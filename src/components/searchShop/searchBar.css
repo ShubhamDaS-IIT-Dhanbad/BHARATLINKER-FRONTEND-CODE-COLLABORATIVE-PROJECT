@@ -68,9 +68,9 @@
     display: flex;
     align-items: center;
     gap: 5px;
-    font-size: 13px;
+    font-size: 1rem;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-    font-weight: 300;
+    font-weight: 800;
     margin-top: -7px;
 }
 
@@ -89,7 +89,7 @@
     justify-content: center;
     align-items: center;
     background-color: #fff;
-    border: 1px solid #000;
+    border: 1.8px solid #00000080;
     border-radius: 11px;
     width: 96vw;
     height: 41px;

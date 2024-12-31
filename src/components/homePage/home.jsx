@@ -1,5 +1,5 @@
-import React, { useRef, useCallback, memo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useRef, useCallback, memo,useEffect } from 'react';
+import { useNavigate,useLocation } from 'react-router-dom';
 import HomePageNavbar from './homeNavBar';
 
 import { MdOutlineStore } from "react-icons/md";
@@ -7,14 +7,8 @@ import { RiSunCloudyLine } from "react-icons/ri";
 import { TbCategoryPlus } from "react-icons/tb";
 import { MdOutlineAdminPanelSettings } from "react-icons/md";
 
-import bh2 from '../../assets/i1.avif';
-
-
-// import ExploreByCategories from '../homePageComponent/exploreByCategory';
-// import ShopByStore from '../homePageComponent/shopByStore.jsx';
 import HomeFooter from './homeFooter.jsx';
 import HomeTestimonial from './homeTestimonial.jsx';
-import HomeAboutUs from './homeAboutUs.jsx';
 
 import './home.css';
 
@@ -46,9 +40,6 @@ const Home = () => {
             <HomePageNavbar />
 
             <div id="home-div" ref={containerRef}>
-                {/* <div  id="home-div-img-div">
-                    <img src={bh2} style={{height:"60vh"}}/>
-                </div> */}
                 <HomeTestimonial/>
                 <HomeFooter/>
             </div>
@@ -87,3 +78,7 @@ const FooterButton = memo(({ icon, label, onClick }) => (
 ));
 
 export default memo(Home);
+
+
+
+
