@@ -2,7 +2,7 @@ import React, { useMemo, Suspense, useEffect } from "react";
 import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import ReactGA from "react-ga4";
 
-import './app.css';
+import './App.css';
 
 import HomePage from './components/homePage/home.jsx'
 import LoginPage from './components/loginPage/login.jsx'
