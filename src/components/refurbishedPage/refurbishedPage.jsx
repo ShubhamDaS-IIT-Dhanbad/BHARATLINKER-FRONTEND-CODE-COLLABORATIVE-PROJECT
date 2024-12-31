@@ -62,7 +62,7 @@ console.log(refurbishedProducts.length,hasMoreProducts)
             </div>
 
             {/* Infinite scroll for the product list */}
-            {/* <InfiniteScroll
+            <InfiniteScroll
                 dataLength={refurbishedProducts.length}
                 next={handleLoadMore}
                 hasMore={hasMoreProducts}
@@ -72,7 +72,7 @@ console.log(refurbishedProducts.length,hasMoreProducts)
                     products={refurbishedProducts}
                     loading={loading}  
                 />
-            </InfiniteScroll> */}
+            </InfiniteScroll>
 
 
             {/* Footer navigation */}
