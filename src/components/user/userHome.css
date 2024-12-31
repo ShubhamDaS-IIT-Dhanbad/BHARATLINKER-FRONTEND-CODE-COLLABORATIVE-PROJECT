@@ -1,0 +1,156 @@
+.dashboard-header-parent {
+    display: flex;
+    height: 50px;
+    align-items: center;
+    background-color: #fff; /* More readable hex for white */
+    color: #000;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding:15px;
+    z-index: 1000; /* Ensure the header stays on top of other content */
+}
+
+.dashboard-header-user {
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+    padding-left: 10px;
+}
+
+.dashboard-header-user > p {
+    padding: 0;
+    margin: 0;
+}
+
+#dashboard-header-user-location {
+    font-size: 19px; /* Reduced slightly for consistency */
+    font-weight: 700;
+    white-space: nowrap; /* Prevents text from wrapping */
+    overflow: hidden;
+    text-overflow: ellipsis; /* Ensures long text is truncated with "..." */
+}
+
+#dashboard-header-user-email {
+    margin-top: -5px;
+    font-weight: 100;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-size: 14px; /* Adjust for better readability */
+    color: #666; /* Slightly softer color */
+}
+
+#dashboard-header-ham {
+    cursor: pointer; /* Adds a pointer cursor to the profile icon */
+}
+
+.dashboard-header-parent-refurbished {
+    cursor: pointer; /* Adds a pointer cursor to the home icon */
+}
+
+
+
+
+.dashboard-Your-information{
+    display: flex;flex-direction: column;
+    gap: 10px;margin-top: 20px;
+    min-height: 90vh;margin-top: 100px;
+}
+.dashboard-Your-Refurbished{
+    display: flex;justify-content: start;align-items: center;
+   gap: 10px;
+    margin-left: 20px;
+}
+.dashboard-Your-information-icons{
+    background-color: aliceblue;
+    max-height: 40px;max-width: 40px;padding: 5px;
+    border-radius: 10px;
+    display: flex;justify-content: center;
+    align-items: center;
+    font-size:25px;
+}
+.dashboard-Your-information{
+    display: flex;flex-direction: column;
+}
+.dashboard-Your-info-p{
+    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-size: 18px;
+}
+
+
+
+.dashboard-footer-p{
+   text-align: center;
+}
+
+
+/* Common Styles for Pop-Up Container */
+.logout-pop-up, .user-book-update-pop-up, .user-book-delete-pop-up {
+    position: fixed;
+    top: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    background-color: #000000c4;
+    height: 100vh;
+    z-index: 20000;
+}
+
+/* Common Styles for Pop-Up Inner Div */
+.logout-pop-up-inner-div, .user-book-update-pop-up-inner, .user-book-delete-pop-up-inner {
+    background-color: #fff;
+    border-radius: 10px;
+    width: 85vw;
+    height: 130px;
+}
+
+/* Common Styles for Pop-Up Statement Text */
+.logout-pop-up-inner-div-logout-statement,
+.user-book-update-pop-up-message,
+.user-book-delete-pop-up-message {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 45%;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.075);
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+/* Common Styles for No and Yes Options */
+.logout-pop-up-inner-div-no-yes,
+.user-book-update-pop-up-options,
+.user-book-delete-pop-up-options {
+    display: flex;
+    height: 100%;
+}
+
+.logout-pop-up-inner-div-no, .user-book-update-option-no, .user-book-delete-option-no {
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50%;
+    border-right: 1px solid rgba(0, 0, 0, 0.053);
+}
+
+.logout-pop-up-inner-div-yes, .user-book-update-option-yes, .user-book-delete-option-yes {
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50%;
+}
+
+/* Specific Colors for Action Confirmation */
+.logout-pop-up-inner-div-yes {
+    color: green; /* Logout Confirmation */
+}
+
+.user-book-update-option-yes {
+    color: blue; /* Update Confirmation */
+}
+
+.user-book-delete-option-yes {
+    color: red; /* Delete Confirmation */
+}

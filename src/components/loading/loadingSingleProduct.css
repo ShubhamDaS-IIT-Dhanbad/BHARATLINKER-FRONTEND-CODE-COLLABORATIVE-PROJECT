@@ -1,0 +1,6 @@
+#loading-single-product-details{
+    display: flex;flex-direction: column;
+    justify-content: center;
+    margin-top: 47px;
+    overflow: hidden;
+}

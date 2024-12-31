@@ -1,0 +1,49 @@
+
+.refurbished-image-div img{
+    width: 100vw;margin-top: 100px;
+}
+/* footer */
+
+#refurbishedProductPage-footer {
+    width: 100vh;
+    display: flex;
+    color: rgba(0, 0, 0, 0.6);
+    font-weight: 900;
+    height: 70px;
+    background-color: rgb(246, 201, 201);
+    position: fixed;
+    bottom: 0;
+    z-index: 999;
+}
+
+#refurbishedProductPage-footer-sortby,
+#refurbishedProductPage-footer-filterby {
+    display: flex;
+    width: 50vw;
+    font-size: 19px;
+    justify-content: center;
+    align-items: center;
+}
+
+
+
+#refurbished-product-page-grid{
+    display: flex;flex-wrap: wrap;
+    width: 100vw;justify-content: center;
+    margin-bottom: 77px;margin-top: 113px;
+    min-height: calc(100vh - 120px - 80px);
+
+}
+
+
+.refurbished-search-page-load-more-container{
+    margin-bottom: 60px;
+}
+
+
+
+
+
+.refurbished-selected-category{
+    color: greenyellow;
+}

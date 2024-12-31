@@ -1,0 +1,384 @@
+.user-update-books-header {
+    background-color: rgb(255, 255, 255);
+    position: fixed;
+    top: 0;
+    height: 60px;
+    display: flex;
+    flex-grow: 1;
+    align-items: center;
+    padding: 10px;
+    gap: 10px;
+    width: 100vw;
+}
+
+.user-update-books-header-left-icon {
+    margin-left: 4px;
+    color: #000;
+}
+
+.user-update-books-header-inner-div {
+    padding-left: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.user-update-books-header-inner-div-p {
+    font-size: 25px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.user-update-books-header-inner-div-phn-div {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 13px;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-weight: 300;
+    margin-top: -7px;
+}
+
+
+
+
+/* type */
+.user-update-book-type {
+    margin-top: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+    gap: 5px;
+}
+
+.user-update-book-type-book,
+.user-update-book-type-module {
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    height: 100%;
+    width: 90px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    border: 1px solid black;
+}
+
+.user-update-book-type-book.active,
+.user-update-book-type-module.active {
+    background-color: #000;
+    color: white;
+}
+
+
+
+.book-update-form {
+    margin-top: 40px;
+    margin-bottom: 120px;
+    display: flex;
+    flex-direction: column;
+    min-height: 70vh;
+    align-items: center;
+    gap: 5px;overflow-y: scroll;
+}
+
+.book-update-form-group {
+    height: 45px;
+    border: 1px solid black;
+    display: flex;
+    align-items: center;
+    width: fit-content;
+    width: 40vw;
+    border-radius: 10px;
+    width: 90vw;
+
+}
+.book-update-form-group.active,
+.board-update-form-group.active,
+.lang-update-form-group.active,
+.book-update-form-group-inner.active{
+    border: 1px solid rgb(0, 202, 84);
+}
+
+.book-update-form-group-inner {
+    width: 100vw;
+    display: flex;
+    padding: 0px 10px 0px 10px;
+    justify-content: space-between;
+}
+
+.book-update-form-group>lable {
+    color: #c50c0c;
+}
+
+#book-update-form-group-class {
+    outline: none;
+    border: none;
+}
+
+
+
+
+.refurbished-books-class-popup {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    background-color: rgba(0, 0, 0, 0.838);
+    display: flex;
+    justify-content: flex-end;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    z-index: 9999;
+}
+
+.refurbished-books-class-popup-close-popup {
+    color: rgb(0, 0, 0);background-color: white;
+    padding: 5px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+
+.refurbished-books-class-popup-options {
+    background-color: white;
+    /* Popup background */
+    width: 100vw;
+    /* Full width */
+    border-top-left-radius: 10px;
+    /* Rounded corners */
+    border-top-right-radius: 10px;
+    /* Rounded corners */
+    height: 75vh;
+    overflow-y: scroll;
+    /* Enables scrolling */
+
+}
+
+.refurbished-books-class-popup-options-flex {
+    display: flex;
+    /* Flexbox layout */
+    flex-wrap: wrap;
+    /* Allow items to wrap */
+    width: 100vw;
+    max-width: 100vw;
+    justify-content: center;
+    gap: 5px;
+    margin-top: 10px;
+}
+
+.refurbished-books-class-popup-class-option {
+    min-width: 60px;
+    /* Width of each option */
+    border: 1px solid rgba(0, 0, 0, 0.26);
+    padding: 0px 7px 0px 7px;
+    min-height: 70px;
+    border-radius: 10px;
+    margin: 0;
+    /* No margin to eliminate gaps */
+    display: flex;
+    /* Flexbox for centering */
+    align-items: center;
+    /* Center vertically */
+    justify-content: center;
+    /* Center horizontally */
+    margin-top: none;
+}
+
+
+
+/* board lang */
+.board-update-form-group,
+.lang-update-form-group {
+    height: 45px;
+    border: 1px solid black;
+    display: flex;
+    align-items: center;
+    width: fit-content;
+    border-radius: 10px;
+    width: calc(44vw);
+}
+
+
+.board-update-form-group-inner,
+.lang-update-form-group-inner {
+    width: 100vw;
+    display: flex;
+    padding: 0px 10px 0px 10px;
+    justify-content: space-between;
+}
+.book-update-form-group-label,
+.board-update-form-group-label,
+.lang-update-form-group-label{
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+.book-update-title-input,
+.book-update-price-input,
+.book-update-discounted-input,
+.book-update-description-input,
+.book-update-keywords-input,
+.book-update-author-input,
+.book-update-year-input {
+    outline: none;
+    border: none;
+    background: none;
+    justify-content: center;align-items: center;
+    display: flex;flex-grow: 1;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-size: 20px;
+}
+
+.book-update-title-input::placeholder,
+.book-update-price-input::placeholder,
+.book-update-discounted-input::placeholder,
+.book-update-description-input::placeholder,
+.book-update-keywords-input::placeholder,
+.book-update-author-input::placeholder,
+.book-update-year-input::placeholder {
+    font-size: 13px;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-weight: 300;
+}
+
+
+
+.user-update-book-submit-button-container{
+    border: 1px solid green;
+    color: rgb(0, 0, 0);
+    margin-top: 40px;border-radius: 5px;
+    width: 95vw;height: 60px;
+    font-size: 20px;
+     font-weight: 300;position:initial;bottom: 0;
+    display: flex;justify-content: center;align-items:center;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+
+
+
+
+
+
+
+
+
+.book-update-image-section{
+    width: 100vw;display: flex;
+    gap: 5px;justify-content: center;
+    margin-top: 30px;
+}
+.book-update-image-section-remove-image-div{
+width: 100%;padding: 3px 0px 3px 0px;
+    display: flex;justify-content: center;align-items: center;
+border: 1px solid black;border-radius: 9px;
+    margin-top: 5px;
+}
+.user-update-image-placeholder,.user-book-uploaded-image{
+    width: 100px;height: 100px;
+    border: 1px solid rgba(0, 0, 0, 0.58);
+    border-radius: 9px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+
+
+
+.use-book-update-all-field-required-div{
+    width: 100vw;height: 100vh;
+    position: fixed;top: 0;
+    background-color: #000000cf;
+    display: flex;justify-content: center;align-items: center;
+    
+}
+.use-book-update-all-field-required-div-inner{
+    width: 70vw;height: 90px;
+    background-color: #ffffff;
+    border-radius: 10px;display: flex;font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    justify-content: center;align-items: center;
+    gap: 10px;
+    flex-direction: column;
+}
+.use-book-update-all-field-required-div-inner-ok{
+    color: black;
+    background-color: #ffffff;
+    border-radius: 10px;display: flex;font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    justify-content: center;align-items: center;
+}
+
+
+
+
+
+
+
+
+/* updte book poop up */
+.user-book-update-pop-up {
+    position: fixed;
+    top: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    background-color: #000000c4;
+    height: 100vh;
+    z-index: 20000;
+}
+
+.user-book-update-pop-up-inner {
+    background-color: #fff;
+    border-radius: 10px;
+    width: 85vw;
+    height: 130px;
+}
+
+.user-book-update-pop-up-message {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 45%;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.075);
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+.user-book-update-pop-up-options {
+    display: flex;
+    height: 100%;
+}
+
+.user-book-update-option-no {
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50%;
+    border-right: 1px solid rgba(0, 0, 0, 0.053);
+}
+
+.user-book-update-option-yes {
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50%;
+    
+    color: green;
+}
+/* deleet */
+.user-update-book-delete-button-container{
+    border: 1px solid red;
+    color: rgb(0, 0, 0);
+    border-radius: 5px;
+    width: 95vw;height: 60px;
+    font-size: 20px;
+     font-weight: 300;position:initial;bottom: 0;
+    display: flex;justify-content: center;align-items:center;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+

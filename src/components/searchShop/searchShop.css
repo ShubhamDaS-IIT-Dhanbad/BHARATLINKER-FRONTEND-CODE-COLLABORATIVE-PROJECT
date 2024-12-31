@@ -1,0 +1,105 @@
+#shopSearchPage-container {
+    width: 100%;
+    height: 70px;
+    position: fixed;
+    top: 0;
+    background-color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+}
+#shopSearchPage-container-top {
+    width: 100%;
+    height: 75px;
+    position: fixed;
+    top: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+}
+
+#shopSearchPage-header {
+    display: flex;
+    align-self: center;
+    justify-content: center;
+    border: 1px solid rgba(0, 0, 0, 0.21);
+    align-items: center;
+    background-color: rgb(255, 255, 255);
+    border-radius: 10px;
+    width: 96%;
+    height: 49px;
+}
+
+#shopSearchPage-header-input:-webkit-autofill,
+#shopSearchPage-header-input:-webkit-autofill:hover,
+#shopSearchPage-header-input:-webkit-autofill:focus {
+    background-color: white !important;
+    color: rgb(0, 0, 0) !important;
+    -webkit-box-shadow: 0 0 0px 1000px white inset !important;
+    box-shadow: 0 0 0px 1000px white inset !important;
+}
+#shopSearchPage-header-input::placeholder{
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-weight: 200;
+}
+/* General input styling */
+#shopSearchPage-header-input {
+    border: none;
+    color: rgba(0, 0, 0, 0.546);
+    font-size: 12px;
+    padding-left: 10px;
+    flex-grow: 1; /* Allow input to grow */
+    outline: none;
+    background-color: white;
+}
+
+#shopSearchPage-header-icon {
+    font-size: 29px;
+    margin-left: 10px;
+    color: rgba(0, 0, 0, 0.546);
+}
+
+
+
+
+
+#searchShopPage-footer {
+    width: 100vh;height: 60px;
+    display: flex;
+    color: rgba(0, 0, 0,0.66);
+    font-weight: 900;
+    background-color: #cbc0ed;
+    position: fixed;
+    bottom: 0;
+    z-index: 888;
+}
+
+#searchShopPage-footer-sortby,
+#searchShopPage-footer-filterby {
+    display: flex;
+    width: 50vw;
+    font-size: 19px;
+    justify-content: center;
+    align-items: center;
+}
+
+
+/* shop results */
+#shopResults{
+    margin-top: 120px;margin-bottom: 60px;
+    background-color: rgb(255, 255, 255);
+}
+/* No shop found */
+.search-no-shop-found{
+    display: flex;flex-direction: column;
+    align-items: center;justify-content: center;
+    height: 50vh;
+}
+
+
+.shop-selected-category{
+    color: greenyellow;
+}
