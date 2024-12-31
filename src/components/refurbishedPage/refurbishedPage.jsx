@@ -53,15 +53,14 @@ const RefurbishedPage = () => {
     };
 
     if (error) return <div>Error: {error}</div>;
-console.log(refurbishedProducts.length,hasMoreProducts)
     return (
         <div className='refurbished-main-container'>
-            <RefurbishedNavbar setSearchInput={setSearchInput} />
+            {/* <RefurbishedNavbar setSearchInput={setSearchInput} />
             <div className='refurbished-image-div'>
                 <img src={r1} alt="Refurbished section" />
             </div>
 
-            {/* Infinite scroll for the product list */}
+           
             <InfiniteScroll
                 dataLength={refurbishedProducts.length}
                 next={handleLoadMore}
@@ -72,7 +71,7 @@ console.log(refurbishedProducts.length,hasMoreProducts)
                     products={refurbishedProducts}
                     loading={loading}  
                 />
-            </InfiniteScroll>
+            </InfiniteScroll> */}
 
 
             {/* Footer navigation */}
