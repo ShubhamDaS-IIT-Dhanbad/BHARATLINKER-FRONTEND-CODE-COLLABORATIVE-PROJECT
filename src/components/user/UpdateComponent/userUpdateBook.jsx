@@ -3,7 +3,6 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
 
 import { useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
 
 import { IoClose } from 'react-icons/io5';
 import { CiImageOn } from "react-icons/ci";
