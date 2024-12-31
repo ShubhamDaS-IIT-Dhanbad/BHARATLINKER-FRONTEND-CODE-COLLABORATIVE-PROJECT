@@ -57,12 +57,12 @@ console.log(refurbishedProducts.length,hasMoreProducts)
     return (
         <div className='refurbished-main-container'>
             <RefurbishedNavbar setSearchInput={setSearchInput} />
-            {/* <div className='refurbished-image-div'>
+            <div className='refurbished-image-div'>
                 <img src={r1} alt="Refurbished section" />
-            </div> */}
+            </div>
 
             {/* Infinite scroll for the product list */}
-            <InfiniteScroll
+            {/* <InfiniteScroll
                 dataLength={refurbishedProducts.length}
                 next={handleLoadMore}
                 hasMore={hasMoreProducts}
@@ -72,7 +72,7 @@ console.log(refurbishedProducts.length,hasMoreProducts)
                     products={refurbishedProducts}
                     loading={loading}  
                 />
-            </InfiniteScroll>
+            </InfiniteScroll> */}
 
 
             {/* Footer navigation */}

@@ -21,8 +21,8 @@ import ShopFilterSection from './components/searchShop/filterSection.jsx';
 //Shop Card
 import SingleShopCard from './components/singleShop/singleShop.jsx'
 import RefurbishedPage from "./components/refurbishedPage/refurbishedPage.jsx";
-import RefurbishedProductSortBySection from "./components/searchPage/sortbySection.jsx";
-import RefurbishedProductFilterSection from "./components/refurbishedPage/filterSection.jsx";
+// import RefurbishedProductSortBySection from "./components/searchPage/sortbySection.jsx";
+// import RefurbishedProductFilterSection from "./components/refurbishedPage/filterSection.jsx";
 
 
 //retailer routes
@@ -88,8 +88,8 @@ const RoutesWithConditionalHeader = React.memo(({ address }) => {
 
          {/* refurbished products */}
          <Route path="/refurbished" element={<RefurbishedPage />} />
-         <Route path="/refurbished/sortby" element={<RefurbishedProductSortBySection />} />
-         <Route path="/refurbished/filter" element={<RefurbishedProductFilterSection />} />
+         {/* <Route path="/refurbished/sortby" element={<RefurbishedProductSortBySection />} />
+         <Route path="/refurbished/filter" element={<RefurbishedProductFilterSection />} /> */}
 
 
 
