@@ -7,6 +7,7 @@ import { fetchRefurbishedProducts, loadMoreRefurbishedProducts } from '../../red
 import r1 from '../../assets/refur.webp';
 import { LiaSortSolid } from "react-icons/lia";
 import { MdFilterList } from "react-icons/md";
+import InfiniteScroll from 'react-infinite-scroll-component';
 import './refurbishedPage.css';
 
 const RefurbishedPage = () => {
@@ -54,7 +55,7 @@ const RefurbishedPage = () => {
     if (error) return <div>Error: {error}</div>;
     return (
         <div className='refurbished-main-container'>
-            {/* <RefurbishedNavbar setSearchInput={setSearchInput} />
+            <RefurbishedNavbar setSearchInput={setSearchInput} />
             <div className='refurbished-image-div'>
                 <img src={r1} alt="Refurbished section" />
             </div>
@@ -70,7 +71,7 @@ const RefurbishedPage = () => {
                     products={refurbishedProducts}
                     loading={loading}  
                 />
-            </InfiniteScroll> */}
+            </InfiniteScroll>
 
 
             {/* Footer navigation */}
