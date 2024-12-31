@@ -51,7 +51,7 @@ const SearchBar = ({ inputValue, onInputChange, onSearch, onNavigateHome }) => {
                     />
                     <input
                         className='product-page-search-input'
-                        placeholder="Search Products"
+                        placeholder="Search Product"
                         value={inputValue}  // Controlled input value
                         onKeyPress={handleKeyPress} // Detect "Enter" key press
                         onChange={onInputChange}  // Handle input change

@@ -39,11 +39,6 @@ const RefurbishedPage = () => {
 
     // Load more products when user scrolls
     const handleLoadMore = () => {
-        console.log('Loading more products...');
-        console.log('Current Page:', currentPage);
-        console.log('Has More Products:', hasMoreProducts);
-        console.log('Loading More Products:', loadingMoreProducts);
-
         if (!hasMoreProducts || loadingMoreProducts) return; // Prevent further loading if no more products or if loading
 
         const params = {
@@ -64,10 +59,6 @@ const RefurbishedPage = () => {
     return (
         <div className='refurbished-main-container'>
             <RefurbishedNavbar setSearchInput={setSearchInput} />
-            <div className='refurbished-image-div'>
-                <img src={r1} alt="Refurbished section" />
-            </div>
-
             <InfiniteScroll
                 dataLength={refurbishedProducts.length}
                 next={handleLoadMore}

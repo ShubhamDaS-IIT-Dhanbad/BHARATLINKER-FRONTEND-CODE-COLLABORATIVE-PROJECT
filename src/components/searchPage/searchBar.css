@@ -101,8 +101,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #fff;
-    border-radius: 11px;border: 1.8px solid rgba(0, 0, 0, 0.521);
+    background-color: #abaefc;
+    border-radius: 11px;border: 2px solid rgba(255, 255, 255);
     width: 96vw;
     height: 41px;
 }
@@ -111,25 +111,28 @@
 .product-page-search-icon {
     font-size: 29px;
     margin-left: 10px;
-    color: #000;
+    color: #000000;
 }
 
 /* Search Input */
 .product-page-search-input {
     border: none;
     color: #000;
-    font-size: 12px;
+    font-size: 1rem;
     padding-left: 10px;
-    
+    background-color: #abaefc;
     flex-grow: 1;
     outline: none;
-    background-color: #fff;
 }
 
 /* Autofill Styles for Chrome, Edge, and Safari */
 .product-page-search-input:-webkit-autofill {
     background-color: #fff !important;
-    color: #000 !important;
+    color: #000 !important;font-size: 1rem;
     -webkit-box-shadow: 0 0 0px 1000px #fff inset !important;
     box-shadow: 0 0 0px 1000px #fff inset !important;
+}
+.product-page-search-input::placeholder {
+    color: #000000 !important;
+    font-size: 0.9rem;
 }
