@@ -7,7 +7,6 @@ import { fetchRefurbishedProducts, loadMoreRefurbishedProducts } from '../../red
 import r1 from '../../assets/refur.webp';
 import { LiaSortSolid } from "react-icons/lia";
 import { MdFilterList } from "react-icons/md";
-import InfiniteScroll from 'react-infinite-scroll-component';
 import './refurbishedPage.css';
 
 const RefurbishedPage = () => {
