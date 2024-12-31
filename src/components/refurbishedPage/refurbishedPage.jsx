@@ -15,7 +15,7 @@ const RefurbishedPage = () => {
     const dispatch = useDispatch();
     const [searchInput, setSearchInput] = useState('');
 
-    const { refurbishedProducts, currentPage, hasMoreProducts, error, loading,loadingMoreProducts } = useSelector(state => state.refurbishedproducts);
+    const { refurbishedProducts, currentPage, hasMoreProducts, error, loading, loadingMoreProducts } = useSelector(state => state.refurbishedproducts);
     const selectedCategories = useSelector(state => state.refurbishedproductfiltersection.selectedCategories);
 
     // Function to handle product search
@@ -39,6 +39,13 @@ const RefurbishedPage = () => {
 
     // Load more products when user scrolls
     const handleLoadMore = () => {
+        console.log('Loading more products...');
+        console.log('Current Page:', currentPage);
+        console.log('Has More Products:', hasMoreProducts);
+        console.log('Loading More Products:', loadingMoreProducts);
+
+        if (!hasMoreProducts || loadingMoreProducts) return; // Prevent further loading if no more products or if loading
+
         const params = {
             inputValue: searchInput.trim(),
             page: currentPage + 1,
@@ -53,6 +60,7 @@ const RefurbishedPage = () => {
     };
 
     if (error) return <div>Error: {error}</div>;
+
     return (
         <div className='refurbished-main-container'>
             <RefurbishedNavbar setSearchInput={setSearchInput} />
@@ -60,19 +68,18 @@ const RefurbishedPage = () => {
                 <img src={r1} alt="Refurbished section" />
             </div>
 
-           
             <InfiniteScroll
                 dataLength={refurbishedProducts.length}
                 next={handleLoadMore}
                 hasMore={hasMoreProducts}
                 loader={loadingMoreProducts && <h4>Loading more products...</h4>}
+                endMessage={<p>No more products available</p>}
             >
                 <RefurbishedProductList
                     products={refurbishedProducts}
                     loading={loading}  
                 />
             </InfiniteScroll>
-
 
             {/* Footer navigation */}
             <div id='refurbishedProductPage-footer'>
