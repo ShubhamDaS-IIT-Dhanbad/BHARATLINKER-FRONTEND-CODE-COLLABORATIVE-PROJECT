@@ -1,19 +1,22 @@
 import React, { useState } from "react";
 import "./homeTestimonial.css";
 
+import ti1 from '../../assets/ti1.png'
+import ti2 from '../../assets/ti2.png'
+
 const Testimonial = () => {
   const testimonials = [
     {
       name: "Williamson",
       position: "Web Developer",
-      image: "https://via.placeholder.com/100", // Replace with actual image
+      image: ti1,
       quote:
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam enim diam, tempus vel ultrices viverra, luctus in elit.",
     },
     {
       name: "Jessica",
       position: "UI/UX Designer",
-      image: "https://via.placeholder.com/100", // Replace with actual image
+      image: ti2, // Replace with actual image
       quote:
         "Aliquam tempus blandit velit, in pharetra ex volutpat a. Cras eu augue ac nisi tempor commodo.",
     },

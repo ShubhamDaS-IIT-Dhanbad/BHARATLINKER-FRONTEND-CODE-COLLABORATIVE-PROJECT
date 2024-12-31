@@ -1,7 +1,7 @@
 /* General Layout */
 #home-div {
     display: flex;
-    flex-direction: column;background-color: rgb(122, 139, 255);
+    flex-direction: column;background-color: rgb(255, 255, 255);
     margin-top: 115px;
     max-width: 100vw;margin-bottom: 60px;
 }
@@ -9,7 +9,7 @@
     height: 75vh;width: 100vw;overflow: hidden;
     display: flex;justify-content: center;align-items: center;
 }
-#home-div-img-div img {background-color: aqua;
+#home-div-img-div img {
     max-height: 40vh;
 }
 
@@ -35,7 +35,7 @@
     align-items: center;
     justify-content: space-evenly;
     height: 60px;
-    background-color: rgb(122, 139, 255);
+    background-color: rgb(255, 255, 255);
     position: fixed;
     bottom: 0;
     z-index: 1000;
@@ -46,7 +46,7 @@
     height: 55px;
     font-weight:600;
     font-size: 1rem;
-    color: rgba(255, 255, 255, 0.9);
+    color: rgba(0, 0, 0, 0.9);
     display: flex;font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     flex-direction: column;
     align-items: center;
@@ -56,7 +56,7 @@
 /* Product Details */
 #home-product-details-similar {
     margin-top: 30px;
-    color: rgb(255, 255, 255);
+    color: rgb(0, 0, 0);
     gap: 10px;
     display: flex;
     flex-direction: column;
