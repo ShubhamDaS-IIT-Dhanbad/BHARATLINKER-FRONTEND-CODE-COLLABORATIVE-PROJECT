@@ -21,8 +21,8 @@ import ShopFilterSection from './components/searchShop/filterSection.jsx';
 //Shop Card
 import SingleShopCard from './components/singleShop/singleShop.jsx'
 import RefurbishedPage from "./components/refurbishedPage/refurbishedPage.jsx";
-// import RefurbishedProductSortBySection from "./components/searchPage/sortbySection.jsx";
-// import RefurbishedProductFilterSection from "./components/refurbishedPage/filterSection.jsx";
+import RefurbishedProductSortBySection from "./components/searchPage/sortbySection.jsx";
+import RefurbishedProductFilterSection from "./components/refurbishedPage/filterSection.jsx";
 
 
 //retailer routes
@@ -31,12 +31,12 @@ import RetailerRoutes from './components/retailer/retailerRoutes.jsx';
 
 //user routes
 import User from './components/user/userHome.jsx'
-// import RefurbishedBooksUploadUser from './components/user/booksUploadComponent/booksUpload.jsx'
-// import RefurbishedGadgetsUploadUser from './components/user/gadgetsUploadComponent/gadgetsUpload.jsx'
-// import UserProductPageMain from './components/user/productPage/userProductPageMain.jsx'
-// import UserUpdateBook  from './components/user/updateComponent/userUpdateBook.jsx';
-// import UserUpdateModule  from './components/user/updateComponent/userUpdateModule.jsx';
-// import UserUpdateGadget from './components/user/UpdateComponent/userUpdateGadget.jsx';
+import RefurbishedBooksUploadUser from './components/user/booksUploadComponent/booksUpload.jsx'
+import RefurbishedGadgetsUploadUser from './components/user/gadgetsUploadComponent/gadgetsUpload.jsx'
+import UserProductPageMain from './components/user/productPage/userProductPageMain.jsx'
+import UserUpdateBook  from './components/user/updateComponent/userUpdateBook.jsx';
+import UserUpdateModule  from './components/user/updateComponent/userUpdateModule.jsx';
+import UserUpdateGadget from './components/user/UpdateComponent/userUpdateGadget.jsx';
 
 function App() {
   return (
@@ -88,8 +88,8 @@ const RoutesWithConditionalHeader = React.memo(({ address }) => {
 
          {/* refurbished products */}
          <Route path="/refurbished" element={<RefurbishedPage />} />
-         {/* <Route path="/refurbished/sortby" element={<RefurbishedProductSortBySection />} />
-         <Route path="/refurbished/filter" element={<RefurbishedProductFilterSection />} /> */}
+         <Route path="/refurbished/sortby" element={<RefurbishedProductSortBySection />} />
+         <Route path="/refurbished/filter" element={<RefurbishedProductFilterSection />} />
 
         {/* retailer routes */}
         <Route path='/retailer' element={<Retailer />} />
@@ -97,12 +97,12 @@ const RoutesWithConditionalHeader = React.memo(({ address }) => {
 
         {/* user routes */}
         <Route path='/user' element={<User />} />
-        {/* <Route path='/user/upload/books' element={<RefurbishedBooksUploadUser/>} />
-        <Route path='/user/upload/gadgets' element={<RefurbishedGadgetsUploadUser/>} /> */}
-        {/* <Route path='/user/refurbished' element={<UserProductPageMain/>} /> */}
-        {/* <Route path='/user/refurbished/update/book/:id' element={<UserUpdateBook />} />
+        <Route path='/user/upload/books' element={<RefurbishedBooksUploadUser/>} />
+        <Route path='/user/upload/gadgets' element={<RefurbishedGadgetsUploadUser/>} />
+        <Route path='/user/refurbished' element={<UserProductPageMain/>} />
+        <Route path='/user/refurbished/update/book/:id' element={<UserUpdateBook />} />
         <Route path='/user/refurbished/update/module/:id' element={<UserUpdateModule/>} />
-        <Route path='/user/refurbished/update/gadget/:id' element={<UserUpdateGadget/>} /> */}
+        <Route path='/user/refurbished/update/gadget/:id' element={<UserUpdateGadget/>} />
         <Route path='/user/privacy' element={<Retailer />} />
 
       </Routes>
