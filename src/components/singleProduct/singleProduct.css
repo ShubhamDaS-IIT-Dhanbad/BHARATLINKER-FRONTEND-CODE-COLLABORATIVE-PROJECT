@@ -56,9 +56,7 @@
 #product-details-info {
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    padding: 10px;flex-grow: 1;
-    min-height: 85px;
+    padding: 10px;
 }
 
 #product-details-trending-deals {
@@ -143,7 +141,7 @@
 }
 
 #product-detail-about {
-    padding: 10px;flex-grow: 1;
+    padding: 10px;
     display: flex;font-size: 18px;
     align-items: center;gap: 5px;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
