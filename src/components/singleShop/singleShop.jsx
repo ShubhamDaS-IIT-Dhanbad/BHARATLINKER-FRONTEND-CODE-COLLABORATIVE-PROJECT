@@ -149,22 +149,20 @@ const ShopDetails = () => {
                         <div
                             id="shop-details-about"
                             onClick={toggleAddress}
-                            style={{ cursor: "pointer" }}
                         >
                             <p style={{ fontSize: "19px", fontWeight: "700" }}>Address</p>
                             {showAddress ? <IoIosArrowUp size={25} /> : <IoIosArrowDown size={25} />}
                         </div>
 
                         {showAddress && (
-                            <div id="shop-details-description">{shopDetail.address}</div>
+                            <div id="shop-details-description">{shopDetail?.address}</div>
                         )}
 
                         <div id="shop-details-hr"></div>
 
                         <div
-                            id="shop-details-contact"
+                            id="shop-detail-contact"
                             onClick={toggleContact}
-                            style={{ cursor: "pointer" }}
                         >
                             <p style={{ fontSize: "19px", fontWeight: "700" }}>Contact</p>
                             {showContact ? <IoIosArrowUp size={25} /> : <IoIosArrowDown size={25} />}

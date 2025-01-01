@@ -4,22 +4,10 @@
     justify-content: center;
     align-items: center;
     transition: transform 0.3s ease;
-    cursor: pointer;
     width: 90vw;
     padding: 10px 0px;
     outline: none;
 }
-
-.shop-card-container:focus {
-    outline: none; /* Ensures the div doesn't get the focus outline */
-}
-
-.shop-card-container:active {
-    outline: none; /* Removes any active state outline */
-}
-
-  
-
 
 
 .shop-card-header {
@@ -55,7 +43,6 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    cursor: pointer;
 }
 .shop-card-address-toggle div{
     display: flex;font-weight: 900;
