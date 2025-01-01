@@ -117,7 +117,7 @@ const ProductDetails = () => {
                                 <div id="product-details-info">
                                     <span id="product-details-trending-deals">Trending deal</span>
                                     <p id="product-details-pid">Product # {productDetail.$id}</p>
-                                    <div id="product-details-title">{productDetail.title}</div>
+                                    <div id="product-details-title">{productDetail.title} llllll Lorem ipsum dolor sit amet consectetur adipisicing elit. Magni commodi laborum error repellat maiores consequatur eveniet pariatur sunt laboriosam? Iste ad accusantium atque modi aliquid nemo excepturi alias reiciendis consequatur.</div>
                                 </div>
                                 <div
                                     id="product-detail-about"
