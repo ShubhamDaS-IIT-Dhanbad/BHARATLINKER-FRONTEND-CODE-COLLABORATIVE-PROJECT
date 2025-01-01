@@ -16,10 +16,10 @@ const FilterSection = () => {
     const [searchCategory, setSearchCategory] = useState("");
 
     const selectedCategories = useSelector(state => state.searchshopfiltersection.selectedCategories);
-    const categories = ['Electronics', 'Fashion', 'Home', 'Books'];
+    const categories = ['Electronics', 'Fashion', 'Home', 'Books','kokosks'];
 
     const filteredCategories = categories.filter(category =>
-        category.toLowerCase().includes(searchCategory.toLowerCase())
+        category.toLowerCase()
     );
 
 
@@ -32,7 +32,7 @@ const FilterSection = () => {
     return (
         <div className='product-filter-section'>
 
-            <div id='filter-section-product-page'>
+            <div id='filter-section-shop-page'>
                 <MdOutlineKeyboardArrowLeft size={'40px'} onClick={() => navigate('/shop')} />
                 FILTER SECTION
             </div>
