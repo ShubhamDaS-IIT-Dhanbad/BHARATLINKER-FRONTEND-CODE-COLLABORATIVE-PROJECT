@@ -9,7 +9,7 @@ import { MdOutlineKeyboardArrowRight } from "react-icons/md";
 import { HiOutlineArrowRightStartOnRectangle } from "react-icons/hi2";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { useDispatch, useSelector } from 'react-redux';
-
+import SingleProductSearchBar from './singleProductSearchBar.jsx';
 import LoadingSingleProduct from "../loading/loadingSingleProduct.jsx";
 import { BiSearchAlt } from "react-icons/bi";
 import { TbCategoryPlus } from "react-icons/tb";
@@ -35,7 +35,6 @@ const ProductDetails = () => {
     useEffect(() => {
         const fetchProductDetails = async () => {
             let product = products.find((product) => product.$id === productId);
-
             if (product) {
                 setProductDetails(product);
                 setSelectedImage(product.imageUrl || 'http://res.cloudinary.com/dthelgixr/image/upload/v1727870088/hd7kcjuz8jfjajnzmqkp.webp');
@@ -76,7 +75,7 @@ const ProductDetails = () => {
         };
 
         fetchProductDetails();
-    }, []);
+    }, [products, shops, singleShops, productId, dispatch, navigate]);
 
     const handleSearchChange = (e) => {
         setSearchQuery(e.target.value);
@@ -101,17 +100,7 @@ const ProductDetails = () => {
     return (
         <Fragment>
             <div id='product-details-search-container-top'>
-                <div id='product-details-search-container-top-div'>
-                    <BiSearchAlt size={40} id='header-div-search-div-search' />
-                    <input
-                        id='product-details-search-bar'
-                        value={searchQuery}
-                        onChange={handleSearchChange}
-                        placeholder="Search Products"
-                        onKeyDown={handleEnter}
-                    />
-                    <TbCategoryPlus onClick={() => { navigate('/search') }} size={35} style={{ paddingRight: "10px" }} />
-                </div>
+                <SingleProductSearchBar />
             </div>
 
             {loading ? (
@@ -119,63 +108,56 @@ const ProductDetails = () => {
             ) : (
                 <Fragment>
                     {productDetail && (
-                        <div id="product-details-container">
-                            <div id="product-details-img">
-                                <img src={selectedImage} alt="Selected Product" id="product-details-img-selected" />
-                            </div>
-
-                            <div id="product-details-info">
-                                <span id="product-details-trending-deals">Trending deal</span>
-                                <p id="product-details-pid">Product # {productDetail.$id}</p>
-                                <div id="product-details-title">{productDetail.title} To reduce line spacing (line-height) and letter spacing (letter-spacing) for the #product-details-title, you can add the line-height and letter-spacing properties to your CSS. Here's an</div>
-                            </div>
-
-                            <div id="product-details-see-all-brand-product">
-                                See All {productDetail.brand} Products <MdOutlineKeyboardArrowRight size={11} />
-                            </div>
-
-                            <div
-                                id="product-details-shop"
-                                onClick={handleShopClick}
-                                style={{ cursor: 'pointer' }}
-                            >
-                                Shop: {shopDetail ? shopDetail.shopName : 'Loading...'}
-                                <HiOutlineArrowRightStartOnRectangle />
-                            </div>
-
-                            <div id="product-details-price-button">
-                                <p>₹{productDetail.price}</p>
-                                <div id={`product-details-price-${productDetail.isInStock ? 'instock' : 'outofstock'}`}>
-                                    {productDetail.isInStock ? 'IN STOCK' : 'OUT OF STOCK'}
+                        <>
+                            <div id="product-details-container">
+                                <div id="product-details-img">
+                                    <img src={selectedImage} alt="Selected Product" id="product-details-img-selected" />
                                 </div>
-                            </div>
 
-                            <div id="product-details-hr"></div>
-                            <div
-                                id="product-details-about"
-                                onClick={toggleDescription}
-                                style={{ cursor: 'pointer' }}
-                            >
-                                <p>About Product</p>
-                                {showDescription ? <IoIosArrowUp size={20} /> : <IoIosArrowDown size={20} />}
-                            </div>
-                            <div id="product-details-hr"></div>
+                                <div id="product-details-info">
+                                    <span id="product-details-trending-deals">Trending deal</span>
+                                    <p id="product-details-pid">Product # {productDetail.$id}</p>
+                                    <div id="product-details-title">{productDetail.title}</div>
+                                </div>
+                                <div
+                                    id="product-detail-about"
+                                    onClick={toggleDescription}
+                                >
+                                    <p>About Product</p>
+                                    {showDescription ? <IoIosArrowUp size={20} /> : <IoIosArrowDown size={20} />}
+                                </div>
 
-                            {showDescription && (
-                                <div id="product-details-description">
-                                    Description: {productDetail.description}
+                                <div
+                                    id="product-details-see-all-brand-product"
+                                    onClick={() => navigate(`/search?query=${productDetail.brand}`)} // Fixed onClick syntax
+                                >
+                                    See All {productDetail.brand} Products <MdOutlineKeyboardArrowRight size={11} />
                                 </div>
-                            )}
 
-                            <div className="product-book-now-order-now">
-                                <div className="product-book-now">
-                                    BOOK NOW
+                                <div
+                                    id="product-details-shop"
+                                    onClick={handleShopClick}
+                                    style={{ cursor: 'pointer' }}
+                                >
+                                    Shop: {shopDetail ? shopDetail?.shopName : 'Loading...'}
+                                    <HiOutlineArrowRightStartOnRectangle />
                                 </div>
-                                <div className="product-order-now">
-                                    ORDER NOW
+
+                                <div id="product-details-price-button">
+                                    <p>₹{productDetail.price}</p>
+                                    <div id={`product-details-price-${productDetail.isInStock ? 'instock' : 'outofstock'}`}>
+                                        {productDetail.isInStock ? 'IN STOCK' : 'OUT OF STOCK'}
+                                    </div>
                                 </div>
+
+                                {showDescription && (
+                                    <div id="product-details-description">
+                                        Description: {productDetail.description}
+                                    </div>
+                                )}
                             </div>
-                        </div>
+                            <div id="product-details-bottom-text">@Bharat Linker 2025</div>
+                        </>
                     )}
                 </Fragment>
             )}

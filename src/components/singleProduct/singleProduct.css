@@ -36,9 +36,9 @@
 #product-details-container {
     display: flex;
     flex-direction: column;
-    min-height: 100vh;width: 100vw;
-    margin-top: 87px;
-    margin-bottom: 30vh;
+    min-height: 90vh;width: 100vw;
+    margin-top: 120px;
+    margin-bottom: 5vh;
 }
 
 #product-details-img {
@@ -136,18 +136,24 @@
     padding: 2px;font-size: 19px;
 }
 
-#product-details-hr {
+#product-detail-hr {
     margin: 5px 10px;
     background-color: rgba(0, 0, 0, 0.358);
     height: 0.1px;display: flex;flex-grow: 1;
+    display: contents;
 }
 
-#product-details-about {
+#product-detail-about {
     padding: 10px;flex-grow: 1;
     display: flex;font-size: 18px;
-    align-items: center;
-    justify-content: space-between;
+    align-items: center;gap: 5px;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
+#product-details-about :active {
+    background-color: rgb(27, 128, 216);
+  }
+
+
 
 #product-details-description {
     padding: 10px;
@@ -178,4 +184,9 @@
     padding: 17px;border-radius: 25px;
     background-color: rgb(116, 176, 233);
     color: rgb(255, 255, 255);font-weight: 800;
+}
+
+#product-details-bottom-text{
+    width: 100vw;padding: 0;margin: 0;
+    display: flex;justify-content: center;align-items: center;
 }
