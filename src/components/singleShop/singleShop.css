@@ -3,7 +3,7 @@
 #shop-details-container {
     display: flex;
     flex-direction: column;
-    margin-top: 113px;
+    margin-top: 115px;
     margin-bottom: 10vh;
     ::-webkit-scrollbar{
         display: none;

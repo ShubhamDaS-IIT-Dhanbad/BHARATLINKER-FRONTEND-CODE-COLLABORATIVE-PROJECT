@@ -19,7 +19,7 @@ const Shop = () => {
 
     const { shops, loading, currentPage, loadingMoreShops, hasMoreShops } = useSelector((state) => state.searchshops);
     const selectedCategories = useSelector(state => state.searchshopfiltersection.selectedCategories);
-
+  
     const handleSearch = () => {
 
         const params = {
@@ -41,7 +41,7 @@ const Shop = () => {
         if (shops.length === 0) {
             handleSearch();
         }
-    }, [inputValue]);
+    }, []);
 
     const handleInputChange = (event) => {
         const value = event.target.value;
