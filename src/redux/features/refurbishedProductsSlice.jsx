@@ -6,11 +6,20 @@ import searchRefurbishedProductService from '../../appWrite/searchRefurbished.js
 export const fetchRefurbishedProducts = createAsyncThunk(
   'refurbishedProducts/fetchRefurbishedProducts',
   async ({
-    inputValue, selectedCategories, selectedBrands, pinCodes, page,
+    inputValue, pinCodes, page,
     productsPerPage, sortByAsc, sortByDesc,
     hasMoreProductsBook,
     hasMoreProductsModule,
-    hasMoreProductsGadgets }, { rejectWithValue }) => {
+    hasMoreProductsGadgets,
+
+    selectedCategories,
+    selectedClasses,
+    selectedExams,
+    selectedLanguages,
+    selectedBoards,
+    selectedBrands
+
+  }, { rejectWithValue }) => {
     try {
       const response = await searchRefurbishedProductService.getRefurbishedProducts({
         inputValue, pinCodes, page, productsPerPage, sortByAsc, sortByDesc, selectedCategories, selectedBrands,
@@ -49,11 +58,18 @@ export const fetchRefurbishedProducts = createAsyncThunk(
 export const loadMoreRefurbishedProducts = createAsyncThunk(
   'refurbishedProducts/loadMoreRefurbishedProducts',
   async ({
-    inputValue, selectedCategories, selectedBrands, pinCodes, page,
+    inputValue, pinCodes, page,
     productsPerPage, sortByAsc, sortByDesc,
     hasMoreProductsBook,
     hasMoreProductsModule,
-    hasMoreProductsGadgets
+    hasMoreProductsGadgets,
+
+    selectedCategories,
+    selectedClasses,
+    selectedExams,
+    selectedLanguages,
+    selectedBoards,
+    selectedBrands,
   }, { rejectWithValue }) => {
     try {
       const response = await searchRefurbishedProductService.getRefurbishedProducts({
@@ -109,7 +125,7 @@ const refurbishedProductsSlice = createSlice({
       state.hasMoreProductsModule = true;
       state.hasMoreProductsGadgets = true;
       state.error = null;
-      state.loadingMoreProducts= false;
+      state.loadingMoreProducts = false;
     },
     setCurrentPage: (state, action) => {
       state.currentPage = action.payload; // Set current page

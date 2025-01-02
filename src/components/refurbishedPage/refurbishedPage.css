@@ -47,3 +47,35 @@
 .refurbished-selected-category{
     color: greenyellow;
 }
+
+
+
+
+
+
+/* sort by pop up */
+.refurbished-page-sort-by-tab,.refurbished-page-filter-by-tab{
+    width: 100vw;height: 100vh;
+    position: fixed;top: 0;
+    background-color: rgba(0, 0, 0, 0.71);
+    display: flex;justify-content: flex-end;flex-direction: column;
+    align-items: center;gap: 10px;
+    z-index: 9999;color: black;
+}
+#refurbished-page-sort-by-header,#refurbished-page-filter-by-header{
+    display: flex; /* Use flexbox for layout */
+    flex-direction: column; /* Stack items vertically */
+    min-height: 70vh; /* Set height to 70% of the viewport */
+    width: 100vw; /* Set width to full viewport width */
+    max-width: 100vw; /* Prevent exceeding full viewport width */
+    background-color: rgb(236, 241, 246); /* Background color */
+    border-top-left-radius: 20px; /* Rounded top-left corner */
+    border-top-right-radius: 20px; /* Rounded top-right corner */
+    padding: 7px; /* Padding for spacing */
+    box-sizing: border-box; /* Include padding in width calculation */
+    overflow: hidden; /* Hide any overflow content */
+    gap: 10px;
+}
+#refurbished-page-filter-by-header{
+    overflow-y:scroll ;
+}
