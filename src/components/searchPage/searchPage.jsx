@@ -20,7 +20,6 @@ const SearchPage = () => {
     const [inputValue, setInputValue] = useState(query);
 
     const { products, loading, currenPage, loadingMoreProducts, hasMoreProducts } = useSelector((state) => state.searchproducts);
-    
     const selectedCategories = useSelector(state => state.searchproductfiltersection.selectedCategories);
     const selectedBrands = useSelector(state => state.searchproductfiltersection.selectedBrands);
 

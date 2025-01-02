@@ -15,7 +15,9 @@ const RefurbishedPage = () => {
     const dispatch = useDispatch();
     const [searchInput, setSearchInput] = useState('');
 
-    const { refurbishedProducts, currentPage, hasMoreProducts, error, loading, loadingMoreProducts } = useSelector(state => state.refurbishedproducts);
+    const { refurbishedProducts, currentPage, hasMoreProducts,hasMoreProductsBook,
+        hasMoreProductsModule,
+        hasMoreProductsGadgets, error, loading, loadingMoreProducts } = useSelector(state => state.refurbishedproducts);
     const selectedCategories = useSelector(state => state.refurbishedproductfiltersection.selectedCategories);
 
     // Function to handle product search
@@ -23,9 +25,12 @@ const RefurbishedPage = () => {
         const params = {
             inputValue: searchInput,
             page: 1,
-            productsPerPage: 2,
+            productsPerPage: 8,
             pinCodes: [742136],
             selectedCategories,
+            hasMoreProductsBook,
+            hasMoreProductsModule,
+            hasMoreProductsGadgets,
             selectedBrands: [],
             sortByAsc: null,
             sortByDesc: null,
@@ -44,9 +49,12 @@ const RefurbishedPage = () => {
         const params = {
             inputValue: searchInput.trim(),
             page: currentPage + 1,
-            productsPerPage: 2,
+            productsPerPage: 8,
             pinCodes: [742136],
             selectedCategories,
+            hasMoreProductsBook,
+            hasMoreProductsModule,
+            hasMoreProductsGadgets,
             selectedBrands: [],
             sortByAsc: null,
             sortByDesc: null,

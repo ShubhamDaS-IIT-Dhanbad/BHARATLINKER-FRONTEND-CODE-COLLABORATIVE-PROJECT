@@ -1,6 +1,6 @@
 import React from 'react';
 import { IoIosArrowDown } from "react-icons/io";
-import SearchPageProductCard from '../productCards/searchPageProductCard.jsx';
+import RefurbishedProductCard from '../refurbishedProductCard/refurbishedProductCard.jsx';
 import NoProductsFound from './noProductFound.jsx';
 
 const ProductList = ({ products, loading}) => {
@@ -15,7 +15,7 @@ const ProductList = ({ products, loading}) => {
         <>
             <div id="refurbished-product-page-grid">
                 {products?.map((product) => (
-                    <SearchPageProductCard
+                    <RefurbishedProductCard
                         key={product.$id}
                         id={product.$id}
                         image={product.images[0]}  

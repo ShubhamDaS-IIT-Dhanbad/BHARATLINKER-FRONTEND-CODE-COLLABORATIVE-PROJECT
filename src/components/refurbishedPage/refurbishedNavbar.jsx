@@ -32,13 +32,11 @@ function RefurbishedNavbar({ setSearchInput }) {
 
     const handleHomePageSearchSubmit = () => {
         const trimmedInput = homePageSearchInput.trim();
+        dispatch(resetRefurbishedProducts());
         if (trimmedInput) {
-            dispatch(resetRefurbishedProducts());
             setSearchInput(trimmedInput);
         }
     };
-
-
 
     return (
         <>

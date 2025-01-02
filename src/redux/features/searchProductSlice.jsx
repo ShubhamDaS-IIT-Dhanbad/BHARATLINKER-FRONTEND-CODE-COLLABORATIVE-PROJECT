@@ -1,22 +1,22 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import searchProductService from '../../appWrite/searchProduct.js'
+import searchProductService from '../../appWrite/searchProduct.js';
 
 // Async thunk to fetch products
 export const fetchProducts = createAsyncThunk(
     'products/fetchProducts',
-    async ({ inputValue,  selectedCategories,selectedBrands, pinCodes, page, productsPerPage,sortByAsc,sortByDesc  }, { rejectWithValue }) => {
+    async ({ inputValue, selectedCategories, selectedBrands, pinCodes, page, productsPerPage, sortByAsc, sortByDesc }, { rejectWithValue }) => {
         try {
             const response = await searchProductService.getProducts({
-                inputValue, pinCodes, page, productsPerPage,sortByAsc
+                inputValue, pinCodes, page, productsPerPage, sortByDesc, sortByAsc, selectedBrands, selectedCategories
             });
 
             if (response.documents.length === 0) {
                 return {
-                  products: [],
-                  totalPages: 0,
+                    products: [],
+                    totalPages: 0,
                 };
-              }
-            // Check if response has products and totalPages
+            }
+
             if (response.documents && response.total) {
                 return {
                     products: response.documents,
@@ -34,14 +34,13 @@ export const fetchProducts = createAsyncThunk(
 
 export const loadMoreProducts = createAsyncThunk(
     'products/loadMoreProducts',
-    async ({ inputValue,  selectedCategories,selectedBrands, pinCodes, page, productsPerPage,sortByAsc,sortByDesc}, { rejectWithValue }) => {
+    async ({ inputValue, selectedCategories, selectedBrands, pinCodes, page, productsPerPage, sortByAsc, sortByDesc }, { rejectWithValue }) => {
         try {
             const response = await searchProductService.getProducts({
                 inputValue, pinCodes, page, productsPerPage, selectedCategories,
-                selectedBrands,
+                selectedBrands, sortByAsc, sortByDesc
             });
 
-            // Check if response has products and totalPages
             if (response.documents && response.total) {
                 return {
                     products: response.documents,
@@ -81,6 +80,15 @@ const productsSlice = createSlice({
             state.hasMoreProducts = true;
             state.error = null;
         },
+        sortProductReducer: (state, action) => {
+            const { asc, desc } = action.payload;
+            if (asc) {
+                state.products.sort((a, b) => a.price - b.price);
+            }
+            if (desc) {
+                state.products.sort((a, b) => b.price - a.price);
+            }
+        }
     },
     extraReducers: (builder) => {
         builder
@@ -96,7 +104,7 @@ const productsSlice = createSlice({
                     );
                     state.products = [...state.products, ...newProducts];
                     state.totalPages = totalPages;
-                    state.hasMoreProducts = state.currentPage*20 < totalPages;
+                    state.hasMoreProducts = state.currentPage * 20 < totalPages;
                 } else {
                     state.hasMoreProducts = false;
                 }
@@ -107,7 +115,6 @@ const productsSlice = createSlice({
                 state.error = action.payload || 'Something went wrong';
                 state.hasMoreProducts = false;
             })
-            // load more products
             .addCase(loadMoreProducts.pending, (state) => {
                 state.loadingMoreProducts = true;
                 state.error = null;
@@ -120,8 +127,8 @@ const productsSlice = createSlice({
                     );
                     state.products = [...state.products, ...newProducts];
                     state.totalPages = totalPages;
-                    state.currentPage+=state.currentPage;
-                    state.hasMoreProducts = state.currentPage*20 < totalPages;
+                    state.currentPage += 1;
+                    state.hasMoreProducts = state.currentPage * 20 < totalPages;
                 } else {
                     state.hasMoreProducts = false;
                 }
@@ -142,5 +149,5 @@ export const selectCurrentPage = (state) => state.searchproducts.currentPage;
 export const selectError = (state) => state.searchproducts.error;
 
 // Exporting actions and reducer
-export const { setCurrentPage, resetProducts } = productsSlice.actions;
+export const { setCurrentPage, resetProducts, sortProductReducer } = productsSlice.actions;
 export default productsSlice.reducer;

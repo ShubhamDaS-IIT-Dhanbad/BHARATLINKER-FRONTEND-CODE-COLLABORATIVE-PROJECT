@@ -24,6 +24,9 @@ class SearchRefurbishedProductService {
         minPrice,
         maxPrice,
         isInStock,
+        isbook = true,
+        ismodule = true,
+        isgadgets = true,
         page,
         productsPerPage,
         sortByAsc = false,
@@ -37,33 +40,12 @@ class SearchRefurbishedProductService {
                 queries.push(Query.equal('pinCodes', pinCodes));
             }
             if (inputValue) {
-                queries.push(Query.or([
-                    Query.search('title', inputValue),
-                    Query.search('description', inputValue)
-                ]));
+                queries.push(Query.or([Query.search('title', inputValue), Query.search('description', inputValue)]));
             }
             // Filter by selected categories
             if (selectedCategories.length > 0) {
                 queries.push(Query.contains('category', selectedCategories));
             }
-
-            // Filter by selected brands
-            // if (selectedBrands.length > 0) {
-            //     queries.push(Query.contains('brand', selectedBrands));
-            // }
-
-            // Price range filtering
-            // if (minPrice !== undefined) {
-            //     queries.push(Query.greaterThanEqual('price', minPrice));
-            // }
-            // if (maxPrice !== undefined) {
-            //     queries.push(Query.lessThanEqual('price', maxPrice));
-            // }
-
-            // In-stock filtering
-            // if (isInStock !== undefined) {
-            //     queries.push(Query.equal('isInStock', isInStock));
-            // }
 
             // Sorting options
             if (sortByAsc) {
@@ -80,13 +62,70 @@ class SearchRefurbishedProductService {
                 queries.push(Query.offset(offset));
             }
 
-            // Fetch refurbished products with applied queries
-            const products = await this.databases.listDocuments(
-                conf.appwriteRefurbishProductDatabaseId,
-                conf.appwriteRefurbishedBooksCollectionId,
-                queries
-            );
-            return products;
+            let productsBook = { documents: [] };
+            let productsModule = { documents: [] };
+            let productsGadgets = { documents: [] };
+
+            // Fetch products for Books, if isbook is true
+            if (isbook) {
+                const bookQueries = [...queries];
+                // Add book-specific filters here
+                if (minPrice !== undefined) {
+                    bookQueries.push(Query.greaterThanEqual('price', minPrice));
+                }
+                if (maxPrice !== undefined) {
+                    bookQueries.push(Query.lessThanEqual('price', maxPrice));
+                }
+                if (isInStock !== undefined) {
+                    bookQueries.push(Query.equal('isInStock', isInStock));
+                }
+                productsBook = await this.databases.listDocuments(
+                    conf.appwriteRefurbishProductDatabaseId,
+                    conf.appwriteRefurbishedBooksCollectionId,
+                    bookQueries
+                );
+            }
+
+            // Fetch products for Modules, if ismodule is true
+            if (ismodule) {
+                const moduleQueries = [...queries];
+                productsModule = await this.databases.listDocuments(
+                    conf.appwriteRefurbishProductDatabaseId,
+                    conf.appwriteRefurbishedModulesCollectionId,
+                    moduleQueries
+                );
+            }
+
+            // Fetch products for Gadgets, if isgadgets is true, but exclude inputValue for gadgets
+            if (isgadgets) {
+                const gadgetsQueries = [...queries];
+                // Remove inputValue search from gadgets query
+                const index = gadgetsQueries.findIndex(q => q.$or);
+                if (index !== -1) {
+                    gadgetsQueries.splice(index, 1); // Remove inputValue search query
+                }
+                productsGadgets = await this.databases.listDocuments(
+                    conf.appwriteRefurbishProductDatabaseId,
+                    conf.appwriteRefurbishedGadgetsCollectionId,
+                    gadgetsQueries
+                );
+            }
+
+            // Combine products from all collections
+            const products = [
+                ...productsBook.documents,
+                ...productsModule.documents,
+                ...productsGadgets.documents
+            ];
+
+            // Return the combined result with the count of documents in each category
+            return {
+                products,
+                nbook: isbook ? productsBook.documents.length : 0,
+                nmodule: ismodule ? productsModule.documents.length : 0,
+                ngadgets: isgadgets ? productsGadgets.documents.length : 0
+            };
+
         } catch (error) {
             console.error('Appwrite service :: getRefurbishedProducts', error);
             return false;
@@ -111,3 +150,4 @@ class SearchRefurbishedProductService {
 
 const searchRefurbishedProductService = new SearchRefurbishedProductService();
 export default searchRefurbishedProductService;
+

@@ -97,13 +97,6 @@ const Shop = () => {
                     FILTER BY
                 </div>
             </div>
-
-
-
-
-
-
-            
         </>
     );
 };

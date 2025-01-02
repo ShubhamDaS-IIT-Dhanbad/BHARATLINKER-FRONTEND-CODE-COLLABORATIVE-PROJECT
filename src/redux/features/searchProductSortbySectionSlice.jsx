@@ -13,24 +13,27 @@ const searchProductSortBySectionSlice = createSlice({
     reducers: {
         toggleSortOrder: (state, action) => {
             const order = action.payload;
-
+            console.log(order)
             if (order === 'asc') {
                 if (state.sortByAsc) {
                     state.sortByAsc = false;
 
                 } else {
                     state.sortByAsc = true;
-                    state.sortByDesc = false; // Reset descending
                 }
+                if(state.sortByDesc) state.sortByAsc = false;
             } else if (order === 'desc') {
                 if (state.sortByDesc) {
                     state.sortByDesc = false;
 
                 } else {
-                    state.sortByAsc = false; // Reset ascending
                     state.sortByDesc = true;
+                    
+                    
                 }
+                if(state.sortByAsc) state.sortByAsc = false;
             }
+            console.log( state.sortByDesc, state.sortByAsc)
         },
         setPriceRange: (state, action) => {
             const { min, max } = action.payload;

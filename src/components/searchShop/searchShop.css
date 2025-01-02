@@ -76,7 +76,7 @@
     position: fixed;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     bottom: 0;
-    z-index: 999;
+    z-index: 2;
 }
 
 #searchShopPage-footer-sortby,
@@ -90,7 +90,7 @@
 
 
 #filter-category-options {
-    display: flex;
+    display: flex;flex-direction: column;
     justify-content: center;
     align-items: center;
 }

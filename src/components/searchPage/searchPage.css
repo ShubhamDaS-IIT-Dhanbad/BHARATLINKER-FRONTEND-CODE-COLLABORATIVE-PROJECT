@@ -141,6 +141,11 @@
 #filter-options-product-page {
     width: 100vw;
 }
+#search-page-filter-category-options,#search-page-filter-brand-options{
+    display: flex;flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
 
 .pincode-item-selected,
 .pincode-item-unselected {
