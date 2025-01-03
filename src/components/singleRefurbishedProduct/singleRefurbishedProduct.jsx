@@ -56,15 +56,18 @@ const ProductDetails = () => {
 
     const handlePhoneClick = () => {
         if (productDetail && productDetail.phone) {
-            window.location.href = `tel:${productDetail.phn}`;
+            window.location.href = `tel:${productDetail.phone}`;
         }
     };
 
     const handleWhatsappClick = () => {
-        console.log("ko")
         if (productDetail && productDetail.phone) {
-            window.location.href = `https://wa.me/${productDetail.phn}`;
+            window.location.href = `https://wa.me/${productDetail.phone}`;
         }
+    };
+
+    const handleImageClick = (index) => {
+        setSelectedImage(productDetail.images[index]);
     };
 
     return (
@@ -87,36 +90,52 @@ const ProductDetails = () => {
                                 <img src={selectedImage} alt="Selected Product" id="refurbishedProductDetails-img-selected" />
                             </div>
 
+                            <div id="shop-details-thumbnails">
+                                {productDetail.images?.map((image, index) => (
+                                    <div
+                                        id="shop-details-thumbnail"
+                                        key={index}
+                                        onClick={() => handleImageClick(index)}
+                                        className={
+                                            selectedImage === image ? "image-select" : "image-unselect"
+                                        }
+                                    >
+                                        <div id="shop-details-thumbnail-item"></div>
+                                    </div>
+                                ))}
+                            </div>
+
                             <div id="refurbishedProductDetails-info">
                                 <span id="refurbishedProductDetails-trending-deals">Trending deal</span>
                                 <p id="refurbishedProductDetails-pid">Product # {productDetail.$id}</p>
                                 <div id="refurbishedProductDetails-title">{productDetail.title}</div>
                             </div>
 
-                            <div id="refurbishedProductDetail-about" onClick={toggleDescription}>
-                                <p>About Product</p>
-                                {showDescription ? <IoIosArrowUp size={20} /> : <IoIosArrowDown size={20} />}
+                            {/* Image dots */}
+                            <div id="refurbishedProductDetails-image-dots">
+                                {productDetail.images.map((image, index) => (
+                                    <span
+                                        key={index}
+                                        className={`image-dot ${selectedImage === image ? 'selected' : ''}`}
+                                        onClick={() => handleImageClick(index)}
+                                    >
+                                    </span>
+                                ))}
                             </div>
 
                             <div id="refurbishedProductDetails-price-button">
                                 <p>₹{productDetail.price}</p>
-                                <div id={`refurbishedProductDetails-price-${productDetail.isInStock ? 'instock' : 'outofstock'}`}>
+                                <div id='refurbishedProductDetails-on-sale'>
                                     ON SALE
                                 </div>
                             </div>
-
-                            {showDescription && (
-                                <div id="refurbishedProductDetails-description">
-                                    Description: {productDetail.description}
-                                </div>
-                            )}
                         </div>
                     ) : (
                         <p>Product not found.</p>
                     )}
-                    
                 </Fragment>
             )}
+
             <div id='refurbishedProductSearchPage-footer'>
                 <div id='refurbishedProductSearchPage-footer-sortby' onClick={handlePhoneClick}>
                     PHONE
@@ -130,3 +149,13 @@ const ProductDetails = () => {
 };
 
 export default ProductDetails;
+
+
+{/* <div id="refurbishedProductDetail-about" onClick={toggleDescription}>
+                                About Product
+                            </div>
+                            {showDescription && (
+                                <div id="refurbishedProductDetails-description">
+                                    Description: {productDetail.description}
+                                </div>
+                            )} */}

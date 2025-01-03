@@ -35,16 +35,17 @@ const ProductDetails = () => {
     useEffect(() => {
         const fetchProductDetails = async () => {
             let product = products.find((product) => product.$id === productId);
+            console.log(product)
             if (product) {
                 setProductDetails(product);
-                setSelectedImage(product.imageUrl || 'http://res.cloudinary.com/dthelgixr/image/upload/v1727870088/hd7kcjuz8jfjajnzmqkp.webp');
+                setSelectedImage(product.images[0] || 'http://res.cloudinary.com/dthelgixr/image/upload/v1727870088/hd7kcjuz8jfjajnzmqkp.webp');
                 fetchShopDetails(product.shop); // Fetch shop details if the shopId is available
             } else {
                 try {
                     const response = await searchProductService.getProductById(productId);
                     if (response) {
                         setProductDetails(response);
-                        setSelectedImage(response.imageUrl || 'http://res.cloudinary.com/dthelgixr/image/upload/v1727870088/hd7kcjuz8jfjajnzmqkp.webp');
+                        setSelectedImage(response.images[0] || 'http://res.cloudinary.com/dthelgixr/image/upload/v1727870088/hd7kcjuz8jfjajnzmqkp.webp');
                         fetchShopDetails(response.shop); // Fetch shop details based on product's shopId
                     }
                 } catch (error) {
@@ -91,6 +92,10 @@ const ProductDetails = () => {
         setShowDescription(!showDescription);
     };
 
+    const handleImageClick = (index) => {
+        setSelectedImage(productDetail.images[index]);
+    };
+
     const handleShopClick = () => {
         if (shopDetail) {
             navigate(`/shop/${shopDetail.$id}`);
@@ -100,7 +105,7 @@ const ProductDetails = () => {
     return (
         <Fragment>
             <div id='product-details-search-container-top'>
-                <SingleProductSearchBar />
+                <SingleProductSearchBar value={searchQuery} onChange={handleSearchChange} onKeyPress={handleEnter} />
             </div>
 
             {loading ? (
@@ -113,23 +118,32 @@ const ProductDetails = () => {
                                 <div id="product-details-img">
                                     <img src={selectedImage} alt="Selected Product" id="product-details-img-selected" />
                                 </div>
+                                <div id="shop-details-thumbnails">
+                                    {productDetail.images?.map((image, index) => (
+                                        <div
+                                            id="shop-details-thumbnail"
+                                            key={index}
+                                            onClick={() => handleImageClick(index)}
+                                            className={selectedImage === image ? "image-select" : "image-unselect"}
+                                        >
+                                            <div id="shop-details-thumbnail-item"></div>
+                                        </div>
+                                    ))}
+                                </div>
 
                                 <div id="product-details-info">
                                     <span id="product-details-trending-deals">Trending deal</span>
                                     <p id="product-details-pid">Product # {productDetail.$id}</p>
                                     <div id="product-details-title">{productDetail.title}</div>
                                 </div>
-                                <div
-                                    id="product-detail-about"
-                                    onClick={toggleDescription}
-                                >
+                                <div id="product-detail-about" onClick={toggleDescription}>
                                     <p>About Product</p>
                                     {showDescription ? <IoIosArrowUp size={20} /> : <IoIosArrowDown size={20} />}
                                 </div>
 
                                 <div
                                     id="product-details-see-all-brand-product"
-                                    onClick={() => navigate(`/search?query=${productDetail.brand}`)} // Fixed onClick syntax
+                                    onClick={() => navigate(`/search?query=${productDetail.brand}`)}
                                 >
                                     See All {productDetail.brand} Products <MdOutlineKeyboardArrowRight size={11} />
                                 </div>

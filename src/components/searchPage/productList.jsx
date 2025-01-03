@@ -19,7 +19,7 @@ const ProductList = ({ products, loading, hasMoreProducts, loadingMoreProducts, 
                     <SearchPageProductCard
                         key={product.$id}
                         id={product.$id}
-                        image=''
+                        image={product.images}
                         title={product.title.length > 45 ? `${product.title.substr(0, 45)}...` : product.title}
                         price={product.price}
                         isInStock={product.isInStock}

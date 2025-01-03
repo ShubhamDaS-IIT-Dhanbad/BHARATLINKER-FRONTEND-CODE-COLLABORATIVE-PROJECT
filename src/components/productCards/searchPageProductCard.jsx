@@ -5,7 +5,7 @@ import "./searchPageProductCard.css";
 function SearchPageProductCard({ id, image, title, price, isInStock }) {
     const navigate = useNavigate();
 
-    const imageUrl = image || 'http://res.cloudinary.com/dthelgixr/image/upload/v1727870088/hd7kcjuz8jfjajnzmqkp.webp';
+    const imageUrl = image[0] || 'http://res.cloudinary.com/dthelgixr/image/upload/v1727870088/hd7kcjuz8jfjajnzmqkp.webp';
     const productName = title ? (title.length > 45 ? title.substr(0, 45) + '..' : title) : 'Product Name';
     const productPrice = price || '0';
 
