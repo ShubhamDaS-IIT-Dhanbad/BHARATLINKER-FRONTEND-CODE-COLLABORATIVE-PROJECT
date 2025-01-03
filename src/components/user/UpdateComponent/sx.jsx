@@ -4,7 +4,7 @@ import { FaArrowLeft } from 'react-icons/fa';
 
 import UpdateModule from './moduleUpdateForm.jsx'
 import Cookies from 'js-cookie';
-import './userUpdateBook.css';
+// import './userUpdateBook.css';
 
 const UploadProduct = () => {
   const navigate = useNavigate();

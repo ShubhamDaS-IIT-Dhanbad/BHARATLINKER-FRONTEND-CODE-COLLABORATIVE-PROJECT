@@ -35,7 +35,7 @@ import RefurbishedGadgetsUploadUser from './components/user/gadgetsUploadCompone
 import UserProductPageMain from './components/user/productPage/userProductPageMain.jsx'
 
 import UserUpdateBook  from './components/user/UpdateComponent/uub.jsx';
-import UserUpdateModule  from './sx.jsx';
+import UserUpdateModule  from './components/user/UpdateComponent/sx.jsx';
 import UserUpdateGadget from './components/user/UpdateComponent/uug.jsx';
 
 function App() {
