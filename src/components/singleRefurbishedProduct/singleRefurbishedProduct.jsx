@@ -7,9 +7,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import SingleRefurbishedProductSearchBar from './singleRefurbishedProductSearchBar.jsx';
 import LoadingSingleProduct from "../loading/loadingSingleProduct.jsx";
 
-import { IoCallOutline } from "react-icons/io5";
-import { PiPhoneCallFill } from "react-icons/pi";
-import { FaWhatsapp } from "react-icons/fa";
 
 const ProductDetails = () => {
     const navigate = useNavigate();
@@ -44,18 +41,7 @@ const ProductDetails = () => {
         setSearchQuery(e.target.value);
     };
 
-    const handleEnter = (e) => {
-        if (e.key === 'Enter' && searchQuery.trim()) {
-            navigate(`/search?query=${searchQuery}`);
-        }
-    };
-
-    const toggleDescription = () => {
-        setShowDescription((prev) => !prev);
-    };
-
     const handlePhoneClick = () => {
-        console.log(productDetail)
         if (productDetail && productDetail.phn) {
             window.location.href = `tel:${productDetail.phn}`;
         }
@@ -75,9 +61,6 @@ const ProductDetails = () => {
         <Fragment>
             <div id='refurbishedProductDetails-search-container-top'>
                 <SingleRefurbishedProductSearchBar
-                    value={searchQuery}
-                    onChange={handleSearchChange}
-                    onKeyPress={handleEnter}
                 />
             </div>
 

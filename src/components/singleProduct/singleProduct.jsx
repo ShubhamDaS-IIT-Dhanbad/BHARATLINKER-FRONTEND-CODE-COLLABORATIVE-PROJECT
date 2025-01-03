@@ -3,18 +3,15 @@ import { useParams, useNavigate } from 'react-router-dom';
 import "./singleProduct.css";
 
 import searchProductService from '../../appWrite/searchProduct.js';
-import searchShopService from '../../appWrite/searchShop.js';
-
 import { MdOutlineKeyboardArrowRight } from "react-icons/md";
 import { HiOutlineArrowRightStartOnRectangle } from "react-icons/hi2";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { useDispatch, useSelector } from 'react-redux';
 import SingleProductSearchBar from './singleProductSearchBar.jsx';
 import LoadingSingleProduct from "../loading/loadingSingleProduct.jsx";
-import { BiSearchAlt } from "react-icons/bi";
-import { TbCategoryPlus } from "react-icons/tb";
 
 import { fetchShopById } from '../../redux/features/singleShopSlice.jsx';
+
 
 const ProductDetails = () => {
     const navigate = useNavigate();
@@ -23,6 +20,8 @@ const ProductDetails = () => {
     const { shops } = useSelector((state) => state.searchshops);
     const { singleShops } = useSelector((state) => state.singleshops);
 
+        
+    
     const { productId } = useParams();
 
     const [loading, setLoading] = useState(true);
@@ -35,7 +34,7 @@ const ProductDetails = () => {
     useEffect(() => {
         const fetchProductDetails = async () => {
             let product = products.find((product) => product.$id === productId);
-            console.log(product)
+           
             if (product) {
                 setProductDetails(product);
                 setSelectedImage(product.images[0] || 'http://res.cloudinary.com/dthelgixr/image/upload/v1727870088/hd7kcjuz8jfjajnzmqkp.webp');
@@ -76,17 +75,9 @@ const ProductDetails = () => {
         };
 
         fetchProductDetails();
-    }, [products, shops, singleShops, productId, dispatch, navigate]);
+    }, []);
 
-    const handleSearchChange = (e) => {
-        setSearchQuery(e.target.value);
-    };
-
-    const handleEnter = (e) => {
-        if (e.key === 'Enter' && searchQuery.trim()) {
-            navigate(`/search?query=${searchQuery}`);
-        }
-    };
+  
 
     const toggleDescription = () => {
         setShowDescription(!showDescription);
@@ -105,7 +96,7 @@ const ProductDetails = () => {
     return (
         <Fragment>
             <div id='product-details-search-container-top'>
-                <SingleProductSearchBar value={searchQuery} onChange={handleSearchChange} onKeyPress={handleEnter} />
+                <SingleProductSearchBar/>
             </div>
 
             {loading ? (

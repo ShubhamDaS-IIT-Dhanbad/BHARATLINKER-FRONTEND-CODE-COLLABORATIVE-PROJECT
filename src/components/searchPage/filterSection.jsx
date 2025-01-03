@@ -16,7 +16,7 @@ const FilterSection = () => {
     const selectedCategories = useSelector(state => state.searchproductfiltersection.selectedCategories);
     const selectedBrands = useSelector(state => state.searchproductfiltersection.selectedBrands);
 
-    const categories = ['Electronics', 'Fashion', 'Home', 'Books'];
+    const categories = ['Electronics', 'Fashion', 'Home', 'Books','Human'];
     const brands = ['Apple', 'Samsung', 'Nike', 'Adidas'];
 
     const filteredCategories = categories.filter(category =>
@@ -27,12 +27,12 @@ const FilterSection = () => {
     );
 
     const handleCategoryClick = (category) => {
-        dispatch(toggleCategory(category.toUpperCase())); // Ensure consistency with stored values
+        dispatch(toggleCategory(category.toLowerCase())); // Ensure consistency with stored values
         dispatch(resetProducts());
     };
 
     const handleBrandClick = (brand) => {
-        dispatch(toggleBrand(brand.toUpperCase())); // Ensure consistency with stored values
+        dispatch(toggleBrand(brand.toLowerCase())); // Ensure consistency with stored values
         dispatch(resetProducts());
     };
 
@@ -67,7 +67,7 @@ const FilterSection = () => {
                             filteredCategories.map(category => (
                                 <p
                                     key={category}
-                                    className={`filter-option ${selectedCategories.includes(category.toUpperCase()) ? 'shop-selected-category' : 'shop-unselected-category'}`}
+                                    className={`filter-option ${selectedCategories.includes(category.toLowerCase()) ? 'shop-selected-category' : 'shop-unselected-category'}`}
                                     onClick={() => handleCategoryClick(category)}
                                 >
                                     {category}
@@ -96,7 +96,7 @@ const FilterSection = () => {
                             filteredBrands.map(brand => (
                                 <p
                                     key={brand}
-                                    className={`filter-option ${selectedBrands.includes(brand.toUpperCase()) ? 'shop-selected-category' : 'shop-unselected-category'}`}
+                                    className={`filter-option ${selectedBrands.includes(brand.toLowerCase()) ? 'shop-selected-category' : 'shop-unselected-category'}`}
                                     onClick={() => handleBrandClick(brand)}
                                 >
                                     {brand}

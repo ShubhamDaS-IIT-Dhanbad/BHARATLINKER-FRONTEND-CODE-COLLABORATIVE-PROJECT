@@ -1,19 +1,23 @@
 import React, { useState } from 'react';
 import { BiSearchAlt } from "react-icons/bi";
-import { TbHomeMove, TbChevronDown } from "react-icons/tb";
+import { TbChevronDown } from "react-icons/tb";
 import { FaArrowLeft } from 'react-icons/fa'; // Import FaArrowLeft
 import { useNavigate } from 'react-router-dom'; // Import navigate hook for routing
 import LocationTab from '../locationTab/locationTab';
 import './singleShopSearchBar.css';
+import { useDispatch } from 'react-redux'; // Import useDispatch for dispatching actions
+import { resetShops } from '../../redux/features/searchShopSlice.jsx'; // Ensure resetShops is imported
 
 const SingleShopSearchBar = () => {
     const navigate = useNavigate();
-    const [inputValue, setInputValue] = useState(""); // State to hold input value
+    const dispatch = useDispatch(); // Initialize dispatch
+    const [inputValue, setInputValue] = useState(''); // Initialize state for input value
     const [locationTab, setLocationTab] = useState(false);
 
     const handleKeyPress = (e) => {
         if (e.key === 'Enter') {
-            navigate(`/search?query=${inputValue}`);
+            dispatch(resetShops());
+            navigate(`/shop?query=${inputValue}`);
         }
     };
 

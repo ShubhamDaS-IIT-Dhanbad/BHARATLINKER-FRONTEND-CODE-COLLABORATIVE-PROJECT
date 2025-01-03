@@ -1,16 +1,20 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { BiSearchAlt } from 'react-icons/bi';
 import { TbChevronDown } from 'react-icons/tb';
 import { FaArrowLeft } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import './searchBar.css';
 import LocationTab from '../locationTab/locationTab';
-const ShopSearchBar = ({ shopQuery, handleSearchChange, handleSearch }) => {
+import { resetShops } from '../../redux/features/searchShopSlice';
+const ShopSearchBar = ({  inputValue, handleSearchChange, handleSearch }) => {
+    const dispatch=useDispatch();
     const navigate = useNavigate();
     const [locationTab, setLocationTab] = useState(false);
 
     const handleKeyDown = (event) => {
         if (event.key === 'Enter') {
+            dispatch(resetShops());
             handleSearch();
         }
     };
@@ -53,7 +57,7 @@ const ShopSearchBar = ({ shopQuery, handleSearchChange, handleSearch }) => {
                         <input
                             className='shop-page-search-input'
                             placeholder="Search By Shop Name"
-                            value={shopQuery}
+                            value={inputValue}
                             onChange={handleSearchChange}
                             onKeyDown={handleKeyDown}
                             aria-label="Search input"

@@ -31,7 +31,6 @@ const Shop = () => {
             sortByAsc: null,
             sortByDesc: null,
         };
-        dispatch(resetShops());
         dispatch(fetchShops(params));
     };
 
@@ -69,6 +68,7 @@ const Shop = () => {
         <>
             <div id='shopSearchPage-container-top'>
                 <SearchBar
+                    inputValue={inputValue}
                     handleSearchChange={handleInputChange}
                     handleSearch={handleSearch}
                 />

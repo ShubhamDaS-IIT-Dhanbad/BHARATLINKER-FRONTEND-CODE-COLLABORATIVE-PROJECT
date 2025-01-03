@@ -11,7 +11,7 @@ const SearchBar = ({ inputValue, onInputChange, onSearch, onNavigateHome }) => {
 
     const handleKeyPress = (e) => {
         if (e.key === 'Enter') {
-            onSearch(); // Trigger search when "Enter" is pressed
+            onSearch();
         }
     };
 

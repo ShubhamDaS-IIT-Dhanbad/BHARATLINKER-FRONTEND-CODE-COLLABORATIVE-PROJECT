@@ -37,7 +37,6 @@ class SearchProductService {
                 queries.push(Query.equal('pinCodes', pinCodes));
             }
             if (inputValue) {
-                console.log(inputValue);
                 queries.push(Query.or([
                     Query.search('title', inputValue),
                     Query.search('description', inputValue)
@@ -46,13 +45,11 @@ class SearchProductService {
 
             // Check if any category in the selectedCategories array exists in the category field
             if (selectedCategories && selectedCategories.length > 0) {
-                console.log(selectedCategories);
                 queries.push(Query.contains('category', selectedCategories));
             }
 
             // Check if any brand in the selectedBrands array exists in the brand field
             if (selectedBrands && selectedBrands.length > 0) {
-                console.log(selectedBrands);
                 queries.push(Query.contains('brand', selectedBrands));
             }
 
@@ -99,7 +96,6 @@ class SearchProductService {
 
     // Method to fetch a product by ID
     async getProductById(productId) {
-        console.log(productId, conf.appwriteProductsProjectId, conf.appwriteProductsDatabaseId, conf.appwriteProductsCollectionId);
         try {
             const product = await this.databases.getDocument(
                 conf.appwriteProductsDatabaseId,

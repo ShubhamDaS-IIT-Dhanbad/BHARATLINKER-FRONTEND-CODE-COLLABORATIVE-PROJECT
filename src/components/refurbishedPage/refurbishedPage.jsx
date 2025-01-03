@@ -10,12 +10,16 @@ import RefurbishedProductSortBySection from './sortBySection';
 import RefurbishedProductFilterBySection from './filterSection';
 import './refurbishedPage.css';
 import { RotatingLines } from 'react-loader-spinner'; // Import the loader spinner
+import { useSearchParams } from 'react-router-dom';
 
 const RefurbishedPage = () => {
   const dispatch = useDispatch();
 
   // Local state hooks
-  const [searchInput, setSearchInput] = useState('');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const query = searchParams.get('query') || '';
+  const [inputValue, setInputValue] = useState(query);
+
   const [showSortBy, setShowSortBy] = useState(false);
   const [showFilterBy, setShowFilterBy] = useState(false);
 
@@ -41,7 +45,7 @@ const RefurbishedPage = () => {
   // Search handling function
   const handleSearch = () => {
     const params = {
-      inputValue: searchInput,
+      inputValue,
       page: 1,
       productsPerPage: 8,
       pinCodes: [742136],
@@ -53,34 +57,33 @@ const RefurbishedPage = () => {
       selectedBrands,
       sortByAsc, sortByDesc
     };
-    dispatch(resetRefurbishedProducts());
     dispatch(fetchRefurbishedProducts(params));
   };
 
   // Input change handler for search
   const handleInputChange = (event) => {
     const value = event.target.value;
-    setSearchInput(value);
+    setInputValue(value);
+    setSearchParams({ query: value });
   };
 
   // Fetch products on initial render if no products exist
   useEffect(() => {
     if (refurbishedProducts.length === 0) handleSearch();
-  },
-    [
-      selectedCategories,
-      selectedClasses,
-      selectedExams,
-      selectedLanguages,
-      selectedBoards,
-      selectedBrands]);
+  }, [
+    selectedCategories,
+    selectedClasses,
+    selectedExams,
+    selectedLanguages,
+    selectedBoards,
+    selectedBrands]);
 
   // Handle loading more products
   const handleLoadMore = () => {
     if (!hasMoreProducts || loadingMoreProducts) return;
 
     const params = {
-      inputValue: searchInput,
+      inputValue,
       page: currentPage + 1,
       productsPerPage: 8,
       pinCodes: [742136],
@@ -110,6 +113,7 @@ const RefurbishedPage = () => {
       <RefurbishedNavbar
         handleSearch={handleSearch}
         handleSearchChange={handleInputChange}
+        inputValue={inputValue}
       />
       {loading ? (
         <div className="refurbished-page-loading-container">

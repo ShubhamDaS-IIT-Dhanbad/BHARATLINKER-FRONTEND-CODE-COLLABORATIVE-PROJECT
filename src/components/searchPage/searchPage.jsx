@@ -1,51 +1,30 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchProducts, loadMoreProducts, resetProducts } from '../../redux/features/searchProductSlice.jsx';
+import { useSelector, useDispatch } from 'react-redux';
+import { loadMoreProducts } from '../../redux/features/searchProductSlice.jsx';
+import { useExecuteSearch } from '../../hooks/searchProductHook.jsx'; // Import the hook
 import { LiaSortSolid } from "react-icons/lia";
 import { MdFilterList } from "react-icons/md";
 import { ToastContainer } from 'react-toastify';
 import SearchBar from './searchBar';
 import ProductList from './productList.jsx';
-import { useUserPincode } from '../../hooks/userPincodeHook.jsx';
-import { RotatingLines } from 'react-loader-spinner'; // Import the spinner
+import { RotatingLines } from 'react-loader-spinner';
 import './searchPage.css';
 
 const SearchPage = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const productsPerPage = 24;
+    const { inputValue, setInputValue, executeSearch } = useExecuteSearch();
 
     const [searchParams, setSearchParams] = useSearchParams();
     const query = searchParams.get('query') || '';
-    const [inputValue, setInputValue] = useState(query);
-
     const { products, loading, currenPage, loadingMoreProducts, hasMoreProducts } = useSelector((state) => state.searchproducts);
-    const selectedCategories = useSelector(state => state.searchproductfiltersection.selectedCategories);
-    const selectedBrands = useSelector(state => state.searchproductfiltersection.selectedBrands);
-
-    const { sortByAsc, sortByDesc } = useSelector((state) => state.searchproductsortbysection);
-    
-    const handleSearch = () => {
-        const params = {
-            inputValue,
-            page: 1,
-            productsPerPage,
-            pinCodes: [742136, 742137],
-            selectedCategories,
-            selectedBrands,
-            sortByAsc,
-            sortByDesc
-        };
-        dispatch(resetProducts());
-        dispatch(fetchProducts(params));
-    };
 
     useEffect(() => {
         if (products.length === 0) {
-            handleSearch();
+            executeSearch();
         }
-    }, []); 
+    }, []);
 
     const handleInputChange = (event) => {
         const value = event.target.value;
@@ -60,12 +39,12 @@ const SearchPage = () => {
         const params = {
             inputValue,
             page: currenPage + 1,
-            productsPerPage,
+            productsPerPage: 24,
             pinCodes: [742136, 742137],
-            selectedCategories,
-            selectedBrands,
-            sortByAsc: sortByAsc,
-            sortByDesc: sortByDesc
+            selectedCategories: [],
+            selectedBrands: [],
+            sortByAsc: false,
+            sortByDesc: true,
         };
         dispatch(loadMoreProducts(params));
     };
@@ -77,21 +56,18 @@ const SearchPage = () => {
                 <SearchBar
                     inputValue={inputValue}
                     onInputChange={handleInputChange}
-                    onSearch={handleSearch}
+                    onSearch={executeSearch}
                     onNavigateHome={() => navigate('/')}
                 />
             </div>
-            
+
             {loading ? (
                 <div className="refurbished-page-loading-container">
                     <RotatingLines width="60" height="60" color="#007bff" />
                 </div>
             ) : (
                 <ProductList
-                    products={products}
-                    loading={loading}
-                    hasMoreProducts={hasMoreProducts}
-                    loadingMoreProducts={loadingMoreProducts}
+                   
                     onLoadMore={onLoadMore}
                 />
             )}

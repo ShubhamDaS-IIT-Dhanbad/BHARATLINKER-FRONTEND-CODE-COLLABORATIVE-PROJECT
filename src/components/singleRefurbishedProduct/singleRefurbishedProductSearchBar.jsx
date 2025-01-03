@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { BiSearchAlt } from "react-icons/bi";
 import { TbChevronDown } from "react-icons/tb";
 import { FaArrowLeft } from 'react-icons/fa';
@@ -6,13 +7,16 @@ import { useNavigate } from 'react-router-dom';
 import LocationTab from '../locationTab/locationTab';
 import './singleRefurbishedProductSearchBar.css';
 
+import { resetRefurbishedProducts } from "../../redux/features/refurbishedProductsSlice.jsx";
 const SingleRefurbishedProductSearchBar = () => {
+    const dispatch=useDispatch();
     const navigate = useNavigate();
     const [inputValue, setInputValue] = useState("");
     const [locationTab, setLocationTab] = useState(false);
 
     const handleKeyPress = (e) => {
         if (e.key === 'Enter') {
+            dispatch(resetRefurbishedProducts());
             navigate(`/refurbished?query=${inputValue}`);
         }
     };

@@ -1,19 +1,23 @@
 import React from 'react';
 import { IoIosArrowDown } from "react-icons/io";
-
+import { useSelector}from 'react-redux';
 import NoProductsFound from './noProductFound.jsx';
 import SearchPageProductCard from '../productCards/searchPageProductCard.jsx';
 
-const ProductList = ({ products, loading, hasMoreProducts, loadingMoreProducts, onLoadMore }) => {
+const ProductList = ({ onLoadMore }) => {
+    const { products, loading,loadingMoreProducts,hasMoreProducts } = useSelector((state) => state.searchproducts);
+
+    // Loading state while products are being fetched
     if (loading) return <>Loading...</>;
+
+    // Handle case where no products are found
     if (!loading && products.length === 0) {
-        return (
-           <NoProductsFound/>
-        );
+        return <NoProductsFound />;
     }
 
     return (
         <>
+            {/* Display products in a grid layout */}
             <div id="product-page-grid">
                 {products.map((product) => (
                     <SearchPageProductCard
@@ -26,11 +30,15 @@ const ProductList = ({ products, loading, hasMoreProducts, loadingMoreProducts, 
                     />
                 ))}
             </div>
+
+            {/* Display "Load More" button if there are more products to load */}
             {hasMoreProducts && !loadingMoreProducts && (
                 <div className='search-page-load-more-container'>
                     <IoIosArrowDown size={30} className="search-page-load-more-icon" onClick={onLoadMore} />
                 </div>
             )}
+
+            {/* Display loading message if more products are being loaded */}
             {hasMoreProducts && loadingMoreProducts && (
                 <>Loading more products...</>
             )}
