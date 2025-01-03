@@ -53,7 +53,7 @@ const UploadProduct = () => {
     }
   }, []);
 
-  const products = useSelector((state) => state.userAllRefurbishedProducts.allRefurbishedProducts);
+  const products = useSelector((state) => state.userRefurbishedProducts.refurbishedProducts);
   useEffect(() => {
     const fetchProductData = async () => {
       if (productId) {

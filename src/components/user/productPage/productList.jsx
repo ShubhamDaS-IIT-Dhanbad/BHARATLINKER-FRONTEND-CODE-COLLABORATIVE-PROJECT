@@ -11,7 +11,7 @@ const ProductList = ({ products, loading}) => {
 
     return (
         <>
-            <div id="user-refurbished-product-page-grid">
+            <div id="user-refurbished-product-page-grid" style={{marginTop:"110px"}}>
                 {products?.map((product) => (
                     <SearchPageProductCard
                         key={product.$id}

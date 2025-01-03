@@ -32,7 +32,7 @@ function UpdateModuleForm() {
     });
     const [userData, setUserData] = useState({});
     const [imagesToDelete, setImagesToDelete] = useState([]);
-    const products = useSelector((state) => state.userAllRefurbishedProducts.allRefurbishedProducts);
+    const products = useSelector((state) => state.userRefurbishedProducts.refurbishedProducts);
 
     useEffect(() => {
         const userSession = Cookies.get('BharatLinkerUser');

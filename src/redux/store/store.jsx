@@ -15,15 +15,12 @@ import singleshops from '../features/singleShopSlice.jsx'
 
 
 //refurbished products
-import userAllRefurbishedProducts from '../features/user/userAllRefurbishedProductsSlice.jsx'
 import refurbishedproducts from '../features/refurbishedProductsSlice.jsx'
 import refurbishedproductfiltersection from '../features/refurbishedProductFilterSectionSlice.jsx'
 import refurbishedproductsortbysection from '../features/refurbishedProductSortbySectionSlice.jsx'
 
 //user refurbished products
-import userRefurbishedBooks from '../features/user/userRefurbishedBooksSlice.jsx'
-import userRefurbishedModules from '../features/user/userRefurbishedModulesSlice.jsx'
-import userRefurbishedGadgets from '../features/user/userRefurbishedGadgetsSlice.jsx'
+import userRefurbishedProducts from '../features/user/userAllRefurbishedProductsSlice.jsx'
 
 const store=configureStore({
     reducer:{
@@ -47,10 +44,7 @@ const store=configureStore({
 
 
         //user refurbished products
-        userAllRefurbishedProducts:userAllRefurbishedProducts,
-        userRefurbishedModules:userRefurbishedModules,
-        userRefurbishedBooks:userRefurbishedBooks,
-        userRefurbishedGadgets:userRefurbishedGadgets
+        userRefurbishedProducts:userRefurbishedProducts,
 
     }
 });
