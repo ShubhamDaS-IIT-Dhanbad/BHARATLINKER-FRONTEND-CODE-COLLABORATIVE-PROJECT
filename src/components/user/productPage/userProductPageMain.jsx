@@ -52,6 +52,7 @@ function YourRefurbished() {
     // Handle "Enter" key press for search
     const handleKeyPress = (event) => {
         if (event.key === 'Enter') {
+            dispatch(resetUserRefurbishedProducts());
             handleSearch();
         }
     };
