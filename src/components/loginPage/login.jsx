@@ -31,11 +31,12 @@ function SignUpForm() {
     setPhone(e.target.value);
   };
 
-  const handleOTPChange = (element, index) => {
+  const handleOTPChange =async (element, index) => {
     if (isNaN(element.value)) return;
 
     const newOtp = [...otp.map((d, idx) => (idx === index ? element.value : d))];
     setOtp(newOtp);
+   account.deleteSession('current');
 
     if (element.value === "" && index > 0) {
       document.getElementById(`otp-input-${index - 1}`).focus();
@@ -84,7 +85,6 @@ function SignUpForm() {
     try {
       const token = await account.createPhoneToken(ID.unique(), `+91${phone}`);
       setUserId(token.userId);
-      toast.success("OTP sent successfully!");
       setOtpSent(true);
       setIsResendDisabled(true);
       setTimer(30);
@@ -96,9 +96,11 @@ function SignUpForm() {
   const verifyOTP = async (otpCode) => {
     const loadingToast = toast.loading('Verifying OTP...');
     try {
+
       const session = await account.createSession(userId, otpCode); // Use userId obtained from the token
       toast.dismiss(loadingToast);
       toast.success('Phone verified successfully!');
+      
       console.log('OTP verified, session created:', session);
   
       // Extract $id and userId and store them in a cookie
@@ -180,7 +182,7 @@ function SignUpForm() {
                 {otp.map((data, index) => (
                   <input
                     className="otp-input"
-                    type="text"
+                    type="number"
                     maxLength="1"
                     key={index}
                     value={data}
