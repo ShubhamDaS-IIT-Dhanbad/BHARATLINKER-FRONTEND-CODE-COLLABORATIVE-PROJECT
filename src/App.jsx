@@ -102,7 +102,7 @@ const RoutesWithConditionalHeader = React.memo(({ address }) => {
         <Route path='/user/refurbished' element={<UserProductPageMain/>} />
 
         <Route path='/user/refurbished/update/book/:id' element={<UserUpdateBook />} />
-        <Route path='/user/refurbished/update/module/:id' element={<UserUpdateModule/>} />
+        {/* <Route path='/user/refurbished/update/module/:id' element={<UserUpdateModule/>} /> */}
         <Route path='/user/refurbished/update/gadget/:id' element={<UserUpdateGadget/>} />
 
         <Route path='/user/privacy' element={<Retailer />} />
