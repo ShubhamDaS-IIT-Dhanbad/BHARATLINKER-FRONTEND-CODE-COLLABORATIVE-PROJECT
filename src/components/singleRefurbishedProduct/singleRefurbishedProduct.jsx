@@ -55,13 +55,14 @@ const ProductDetails = () => {
     };
 
     const handlePhoneClick = () => {
-        if (productDetail && productDetail.phone) {
+        console.log(productDetail)
+        if (productDetail && productDetail.phn) {
             window.location.href = `tel:${productDetail.phone}`;
         }
     };
 
     const handleWhatsappClick = () => {
-        if (productDetail && productDetail.phone) {
+        if (productDetail && productDetail.phn) {
             window.location.href = `https://wa.me/${productDetail.phone}`;
         }
     };
