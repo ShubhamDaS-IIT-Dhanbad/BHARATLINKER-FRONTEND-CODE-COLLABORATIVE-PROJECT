@@ -24,9 +24,6 @@ const SearchPage = () => {
     const selectedBrands = useSelector(state => state.searchproductfiltersection.selectedBrands);
 
     const { sortByAsc, sortByDesc } = useSelector((state) => state.searchproductsortbysection);
-
-    const { userPincodes } = useUserPincode();
-
     const handleSearch = () => {
         const params = {
             inputValue,

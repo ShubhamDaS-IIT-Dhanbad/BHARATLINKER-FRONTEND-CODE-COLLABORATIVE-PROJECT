@@ -10,7 +10,7 @@ export const fetchProducts = createAsyncThunk(
                 inputValue, pinCodes, page, productsPerPage, sortByDesc, sortByAsc, selectedBrands, selectedCategories
             });
 
-            if (response.documents.length === 0) {
+            if (response?.documents?.length === 0) {
                 return {
                     products: [],
                     totalPages: 0,

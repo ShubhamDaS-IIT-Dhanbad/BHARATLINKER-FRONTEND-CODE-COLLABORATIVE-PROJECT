@@ -1,5 +1,5 @@
 import conf from '../conf/conf.js';
-import { Client, Databases, Storage, Query, Permission } from 'appwrite';
+import { Client, Databases, Storage, Query } from 'appwrite';
 
 class SearchRefurbishedProductService {
     client = new Client();
@@ -34,12 +34,12 @@ class SearchRefurbishedProductService {
     }) {
         try {
             const queries = [];
-    
+
             // Filter by pin codes
             if (pinCodes.length > 0) {
                 queries.push(Query.equal('pinCodes', pinCodes));
             }
-    
+
             // Search by inputValue in title or description
             if (inputValue) {
                 queries.push(Query.or([
@@ -47,17 +47,15 @@ class SearchRefurbishedProductService {
                     Query.search('description', inputValue)
                 ]));
             }
-    
+
             // Filter by selected categories and keywords
             if (selectedCategories.length > 0) {
                 queries.push(Query.or([
                     Query.contains('productType', selectedCategories),
-                    Query.contains('keywords', selectedCategories),
-                    Query.search('title', inputValue),
-                    Query.search('description', inputValue)
+                    Query.contains('keywords', selectedCategories)
                 ]));
             }
-    
+
             // Sorting options
             if (sortByAsc) {
                 queries.push(Query.orderAsc('price'));
@@ -65,18 +63,18 @@ class SearchRefurbishedProductService {
             if (sortByDesc) {
                 queries.push(Query.orderDesc('price'));
             }
-    
+
             // Pagination logic
             const offset = (page - 1) * productsPerPage;
             if (offset >= 0) {
                 queries.push(Query.limit(productsPerPage));
                 queries.push(Query.offset(offset));
             }
-    
+
             let productsBook = { documents: [] };
             let productsModule = { documents: [] };
             let productsGadgets = { documents: [] };
-    
+
             // Fetch products for Books, if isbook is true
             if (isbook) {
                 const bookQueries = [...queries];
@@ -95,7 +93,7 @@ class SearchRefurbishedProductService {
                     bookQueries
                 );
             }
-    
+
             // Fetch products for Modules, if ismodule is true
             if (ismodule) {
                 const moduleQueries = [...queries];
@@ -105,7 +103,7 @@ class SearchRefurbishedProductService {
                     moduleQueries
                 );
             }
-    
+
             // Fetch products for Gadgets, if isgadgets is true
             if (isgadgets) {
                 const gadgetsQueries = [...queries];
@@ -115,28 +113,47 @@ class SearchRefurbishedProductService {
                     gadgetsQueries
                 );
             }
-    
+
             // Combine products from all collections
             const products = [
                 ...productsBook.documents,
                 ...productsModule.documents,
                 ...productsGadgets.documents
             ];
-    
-            // Return the combined result with the count of documents in each category
+
+            // Filter products to make sure they match both category and query
+            const filteredProducts = products.filter(product => {
+                const queryMatch = inputValue ?
+                    product.title.includes(inputValue) || product.description.includes(inputValue) : true;
+
+                const categoryMatch = selectedCategories.length === 0 || selectedCategories.some(category =>
+                    product.productType.includes(category) || product.keywords.includes(category)
+                );
+
+                return categoryMatch && queryMatch;
+            });
+
+            // Apply sorting after filtering
+            if (sortByAsc) {
+                filteredProducts.sort((a, b) => a.price - b.price);
+            }
+            if (sortByDesc) {
+                filteredProducts.sort((a, b) => b.price - a.price);
+            }
+
+            // Return the filtered result with the count of documents in each category
             return {
-                products,
+                products: filteredProducts,
                 nbook: isbook ? productsBook.documents.length : 0,
                 nmodule: ismodule ? productsModule.documents.length : 0,
                 ngadgets: isgadgets ? productsGadgets.documents.length : 0
             };
-    
+
         } catch (error) {
             console.error('Appwrite service :: getRefurbishedProducts', error);
             return false;
         }
     }
-    
 
     // Method to fetch a single refurbished product by its ID
     async getRefurbishedProductById(productId) {
@@ -156,4 +173,3 @@ class SearchRefurbishedProductService {
 
 const searchRefurbishedProductService = new SearchRefurbishedProductService();
 export default searchRefurbishedProductService;
-

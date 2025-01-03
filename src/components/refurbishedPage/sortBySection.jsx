@@ -1,21 +1,20 @@
 import React from 'react';
-import { IoChevronBackCircleOutline } from "react-icons/io5";
+import { IoChevronBackCircleOutline, IoClose } from "react-icons/io5";
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { toggleSortOrder } from '../../redux/features/searchProductSortbySectionSlice';
-import { sortProductReducer } from '../../redux/features/searchProductSlice';
-import { IoClose } from "react-icons/io5";
+import { sortRefurbishedProducts } from '../../redux/features/refurbishedProductsSlice';
+import { toggleSortOrder } from '../../redux/features/refurbishedProductSortbySectionSlice';
 
 const RefurbishedProductSortBySection = ({ showSortBy, setShowSortBy }) => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
     // Fetching sort order state from Redux
-    const { sortByAsc, sortByDesc } = useSelector((state) => state.searchproductsortbysection);
+    const { sortByAsc, sortByDesc } = useSelector((state) => state.refurbishedproductsortbysection);
 
     // Handle sort order change
     const handleSortOrderChange = (order) => {
-        dispatch(sortProductReducer({ asc: sortByAsc, desc: sortByDesc }));
+        dispatch(sortRefurbishedProducts({ asc: sortByAsc, desc: sortByDesc }));
         dispatch(toggleSortOrder(order));
     };
 
@@ -29,9 +28,10 @@ const RefurbishedProductSortBySection = ({ showSortBy, setShowSortBy }) => {
             aria-label={`Sort ${label}`}
         >
             <div
-                className={isSelected ? 'refurbished-sortby-item-selected green-class' : 'refurbished-sortby-item-unselected'}
-            ></div>
-            <p className="refurbished-sortby-item-label">{label}</p>
+                className={isSelected ? 'refurbished-sortby-item-selected' : 'refurbished-sortby-item-unselected'}
+            >
+                {label}
+            </div>
         </div>
     );
 

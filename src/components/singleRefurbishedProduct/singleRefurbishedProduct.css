@@ -1,0 +1,142 @@
+#refurbishedProductDetails-search-container-top {
+    width: 100%;
+    height: 55px;
+    position: fixed;
+    top: 0;
+    background-color: rgb(135, 162, 255);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+}
+
+#refurbishedProductDetails-search-bar {
+    width: 100%;
+    border: none;
+    outline: none;
+    padding: 10px;
+    font-size: 13px;
+    height: 35px;
+}
+
+#refurbishedProductDetails-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 90vh;
+    width: 100vw;
+    margin-top: 120px;
+    margin-bottom: 5vh;
+}
+
+#refurbishedProductDetails-img {
+    height: 277px;
+    display: flex;
+    justify-content: center;
+}
+
+#refurbishedProductDetails-img-selected {
+    height: 240px;
+    background-color: rgb(0, 0, 0);
+}
+
+#refurbishedProductDetails-info {
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+}
+
+#refurbishedProductDetails-trending-deals {
+    background-color: rgba(252, 203, 140, 0.571);
+    font-weight: 900;
+    font-size: 13px;
+    padding: 4px;
+    color: rgb(215, 63, 88);
+    border-radius: 4px;
+    width: fit-content;
+}
+
+#refurbishedProductDetails-pid {
+    font-size: 12px;
+    color: rgba(0, 0, 0, 0.8);
+    font-weight: 100;
+}
+
+#refurbishedProductDetails-title {
+    font-weight: 700;
+    margin-top: 10px;
+    font-size: 18px;
+    line-height: 1.2;
+    letter-spacing: -0.5px;
+}
+
+#refurbishedProductDetails-price-button {
+    margin: 10px 0px 30px 0px;
+    padding: 10px;
+    flex-grow: 1;
+    display: flex;
+    justify-content: space-between;
+    font-weight: 900;
+}
+
+#refurbishedProductDetails-price-button p {
+    height: 40px;
+    font-size: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#refurbishedProductDetails-price-instock {
+    width: 110px;
+    height: 40px;
+    border: 1px solid rgb(67, 208, 123);
+    display: flex;
+    justify-content: center;
+    font-weight: 900;
+    align-items: center;
+    border-radius: 5px;
+    color: rgb(14, 225, 42);
+    padding: 2px;
+    font-size: 19px;
+}
+
+#refurbishedProductDetail-about {
+    padding: 10px;
+    display: flex;
+    font-size: 18px;
+    align-items: center;
+    gap: 5px;
+}
+
+#refurbishedProductDetails-description {
+    padding: 10px;
+    font-size: 14px;
+    color: rgb(2, 40, 136);
+}
+
+#refurbishedProductDetails-bottom-text {
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#refurbishedProductSearchPage-footer {
+    width: 100vw;
+    display: flex;
+    color: rgba(18, 17, 17, 0.92);
+    height: 60px;
+    background-color: #A0DEFF;
+    position: fixed;
+    bottom: 0;
+    z-index: 999;
+}
+
+#refurbishedProductSearchPage-footer-sortby,
+#refurbishedProductSearchPage-footer-filterby {
+    display: flex;
+    width: 50vw;
+    font-size: 19px;
+    justify-content: center;
+    align-items: center;
+}

@@ -13,7 +13,6 @@ const searchProductSortBySectionSlice = createSlice({
     reducers: {
         toggleSortOrder: (state, action) => {
             const order = action.payload;
-            console.log(order)
             if (order === 'asc') {
                 if (state.sortByAsc) {
                     state.sortByAsc = false;
@@ -33,7 +32,6 @@ const searchProductSortBySectionSlice = createSlice({
                 }
                 if(state.sortByAsc) state.sortByAsc = false;
             }
-            console.log( state.sortByDesc, state.sortByAsc)
         },
         setPriceRange: (state, action) => {
             const { min, max } = action.payload;

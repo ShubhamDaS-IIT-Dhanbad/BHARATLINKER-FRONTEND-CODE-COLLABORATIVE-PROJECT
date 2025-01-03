@@ -21,7 +21,6 @@ const Shop = () => {
     const selectedCategories = useSelector(state => state.searchshopfiltersection.selectedCategories);
   
     const handleSearch = () => {
-
         const params = {
             inputValue,
             page: 1,
@@ -33,8 +32,6 @@ const Shop = () => {
         };
         dispatch(resetShops());
         dispatch(fetchShops(params));
-        setSearchParams('');
-        setInputValue('');
     };
 
     useEffect(() => {
@@ -71,7 +68,6 @@ const Shop = () => {
         <>
             <div id='shopSearchPage-container-top'>
                 <SearchBar
-                    searchQuery={inputValue}
                     handleSearchChange={handleInputChange}
                     handleSearch={handleSearch}
                 />

@@ -1,52 +1,31 @@
-// src/features/refurbishedProductSortBySectionSlice.js
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
     sortByAsc: false, // Default sort order: ascending
     sortByDesc: false, // Default sort order: descending
-    priceRange: { min: Number.MIN_SAFE_INTEGER, max: Number.MAX_SAFE_INTEGER }, // Default price range
+    products: [], // Array of products
 };
 
-const refurbishedProductSortBySectionSlice = createSlice({
-    name: 'refurbishedproductsortbysection',
+const searchProductSortbySectionSlice = createSlice({
+    name: 'searchproductsortbysection',
     initialState,
     reducers: {
-        toggleRefurbishedSortOrder: (state, action) => {
+        toggleSortOrder: (state, action) => {
             const order = action.payload;
-
             if (order === 'asc') {
-                if (state.sortByAsc) {
-                    state.sortByAsc = false;
-                } else {
-                    state.sortByAsc = true;
-                    state.sortByDesc = false; // Reset descending
-                }
+                state.sortByAsc = !state.sortByAsc;
+                state.sortByDesc = false;
             } else if (order === 'desc') {
-                if (state.sortByDesc) {
-                    state.sortByDesc = false;
-                } else {
-                    state.sortByAsc = false; // Reset ascending
-                    state.sortByDesc = true;
-                }
+                state.sortByDesc = !state.sortByDesc;
+                state.sortByAsc = false;
             }
         },
-        setRefurbishedPriceRange: (state, action) => {
-            const { min, max } = action.payload;
-            state.priceRange.min = min;
-            state.priceRange.max = max;
-        },
-        resetRefurbishedSortFilters: (state) => {
-            return initialState; // Reset to initial state
-        },
+        setProducts: (state, action) => {
+            state.products = action.payload;
+        }
     },
 });
 
-// Export actions
-export const {
-    toggleRefurbishedSortOrder,
-    setRefurbishedPriceRange,
-    resetRefurbishedSortFilters,
-} = refurbishedProductSortBySectionSlice.actions;
+export const { toggleSortOrder, setProducts} = searchProductSortbySectionSlice.actions;
 
-// Export reducer
-export default refurbishedProductSortBySectionSlice.reducer;
+export default searchProductSortbySectionSlice.reducer;

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BiSearchAlt } from "react-icons/bi";
 import { TbChevronDown } from "react-icons/tb";
@@ -10,31 +10,14 @@ import { useDispatch } from 'react-redux';
 import { resetRefurbishedProducts } from '../../redux/features/refurbishedProductsSlice.jsx';
 import LocationTab from '../locationTab/locationTab.jsx';
 
-function RefurbishedNavbar({ setSearchInput }) {
+function RefurbishedNavbar({ handleSearchChange, handleSearch }) {
     const navigate = useNavigate();
-    const dispatch = useDispatch();
     const [locationTab, setLocationTab] = useState(false);
-    const { address } = useUserLocation();
 
-    const [homePageSearchInput, setHomePageSearchInput] = useState('');
-    const [isHomePageHeaderHidden, setIsHomePageHeaderHidden] = useState(false);
-
-    useEffect(() => {
-        const handleScroll = () => {
-            setIsHomePageHeaderHidden(window.scrollY > 80);
-        };
-
-        window.addEventListener('scroll', handleScroll);
-        return () => {
-            window.removeEventListener('scroll', handleScroll);
-        };
-    }, []);
-
-    const handleHomePageSearchSubmit = () => {
-        const trimmedInput = homePageSearchInput.trim();
-        dispatch(resetRefurbishedProducts());
-        setSearchInput(trimmedInput);
-        
+    const handleKeyDown = (event) => {
+        if (event.key === 'Enter') {
+            handleSearch();
+        }
     };
 
     return (
@@ -48,7 +31,6 @@ function RefurbishedNavbar({ setSearchInput }) {
                             onClick={() => navigate('/')}
                             aria-label="User Account"
                             tabIndex={0}
-
                         />
                         <div className='refurbished-page-user-location'>
                             <p className='refurbished-page-location-label'>REFURBISHED SECTION</p>
@@ -58,7 +40,7 @@ function RefurbishedNavbar({ setSearchInput }) {
                                 aria-label="Change Location"
                                 tabIndex={0}
                             >
-                                Baharampur,Murshidabad,WB
+                                Baharampur, Murshidabad, WB
                                 <TbChevronDown size={15} />
                             </div>
                         </div>
@@ -69,21 +51,19 @@ function RefurbishedNavbar({ setSearchInput }) {
                     <div className='refurbished-page-search-input-container'>
                         <BiSearchAlt
                             className='refurbished-page-search-icon'
-                            onClick={handleHomePageSearchSubmit}
+                            onClick={handleSearch}
                             aria-label="Search"
                             tabIndex={0}
                         />
                         <input
                             className='refurbished-page-search-input'
                             placeholder="Search"
-                            value={homePageSearchInput}
-                            onChange={(e) => setHomePageSearchInput(e.target.value)}
-                            onKeyPress={(e) => e.key === 'Enter' && handleHomePageSearchSubmit()}
+                            onChange={handleSearchChange}
+                            onKeyDown={handleKeyDown}
                             aria-label="Search input"
                         />
                     </div>
                 </div>
-
             </div>
             {locationTab && <LocationTab setLocationTab={setLocationTab} />}
         </>

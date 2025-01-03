@@ -31,7 +31,7 @@ const ShopSearchBar = ({ shopQuery, handleSearchChange, handleSearch }) => {
                             <p className='shop-page-location-label'>EXPLORE SHOP</p>
                             <div
                                 className='shop-page-location-value'
-                                onClick={() => setLocationTab(true)}  // Navigate to pincode page
+                                onClick={() => setLocationTab(true)}
                                 aria-label="Change Location"
                                 tabIndex={0}
                             >

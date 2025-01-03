@@ -10,8 +10,8 @@ function SearchPageProductCard({ id, image, title, price, isInStock }) {
     const productPrice = price || '0';
 
     return (
-        <div className="refurbished-product-card" onClick={() => { navigate(`/product/${id}`) }}>
-            <div className="refurbished-product-card-top" onClick={() => navigate(`/product/${id}`)}>
+        <div className="refurbished-product-card" onClick={() => { navigate(`/refurbished/${id}`) }}>
+            <div className="refurbished-product-card-top">
                 <img className="refurbished-product-card-top-image" src={imageUrl} alt={productName} />
             </div>
             <div className='refurbished-product-card-bottom'>

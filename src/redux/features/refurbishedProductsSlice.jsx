@@ -130,6 +130,14 @@ const refurbishedProductsSlice = createSlice({
     setCurrentPage: (state, action) => {
       state.currentPage = action.payload; // Set current page
     },
+    sortRefurbishedProducts: (state, action) => {
+      const { asc, desc } = action.payload;
+      if (asc) {
+        state.refurbishedProducts.sort((a, b) => a.price - b.price);
+      } else if (desc) {
+        state.refurbishedProducts.sort((a, b) => b.price - a.price);
+      }
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -199,5 +207,5 @@ const refurbishedProductsSlice = createSlice({
 });
 
 // Export actions
-export const { resetRefurbishedProducts, setCurrentPage } = refurbishedProductsSlice.actions;
+export const { resetRefurbishedProducts, setCurrentPage,sortRefurbishedProducts } = refurbishedProductsSlice.actions;
 export default refurbishedProductsSlice.reducer;

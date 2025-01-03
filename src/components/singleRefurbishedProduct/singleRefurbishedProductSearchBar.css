@@ -1,0 +1,133 @@
+/* Header Container */
+.single-refurbished-product-search-header-visible,
+.single-refurbished-product-search-header-hidden {
+    display: flex;
+    flex-direction: column;
+    width: 100vw;
+    position: fixed;
+    top: 0;
+    background-color: #A0DEFF;
+    color: #000000;
+    z-index: 1000;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+/* Header Visible/Hidden Styles */
+.single-refurbished-product-search-header-visible {
+    padding: 10px 0;
+    height: 93px;
+    transform: translateY(0);
+}
+
+.single-refurbished-product-search-header-hidden {
+    padding: 10px 0;
+    height: 87px;
+    transform: translateY(0);
+    transform: translateY(-57px);
+}
+
+/* Header Container */
+.single-refurbished-product-search-header-container {
+    padding: 0 0px 0px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* User Icon */
+.single-refurbished-product-search-back-icon {
+    margin-left: 4px;
+    color: #ffffff;
+}
+
+/* User Section */
+.single-refurbished-product-search-header-user-section {
+    display: flex;
+    height: 52px;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+/* User Location */
+.single-refurbished-product-search-header-location {
+    padding-left: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.single-refurbished-product-search-location-label {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0;
+}
+
+/* Location Value */
+.single-refurbished-product-search-location-value {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 1rem;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-weight: 800;
+    margin-top: -7px;
+}
+
+/* Category Icon */
+.single-refurbished-product-search-category-icon {
+    margin-right: 30px;
+}
+
+/* Search Section */
+.single-refurbished-product-search-input-section {
+    height: 40px;
+    margin-top: 5px;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+}
+
+/* Search Input Container */
+.single-refurbished-product-search-input-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #A0DEFF;
+    border-radius: 11px;
+    border: 2px solid rgb(255, 255, 255);
+    width: 96vw;
+    height: 41px;
+}
+
+/* Search Icon */
+.single-refurbished-product-search-icon {
+    font-size: 29px;
+    margin-left: 10px;
+    color: #000000;
+}
+
+/* Search Input */
+.single-refurbished-product-search-input {
+    border: none;
+    color: #000;
+    font-size: 1rem;
+    padding-left: 10px;
+    background-color: #A0DEFF;
+    flex-grow: 1;
+    outline: none;
+}
+
+/* Autofill Styles for Chrome, Edge, and Safari */
+.single-refurbished-product-search-input:-webkit-autofill {
+    background-color: #fff !important;
+    color: #000 !important;
+    font-size: 1rem;
+    -webkit-box-shadow: 0 0 0px 1000px #fff inset !important;
+    box-shadow: 0 0 0px 1000px #fff inset !important;
+}
+
+.single-refurbished-product-search-input::placeholder {
+    color: #000000 !important;
+    font-size: 0.9rem;
+}
