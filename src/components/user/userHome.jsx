@@ -15,7 +15,7 @@ import Cookies from 'js-cookie'
 import './userHome.css';
 
 function UserHome() {
-    const [userData, setUserData] = useState({phn:''});
+    const [userData, setUserData] = useState({phn:8250846979});
     const [isLogout, setIsLogout] = useState(false);
     const navigate = useNavigate();
 
