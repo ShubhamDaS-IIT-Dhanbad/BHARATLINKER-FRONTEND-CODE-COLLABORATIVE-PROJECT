@@ -9,7 +9,6 @@ export const useExecuteSearch = () => {
 
     const [searchParams, setSearchParams] = useSearchParams();
     const query = searchParams.get('query') || '';
-
     const [inputValue, setInputValue] = useState(query);
     
     const selectedCategories = useSelector(state => state.searchproductfiltersection.selectedCategories);
