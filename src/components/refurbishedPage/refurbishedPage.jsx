@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchRefurbishedProducts, loadMoreRefurbishedProducts, resetRefurbishedProducts } from '../../redux/features/refurbishedProductsSlice';
 import { LiaSortSolid } from 'react-icons/lia';
@@ -10,6 +9,7 @@ import RefurbishedProductList from './refurbishedProductList';
 import RefurbishedProductSortBySection from './sortBySection';
 import RefurbishedProductFilterBySection from './filterSection';
 import './refurbishedPage.css';
+import { RotatingLines } from 'react-loader-spinner'; // Import the loader spinner
 
 const RefurbishedPage = () => {
   const dispatch = useDispatch();
@@ -51,7 +51,7 @@ const RefurbishedPage = () => {
       selectedLanguages,
       selectedBoards,
       selectedBrands,
-      sortByAsc, sortByDesc 
+      sortByAsc, sortByDesc
     };
     dispatch(resetRefurbishedProducts());
     dispatch(fetchRefurbishedProducts(params));
@@ -66,14 +66,14 @@ const RefurbishedPage = () => {
   // Fetch products on initial render if no products exist
   useEffect(() => {
     if (refurbishedProducts.length === 0) handleSearch();
-  }, 
-  [
-    selectedCategories,
-    selectedClasses,
-    selectedExams,
-    selectedLanguages,
-    selectedBoards,
-    selectedBrands]);
+  },
+    [
+      selectedCategories,
+      selectedClasses,
+      selectedExams,
+      selectedLanguages,
+      selectedBoards,
+      selectedBrands]);
 
   // Handle loading more products
   const handleLoadMore = () => {
@@ -90,7 +90,7 @@ const RefurbishedPage = () => {
       selectedLanguages,
       selectedBoards,
       selectedBrands,
-      sortByAsc, sortByDesc 
+      sortByAsc, sortByDesc
     };
     dispatch(loadMoreRefurbishedProducts(params));
   };
@@ -111,18 +111,25 @@ const RefurbishedPage = () => {
         handleSearch={handleSearch}
         handleSearchChange={handleInputChange}
       />
-      <InfiniteScroll
-        dataLength={refurbishedProducts.length}
-        next={handleLoadMore}
-        hasMore={hasMoreProducts}
-        loader={loadingMoreProducts && <h4>Loading more products...</h4>}
-      >
-        <RefurbishedProductList 
-          products={refurbishedProducts} 
-          loading={loading} 
-          sortByAsc={sortByAsc}
-          sortByDesc={sortByDesc}/>
-      </InfiniteScroll>
+      {loading ? (
+        <div className="refurbished-page-loading-container">
+          <RotatingLines width="60" height="60" color="#007bff" />
+        </div>
+      ) : (
+        <InfiniteScroll
+          dataLength={refurbishedProducts.length}
+          next={handleLoadMore}
+          hasMore={hasMoreProducts}
+          loader={loadingMoreProducts && <h4>Loading more products...</h4>}
+        >
+          <RefurbishedProductList
+            products={refurbishedProducts}
+            loading={loading}
+            sortByAsc={sortByAsc}
+            sortByDesc={sortByDesc} />
+        </InfiniteScroll>
+      )}
+
       {showSortBy && (
         <RefurbishedProductSortBySection
           handleSearch={handleSearch}
@@ -132,7 +139,7 @@ const RefurbishedPage = () => {
       )}
       {showFilterBy && (
         <RefurbishedProductFilterBySection
-        handleSearch={handleSearch}
+          handleSearch={handleSearch}
           showFilterBy={showFilterBy}
           setShowFilterBy={setShowFilterBy}
         />

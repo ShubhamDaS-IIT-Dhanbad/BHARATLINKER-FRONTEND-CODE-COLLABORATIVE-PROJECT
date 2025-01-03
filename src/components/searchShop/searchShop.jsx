@@ -6,6 +6,7 @@ import SearchBar from './searchBar.jsx'; // Ensure file name casing matches
 import { LiaSortSolid } from 'react-icons/lia';
 import { MdFilterList } from 'react-icons/md';
 import ShopList from './shopList.jsx';
+import { RotatingLines } from 'react-loader-spinner'; // Import the spinner component
 import './searchShop.css';
 
 const Shop = () => {
@@ -19,13 +20,13 @@ const Shop = () => {
 
     const { shops, loading, currentPage, loadingMoreShops, hasMoreShops } = useSelector((state) => state.searchshops);
     const selectedCategories = useSelector(state => state.searchshopfiltersection.selectedCategories);
-  
+
     const handleSearch = () => {
         const params = {
             inputValue,
             page: 1,
             shopsPerPage: productsPerPage,
-            pinCodes: [742136], 
+            pinCodes: [742136],
             selectedCategories,
             sortByAsc: null,
             sortByDesc: null,
@@ -73,15 +74,21 @@ const Shop = () => {
                 />
             </div>
 
-            <div id='shopResults'>
-                <ShopList
-                    shops={shops}
-                    loading={loading}
-                    loadingMoreShops={loadingMoreShops}
-                    hasMoreShops={hasMoreShops}
-                    onLoadMore={onLoadMore}
-                />
-            </div>
+            {loading ? (
+                <div className="refurbished-page-loading-container">
+                    <RotatingLines width="60" height="60" color="#007bff" />
+                </div>
+            ) : (
+                <div id='shopResults'>
+                    <ShopList
+                        shops={shops}
+                        loading={loading}
+                        loadingMoreShops={loadingMoreShops}
+                        hasMoreShops={hasMoreShops}
+                        onLoadMore={onLoadMore}
+                    />
+                </div>
+            )}
 
             <div id='searchShopPage-footer'>
                 <div id='searchShopPage-footer-sortby' onClick={() => { navigate('/shop/sortby') }}>
@@ -98,4 +105,5 @@ const Shop = () => {
 };
 
 export default Shop;
+
 

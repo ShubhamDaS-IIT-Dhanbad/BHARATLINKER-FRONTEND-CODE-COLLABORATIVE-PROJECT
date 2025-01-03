@@ -8,6 +8,7 @@ import { ToastContainer } from 'react-toastify';
 import SearchBar from './searchBar';
 import ProductList from './productList.jsx';
 import { useUserPincode } from '../../hooks/userPincodeHook.jsx';
+import { RotatingLines } from 'react-loader-spinner'; // Import the spinner
 import './searchPage.css';
 
 const SearchPage = () => {
@@ -24,6 +25,7 @@ const SearchPage = () => {
     const selectedBrands = useSelector(state => state.searchproductfiltersection.selectedBrands);
 
     const { sortByAsc, sortByDesc } = useSelector((state) => state.searchproductsortbysection);
+    
     const handleSearch = () => {
         const params = {
             inputValue,
@@ -33,8 +35,7 @@ const SearchPage = () => {
             selectedCategories,
             selectedBrands,
             sortByAsc,
-            sortByDesc 
-
+            sortByDesc
         };
         dispatch(resetProducts());
         dispatch(fetchProducts(params));
@@ -44,7 +45,7 @@ const SearchPage = () => {
         if (products.length === 0) {
             handleSearch();
         }
-    }, []);
+    }, []); 
 
     const handleInputChange = (event) => {
         const value = event.target.value;
@@ -64,7 +65,7 @@ const SearchPage = () => {
             selectedCategories,
             selectedBrands,
             sortByAsc: sortByAsc,
-            sortByDesc :sortByDesc 
+            sortByDesc: sortByDesc
         };
         dispatch(loadMoreProducts(params));
     };
@@ -72,15 +73,20 @@ const SearchPage = () => {
     return (
         <>
             <ToastContainer />
-            <>
-                <div id='productSearchPage-container-top'>
-                    <SearchBar
-                        inputValue={inputValue}
-                        onInputChange={handleInputChange}
-                        onSearch={handleSearch}
-                        onNavigateHome={() => navigate('/')}
-                    />
+            <div id='productSearchPage-container-top'>
+                <SearchBar
+                    inputValue={inputValue}
+                    onInputChange={handleInputChange}
+                    onSearch={handleSearch}
+                    onNavigateHome={() => navigate('/')}
+                />
+            </div>
+            
+            {loading ? (
+                <div className="refurbished-page-loading-container">
+                    <RotatingLines width="60" height="60" color="#007bff" />
                 </div>
+            ) : (
                 <ProductList
                     products={products}
                     loading={loading}
@@ -88,14 +94,14 @@ const SearchPage = () => {
                     loadingMoreProducts={loadingMoreProducts}
                     onLoadMore={onLoadMore}
                 />
-            </>
+            )}
 
             <div id='productSearchPage-footer'>
-                <div id='productSearchPage-footer-sortby' onClick={() => { navigate('/search/sortby')}}>
+                <div id='productSearchPage-footer-sortby' onClick={() => { navigate('/search/sortby') }}>
                     <LiaSortSolid size={33} />
                     SORT BY
                 </div>
-                <div id='productSearchPage-footer-filterby' onClick={() => { navigate('/search/filterby')}}>
+                <div id='productSearchPage-footer-filterby' onClick={() => { navigate('/search/filterby') }}>
                     <MdFilterList size={33} />
                     FILTER BY
                 </div>
