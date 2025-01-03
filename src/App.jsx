@@ -38,6 +38,7 @@ import UserUpdateModule  from './components/user/updateComponent/userUpdateModul
 import UserUpdateGadget from './components/user/UpdateComponent/userUpdateGadget.jsx';
 
 function App() {
+
   return (
     <Router>
       <Suspense fallback={<LoadingFallback />}>
