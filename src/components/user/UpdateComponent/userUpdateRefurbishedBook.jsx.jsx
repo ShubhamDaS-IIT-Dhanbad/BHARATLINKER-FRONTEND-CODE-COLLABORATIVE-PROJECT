@@ -68,6 +68,7 @@ const UploadProduct = () => {
   useEffect(() => {
     if (productId) {
       const product = products.find((product) => product.$id === productId.id);
+      if (!product) { navigate('/user/refurbished') }
       if (product) {
         const {
           class: prodClass,
@@ -97,7 +98,6 @@ const UploadProduct = () => {
           buyingYear: '',
           pinCodes: '740001,740002,740003,742136',
         });
-
         setImages([...productImages, null].slice(0, 3));
         setImagesToDelete([...productImages, null].slice(0, 3));
       }
@@ -216,14 +216,26 @@ const UploadProduct = () => {
   //success pop up
 
   // Reusable error popup
-  const Popup = ({ message, onClose }) => (
+  const PopupFail = ({ message, onClose }) => (
     <div className='user-book-delete-pop-up'>
       <div className='user-book-delete-pop-up-inner'>
         <div className='user-book-delete-pop-up-message'>
           {message}
         </div>
-        <div className='user-book-delete-pop-up-options'>
-          <div className='user-book-delete-option-no' onClick={onClose}>Ok</div>
+        <div className='user-refurbished-book-fail-popup' onClick={onClose}>
+          ok
+        </div>
+      </div>
+    </div>
+  );
+  const PopupSuccess = ({ message, onClose }) => (
+    <div className='user-book-delete-pop-up'>
+      <div className='user-book-delete-pop-up-inner'>
+        <div className='user-book-delete-pop-up-message'>
+          {message}
+        </div>
+        <div className='user-refurbished-book-successful-popup' onClick={onClose}>
+          Ok
         </div>
       </div>
     </div>
@@ -484,14 +496,8 @@ const UploadProduct = () => {
                       src={typeof (image) == 'string' ? image : URL.createObjectURL(image)}
                       alt={`Uploaded ${index + 1}`}
                       className='user-book-uploaded-image'
+                      onClick={() => removeImage(index)}
                     />
-                    <div className='book-update-image-section-remove-image-div'>
-                      <IoClose
-                        size={25}
-                        className='remove-image-icon'
-                        onClick={() => removeImage(index)}
-                      />
-                    </div>
                   </>
                 ) : (
                   <div className='user-update-image-placeholder' onClick={() => triggerFileInput(index)}><CiImageOn size={50} /></div>
@@ -505,14 +511,6 @@ const UploadProduct = () => {
               </div>
             ))}
           </div>
-
-          <div className='user-update-book-submit-button-container' onClick={() => setIsUpdate(true)} >
-            Update
-          </div>or
-          <div className='user-update-book-delete-button-container' onClick={() => setIsDelete(true)}>
-            Delete
-          </div>
-
         </div>
       )}
 
@@ -547,26 +545,26 @@ const UploadProduct = () => {
       )}
 
       {isUpdateSuccessful && (
-        <Popup
+        <PopupSuccess
           message="product updated successfully!"
-          onClose={() => {setIsUpdateSuccessful(false)}}
+          onClose={() => { setIsUpdateSuccessful(false) }}
         />
       )}
       {isDeleteSuccessful && (
-        <Popup
+        <PopupSuccess
           message="product deleted successfully!"
-          onClose={() => {navigate('/user/refurbished')}}
+          onClose={() => { navigate('/user/refurbished') }}
         />
       )}
 
       {deleteFail && (
-        <Popup
+        <PopupFail
           message="Failed to delete product!"
           onClose={() => setDeleteFail(false)}
         />
       )}
       {updateFail && (
-        <Popup
+        <PopupFail
           message="Failed to update product!"
           onClose={() => setUpdateFail(false)}
         />
@@ -583,6 +581,16 @@ const UploadProduct = () => {
           />
         </div>
       )}
+
+
+      <div id='user-refurbished-book-update-footer-div'>
+        <div id='user-refurbished-book-update-footer-update' onClick={() => setIsUpdate(true)}>  
+          UPDATE
+        </div>
+        <div id='user-refurbished-book-update-footer-delete' onClick={() => setIsDelete(true)}>
+          DELETE
+        </div>
+      </div>
     </>
   );
 };

@@ -100,8 +100,7 @@
 }
 
 .book-update-form-group-inner {
-    width: 100vw;
-    display: flex;
+    width: 100vw; display: flex;
     padding: 0px 10px 0px 10px;
     justify-content: space-between;
 }
@@ -227,7 +226,7 @@
     background: none;
     justify-content: center;align-items: center;
     display: flex;flex-grow: 1;
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
     font-size: 20px;
 }
 
@@ -238,9 +237,9 @@
 .book-update-keywords-input::placeholder,
 .book-update-author-input::placeholder,
 .book-update-year-input::placeholder {
-    font-size: 13px;
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-    font-weight: 300;
+    font-size: 16px;
+    font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-weight: 600;
 }
 
 
@@ -386,3 +385,26 @@ border: 1px solid black;border-radius: 9px;
 
 
 
+/* popsuccessful */
+.user-refurbished-book-successful-popup,.user-refurbished-book-successful-popup{
+    display: flex;justify-content: center;align-items: center;
+    height: 50%;
+}
+.user-refurbished-book-successful-popup{color: green;}
+.user-refurbished-book-successful-popup{color: #dc2121;}
+/*footer*/
+#user-refurbished-book-update-footer-div{
+    position: fixed;bottom: 0;
+    width: 100vw;height: 70px;background-color: #464444;
+    display: flex;
+}
+#user-refurbished-book-update-footer-update,#user-refurbished-book-update-footer-delete{
+    width: 50%;height: 100%;
+    display: flex;justify-content: center;align-items: center;
+}
+#user-refurbished-book-update-footer-update{
+color: rgb(255, 255, 255);background-color: #000;
+}
+#user-refurbished-book-update-footer-delete{
+color: white;background-color: #c50c0c;
+}
