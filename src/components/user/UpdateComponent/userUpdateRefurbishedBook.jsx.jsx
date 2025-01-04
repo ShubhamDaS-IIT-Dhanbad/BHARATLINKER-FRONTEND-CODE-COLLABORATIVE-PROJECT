@@ -102,7 +102,7 @@ const UploadProduct = () => {
         setImagesToDelete([...productImages, null].slice(0, 3));
       }
     }
-  }, [productId, products]);
+  }, []);
 
   // Image handler
   const handleImageAction = (index, action, files = null) => {
@@ -186,7 +186,7 @@ const UploadProduct = () => {
     setIsDelete(false);
     setIsDeleting(true);
     try {
-      // await userUploadBooks.deleteProduct(productId, imagesToDelete);
+      await userUploadBooks.deleteProduct(productId, imagesToDelete);
       dispatch(deleteProduct(productId));
       setIsDeleteSuccessful(true);
 
@@ -213,7 +213,7 @@ const UploadProduct = () => {
       </div>
     </div>
   );
-  //success pop up
+ 
 
   // Reusable error popup
   const PopupFail = ({ message, onClose }) => (
@@ -228,6 +228,7 @@ const UploadProduct = () => {
       </div>
     </div>
   );
+   //success pop up
   const PopupSuccess = ({ message, onClose }) => (
     <div className='user-book-delete-pop-up'>
       <div className='user-book-delete-pop-up-inner'>
