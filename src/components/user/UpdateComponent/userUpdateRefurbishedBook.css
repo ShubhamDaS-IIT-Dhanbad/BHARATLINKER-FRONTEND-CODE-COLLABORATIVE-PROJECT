@@ -372,7 +372,15 @@ border: 1px solid black;border-radius: 9px;
     
     color: green;
 }
-/* deleet */
+
+/*loading*/
+.user-refurbished-book-page-loading-div{
+    width: 100vw;display: flex;
+    height: 90vh;
+    justify-content: center;align-items: center;
+
+}
+/* delete */
 .user-update-book-delete-button-container{
     border: 1px solid red;
     color: rgb(0, 0, 0);
@@ -383,11 +391,6 @@ border: 1px solid black;border-radius: 9px;
     display: flex;justify-content: center;align-items:center;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
-
-
-
-
-
 /* popsuccessful */
 .user-refurbished-book-successful-popup,.user-refurbished-book-successful-popup{
     display: flex;justify-content: center;align-items: center;

@@ -7,6 +7,7 @@ import { Oval } from 'react-loader-spinner';
 import { useSelector } from 'react-redux';
 import { IoClose } from 'react-icons/io5';
 import { CiImageOn } from 'react-icons/ci';
+import { RotatingLines } from 'react-loader-spinner';
 import Cookies from 'js-cookie';
 
 import userUploadBooks from '../../../appWrite/UserUploadRefurbished/userUploadBooks.js';
@@ -22,6 +23,7 @@ const UploadProduct = () => {
   const productId = useParams('id');
   const products = useSelector((state) => state.userRefurbishedProducts.refurbishedProducts);
 
+  const [loading, setLoading] = useState(true);
   const [isDeleting, setIsDeleting] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
 
@@ -66,6 +68,7 @@ const UploadProduct = () => {
   }, []);
 
   useEffect(() => {
+    setLoading(true);
     if (productId) {
       const product = products.find((product) => product.$id === productId.id);
       if (!product) { navigate('/user/refurbished') }
@@ -101,7 +104,7 @@ const UploadProduct = () => {
         setImages([...productImages, null].slice(0, 3));
         setImagesToDelete([...productImages, null].slice(0, 3));
       }
-    }
+    } setLoading(false);
   }, []);
 
   // Image handler
@@ -213,7 +216,7 @@ const UploadProduct = () => {
       </div>
     </div>
   );
- 
+
 
   // Reusable error popup
   const PopupFail = ({ message, onClose }) => (
@@ -228,7 +231,7 @@ const UploadProduct = () => {
       </div>
     </div>
   );
-   //success pop up
+  //success pop up
   const PopupSuccess = ({ message, onClose }) => (
     <div className='user-book-delete-pop-up'>
       <div className='user-book-delete-pop-up-inner'>
@@ -265,256 +268,263 @@ const UploadProduct = () => {
         </div>
       </div>
 
-      <div className='user-update-book-type'>
-        <div
-          className={`user-update-book-type-book ${type === 'books' ? 'active' : ''}`}
-          onClick={() => setType('books')}
-        >
-          {type}
+
+
+      {loading ? (
+        <div className="user-refurbished-book-page-loading-div">
+          <RotatingLines width="60" height="60" color="#007bff" />
         </div>
-
-      </div>
-
-      {type === 'books' && (
-        <div className='book-update-form'>
-          {/* Class Selection */}
-          <div className={`book-update-form-group ${formData.class !== 'class' ? 'active' : ''}`} onClick={() => setClassPopUp(!classPopUp)}>
-            <div className={`book-update-form-group-inner`}>
-              <label className='book-update-form-group-label'>
-                {formData.class}
-              </label>
-              *
+      ) : (
+        <>
+          <div className='user-update-book-type'>
+            <div
+              className={`user-update-book-type-book ${type === 'books' ? 'active' : ''}`}
+              onClick={() => setType('books')}
+            >
+              {type}
             </div>
           </div>
-
-          {classPopUp && (
-            <div className='refurbished-books-class-popup'>
-              <div className='refurbished-books-class-popup-close-popup' onClick={() => setClassPopUp(false)}>
-                <IoClose size={25} />
-              </div>
-              <div className='refurbished-books-class-popup-options'>
-                <div className='refurbished-books-class-popup-options-flex'>
-                  {['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'].map((classItem) => (
-                    <div
-                      key={classItem}
-                      className='refurbished-books-class-popup-class-option'
-                      onClick={() => handleClassSelect(classItem)}
-                    >
-                      {classItem}
-                    </div>
-                  ))}
+          {type === 'books' && (
+            <div className='book-update-form'>
+              {/* Class Selection */}
+              <div className={`book-update-form-group ${formData.class !== 'class' ? 'active' : ''}`} onClick={() => setClassPopUp(!classPopUp)}>
+                <div className={`book-update-form-group-inner`}>
+                  <label className='book-update-form-group-label'>
+                    {formData.class}
+                  </label>
+                  *
                 </div>
               </div>
-            </div>
-          )}
 
-          {/* Board & Language Selection */}
-          <div style={{ display: "flex", maxWidth: "90vw", gap: "3px" }}>
-            <div className={`board-update-form-group ${formData.board !== 'board' ? 'active' : ''}`} onClick={() => setBoardPopUp(!boardPopUp)}>
-              <div className='board-update-form-group-inner'>
-                <label className='board-update-form-group-label'>
-                  {formData?.board?.toUpperCase()}
-                </label>
-                *
-              </div>
-            </div>
-            <div className={`lang-update-form-group  ${formData.language !== 'language' ? 'active' : ''}`} onClick={() => setLanguagePopUp(!languagePopUp)}>
-              <div className='lang-update-form-group-inner'>
-                <label className='lang-update-form-group-label'>
-                  {formData?.language?.toUpperCase()}
-                </label>
-                *
-              </div>
-            </div>
-          </div>
-
-
-
-          {boardPopUp && (
-            <div className='refurbished-books-class-popup'>
-              <div className='refurbished-books-class-popup-close-popup' onClick={() => setBoardPopUp(false)}>
-                <IoClose size={25} />
-              </div>
-              <div className='refurbished-books-class-popup-options'>
-                <div className='refurbished-books-class-popup-options-flex'>
-                  {['cbse', 'icse'].map((boardItem) => (
-                    <div
-                      key={boardItem}
-                      className='refurbished-books-class-popup-class-option'
-                      onClick={() => handleBoardSelect(boardItem)}
-                    >
-                      {boardItem?.toUpperCase()}
+              {classPopUp && (
+                <div className='refurbished-books-class-popup'>
+                  <div className='refurbished-books-class-popup-close-popup' onClick={() => setClassPopUp(false)}>
+                    <IoClose size={25} />
+                  </div>
+                  <div className='refurbished-books-class-popup-options'>
+                    <div className='refurbished-books-class-popup-options-flex'>
+                      {['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'].map((classItem) => (
+                        <div
+                          key={classItem}
+                          className='refurbished-books-class-popup-class-option'
+                          onClick={() => handleClassSelect(classItem)}
+                        >
+                          {classItem}
+                        </div>
+                      ))}
                     </div>
-                  ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Board & Language Selection */}
+              <div style={{ display: "flex", maxWidth: "90vw", gap: "3px" }}>
+                <div className={`board-update-form-group ${formData.board !== 'board' ? 'active' : ''}`} onClick={() => setBoardPopUp(!boardPopUp)}>
+                  <div className='board-update-form-group-inner'>
+                    <label className='board-update-form-group-label'>
+                      {formData?.board?.toUpperCase()}
+                    </label>
+                    *
+                  </div>
+                </div>
+                <div className={`lang-update-form-group  ${formData.language !== 'language' ? 'active' : ''}`} onClick={() => setLanguagePopUp(!languagePopUp)}>
+                  <div className='lang-update-form-group-inner'>
+                    <label className='lang-update-form-group-label'>
+                      {formData?.language?.toUpperCase()}
+                    </label>
+                    *
+                  </div>
                 </div>
               </div>
-            </div>
-          )}
-          {languagePopUp && (
-            <div className='refurbished-books-class-popup'>
-              <div className='refurbished-books-class-popup-close-popup' onClick={() => setLanguagePopUp(false)}>
-                <IoClose size={25} />
-              </div>
-              <div className='refurbished-books-class-popup-options'>
-                <div className='refurbished-books-class-popup-options-flex'>
-                  {['Beng', 'Eng'].map((languageItem) => (
-                    <div
-                      key={languageItem}
-                      className='refurbished-books-class-popup-class-option'
-                      onClick={() => handleLanguageSelect(languageItem)}
-                    >
-                      {languageItem.charAt(0)?.toUpperCase() + languageItem.slice(1)}
+
+
+
+              {boardPopUp && (
+                <div className='refurbished-books-class-popup'>
+                  <div className='refurbished-books-class-popup-close-popup' onClick={() => setBoardPopUp(false)}>
+                    <IoClose size={25} />
+                  </div>
+                  <div className='refurbished-books-class-popup-options'>
+                    <div className='refurbished-books-class-popup-options-flex'>
+                      {['cbse', 'icse'].map((boardItem) => (
+                        <div
+                          key={boardItem}
+                          className='refurbished-books-class-popup-class-option'
+                          onClick={() => handleBoardSelect(boardItem)}
+                        >
+                          {boardItem?.toUpperCase()}
+                        </div>
+                      ))}
                     </div>
-                  ))}
+                  </div>
+                </div>
+              )}
+              {languagePopUp && (
+                <div className='refurbished-books-class-popup'>
+                  <div className='refurbished-books-class-popup-close-popup' onClick={() => setLanguagePopUp(false)}>
+                    <IoClose size={25} />
+                  </div>
+                  <div className='refurbished-books-class-popup-options'>
+                    <div className='refurbished-books-class-popup-options-flex'>
+                      {['Beng', 'Eng'].map((languageItem) => (
+                        <div
+                          key={languageItem}
+                          className='refurbished-books-class-popup-class-option'
+                          onClick={() => handleLanguageSelect(languageItem)}
+                        >
+                          {languageItem.charAt(0)?.toUpperCase() + languageItem.slice(1)}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              <div className={`book-update-form-group   ${formData.subject !== 'subject' ? 'active' : ''}`} onClick={() => setSubjectPopUp(!subjectPopUp)}>
+                <div className={`book-update-form-group-inner`}>
+                  <label className='book-update-form-group-label'>
+                    {formData?.subject?.toUpperCase()}
+                  </label>
+                  *
                 </div>
               </div>
-            </div>
-          )}
 
-          <div className={`book-update-form-group   ${formData.subject !== 'subject' ? 'active' : ''}`} onClick={() => setSubjectPopUp(!subjectPopUp)}>
-            <div className={`book-update-form-group-inner`}>
-              <label className='book-update-form-group-label'>
-                {formData?.subject?.toUpperCase()}
-              </label>
-              *
-            </div>
-          </div>
-
-          {subjectPopUp && (
-            <div className='refurbished-books-class-popup'>
-              <div className='refurbished-books-class-popup-close-popup' onClick={() => setSubjectPopUp(false)}>
-                <IoClose size={25} />
-              </div>
-              <div className='refurbished-books-class-popup-options'>
-                <div className='refurbished-books-class-popup-options-flex'>
-                  {['math', 'science', 'history', 'english'].map((subjectItem) => (
-                    <div
-                      key={subjectItem}
-                      className='refurbished-books-class-popup-class-option'
-                      onClick={() => handleSubjectSelect(subjectItem)}
-                    >
-                      {subjectItem?.charAt(0)?.toUpperCase() + subjectItem.slice(1)}
+              {subjectPopUp && (
+                <div className='refurbished-books-class-popup'>
+                  <div className='refurbished-books-class-popup-close-popup' onClick={() => setSubjectPopUp(false)}>
+                    <IoClose size={25} />
+                  </div>
+                  <div className='refurbished-books-class-popup-options'>
+                    <div className='refurbished-books-class-popup-options-flex'>
+                      {['math', 'science', 'history', 'english'].map((subjectItem) => (
+                        <div
+                          key={subjectItem}
+                          className='refurbished-books-class-popup-class-option'
+                          onClick={() => handleSubjectSelect(subjectItem)}
+                        >
+                          {subjectItem?.charAt(0)?.toUpperCase() + subjectItem.slice(1)}
+                        </div>
+                      ))}
                     </div>
-                  ))}
+                  </div>
+                </div>
+              )}
+
+              <hr style={{ width: "0vw", backgroundColor: "white", margin: "20px 0px 10px 0px" }}></hr>
+
+              <div className='book-update-form-group'>
+                <div className='book-update-form-group-inner'>
+                  <input
+                    type='text'
+                    name='title'
+                    value={formData.title}
+                    onChange={handleInputChange}
+                    placeholder='Enter Title'
+                    className='book-update-title-input'
+                  />
+                  *
                 </div>
               </div>
-            </div>
-          )}
 
-          <hr style={{ width: "0vw", backgroundColor: "white", margin: "20px 0px 10px 0px" }}></hr>
+              <div className='book-update-form-group'>
+                <div className='book-update-form-group-inner'>
+                  <input
+                    type='text'
+                    name='description'
+                    value={formData.description}
+                    onChange={handleInputChange}
+                    placeholder='Description'
+                    className='book-update-description-input'
+                  />
+                </div>
+              </div>
 
-          <div className='book-update-form-group'>
-            <div className='book-update-form-group-inner'>
-              <input
-                type='text'
-                name='title'
-                value={formData.title}
-                onChange={handleInputChange}
-                placeholder='Enter Title'
-                className='book-update-title-input'
-              />
-              *
-            </div>
-          </div>
-
-          <div className='book-update-form-group'>
-            <div className='book-update-form-group-inner'>
-              <input
-                type='text'
-                name='description'
-                value={formData.description}
-                onChange={handleInputChange}
-                placeholder='Description'
-                className='book-update-description-input'
-              />
-            </div>
-          </div>
-
-          <div className='book-update-form-group'>
-            <div className='book-update-form-group-inner'>
-              <s>
-                <input
-                  type='number'
-                  name='price'
-                  value={formData.price}
-                  onChange={handleInputChange}
-                  placeholder='Enter Price'
-                  className='book-update-price-input'
-                />
-              </s>
-              *
-            </div>
-          </div>
-
-          <div className='book-update-form-group'>
-            <div className='book-update-form-group-inner'>
-              <input
-                type='number'
-                name='discountedPrice'
-                value={formData.discountedPrice}
-                onChange={handleInputChange}
-                placeholder='Discounted price'
-                className='book-update-discounted-input'
-              />
-              *
-            </div>
-          </div>
-
-
-          <hr style={{ width: "0vw", backgroundColor: "white", margin: "20px 0px 10px 0px" }}></hr>
-
-          <p>IMPORTANT FOR SEO</p>
-          {/* Keywords Input */}
-          <div className='book-update-form-group'>
-            <div className='book-update-form-group-inner'>
-              <input
-                type='text'
-                name='keywords'
-                value={formData.keywords}
-                onChange={handleInputChange}
-                placeholder='Keywords (seperated by comma)'
-                className='book-update-keywords-input'
-              />
-            </div>
-          </div>
-
-
-
-
-          {/* Image Upload */}
-          <div className='book-update-image-section'>
-            {images.map((image, index) => (
-              <div
-                key={index}
-                className='book-update-image-container'
-                onDrop={(event) => handleDrop(index, event)}
-                onDragOver={(event) => event.preventDefault()}
-
-              >
-                {image ? (
-                  <>
-                    <img
-                      src={typeof (image) == 'string' ? image : URL.createObjectURL(image)}
-                      alt={`Uploaded ${index + 1}`}
-                      className='user-book-uploaded-image'
-                      onClick={() => removeImage(index)}
+              <div className='book-update-form-group'>
+                <div className='book-update-form-group-inner'>
+                  <s>
+                    <input
+                      type='number'
+                      name='price'
+                      value={formData.price}
+                      onChange={handleInputChange}
+                      placeholder='Enter Price'
+                      className='book-update-price-input'
                     />
-                  </>
-                ) : (
-                  <div className='user-update-image-placeholder' onClick={() => triggerFileInput(index)}><CiImageOn size={50} /></div>
-                )}
-                <input
-                  type='file'
-                  id={`image-update-${index}`}
-                  style={{ display: 'none' }}
-                  onChange={(event) => handleImageChange(index, event.target.files)}
-                />
+                  </s>
+                  *
+                </div>
               </div>
-            ))}
-          </div>
-        </div>
-      )}
 
+              <div className='book-update-form-group'>
+                <div className='book-update-form-group-inner'>
+                  <input
+                    type='number'
+                    name='discountedPrice'
+                    value={formData.discountedPrice}
+                    onChange={handleInputChange}
+                    placeholder='Discounted price'
+                    className='book-update-discounted-input'
+                  />
+                  *
+                </div>
+              </div>
+
+
+              <hr style={{ width: "0vw", backgroundColor: "white", margin: "20px 0px 10px 0px" }}></hr>
+
+              <p>IMPORTANT FOR SEO</p>
+              {/* Keywords Input */}
+              <div className='book-update-form-group'>
+                <div className='book-update-form-group-inner'>
+                  <input
+                    type='text'
+                    name='keywords'
+                    value={formData.keywords}
+                    onChange={handleInputChange}
+                    placeholder='Keywords (seperated by comma)'
+                    className='book-update-keywords-input'
+                  />
+                </div>
+              </div>
+
+
+
+
+              {/* Image Upload */}
+              <div className='book-update-image-section'>
+                {images.map((image, index) => (
+                  <div
+                    key={index}
+                    className='book-update-image-container'
+                    onDrop={(event) => handleDrop(index, event)}
+                    onDragOver={(event) => event.preventDefault()}
+
+                  >
+                    {image ? (
+                      <>
+                        <img
+                          src={typeof (image) == 'string' ? image : URL.createObjectURL(image)}
+                          alt={`Uploaded ${index + 1}`}
+                          className='user-book-uploaded-image'
+                          onClick={() => removeImage(index)}
+                        />
+                      </>
+                    ) : (
+                      <div className='user-update-image-placeholder' onClick={() => triggerFileInput(index)}><CiImageOn size={50} /></div>
+                    )}
+                    <input
+                      type='file'
+                      id={`image-update-${index}`}
+                      style={{ display: 'none' }}
+                      onChange={(event) => handleImageChange(index, event.target.files)}
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+        </>
+      )}
 
 
       {!allField && (
@@ -585,7 +595,7 @@ const UploadProduct = () => {
 
 
       <div id='user-refurbished-book-update-footer-div'>
-        <div id='user-refurbished-book-update-footer-update' onClick={() => setIsUpdate(true)}>  
+        <div id='user-refurbished-book-update-footer-update' onClick={() => setIsUpdate(true)}>
           UPDATE
         </div>
         <div id='user-refurbished-book-update-footer-delete' onClick={() => setIsDelete(true)}>
