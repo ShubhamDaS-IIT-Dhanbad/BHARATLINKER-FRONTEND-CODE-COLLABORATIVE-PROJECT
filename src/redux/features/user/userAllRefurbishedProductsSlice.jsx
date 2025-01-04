@@ -100,6 +100,16 @@ const userRefurbishedProductsSlice = createSlice({
         state.refurbishedProducts.sort((a, b) => b.price - a.price);
       }
     },
+    deleteProduct: (state, action) => {
+      const productId = action.payload;
+      state.refurbishedProducts = state.refurbishedProducts.filter(
+        (product) => product.$id !== productId.id
+      );
+      
+    },
+    updateProduct: (state, action) => {
+      
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -169,6 +179,8 @@ export const {
   resetUserRefurbishedProducts,
   setCurrentUserPage,
   sortUserRefurbishedProducts,
+  deleteProduct,
+  updateProduct,
 } = userRefurbishedProductsSlice.actions;
 
 export default userRefurbishedProductsSlice.reducer;

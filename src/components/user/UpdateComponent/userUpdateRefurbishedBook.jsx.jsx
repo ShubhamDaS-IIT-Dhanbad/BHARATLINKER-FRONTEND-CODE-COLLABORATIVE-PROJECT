@@ -1,22 +1,36 @@
 import React, { useState, useEffect } from 'react';
+
 import { useNavigate, useParams } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import { FaArrowLeft } from 'react-icons/fa';
-
+import { Oval } from 'react-loader-spinner';
 import { useSelector } from 'react-redux';
-
 import { IoClose } from 'react-icons/io5';
-import { CiImageOn } from "react-icons/ci";
+import { CiImageOn } from 'react-icons/ci';
 import Cookies from 'js-cookie';
 
 import userUploadBooks from '../../../appWrite/UserUploadRefurbished/userUploadBooks.js';
-import './userUpdateBook.css';
+import { deleteProduct } from '../../../redux/features/user/userAllRefurbishedProductsSlice.jsx';
+import { resetUserRefurbishedProducts } from '../../../redux/features/user/userAllRefurbishedProductsSlice.jsx';
+
+import './userUpdateRefurbishedBook.css';
 
 const UploadProduct = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const productId = useParams('id');
+  const products = useSelector((state) => state.userRefurbishedProducts.refurbishedProducts);
+
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [isUpdating, setIsUpdating] = useState(false);
 
   const [isUpdate, setIsUpdate] = useState(false);
   const [isDelete, setIsDelete] = useState(false);
+  const [isDeleteSuccessful, setIsDeleteSuccessful] = useState(false);
+  const [isUpdateSuccessful, setIsUpdateSuccessful] = useState(false);
+  const [deleteFail, setDeleteFail] = useState(false);
+  const [updateFail, setUpdateFail] = useState(false);
 
   const [type, setType] = useState('books');
   const [classPopUp, setClassPopUp] = useState(false);
@@ -24,130 +38,118 @@ const UploadProduct = () => {
   const [boardPopUp, setBoardPopUp] = useState(false);
   const [languagePopUp, setLanguagePopUp] = useState(false);
   const [userData, setUserData] = useState('');
-  const [allField, setallField] = useState(true);
+  const [allField, setAllField] = useState(true);
 
   const [toDeleteImagesUrls, setToDeleteImagesUrls] = useState([]);
+  const [images, setImages] = useState([null, null, null]);
+  const [imagesToDelete, setImagesToDelete] = useState([]);
 
   const [formData, setFormData] = useState({
     class: 'class',
     language: 'language',
     board: 'board',
     subject: 'subject',
-    title: '', // for title
-    description: '', // for description
-    price: '', // for price
-    discountedPrice: '', // for discounted price
-    keywords: '', // for keywords
-    author: '', // for author name
+    title: '',
+    description: '',
+    price: '',
+    discountedPrice: '',
+    keywords: '',
+    author: '',
     buyingYear: '',
-    pinCodes: '740001,740002,740003,742136'
+    pinCodes: '740001,740002,740003,742136',
   });
-  const [images, setImages] = useState([null, null, null]);
-  const [imagesToDelete, setImagesToDelete] = useState([]);
-
 
   useEffect(() => {
-    const userSession = Cookies.get('BharatLinkerUser');
-    if (userSession) {
-      setUserData(JSON.parse(userSession));
+    if (Cookies.get('BharatLinkerUser')) {
+      setUserData(JSON.parse(Cookies.get('BharatLinkerUser')));
     }
   }, []);
 
-  const products = useSelector((state) => state.userRefurbishedProducts.refurbishedProducts);
   useEffect(() => {
-    const fetchProductData = async () => {
-      if (productId) {
-        const filteredProducts = products.filter((product) => product.$id === productId.id);
+    if (productId) {
+      const product = products.find((product) => product.$id === productId.id);
+      if (product) {
+        const {
+          class: prodClass,
+          language,
+          board,
+          subject,
+          title,
+          description,
+          price,
+          discountedPrice,
+          keywords,
+          author,
+          images: productImages,
+        } = product;
+
         setFormData({
-          class: filteredProducts[0]?.class,
-          language: filteredProducts[0]?.language,
-          board: filteredProducts[0]?.board,
-          subject: filteredProducts[0]?.subject,
-          title: filteredProducts[0]?.title,
-          description: filteredProducts[0]?.description,
-          price: filteredProducts[0]?.price,
-          discountedPrice: filteredProducts[0]?.discountedPrice,
-          keywords: filteredProducts[0]?.keywords.join(','),
-          author: filteredProducts[0]?.author,
+          class: prodClass,
+          language,
+          board,
+          subject,
+          title,
+          description,
+          price,
+          discountedPrice,
+          keywords: keywords.join(','),
+          author,
           buyingYear: '',
-          pinCodes: '740001,740002,740003,742136'
+          pinCodes: '740001,740002,740003,742136',
         });
 
-        const updatedImages = [...filteredProducts[0].images];
-        for (let i = updatedImages.length; i < 3; i++) {
-          updatedImages.push(null);
-        }
-        setImages(updatedImages);
-        setImagesToDelete(updatedImages);
-
+        setImages([...productImages, null].slice(0, 3));
+        setImagesToDelete([...productImages, null].slice(0, 3));
       }
-    };
-    fetchProductData();
-  }, []);
-
-
-
-  const handleImageChange = (index, files) => {
-    if (files && files[0]) {
-      const updatedImages = [...images];
-      updatedImages[index] = files[0];
-      setImages(updatedImages);
     }
-  };
+  }, [productId, products]);
 
-  const handleDrop = (index, event) => {
-    event.preventDefault();
-    event.stopPropagation();
-    const files = event.dataTransfer.files;
-    handleImageChange(index, files);
-  };
-
-  const triggerFileInput = (index) => {
-    document.getElementById(`image-update-${index}`).click();
-  };
-
-  const removeImage = (index) => {
-    if (typeof (images[index]) === 'string') {
-      const publicId = images[index];
-      setToDeleteImagesUrls((prevUrls) => [...prevUrls, publicId]);
-    }
+  // Image handler
+  const handleImageAction = (index, action, files = null) => {
     const updatedImages = [...images];
-    updatedImages[index] = null;
+    switch (action) {
+      case 'change':
+        if (files && files[0]) {
+          updatedImages[index] = files[0];
+        }
+        break;
+      case 'remove':
+        if (typeof updatedImages[index] === 'string') {
+          const publicId = updatedImages[index];
+          setToDeleteImagesUrls((prevUrls) => [...prevUrls, publicId]);
+        }
+        updatedImages[index] = null;
+        break;
+      default:
+        return;
+    }
     setImages(updatedImages);
   };
 
-  const handleClassSelect = (selectedClass) => {
+  const handleImageChange = (index, files) => handleImageAction(index, 'change', files);
+  const handleDrop = (index, event) => {
+    event.preventDefault();
+    event.stopPropagation();
+    handleImageAction(index, 'change', event.dataTransfer.files);
+  };
+  const triggerFileInput = (index) => document.getElementById(`image-update-${index}`).click();
+  const removeImage = (index) => handleImageAction(index, 'remove');
+
+  // Reusable handle select
+  const handleSelect = (field, value, setPopUp) => {
     setFormData((prevFormData) => ({
       ...prevFormData,
-      class: Number(selectedClass),
+      [field]: value,
     }));
-    setClassPopUp(false);
+    setPopUp(false);
   };
 
-  const handleSubjectSelect = (selectedSubject) => {
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      subject: selectedSubject,
-    }));
-    setSubjectPopUp(false);
-  };
+  const handleClassSelect = (selectedClass) => handleSelect('class', Number(selectedClass), setClassPopUp);
+  const handleSubjectSelect = (selectedSubject) => handleSelect('subject', selectedSubject, setSubjectPopUp);
+  const handleBoardSelect = (selectedBoard) => handleSelect('board', selectedBoard, setBoardPopUp);
+  const handleLanguageSelect = (selectedLanguage) => handleSelect('language', selectedLanguage, setLanguagePopUp);
 
-  const handleBoardSelect = (selectedBoard) => {
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      board: selectedBoard,
-    }));
-    setBoardPopUp(false);
-  };
-
-  const handleLanguageSelect = (selectedLanguage) => {
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      language: selectedLanguage,
-    }));
-    setLanguagePopUp(false);
-  };
-
+  // Handle input change
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevFormData) => ({
@@ -156,37 +158,77 @@ const UploadProduct = () => {
     }));
   };
 
-  const handleSubmit = () => {
-    if (
-      !formData.class ||
-      !formData.language ||
-      !formData.board ||
-      !formData.subject ||
-      !formData.title ||
-      !formData.price ||
-      !formData.discountedPrice
-    ) {
-      setallField(false);
-      console.log("error")
+  // Handle update
+  const handleUpdate = async () => {
+    const { class: productClass, language, board, subject, title, price, discountedPrice } = formData;
+    if (!productClass || !language || !board || !subject || !title || !price || !discountedPrice) {
+      setAllField(false);
+      console.error("All fields are required.");
       return;
     }
+
+    setIsUpdate(false);
+    setIsUpdating(true);
     try {
-      console.log("here")
-      const updatedData = formData;
-      userUploadBooks.updateUserRefurbishedProduct(productId, toDeleteImagesUrls, updatedData, images);
+      await userUploadBooks.updateUserRefurbishedProduct(productId, toDeleteImagesUrls, { ...formData }, images);
+      setIsUpdateSuccessful(true);
+      dispatch(resetUserRefurbishedProducts());
     } catch (error) {
-      console.log("error")
+      setUpdateFail(true);
+      console.error("Error updating product:", error);
+    } finally {
+      setIsUpdating(false);
     }
   };
 
+  // Handle delete
   const handleDelete = async () => {
+    setIsDelete(false);
+    setIsDeleting(true);
     try {
-      await userUploadBooks.deleteProduct(productId, imagesToDelete);
-      alert("Delete successful");
+      // await userUploadBooks.deleteProduct(productId, imagesToDelete);
+      dispatch(deleteProduct(productId));
+      setIsDeleteSuccessful(true);
+
+      console.log("Product deleted successfully.");
     } catch (error) {
-      console.error("Error in deleting product:", error);
+      setDeleteFail(true);
+      console.error("Error deleting product:", error);
+    } finally {
+      setIsDeleting(false);
     }
   };
+
+  // Reusable confirmation popup
+  const ConfirmationPopup = ({ message, onClose, onConfirm, isDelete }) => (
+    <div className={`user-book-${isDelete ? 'delete' : 'update'}-pop-up`}>
+      <div className={`user-book-${isDelete ? 'delete' : 'update'}-pop-up-inner`}>
+        <div className={`user-book-${isDelete ? 'delete' : 'update'}-pop-up-message`}>
+          {message}
+        </div>
+        <div className={`user-book-${isDelete ? 'delete' : 'update'}-pop-up-options`}>
+          <div className={`user-book-${isDelete ? 'delete' : 'update'}-option-no`} onClick={onClose}>No</div>
+          <div className={`user-book-${isDelete ? 'delete' : 'update'}-option-yes`} onClick={onConfirm}>Yes</div>
+        </div>
+      </div>
+    </div>
+  );
+  //success pop up
+
+  // Reusable error popup
+  const Popup = ({ message, onClose }) => (
+    <div className='user-book-delete-pop-up'>
+      <div className='user-book-delete-pop-up-inner'>
+        <div className='user-book-delete-pop-up-message'>
+          {message}
+        </div>
+        <div className='user-book-delete-pop-up-options'>
+          <div className='user-book-delete-option-no' onClick={onClose}>Ok</div>
+        </div>
+      </div>
+    </div>
+  );
+
 
   return (
     <>
@@ -202,7 +244,6 @@ const UploadProduct = () => {
           <p className='user-update-books-header-inner-div-p'>UPDATE {type?.toUpperCase()}</p>
           <div
             className={`user-update-books-header-inner-div-phn-div`}
-            onClick={() => navigate('/pincode')}
             aria-label="Change Location"
             tabIndex={0}
           >
@@ -409,8 +450,7 @@ const UploadProduct = () => {
 
           <hr style={{ width: "0vw", backgroundColor: "white", margin: "20px 0px 10px 0px" }}></hr>
 
-          <p>Aditional Info</p>
-
+          <p>IMPORTANT FOR SEO</p>
           {/* Keywords Input */}
           <div className='book-update-form-group'>
             <div className='book-update-form-group-inner'>
@@ -425,33 +465,7 @@ const UploadProduct = () => {
             </div>
           </div>
 
-          {/* Author Name Input */}
-          <div className='book-update-form-group'>
-            <div className='book-update-form-group-inner'>
-              <input
-                type='text'
-                name='author'
-                value={formData.author}
-                onChange={handleInputChange}
-                placeholder='Book Author Name'
-                className='book-update-author-input'
-              />
-            </div>
-          </div>
 
-          {/* Buying Year Input */}
-          <div className='book-update-form-group'>
-            <div className='book-update-form-group-inner'>
-              <input
-                type='number'
-                name='buyingYear'
-                value={formData.buyingYear}
-                onChange={handleInputChange}
-                placeholder='Book Buying Year'
-                className='book-update-year-input'
-              />
-            </div>
-          </div>
 
 
           {/* Image Upload */}
@@ -503,6 +517,7 @@ const UploadProduct = () => {
       )}
 
 
+
       {!allField && (
         <div className='use-book-update-all-field-required-div' >
           <div className='use-book-update-all-field-required-div-inner' onClick={() => setallField(true)}>
@@ -514,46 +529,60 @@ const UploadProduct = () => {
 
         </div>)
       }
-
       {isUpdate && (
-        <div className='user-book-update-pop-up'>
-          <div className='user-book-update-pop-up-inner'>
-            <div className='user-book-update-pop-up-message'>
-              Are you sure you want to update?
-            </div>
-            <div className='user-book-update-pop-up-options'>
-              <div className='user-book-update-option-no' onClick={() => setIsUpdate(false)}>
-                No
-              </div>
-              <div className='user-book-update-option-yes' onClick={handleSubmit}>
-                Yes
-              </div>
-            </div>
-          </div>
-        </div>
+        <ConfirmationPopup
+          message="Are you sure you want to update?"
+          onClose={() => setIsUpdate(false)}
+          onConfirm={handleUpdate}
+          isDelete={false} // indicates it's for update, not delete
+        />
+      )}
+      {isDelete && (
+        <ConfirmationPopup
+          message="Are you sure you want to delete?"
+          onClose={() => setIsDelete(false)}
+          onConfirm={handleDelete}
+          isDelete={true} // indicates it's for delete
+        />
       )}
 
+      {isUpdateSuccessful && (
+        <Popup
+          message="product updated successfully!"
+          onClose={() => {setIsUpdateSuccessful(false)}}
+        />
+      )}
+      {isDeleteSuccessful && (
+        <Popup
+          message="product deleted successfully!"
+          onClose={() => {navigate('/user/refurbished')}}
+        />
+      )}
 
-
-
-      {isDelete &&
+      {deleteFail && (
+        <Popup
+          message="Failed to delete product!"
+          onClose={() => setDeleteFail(false)}
+        />
+      )}
+      {updateFail && (
+        <Popup
+          message="Failed to update product!"
+          onClose={() => setUpdateFail(false)}
+        />
+      )}
+      {isDeleting || isUpdating && (
         <div className='user-book-delete-pop-up'>
-          <div className='user-book-delete-pop-up-inner'>
-            <div className='user-book-delete-pop-up-message'>
-              Are you sure you want to delete?
-            </div>
-            <div className='user-book-delete-pop-up-options'>
-              <div className='user-book-delete-option-no' onClick={() => setIsDelete(false)}>
-                No
-              </div>
-              <div className='user-book-delete-option-yes' onClick={handleDelete}>
-                Yes
-              </div>
-            </div>
-          </div>
+          <Oval
+            height={40}
+            width={40}
+            color="#4A90E2"
+            secondaryColor="#ddd"
+            strokeWidth={4}
+            strokeWidthSecondary={2}
+          />
         </div>
-      }
-
+      )}
     </>
   );
 };

@@ -34,7 +34,7 @@ import RefurbishedBooksUploadUser from './components/user/booksUploadComponent/b
 import RefurbishedGadgetsUploadUser from './components/user/gadgetsUploadComponent/gadgetsUpload.jsx'
 import UserProductPageMain from './components/user/productPage/userProductPageMain.jsx'
 
-import UserUpdateBook  from './components/user/UpdateComponent/uub.jsx';
+import UserUpdateBook  from './components/user/UpdateComponent/userUpdateRefurbishedBook.jsx.jsx';
 import UserUpdateModule  from './components/user/UpdateComponent/sx.jsx';
 import UserUpdateGadget from './components/user/UpdateComponent/uug.jsx';
 

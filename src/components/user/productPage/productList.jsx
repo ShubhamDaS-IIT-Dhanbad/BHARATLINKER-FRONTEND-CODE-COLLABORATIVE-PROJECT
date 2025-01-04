@@ -8,7 +8,6 @@ const ProductList = ({ products, loading}) => {
           <div>no product found</div>
         );
     }
-
     return (
         <>
             <div id="user-refurbished-product-page-grid" style={{marginTop:"110px"}}>

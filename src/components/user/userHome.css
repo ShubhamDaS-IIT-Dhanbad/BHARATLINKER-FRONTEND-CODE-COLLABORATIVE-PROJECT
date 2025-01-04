@@ -84,6 +84,13 @@
 }
 
 
+
+
+
+
+
+  
+
 /* Common Styles for Pop-Up Container */
 .logout-pop-up, .user-book-update-pop-up, .user-book-delete-pop-up {
     position: fixed;
@@ -92,8 +99,9 @@
     justify-content: center;
     align-items: center;
     width: 100vw;
-    background-color: #000000c4;
+    background-color: #1b1818e5;
     height: 100vh;
+    
     z-index: 20000;
 }
 
@@ -151,6 +159,6 @@
     color: blue; /* Update Confirmation */
 }
 
-.user-book-delete-option-yes {
-    color: red; /* Delete Confirmation */
+.user-book-delete-option-no {
+    color: red;
 }
