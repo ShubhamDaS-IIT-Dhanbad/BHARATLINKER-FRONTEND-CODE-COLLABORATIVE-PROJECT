@@ -96,7 +96,7 @@
 .board-update-form-group.active,
 .lang-update-form-group.active,
 .book-update-form-group-inner.active{
-    border: 1px solid rgb(0, 202, 84);
+    border: 1.8px solid rgb(69, 236, 64);
 }
 
 .book-update-form-group-inner {
@@ -277,12 +277,15 @@ border: 1px solid black;border-radius: 9px;
 }
 .user-update-image-placeholder,.user-book-uploaded-image{
     width: 100px;height: 100px;
-    border: 1px solid rgba(0, 0, 0, 0.58);
     border-radius: 9px;
     display: flex;
     justify-content: center;
     align-items: center;
 }
+.user-update-image-placeholder{
+    border: 1.8px solid rgb(0, 0, 0);
+}
+.user-book-uploaded-image{ border: 1.8px solid rgb(69, 236, 64);}
 
 
 
