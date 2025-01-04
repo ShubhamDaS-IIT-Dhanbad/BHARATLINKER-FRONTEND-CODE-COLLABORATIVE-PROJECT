@@ -162,8 +162,8 @@ const UploadProduct = () => {
   const handleUpdate = async () => {
     const { class: productClass, language, board, subject, title, price, discountedPrice } = formData;
     if (!productClass || !language || !board || !subject || !title || !price || !discountedPrice) {
+      setIsUpdate(false);
       setAllField(false);
-      console.error("All fields are required.");
       return;
     }
 
@@ -423,7 +423,7 @@ const UploadProduct = () => {
                 name='description'
                 value={formData.description}
                 onChange={handleInputChange}
-                placeholder='Enter Description'
+                placeholder='Description'
                 className='book-update-description-input'
               />
             </div>
@@ -452,7 +452,7 @@ const UploadProduct = () => {
                 name='discountedPrice'
                 value={formData.discountedPrice}
                 onChange={handleInputChange}
-                placeholder='Enter Discounted Price'
+                placeholder='Discounted price'
                 className='book-update-discounted-input'
               />
               *
@@ -471,7 +471,7 @@ const UploadProduct = () => {
                 name='keywords'
                 value={formData.keywords}
                 onChange={handleInputChange}
-                placeholder='Book Keywords (seperated by comma)'
+                placeholder='Keywords (seperated by comma)'
                 className='book-update-keywords-input'
               />
             </div>
@@ -518,9 +518,9 @@ const UploadProduct = () => {
 
       {!allField && (
         <div className='use-book-update-all-field-required-div' >
-          <div className='use-book-update-all-field-required-div-inner' onClick={() => setallField(true)}>
+          <div className='use-book-update-all-field-required-div-inner' >
             All the * mark field are Required
-            <div className='use-book-update-all-field-required-div-inner-ok'>
+            <div className='use-book-update-all-field-required-div-inner-ok' onClick={() => setAllField(true)}>
               ok
             </div>
           </div>
