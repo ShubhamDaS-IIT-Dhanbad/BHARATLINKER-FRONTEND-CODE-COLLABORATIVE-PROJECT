@@ -165,9 +165,7 @@ function UploadGadgetsForm({ userData }) {
                         className='user-refurbished-gadgets-upload-discounted-input'
                     />
                 </div>
-
-
-
+                
                 <input
                     type='text'
                     name='keywords'
