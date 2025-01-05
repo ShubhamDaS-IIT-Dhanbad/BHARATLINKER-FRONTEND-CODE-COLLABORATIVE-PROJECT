@@ -69,8 +69,7 @@ function UploadGadgetsForm({ userData }) {
         }
         const finalFormData = {
             ...formData,
-            phn: `+91${userData?.phn || ''}`,
-            details: JSON.stringify(formData.details)
+            phn: `+91${userData?.phn || ''}`
         };
         setIsUploading(true);
         try {
