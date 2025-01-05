@@ -136,7 +136,7 @@ function UploadGadgetsForm({ userData }) {
                         name='title'
                         value={formData.title}
                         onChange={handleInputChange}
-                        placeholder='title'
+                        placeholder='enter a releavent title'
                         style={{ maxWidth: "90vw", minHeight: "15vh" }}
                         className='user-refurbished-product-title-input'
                     />
@@ -146,7 +146,7 @@ function UploadGadgetsForm({ userData }) {
                         value={formData.description}
                         onChange={handleInputChange}
                         style={{ maxWidth: "90vw", minHeight: "30vh" }}
-                        placeholder='description'
+                        placeholder='enter a releavent description'
                         className='user-refurbished-product-description-input'
                     />
                 </div >
@@ -157,7 +157,7 @@ function UploadGadgetsForm({ userData }) {
                         name='price'
                         value={formData.price}
                         onChange={handleInputChange}
-                        placeholder='Enter Original Price'
+                        placeholder='enter original price'
                         className='user-refurbished-gadgets-upload-price-input'
                     />
                     <input
@@ -165,7 +165,7 @@ function UploadGadgetsForm({ userData }) {
                         name='discountedPrice'
                         value={formData.discountedPrice}
                         onChange={handleInputChange}
-                        placeholder='discounted price'
+                        placeholder='enter discounted price'
                         className='user-refurbished-gadgets-upload-discounted-input'
                     />
                 </div>
@@ -177,7 +177,7 @@ function UploadGadgetsForm({ userData }) {
                     onChange={handleInputChange}
 
                     style={{ maxWidth: "90vw", minHeight: "20vh" }}
-                    placeholder='Keywords (separated by commas)'
+                    placeholder='Keywords (separated by commas [,] )'
                     className='user-refurbished-gadgets-upload-keywords-input'
                 />
 
@@ -216,7 +216,7 @@ function UploadGadgetsForm({ userData }) {
             {!allFieldEntered && (
                 <div className='user-refurbished-gadgets-all-fields-required-div'>
                     <div className='user-refurbished-gadgets-all-fields-required-div-inner'>
-                        All the * marked fields are Required
+                        All the fields are Required
                         <div
                             className='user-refurbished-gadgets-all-fields-required-div-inner-ok'
                             onClick={() => setAllFieldEntered(true)}
