@@ -25,9 +25,7 @@ function UploadGadgetsForm({ userData }) {
         discountedPrice: '',
         description: '',
         title: '',
-        details: {},
         keywords: '',
-        buyingYear: '',
         phn: `+91${userData?.phn || ''}`,
         pinCodes: '740001,740002,740003,742136',
         productType: 'gadget'
@@ -65,19 +63,27 @@ function UploadGadgetsForm({ userData }) {
         const { category, brand, title, price, discountedPrice } = formData;
         if (!category || category === 'category' || !brand || brand === 'brand' || !title || !price || !discountedPrice) {
             setAllFieldEntered(false);
+            console.log("Please fill all required fields.");
             return;
         }
-
-        const finalFormData = {
-            ...formData,
-            phn: `+91${userData?.phn || ''}`,
-            details: JSON.stringify(formData.details)
-        };
 
         setIsUploading(true);
         try {
             await userUploadGadgets.uploadGadgetWithImages(finalFormData, images);
             setUploadStatus({ success: true, fail: false });
+            setFormData({
+                category: 'category',
+                brand: 'brand',
+                price: '',
+                discountedPrice: '',
+                description: '',
+                title: '',
+                keywords: '',
+                buyingYear: '',
+                phn: `+91${userData?.phn || ''}`,
+                pinCodes: '740001,740002,740003,742136',
+                productType: 'gadget'
+            });
         } catch (error) {
             console.error("Upload error:", error);
             setUploadStatus({ success: false, fail: true });
@@ -106,14 +112,18 @@ function UploadGadgetsForm({ userData }) {
     );
 
     const Popup = ({ message, onClose, isSuccess }) => (
-        <div className='user-book-delete-pop-up'>
-            <div className='user-book-delete-pop-up-inner'>
-                <div className='user-book-delete-pop-up-message'>{message}</div>
-                <div className={isSuccess ? 'user-refurbished-book-successful-popup' : 'user-refurbished-book-fail-popup'} onClick={onClose}>
+        <div className='user-refurbished-gadgets-upload-pop-up'>
+            <div className='user-refurbished-gadgets-upload-pop-up-inner'>
+                <div className='user-refurbished-gadgets-upload-pop-up-message'>{message}</div>
+                <div
+                    className={isSuccess ? 'user-refurbished-gadgets-upload-successful-popup' : 'user-refurbished-gadgets-upload-fail-popup'}
+                    onClick={onClose}
+                >
                     OK
                 </div>
             </div>
         </div>
+
     );
 
     return (
@@ -219,7 +229,7 @@ function UploadGadgetsForm({ userData }) {
             )}
             {isUploading && (
                 <div className='user-refurbished-gadgets-uploading-loader'>
-                    <Oval height={20} width={20} color="#fff" />
+                    <Oval height={40} width={40} color="#fff" />
                 </div>
             )}
             {uploadStatus.success && (

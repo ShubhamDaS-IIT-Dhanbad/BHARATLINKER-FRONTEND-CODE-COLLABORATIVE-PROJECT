@@ -262,7 +262,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #000000d4;
+    background-color: #000000e0;
     position: fixed;
     top: 0;
     overflow: hidden;
@@ -308,4 +308,46 @@
     border: 2px solid green;
     border-radius: 5px;
     padding: 5px;
+}
+
+
+
+
+
+
+
+
+
+
+/* Common Styles for Pop-Up Inner Div */
+.user-refurbished-gadgets-upload-pop-up {
+    background-color: #000000e0;
+    width: 100vw;position: fixed;top: 0;
+    height: 100vh;z-index: 100;
+    display: flex;justify-content: center;align-items: center;
+}
+.user-refurbished-gadgets-upload-pop-up-inner {
+    background-color: #fff;
+    border-radius: 10px;
+    width: 85vw;
+    height: 130px;
+}
+/* Common Styles for Pop-Up Statement Text */
+.user-refurbished-gadgets-upload-pop-up-message {
+    display: flex;
+    justify-content: center;
+    align-items: center;padding: 10px;
+    height: 45%;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.075);
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+/* Common Styles for No and Yes Options */
+.user-refurbished-gadgets-upload-fail-popup {
+    display: flex;justify-content: center;align-items: center;
+    height: 30%;color: red;
+}
+.user-refurbished-gadgets-upload-successful-popup{
+    display: flex;justify-content: center;align-items: center;
+    height: 30%;color: rgb(23, 219, 40);
 }
