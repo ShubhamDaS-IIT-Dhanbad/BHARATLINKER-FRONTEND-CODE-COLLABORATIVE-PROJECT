@@ -69,7 +69,7 @@ function UploadGadgetsForm({ userData }) {
 
         setIsUploading(true);
         try {
-            await userUploadGadgets.uploadGadgetWithImages(finalFormData, images);
+            await userUploadGadgets.uploadGadgetWithImages(formData, images);
             setUploadStatus({ success: true, fail: false });
             setFormData({
                 category: 'category',
@@ -84,6 +84,7 @@ function UploadGadgetsForm({ userData }) {
                 pinCodes: '740001,740002,740003,742136',
                 productType: 'gadget'
             });
+            setImages([null, null, null]);
         } catch (error) {
             console.error("Upload error:", error);
             setUploadStatus({ success: false, fail: true });
