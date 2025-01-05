@@ -61,15 +61,21 @@ function UploadGadgetsForm({ userData }) {
 
     const handleSubmit = async () => {
         const { category, brand, title, price, discountedPrice } = formData;
-        if (!category || category === 'category' || !brand || brand === 'brand' || !title || !price || !discountedPrice) {
+        
+        if (!userData.phn || !category || category === 'category' || !brand || brand === 'brand' || !title || !price || !discountedPrice) {
             setAllFieldEntered(false);
             console.log("Please fill all required fields.");
             return;
         }
-
+        const finalFormData = {
+            ...formData,
+            phn: `+91${userData?.phn || ''}`,
+            details: JSON.stringify(formData.details)
+        };
         setIsUploading(true);
         try {
-            await userUploadGadgets.uploadGadgetWithImages(formData, images);
+            
+            await userUploadGadgets.uploadGadgetWithImages(finalFormData, images);
             setUploadStatus({ success: true, fail: false });
             setFormData({
                 category: 'category',
