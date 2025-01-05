@@ -269,6 +269,7 @@ const UploadBooksModulesForm = ({ userData, productType }) => {
 
 
             </div>
+            
             {!allFieldEntered && (
                 <Popup message="All fields are required!" onClose={() => setAllFieldEntered(true)} isSuccess={false} />
             )}

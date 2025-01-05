@@ -197,3 +197,13 @@
     border-radius: 10px;padding: 10px;
     color: #000;margin-top: 50px;
 }
+
+
+
+/*loader*/
+.user-refurbished-product-book-module-upload-form-loader{
+    width: 100vw;height: 100vh;
+    background-color: #000000e8;position: fixed;top: 0;
+    z-index: 100;
+    display: flex;justify-content: center;align-items: center;
+}

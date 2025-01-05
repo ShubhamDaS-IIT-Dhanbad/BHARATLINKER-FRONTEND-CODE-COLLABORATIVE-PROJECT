@@ -11,7 +11,6 @@ const UploadProduct = () => {
     const navigate = useNavigate();
     const [type, setType] = useState('book');
     const [userData, setUserData] = useState('');
-    const [allField, setallField] = useState(true);
 
     useEffect(() => {
         const userSession = Cookies.get('BharatLinkerUser');
