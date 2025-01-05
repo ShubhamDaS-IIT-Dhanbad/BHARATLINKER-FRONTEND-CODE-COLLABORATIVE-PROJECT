@@ -250,7 +250,8 @@
     /* Enables scrolling */
 
 }
-.refurbished-book-module-class-popup-class-option {
+.refurbished-book-module-class-popup-class-option,
+.selected-green {
     min-width: 60px;
     /* Width of each option */
     border: 1px solid rgba(0, 0, 0, 0.26);
@@ -267,4 +268,6 @@
     /* Center horizontally */
     margin-top: none;
 }
-
+.selected-green {
+    border: 1.9px solid #28a745;
+  }

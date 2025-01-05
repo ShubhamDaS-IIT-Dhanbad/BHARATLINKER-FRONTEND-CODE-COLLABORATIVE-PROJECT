@@ -210,17 +210,16 @@
 }
 
 .user-refurbished-gadgets-popup-options {
-    padding: 19px;
-    background-color: white;
+    background-color: rgb(255, 255, 255);
     width: 100vw;
+    /* Full width */
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
-    height: 75vh;
-    overflow-y: scroll;
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 10px;
+    /* Rounded corners */
+    max-height: 75vh;
+    overflow-y: scroll;gap: 5px;
+    display: flex;flex-wrap: wrap;justify-content: center;align-items: center;
+    padding: 20px 0px 10vh 0px;
 }
 
 .user-refurbished-gadgets-popup-option {

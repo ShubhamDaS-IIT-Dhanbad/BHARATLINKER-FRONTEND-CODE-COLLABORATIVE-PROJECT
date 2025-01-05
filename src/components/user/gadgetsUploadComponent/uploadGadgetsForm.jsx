@@ -97,24 +97,30 @@ function UploadGadgetsForm({ userData }) {
         }
     };
 
-    const renderPopUp = (type, options) => (
-        popUps[type] && (
-            <div className='user-refurbished-gadgets-popup'>
-                <IoClose size={25} className='user-refurbished-gadgets-popup-close' onClick={() => togglePopUp(type)} />
-                <div className='user-refurbished-gadgets-popup-options'>
-                    {options.map((option) => (
-                        <div
-                            key={option}
-                            className={`user-refurbished-gadgets-popup-option ${formData[type] === option ? 'user-refurbished-gadgets-selected-option' : ''}`}
-                            onClick={() => handleOptionSelect(type, option)}
-                        >
-                            {option}
-                        </div>
-                    ))}
+    const renderPopUp = (type, options) => {
+        return (
+            popUps[type] && (
+                <div className='user-refurbished-gadgets-popup'>
+                    <IoClose size={25} className='user-refurbished-gadgets-popup-close' onClick={() => togglePopUp(type)} />
+                    <div style={{color:"white"}}>
+                        {`${type.toUpperCase()}`}
+                    </div>
+                    <div className='user-refurbished-gadgets-popup-options'>
+                        {options.map((option) => (
+                            <div
+                                key={option}
+                                className={`user-refurbished-gadgets-popup-option ${formData[type] === option ? 'user-refurbished-gadgets-selected-option' : ''}`}
+                                onClick={() => handleOptionSelect(type, option)}
+                            >
+                                {option}
+                            </div>
+                        ))}
+                    </div>
                 </div>
-            </div>
-        )
-    );
+            )
+        );
+    };
+    
 
     const Popup = ({ message, onClose, isSuccess }) => (
         <div className='user-refurbished-gadgets-upload-pop-up'>

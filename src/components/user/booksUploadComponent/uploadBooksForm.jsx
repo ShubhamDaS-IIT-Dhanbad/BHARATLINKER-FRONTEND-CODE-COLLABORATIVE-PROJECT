@@ -139,7 +139,7 @@ const UploadBooksModulesForm = ({ userData, productType }) => {
                         {options.map((item) => (
                             <div
                                 key={item}
-                                className="refurbished-book-module-class-popup-class-option"
+                                className={`${formData[kpopup] === item ? 'selected-green' : 'refurbished-book-module-class-popup-class-option'}`}
                                 onClick={() => handleSelect(item)}
                             >
                                 {item.charAt(0).toUpperCase() + item.slice(1)}
