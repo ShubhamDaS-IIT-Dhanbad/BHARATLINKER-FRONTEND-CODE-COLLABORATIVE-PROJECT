@@ -3,16 +3,17 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { FaArrowLeft } from 'react-icons/fa';
 import Cookies from 'js-cookie';
-import UploadBooksForm from './userUpdatePageBookModuleForm.jsx';
+import UploadBooksForm from './userProductUpdateForm.jsx';
 
-import './userUpdatePageBookModule.css';
+import './userProductUpdate.css';
 
 const UploadProduct = () => {
     const navigate = useNavigate();
-    const { id: productId } = useParams(); // Correct syntax for useParams
-    const products = useSelector((state) => state.userRefurbishedProducts.refurbishedProducts); // Import useSelector
+    const { id: productId} = useParams();
+    const [productType, setProductType] = useState('');
+
+    const products = useSelector((state) => state.userRefurbishedProducts.refurbishedProducts);
     const [userData, setUserData] = useState(null);
-    const [productType, setProductType] = useState(''); // Add state for productType
 
     useEffect(() => {
         const userSession = Cookies.get('BharatLinkerUser');
@@ -53,7 +54,7 @@ const UploadProduct = () => {
                 </div>
             </div>
 
-            <UploadBooksForm userData={userData} />
+            <UploadBooksForm userData={userData} productType={productType}/>
             <footer>
                 <p className="dashboard-footer-p">© 2025 Bharat Linker</p>
             </footer>

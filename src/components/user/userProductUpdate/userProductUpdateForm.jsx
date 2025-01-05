@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { IoClose } from 'react-icons/io5';
 import { CiImageOn } from 'react-icons/ci';
-import { FaArrowLeft } from 'react-icons/fa';
 import { Oval } from 'react-loader-spinner';
+import { MdOutlineCategory } from "react-icons/md";
+import { TbBrandAirtable } from "react-icons/tb";
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import userUploadBooks from '../../../appWrite/UserUploadRefurbished/userUploadBooks.js';
 import { deleteProduct, resetUserRefurbishedProducts } from '../../../redux/features/user/userAllRefurbishedProductsSlice.jsx';
 
-const UploadBooksModulesForm = () => {
+const UploadBooksModulesForm = ({ productType }) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
+
     const productId = useParams('id');
     const products = useSelector((state) => state.userRefurbishedProducts.refurbishedProducts);
 
@@ -20,22 +22,21 @@ const UploadBooksModulesForm = () => {
 
     const [isUpdate, setIsUpdate] = useState(false);
     const [isDelete, setIsDelete] = useState(false);
+
     const [isDeleteSuccessful, setIsDeleteSuccessful] = useState(false);
     const [isUpdateSuccessful, setIsUpdateSuccessful] = useState(false);
+
     const [deleteFail, setDeleteFail] = useState(false);
     const [updateFail, setUpdateFail] = useState(false);
 
-    const [type, setType] = useState('books');
-    const [userData, setUserData] = useState('');
-    const [allField, setAllField] = useState(true);
-
     const [toDeleteImagesUrls, setToDeleteImagesUrls] = useState([]);
-    const [imagesToDelete, setImagesToDelete] = useState([]);
 
     const [popUpState, setPopUpState] = useState({
         classPopUp: false,
         subjectPopUp: false,
         languagePopUp: false,
+        categoryPopUp: false,
+        brandPopUp: false,
     });
 
     const [formData, setFormData] = useState({
@@ -49,7 +50,8 @@ const UploadBooksModulesForm = () => {
         keywords: '',
         pinCodes: '740001,740002,740003,742136',
         productType: 'module',
-        phn: `+91${userData.phn || ''}`,
+        category: '', // Ensure this is initialized
+        brand: ''
     });
 
     const [images, setImages] = useState([null, null, null]);
@@ -75,10 +77,11 @@ const UploadBooksModulesForm = () => {
                     productType,
                     keywords,
                     author,
-                    images: productImages, // Array of image URLs
+                    category,
+                    brand,
+                    images: productImages,
                 } = product;
 
-                // Update form data with product details
                 setFormData({
                     class: prodClass,
                     language,
@@ -88,88 +91,62 @@ const UploadBooksModulesForm = () => {
                     description,
                     productType,
                     price,
+                    category,
+                    brand,
                     discountedPrice,
-                    keywords: keywords.join(','), // Convert array to a comma-separated string
+                    keywords: keywords.join(','),
                     author,
-                    pinCodes: '740001,740002,740003,742136', // Default pin codes
+                    pinCodes: '740001,740002,740003,742136',
                 });
 
-                // Update images state with the first 3 images (URLs as strings) and pad with nulls if needed
                 const paddedImages = [...productImages, null, null, null].slice(0, 3);
-                setImages(paddedImages); // Set image URLs as strings
-                setImagesToDelete(paddedImages); // Same padded array for deletion tracking
+                setImages(paddedImages);
             }
         }
 
         setLoading(false);
     }, []);
 
-
-
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setFormData((prevData) => ({
-            ...prevData,
-            [name]: value,
-        }));
-    };
-
-    const handleImageAction = (index, action, files = null) => {
-        const updatedImages = [...images];
-        switch (action) {
-            case 'change':
-                if (files && files[0]) {
-                    updatedImages[index] = files[0];
-                }
-                break;
-            case 'remove':
-                if (typeof updatedImages[index] === 'string') {
-                    const publicId = updatedImages[index];
-                    setToDeleteImagesUrls((prevUrls) => [...prevUrls, publicId]);
-                }
-                updatedImages[index] = null;
-                break;
-            default:
-                return;
-        }
-        setImages(updatedImages);
+        setFormData((prevData) => ({ ...prevData, [name]: value }));
     };
 
     const handleClassSelect = (selectedClass) => {
-        setFormData((prevFormData) => ({
-            ...prevFormData,
-            class: Number(selectedClass),
-        }));
+        setFormData((prevFormData) => ({ ...prevFormData, class: selectedClass }));
         setPopUpState((prevState) => ({ ...prevState, classPopUp: false }));
     };
 
     const handleSubjectSelect = (selectedSubject) => {
-        setFormData((prevFormData) => ({
-            ...prevFormData,
-            subject: selectedSubject,
-        }));
+        setFormData((prevFormData) => ({ ...prevFormData, subject: selectedSubject }));
         setPopUpState((prevState) => ({ ...prevState, subjectPopUp: false }));
     };
 
     const handleLanguageSelect = (selectedLanguage) => {
-        setFormData((prevFormData) => ({
-            ...prevFormData,
-            language: selectedLanguage,
-        }));
+        setFormData((prevFormData) => ({ ...prevFormData, language: selectedLanguage }));
         setPopUpState((prevState) => ({ ...prevState, languagePopUp: false }));
     };
 
+    const handleCategorySelect = (selectedCategory) => {
+        setFormData((prevFormData) => ({ ...prevFormData, category: selectedCategory }));
+        setPopUpState((prevState) => ({ ...prevState, categoryPopUp: false }));
+    };
 
+    const handleBrandSelect = (selectedBrand) => {
+        setFormData((prevFormData) => ({ ...prevFormData, brand: selectedBrand }));
+        setPopUpState((prevState) => ({ ...prevState, brandPopUp: false }));
+    };
 
-
-
-
+    const [allFieldEntered, setAllFieldEntered] = useState(true);
 
     const handleUpdate = async () => {
-        const { class: productClass, language, subject, title, price, discountedPrice } = formData;
-        if (!productClass || !language || !subject || !title || !price || !discountedPrice) {
-            setIsUpdate(false);
-            setAllField(false);
+        const { title, price, discountedPrice, class: selectedClass, language, category, brand } = formData;
+        if ((productType == 'module' || productType == 'book') && ![title, price, discountedPrice, selectedClass, language].every(Boolean)) {
+            setAllFieldEntered(false);
+            return;
+        }
+        if (productType == 'gadget' && ![title, price, discountedPrice, brand, category].every(Boolean)) {
+            setAllFieldEntered(false);
             return;
         }
 
@@ -190,9 +167,8 @@ const UploadBooksModulesForm = () => {
     const handleDelete = async () => {
         setIsDeleting(true);
         setIsDelete(false);
-        setIsDeleting(true);
         try {
-            await userUploadBooks.deleteProduct(productId, imagesToDelete);
+            await userUploadBooks.deleteProduct(productId, toDeleteImagesUrls);
             dispatch(deleteProduct(productId));
             setIsDeleteSuccessful(true);
             console.log('Product deleted successfully.');
@@ -203,8 +179,6 @@ const UploadBooksModulesForm = () => {
             setIsDeleting(false);
         }
     };
-
-
 
     const ConfirmationPopup = ({ message, onClose, onConfirm, isDelete }) => (
         <div className={`user-refurbished-book-module-${isDelete ? 'delete' : 'update'}-popup`}>
@@ -236,6 +210,7 @@ const UploadBooksModulesForm = () => {
             </div>
         </div>
     );
+
     const PopupFail = ({ message, onClose }) => (
         <div className="user-refurbished-book-module-fail-popup">
             <div className="user-refurbished-book-module-fail-popup-inner">
@@ -281,8 +256,6 @@ const UploadBooksModulesForm = () => {
         );
     };
 
-
-
     const handleImageChange = (index, file) => {
         if (file) {
             const updatedImages = [...images];
@@ -293,57 +266,89 @@ const UploadBooksModulesForm = () => {
 
     const removeImage = (index) => {
         const updatedImages = [...images];
-        updatedImages[index] = null; // Clear the image at the index
+        const imageUrl = updatedImages[index];
+        if (imageUrl && isValidUrl(imageUrl)) {
+            setToDeleteImagesUrls((prevUrls) => [...prevUrls, imageUrl]);
+        }
+        updatedImages[index] = null;
         setImages(updatedImages);
     };
-
+    const isValidUrl = (url) => {
+        const regex = /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/i;
+        return regex.test(url);
+    };
+    
 
 
     return (
         <>
 
+            {productType != 'gadget' ?
+                <div className='user-update-book-module-type'>
+                    <div
+                        className={`user-update-book-module-type-book ${formData.productType === 'book' ? 'active' : ''}`}
 
-            <div className='user-update-book-module-type'>
-                <div
-                    className={`user-update-book-module-type-book ${formData.productType === 'book' ? 'active' : ''}`}
-                    onClick={() => setType('book')}
-                >
-                    Book
+                    >
+                        Book
+                    </div>
+                    <div
+                        className={`user-update-book-module-type-module ${formData.productType === 'module' ? 'active' : ''}`}
+                    >
+                        Module
+                    </div>
                 </div>
-                <div
-                    className={`user-update-book-module-type-module ${formData.productType === 'module' ? 'active' : ''}`}
-                    onClick={() => setType('module')}
-                >
-                    Module
-                </div>
-            </div>
+                :
+                <></>
+            }
 
 
             <div className="user-refurbished-product-book-module-update-form">
-                <div style={{ display: 'flex', gap: '5px', marginTop: '40px', marginBottom: '17px' }}>
-                    <div
-                        className={`user-refurbished-product-book-module-update-form-class ${formData.class && formData.class !== 'class' ? 'active' : ''}`}
-                        onClick={() => setPopUpState((prevState) => ({ ...prevState, classPopUp: !prevState.classPopUp }))}
-                    >
-                        C
-                    </div>
-                    <div
-                        className={`user-refurbished-product-book-module-update-form-subject ${formData.subject ? 'active' : ''}`}
-                        onClick={() => setPopUpState((prevState) => ({ ...prevState, subjectPopUp: !prevState.subjectPopUp }))}
-                    >
-                        S
-                    </div>
-                    <div
-                        className={`user-refurbished-product-book-module-update-form-language ${formData.language ? 'active' : ''}`}
-                        onClick={() => setPopUpState((prevState) => ({ ...prevState, languagePopUp: !prevState.languagePopUp }))}
-                    >
-                        L
-                    </div>
-                </div>
 
-                {renderPopUp('classPopUp', [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], handleClassSelect)}
+
+
+                {productType != 'gadget' ?
+                    <div style={{ display: "flex", gap: "5px", marginTop: "30px", marginBottom: "17px" }}>
+                        <div
+                            className={`user-refurbished-product-book-module-update-form-class ${formData.class && formData.class !== 'class' ? 'active' : ''}`}
+                            onClick={() => setPopUpState((prevState) => ({ ...prevState, classPopUp: !prevState.classPopUp }))}
+                        >
+                            C
+                        </div>
+                        <div
+                            className={`user-refurbished-product-book-module-update-form-subject ${formData.subject ? 'active' : ''}`}
+                            onClick={() => setPopUpState(prevState => ({ ...prevState, subjectPopUp: !prevState.subjectPopUp }))}
+                        >
+                            S
+                        </div>
+                        <div
+                            className={`user-refurbished-product-book-module-update-form-language ${formData.language ? 'active' : ''}`}
+                            onClick={() => setPopUpState(prevState => ({ ...prevState, languagePopUp: !prevState.languagePopUp }))}
+                        >
+                            L
+                        </div>
+                    </div>
+                    :
+                    <>
+                        <div className='user-refurbished-product-category-brand-div' style={{ display: "flex", gap: "5px", marginTop: "90px", marginBottom: "17px" }}>
+                            <div
+                                className={`user-refurbished-product-book-module-upload-form-category ${formData.category ? 'active' : ''}`}
+                                onClick={() => setPopUpState(prevState => ({ ...prevState, categoryPopUp: !prevState.categoryPopUp }))}>
+                                <MdOutlineCategory size={30} />
+                            </div>
+                            <div className={`user-refurbished-product-book-module-upload-form-brand ${formData.brand ? 'active' : ''}`}
+                                onClick={() => setPopUpState(prevState => ({ ...prevState, brandPopUp: !prevState.brandPopUp }))}>
+                                <TbBrandAirtable size={30} />
+                            </div>
+                        </div>
+                    </>
+                }
+                {renderPopUp('classPopUp', ['1','2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'], handleClassSelect)}
                 {renderPopUp('languagePopUp', ['beng', 'eng'], handleLanguageSelect)}
                 {renderPopUp('subjectPopUp', ['math', 'science', 'history', 'english'], handleSubjectSelect)}
+                {renderPopUp('categoryPopUp', ['category', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'], handleCategorySelect)}
+                {renderPopUp('brandPopUp', ['brand', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'], handleBrandSelect)}
+
+
 
                 <div className='user-refurbished-product-title-description-div'>
                     <textarea
@@ -401,12 +406,12 @@ const UploadBooksModulesForm = () => {
                         <div key={index} className="user-refurbished-product-book-module-update-form-image-container">
                             {image ? (
                                 <img
-                                    src={typeof image === 'string' ? image : URL.createObjectURL(image)} // Handle both URL and File objects
+                                    src={typeof image === 'string' ? image : URL.createObjectURL(image)} 
                                     className="user-refurbished-product-book-module-update-form-uploaded-image"
                                     alt={`Uploaded ${index + 1}`}
                                     onClick={() => removeImage(index)}
                                     onLoad={(e) => {
-                                        if (typeof image !== 'string') URL.revokeObjectURL(e.target.src); // Clean up object URL
+                                        if (typeof image !== 'string') URL.revokeObjectURL(e.target.src);
                                     }}
                                 />
                             ) : (
@@ -442,6 +447,10 @@ const UploadBooksModulesForm = () => {
 
 
             </div>
+
+            {!allFieldEntered && (
+                <PopupSuccess message="All fields are required!" onClose={() => setAllFieldEntered(true)} isSuccess={false} />
+            )}
             {(loading || isDeleting || isUpdating) && (
                 <div className='user-book-delete-pop-up'>
                     <Oval

@@ -29,7 +29,7 @@ function YourRefurbished() {
         const params = {
             inputValue,
             page: 1,
-            productsPerPage: 2,
+            productsPerPage: 8,
             pinCodes: [742136],  // Example pin code
             selectedCategories: [],  // Example, replace with actual category data
             selectedClasses: [],
@@ -69,7 +69,7 @@ function YourRefurbished() {
         const params = {
             inputValue,
             page: currentPage + 1,
-            productsPerPage: 2,
+            productsPerPage: 8,
             pinCodes: [742136],
             selectedCategories: [],
             selectedClasses: [],

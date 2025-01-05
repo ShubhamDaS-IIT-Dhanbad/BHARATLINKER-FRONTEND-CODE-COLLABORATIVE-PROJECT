@@ -21,7 +21,7 @@ function UserRefurbishedAllProductPage({ id, image, title, price, productType}) 
                     </span>
                 </div>
                 
-                <div className="user-refurbished-product-card-edit" onClick={() => navigate(`/user/refurbished/update/${productType}/${id}`)}>
+                <div className="user-refurbished-product-card-edit" onClick={() => navigate(`/user/refurbished/update/${id}?productType=${productType}`)}>
                     <span>Edit</span>
                 </div>
             </div>

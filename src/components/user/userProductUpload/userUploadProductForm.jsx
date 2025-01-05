@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { IoClose } from 'react-icons/io5';
 import { CiImageOn } from 'react-icons/ci';
-import { TbWorldUpload } from 'react-icons/tb';
+import { MdOutlineCategory } from "react-icons/md";
+import { TbBrandAirtable, TbWorldUpload } from "react-icons/tb";
+
 import { Oval } from 'react-loader-spinner';
 
 import { MdOutlineClass } from "react-icons/md";
@@ -14,6 +16,8 @@ const UploadBooksModulesForm = ({ userData, productType }) => {
         classPopUp: false,
         subjectPopUp: false,
         languagePopUp: false,
+        categoryPopUp: false,
+        brandPopUp: false,
     });
 
     const [uploadStatus, setUploadStatus] = useState({
@@ -32,6 +36,8 @@ const UploadBooksModulesForm = ({ userData, productType }) => {
         keywords: '',
         pinCodes: '740001,740002,740003,742136',
         productType,
+        brand: '',
+        category: '',
         phn: `+91${userData.phn || ''}`,
     });
 
@@ -62,20 +68,52 @@ const UploadBooksModulesForm = ({ userData, productType }) => {
         }
     };
 
+
+
+
+
+    const handleClassSelect = (selectedClass) => {
+        setFormData((prevFormData) => ({
+            ...prevFormData,
+            class: Number(selectedClass),
+        }));
+        setPopUpState(prevState => ({ ...prevState, classPopUp: false }));
+    };
+    const handleLanguageSelect = (selectedLanguage) => {
+        setFormData((prevFormData) => ({
+            ...prevFormData, language: selectedLanguage,
+        }));
+        setPopUpState(prevState => ({ ...prevState, languagePopUp: false }));
+    };
     const handleSubjectSelect = (selectedSubject) => {
         setFormData(prevFormData => ({ ...prevFormData, subject: selectedSubject }));
         setPopUpState(prevState => ({ ...prevState, subjectPopUp: false }));
     };
-
-    const handleLanguageSelect = (selectedLanguage) => {
-        setFormData(prevFormData => ({ ...prevFormData, language: selectedLanguage }));
-        setPopUpState(prevState => ({ ...prevState, languagePopUp: false }));
+  const handleCategorySelect = (selectedCategory) => {
+        setFormData(prevFormData => ({ ...prevFormData, category: selectedCategory }));
+        setPopUpState(prevState => ({ ...prevState, categoryPopUp: false }));
     };
+    const handleBrandSelect = (selectedBrand) => {
+        setFormData(prevFormData => ({ ...prevFormData, brand: selectedBrand }));
+        setPopUpState(prevState => ({ ...prevState, brandPopUp: false }));
+    };
+  
+
+
+
+
+
+
 
     const handleSubmit = () => {
-        const { title, price, discountedPrice, class: selectedClass, language } = formData;
+        const { title, price, discountedPrice, class: selectedClass, language,category,brand } = formData;
 
-        if (![title, price, discountedPrice, selectedClass, language].every(Boolean)) {
+        
+        if ((productType=='module'||productType=='book') && ![title, price, discountedPrice, selectedClass, language].every(Boolean)) {
+            setAllFieldEntered(false);
+            return;
+        }
+        if (productType=='gadget' && ![title, price, discountedPrice, brand,category].every(Boolean)) {
             setAllFieldEntered(false);
             return;
         }
@@ -98,13 +136,7 @@ const UploadBooksModulesForm = ({ userData, productType }) => {
                 setIsUploading(false);
             });
     };
-    const handleClassSelect = (selectedClass) => {
-        setFormData((prevFormData) => ({
-            ...prevFormData,
-            class: Number(selectedClass),
-        }));
-        setPopUpState(prevState => ({ ...prevState, classPopUp: false }));
-    };
+
     const resetForm = () => {
         setFormData({
             class: '',
@@ -132,7 +164,7 @@ const UploadBooksModulesForm = ({ userData, productType }) => {
                     >
                         <IoClose size={25} />
                     </div>
-                    <div style={{color:"white"}}>
+                    <div style={{ color: "white" }}>
                         {`${kpopup.toUpperCase()}`}
                     </div>
                     <div className="refurbished-book-module-class-popup-options">
@@ -170,31 +202,52 @@ const UploadBooksModulesForm = ({ userData, productType }) => {
     return (
         <>
             <div className="user-refurbished-product-book-module-upload-form">
+                {productType != 'gadget' ?
+                    <div style={{ display: "flex", gap: "5px", marginBottom: "17px" }}>
+                        <div
+                            className={`user-refurbished-product-book-module-upload-form-class ${formData.class && formData.class !== 'class' ? 'active' : ''}`}
+                            onClick={() => setPopUpState(prevState => ({ ...prevState, classPopUp: !prevState.classPopUp }))}
+                        >
+                            C
+                        </div>
+                        <div
+                            className={`user-refurbished-product-book-module-upload-form-subject ${formData.subject ? 'active' : ''}`}
+                            onClick={() => setPopUpState(prevState => ({ ...prevState, subjectPopUp: !prevState.subjectPopUp }))}
+                        >
+                            S
+                        </div>
+                        <div
+                            className={`user-refurbished-product-book-module-upload-form-language ${formData.language ? 'active' : ''}`}
+                            onClick={() => setPopUpState(prevState => ({ ...prevState, languagePopUp: !prevState.languagePopUp }))}
+                        >
+                            L
+                        </div>
+                    </div>
+                    :
+                    <>
+                        <div className='user-refurbished-product-category-brand-div' style={{marginTop:"50px"}}>
+                            <div 
+                                className={`user-refurbished-product-book-module-upload-form-category ${formData.category ? 'active' : ''}`}
+                                onClick={() => setPopUpState(prevState => ({ ...prevState, categoryPopUp: !prevState.categoryPopUp }))}>
+                                <MdOutlineCategory size={30} />
+                            </div>
+                            <div className={`user-refurbished-product-book-module-upload-form-brand ${formData.brand ? 'active' : ''}`}
+                                onClick={() => setPopUpState(prevState => ({ ...prevState, brandPopUp: !prevState.brandPopUp }))}>
+                                <TbBrandAirtable size={30} />
+                            </div>
+                        </div>
+                    </>
+                }
 
-                <div style={{ display: "flex", gap: "5px", marginBottom: "17px" }}>
-                    <div
-                        className={`user-refurbished-product-book-module-upload-form-class ${formData.class && formData.class !== 'class' ? 'active' : ''}`}
-                        onClick={() => setPopUpState(prevState => ({ ...prevState, classPopUp: !prevState.classPopUp }))}
-                    >
-                        C
-                    </div>
-                    <div
-                        className={`user-refurbished-product-book-module-upload-form-subject ${formData.subject ? 'active' : ''}`}
-                        onClick={() => setPopUpState(prevState => ({ ...prevState, subjectPopUp: !prevState.subjectPopUp }))}
-                    >
-                        S
-                    </div>
-                    <div
-                        className={`user-refurbished-product-book-module-upload-form-language ${formData.language ? 'active' : ''}`}
-                        onClick={() => setPopUpState(prevState => ({ ...prevState, languagePopUp: !prevState.languagePopUp }))}
-                    >
-                        L
-                    </div>
-                </div>
 
                 {renderPopUp('classPopUp', ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'], handleClassSelect)}
                 {renderPopUp('languagePopUp', ['Beng', 'Eng'], handleLanguageSelect)}
                 {renderPopUp('subjectPopUp', ['math', 'science', 'history', 'english'], handleSubjectSelect)}
+                {renderPopUp('categoryPopUp', ['category', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'], handleCategorySelect)}
+                {renderPopUp('brandPopUp', ['brand', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'], handleBrandSelect)}
+
+
+
 
                 <div className='user-refurbished-product-title-description-div'>
                     <textarea

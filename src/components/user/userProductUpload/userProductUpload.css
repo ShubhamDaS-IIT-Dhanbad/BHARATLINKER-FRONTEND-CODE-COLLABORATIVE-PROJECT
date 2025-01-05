@@ -116,7 +116,9 @@
 
 .user-refurbished-product-book-module-upload-form-class,
 .user-refurbished-product-book-module-upload-form-subject,
-.user-refurbished-product-book-module-upload-form-language {
+.user-refurbished-product-book-module-upload-form-language,
+.user-refurbished-product-book-module-upload-form-category,
+.user-refurbished-product-book-module-upload-form-brand {
     height:50px;
     border: 2px solid rgba(0, 0, 0, 0.142);
     display: flex;
@@ -128,7 +130,9 @@
 }
 .user-refurbished-product-book-module-upload-form-class.active,
 .user-refurbished-product-book-module-upload-form-subject.active,
-.user-refurbished-product-book-module-upload-form-language.active {
+.user-refurbished-product-book-module-upload-form-language.active,
+.user-refurbished-product-book-module-upload-form-category.active,
+.user-refurbished-product-book-module-upload-form-brand.active {
     border: 2.2px solid rgba(0, 202, 84, 0.918);
 }
 

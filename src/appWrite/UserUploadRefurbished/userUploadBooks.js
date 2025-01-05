@@ -40,6 +40,7 @@ class UserUploadBooks {
 
 
     async deleteImageFromCloudinary(imageUrl) {
+        console.log(imageUrl);
         if (!imageUrl) return;
         const urlParts = imageUrl.split('/');
         const publicIdWithExtension = urlParts[urlParts.length - 1];
@@ -76,66 +77,60 @@ class UserUploadBooks {
 
 
 
-    async uploadProductWithImages(productData, files = []) {
-        let uploadedImages = [];
-        try {
-            uploadedImages = await this.uploadImagesToCloudinary(files);
-            const imageUrls = uploadedImages.map(({ secure_url }) => secure_url);
+    // async uploadProductWithImages(productData, files = []) {
+    //     let uploadedImages = [];
+    //     try {
+    //         uploadedImages = await this.uploadImagesToCloudinary(files);
+    //         const imageUrls = uploadedImages.map(({ secure_url }) => secure_url);
 
-            const newProductData = {
-                ...productData,
-                language: productData.language.toLowerCase(),
-                board: productData.board.toLowerCase(),
-                subject: productData.subject.toLowerCase(),
-                title: productData.title.toLowerCase(),
-                description: productData.description.toLowerCase(),
-                price: Number(productData.price),
-                discountedPrice: Number(productData.discountedPrice),
-                keywords: productData.keywords.split(','),
-                pinCodes: productData.pinCodes.split(',').map(pin => Number(pin)),
-                images: imageUrls,
-                phn: productData.phn
-            };
+    //         const newProductData = {
+    //             ...productData,
+    //             language: productData.language.toLowerCase(),
+    //             subject: productData.subject.toLowerCase(),
+    //             title: productData.title.toLowerCase(),
+    //             description: productData.description.toLowerCase(),
+    //             price: Number(productData.price),
+    //             discountedPrice: Number(productData.discountedPrice),
+    //             keywords: productData.keywords.split(','),
+    //             pinCodes: productData.pinCodes.split(',').map(pin => Number(pin)),
+    //             images: imageUrls,
+    //             phn: productData.phn,
+    //             category:productData.category,
+    //             brand:productData.brand
+    //         };
 
-            const document = await this.databases.createDocument(
-                conf.appwriteRefurbishProductDatabaseId,
-                conf.appwriteRefurbishedBooksCollectionId,
-                ID.unique(),
-                newProductData
-            );
-            return document;
-        } catch (error) {
-            console.error('Error uploading product:', error);
-            if (uploadedImages.length > 0) await this.cleanupUploadedImages(uploadedImages);
-            throw error;
-        }
-    }
+    //         const document = await this.databases.createDocument(
+    //             conf.appwriteRefurbishProductDatabaseId,
+    //             conf.appwriteRefurbishedBooksCollectionId,
+    //             ID.unique(),
+    //             newProductData
+    //         );
+    //         return document;
+    //     } catch (error) {
+    //         console.error('Error uploading product:', error);
+    //         if (uploadedImages.length > 0) await this.cleanupUploadedImages(uploadedImages);
+    //         throw error;
+    //     }
+    // }
 
 
     async updateUserRefurbishedProduct(productId, toDeleteImagesUrls, updatedData, newFiles = []) {
         let uploadedImages = [];
         let allImageUrls = updatedData.images || [];
         try {
-            // Delete specified images
             if (toDeleteImagesUrls.length > 0) {
                 await this.cleanupUploadedImages(toDeleteImagesUrls);
             }
-
-            // Separate URLs and files for uploading
             const validUrls = newFiles.filter(url => url !== null && typeof url === 'string');
             const filesToUpload = newFiles.filter(file => typeof file === 'object');
 
-            // Upload new files if available and get their URLs
             if (filesToUpload.length > 0) {
                 uploadedImages = await this.uploadImagesToCloudinary(filesToUpload);
                 const newImageUrls = uploadedImages.map(image => image.secure_url);
                 allImageUrls = [...validUrls, ...allImageUrls, ...newImageUrls];
             } else {
-                // If no new files, just add valid URLs to existing ones
                 allImageUrls = [...validUrls, ...allImageUrls];
             }
-
-            // Prepare updated product data
             const updatedProductData = {
                 ...updatedData,
                 language: updatedData.language.toLowerCase(),
@@ -144,12 +139,13 @@ class UserUploadBooks {
                 description: updatedData.description.toLowerCase(),
                 price: Number(updatedData.price),
                 discountedPrice: Number(updatedData.discountedPrice),
+                category:updatedData?.category?.toLowerCase() || '',
+                brand:updatedData?.brand?.toLowerCase() || '',
                 keywords: updatedData.keywords.split(','),
                 pinCodes: updatedData.pinCodes.split(',').map(pin => Number(pin)),
                 images: allImageUrls,
             };
 
-            // Update the document in the database
             const updatedDocument = await this.databases.updateDocument(
                 conf.appwriteRefurbishProductDatabaseId,
                 conf.appwriteRefurbishedModulesCollectionId,
@@ -208,6 +204,8 @@ class UserUploadBooks {
                 discountedPrice: Number(productData.discountedPrice),
                 keywords: productData.keywords.split(','),
                 phn: productData.phn,
+                category:productData.category.toLowerCase(),
+                brand:productData.brand.toLowerCase(),
                 pinCodes: productData.pinCodes.split(',').map((pin) => Number(pin)),
                 productType: productData.productType
             };
@@ -271,6 +269,8 @@ class UserUploadBooks {
                 keywords: formData.keywords.split(','),
                 pinCodes: formData.pinCodes.split(',').map(pin => Number(pin)),
                 coachingInstitute: formData.coachingInstitute || '',
+                category:formData.category || '',
+                brand:formData.brand || '',
                 exam: formData.exam || '',
                 images: allImageUrls,
             };

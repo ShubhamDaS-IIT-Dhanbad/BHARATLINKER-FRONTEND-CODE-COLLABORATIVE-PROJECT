@@ -1,24 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
 
 import Cookies from 'js-cookie';
-import UploadBooksForm from './uploadBooksForm.jsx';
+import UploadBooksForm from './userUploadProductForm.jsx';
 
-import './bookUpload.css';
+import './userProductUpload.css';
 
 const UploadProduct = () => {
     const navigate = useNavigate();
-    const [type, setType] = useState('book');
     const [userData, setUserData] = useState('');
+    const { productType } = useParams();
 
     useEffect(() => {
         const userSession = Cookies.get('BharatLinkerUser');
         if (userSession) {
             setUserData(JSON.parse(userSession));
         }
-    }, []);
-
+    }, [productType]);
 
     return (
         <>
@@ -31,10 +30,9 @@ const UploadProduct = () => {
                     tabIndex={0}
                 />
                 <div className='user-upload-books-header-inner-div'>
-                    <p className='user-upload-books-header-inner-div-p'>UPLOAD {type.toUpperCase()}</p>
+                    <p className='user-upload-books-header-inner-div-p'>UPLOAD {productType.toUpperCase()}</p>
                     <div
                         className={`user-upload-books-header-inner-div-phn-div`}
-                        onClick={() => navigate('/pincode')}
                         aria-label="Change Location"
                         tabIndex={0}
                     >
@@ -42,28 +40,24 @@ const UploadProduct = () => {
                     </div>
                 </div>
             </div>
-
-            <div className='user-upload-book-type'>
-                <div
-                    className={`user-upload-book-type-book ${type === 'book' ? 'active' : ''}`}
-                    onClick={() => setType('book')}
-                >
-                    Book
+            {
+                productType != 'gadget' && <div className='user-upload-book-type'>
+                    <div
+                        className={`user-upload-book-type-book ${productType === 'book' ? 'active' : ''}`}
+                        onClick={() => navigate('/user/upload/book')}
+                    >
+                        Book
+                    </div>
+                    <div
+                        className={`user-upload-book-type-module ${productType === 'module' ? 'active' : ''}`}
+                        onClick={() => navigate('/user/upload/module')}
+                    >
+                        Module
+                    </div>
                 </div>
-                <div
-                    className={`user-upload-book-type-module ${type === 'module' ? 'active' : ''}`}
-                    onClick={() => setType('module')}
-                >
-                    Module
-                </div>
-            </div>
+            }
 
-            {type === 'book' && (
-                <UploadBooksForm userData={userData} productType={type} />
-            )}
-            {type === 'module' && (
-                <UploadBooksForm userData={userData} productType={type} />
-            )}
+            <UploadBooksForm userData={userData} productType={productType} />
 
             <footer>
                 <p className='dashboard-footer-p'>© 2025 Bharat Linker</p>

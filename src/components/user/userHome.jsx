@@ -68,11 +68,11 @@ function UserHome() {
                         <AiOutlineProduct className='dashboard-Your-information-icons' aria-label="Your refurbished items" />
                         <p className='dashboard-Your-info-p'>Your refurbished</p>
                     </article>
-                    <article className='dashboard-Your-Refurbished' onClick={() => navigate('/user/upload/books')}>
+                    <article className='dashboard-Your-Refurbished' onClick={() => navigate('/user/upload/book')}>
                         <FiUploadCloud className='dashboard-Your-information-icons' aria-label="Upload books" />
                         <p className='dashboard-Your-info-p'>Upload Books</p>
                     </article>
-                    <article className='dashboard-Your-Refurbished' onClick={() => navigate('/user/upload/gadgets')}>
+                    <article className='dashboard-Your-Refurbished' onClick={() => navigate('/user/upload/gadget')}>
                         <TbDeviceMobileCharging  className='dashboard-Your-information-icons' aria-label="Upload books" />
                         <p className='dashboard-Your-info-p'>Upload Gadgets</p>
                     </article>

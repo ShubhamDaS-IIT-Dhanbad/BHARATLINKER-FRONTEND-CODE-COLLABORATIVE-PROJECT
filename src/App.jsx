@@ -30,12 +30,12 @@ import RetailerRoutes from './components/retailer/retailerRoutes.jsx';
 
 //user routes
 import User from './components/user/userHome.jsx'
-import RefurbishedBooksUploadUser from './components/user/booksUploadComponent/booksUpload.jsx'
-import RefurbishedGadgetsUploadUser from './components/user/gadgetsUploadComponent/gadgetsUpload.jsx'
+import RefurbishedBooksUploadUser from './components/user/userProductUpload/userProductUpload.jsx'
+import UserUpdateBookModule  from './components/user/userProductUpdate/userProductUpdate.jsx';
+import UserUpdateGadget from './components/user/userProductUpdate/userProductUpdate.jsx';
 import UserProductPageMain from './components/user/productPage/userProductPageMain.jsx'
 
-import UserUpdateBookModule  from './components/user/update/userUpdatePageBookModule.jsx';
-import UserUpdateGadget from './components/user/update/userUpdatePageBookModule.jsx';
+
 
 function App() {
 
@@ -96,15 +96,10 @@ const RoutesWithConditionalHeader = React.memo(({ address }) => {
 
         {/* user routes */}
         <Route path='/user' element={<User />} />
-        <Route path='/user/upload/books' element={<RefurbishedBooksUploadUser/>} />
-        <Route path='/user/upload/gadgets' element={<RefurbishedGadgetsUploadUser/>} />
         <Route path='/user/refurbished' element={<UserProductPageMain/>} />
-
-        <Route path='/user/refurbished/update/book/:id' element={<UserUpdateBookModule/>} />
-        <Route path='/user/refurbished/update/module/:id' element={<UserUpdateBookModule/>} />
-        <Route path='/user/refurbished/update/gadget/:id' element={<UserUpdateGadget/>} />
-
-        <Route path='/user/privacy' element={<Retailer />} />
+        <Route path='/user/upload/:productType' element={<RefurbishedBooksUploadUser/>} />
+        <Route path='/user/refurbished/update/:id' element={<UserUpdateBookModule/>}/>
+        <Route path='/user/privacy' element={<>private boss</>} />
 
       </Routes>
     </>

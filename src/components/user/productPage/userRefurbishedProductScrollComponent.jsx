@@ -20,32 +20,12 @@ function UserAllProducts({loadMoreBooks, loadMoreModules, loadMoreGadgets }) {
     return (
         <div style={{ visibility: "hidden" }}>
             <InfiniteScroll
-                dataLength={refurbishedBooks.length}
-                next={loadMoreBooks}
-                hasMore={hasMoreBooks}
-                loader={booksLoading && <h4>Loading more refurbished books...</h4>}
-                endMessage={<p style={{ textAlign: 'center' }}>No more refurbished books to load</p>}
-            >
-            </InfiniteScroll>
-
-            <InfiniteScroll
                 dataLength={refurbishedModules.length}
                 next={loadMoreModules}
                 hasMore={hasMoreModules}
                 loader={modulesLoading && <h4>Loading more refurbished modules...</h4>}
                 endMessage={<p style={{ textAlign: 'center' }}>No more refurbished modules to load</p>}
             >
-                
-            </InfiniteScroll>
-
-            <InfiniteScroll
-                dataLength={refurbishedGadgets.length}
-                next={loadMoreGadgets}
-                hasMore={hasMoreGadgets}
-                loader={gadgetsLoading && <h4>Loading more refurbished gadgets...</h4>}
-                endMessage={<p style={{ textAlign: 'center' }}>No more refurbished gadgets to load</p>}
-            >
-                {/* Render gadgets */}
             </InfiniteScroll>
         </div>
     );
