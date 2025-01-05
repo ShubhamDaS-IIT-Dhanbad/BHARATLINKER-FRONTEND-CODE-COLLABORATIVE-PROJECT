@@ -61,7 +61,6 @@ function UploadGadgetsForm({ userData }) {
 
     const handleSubmit = async () => {
         const { category, brand, title, price, discountedPrice } = formData;
-        
         if (!userData.phn || !category || category === 'category' || !brand || brand === 'brand' || !title || !price || !discountedPrice) {
             setAllFieldEntered(false);
             console.log("Please fill all required fields.");
@@ -73,7 +72,7 @@ function UploadGadgetsForm({ userData }) {
         };
         setIsUploading(true);
         try {
-            
+
             await userUploadGadgets.uploadGadgetWithImages(finalFormData, images);
             setUploadStatus({ success: true, fail: false });
             setFormData({

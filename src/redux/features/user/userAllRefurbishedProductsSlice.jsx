@@ -105,10 +105,13 @@ const userRefurbishedProductsSlice = createSlice({
       state.refurbishedProducts = state.refurbishedProducts.filter(
         (product) => product.$id !== productId.id
       );
-      
     },
     updateProduct: (state, action) => {
-      
+      // You can implement update logic here if needed
+    },
+    addUserRefurbishedProduct: (state, action) => {
+      const newProduct = action.payload;
+      state.refurbishedProducts = [newProduct, ...state.refurbishedProducts];
     },
   },
   extraReducers: (builder) => {
@@ -181,6 +184,7 @@ export const {
   sortUserRefurbishedProducts,
   deleteProduct,
   updateProduct,
+  addUserRefurbishedProduct,
 } = userRefurbishedProductsSlice.actions;
 
 export default userRefurbishedProductsSlice.reducer;

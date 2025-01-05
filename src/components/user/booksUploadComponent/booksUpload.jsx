@@ -4,16 +4,15 @@ import { FaArrowLeft } from 'react-icons/fa';
 
 import Cookies from 'js-cookie';
 import UploadBooksForm from './uploadBooksForm.jsx';
-import UploadModuleForm from './uploadModuleForm.jsx';
 
 import './bookUpload.css';
 
 const UploadProduct = () => {
     const navigate = useNavigate();
-    const [type, setType] = useState('books');
+    const [type, setType] = useState('book');
     const [userData, setUserData] = useState('');
     const [allField, setallField] = useState(true);
-    
+
     useEffect(() => {
         const userSession = Cookies.get('BharatLinkerUser');
         if (userSession) {
@@ -47,38 +46,29 @@ const UploadProduct = () => {
 
             <div className='user-upload-book-type'>
                 <div
-                    className={`user-upload-book-type-book ${type === 'books' ? 'active' : ''}`}
-                    onClick={() => setType('books')}
+                    className={`user-upload-book-type-book ${type === 'book' ? 'active' : ''}`}
+                    onClick={() => setType('book')}
                 >
                     Book
                 </div>
                 <div
-                    className={`user-upload-book-type-module ${type === 'modules' ? 'active' : ''}`}
-                    onClick={() => setType('modules')}
+                    className={`user-upload-book-type-module ${type === 'module' ? 'active' : ''}`}
+                    onClick={() => setType('module')}
                 >
                     Module
                 </div>
             </div>
 
-            {type === 'books' && (
-                <UploadBooksForm userData={userData}/>
+            {type === 'book' && (
+                <UploadBooksForm userData={userData} productType={type} />
             )}
-             {type === 'modules' && (
-                <UploadModuleForm userData={userData}/>
+            {type === 'module' && (
+                <UploadBooksForm userData={userData} productType={type} />
             )}
 
-
-            {!allField && (
-                <div className='use-book-upload-all-field-required-div' >
-                    <div className='use-book-upload-all-field-required-div-inner' onClick={() => setallField(true)}>
-                        All the * mark field are Required
-                        <div className='use-book-upload-all-field-required-div-inner-ok'>
-                            ok
-                        </div>
-                    </div>
-
-                </div>)
-            }
+            <footer>
+                <p className='dashboard-footer-p'>© 2025 Bharat Linker</p>
+            </footer>
         </>
     );
 };
