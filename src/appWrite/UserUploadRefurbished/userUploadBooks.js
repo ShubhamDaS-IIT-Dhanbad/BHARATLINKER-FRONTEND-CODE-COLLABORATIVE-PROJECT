@@ -129,8 +129,6 @@ class UserUploadBooks {
             if (filesToUpload.length > 0) {
                 uploadedImages = await this.uploadImagesToCloudinary(filesToUpload);
                 const newImageUrls = uploadedImages.map(image => image.secure_url);
-
-                // Concatenate URLs, adding new images at the end
                 allImageUrls = [...validUrls, ...allImageUrls, ...newImageUrls];
             } else {
                 // If no new files, just add valid URLs to existing ones
@@ -141,14 +139,12 @@ class UserUploadBooks {
             const updatedProductData = {
                 ...updatedData,
                 language: updatedData.language.toLowerCase(),
-                board: updatedData.board.toLowerCase(),
                 subject: updatedData.subject.toLowerCase(),
                 title: updatedData.title.toLowerCase(),
                 description: updatedData.description.toLowerCase(),
                 price: Number(updatedData.price),
                 discountedPrice: Number(updatedData.discountedPrice),
                 keywords: updatedData.keywords.split(','),
-                buyingYear: Number(updatedData.buyingYear),
                 pinCodes: updatedData.pinCodes.split(',').map(pin => Number(pin)),
                 images: allImageUrls,
             };
@@ -156,7 +152,7 @@ class UserUploadBooks {
             // Update the document in the database
             const updatedDocument = await this.databases.updateDocument(
                 conf.appwriteRefurbishProductDatabaseId,
-                conf.appwriteRefurbishedBooksCollectionId,
+                conf.appwriteRefurbishedModulesCollectionId,
                 productId.id,
                 updatedProductData
             );
@@ -179,7 +175,7 @@ class UserUploadBooks {
             }
             const response = await this.databases.deleteDocument(
                 conf.appwriteRefurbishProductDatabaseId,
-                conf.appwriteRefurbishedBooksCollectionId,
+                conf.appwriteRefurbishedModulesCollectionId,
                 productId.id
             );
             console.log('Product deleted successfully:', response);
@@ -211,7 +207,6 @@ class UserUploadBooks {
                 price: Number(productData.price),
                 discountedPrice: Number(productData.discountedPrice),
                 keywords: productData.keywords.split(','),
-                buyingYear: Number(productData.buyingYear),
                 phn: productData.phn,
                 pinCodes: productData.pinCodes.split(',').map((pin) => Number(pin)),
                 productType: productData.productType
@@ -274,7 +269,6 @@ class UserUploadBooks {
                 price: Number(formData.price),
                 discountedPrice: Number(formData.discountedPrice),
                 keywords: formData.keywords.split(','),
-                buyingYear: Number(formData.buyingYear),
                 pinCodes: formData.pinCodes.split(',').map(pin => Number(pin)),
                 coachingInstitute: formData.coachingInstitute || '',
                 exam: formData.exam || '',
