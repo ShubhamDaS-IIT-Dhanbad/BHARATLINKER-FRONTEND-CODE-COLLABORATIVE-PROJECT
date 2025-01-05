@@ -123,29 +123,24 @@ function UploadGadgetsForm({ userData }) {
                 {renderPopUp('brand', OPTIONS.brands)}
 
                 <div className='user-refurbished-product-title-description-div'>
-                    <div className='user-refurbished-product-title-description-div-title'>
-                        <input
-                            type='text'
-                            name='title'
-                            value={formData.title}
-                            onChange={handleInputChange}
-                            placeholder='Enter Gadget Title'
-                            className='user-refurbished-product-title-description-div-title-input'
-                        />
-                        <p>*</p>
-                    </div>
-                    <div className='user-refurbished-product-title-description-div-description'>
-                        <input
-                            type='text'
-                            name='description'
-                            value={formData.description}
-                            onChange={handleInputChange}
-                            placeholder='Enter Gadget Description'
-                            className='user-refurbished-product-title-description-div-description-input'
-                        />
-                        <p>*</p>
-                    </div>
-                </div>
+                    <textarea
+                        type='text'
+                        name='title'
+                        value={formData.title}
+                        onChange={handleInputChange}
+                        placeholder='title'
+                        style={{ maxWidth: "90vw", minHeight: "15vh" }}
+                        className='user-refurbished-product-title-input'
+                    />
+                    <textarea
+                        type='text'
+                        name='description'
+                        value={formData.description}
+                        onChange={handleInputChange}
+                        style={{ maxWidth: "90vw", minHeight: "30vh" }}
+                        className='user-refurbished-product-description-input'
+                    />
+                </div >
 
                 <div className='user-refurbished-product-price-discounted-div'>
                     <input
@@ -165,12 +160,14 @@ function UploadGadgetsForm({ userData }) {
                         className='user-refurbished-gadgets-upload-discounted-input'
                     />
                 </div>
-                
-                <input
+
+                <textarea
                     type='text'
                     name='keywords'
                     value={formData.keywords}
                     onChange={handleInputChange}
+
+                    style={{ maxWidth: "90vw", minHeight: "20vh" }}
                     placeholder='Keywords (separated by commas)'
                     className='user-refurbished-gadgets-upload-keywords-input'
                 />
@@ -205,7 +202,7 @@ function UploadGadgetsForm({ userData }) {
                 </div>
 
                 <button className='user-refurbished-gadgets-submit' onClick={handleSubmit} disabled={isUploading}>SUBMIT</button>
-            </div>
+            </div >
 
             {!allFieldEntered && (
                 <div className='user-refurbished-gadgets-all-fields-required-div'>
@@ -219,7 +216,8 @@ function UploadGadgetsForm({ userData }) {
                         </div>
                     </div>
                 </div>
-            )}
+            )
+            }
             {isUploading ? <div className='user-refurbished-gadgets-uploading-loader'><Oval height={20} width={20} color="#fff" /></div> : ""}
         </>
 

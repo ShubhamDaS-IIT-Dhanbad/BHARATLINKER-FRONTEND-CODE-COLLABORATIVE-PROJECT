@@ -304,7 +304,6 @@ function uploadBooksForm({ userData }) {
 
             <div className='book-upload-form-group'>
                 <div className='book-upload-form-group-inner'>
-                    <s>
                         <input
                             type='number'
                             name='price'
@@ -313,7 +312,6 @@ function uploadBooksForm({ userData }) {
                             placeholder='Enter Price'
                             className='book-upload-price-input'
                         />
-                    </s>
                     *
                 </div>
             </div>
