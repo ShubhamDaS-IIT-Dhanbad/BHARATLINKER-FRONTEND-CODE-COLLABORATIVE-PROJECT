@@ -5,21 +5,19 @@ import { Oval } from 'react-loader-spinner';
 import userUploadGadgets from '../../../appWrite/UserUploadRefurbished/userUploadGadgets.js';
 
 import { MdOutlineCategory } from "react-icons/md";
-import { TbBrandAirtable } from "react-icons/tb";
-import { TbWorldUpload } from "react-icons/tb";
+import { TbBrandAirtable, TbWorldUpload } from "react-icons/tb";
 
-import './gadgetsUpload.css'
+import './gadgetsUpload.css';
+
 const OPTIONS = {
-    categories: [
-        'Desktop', 'Ear Buds', 'Laptop', 'Mobile', 'Neck Band'
-    ],
+    categories: ['Desktop', 'Ear Buds', 'Laptop', 'Mobile', 'Neck Band'],
     brands: ['Oppo', 'Poco', 'Realme', 'Desktop', 'Ear Buds', 'Laptop', 'Mobile', 'Neck Band']
 };
 
 function UploadGadgetsForm({ userData }) {
     const [isUploading, setIsUploading] = useState(false);
-
     const [allFieldEntered, setAllFieldEntered] = useState(true);
+    const [uploadStatus, setUploadStatus] = useState({ success: false, fail: false });
     const [formData, setFormData] = useState({
         category: 'category',
         brand: 'brand',
@@ -34,12 +32,8 @@ function UploadGadgetsForm({ userData }) {
         pinCodes: '740001,740002,740003,742136',
         productType: 'gadget'
     });
-
     const [images, setImages] = useState([null, null, null]);
-    const [popUps, setPopUps] = useState({
-        category: false,
-        brand: false
-    });
+    const [popUps, setPopUps] = useState({ category: false, brand: false });
 
     const togglePopUp = (type) => {
         setPopUps((prev) => ({ ...prev, [type]: !prev[type] }));
@@ -71,22 +65,22 @@ function UploadGadgetsForm({ userData }) {
         const { category, brand, title, price, discountedPrice } = formData;
         if (!category || category === 'category' || !brand || brand === 'brand' || !title || !price || !discountedPrice) {
             setAllFieldEntered(false);
-            console.log("Please fill all required fields.");
             return;
         }
 
         const finalFormData = {
             ...formData,
-            phn: `+91${userData.phn || ''}`,
+            phn: `+91${userData?.phn || ''}`,
             details: JSON.stringify(formData.details)
         };
 
         setIsUploading(true);
         try {
             await userUploadGadgets.uploadGadgetWithImages(finalFormData, images);
-            console.log("Upload successful");
+            setUploadStatus({ success: true, fail: false });
         } catch (error) {
-            console.log("Upload error:", error);
+            console.error("Upload error:", error);
+            setUploadStatus({ success: false, fail: true });
         } finally {
             setIsUploading(false);
         }
@@ -100,8 +94,7 @@ function UploadGadgetsForm({ userData }) {
                     {options.map((option) => (
                         <div
                             key={option}
-                            className={`user-refurbished-gadgets-popup-option ${formData[type] === option ? 'user-refurbished-gadgets-selected-option' : ''
-                                }`}
+                            className={`user-refurbished-gadgets-popup-option ${formData[type] === option ? 'user-refurbished-gadgets-selected-option' : ''}`}
                             onClick={() => handleOptionSelect(type, option)}
                         >
                             {option}
@@ -112,44 +105,49 @@ function UploadGadgetsForm({ userData }) {
         )
     );
 
+    const Popup = ({ message, onClose, isSuccess }) => (
+        <div className='user-book-delete-pop-up'>
+            <div className='user-book-delete-pop-up-inner'>
+                <div className='user-book-delete-pop-up-message'>{message}</div>
+                <div className={isSuccess ? 'user-refurbished-book-successful-popup' : 'user-refurbished-book-fail-popup'} onClick={onClose}>
+                    OK
+                </div>
+            </div>
+        </div>
+    );
 
     return (
         <>
             <div className='user-refurbished-gadgets-upload-form'>
-
                 <div className='user-refurbished-product-category-brand-div'>
                     <div className='user-refurbished-product-category-brand-div-category' onClick={() => togglePopUp('category')}>
-                        < MdOutlineCategory size={30} />
+                        <MdOutlineCategory size={30} />
                     </div>
-
                     <div className='user-refurbished-product-category-brand-div-brand' onClick={() => togglePopUp('brand')}>
                         <TbBrandAirtable size={30} />
                     </div>
                 </div>
-
                 {renderPopUp('category', OPTIONS.categories)}
                 {renderPopUp('brand', OPTIONS.brands)}
 
                 <div className='user-refurbished-product-title-description-div'>
                     <textarea
-                        type='text'
                         name='title'
                         value={formData.title}
                         onChange={handleInputChange}
-                        placeholder='enter a releavent title'
-                        style={{ maxWidth: "90vw", minHeight: "15vh" }}
+                        placeholder='Enter a relevant title'
                         className='user-refurbished-product-title-input'
+                        style={{ maxWidth: "90vw", minHeight: "15vh" }}
                     />
                     <textarea
-                        type='text'
                         name='description'
                         value={formData.description}
                         onChange={handleInputChange}
-                        style={{ maxWidth: "90vw", minHeight: "30vh" }}
-                        placeholder='enter a releavent description'
+                        placeholder='Enter a relevant description'
                         className='user-refurbished-product-description-input'
+                        style={{ maxWidth: "90vw", minHeight: "30vh" }}
                     />
-                </div >
+                </div>
 
                 <div className='user-refurbished-product-price-discounted-div'>
                     <input
@@ -157,7 +155,7 @@ function UploadGadgetsForm({ userData }) {
                         name='price'
                         value={formData.price}
                         onChange={handleInputChange}
-                        placeholder='enter original price'
+                        placeholder='Enter original price'
                         className='user-refurbished-gadgets-upload-price-input'
                     />
                     <input
@@ -165,22 +163,19 @@ function UploadGadgetsForm({ userData }) {
                         name='discountedPrice'
                         value={formData.discountedPrice}
                         onChange={handleInputChange}
-                        placeholder='enter discounted price'
+                        placeholder='Enter discounted price'
                         className='user-refurbished-gadgets-upload-discounted-input'
                     />
                 </div>
 
                 <textarea
-                    type='text'
                     name='keywords'
                     value={formData.keywords}
                     onChange={handleInputChange}
-
-                    style={{ maxWidth: "90vw", minHeight: "20vh" }}
-                    placeholder='Keywords (separated by commas [,] )'
+                    placeholder='Keywords (separated by commas [,])'
                     className='user-refurbished-gadgets-upload-keywords-input'
+                    style={{ maxWidth: "90vw", minHeight: "20vh" }}
                 />
-
 
                 <div className='user-refurbished-gadgets-upload-image-section'>
                     {images.map((image, index) => (
@@ -191,6 +186,7 @@ function UploadGadgetsForm({ userData }) {
                                     className='user-refurbished-gadgets-uploaded-image'
                                     alt={`Uploaded ${index + 1}`}
                                     onClick={() => removeImage(index)}
+                                    onLoad={(e) => URL.revokeObjectURL(e.target.src)}
                                 />
                             ) : (
                                 <div
@@ -210,27 +206,38 @@ function UploadGadgetsForm({ userData }) {
                     ))}
                 </div>
 
-                <TbWorldUpload className='user-refurbished-gadgets-submit' size={35} onClick={handleSubmit} disabled={isUploading}/>
-            </div >
+                <div
+                    className={`user-refurbished-gadgets-submit ${isUploading ? 'disabled' : ''}`}
+                    onClick={isUploading ? null : handleSubmit}
+                >
+                    <TbWorldUpload size={35} />
+                </div>
+            </div>
 
             {!allFieldEntered && (
-                <div className='user-refurbished-gadgets-all-fields-required-div'>
-                    <div className='user-refurbished-gadgets-all-fields-required-div-inner'>
-                        All the fields are Required
-                        <div
-                            className='user-refurbished-gadgets-all-fields-required-div-inner-ok'
-                            onClick={() => setAllFieldEntered(true)}
-                        >
-                            OK
-                        </div>
-                    </div>
+                <Popup message="All fields are required!" onClose={() => setAllFieldEntered(true)} isSuccess={false} />
+            )}
+            {isUploading && (
+                <div className='user-refurbished-gadgets-uploading-loader'>
+                    <Oval height={20} width={20} color="#fff" />
                 </div>
-            )
-            }
-            {isUploading ? <div className='user-refurbished-gadgets-uploading-loader'><Oval height={20} width={20} color="#fff" /></div> : ""}
+            )}
+            {uploadStatus.success && (
+                <Popup message="Gadget uploaded successfully!" onClose={() => setUploadStatus({ success: false, fail: false })} isSuccess />
+            )}
+            {uploadStatus.fail && (
+                <Popup message="Failed to upload gadget. Please try again!" onClose={() => setUploadStatus({ success: false, fail: false })} isSuccess={false} />
+            )}
         </>
-
     );
 }
 
 export default UploadGadgetsForm;
+
+
+
+
+
+
+
+
