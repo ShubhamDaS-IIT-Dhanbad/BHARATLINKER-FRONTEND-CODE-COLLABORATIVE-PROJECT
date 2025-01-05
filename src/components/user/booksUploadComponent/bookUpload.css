@@ -207,3 +207,64 @@
     z-index: 100;
     display: flex;justify-content: center;align-items: center;
 }
+
+/*pop ups*/
+
+
+.refurbished-book-module-class-popup {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    background-color: rgba(0, 0, 0, 0.838);
+    display: flex;
+    justify-content: flex-end;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    z-index: 9999;
+}
+
+.refurbished-book-module-class-popup-close-popup {
+    color: rgb(0, 0, 0);background-color: white;
+    padding: 5px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+
+.refurbished-book-module-class-popup-options {
+    background-color: rgb(255, 255, 255);
+    padding: 10px 0px;
+    width: 100vw;
+    /* Full width */
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+    /* Rounded corners */
+    max-height: 75vh;
+    overflow-y: scroll;gap: 5px;
+    display: flex;flex-wrap: wrap;justify-content: center;align-items: center;
+    /* Enables scrolling */
+
+}
+.refurbished-book-module-class-popup-class-option {
+    min-width: 60px;
+    /* Width of each option */
+    border: 1px solid rgba(0, 0, 0, 0.26);
+    padding: 0px 9px 0px 9px;
+    height: 45px;
+    border-radius: 10px;
+    margin: 0;
+    /* No margin to eliminate gaps */
+    display: flex;
+    /* Flexbox for centering */
+    align-items: center;
+    /* Center vertically */
+    justify-content: center;
+    /* Center horizontally */
+    margin-top: none;
+}
+

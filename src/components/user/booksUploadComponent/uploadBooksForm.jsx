@@ -121,22 +121,37 @@ const UploadBooksModulesForm = ({ userData, productType }) => {
         setImages([null, null, null]);
     };
 
-    const renderPopUp = (popUpKey, options, handleSelect) => (
-        popUpState[popUpKey] && (
-            <div className="refurbished-books-class-popup">
-                <div className="refurbished-books-class-popup-close-popup" onClick={() => setPopUpState(prevState => ({ ...prevState, [popUpKey]: false }))}>
-                    <IoClose size={25} />
+    const renderPopUp = (popUpKey, options, handleSelect) => {
+        const kpopup = popUpKey.slice(0, -5); // Remove the last 5 characters
+        return (
+            popUpState[popUpKey] && (
+                <div className="refurbished-book-module-class-popup">
+                    <div
+                        className="refurbished-book-module-class-popup-close-popup"
+                        onClick={() => setPopUpState(prevState => ({ ...prevState, [popUpKey]: false }))}
+                    >
+                        <IoClose size={25} />
+                    </div>
+                    <div style={{color:"white"}}>
+                        {`${kpopup.toUpperCase()}`}
+                    </div>
+                    <div className="refurbished-book-module-class-popup-options">
+                        {options.map((item) => (
+                            <div
+                                key={item}
+                                className="refurbished-book-module-class-popup-class-option"
+                                onClick={() => handleSelect(item)}
+                            >
+                                {item.charAt(0).toUpperCase() + item.slice(1)}
+                            </div>
+                        ))}
+                    </div>
                 </div>
-                <div className="refurbished-books-class-popup-options">
-                    {options.map((item) => (
-                        <div key={item} className="refurbished-books-class-popup-class-option" onClick={() => handleSelect(item)}>
-                            {item.charAt(0).toUpperCase() + item.slice(1)}
-                        </div>
-                    ))}
-                </div>
-            </div>
-        )
-    );
+            )
+        );
+    };
+
+
 
     const Popup = ({ message, onClose, isSuccess }) => (
         <div className="user-refurbished-gadgets-upload-pop-up">
@@ -156,18 +171,18 @@ const UploadBooksModulesForm = ({ userData, productType }) => {
         <>
             <div className="user-refurbished-product-book-module-upload-form">
 
-                <div style={{display:"flex",gap:"5px",marginBottom:"17px"}}>
+                <div style={{ display: "flex", gap: "5px", marginBottom: "17px" }}>
                     <div
                         className={`user-refurbished-product-book-module-upload-form-class ${formData.class && formData.class !== 'class' ? 'active' : ''}`}
                         onClick={() => setPopUpState(prevState => ({ ...prevState, classPopUp: !prevState.classPopUp }))}
                     >
-                       C
+                        C
                     </div>
                     <div
                         className={`user-refurbished-product-book-module-upload-form-subject ${formData.subject ? 'active' : ''}`}
                         onClick={() => setPopUpState(prevState => ({ ...prevState, subjectPopUp: !prevState.subjectPopUp }))}
                     >
-                       S
+                        S
                     </div>
                     <div
                         className={`user-refurbished-product-book-module-upload-form-language ${formData.language ? 'active' : ''}`}
@@ -269,7 +284,7 @@ const UploadBooksModulesForm = ({ userData, productType }) => {
 
 
             </div>
-            
+
             {!allFieldEntered && (
                 <Popup message="All fields are required!" onClose={() => setAllFieldEntered(true)} isSuccess={false} />
             )}
