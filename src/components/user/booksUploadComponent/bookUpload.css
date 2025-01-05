@@ -238,7 +238,6 @@
 
 .refurbished-book-module-class-popup-options {
     background-color: rgb(255, 255, 255);
-    padding: 10px 0px;
     width: 100vw;
     /* Full width */
     border-top-left-radius: 10px;
@@ -247,6 +246,7 @@
     max-height: 75vh;
     overflow-y: scroll;gap: 5px;
     display: flex;flex-wrap: wrap;justify-content: center;align-items: center;
+    padding: 20px 0px 50px 0px;
     /* Enables scrolling */
 
 }
