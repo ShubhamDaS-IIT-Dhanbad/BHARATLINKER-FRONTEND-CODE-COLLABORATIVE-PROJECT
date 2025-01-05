@@ -42,15 +42,16 @@ const UploadGadgetsPage = () => {
                 </div>
             </div>
 
-            <div className='user-refurbished-gadgets-upload-page-type'>
+            {/* <div className='user-refurbished-gadgets-upload-page-type'>
                 <div className={`user-refurbished-gadgets-upload-page-type-option ${type === 'gadgets' ? 'active' : ''}`}>
                     Gadgets
                 </div>
-            </div>
+            </div> */}
 
-            {type === 'gadgets' && (
-                <UploadBooksForm userData={userData} />
-            )}
+            <UploadBooksForm userData={userData} />
+            <footer>
+                <p className='dashboard-footer-p'>© 2024 Bharat Linker</p>
+            </footer>
         </>
 
     );

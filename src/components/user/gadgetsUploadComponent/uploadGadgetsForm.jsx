@@ -3,6 +3,11 @@ import { IoClose } from 'react-icons/io5';
 import { CiImageOn } from "react-icons/ci";
 import { Oval } from 'react-loader-spinner';
 import userUploadGadgets from '../../../appWrite/UserUploadRefurbished/userUploadGadgets.js';
+
+import { MdOutlineCategory } from "react-icons/md";
+import { TbBrandAirtable } from "react-icons/tb";
+import { TbWorldUpload } from "react-icons/tb";
+
 import './gadgetsUpload.css'
 const OPTIONS = {
     categories: [
@@ -95,7 +100,8 @@ function UploadGadgetsForm({ userData }) {
                     {options.map((option) => (
                         <div
                             key={option}
-                            className='user-refurbished-gadgets-popup-option'
+                            className={`user-refurbished-gadgets-popup-option ${formData[type] === option ? 'user-refurbished-gadgets-selected-option' : ''
+                                }`}
                             onClick={() => handleOptionSelect(type, option)}
                         >
                             {option}
@@ -103,19 +109,21 @@ function UploadGadgetsForm({ userData }) {
                     ))}
                 </div>
             </div>
-
         )
     );
+
 
     return (
         <>
             <div className='user-refurbished-gadgets-upload-form'>
+
                 <div className='user-refurbished-product-category-brand-div'>
                     <div className='user-refurbished-product-category-brand-div-category' onClick={() => togglePopUp('category')}>
-                        <label>{formData.category}</label> *
+                        < MdOutlineCategory size={30} />
                     </div>
+
                     <div className='user-refurbished-product-category-brand-div-brand' onClick={() => togglePopUp('brand')}>
-                        <label>{formData.brand}</label> *
+                        <TbBrandAirtable size={30} />
                     </div>
                 </div>
 
@@ -138,13 +146,14 @@ function UploadGadgetsForm({ userData }) {
                         value={formData.description}
                         onChange={handleInputChange}
                         style={{ maxWidth: "90vw", minHeight: "30vh" }}
+                        placeholder='description'
                         className='user-refurbished-product-description-input'
                     />
                 </div >
 
                 <div className='user-refurbished-product-price-discounted-div'>
                     <input
-                        type='text'
+                        type='number'
                         name='price'
                         value={formData.price}
                         onChange={handleInputChange}
@@ -152,7 +161,7 @@ function UploadGadgetsForm({ userData }) {
                         className='user-refurbished-gadgets-upload-price-input'
                     />
                     <input
-                        type='text'
+                        type='number'
                         name='discountedPrice'
                         value={formData.discountedPrice}
                         onChange={handleInputChange}
@@ -201,7 +210,7 @@ function UploadGadgetsForm({ userData }) {
                     ))}
                 </div>
 
-                <button className='user-refurbished-gadgets-submit' onClick={handleSubmit} disabled={isUploading}>SUBMIT</button>
+                <TbWorldUpload className='user-refurbished-gadgets-submit' size={35} onClick={handleSubmit} disabled={isUploading}/>
             </div >
 
             {!allFieldEntered && (
