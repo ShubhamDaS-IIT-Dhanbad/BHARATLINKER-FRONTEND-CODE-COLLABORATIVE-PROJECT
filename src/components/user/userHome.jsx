@@ -13,7 +13,7 @@ import { AiOutlineProduct } from "react-icons/ai";
 import { Client, Account, ID } from 'appwrite';
 import Cookies from 'js-cookie'
 import './userHome.css';
-
+import conf from '../conf/conf.js';
 function UserHome() {
     const [userData, setUserData] = useState({phn:8250846979});
     const [isLogout, setIsLogout] = useState(false);
@@ -25,7 +25,7 @@ function UserHome() {
     },[])
     const client = new Client()
         .setEndpoint('https://cloud.appwrite.io/v1')
-        .setProject('670211c2003bf4774272');
+        .setProject(conf.VITE_APPWRITE_USERS_PROJECT_ID);
 
     const account = new Account(client);
     const handleLogout = async () => {
