@@ -80,10 +80,10 @@ function UserHome() {
                         <CiBellOn className='dashboard-Your-information-icons' aria-label="Update refurbished items" />
                         <p className='dashboard-Your-info-p'>Notification</p>
                     </article>
-                    <article className='dashboard-Your-Refurbished' onClick={() => navigate('/user/privacy')}>
+                    {/* <article className='dashboard-Your-Refurbished' onClick={() => navigate('/user/privacy')}>
                         <CiLock className='dashboard-Your-information-icons' aria-label="Account privacy settings" />
                         <p className='dashboard-Your-info-p'>Account Privacy</p>
-                    </article>
+                    </article> */}
                     <article className='dashboard-Your-Refurbished' onClick={() => setIsLogout(true)}>
                         <MdOutlineAdminPanelSettings className='dashboard-Your-information-icons' aria-label="Logout" />
                         <p className='dashboard-Your-info-p'>Logout</p>
