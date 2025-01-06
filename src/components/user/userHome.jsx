@@ -13,7 +13,7 @@ import { AiOutlineProduct } from "react-icons/ai";
 import { Client, Account, ID } from 'appwrite';
 import Cookies from 'js-cookie'
 import './userHome.css';
-import conf from '../conf/conf.js';
+import conf from '../../conf/conf.js';
 function UserHome() {
     const [userData, setUserData] = useState({phn:8250846979});
     const [isLogout, setIsLogout] = useState(false);
