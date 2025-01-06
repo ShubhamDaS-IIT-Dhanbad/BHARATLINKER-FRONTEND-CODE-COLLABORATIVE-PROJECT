@@ -91,10 +91,6 @@ function UserHome() {
                 </section>
             </main>
 
-            <footer>
-                <p className='dashboard-footer-p'>© 2024 Bharat Linker</p>
-            </footer>
-
             {isLogout &&
                 <div className='logout-pop-up'>
                     <div className='logout-pop-up-inner-div'>
