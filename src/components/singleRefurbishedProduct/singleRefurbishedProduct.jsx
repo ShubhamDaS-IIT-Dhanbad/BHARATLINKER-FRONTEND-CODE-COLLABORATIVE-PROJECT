@@ -58,10 +58,7 @@ const ProductDetails = () => {
 
     return (
         <Fragment>
-            <div id='refurbishedProductDetails-search-container-top'>
-                <SingleRefurbishedProductSearchBar
-                />
-            </div>
+            <SingleRefurbishedProductSearchBar />
 
             {loading ? (
                 <LoadingSingleProduct />
@@ -73,38 +70,37 @@ const ProductDetails = () => {
                                 <img src={selectedImage} alt="Selected Product" id="refurbishedProductDetails-img-selected" />
                             </div>
 
+                            {/* <div id="shop-details-thumbnails">
+                                    {productDetail.images?.map((image, index) => (
+                                        <div
+                                            id="single-refurbished-product-image-dot"
+                                            key={index}
+                                            onClick={() => handleImageClick(index)}
+                                            className={
+                                                selectedImage === image ? "image-select" : "image-unselect"
+                                            }
+                                        >
+                                        </div>
+                                    ))}
+                                </div> */}
+                            {/* Image dots */}
                             <div id="shop-details-thumbnails">
-                                {productDetail.images?.map((image, index) => (
-                                    <div
-                                        id="shop-details-thumbnail"
+                                {productDetail.images.map((image, index) => (
+                                    <span
                                         key={index}
+                                        className={`single-refurbished-product-image-dot ${selectedImage === image ? 'selected' : 'unselected'}`}
                                         onClick={() => handleImageClick(index)}
-                                        className={
-                                            selectedImage === image ? "image-select" : "image-unselect"
-                                        }
                                     >
-                                        <div id="shop-details-thumbnail-item"></div>
-                                    </div>
+                                    </span>
                                 ))}
                             </div>
-
                             <div id="refurbishedProductDetails-info">
                                 <span id="refurbishedProductDetails-trending-deals">Trending deal</span>
                                 <p id="refurbishedProductDetails-pid">Product # {productDetail.$id}</p>
                                 <div id="refurbishedProductDetails-title">{productDetail.title}</div>
                             </div>
 
-                            {/* Image dots */}
-                            <div id="refurbishedProductDetails-image-dots">
-                                {productDetail.images.map((image, index) => (
-                                    <span
-                                        key={index}
-                                        className={`image-dot ${selectedImage === image ? 'selected' : ''}`}
-                                        onClick={() => handleImageClick(index)}
-                                    >
-                                    </span>
-                                ))}
-                            </div>
+
 
                             <div id="refurbishedProductDetails-price-button">
                                 <p>₹{productDetail.price}</p>

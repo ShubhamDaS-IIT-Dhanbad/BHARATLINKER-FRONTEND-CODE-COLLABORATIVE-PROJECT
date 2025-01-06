@@ -6,8 +6,8 @@
     width: 100vw;
     position: fixed;
     top: 0;
-    background-color: #A0DEFF;
-    color: #000000;
+    background-color: #161914;
+    color: #ffffff;
     z-index: 1000;
     transition: transform 0.3s ease, opacity 0.3s ease;
 }
@@ -93,7 +93,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #A0DEFF;
+    background-color: #181C14;
     border-radius: 11px;
     border: 2px solid rgb(255, 255, 255);
     width: 96vw;
@@ -104,16 +104,16 @@
 .single-refurbished-product-search-icon {
     font-size: 29px;
     margin-left: 10px;
-    color: #000000;
+    color: #ffffff;
 }
 
 /* Search Input */
 .single-refurbished-product-search-input {
     border: none;
-    color: #000;
+    color: #ffffff;
     font-size: 1rem;
     padding-left: 10px;
-    background-color: #A0DEFF;
+    background-color: #181C14;
     flex-grow: 1;
     outline: none;
 }
@@ -121,13 +121,13 @@
 /* Autofill Styles for Chrome, Edge, and Safari */
 .single-refurbished-product-search-input:-webkit-autofill {
     background-color: #fff !important;
-    color: #000 !important;
+    color: #ffffff !important;
     font-size: 1rem;
     -webkit-box-shadow: 0 0 0px 1000px #fff inset !important;
     box-shadow: 0 0 0px 1000px #fff inset !important;
 }
 
 .single-refurbished-product-search-input::placeholder {
-    color: #000000 !important;
+    color: #ffffff !important;
     font-size: 0.9rem;
 }
