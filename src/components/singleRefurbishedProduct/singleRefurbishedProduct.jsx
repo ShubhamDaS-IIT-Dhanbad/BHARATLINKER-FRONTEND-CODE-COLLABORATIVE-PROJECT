@@ -2,7 +2,6 @@ import React, { Fragment, useEffect, useState } from "react";
 import { useParams, useNavigate } from 'react-router-dom';
 import "./singleRefurbishedProduct.css";
 
-import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { useDispatch, useSelector } from 'react-redux';
 import SingleRefurbishedProductSearchBar from './singleRefurbishedProductSearchBar.jsx';
 import LoadingSingleProduct from "../loading/loadingSingleProduct.jsx";

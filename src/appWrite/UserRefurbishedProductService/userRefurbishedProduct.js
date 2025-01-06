@@ -190,7 +190,7 @@ class UserRefurbishedProduct {
 
 
     async getUserRefurbishedProducts({
-        inputValue,
+        inputValue = '', // Input string
         pinCodes = [],
         selectedCategories,
         selectedBrands,
@@ -208,6 +208,9 @@ class UserRefurbishedProduct {
         }
     
         try {
+            // Convert inputValue to an array of tokens
+            const inputTokens = inputValue.split(' ').filter(token => token.trim() !== '').map(token => token.toLowerCase());
+    
             const queries = [];
             queries.push(Query.equal('phn', phn));
     
@@ -215,17 +218,16 @@ class UserRefurbishedProduct {
                 queries.push(Query.equal('pinCodes', pinCodes));
             }
     
-            if (inputValue) {
-                queries.push(Query.or([
-                    Query.search('title', inputValue),
-                    Query.search('description', inputValue)
-                ]));
-            }
-    
             if (selectedCategories.length > 0) {
                 queries.push(Query.or([
                     Query.contains('productType', selectedCategories),
                     Query.contains('keywords', selectedCategories)
+                ]));
+            }
+            if (inputValue.length > 0) {
+                queries.push(Query.or([
+                    Query.contains('title', inputTokens),
+                    Query.contains('description', inputTokens)
                 ]));
             }
     
@@ -239,7 +241,7 @@ class UserRefurbishedProduct {
             const offset = (page - 1) * productsPerPage;
             queries.push(Query.limit(productsPerPage), Query.offset(offset));
     
-            const fetchCategoryProducts = async (collectionId, applyPriceFilter = false) => {
+            const fetchProducts = async (collectionId, applyPriceFilter = false) => {
                 const categoryQueries = [...queries];
                 if (applyPriceFilter) {
                     if (minPrice !== undefined) {
@@ -260,26 +262,41 @@ class UserRefurbishedProduct {
                 return response.documents || []; // Ensure an array is returned
             };
     
-            const allProducts = await fetchCategoryProducts(conf.appwriteRefurbishedModulesCollectionId);
+            const allProducts = await fetchProducts(conf.appwriteRefurbishedModulesCollectionId);
             if (!Array.isArray(allProducts)) {
                 throw new TypeError("Expected 'allProducts' to be an array.");
             }
     
-            const lowercaseInput = inputValue?.toLowerCase() || '';
-            const filteredProducts = allProducts.filter(product => {
-                const matchesQuery = inputValue
-                    ? product.title.toLowerCase().includes(lowercaseInput) ||
-                      product.description.toLowerCase().includes(lowercaseInput) ||
-                      product.keywords.some(keyword => keyword.toLowerCase().includes(lowercaseInput))
-                    : true;
+            // Skip scoring when inputValue is empty
+            if (inputValue.length === 0) {
+                return {
+                    success: true,
+                    products: allProducts
+                };
+            }
     
-                const matchesCategory = selectedCategories.length === 0 || selectedCategories.some(category =>
-                    product.productType.includes(category) || product.keywords.some(keyword => keyword.includes(category))
-                );
+            // Scoring and filtering
+            const scoredProducts = allProducts.map(product => {
+                let score = 0;
     
-                return matchesQuery && matchesCategory;
+                // Check matches in title and description
+                inputTokens.forEach(token => {
+                    if (product.title.toLowerCase().includes(token)) score += 3; // Exact match in title
+                    if (product.description.toLowerCase().includes(token)) score += 2; // Exact match in description
+                    if (product.title.toLowerCase().startsWith(token)) score += 5; // Title starts with token
+                    if (product.description.toLowerCase().startsWith(token)) score += 4; // Description starts with token
+                });
+    
+                return { ...product, score }; // Attach score to each product
             });
     
+            // Filter out products with no score (if necessary)
+            const filteredProducts = scoredProducts.filter(product => product.score > 0);
+    
+            // Sort by score in descending order
+            filteredProducts.sort((a, b) => b.score - a.score);
+    
+            // Apply additional sorting by price if needed
             if (sortByAsc) {
                 filteredProducts.sort((a, b) => a.price - b.price);
             }
@@ -297,6 +314,8 @@ class UserRefurbishedProduct {
             return { success: false, error: error.message || 'Unknown error' };
         }
     }
+    
+    
     
 
 }

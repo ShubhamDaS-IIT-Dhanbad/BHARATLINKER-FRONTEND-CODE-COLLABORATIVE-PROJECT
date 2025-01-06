@@ -1,10 +1,9 @@
 import conf from '../conf/conf.js';
-import { Client, Databases, Storage, Query } from 'appwrite';
+import { Client, Databases, Query } from 'appwrite';
 
 class SearchRefurbishedProductService {
     client = new Client();
     databases;
-    bucket;
 
     constructor() {
         this.client
@@ -12,27 +11,25 @@ class SearchRefurbishedProductService {
             .setProject(conf.appwriteRefurbishProductProjectId);
 
         this.databases = new Databases(this.client);
-        this.bucket = new Storage(this.client);
     }
 
-    // Method to fetch refurbished products with various filters
+    // Method to fetch refurbished products from the Modules collection with various filters
     async getRefurbishedProducts({
         inputValue,
         pinCodes = [],
-        selectedCategories,
-        selectedBrands,
+        selectedCategories = [],
         minPrice,
         maxPrice,
         isInStock,
-        isbook = true,
-        ismodule = true,
-        isgadgets = true,
-        page,
-        productsPerPage,
+        page = 1,
+        productsPerPage = 8,
         sortByAsc = false,
-        sortByDesc = false
+        sortByDesc = false,
     }) {
         try {
+             // Convert input to tokens (array of strings)
+             const inputTokens = inputValue.split(' ').filter(token => token.trim() !== '').map(token => token.toLowerCase());
+
             const queries = [];
 
             // Filter by pin codes
@@ -40,20 +37,35 @@ class SearchRefurbishedProductService {
                 queries.push(Query.equal('pinCodes', pinCodes));
             }
 
-            // Search by inputValue in title or description
+            // Search by inputValue in title or description (will implement scoring later)
             if (inputValue) {
-                queries.push(Query.or([
-                    Query.search('title', inputValue),
-                    Query.search('description', inputValue)
-                ]));
+                queries.push(
+                    Query.or([
+                        Query.contains('title', inputTokens),
+                        Query.contains('description', inputTokens),
+                    ])
+                );
             }
 
-            // Filter by selected categories and keywords
+            // Filter by selected categories
             if (selectedCategories.length > 0) {
-                queries.push(Query.or([
-                    Query.contains('productType', selectedCategories),
-                    Query.contains('keywords', selectedCategories)
-                ]));
+                queries.push(
+                    Query.or([
+                        Query.contains('productType', selectedCategories),
+                        Query.contains('keywords', selectedCategories),
+                    ])
+                );
+            }
+
+            // Add price and stock filters
+            if (minPrice !== undefined) {
+                queries.push(Query.greaterThanEqual('price', minPrice));
+            }
+            if (maxPrice !== undefined) {
+                queries.push(Query.lessThanEqual('price', maxPrice));
+            }
+            if (isInStock !== undefined) {
+                queries.push(Query.equal('isInStock', isInStock));
             }
 
             // Sorting options
@@ -71,69 +83,46 @@ class SearchRefurbishedProductService {
                 queries.push(Query.offset(offset));
             }
 
-            let productsBook = { documents: [] };
-            let productsModule = { documents: [] };
-            let productsGadgets = { documents: [] };
+            // Fetch products from the Modules collection
+            const productsModule = await this.databases.listDocuments(
+                conf.appwriteRefurbishProductDatabaseId,
+                conf.appwriteRefurbishedModulesCollectionId,
+                queries
+            );
 
-            // Fetch products for Books, if isbook is true
-            if (isbook) {
-                const bookQueries = [...queries];
-                if (minPrice !== undefined) {
-                    bookQueries.push(Query.greaterThanEqual('price', minPrice));
-                }
-                if (maxPrice !== undefined) {
-                    bookQueries.push(Query.lessThanEqual('price', maxPrice));
-                }
-                if (isInStock !== undefined) {
-                    bookQueries.push(Query.equal('isInStock', isInStock));
-                }
-                productsBook = await this.databases.listDocuments(
-                    conf.appwriteRefurbishProductDatabaseId,
-                    conf.appwriteRefurbishedBooksCollectionId,
-                    bookQueries
-                );
+            const allProducts = productsModule.documents;
+
+            // If no input value, return the products directly
+            if (inputValue.length === 0) {
+                return {
+                    products: allProducts,
+                    total: productsModule.total,
+                };
             }
 
-            // Fetch products for Modules, if ismodule is true
-            if (ismodule) {
-                const moduleQueries = [...queries];
-                productsModule = await this.databases.listDocuments(
-                    conf.appwriteRefurbishProductDatabaseId,
-                    conf.appwriteRefurbishedModulesCollectionId,
-                    moduleQueries
-                );
-            }
+           
+            // Rank products based on matches in title and description
+            const scoredProducts = allProducts.map(product => {
+                let score = 0;
 
-            // Fetch products for Gadgets, if isgadgets is true
-            if (isgadgets) {
-                const gadgetsQueries = [...queries];
-                productsGadgets = await this.databases.listDocuments(
-                    conf.appwriteRefurbishProductDatabaseId,
-                    conf.appwriteRefurbishedGadgetsCollectionId,
-                    gadgetsQueries
-                );
-            }
+                // Rank based on matches in title and description
+                inputTokens.forEach(token => {
+                    if (product.title.toLowerCase().includes(token)) score += 3;  // Exact match in title
+                    if (product.description.toLowerCase().includes(token)) score += 2;  // Exact match in description
+                    if (product.title.toLowerCase().startsWith(token)) score += 5;  // Token starts with title
+                    if (product.description.toLowerCase().startsWith(token)) score += 4;  // Token starts with description
+                });
 
-            // Combine products from all collections
-            const products = [
-                ...productsBook.documents,
-                ...productsModule.documents,
-                ...productsGadgets.documents
-            ];
-
-            // Filter products to make sure they match both category and query
-            const filteredProducts = products.filter(product => {
-                const queryMatch = inputValue ?
-                    product.title.includes(inputValue) || product.description.includes(inputValue) : true;
-
-                const categoryMatch = selectedCategories.length === 0 || selectedCategories.some(category =>
-                    product.productType.includes(category) || product.keywords.includes(category)
-                );
-
-                return categoryMatch && queryMatch;
+                return { ...product, score }; // Attach score to each product
             });
 
-            // Apply sorting after filtering
+            // Filter out products with no score
+            const filteredProducts = scoredProducts.filter(product => product.score > 0);
+
+            // Sort products by score (descending order)
+            filteredProducts.sort((a, b) => b.score - a.score);
+
+            // Apply additional sorting by price if needed
             if (sortByAsc) {
                 filteredProducts.sort((a, b) => a.price - b.price);
             }
@@ -141,26 +130,22 @@ class SearchRefurbishedProductService {
                 filteredProducts.sort((a, b) => b.price - a.price);
             }
 
-            // Return the filtered result with the count of documents in each category
             return {
                 products: filteredProducts,
-                nbook: isbook ? productsBook.documents.length : 0,
-                nmodule: ismodule ? productsModule.documents.length : 0,
-                ngadgets: isgadgets ? productsGadgets.documents.length : 0
+                total: productsModule.total,
             };
-
         } catch (error) {
             console.error('Appwrite service :: getRefurbishedProducts', error);
             return false;
         }
     }
 
-    // Method to fetch a single refurbished product by its ID
+    // Method to fetch a single refurbished product by its ID from the Modules collection
     async getRefurbishedProductById(productId) {
         try {
             const product = await this.databases.getDocument(
                 conf.appwriteRefurbishProductDatabaseId,
-                conf.appwriteRefurbishedBooksCollectionId,
+                conf.appwriteRefurbishedModulesCollectionId,
                 productId
             );
             return product;

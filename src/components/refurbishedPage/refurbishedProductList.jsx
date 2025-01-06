@@ -1,5 +1,4 @@
 import React, { useMemo } from 'react';
-import { IoIosArrowDown } from "react-icons/io";
 import RefurbishedProductCard from '../refurbishedProductCard/refurbishedProductCard.jsx';
 import NoProductsFound from './noProductFound.jsx';
 

@@ -1,13 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-    searchTerm: '',         // Stores the search term for refurbished products
-    selectedCategories: [], // Stores selected categories for filtering
-    selectedBrands: [],     // Stores selected brands for filtering
-    selectedClasses: [],    // Stores selected classes for filtering
-    selectedExams: [],      // Stores selected exams for filtering
-    selectedLanguages: [],  // Stores selected languages for filtering
-    selectedBoards: [],     // Stores selected boards for filtering
+    searchTerm: '',  
+    selectedCategories: [], 
+    selectedBrands: [],     
+    selectedClasses: [],   
+    selectedExams: [],     
+    selectedLanguages: [],  
+    selectedBoards: [],
 };
 
 const refurbishedFilterSectionSlice = createSlice({

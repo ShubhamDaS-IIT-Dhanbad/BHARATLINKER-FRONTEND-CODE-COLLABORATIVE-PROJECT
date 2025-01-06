@@ -4,7 +4,7 @@ import { BiSearchAlt } from 'react-icons/bi';
 import { TbChevronDown } from 'react-icons/tb';
 import { FaArrowLeft } from 'react-icons/fa6';
 import { useDispatch } from 'react-redux';
-import { resetRefurbishedProducts } from '../../redux/features/refurbishedProductsSlice.jsx';
+import { resetRefurbishedProducts } from '../../redux/features/refurbishedPage/refurbishedProductsSlice.jsx';
 import LocationTab from '../locationTab/locationTab.jsx';
 import './refurbishedNavbar.css';
 

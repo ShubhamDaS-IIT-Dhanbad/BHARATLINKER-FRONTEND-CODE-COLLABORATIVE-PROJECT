@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchRefurbishedProducts, loadMoreRefurbishedProducts, resetRefurbishedProducts } from '../../redux/features/refurbishedProductsSlice';
+import { fetchRefurbishedProducts, loadMoreRefurbishedProducts} from '../../redux/features/refurbishedPage/refurbishedProductsSlice.jsx';
 import { LiaSortSolid } from 'react-icons/lia';
 import { MdFilterList } from 'react-icons/md';
 import InfiniteScroll from 'react-infinite-scroll-component';
@@ -8,8 +8,10 @@ import RefurbishedNavbar from './refurbishedNavbar';
 import RefurbishedProductList from './refurbishedProductList';
 import RefurbishedProductSortBySection from './sortBySection';
 import RefurbishedProductFilterBySection from './filterSection';
+
 import './refurbishedPage.css';
-import { RotatingLines } from 'react-loader-spinner'; // Import the loader spinner
+
+import { RotatingLines } from 'react-loader-spinner';
 import { useSearchParams } from 'react-router-dom';
 
 const RefurbishedPage = () => {
@@ -23,8 +25,6 @@ const RefurbishedPage = () => {
   const [showSortBy, setShowSortBy] = useState(false);
   const [showFilterBy, setShowFilterBy] = useState(false);
 
-  const { sortByAsc, sortByDesc } = useSelector((state) => state.refurbishedproductsortbysection);
-
   // Redux state
   const {
     refurbishedProducts,
@@ -32,7 +32,7 @@ const RefurbishedPage = () => {
     hasMoreProducts,
     loading,
     loadingMoreProducts,
-    error,
+    error, sortByAsc, sortByDesc
   } = useSelector((state) => state.refurbishedproducts);
 
   const selectedCategories = useSelector((state) => state.refurbishedproductfiltersection.selectedCategories);
@@ -45,20 +45,22 @@ const RefurbishedPage = () => {
   // Search handling function
   const handleSearch = () => {
     const params = {
-      inputValue,
-      page: 1,
-      productsPerPage: 8,
+      inputValue,                
+      page: 1,                
+      productsPerPage: 8,      
       pinCodes: [742136],
-      selectedCategories,
-      selectedClasses,
-      selectedExams,
-      selectedLanguages,
-      selectedBoards,
-      selectedBrands,
-      sortByAsc, sortByDesc
+      selectedCategories: selectedCategories || [],
+      selectedClasses: selectedClasses || [],        
+      selectedExams: selectedExams || [],            
+      selectedLanguages: selectedLanguages || [],    
+      selectedBrands: selectedBrands || [],          
+      sortByAsc: sortByAsc || false,                 
+      sortByDesc: sortByDesc || false,               
     };
+
     dispatch(fetchRefurbishedProducts(params));
   };
+
 
   // Input change handler for search
   const handleInputChange = (event) => {
@@ -139,6 +141,8 @@ const RefurbishedPage = () => {
           handleSearch={handleSearch}
           showSortBy={showSortBy}
           setShowSortBy={setShowSortBy}
+          sortByAsc={sortByAsc}
+          sortByDesc={sortByDesc}
         />
       )}
       {showFilterBy && (
@@ -146,6 +150,8 @@ const RefurbishedPage = () => {
           handleSearch={handleSearch}
           showFilterBy={showFilterBy}
           setShowFilterBy={setShowFilterBy}
+          sortByAsc={sortByAsc}
+          sortByDesc={sortByDesc}
         />
       )}
       <div id='refurbishedProductPage-footer'>

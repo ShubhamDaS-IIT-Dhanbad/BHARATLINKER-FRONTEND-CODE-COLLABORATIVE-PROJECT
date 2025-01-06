@@ -1,100 +1,91 @@
 // src/redux/features/refurbishedProductsSlice.jsx
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import searchRefurbishedProductService from '../../appWrite/searchRefurbished.js';
+import searchRefurbishedProductService from '../../../appWrite/searchRefurbished.js';
 
 // Async thunk for fetching refurbished products
 export const fetchRefurbishedProducts = createAsyncThunk(
   'refurbishedProducts/fetchRefurbishedProducts',
-  async ({
-    inputValue, pinCodes, page,
-    productsPerPage, sortByAsc, sortByDesc,
-    hasMoreProductsBook,
-    hasMoreProductsModule,
-    hasMoreProductsGadgets,
-
-    selectedCategories,
-    selectedClasses,
-    selectedExams,
-    selectedLanguages,
-    selectedBoards,
-    selectedBrands
-
-  }, { rejectWithValue }) => {
+  async (
+    {
+      inputValue,
+      pinCodes,
+      page,
+      productsPerPage,
+      sortByAsc,
+      sortByDesc,
+      selectedCategories,
+      selectedBrands,
+    },
+    { rejectWithValue }
+  ) => {
     try {
       const response = await searchRefurbishedProductService.getRefurbishedProducts({
-        inputValue, pinCodes, page, productsPerPage, sortByAsc, sortByDesc, selectedCategories, selectedBrands,
-        hasMoreProductsBook,
-        hasMoreProductsModule,
-        hasMoreProductsGadgets
+        inputValue,
+        pinCodes,
+        page,
+        productsPerPage,
+        sortByAsc,
+        sortByDesc,
+        selectedCategories,
+        selectedBrands,
       });
 
-      if (response?.products?.length === 0) {
-        return {
-          refurbishedProducts: [],
-          totalPages: 0,
-          productsPerPage
-        };
-      }
-
-      if (response.products) {
-        return {
-          refurbishedProducts: response.products,
-          nbook: response.nbook,
-          nmodule: response.nmodule,
-          ngadgets: response.ngadgets,
-          productsPerPage,
-          totalPages: response.total || 0,
-        };
-      } else {
-        return rejectWithValue('Invalid data structure in response');
-      }
-    } catch (error) {
-      console.error("Error fetching refurbished products:", error);
-      return rejectWithValue(error.response?.data || error.message);
-    }
-  }
-);
-
-export const loadMoreRefurbishedProducts = createAsyncThunk(
-  'refurbishedProducts/loadMoreRefurbishedProducts',
-  async ({
-    inputValue, pinCodes, page,
-    productsPerPage, sortByAsc, sortByDesc,
-    hasMoreProductsBook,
-    hasMoreProductsModule,
-    hasMoreProductsGadgets,
-
-    selectedCategories,
-    selectedClasses,
-    selectedExams,
-    selectedLanguages,
-    selectedBoards,
-    selectedBrands,
-  }, { rejectWithValue }) => {
-    try {
-      const response = await searchRefurbishedProductService.getRefurbishedProducts({
-        inputValue, pinCodes, page, productsPerPage,
-        sortByAsc, sortByDesc, selectedCategories, selectedBrands, hasMoreProductsBook,
-        hasMoreProductsModule,
-        hasMoreProductsGadgets
-      });
-
-      // Check if response has refurbished products and total pages
       if (response?.products) {
         return {
           refurbishedProducts: response.products,
           productsPerPage,
           totalPages: response.total || 0,
-          nbook: response.nbook || 0,
-          nmodule: response.nmodule || 0,
-          ngadgets: response.ngadgets || 0,
         };
       } else {
         return rejectWithValue('Invalid data structure in response');
       }
     } catch (error) {
-      console.error("Error loading more refurbished products:", error);
-      return rejectWithValue(error.response?.data || error.message);
+      console.error('Error fetching refurbished products:', error);
+      return rejectWithValue(error.response?.data || error.message || 'Unknown error');
+    }
+  }
+);
+
+// Async thunk for loading more refurbished products
+export const loadMoreRefurbishedProducts = createAsyncThunk(
+  'refurbishedProducts/loadMoreRefurbishedProducts',
+  async (
+    {
+      inputValue,
+      pinCodes,
+      page,
+      productsPerPage,
+      sortByAsc,
+      sortByDesc,
+      selectedCategories,
+      selectedBrands,
+    },
+    { rejectWithValue }
+  ) => {
+    try {
+      const response = await searchRefurbishedProductService.getRefurbishedProducts({
+        inputValue,
+        pinCodes,
+        page,
+        productsPerPage,
+        sortByAsc,
+        sortByDesc,
+        selectedCategories,
+        selectedBrands,
+      });
+
+      if (response?.products) {
+        return {
+          refurbishedProducts: response.products,
+          productsPerPage,
+          totalPages: response.total || 0,
+        };
+      } else {
+        return rejectWithValue('Invalid data structure in response');
+      }
+    } catch (error) {
+      console.error('Error loading more refurbished products:', error);
+      return rejectWithValue(error.response?.data || error.message || 'Unknown error');
     }
   }
 );
@@ -108,27 +99,31 @@ const refurbishedProductsSlice = createSlice({
     currentPage: 1,
     totalPages: 1,
     hasMoreProducts: true,
-    hasMoreProductsBook: true,
-    hasMoreProductsModule: true,
-    hasMoreProductsGadgets: true,
     error: null,
-    loadingMoreProducts: false, // Added this state for load more functionality
+    loadingMoreProducts: false,
   },
   reducers: {
+    toggleSortOrder: (state, action) => {
+      const order = action.payload;
+      if (order === 'asc') {
+          state.sortByAsc = !state.sortByAsc;
+          state.sortByDesc = false;
+      } else if (order === 'desc') {
+          state.sortByDesc = !state.sortByDesc;
+          state.sortByAsc = false;
+      }
+  },
     resetRefurbishedProducts: (state) => {
       state.refurbishedProducts = [];
       state.loading = false;
       state.currentPage = 1;
       state.totalPages = 1;
       state.hasMoreProducts = true;
-      state.hasMoreProductsBook = true;
-      state.hasMoreProductsModule = true;
-      state.hasMoreProductsGadgets = true;
       state.error = null;
       state.loadingMoreProducts = false;
     },
     setCurrentPage: (state, action) => {
-      state.currentPage = action.payload; // Set current page
+      state.currentPage = action.payload;
     },
     sortRefurbishedProducts: (state, action) => {
       const { asc, desc } = action.payload;
@@ -137,7 +132,7 @@ const refurbishedProductsSlice = createSlice({
       } else if (desc) {
         state.refurbishedProducts.sort((a, b) => b.price - a.price);
       }
-    }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -146,21 +141,23 @@ const refurbishedProductsSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchRefurbishedProducts.fulfilled, (state, action) => {
-        const { refurbishedProducts, totalPages, productsPerPage, nbook, nmodule, ngadgets } = action.payload;
+        const { refurbishedProducts, totalPages, productsPerPage } = action.payload;
 
+        // Update refurbished products and hasMoreProducts
         if (refurbishedProducts.length > 0) {
           const newProducts = refurbishedProducts.filter(
-            (product) => !state.refurbishedProducts.some(existingProduct => existingProduct.$id === product.$id)
+            (product) =>
+              !state.refurbishedProducts.some(
+                (existingProduct) => existingProduct.$id === product.$id
+              )
           );
           state.refurbishedProducts = [...state.refurbishedProducts, ...newProducts];
           state.totalPages = totalPages;
 
-          // Update 'hasMoreProducts' logic based on number of products in each category
-          state.hasMoreProductsBook = nbook >= 4;
-          state.hasMoreProductsModule = nmodule >= 4;
-          state.hasMoreProductsGadgets = ngadgets >= 4;
-
-          state.hasMoreProducts = state.hasMoreProductsBook || state.hasMoreProductsModule || state.hasMoreProductsGadgets;
+          // Check if there are no more products
+          if (refurbishedProducts.length < productsPerPage) {
+            state.hasMoreProducts = false;
+          }
         } else {
           state.hasMoreProducts = false;
         }
@@ -168,7 +165,7 @@ const refurbishedProductsSlice = createSlice({
       })
       .addCase(fetchRefurbishedProducts.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message; // Capture error message
+        state.error = action.error.message;
       })
 
       // Load more refurbished products
@@ -177,22 +174,24 @@ const refurbishedProductsSlice = createSlice({
         state.error = null;
       })
       .addCase(loadMoreRefurbishedProducts.fulfilled, (state, action) => {
-        const { refurbishedProducts, totalPages, productsPerPage, nbook, nmodule, ngadgets } = action.payload;
+        const { refurbishedProducts, totalPages, productsPerPage } = action.payload;
 
+        // Update refurbished products and hasMoreProducts
         if (refurbishedProducts.length > 0) {
           const newProducts = refurbishedProducts.filter(
-            (product) => !state.refurbishedProducts.some(existingProduct => existingProduct.$id === product.$id)
+            (product) =>
+              !state.refurbishedProducts.some(
+                (existingProduct) => existingProduct.$id === product.$id
+              )
           );
           state.refurbishedProducts = [...state.refurbishedProducts, ...newProducts];
           state.totalPages = totalPages;
           state.currentPage += 1;
 
-          // Update 'hasMoreProducts' logic based on number of products in each category
-          state.hasMoreProductsBook = nbook >= 4;
-          state.hasMoreProductsModule = nmodule >= 4;
-          state.hasMoreProductsGadgets = ngadgets >= 4;
-
-          state.hasMoreProducts = state.hasMoreProductsBook || state.hasMoreProductsModule || state.hasMoreProductsGadgets;
+          // Check if there are no more products
+          if (refurbishedProducts.length < productsPerPage) {
+            state.hasMoreProducts = false;
+          }
         } else {
           state.hasMoreProducts = false;
         }
@@ -207,5 +206,5 @@ const refurbishedProductsSlice = createSlice({
 });
 
 // Export actions
-export const { resetRefurbishedProducts, setCurrentPage,sortRefurbishedProducts } = refurbishedProductsSlice.actions;
+export const { toggleSortOrder,resetRefurbishedProducts, setCurrentPage, sortRefurbishedProducts } =refurbishedProductsSlice.actions;
 export default refurbishedProductsSlice.reducer;

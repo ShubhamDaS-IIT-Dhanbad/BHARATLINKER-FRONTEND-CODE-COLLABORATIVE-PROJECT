@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import LocationTab from '../locationTab/locationTab';
 import './singleRefurbishedProductSearchBar.css';
 
-import { resetRefurbishedProducts } from "../../redux/features/refurbishedProductsSlice.jsx";
+import { resetRefurbishedProducts } from "../../redux/features/refurbishedPage/refurbishedProductsSlice.jsx";
 const SingleRefurbishedProductSearchBar = () => {
     const dispatch=useDispatch();
     const navigate = useNavigate();

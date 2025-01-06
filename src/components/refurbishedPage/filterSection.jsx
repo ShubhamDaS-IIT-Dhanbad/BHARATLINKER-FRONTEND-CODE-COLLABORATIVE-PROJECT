@@ -1,7 +1,5 @@
 import React, { useState, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { MdOutlineKeyboardArrowLeft } from 'react-icons/md';
-import { IoIosArrowUp, IoIosArrowDown } from 'react-icons/io';
 import { IoClose } from 'react-icons/io5';
 import { IoSearch } from 'react-icons/io5';
 import { useNavigate } from 'react-router-dom';
@@ -12,8 +10,8 @@ import {
   toggleRefurbishedExam,
   toggleRefurbishedLanguage,
   toggleRefurbishedBoard,
-} from '../../redux/features/refurbishedProductFilterSectionSlice.jsx';
-import { resetRefurbishedProducts } from '../../redux/features/refurbishedProductsSlice.jsx';
+} from '../../redux/features/refurbishedPage/refurbishedProductFilterSectionSlice.jsx';
+import { resetRefurbishedProducts } from '../../redux/features/refurbishedPage/refurbishedProductsSlice.jsx';
 
 import './refurbishedPage.css';
 

@@ -15,9 +15,8 @@ import singleshops from '../features/singleShopSlice.jsx'
 
 
 //refurbished products
-import refurbishedproducts from '../features/refurbishedProductsSlice.jsx'
-import refurbishedproductfiltersection from '../features/refurbishedProductFilterSectionSlice.jsx'
-import refurbishedproductsortbysection from '../features/refurbishedProductSortbySectionSlice.jsx'
+import refurbishedproducts from '../features/refurbishedPage/refurbishedProductsSlice.jsx'
+import refurbishedproductfiltersection from '../features/refurbishedPage/refurbishedProductFilterSectionSlice.jsx'
 
 //user refurbished products
 import userRefurbishedProducts from '../features/user/userAllRefurbishedProductsSlice.jsx'
@@ -40,7 +39,6 @@ const store=configureStore({
         //refurbished products
         refurbishedproducts:refurbishedproducts,
         refurbishedproductfiltersection:refurbishedproductfiltersection,
-        refurbishedproductsortbysection:refurbishedproductsortbysection,
 
 
         //user refurbished products

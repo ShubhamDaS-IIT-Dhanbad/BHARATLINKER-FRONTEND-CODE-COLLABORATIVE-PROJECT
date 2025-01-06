@@ -33,7 +33,7 @@ import User from './components/user/userHome.jsx'
 import UserProductPageMain from './components/user/productPage/userProductPageMain.jsx'
 import RefurbishedBooksUploadUser from './components/user/userProductUpload/userProductUpload.jsx'
 import UserUpdateBookModule  from './components/user/userProductUpdate/userProductUpdate.jsx';
-import UserNotification from './components/user/notication/userNotification.jsx'
+import UserNotification from './components/user/notification/userNotification.jsx'
 
 
 

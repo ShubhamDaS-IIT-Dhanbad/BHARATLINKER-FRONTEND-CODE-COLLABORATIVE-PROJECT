@@ -1,16 +1,13 @@
 import React from 'react';
 import { IoChevronBackCircleOutline, IoClose } from "react-icons/io5";
 import { useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
-import { sortRefurbishedProducts } from '../../redux/features/refurbishedProductsSlice';
-import { toggleSortOrder } from '../../redux/features/refurbishedProductSortbySectionSlice';
+import { useDispatch} from 'react-redux';
+import { sortRefurbishedProducts,toggleSortOrder } from '../../redux/features/refurbishedPage/refurbishedProductsSlice.jsx';
 
-const RefurbishedProductSortBySection = ({ showSortBy, setShowSortBy }) => {
+const RefurbishedProductSortBySection = ({ showSortBy, setShowSortBy,sortByAsc, sortByDesc }) => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    // Fetching sort order state from Redux
-    const { sortByAsc, sortByDesc } = useSelector((state) => state.refurbishedproductsortbysection);
 
     // Handle sort order change
     const handleSortOrderChange = (order) => {
