@@ -6,7 +6,7 @@ import { MdOutlineCategory } from "react-icons/md";
 import { TbBrandAirtable } from "react-icons/tb";
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-import userUploadBooks from '../../../appWrite/UserUploadRefurbished/userUploadBooks.js';
+import userRefurbishedProduct from '../../../appWrite/UserRefurbishedProductService/userRefurbishedProduct.js';
 import { deleteProduct, resetUserRefurbishedProducts } from '../../../redux/features/user/userAllRefurbishedProductsSlice.jsx';
 
 const UploadBooksModulesForm = ({ productType }) => {
@@ -153,7 +153,7 @@ const UploadBooksModulesForm = ({ productType }) => {
         setIsUpdate(false);
         setIsUpdating(true);
         try {
-            await userUploadBooks.updateUserRefurbishedProduct(productId, toDeleteImagesUrls, { ...formData }, images);
+            await userRefurbishedProduct.updateUserRefurbishedProduct(productId, toDeleteImagesUrls, { ...formData }, images);
             setIsUpdateSuccessful(true);
             dispatch(resetUserRefurbishedProducts());
         } catch (error) {
@@ -168,7 +168,7 @@ const UploadBooksModulesForm = ({ productType }) => {
         setIsDeleting(true);
         setIsDelete(false);
         try {
-            await userUploadBooks.deleteProduct(productId, toDeleteImagesUrls);
+            await userRefurbishedProduct.deleteProduct(productId, toDeleteImagesUrls);
             dispatch(deleteProduct(productId));
             setIsDeleteSuccessful(true);
             console.log('Product deleted successfully.');

@@ -5,11 +5,7 @@ import { MdOutlineCategory } from "react-icons/md";
 import { TbBrandAirtable, TbWorldUpload } from "react-icons/tb";
 
 import { Oval } from 'react-loader-spinner';
-
-import { MdOutlineClass } from "react-icons/md";
-import { MdOutlineSubject } from "react-icons/md";
-
-import userUploadBooks from '../../../appWrite/UserUploadRefurbished/userUploadBooks.js';
+import userRefurbishedProduct from '../../../appWrite/UserRefurbishedProductService/userRefurbishedProduct.js';
 
 const UploadBooksModulesForm = ({ userData, productType }) => {
     const [popUpState, setPopUpState] = useState({
@@ -89,7 +85,7 @@ const UploadBooksModulesForm = ({ userData, productType }) => {
         setFormData(prevFormData => ({ ...prevFormData, subject: selectedSubject }));
         setPopUpState(prevState => ({ ...prevState, subjectPopUp: false }));
     };
-  const handleCategorySelect = (selectedCategory) => {
+    const handleCategorySelect = (selectedCategory) => {
         setFormData(prevFormData => ({ ...prevFormData, category: selectedCategory }));
         setPopUpState(prevState => ({ ...prevState, categoryPopUp: false }));
     };
@@ -97,7 +93,7 @@ const UploadBooksModulesForm = ({ userData, productType }) => {
         setFormData(prevFormData => ({ ...prevFormData, brand: selectedBrand }));
         setPopUpState(prevState => ({ ...prevState, brandPopUp: false }));
     };
-  
+
 
 
 
@@ -106,14 +102,14 @@ const UploadBooksModulesForm = ({ userData, productType }) => {
 
 
     const handleSubmit = () => {
-        const { title, price, discountedPrice, class: selectedClass, language,category,brand } = formData;
+        const { title, price, discountedPrice, class: selectedClass, language, category, brand } = formData;
 
-        
-        if ((productType=='module'||productType=='book') && ![title, price, discountedPrice, selectedClass, language].every(Boolean)) {
+
+        if ((productType == 'module' || productType == 'book') && ![title, price, discountedPrice, selectedClass, language].every(Boolean)) {
             setAllFieldEntered(false);
             return;
         }
-        if (productType=='gadget' && ![title, price, discountedPrice, brand,category].every(Boolean)) {
+        if (productType == 'gadget' && ![title, price, discountedPrice, brand, category].every(Boolean)) {
             setAllFieldEntered(false);
             return;
         }
@@ -124,7 +120,7 @@ const UploadBooksModulesForm = ({ userData, productType }) => {
         };
 
         setIsUploading(true);
-        userUploadBooks.uploadModuleWithImages(finalFormData, images)
+        userRefurbishedProduct.uploadProductWithImages(finalFormData, images)
             .then(() => {
                 setUploadStatus({ success: true, fail: false });
                 resetForm();
@@ -225,8 +221,8 @@ const UploadBooksModulesForm = ({ userData, productType }) => {
                     </div>
                     :
                     <>
-                        <div className='user-refurbished-product-category-brand-div' style={{marginTop:"50px"}}>
-                            <div 
+                        <div className='user-refurbished-product-category-brand-div' style={{ marginTop: "50px", display: 'flex', gap: '10px' }}>
+                            <div
                                 className={`user-refurbished-product-book-module-upload-form-category ${formData.category ? 'active' : ''}`}
                                 onClick={() => setPopUpState(prevState => ({ ...prevState, categoryPopUp: !prevState.categoryPopUp }))}>
                                 <MdOutlineCategory size={30} />

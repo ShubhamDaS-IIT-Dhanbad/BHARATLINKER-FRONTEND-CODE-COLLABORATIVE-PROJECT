@@ -1,5 +1,5 @@
 import React from 'react';
-import SearchPageProductCard from '../productCards/searchPageProductCard.jsx';
+import SearchPageProductCard from './searchPageProductCard.jsx';
 
 const ProductList = ({ products, loading}) => {
     if (loading) return <>Loading...</>;

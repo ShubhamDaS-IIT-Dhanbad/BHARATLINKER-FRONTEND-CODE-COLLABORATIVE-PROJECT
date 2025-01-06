@@ -6,41 +6,57 @@ import { BiSearchAlt } from "react-icons/bi";
 import { Helmet } from 'react-helmet';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { RotatingLines } from 'react-loader-spinner';
-import { fetchUserRefurbishedProducts, loadMoreUserRefurbishedProducts, resetUserRefurbishedProducts, setCurrentUserPage } from '../../../redux/features/user/userAllRefurbishedProductsSlice.jsx';
+import {
+    fetchUserRefurbishedProducts,
+    loadMoreUserRefurbishedProducts,
+    resetUserRefurbishedProducts,
+} from '../../../redux/features/user/userAllRefurbishedProductsSlice.jsx';
 import ProductList from './productList.jsx';
 import './userProductPageMain.css';
 import Cookies from 'js-cookie';
 
-function YourRefurbished() {
+function userRefurbishedProduct() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const { refurbishedProducts, loading, error, currentPage, totalPages, hasMoreProducts, loadingMoreProducts } = useSelector(state => state.userRefurbishedProducts);
+    const {
+        refurbishedProducts,
+        loading,
+        error,
+        currentPage,
+        hasMoreProducts,
+        loadingMoreProducts,
+    } = useSelector((state) => state.userRefurbishedProducts);
 
     const [inputValue, setInputValue] = useState('');
-    const [userData, setUserData] = useState('');
+    const [userData, setUserData] = useState(null);
 
+    // Fetch user data from cookies on component mount
     useEffect(() => {
         const userSession = Cookies.get('BharatLinkerUser');
-        setUserData(JSON.parse(userSession));
+        if (userSession) {
+            setUserData(JSON.parse(userSession));
+        }
     }, []);
 
     // Handle search functionality
     const handleSearch = () => {
+        if (!userData?.phn) return;
         const params = {
             inputValue,
             page: 1,
-            productsPerPage: 8,
-            pinCodes: [742136],  // Example pin code
-            selectedCategories: [],  // Example, replace with actual category data
+            productsPerPage: 1,
+            pinCodes: [742136],
+            selectedCategories: [],
             selectedClasses: [],
             selectedExams: [],
             selectedLanguages: [],
             selectedBoards: [],
             selectedBrands: [],
-            sortByAsc: false,  // Example, replace with actual sorting condition
+            sortByAsc: false,
             sortByDesc: false,
-            phn: '+91'+userData.phn  // Pass phone number here
+            phn: `+91${userData.phn}`,
         };
+        dispatch(resetUserRefurbishedProducts());
         dispatch(fetchUserRefurbishedProducts(params));
     };
 
@@ -52,24 +68,25 @@ function YourRefurbished() {
     // Handle "Enter" key press for search
     const handleKeyPress = (event) => {
         if (event.key === 'Enter') {
-            dispatch(resetUserRefurbishedProducts());
             handleSearch();
         }
     };
 
     // Fetch products on initial render if no products exist
     useEffect(() => {
-        if (refurbishedProducts.length === 0 && userData) handleSearch();
+        if (refurbishedProducts.length === 0 && userData) {
+            handleSearch();
+        }
     }, [userData]);
 
     // Handle loading more products
     const handleLoadMore = () => {
-        if (!hasMoreProducts || loadingMoreProducts || !userData?.phn) return; // Do not fetch if phone number is missing
+        if (!hasMoreProducts || loadingMoreProducts || !userData?.phn) return;
 
         const params = {
             inputValue,
             page: currentPage + 1,
-            productsPerPage: 8,
+            productsPerPage: 1,
             pinCodes: [742136],
             selectedCategories: [],
             selectedClasses: [],
@@ -79,15 +96,15 @@ function YourRefurbished() {
             selectedBrands: [],
             sortByAsc: false,
             sortByDesc: false,
-            phn: '+91'+userData.phn // Pass phone number here as wel
+            phn: `+91${userData.phn}`,
         };
         dispatch(loadMoreUserRefurbishedProducts(params));
     };
 
-    // Error handling display
+    // Error handling
     if (error) {
         return (
-            <div>
+            <div className="error-container">
                 <p>Error: {error}</p>
                 <button onClick={handleSearch}>Retry</button>
             </div>
@@ -102,41 +119,43 @@ function YourRefurbished() {
                 <meta name="keywords" content="refurbished products, buy refurbished, Bharat Linker" />
             </Helmet>
             <header>
-                <div className='user-refurbished-product-page-header'>
-                    <div className='user-refurbished-product-page-header-upper'>
+                <div className="user-refurbished-product-page-header">
+                    <div className="user-refurbished-product-page-header-upper">
                         <FaArrowLeft
-                            id='user-refurbished-product-page-left-icon'
+                            id="user-refurbished-product-page-left-icon"
                             size={25}
                             onClick={() => navigate('/user')}
                             aria-label="Go back to User Account"
                             tabIndex={0}
                         />
-                        <div className='user-refurbished-product-page-header-inner'>
-                            <h1 className='user-refurbished-product-page-header-text'>YOUR REFURBISHED</h1>
-                            <div
-                                className='user-refurbished-product-page-header-phn-div'
-                                onClick={() => navigate('/pincode')}
-                                aria-label="Change Location"
-                                tabIndex={0}
-                            >
-                                {userData.phn}
-                            </div>
+                        <div className="user-refurbished-product-page-header-inner">
+                            <h1 className="user-refurbished-product-page-header-text">YOUR REFURBISHED</h1>
+                            {userData?.phn && (
+                                <div
+                                    className="user-refurbished-product-page-header-phn-div"
+                                    onClick={() => navigate('/pincode')}
+                                    aria-label="Change Location"
+                                    tabIndex={0}
+                                >
+                                    {userData.phn}
+                                </div>
+                            )}
                         </div>
                     </div>
-                    <div className='user-refurbished-product-page-search-section'>
-                        <div className='user-refurbished-product-page-search-input-container'>
+                    <div className="user-refurbished-product-page-search-section">
+                        <div className="user-refurbished-product-page-search-input-container">
                             <BiSearchAlt
-                                className='user-refurbished-product-page-search-icon'
+                                className="user-refurbished-product-page-search-icon"
                                 onClick={handleSearch}
                                 aria-label="Search Products"
                                 tabIndex={0}
                             />
                             <input
-                                className='user-refurbished-product-page-search-input'
+                                className="user-refurbished-product-page-search-input"
                                 placeholder="Search Products"
                                 value={inputValue}
                                 onChange={handleInputChange}
-                                onKeyDown={handleKeyPress}  // Trigger search on "Enter"
+                                onKeyDown={handleKeyPress}
                                 aria-label="Search input"
                             />
                         </div>
@@ -144,7 +163,6 @@ function YourRefurbished() {
                 </div>
             </header>
             <main>
-                {/* Handle loading state */}
                 {loading ? (
                     <div className="refurbished-page-loading-container">
                         <RotatingLines width="60" height="60" color="#007bff" />
@@ -155,18 +173,18 @@ function YourRefurbished() {
                         next={handleLoadMore}
                         hasMore={hasMoreProducts}
                     >
-                        <ProductList
-                            products={refurbishedProducts}
-                            loading={loading}
-                        />
+                        <ProductList products={refurbishedProducts} loading={loading} />
                     </InfiniteScroll>
                 )}
+                {loadingMoreProducts && (
+                    <div className="user-refurbished-product-page-loading-more">
+                        <RotatingLines width="40" height="40" color="#007bff" />
+                    </div>
+                )}
 
-                {/* Handle loading more products */}
-                {loadingMoreProducts && <p></p>}
             </main>
         </div>
     );
 }
 
-export default YourRefurbished;
+export default userRefurbishedProduct;

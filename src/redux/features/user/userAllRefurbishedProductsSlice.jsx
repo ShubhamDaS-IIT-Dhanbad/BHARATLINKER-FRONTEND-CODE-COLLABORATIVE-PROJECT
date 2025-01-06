@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import userRefurbishedProductsService from '../../../appWrite/userProducts/userRefurbishedProducts.js';
+import userRefurbishedProductsService from '../../../appWrite/UserRefurbishedProductService/userRefurbishedProduct.js';
 
 // Async thunk for fetching refurbished products
 export const fetchUserRefurbishedProducts = createAsyncThunk(
@@ -19,9 +19,6 @@ export const fetchUserRefurbishedProducts = createAsyncThunk(
       if (response.products) {
         return {
           refurbishedProducts: response.products,
-          nbook: response.nbook,
-          nmodule: response.nmodule,
-          ngadgets: response.ngadgets,
           productsPerPage: params.productsPerPage,
           totalPages: Math.ceil(response.products.length / params.productsPerPage),
         };
@@ -47,9 +44,6 @@ export const loadMoreUserRefurbishedProducts = createAsyncThunk(
           refurbishedProducts: response.products,
           productsPerPage: params.productsPerPage,
           totalPages: Math.ceil(response.products.length / params.productsPerPage),
-          nbook: response.nbook || 0,
-          nmodule: response.nmodule || 0,
-          ngadgets: response.ngadgets || 0,
         };
       } else {
         return rejectWithValue('Invalid data structure in response');
@@ -70,9 +64,6 @@ const userRefurbishedProductsSlice = createSlice({
     currentPage: 1,
     totalPages: 1,
     hasMoreProducts: true,
-    hasMoreProductsBook: true,
-    hasMoreProductsModule: true,
-    hasMoreProductsGadgets: true,
     error: null,
     loadingMoreProducts: false, // Added this state for load more functionality
   },
@@ -83,9 +74,6 @@ const userRefurbishedProductsSlice = createSlice({
       state.currentPage = 1;
       state.totalPages = 1;
       state.hasMoreProducts = true;
-      state.hasMoreProductsBook = true;
-      state.hasMoreProductsModule = true;
-      state.hasMoreProductsGadgets = true;
       state.error = null;
       state.loadingMoreProducts = false;
     },
@@ -121,20 +109,19 @@ const userRefurbishedProductsSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchUserRefurbishedProducts.fulfilled, (state, action) => {
-        const { refurbishedProducts, totalPages, nbook, nmodule, ngadgets } = action.payload;
+        const { refurbishedProducts, totalPages, productsPerPage } = action.payload;
 
         if (refurbishedProducts.length > 0) {
           const newProducts = refurbishedProducts.filter(
-            (product) => !state.refurbishedProducts.some(existingProduct => existingProduct.$id === product.$id)
+            (product) =>
+              !state.refurbishedProducts.some((existingProduct) => existingProduct.$id === product.$id)
           );
           state.refurbishedProducts = [...state.refurbishedProducts, ...newProducts];
           state.totalPages = totalPages;
 
-          state.hasMoreProductsBook = nbook >= 2;
-          state.hasMoreProductsModule = nmodule >= 2;
-          state.hasMoreProductsGadgets = ngadgets >= 2;
-
-          state.hasMoreProducts = state.hasMoreProductsBook || state.hasMoreProductsModule || state.hasMoreProductsGadgets;
+          if (refurbishedProducts.length < productsPerPage) {
+            state.hasMoreProducts = false;
+          }
         } else {
           state.hasMoreProducts = false;
         }
@@ -149,21 +136,20 @@ const userRefurbishedProductsSlice = createSlice({
         state.error = null;
       })
       .addCase(loadMoreUserRefurbishedProducts.fulfilled, (state, action) => {
-        const { refurbishedProducts, totalPages, nbook, nmodule, ngadgets } = action.payload;
+        const { refurbishedProducts, totalPages, productsPerPage } = action.payload;
 
         if (refurbishedProducts.length > 0) {
           const newProducts = refurbishedProducts.filter(
-            (product) => !state.refurbishedProducts.some(existingProduct => existingProduct.$id === product.$id)
+            (product) =>
+              !state.refurbishedProducts.some((existingProduct) => existingProduct.$id === product.$id)
           );
           state.refurbishedProducts = [...state.refurbishedProducts, ...newProducts];
           state.totalPages = totalPages;
           state.currentPage += 1;
 
-          state.hasMoreProductsBook = nbook >= 1;
-          state.hasMoreProductsModule = nmodule >= 1;
-          state.hasMoreProductsGadgets = ngadgets >= 1;
-
-          state.hasMoreProducts = state.hasMoreProductsBook || state.hasMoreProductsModule || state.hasMoreProductsGadgets;
+          if (refurbishedProducts.length < productsPerPage) {
+            state.hasMoreProducts = false;
+          }
         } else {
           state.hasMoreProducts = false;
         }
