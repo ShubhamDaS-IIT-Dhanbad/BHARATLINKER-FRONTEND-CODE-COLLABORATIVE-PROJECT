@@ -71,7 +71,7 @@ const UploadBooksModulesForm = ({ userData, productType }) => {
     const handleClassSelect = (selectedClass) => {
         setFormData((prevFormData) => ({
             ...prevFormData,
-            class: Number(selectedClass),
+            class: selectedClass,
         }));
         setPopUpState(prevState => ({ ...prevState, classPopUp: false }));
     };
@@ -103,22 +103,26 @@ const UploadBooksModulesForm = ({ userData, productType }) => {
 
     const handleSubmit = () => {
         const { title, price, discountedPrice, class: selectedClass, language, category, brand } = formData;
-
-
-        if ((productType == 'module' || productType == 'book') && ![title, price, discountedPrice, selectedClass, language].every(Boolean)) {
+    
+        // Check if required fields are filled based on the product type
+        const isModuleOrBookValid = (productType === 'module' || productType === 'book') && 
+            [title, price, discountedPrice, selectedClass, language].every(Boolean);
+        const isGadgetValid = productType === 'gadget' && 
+            [title, price, discountedPrice, brand, category].every(Boolean);
+    
+        // If fields are not valid, show error and return
+        if (!isModuleOrBookValid && !isGadgetValid) {
             setAllFieldEntered(false);
             return;
         }
-        if (productType == 'gadget' && ![title, price, discountedPrice, brand, category].every(Boolean)) {
-            setAllFieldEntered(false);
-            return;
-        }
-
+    
+        // Prepare the final form data
         const finalFormData = {
             ...formData,
             phn: `+91${userData?.phn || ''}`,
         };
-
+    
+        // Start uploading
         setIsUploading(true);
         userRefurbishedProduct.uploadProductWithImages(finalFormData, images)
             .then(() => {
@@ -132,6 +136,7 @@ const UploadBooksModulesForm = ({ userData, productType }) => {
                 setIsUploading(false);
             });
     };
+    
 
     const resetForm = () => {
         setFormData({
@@ -181,15 +186,27 @@ const UploadBooksModulesForm = ({ userData, productType }) => {
 
 
 
-    const Popup = ({ message, onClose, isSuccess }) => (
-        <div className="user-refurbished-gadgets-upload-pop-up">
-            <div className="user-refurbished-gadgets-upload-pop-up-inner">
-                <div className="user-refurbished-gadgets-upload-pop-up-message">{message}</div>
-                <div
-                    className={isSuccess ? 'user-refurbished-gadgets-upload-successful-popup' : 'user-refurbished-gadgets-upload-fail-popup'}
-                    onClick={onClose}
-                >
-                    OK
+    const PopupSuccess = ({ message, onClose }) => (
+        <div className="user-refurbished-book-module-success-popup">
+            <div className="user-refurbished-book-module-success-popup-inner">
+                <div className="user-refurbished-book-module-success-popup-message">
+                    {message}
+                </div>
+                <div className="user-refurbished-book-module-success-popup-ok" onClick={onClose}>
+                    Ok
+                </div>
+            </div>
+        </div>
+    );
+
+    const PopupFail = ({ message, onClose }) => (
+        <div className="user-refurbished-book-module-fail-popup">
+            <div className="user-refurbished-book-module-fail-popup-inner">
+                <div className="user-refurbished-book-module-fail-popup-message">
+                    {message}
+                </div>
+                <div className="user-refurbished-book-module-fail-popup-ok" onClick={onClose}>
+                    Ok
                 </div>
             </div>
         </div>
@@ -266,7 +283,7 @@ const UploadBooksModulesForm = ({ userData, productType }) => {
 
 
                 <div className='user-refurbished-product-price-discounted-div'>
-                    <textarea
+                    <input
                         type="number"
                         name="price"
                         value={formData.price}
@@ -275,7 +292,7 @@ const UploadBooksModulesForm = ({ userData, productType }) => {
                         style={{ maxWidth: "90vw", height: "4vh" }}
                         className='user-refurbished-product-book-module-upload-form-textarea'
                     />
-                    <textarea
+                    <input
                         type="number"
                         name="discountedPrice"
                         value={formData.discountedPrice}
@@ -335,7 +352,7 @@ const UploadBooksModulesForm = ({ userData, productType }) => {
             </div>
 
             {!allFieldEntered && (
-                <Popup message="All fields are required!" onClose={() => setAllFieldEntered(true)} isSuccess={false} />
+                <PopupFail message="All fields are required!" onClose={() => setAllFieldEntered(true)} isSuccess={false} />
             )}
             {isUploading && (
                 <div className="user-refurbished-product-book-module-upload-form-loader">
@@ -343,10 +360,10 @@ const UploadBooksModulesForm = ({ userData, productType }) => {
                 </div>
             )}
             {uploadStatus.success && (
-                <Popup message={`${productType} uploaded successfully!`} onClose={() => setUploadStatus({ success: false, fail: false })} isSuccess />
+                <PopupSuccess message={`${productType} uploaded successfully!`} onClose={() => setUploadStatus({ success: false, fail: false })} isSuccess />
             )}
             {uploadStatus.fail && (
-                <Popup message={`Failed to upload ${productType}. Please try again!`} onClose={() => setUploadStatus({ success: false, fail: false })} isSuccess={false} />
+                <PopupFail message={`Failed to upload ${productType}. Please try again!`} onClose={() => setUploadStatus({ success: false, fail: false })} isSuccess={false} />
             )}
 
         </>

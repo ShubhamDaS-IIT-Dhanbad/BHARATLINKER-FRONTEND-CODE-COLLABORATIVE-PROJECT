@@ -40,7 +40,6 @@ class UserRefurbishedProduct {
 
 
     async deleteImageFromCloudinary(imageUrl) {
-        console.log(imageUrl);
         if (!imageUrl) return;
         const urlParts = imageUrl.split('/');
         const publicIdWithExtension = urlParts[urlParts.length - 1];
@@ -97,7 +96,6 @@ class UserRefurbishedProduct {
                 pinCodes: productData.pinCodes.split(',').map((pin) => Number(pin)),
                 productType: productData.productType
             };
-
             // Create a document in the Appwrite database with the uploaded images
             const document = await this.databases.createDocument(
                 conf.appwriteRefurbishProductDatabaseId,
@@ -108,8 +106,6 @@ class UserRefurbishedProduct {
                     images: imageUrls
                 }
             );
-
-            console.log("uploaded");
             return document;
         } catch (error) {
             console.error('Error uploading product:', error);
