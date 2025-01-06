@@ -265,7 +265,6 @@ class UserRefurbishedProduct {
             };
     
             const allProducts = await fetchCategoryProducts(conf.appwriteRefurbishedModulesCollectionId);
-            console.log(allProducts)
             if (!Array.isArray(allProducts)) {
                 throw new TypeError("Expected 'allProducts' to be an array.");
             }

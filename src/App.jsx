@@ -30,10 +30,10 @@ import RetailerRoutes from './components/retailer/retailerRoutes.jsx';
 
 //user routes
 import User from './components/user/userHome.jsx'
+import UserProductPageMain from './components/user/productPage/userProductPageMain.jsx'
 import RefurbishedBooksUploadUser from './components/user/userProductUpload/userProductUpload.jsx'
 import UserUpdateBookModule  from './components/user/userProductUpdate/userProductUpdate.jsx';
-import UserUpdateGadget from './components/user/userProductUpdate/userProductUpdate.jsx';
-import UserProductPageMain from './components/user/productPage/userProductPageMain.jsx'
+import UserNotification from './components/user/notication/userNotification.jsx'
 
 
 
@@ -99,6 +99,7 @@ const RoutesWithConditionalHeader = React.memo(({ address }) => {
         <Route path='/user/refurbished' element={<UserProductPageMain/>} />
         <Route path='/user/upload/:productType' element={<RefurbishedBooksUploadUser/>} />
         <Route path='/user/refurbished/update/:id' element={<UserUpdateBookModule/>}/>
+        <Route path='/user/notification' element={<UserNotification/>}/>
         <Route path='/user/privacy' element={<>private boss</>} />
 
       </Routes>
