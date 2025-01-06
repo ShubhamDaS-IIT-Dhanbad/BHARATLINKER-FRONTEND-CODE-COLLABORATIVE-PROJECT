@@ -76,9 +76,9 @@
 #productSearchPage-footer {
     width: 100vh;
     display: flex;
-    color: rgba(18, 17, 17, 0.92);
+    color: rgba(255, 255, 255, 0.92);
     height: 60px;
-    background-color: rgb(161, 172, 255);
+    background-color: #35374B;
     position: fixed;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     bottom: 0;

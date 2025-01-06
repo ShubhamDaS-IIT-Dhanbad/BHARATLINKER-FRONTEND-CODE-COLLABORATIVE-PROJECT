@@ -7,10 +7,10 @@
 #refurbishedProductPage-footer {
     width: 100vh;
     display: flex;
-    color: rgba(0, 0, 0, 0.6);
+    color: rgb(255, 255, 255);
     font-weight: 900;
     height: 70px;
-    background-color: rgb(246, 201, 201);
+    background-color: #001F3F;
     position: fixed;
     bottom: 0;
     z-index: 999;

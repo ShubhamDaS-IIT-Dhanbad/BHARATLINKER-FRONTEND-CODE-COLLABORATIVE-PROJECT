@@ -70,9 +70,9 @@
 #searchShopPage-footer {
     width: 100vh;
     display: flex;
-    color: rgba(18, 17, 17, 0.92);
+    color: rgba(255, 255, 255, 0.92);
     height: 60px;
-    background-color: #cbc0ed;
+    background-color: #021526;
     position: fixed;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     bottom: 0;
