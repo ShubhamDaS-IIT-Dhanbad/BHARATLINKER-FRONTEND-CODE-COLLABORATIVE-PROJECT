@@ -57,15 +57,15 @@
 .refurbished-page-sort-by-tab,.refurbished-page-filter-by-tab{
     width: 100vw;height: 100vh;
     position: fixed;top: 0;
-    background-color: rgba(0, 0, 0, 0.71);
+    background-color: rgba(0, 0, 0, 0.9);
     display: flex;justify-content: flex-end;flex-direction: column;
     align-items: center;gap: 10px;
     z-index: 9999;color: black;
 }
-#refurbished-page-sort-by-header,#refurbished-page-filter-by-header{
+#refurbished-page-sort-by-header{
     display: flex; /* Use flexbox for layout */
     flex-direction: column; /* Stack items vertically */
-    height: 80vh; /* Set height to 70% of the viewport */
+    max-height: 70vh;
     width: 100vw; /* Set width to full viewport width */
     max-width: 100vw; /* Prevent exceeding full viewport width */
     background-color: rgb(236, 241, 246); /* Background color */
@@ -75,27 +75,33 @@
     box-sizing: border-box; /* Include padding in width calculation */
     overflow: hidden; /* Hide any overflow content */
     gap: 10px;
-}
-#refurbished-page-filter-by-header{
-    overflow-y:scroll ;
+    padding-bottom: 10vh;
 }
 #refurbished-page-filter-by-options{
     display: flex;gap: 7px;
     overflow:scroll;width: 90vw;justify-content: flex-start;
 }
 
-.refurbished-page-selected-category {
-    padding: 10px;background-color: aqua;
-    border: 1.8px solid rgb(155, 255, 4);border-radius: 20px;
+
+
+
+#refurbished-page-sortby-options{
+    display: flex;
+    justify-content:center;align-items: center;
+    gap: 10px;margin: 10px 0px 0px 10px;
 }
-.refurbished-page-unselected-category{
-    border: 1.8px solid rgb(115, 33, 33);border-radius: 20px;
+.refurbished-sortby-item-selected{
+    width: 85px;height: 50px;
+    background-color: #000000;border-radius: 20px;color: white;
+    display: flex;justify-content: center;align-items: center;
+    
 }
-
-
-
-
-.refurbished-sortby-item-selected{color: greenyellow;}
+.refurbished-sortby-item-unselected{
+    width: 85px;height: 50px;border: 1px solid black;
+    background-color: #ffffff;border-radius: 20px;
+    display: flex;justify-content: center;align-items: center;
+    
+}
 .refurbished-page-loading-container{
     width: 100vw;height: 100vh;
     display: flex;justify-content: center;align-items: center;

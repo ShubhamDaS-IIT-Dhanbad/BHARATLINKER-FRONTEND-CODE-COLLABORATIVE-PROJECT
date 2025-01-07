@@ -13,11 +13,10 @@ import {
 } from '../../redux/features/refurbishedPage/refurbishedProductFilterSectionSlice.jsx';
 import { resetRefurbishedProducts } from '../../redux/features/refurbishedPage/refurbishedProductsSlice.jsx';
 
-import './refurbishedPage.css';
+import './filterSection.css';
 
-const RefurbishedProductFilterSection = ({ handleSearch,showFilterBy, setShowFilterBy }) => {
+const RefurbishedProductFilterSection = ({showFilterBy, setShowFilterBy }) => {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const [filters, setFilters] = useState({
     category: false,
@@ -37,7 +36,7 @@ const RefurbishedProductFilterSection = ({ handleSearch,showFilterBy, setShowFil
     board: '',
   });
 
- 
+
 
   const selectedFilters = useSelector((state) => ({
     categorys: state.refurbishedproductfiltersection.selectedCategories,
@@ -81,9 +80,9 @@ const RefurbishedProductFilterSection = ({ handleSearch,showFilterBy, setShowFil
     );
 
     return (
-      <div id="filter-options-product-page" key={filter}>
+      <div id="filter-options-refurbished-page" key={filter}>
         <div id={`filter-${filter}-options`}>
-          <div className="searchShopPage-footer-filterby-div">
+          <div className="searchRefurbishedPage-footer-filterby-div">
             <IoSearch size={20} />
             <input
               type="text"
@@ -95,7 +94,7 @@ const RefurbishedProductFilterSection = ({ handleSearch,showFilterBy, setShowFil
                 }))
               }
               placeholder={`Search ${title}`}
-              className="searchShopPage-footer-filterby-input"
+              className="searchRefurbishedPage-footer-filterby-input"
             />
           </div>
           <div id="refurbished-page-filter-by-options">
@@ -105,11 +104,10 @@ const RefurbishedProductFilterSection = ({ handleSearch,showFilterBy, setShowFil
               return (
                 <span
                   key={`${filter}-${item}-${index}`}
-                  className={`filter-option ${
-                    isSelected
+                  className={`filter-option ${isSelected
                       ? 'refurbished-page-selected-category'
                       : 'refurbished-page-unselected-category'
-                  }`}
+                    }`}
                   onClick={() => handleFilterClick(filter, item)}
                 >
                   {item}
@@ -125,13 +123,17 @@ const RefurbishedProductFilterSection = ({ handleSearch,showFilterBy, setShowFil
   return (
     <div className="refurbished-page-filter-by-tab">
       {showFilterBy && (
-        <div
-          className="location-tab-IoIosCloseCircle"
-          onClick={() => setShowFilterBy(false)}
-          aria-label="Close sort options"
-        >
-          <IoClose size={25} />
-        </div>
+        <>
+          <div
+            className="location-tab-IoIosCloseCircle"
+            onClick={() => setShowFilterBy(false)}
+            aria-label="Close sort options"
+          >
+            <IoClose size={25} />
+          </div>
+
+          <div style={{ color: "white" }}>FILTER SECTION</div>
+        </>
       )}
       {showFilterBy && (
         <div id="refurbished-page-filter-by-header">

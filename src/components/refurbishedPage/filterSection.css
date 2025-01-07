@@ -1,0 +1,49 @@
+.searchRefurbishedPage-footer-filterby-div{
+    background-color: rgba(255, 255, 255, 0.941);
+    height: 41px;display: flex;width: 90vw;
+    align-self: center;
+    align-items: center;padding-left: 10px;gap: 10px;
+    border-radius: 10px;font-size: 13px;
+    color: rgb(0, 0, 0);font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-weight: 700;border: 1px solid rgba(0, 0, 0, 0.363);
+}
+.searchRefurbishedPage-footer-filterby-input{
+    outline: none;border: none;
+}
+.searchRefurbishedPage-footer-filterby-input::placeholder{
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: 15px;
+}
+
+
+#filter-options-refurbished-page{
+    margin-top: 15px;
+    display: flex;justify-content: center;align-items: center;
+    flex-direction: column;
+}
+#refurbished-page-filter-by-header{
+    display: flex; /* Use flexbox for layout */
+    flex-direction: column; /* Stack items vertically */
+    max-height: 70vh;
+    width: 100vw; /* Set width to full viewport width */
+    max-width: 100vw; /* Prevent exceeding full viewport width */
+    background-color: rgb(255, 255, 255); /* Background color */
+    border-top-left-radius: 20px; /* Rounded top-left corner */
+    border-top-right-radius: 20px; /* Rounded top-right corner */
+    padding: 7px; /* Padding for spacing */
+    box-sizing: border-box; /* Include padding in width calculation */
+    overflow: hidden; /* Hide any overflow content */
+    gap: 10px;
+    padding-bottom: 10vh;padding-top: 10px;
+}
+#refurbished-page-filter-by-header{
+    overflow-y:scroll ;
+}
+
+
+.refurbished-page-selected-category {
+    margin-top: 10px;color: rgba(56, 227, 93, 0.598);
+}
+.refurbished-page-unselected-category{
+    margin-top: 10px;
+}

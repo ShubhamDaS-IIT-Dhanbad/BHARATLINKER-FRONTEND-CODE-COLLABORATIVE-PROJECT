@@ -27,8 +27,9 @@ const RefurbishedProductSortBySection = ({ showSortBy, setShowSortBy,sortByAsc, 
             <div
                 className={isSelected ? 'refurbished-sortby-item-selected' : 'refurbished-sortby-item-unselected'}
             >
-                {label}
+                 {label}
             </div>
+           
         </div>
     );
 
@@ -38,21 +39,13 @@ const RefurbishedProductSortBySection = ({ showSortBy, setShowSortBy,sortByAsc, 
                 <div className='location-tab-IoIosCloseCircle' onClick={() => setShowSortBy(false)} aria-label="Close sort options">
                     <IoClose size={25} />
                 </div>
+                <div style={{color:"white"}}>SORT SECTION</div>
                 {/* Header Section */}
                 <div id="refurbished-page-sort-by-header">
-                    <div id="refurbished-page-sort-by-header-inner-div">
-                        SORT BY SECTION
-                        <IoChevronBackCircleOutline
-                            id="refurbished-page-sort-by-header-icon"
-                            size="30px"
-                            onClick={() => navigate('/refurbished')}
-                            aria-label="Go back to refurbished page"
-                        />
-                    </div>
                     {/* Sort Options */}
                     <div id="refurbished-page-sortby-options">
-                        <SortOption order="asc" isSelected={sortByAsc} label="Low to High" />
-                        <SortOption order="desc" isSelected={sortByDesc} label="High to Low" />
+                        <SortOption order="asc" isSelected={sortByAsc} label="A - Z" />
+                        <SortOption order="desc" isSelected={sortByDesc} label="Z - A" />
                     </div>
                 </div>
             </div>
