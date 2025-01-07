@@ -49,7 +49,7 @@ const SearchPage = () => {
         const value = event.target.value;
         setInputValue(value);
         setSearchParams((prev) => ({
-            ...Object.fromEntries(prev.entries()), // Ensure proper update of search params
+            ...Object.fromEntries(prev.entries()),
             query: value,
         }));
     };

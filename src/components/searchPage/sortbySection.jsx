@@ -6,15 +6,12 @@ import { toggleSortOrder,sortProductReducer } from '../../redux/features/searchP
 
 import { IoClose } from "react-icons/io5";
 const RefurbishedProductSortBySection = ({ showSortBy, setShowSortBy,sortByAsc, sortByDesc }) => {
-    const navigate = useNavigate();
     const dispatch = useDispatch();
-
-    // Fetching sort order state from Redux
-
+    
     // Handle sort order change
     const handleSortOrderChange = (order) => {
-        dispatch(sortProductReducer({ asc: sortByAsc, desc: sortByDesc }));
         dispatch(toggleSortOrder(order));
+        dispatch(sortProductReducer({ asc: sortByAsc, desc: sortByDesc }));
     };
 
     // Sort option component
@@ -42,9 +39,7 @@ const RefurbishedProductSortBySection = ({ showSortBy, setShowSortBy,sortByAsc, 
                        <IoClose size={25} />
                    </div>
                    <div style={{color:"white"}}>SORT SECTION</div>
-                   {/* Header Section */}
                    <div id="refurbished-page-sort-by-header">
-                       {/* Sort Options */}
                        <div id="refurbished-page-sortby-options">
                            <SortOption order="asc" isSelected={sortByAsc} label="A - Z" />
                            <SortOption order="desc" isSelected={sortByDesc} label="Z - A" />
