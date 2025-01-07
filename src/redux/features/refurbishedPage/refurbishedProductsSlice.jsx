@@ -33,8 +33,7 @@ export const fetchRefurbishedProducts = createAsyncThunk(
       if (response?.products) {
         return {
           refurbishedProducts: response.products,
-          productsPerPage,
-          totalPages: response.total || 0,
+          hasMoreProducts: response.products.length >= productsPerPage, // Corrected check
         };
       } else {
         return rejectWithValue('Invalid data structure in response');
@@ -73,12 +72,10 @@ export const loadMoreRefurbishedProducts = createAsyncThunk(
         selectedCategories,
         selectedBrands,
       });
-
       if (response?.products) {
         return {
           refurbishedProducts: response.products,
-          productsPerPage,
-          totalPages: response.total || 0,
+          hasMoreProducts: response.products.length >= productsPerPage, // Corrected check
         };
       } else {
         return rejectWithValue('Invalid data structure in response');
@@ -101,18 +98,20 @@ const refurbishedProductsSlice = createSlice({
     hasMoreProducts: true,
     error: null,
     loadingMoreProducts: false,
+    sortByAsc: false, // Added default state for sort order
+    sortByDesc: false,
   },
   reducers: {
     toggleSortOrder: (state, action) => {
       const order = action.payload;
       if (order === 'asc') {
-          state.sortByAsc = !state.sortByAsc;
-          state.sortByDesc = false;
+        state.sortByAsc = !state.sortByAsc;
+        state.sortByDesc = false;
       } else if (order === 'desc') {
-          state.sortByDesc = !state.sortByDesc;
-          state.sortByAsc = false;
+        state.sortByDesc = !state.sortByDesc;
+        state.sortByAsc = false;
       }
-  },
+    },
     resetRefurbishedProducts: (state) => {
       state.refurbishedProducts = [];
       state.loading = false;
@@ -141,7 +140,7 @@ const refurbishedProductsSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchRefurbishedProducts.fulfilled, (state, action) => {
-        const { refurbishedProducts, totalPages, productsPerPage } = action.payload;
+        const { refurbishedProducts, hasMoreProducts } = action.payload;
 
         // Update refurbished products and hasMoreProducts
         if (refurbishedProducts.length > 0) {
@@ -152,14 +151,7 @@ const refurbishedProductsSlice = createSlice({
               )
           );
           state.refurbishedProducts = [...state.refurbishedProducts, ...newProducts];
-          state.totalPages = totalPages;
-
-          // Check if there are no more products
-          if (refurbishedProducts.length < productsPerPage) {
-            state.hasMoreProducts = false;
-          }
-        } else {
-          state.hasMoreProducts = false;
+          state.hasMoreProducts = hasMoreProducts;
         }
         state.loading = false;
       })
@@ -167,14 +159,13 @@ const refurbishedProductsSlice = createSlice({
         state.loading = false;
         state.error = action.error.message;
       })
-
       // Load more refurbished products
       .addCase(loadMoreRefurbishedProducts.pending, (state) => {
         state.loadingMoreProducts = true;
         state.error = null;
       })
       .addCase(loadMoreRefurbishedProducts.fulfilled, (state, action) => {
-        const { refurbishedProducts, totalPages, productsPerPage } = action.payload;
+        const { refurbishedProducts, hasMoreProducts } = action.payload;
 
         // Update refurbished products and hasMoreProducts
         if (refurbishedProducts.length > 0) {
@@ -185,15 +176,10 @@ const refurbishedProductsSlice = createSlice({
               )
           );
           state.refurbishedProducts = [...state.refurbishedProducts, ...newProducts];
-          state.totalPages = totalPages;
           state.currentPage += 1;
 
           // Check if there are no more products
-          if (refurbishedProducts.length < productsPerPage) {
-            state.hasMoreProducts = false;
-          }
-        } else {
-          state.hasMoreProducts = false;
+          state.hasMoreProducts = hasMoreProducts;
         }
         state.loadingMoreProducts = false;
       })
@@ -206,5 +192,5 @@ const refurbishedProductsSlice = createSlice({
 });
 
 // Export actions
-export const { toggleSortOrder,resetRefurbishedProducts, setCurrentPage, sortRefurbishedProducts } =refurbishedProductsSlice.actions;
+export const { toggleSortOrder, resetRefurbishedProducts, setCurrentPage, sortRefurbishedProducts } = refurbishedProductsSlice.actions;
 export default refurbishedProductsSlice.reducer;

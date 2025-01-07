@@ -47,7 +47,7 @@ const RefurbishedPage = () => {
     const params = {
       inputValue,                
       page: 1,                
-      productsPerPage: 8,      
+      productsPerPage: 3,      
       pinCodes: [742136],
       selectedCategories: selectedCategories || [],
       selectedClasses: selectedClasses || [],        
@@ -87,7 +87,7 @@ const RefurbishedPage = () => {
     const params = {
       inputValue,
       page: currentPage + 1,
-      productsPerPage: 8,
+      productsPerPage: 3,
       pinCodes: [742136],
       selectedCategories,
       selectedClasses,

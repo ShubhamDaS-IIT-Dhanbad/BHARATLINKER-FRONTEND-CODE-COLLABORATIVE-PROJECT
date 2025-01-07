@@ -7,7 +7,13 @@ export const fetchProducts = createAsyncThunk(
     async ({ inputValue, selectedCategories, selectedBrands, pinCodes, page, productsPerPage, sortByAsc, sortByDesc }, { rejectWithValue }) => {
         try {
             const response = await searchProductService.getProducts({
-                inputValue, page, productsPerPage, sortByAsc, sortByDesc, selectedBrands, selectedCategories
+                inputValue, 
+                page, 
+                productsPerPage, 
+                sortByAsc, 
+                sortByDesc, 
+                selectedBrands, 
+                selectedCategories
             });
 
             if (response?.products?.length === 0) {
@@ -20,7 +26,7 @@ export const fetchProducts = createAsyncThunk(
             if (response.products && response.success) {
                 return {
                     products: response.products,
-                    totalPages: Math.ceil(response.totalCount / productsPerPage) || 1,
+                    hasMoreProducts: response.products.length >= productsPerPage,
                 };
             } else {
                 return rejectWithValue('Invalid data structure in response');
@@ -38,13 +44,19 @@ export const loadMoreProducts = createAsyncThunk(
     async ({ inputValue, selectedCategories, selectedBrands, pinCodes, page, productsPerPage, sortByAsc, sortByDesc }, { rejectWithValue }) => {
         try {
             const response = await searchProductService.getProducts({
-                inputValue, page, productsPerPage, selectedCategories, selectedBrands, sortByAsc, sortByDesc
+                inputValue, 
+                page, 
+                productsPerPage, 
+                selectedCategories, 
+                selectedBrands, 
+                sortByAsc, 
+                sortByDesc
             });
 
             if (response.products && response.success) {
                 return {
                     products: response.products,
-                    totalPages: Math.ceil(response.totalCount / productsPerPage) || 1,
+                    hasMoreProducts: response.products.length >= productsPerPage,
                 };
             } else {
                 return rejectWithValue('Invalid data structure in response');
@@ -76,21 +88,7 @@ const initialState = {
 // Slice
 const productsSlice = createSlice({
     name: 'searchproducts',
-    initialState:{
-        products: [],
-        loading: false,
-        loadingMoreProducts: false,
-        currentPage: 1,
-        selectedCategories: [],
-        selectedBrands: [],
-        totalPages: 1,
-        sortByAsc: false,
-        sortByDesc: false,
-        priceRange: { min: Number.MIN_SAFE_INTEGER, max: Number.MAX_SAFE_INTEGER },
-        hasMoreProducts: true,
-        error: null,
-        productsPerPage: 10,
-    },
+    initialState,
     reducers: {
         setCurrentPage: (state, action) => {
             state.currentPage = action.payload;
@@ -154,10 +152,9 @@ const productsSlice = createSlice({
                 state.error = null;
             })
             .addCase(fetchProducts.fulfilled, (state, action) => {
-                const { products, totalPages } = action.payload;
-                state.products = [...state.products, ...products];
-                state.totalPages = totalPages;
-                state.hasMoreProducts = products.length >= state.productsPerPage && state.currentPage < totalPages;
+                const { products, hasMoreProducts } = action.payload;
+                state.products = products;
+                state.hasMoreProducts = hasMoreProducts;
                 state.loading = false;
             })
             .addCase(fetchProducts.rejected, (state, action) => {
@@ -165,19 +162,20 @@ const productsSlice = createSlice({
                 state.error = action.payload || 'Something went wrong';
                 state.hasMoreProducts = false;
             })
+
             .addCase(loadMoreProducts.pending, (state) => {
                 state.loadingMoreProducts = true;
                 state.error = null;
             })
             .addCase(loadMoreProducts.fulfilled, (state, action) => {
-                const { products, totalPages } = action.payload;
+                const { products, hasMoreProducts } = action.payload;
+                
                 const newProducts = products.filter(
-                    (product) => !state.products.some(existingProduct => existingProduct._id === product._id)
+                    (product) => !state.products.some(existingProduct => existingProduct.$id === product.$id)
                 );
                 state.products = [...state.products, ...newProducts];
-                state.totalPages = totalPages;
                 state.currentPage += 1;
-                state.hasMoreProducts = newProducts.length >= state.productsPerPage && state.currentPage < totalPages;
+                state.hasMoreProducts = hasMoreProducts;
                 state.loadingMoreProducts = false;
             })
             .addCase(loadMoreProducts.rejected, (state, action) => {

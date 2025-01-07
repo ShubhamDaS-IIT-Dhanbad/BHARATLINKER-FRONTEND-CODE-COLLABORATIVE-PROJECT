@@ -5,7 +5,7 @@ import { useState } from 'react';
 
 export const useExecuteSearch = () => {
     const dispatch = useDispatch();
-    const productsPerPage = 24;
+    const productsPerPage = 3;
 
     const [searchParams, setSearchParams] = useSearchParams();
     const query = searchParams.get('query') || '';

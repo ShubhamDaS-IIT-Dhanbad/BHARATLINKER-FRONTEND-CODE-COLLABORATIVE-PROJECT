@@ -25,8 +25,8 @@ class SearchProductService {
         userLat = 23.818637,
         userLon = 86.437171,
         radius,
-        page = 1,
-        productsPerPage = 8,
+        page,
+        productsPerPage = 4,  // Default to 10 products per page
         sortByAsc = false,
         sortByDesc = false,
     }) {
@@ -44,6 +44,7 @@ class SearchProductService {
                     Query.contains('keywords', inputTokens),
                 ]));
             }
+
             // Filter by categories
             if (selectedCategories.length > 0) {
                 queries.push(Query.or([
@@ -70,7 +71,7 @@ class SearchProductService {
                 queries.push(Query.lessThanEqual('long', lonMax));
             }
 
-            // Fetch products with optional price filtering
+            // Fetch products with optional price filtering and pagination
             const fetchProducts = async (collectionId, applyPriceFilter = false) => {
                 const categoryQueries = [...queries];
                 if (applyPriceFilter) {
@@ -85,11 +86,18 @@ class SearchProductService {
                     categoryQueries.push(Query.equal('isInStock', isInStock));
                 }
 
+
+
+                // Pagination applied here using limit and offset
+                const offset = (page - 1) * productsPerPage;
+                categoryQueries.push(Query.limit(productsPerPage));
+                categoryQueries.push(Query.offset(offset));
                 const response = await this.databases.listDocuments(
                     conf.appwriteProductsDatabaseId,
                     collectionId,
                     categoryQueries
                 );
+              
                 return response.documents || [];
             };
 
@@ -103,6 +111,7 @@ class SearchProductService {
             if (inputValue.length === 0) {
                 return { success: true, products: allProducts };
             }
+
             // Perform scoring using the provided score card
             const scoredProducts = allProducts.map(product => {
                 let score = 0;
@@ -150,10 +159,11 @@ class SearchProductService {
             if (sortByDesc) {
                 scoredProducts.sort((a, b) => b.price - a.price);
             }
+
             // Pagination logic
             const startIndex = (page - 1) * productsPerPage;
             const paginatedProducts = scoredProducts.slice(startIndex, startIndex + productsPerPage);
-        
+
             return {
                 success: true,
                 products: paginatedProducts
@@ -164,6 +174,7 @@ class SearchProductService {
             return { success: false, error: error.message };
         }
     }
+
 
 
     // Method to fetch a product by ID

@@ -12,6 +12,7 @@ import SearchBar from './searchBar';
 import ProductList from './productList.jsx'; // Ensure this is implemented
 import { RotatingLines } from 'react-loader-spinner';
 
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 import ProductSortBySection from './sortbySection.jsx'
 import ProductFilterBySection from './filterSection.jsx'
@@ -30,13 +31,13 @@ const SearchPage = () => {
     const query = searchParams.get('query') || '';
 
     const {
-        products = [],
-        loading = false,
+        products,
+        loading,
         currenPage = 1,
-        loadingMoreProducts = false,
-        hasMoreProducts = true,
-        sortByAsc = false,
-        sortByDesc = false
+        loadingMoreProducts,
+        hasMoreProducts,
+        sortByAsc,
+        sortByDesc
     } = useSelector((state) => state.searchproducts);
 
     useEffect(() => {
@@ -58,8 +59,8 @@ const SearchPage = () => {
         const params = {
             inputValue,
             page: currenPage + 1,
-            productsPerPage: 24,
-            pinCodes: [742136, 742137], // Ensure this is dynamic if needed
+            productsPerPage: 2,
+            pinCodes: [742136, 742137],
             selectedCategories: [],
             selectedBrands: [],
             sortByAsc,
@@ -79,20 +80,27 @@ const SearchPage = () => {
                     onNavigateHome={() => navigate('/')}
                 />
             </div>
+            <>
+                {loading ? (
+                    <div className="refurbished-page-loading-container">
+                        <RotatingLines width="60" height="60" color="#007bff" />
+                    </div>
+                ) : (
 
-            {loading ? (
-                <div className="refurbished-page-loading-container">
-                    <RotatingLines width="60" height="60" color="#007bff" />
-                </div>
-            ) : (
-                <ProductList
-                    products={products}
-                    onLoadMore={onLoadMore}
-                    hasMoreProducts={hasMoreProducts}
-                    loadingMoreProducts={loadingMoreProducts}
-                />
-            )}
-
+                    <InfiniteScroll
+                        dataLength={products.length}
+                        next={onLoadMore}
+                        hasMore={hasMoreProducts}
+                        loader={loadingMoreProducts && <h4>Loading more products...</h4>}
+                    >
+                        <ProductList
+                            products={products}
+                            hasMoreProducts={hasMoreProducts}
+                            loadingMoreProducts={loadingMoreProducts}
+                        />
+                    </InfiniteScroll>
+                )}
+            </>
             {showSortBy && (
                 <ProductSortBySection
                     handleSearch={executeSearch}

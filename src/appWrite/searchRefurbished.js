@@ -25,8 +25,8 @@ class SearchRefurbishedProductService {
         userLat = 23.818637,
         userLon = 86.437171,
         radius,
-        page = 1,
-        productsPerPage = 8,
+        page,
+        productsPerPage,
         sortByAsc = false,
         sortByDesc = false,
     }) {
@@ -37,7 +37,7 @@ class SearchRefurbishedProductService {
                 .map(token => token.toLowerCase());
 
             const queries = [];
-            
+
             if (inputValue.length > 0) {
                 queries.push(Query.or([
                     Query.contains('title', inputTokens),
@@ -86,7 +86,11 @@ class SearchRefurbishedProductService {
                 if (isInStock !== undefined) {
                     categoryQueries.push(Query.equal('isInStock', isInStock));
                 }
-
+                
+                // Pagination applied here using limit and offset
+                const offset = (page - 1) * productsPerPage;
+                categoryQueries.push(Query.limit(productsPerPage));
+                categoryQueries.push(Query.offset(offset));
                 const response = await this.databases.listDocuments(
                     conf.appwriteRefurbishProductDatabaseId,
                     collectionId,
