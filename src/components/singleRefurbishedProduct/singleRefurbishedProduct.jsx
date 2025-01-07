@@ -8,7 +8,6 @@ import LoadingSingleProduct from "../loading/loadingSingleProduct.jsx";
 
 const ProductDetails = () => {
     const navigate = useNavigate();
-    const dispatch = useDispatch();
 
     const { refurbishedProducts } = useSelector((state) => state.refurbishedproducts);
     const { refurbishedId } = useParams();
@@ -34,6 +33,7 @@ const ProductDetails = () => {
 
         fetchProductDetails();
     }, [refurbishedProducts, refurbishedId, navigate]);
+
 
     const handleSearchChange = (e) => {
         setSearchQuery(e.target.value);
@@ -104,12 +104,20 @@ const ProductDetails = () => {
 
                             <div className="refurbishedProductDetails-description">
                                 <div className="refurbishedProductDetails-description-text">DESCRIPTION</div>
-                                
-                                    {showDescription ? productDetail.description : truncateText(productDetail.description, 100)}
-                                    <span onClick={toggleDescription} id="refurbishedProductDetails-description-read-more-text">
-                                        {showDescription ? " ..read less" : "  read more.."}
-                                    </span>
-                                
+
+                                <div className="refurbishedProductDetails-lists-description">
+                                    {productDetail.brand && productDetail.brand.trim() !== '' && <>Brand {productDetail.brand} <br></br> </>}
+                                    {productDetail.category && productDetail.category.trim() !== '' && <>Category {productDetail.category} <br></br></>}
+                                    {productDetail.subject && productDetail.subject.trim() !== '' && <>Subject {productDetail.subject} <br></br></>}
+                                    {productDetail.language && productDetail.language.trim() !== '' && <>Language {productDetail.language} <br></br></>}
+                                    {productDetail.class && productDetail.class.trim() !== '' && <>Class {productDetail.class} <br></br></>}
+                                </div>
+
+                                {showDescription ? productDetail.description : truncateText(productDetail.description, 100)}
+                                <span onClick={toggleDescription} id="refurbishedProductDetails-description-read-more-text">
+                                    {showDescription ? " ..read less" : "  read more.."}
+                                </span>
+
                             </div>
                         </div>
                     ) : (
