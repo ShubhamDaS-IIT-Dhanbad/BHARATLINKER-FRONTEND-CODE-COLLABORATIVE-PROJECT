@@ -1,115 +1,122 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { FaArrowLeft } from "react-icons/fa";
-import { IoSearch } from "react-icons/io5";
-import { useNavigate } from 'react-router-dom';
-import { toggleCategory, toggleBrand } from '../../redux/features/searchProductFilterSectionSlice.jsx';
-import { resetProducts } from '../../redux/features/searchProductSlice.jsx';
+import { IoClose, IoSearch } from 'react-icons/io5';
 
-const FilterSection = () => {
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
+import {
+  toggleCategory,
+  toggleBrand
+} from '../../redux/features/searchPage/searchProductSlice.jsx';
+import { resetProducts } from '../../redux/features/searchPage/searchProductSlice.jsx';
 
-    const [searchCategory, setSearchCategory] = useState("");
-    const [searchBrand, setSearchBrand] = useState("");
+import './filterSection.css';
 
-    const selectedCategories = useSelector(state => state.searchproductfiltersection.selectedCategories);
-    const selectedBrands = useSelector(state => state.searchproductfiltersection.selectedBrands);
+const RefurbishedProductFilterSection = ({ showFilterBy, setShowFilterBy }) => {
+  const dispatch = useDispatch();
 
-    const categories = ['Electronics', 'Fashion', 'Home', 'Books','Human'];
-    const brands = ['Apple', 'Samsung', 'Nike', 'Adidas'];
+  const [searchTerms, setSearchTerms] = useState({
+    category: '',
+    brand: ''
+  });
 
-    const filteredCategories = categories.filter(category =>
-        category.toLowerCase().includes(searchCategory.toLowerCase())
-    );
-    const filteredBrands = brands.filter(brand =>
-        brand.toLowerCase().includes(searchBrand.toLowerCase())
-    );
+  const { selectedBrands, selectedCategories } = useSelector(
+    (state) => state.searchproducts
+  );
+  const allFilters = {
+    category: ['Electronics', 'Fashion', 'Home', 'book', 'Module'],
+    brand: ['Samsung', 'Apple', 'Sony', 'Dell', 'HP'],
+  };
 
-    const handleCategoryClick = (category) => {
-        dispatch(toggleCategory(category.toLowerCase())); // Ensure consistency with stored values
-        dispatch(resetProducts());
-    };
+  const filterActions = {
+    category: toggleCategory,
+    brand: toggleBrand,
+  };
 
-    const handleBrandClick = (brand) => {
-        dispatch(toggleBrand(brand.toLowerCase())); // Ensure consistency with stored values
-        dispatch(resetProducts());
-    };
+  const handleFilterClick = (filterType, value) => {
+    console.log(filterType,value)
+    dispatch(filterActions[filterType](value.toLowerCase()));
+    dispatch(resetProducts());
+  };
+
+  const filterItems = useCallback(
+    (filterType) => {
+      return allFilters[filterType].filter((item) =>
+        item.toLowerCase().includes(searchTerms[filterType].toLowerCase())
+      );
+    },
+    [searchTerms]
+  );
+
+  const renderFilter = (filterType, title) => {
+    const filteredItems = filterItems(filterType);
 
     return (
-        <div className='product-filter-section'>
-            {/* Header Section */}
-            <div id="filter-section-product-page">
-                <FaArrowLeft
-                    size={25}
-                    onClick={() => navigate('/search')}
-                    style={{ position: "fixed", left: "10px", cursor: "pointer" }}
-                />
-                <span>Filter</span>
-            </div>
-
-            {/* Filter Options */}
-            <div id="filter-options-product-page">
-                {/* Category Filter */}
-                <div id="search-page-filter-category-options">
-                    <div className='searchShopPage-footer-filterby-div'>
-                        <IoSearch size={20} />
-                        <input
-                            type="text"
-                            value={searchCategory}
-                            onChange={(e) => setSearchCategory(e.target.value)}
-                            placeholder="Search categories..."
-                            className='searchShopPage-footer-filterby-input'
-                        />
-                    </div>
-                    <div id='shop-page-filter-by-options'>
-                        {filteredCategories.length > 0 ? (
-                            filteredCategories.map(category => (
-                                <p
-                                    key={category}
-                                    className={`filter-option ${selectedCategories.includes(category.toLowerCase()) ? 'shop-selected-category' : 'shop-unselected-category'}`}
-                                    onClick={() => handleCategoryClick(category)}
-                                >
-                                    {category}
-                                </p>
-                            ))
-                        ) : (
-                            <li className="no-results">No categories found</li>
-                        )}
-                    </div>
-                </div>
-
-                {/* Brand Filter */}
-                <div id="search-page-filter-brand-options">
-                    <div className='searchShopPage-footer-filterby-div'>
-                        <IoSearch size={20} />
-                        <input
-                            type="text"
-                            value={searchBrand}
-                            onChange={(e) => setSearchBrand(e.target.value)}
-                            placeholder="Search brands..."
-                            className='searchShopPage-footer-filterby-input'
-                        />
-                    </div>
-                    <div id='shop-page-filter-by-options'>
-                        {filteredBrands.length > 0 ? (
-                            filteredBrands.map(brand => (
-                                <p
-                                    key={brand}
-                                    className={`filter-option ${selectedBrands.includes(brand.toLowerCase()) ? 'shop-selected-category' : 'shop-unselected-category'}`}
-                                    onClick={() => handleBrandClick(brand)}
-                                >
-                                    {brand}
-                                </p>
-                            ))
-                        ) : (
-                            <li className="no-results">No brands found</li>
-                        )}
-                    </div>
-                </div>
-            </div>
+      <div className="product-page-filter-options" key={filterType}>
+        <div className="filter-header">
+          <IoSearch size={20} />
+          <input
+            type="text"
+            value={searchTerms[filterType]}
+            onChange={(e) =>
+              setSearchTerms((prev) => ({
+                ...prev,
+                [filterType]: e.target.value,
+              }))
+            }
+            placeholder={`Search ${title}`}
+            className="filter-input"
+          />
         </div>
+        <div className="filter-items">
+          {filteredItems.length > 0 ? (
+            filteredItems.map((item, index) => {
+              const isSelected =
+                (filterType === 'category'
+                  ? selectedCategories
+                  : selectedBrands
+                )?.includes(item.toLowerCase()) || false;
+
+              return (
+                <span
+                  key={`${filterType}-${item}-${index}`}
+                  className={`filter-option ${isSelected
+                    ? 'product-page-selected-category'
+                    : 'product-page-unselected-category'
+                    }`}
+                  onClick={() => handleFilterClick(filterType, item)}
+                >
+                  {item}
+                </span>
+              );
+            })
+          ) : (
+            <p className="no-results">No {title.toLowerCase()} found</p>
+          )}
+        </div>
+      </div>
     );
+  };
+
+  return (
+    <div className="product-page-filter-section">
+      {showFilterBy && (
+        <>
+          <div
+            className="product-page-close-filter-section"
+            onClick={() => setShowFilterBy(false)}
+            aria-label="Close filter options"
+          >
+            <IoClose size={25} />
+          </div>
+          <div style={{ color: 'white' }}>FILTER SECTION</div>
+
+          <div className="product-page-filter-options-container">
+            {renderFilter('category', 'Category')}
+            {renderFilter('brand', 'Brand')}
+          </div>
+        </>
+      )}
+    </div>
+  );
 };
 
-export default FilterSection;
+export default RefurbishedProductFilterSection;

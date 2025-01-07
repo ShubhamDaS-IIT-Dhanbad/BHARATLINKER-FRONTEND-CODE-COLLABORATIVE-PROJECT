@@ -8,7 +8,7 @@ import { useUserLocation } from '../../hooks/userLocationHook.jsx';
 import Cookies from 'js-cookie';
 import './homeNavBar.css';
 import { useDispatch } from 'react-redux';
-import { resetProducts } from '../../redux/features/searchProductSlice.jsx';
+import { resetProducts } from '../../redux/features/searchPage/searchProductSlice.jsx';
 
 import LocationTab from '../locationTab/locationTab.jsx';
 

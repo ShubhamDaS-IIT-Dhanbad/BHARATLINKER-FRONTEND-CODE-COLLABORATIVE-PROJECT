@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { useSearchParams, useNavigate } from 'react-router-dom';
-import { resetProducts, fetchProducts } from '../redux/features/searchProductSlice.jsx';
+import { useSearchParams} from 'react-router-dom';
+import { resetProducts, fetchProducts } from '../redux/features/searchPage/searchProductSlice';
 import { useState } from 'react';
 
 export const useExecuteSearch = () => {
@@ -11,9 +11,7 @@ export const useExecuteSearch = () => {
     const query = searchParams.get('query') || '';
     const [inputValue, setInputValue] = useState(query);
     
-    const selectedCategories = useSelector(state => state.searchproductfiltersection.selectedCategories);
-    const selectedBrands = useSelector(state => state.searchproductfiltersection.selectedBrands);
-    const { sortByAsc, sortByDesc } = useSelector((state) => state.searchproductsortbysection);
+    const {selectedBrands,selectedCategories, sortByAsc, sortByDesc } = useSelector((state) => state.searchproducts);
 
     const executeSearch = () => {
         const params = {

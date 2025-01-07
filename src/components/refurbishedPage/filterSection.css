@@ -35,8 +35,6 @@
     overflow: hidden; /* Hide any overflow content */
     gap: 10px;
     padding-bottom: 10vh;padding-top: 10px;
-}
-#refurbished-page-filter-by-header{
     overflow-y:scroll ;
 }
 

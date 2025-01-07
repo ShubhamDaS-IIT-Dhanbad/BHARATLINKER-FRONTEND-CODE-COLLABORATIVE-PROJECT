@@ -5,7 +5,7 @@ import { FaArrowLeft } from 'react-icons/fa'; // Back icon
 import { useNavigate } from 'react-router-dom'; // Navigate hook for routing
 import LocationTab from '../locationTab/locationTab';
 import { useExecuteSearch } from '../../hooks/searchProductHook.jsx'; // Custom hook for search
-import { resetProducts, fetchProducts } from '../../redux/features/searchProductSlice.jsx';
+import { resetProducts, fetchProducts } from '../../redux/features/searchPage/searchProductSlice.jsx';
 import './singleProductSearchBar.css';
 import { useSelector, useDispatch } from 'react-redux';
 

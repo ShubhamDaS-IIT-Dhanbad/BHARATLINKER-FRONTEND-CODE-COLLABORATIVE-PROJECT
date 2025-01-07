@@ -37,7 +37,7 @@ class SearchRefurbishedProductService {
                 .map(token => token.toLowerCase());
 
             const queries = [];
-console.log(selectedCategories)
+            
             if (inputValue.length > 0) {
                 queries.push(Query.or([
                     Query.contains('title', inputTokens),

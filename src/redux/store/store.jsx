@@ -3,9 +3,7 @@ import {configureStore} from '@reduxjs/toolkit';
 import pincodestate from '../features/pincodeUpdatedSlice.jsx'
 
 // search page
-import searchproducts from '../features/searchProductSlice.jsx'
-import searchproductfiltersection from '../features/searchProductFilterSectionSlice.jsx'
-import searchproductsortbysection from '../features/searchProductSortbySectionSlice.jsx'
+import searchproducts from '../features/searchPage/searchProductSlice.jsx'
 
 //search shops
 import searchshops from '../features/searchShopSlice.jsx'
@@ -27,8 +25,6 @@ const store=configureStore({
 
         // search page
         searchproducts:searchproducts,
-        searchproductfiltersection:searchproductfiltersection,
-        searchproductsortbysection:searchproductsortbysection,
 
         //search shops
         searchshops:searchshops,
