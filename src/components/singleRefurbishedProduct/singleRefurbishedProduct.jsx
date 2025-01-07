@@ -6,7 +6,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import SingleRefurbishedProductSearchBar from './singleRefurbishedProductSearchBar.jsx';
 import LoadingSingleProduct from "../loading/loadingSingleProduct.jsx";
 
-
 const ProductDetails = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -56,6 +55,12 @@ const ProductDetails = () => {
         setSelectedImage(productDetail.images[index]);
     };
 
+    const toggleDescription = () => setShowDescription(!showDescription);
+
+    const truncateText = (text, maxLength) => {
+        return text.length > maxLength ? text.substring(0, maxLength) : text;
+    };
+
     return (
         <Fragment>
             <SingleRefurbishedProductSearchBar />
@@ -69,20 +74,6 @@ const ProductDetails = () => {
                             <div id="refurbishedProductDetails-img">
                                 <img src={selectedImage} alt="Selected Product" id="refurbishedProductDetails-img-selected" />
                             </div>
-
-                            {/* <div id="shop-details-thumbnails">
-                                    {productDetail.images?.map((image, index) => (
-                                        <div
-                                            id="single-refurbished-product-image-dot"
-                                            key={index}
-                                            onClick={() => handleImageClick(index)}
-                                            className={
-                                                selectedImage === image ? "image-select" : "image-unselect"
-                                            }
-                                        >
-                                        </div>
-                                    ))}
-                                </div> */}
                             {/* Image dots */}
                             <div id="shop-details-thumbnails">
                                 {productDetail.images.map((image, index) => (
@@ -90,23 +81,35 @@ const ProductDetails = () => {
                                         key={index}
                                         className={`single-refurbished-product-image-dot ${selectedImage === image ? 'selected' : 'unselected'}`}
                                         onClick={() => handleImageClick(index)}
-                                    >
-                                    </span>
+                                    ></span>
                                 ))}
                             </div>
                             <div id="refurbishedProductDetails-info">
                                 <span id="refurbishedProductDetails-trending-deals">Trending deal</span>
                                 <p id="refurbishedProductDetails-pid">Product # {productDetail.$id}</p>
-                                <div id="refurbishedProductDetails-title">{productDetail.title}</div>
+                                <div id="refurbishedProductDetails-title">
+                                    {productDetail.title}
+                                </div>
                             </div>
 
-
-
                             <div id="refurbishedProductDetails-price-button">
-                                <p>₹{productDetail.price}</p>
+                                <div id="refurbishedProductDetails-price-button-inner">
+                                    <p id="refurbishedProductDetails-price">₹{productDetail.price}</p>
+                                    <p id="refurbishedProductDetails-discounted-price">₹{productDetail.discountedPrice}</p>
+                                </div>
                                 <div id='refurbishedProductDetails-on-sale'>
                                     ON SALE
                                 </div>
+                            </div>
+
+                            <div className="refurbishedProductDetails-description">
+                                <div className="refurbishedProductDetails-description-text">DESCRIPTION</div>
+                                
+                                    {showDescription ? productDetail.description : truncateText(productDetail.description, 100)}
+                                    <span onClick={toggleDescription} id="refurbishedProductDetails-description-read-more-text">
+                                        {showDescription ? " ..read less" : "  read more.."}
+                                    </span>
+                                
                             </div>
                         </div>
                     ) : (

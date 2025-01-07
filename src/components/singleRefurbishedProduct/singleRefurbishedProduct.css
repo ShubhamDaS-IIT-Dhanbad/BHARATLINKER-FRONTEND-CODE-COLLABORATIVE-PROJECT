@@ -60,18 +60,13 @@
 
 #refurbishedProductDetails-price-button {
     display: flex;padding: 0px 10px 0px 10px;
-    justify-content: space-between;
+    justify-content: space-between;margin-top: 5px;
     font-weight: 900;align-items: center;
 }
-
-#refurbishedProductDetails-price-button p {
-    height: 40px;
-    font-size: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+#refurbishedProductDetails-price-button-inner{
+    display: flex;flex-direction: column;
+   justify-content: center;align-items: flex-start;
 }
-
 #refurbishedProductDetails-price-instock {
     width: 110px;
     height: 40px;
@@ -88,16 +83,19 @@
 
 #refurbishedProductDetail-about {
     padding: 10px;
-    display: flex;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    display: flex;
     font-size: 12px;
     align-items: center;
     gap: 5px;
 }
 
-#refurbishedProductDetails-description {
+.refurbishedProductDetails-description {
     padding: 10px;
-    font-size: 14px;
-    color: rgb(2, 40, 136);
+    font-size: 15px; white-space: pre-wrap;
+    word-wrap: break-word;font-weight: 200;margin-bottom: 10vh;
+    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-size: 15px;
+    
 }
 
 #refurbishedProductDetails-bottom-text {
@@ -130,8 +128,9 @@
 
 
 #refurbishedProductDetails-on-sale{
-    border: 2px solid greenyellow;
-    padding: 10px;border-radius: 27px;
+    border: 1px solid rgb(0, 0, 0);
+    background-color: rgb(23, 248, 31);color: rgb(255, 255, 255);
+    padding: 10px;border-radius: 27px;font-size: 17px;
 }
 
 
@@ -148,4 +147,35 @@
     border: 4px solid rgba(0, 0, 0, 0.539);
     width: 5px; height: 5px;
     border-radius: 50%;
+}
+
+
+
+
+#refurbishedProductDetails-price{
+    text-decoration: line-through;
+    color: #888; font-weight: 200;font-size: 19px;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+
+
+#refurbishedProductDetails-discounted-price{
+    height: 40px;
+    font-size: 20px;
+    display: flex;margin-top: -10px;
+    justify-content: center;
+    align-items: center;color: red;
+}
+
+
+
+
+
+#refurbishedProductDetails-description-read-more-text{
+    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-size: 15px;margin-top: 5px;
+}
+.refurbishedProductDetails-description-text{
+     font-size: 17px;margin-top: 5px;font-weight: 900;
 }
