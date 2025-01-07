@@ -190,8 +190,7 @@ class UserRefurbishedProduct {
 
 
     async getUserRefurbishedProducts({
-        inputValue = '', // Input string
-        pinCodes = [],
+        inputValue = '',
         selectedCategories,
         selectedBrands,
         minPrice,
@@ -213,11 +212,6 @@ class UserRefurbishedProduct {
     
             const queries = [];
             queries.push(Query.equal('phn', phn));
-    
-            if (pinCodes.length > 0) {
-                queries.push(Query.equal('pinCodes', pinCodes));
-            }
-    
             if (selectedCategories.length > 0) {
                 queries.push(Query.or([
                     Query.contains('productType', selectedCategories),
@@ -227,7 +221,8 @@ class UserRefurbishedProduct {
             if (inputValue.length > 0) {
                 queries.push(Query.or([
                     Query.contains('title', inputTokens),
-                    Query.contains('description', inputTokens)
+                    Query.contains('description', inputTokens),
+                    Query.contains('keywords', inputTokens),
                 ]));
             }
     

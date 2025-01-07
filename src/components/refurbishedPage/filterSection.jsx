@@ -2,14 +2,10 @@ import React, { useState, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { IoClose } from 'react-icons/io5';
 import { IoSearch } from 'react-icons/io5';
-import { useNavigate } from 'react-router-dom';
+
 import {
   toggleRefurbishedCategory,
-  toggleRefurbishedBrand,
-  toggleRefurbishedClass,
-  toggleRefurbishedExam,
-  toggleRefurbishedLanguage,
-  toggleRefurbishedBoard,
+  toggleRefurbishedBrand
 } from '../../redux/features/refurbishedPage/refurbishedProductFilterSectionSlice.jsx';
 import { resetRefurbishedProducts } from '../../redux/features/refurbishedPage/refurbishedProductsSlice.jsx';
 
@@ -20,49 +16,29 @@ const RefurbishedProductFilterSection = ({showFilterBy, setShowFilterBy }) => {
 
   const [filters, setFilters] = useState({
     category: false,
-    brand: false,
-    class: false,
-    exam: false,
-    language: false,
-    board: false,
+    brand: false
   });
 
   const [searchTerms, setSearchTerms] = useState({
     category: '',
-    brand: '',
-    class: '',
-    exam: '',
-    language: '',
-    board: '',
+    brand: ''
   });
 
 
 
   const selectedFilters = useSelector((state) => ({
     categorys: state.refurbishedproductfiltersection.selectedCategories,
-    brands: state.refurbishedproductfiltersection.selectedBrands,
-    classs: state.refurbishedproductfiltersection.selectedClasses,
-    exams: state.refurbishedproductfiltersection.selectedExams,
-    languages: state.refurbishedproductfiltersection.selectedLanguages,
-    boards: state.refurbishedproductfiltersection.selectedBoards,
+    brands: state.refurbishedproductfiltersection.selectedBrands
   }));
 
   const allFilters = {
     category: ['Electronics', 'Fashion', 'Home', 'Book', 'Module'],
     brand: ['Samsung', 'Apple', 'Sony', 'Dell', 'HP'],
-    class: ['Class 1', 'Class 2', 'Class 3', 'Class 4', 'Class 5'],
-    exam: ['CBSE', 'ICSE', 'NEET', 'JEE', 'SAT'],
-    language: ['English', 'Hindi', 'French', 'German', 'Spanish'],
-    board: ['CBSE', 'ICSE', 'State Board', 'IB', 'Cambridge'],
   };
 
   const filterActions = {
     category: toggleRefurbishedCategory,
-    brand: toggleRefurbishedBrand,
-    class: toggleRefurbishedClass,
-    exam: toggleRefurbishedExam,
-    language: toggleRefurbishedLanguage,
-    board: toggleRefurbishedBoard,
+    brand: toggleRefurbishedBrand
   };
 
   const handleFilterClick = (filter, value) => {
@@ -139,10 +115,6 @@ const RefurbishedProductFilterSection = ({showFilterBy, setShowFilterBy }) => {
         <div id="refurbished-page-filter-by-header">
           {renderFilter('category', 'Category')}
           {renderFilter('brand', 'Brand')}
-          {renderFilter('class', 'Class')}
-          {renderFilter('exam', 'Exam')}
-          {renderFilter('language', 'Language')}
-          {renderFilter('board', 'Board')}
         </div>
       )}
     </div>

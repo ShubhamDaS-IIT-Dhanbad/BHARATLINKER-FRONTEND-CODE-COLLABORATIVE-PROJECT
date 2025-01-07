@@ -22,9 +22,9 @@ class SearchRefurbishedProductService {
         minPrice,
         maxPrice,
         isInStock,
-        userLat=23.818637,
-        userLon=86.437171,
-        radius, 
+        userLat = 23.818637,
+        userLon = 86.437171,
+        radius,
         page = 1,
         productsPerPage = 8,
         sortByAsc = false,
@@ -37,17 +37,20 @@ class SearchRefurbishedProductService {
                 .map(token => token.toLowerCase());
 
             const queries = [];
-
-            // Filter by pin codes
-            if (pinCodes.length > 0) {
-                queries.push(Query.equal('pinCodes', pinCodes));
+console.log(selectedCategories)
+            if (inputValue.length > 0) {
+                queries.push(Query.or([
+                    Query.contains('title', inputTokens),
+                    Query.contains('description', inputTokens),
+                    Query.contains('keywords', inputTokens),
+                ]));
             }
-
             // Filter by categories
             if (selectedCategories.length > 0) {
                 queries.push(Query.or([
                     Query.contains('productType', selectedCategories),
                     Query.contains('keywords', selectedCategories),
+                    Query.contains('category', selectedCategories),
                 ]));
             }
 
@@ -105,37 +108,40 @@ class SearchRefurbishedProductService {
             // Perform scoring using the provided score card
             const scoredProducts = allProducts.map(product => {
                 let score = 0;
+                let distance = null;
 
-                // Haversine formula for distance
-                const toRadians = (deg) => (deg * Math.PI) / 180;
-                const dLat = toRadians(product.latitude - userLat);
-                const dLon = toRadians(product.longitude - userLon);
-                const lat1 = toRadians(userLat);
-                const lat2 = toRadians(product.latitude);
+                // Always calculate the score based on input tokens
+                inputTokens.forEach(token => {
+                    if (product.title.toLowerCase().includes(token)) score += 3;
+                    if (product.description.toLowerCase().includes(token)) score += 2;
+                    if (product.title.toLowerCase().startsWith(token)) score += 5;
+                    if (product.description.toLowerCase().startsWith(token)) score += 4;
+                });
 
-                const a = Math.sin(dLat / 2) ** 2 +
-                    Math.sin(dLon / 2) ** 2 * Math.cos(lat1) * Math.cos(lat2);
-                const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-                const R = 6371; // Radius of Earth in km
-                const distance = R * c; // Distance in km
+                // Only calculate the distance if the radius, userLat, and userLon are provided
+                if (radius && userLat && userLon) {
+                    // Haversine formula for distance
+                    const toRadians = (deg) => (deg * Math.PI) / 180;
+                    const dLat = toRadians(product.latitude - userLat);
+                    const dLon = toRadians(product.longitude - userLon);
+                    const lat1 = toRadians(userLat);
+                    const lat2 = toRadians(product.latitude);
 
-                // If the product is within the radius, apply scoring
-                if (distance <= radius) {
-                    // Input token-based scoring
-                    inputTokens.forEach(token => {
-                        if (product.title.toLowerCase().includes(token)) score += 3;
-                        if (product.description.toLowerCase().includes(token)) score += 2;
-                        if (product.title.toLowerCase().startsWith(token)) score += 5;
-                        if (product.description.toLowerCase().startsWith(token)) score += 4;
-                    });
+                    const a = Math.sin(dLat / 2) ** 2 +
+                        Math.sin(dLon / 2) ** 2 * Math.cos(lat1) * Math.cos(lat2);
+                    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+                    const R = 6371;
+                    distance = R * c;
 
-                    // Attach both score and distance to the product
-                    return { ...product, score, distance };
+                    // Only include products within the radius
+                    if (distance > radius) {
+                        return null;
+                    }
                 }
 
-                // Exclude products outside the radius
-                return null;
-            }).filter(product => product !== null); // Remove null values (products outside the radius)
+                // Return the product with score and distance (if applicable)
+                return { ...product, score, distance };
+            }).filter(product => product !== null);
 
             // After calculating scores and distance, sort by score
             scoredProducts.sort((a, b) => b.score - a.score);

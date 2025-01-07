@@ -17,82 +17,154 @@ class SearchProductService {
 
     // Method to fetch products with filters including price range (minPrice, maxPrice)
     async getProducts({
-        inputValue,
-        pinCodes = [],
-        selectedCategories,
-        selectedBrands,
+        inputValue = '',
+        selectedCategories = [],
         minPrice,
         maxPrice,
         isInStock,
+        userLat = 23.818637,
+        userLon = 86.437171,
+        radius,
         page = 1,
-        productsPerPage = 10,
-        sortByAsc,
-        sortByDesc
+        productsPerPage = 8,
+        sortByAsc = false,
+        sortByDesc = false,
     }) {
         try {
-            const queries = [];
+            const inputTokens = inputValue
+                .split(' ')
+                .filter(token => token.trim() !== '')
+                .map(token => token.toLowerCase());
 
-            // Add filters based on input
-            if (pinCodes.length > 0) {
-                queries.push(Query.equal('pinCodes', pinCodes));
-            }
-            if (inputValue) {
+            const queries = [];
+            if (inputValue.length > 0) {
                 queries.push(Query.or([
-                    Query.search('title', inputValue),
-                    Query.search('description', inputValue)
+                    Query.contains('title', inputTokens),
+                    Query.contains('description', inputTokens),
+                    Query.contains('keywords', inputTokens),
+                ]));
+            }
+            // Filter by categories
+            if (selectedCategories.length > 0) {
+                queries.push(Query.or([
+                    Query.contains('productType', selectedCategories),
+                    Query.contains('keywords', selectedCategories),
                 ]));
             }
 
-            // Check if any category in the selectedCategories array exists in the category field
-            if (selectedCategories && selectedCategories.length > 0) {
-                queries.push(Query.contains('category', selectedCategories));
+            // Geolocation filtering using bounding box
+            if (userLat !== undefined && userLon !== undefined && radius !== undefined) {
+                const boundingBox = getBoundsOfDistance(
+                    { latitude: userLat, longitude: userLon },
+                    radius * 1000 // Convert radius from km to meters
+                );
+
+                const latMin = boundingBox[0].latitude;
+                const latMax = boundingBox[1].latitude;
+                const lonMin = boundingBox[0].longitude;
+                const lonMax = boundingBox[1].longitude;
+
+                queries.push(Query.greaterThanEqual('lat', latMin));
+                queries.push(Query.lessThanEqual('lat', latMax));
+                queries.push(Query.greaterThanEqual('long', lonMin));
+                queries.push(Query.lessThanEqual('long', lonMax));
             }
 
-            // Check if any brand in the selectedBrands array exists in the brand field
-            if (selectedBrands && selectedBrands.length > 0) {
-                queries.push(Query.contains('brand', selectedBrands));
+            // Fetch products with optional price filtering
+            const fetchProducts = async (collectionId, applyPriceFilter = false) => {
+                const categoryQueries = [...queries];
+                if (applyPriceFilter) {
+                    if (minPrice !== undefined) {
+                        categoryQueries.push(Query.greaterThanEqual('price', minPrice));
+                    }
+                    if (maxPrice !== undefined) {
+                        categoryQueries.push(Query.lessThanEqual('price', maxPrice));
+                    }
+                }
+                if (isInStock !== undefined) {
+                    categoryQueries.push(Query.equal('isInStock', isInStock));
+                }
+
+                const response = await this.databases.listDocuments(
+                    conf.appwriteProductsDatabaseId,
+                    collectionId,
+                    categoryQueries
+                );
+                return response.documents || [];
+            };
+
+            const allProducts = await fetchProducts(conf.appwriteProductsCollectionId);
+
+            if (!Array.isArray(allProducts)) {
+                throw new TypeError("Expected 'allProducts' to be an array.");
             }
 
-            // Price range filtering
-            if (minPrice !== undefined) {
-                queries.push(Query.greaterThanEqual('price', minPrice));
+            // If no input value, return the products directly
+            if (inputValue.length === 0) {
+                return { success: true, products: allProducts };
             }
-            if (maxPrice !== undefined) {
-                queries.push(Query.lessThanEqual('price', maxPrice));
-            }
+            // Perform scoring using the provided score card
+            const scoredProducts = allProducts.map(product => {
+                let score = 0;
+                let distance = null;
 
-            // In-stock filtering
-            if (isInStock !== undefined) {
-                queries.push(Query.equal('isInStock', isInStock));
-            }
+                // Always calculate the score based on input tokens
+                inputTokens.forEach(token => {
+                    if (product.title.toLowerCase().includes(token)) score += 3;
+                    if (product.description.toLowerCase().includes(token)) score += 2;
+                    if (product.title.toLowerCase().startsWith(token)) score += 5;
+                    if (product.description.toLowerCase().startsWith(token)) score += 4;
+                });
 
-            // Sorting
+                // Only calculate the distance if the radius, userLat, and userLon are provided
+                if (radius && userLat && userLon) {
+                    // Haversine formula for distance
+                    const toRadians = (deg) => (deg * Math.PI) / 180;
+                    const dLat = toRadians(product.latitude - userLat);
+                    const dLon = toRadians(product.longitude - userLon);
+                    const lat1 = toRadians(userLat);
+                    const lat2 = toRadians(product.latitude);
+
+                    const a = Math.sin(dLat / 2) ** 2 +
+                        Math.sin(dLon / 2) ** 2 * Math.cos(lat1) * Math.cos(lat2);
+                    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+                    const R = 6371;
+                    distance = R * c;
+
+                    // Only include products within the radius
+                    if (distance > radius) {
+                        return null;
+                    }
+                }
+
+                // Return the product with score and distance (if applicable)
+                return { ...product, score, distance };
+            }).filter(product => product !== null);
+
+            // After calculating scores and distance, sort by score
+            scoredProducts.sort((a, b) => b.score - a.score);
+            // Additional price sorting (optional)
             if (sortByAsc) {
-                queries.push(Query.orderAsc('price')); // Sorting by price in ascending order
+                scoredProducts.sort((a, b) => a.price - b.price);
             }
             if (sortByDesc) {
-                queries.push(Query.orderDesc('price')); // Sorting by price in descending order
+                scoredProducts.sort((a, b) => b.price - a.price);
             }
+            // Pagination logic
+            const startIndex = (page - 1) * productsPerPage;
+            const paginatedProducts = scoredProducts.slice(startIndex, startIndex + productsPerPage);
+        
+            return {
+                success: true,
+                products: paginatedProducts
+            };
 
-            // Pagination logic (ensure offset is greater than or equal to 0)
-            const offset = (page - 1) * productsPerPage;
-            if (offset >= 0) {
-                queries.push(Query.limit(productsPerPage));
-                queries.push(Query.offset(offset));
-            }
-
-            // Fetch products with applied queries
-            const products = await this.databases.listDocuments(
-                conf.appwriteProductsDatabaseId,
-                conf.appwriteProductsCollectionId,
-                queries
-            );
-            return products;
         } catch (error) {
-            console.error('Appwrite service :: getProducts', error);
-            return false;
+            console.error('Appwrite service :: getRefurbishedProducts', error);
+            return { success: false, error: error.message };
         }
     }
+
 
     // Method to fetch a product by ID
     async getProductById(productId) {

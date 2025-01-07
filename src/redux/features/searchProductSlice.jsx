@@ -7,20 +7,20 @@ export const fetchProducts = createAsyncThunk(
     async ({ inputValue, selectedCategories, selectedBrands, pinCodes, page, productsPerPage, sortByAsc, sortByDesc }, { rejectWithValue }) => {
         try {
             const response = await searchProductService.getProducts({
-                inputValue, pinCodes, page, productsPerPage, sortByDesc, sortByAsc, selectedBrands, selectedCategories
+                inputValue,page, productsPerPage, sortByDesc, sortByAsc, selectedBrands, selectedCategories
             });
 
-            if (response?.documents?.length === 0) {
+            if (response?.products?.length === 0) {
                 return {
                     products: [],
                     totalPages: 0,
                 };
             }
 
-            if (response.documents && response.total) {
+            if (response.products && response.success) {
                 return {
-                    products: response.documents,
-                    totalPages: response.total || 0,
+                    products: response.products,
+                    totalPages: response.products.length || 0,
                 };
             } else {
                 return rejectWithValue('Invalid data structure in response');
@@ -37,14 +37,14 @@ export const loadMoreProducts = createAsyncThunk(
     async ({ inputValue, selectedCategories, selectedBrands, pinCodes, page, productsPerPage, sortByAsc, sortByDesc }, { rejectWithValue }) => {
         try {
             const response = await searchProductService.getProducts({
-                inputValue, pinCodes, page, productsPerPage, selectedCategories,
+                inputValue,page, productsPerPage, selectedCategories,
                 selectedBrands, sortByAsc, sortByDesc
             });
 
-            if (response.documents && response.total) {
+            if (response.products && response.products.length) {
                 return {
-                    products: response.documents,
-                    totalPages: response.total || 0,
+                    products: response.products,
+                    totalPages: response.products.length || 0,
                 };
             } else {
                 return rejectWithValue('Invalid data structure in response');
