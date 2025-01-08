@@ -6,9 +6,12 @@ import { MdOutlineKeyboardArrowRight } from "react-icons/md";
 import { HiOutlineArrowRightStartOnRectangle } from "react-icons/hi2";
 import { useDispatch, useSelector } from 'react-redux';
 import SingleProductSearchBar from './singleProductSearchBar.jsx';
-import LoadingSingleProduct from "../loading/loadingSingleProduct.jsx";
+
+import { RotatingLines } from 'react-loader-spinner';
+
 import { fetchShopById } from '../../redux/features/singleShopSlice.jsx';
-import { IoClose, IoSearch } from 'react-icons/io5';
+import { IoClose} from 'react-icons/io5';
+import { BsQuestionCircle } from "react-icons/bs";
 
 const fallbackImage = 'http://res.cloudinary.com/dthelgixr/image/upload/v1727870088/hd7kcjuz8jfjajnzmqkp.webp';
 
@@ -34,14 +37,14 @@ const ProductDetails = () => {
             if (product) {
                 setProductDetails(product);
                 setSelectedImage(product?.images[0] || fallbackImage);
-                fetchShopDetails(product?.shop); // Fetch shop details if the shopId is available
+                fetchShopDetails(product?.shop);
             } else {
                 try {
                     const response = await searchProductService.getProductById(productId);
                     if (response) {
                         setProductDetails(response);
                         setSelectedImage(response?.images[0] || fallbackImage);
-                        fetchShopDetails(response?.shop); // Fetch shop details based on product's shopId
+                        fetchShopDetails(response?.shop);
                     }
                 } catch (error) {
                     console.error("Error fetching product details: ", error);
@@ -71,7 +74,7 @@ const ProductDetails = () => {
         };
 
         fetchProductDetails();
-    }, [productId, products, shops, singleShops, dispatch, navigate]);  // Added dependencies
+    }, []);
 
     const toggleDescription = () => {
         setShowDescription(!showDescription);
@@ -94,7 +97,9 @@ const ProductDetails = () => {
             </div>
 
             {loading ? (
-                <LoadingSingleProduct />
+                 <div className="refurbished-page-loading-container">
+                                    <RotatingLines width="60" height="60" color="#007bff" />
+                                </div>
             ) : (
                 <Fragment>
                     {productDetail && (
@@ -117,7 +122,10 @@ const ProductDetails = () => {
                                 </div>
 
                                 <div id="product-details-info">
-                                    <span id="product-details-trending-deals">Trending deal</span>
+                                    <div style={{ display: "flex", alignItems: "center" }}>
+                                        <span id="product-details-trending-deals">Trending deal </span>
+                                        <BsQuestionCircle className="productDetails-description-icon" onClick={toggleDescription} size={20} />
+                                    </div>
                                     <p id="product-details-pid">Product # {productDetail?.$id}</p>
                                     <div id="product-details-title">{productDetail?.title}</div>
                                 </div>
@@ -143,16 +151,14 @@ const ProductDetails = () => {
                                         <p id="refurbishedProductDetails-price">₹{productDetail?.price}</p>
                                         <p id="refurbishedProductDetails-discounted-price">₹{productDetail?.discountedPrice}</p>
                                     </div>
+
                                     <div id={`product-details-price-${productDetail?.isInStock ? 'instock' : 'outofstock'}`}>
                                         {productDetail?.isInStock ? 'IN STOCK' : 'OUT OF STOCK'}
                                     </div>
                                 </div>
 
-
-                                <div className="productDetails-description-text" onClick={toggleDescription}>DESCRIPTION</div>
-                                {showDescription &&
+                                {showDescription && (
                                     <div className="productDetails-description-div-pop-up">
-
                                         <div
                                             className="productDetails-description-div-pop-up-close"
                                             onClick={toggleDescription}
@@ -162,11 +168,17 @@ const ProductDetails = () => {
                                         </div>
                                         <div className="productDetails-filter-section-title">PRODUCT DETAILS</div>
 
-                                        <div className="productDetails-lists-description">
-                                            {productDetail?.brand && productDetail?.brand.trim() !== '' && <>Brand {productDetail?.brand} <br /> </>}
+                                        <div className="productDetails-lists-description-container">
+                                            <div className="productDetails-lists-description">
+                                                {productDetail?.brand && productDetail?.brand !== '' && <>Brand: {productDetail.brand} <br></br> </>}
+                                                {productDetail?.category && productDetail?.category !== '' && <>Category: {productDetail.category} <br></br></>}
+                                                </div>
+                                            <div id="productDetails-description">
+                                                {productDetail.description}
+                                            </div>
                                         </div>
                                     </div>
-                                }
+                                )}
                             </div>
                         </>
                     )}
