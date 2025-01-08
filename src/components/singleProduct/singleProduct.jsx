@@ -1,17 +1,16 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { useParams, useNavigate } from 'react-router-dom';
 import "./singleProduct.css";
-
 import searchProductService from '../../appWrite/searchProduct.js';
 import { MdOutlineKeyboardArrowRight } from "react-icons/md";
 import { HiOutlineArrowRightStartOnRectangle } from "react-icons/hi2";
-import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { useDispatch, useSelector } from 'react-redux';
 import SingleProductSearchBar from './singleProductSearchBar.jsx';
 import LoadingSingleProduct from "../loading/loadingSingleProduct.jsx";
-
 import { fetchShopById } from '../../redux/features/singleShopSlice.jsx';
+import { IoClose, IoSearch } from 'react-icons/io5';
 
+const fallbackImage = 'http://res.cloudinary.com/dthelgixr/image/upload/v1727870088/hd7kcjuz8jfjajnzmqkp.webp';
 
 const ProductDetails = () => {
     const navigate = useNavigate();
@@ -20,15 +19,12 @@ const ProductDetails = () => {
     const { shops } = useSelector((state) => state.searchshops);
     const { singleShops } = useSelector((state) => state.singleshops);
 
-
-
     const { productId } = useParams();
 
     const [loading, setLoading] = useState(true);
     const [productDetail, setProductDetails] = useState(null);
     const [shopDetail, setShopDetail] = useState(null);
-    const [selectedImage, setSelectedImage] = useState('');
-    const [searchQuery, setSearchQuery] = useState('');
+    const [selectedImage, setSelectedImage] = useState(fallbackImage);
     const [showDescription, setShowDescription] = useState(false);
 
     useEffect(() => {
@@ -37,15 +33,15 @@ const ProductDetails = () => {
 
             if (product) {
                 setProductDetails(product);
-                setSelectedImage(product.images[0] || 'http://res.cloudinary.com/dthelgixr/image/upload/v1727870088/hd7kcjuz8jfjajnzmqkp.webp');
-                fetchShopDetails(product.shop); // Fetch shop details if the shopId is available
+                setSelectedImage(product?.images[0] || fallbackImage);
+                fetchShopDetails(product?.shop); // Fetch shop details if the shopId is available
             } else {
                 try {
                     const response = await searchProductService.getProductById(productId);
                     if (response) {
                         setProductDetails(response);
-                        setSelectedImage(response.images[0] || 'http://res.cloudinary.com/dthelgixr/image/upload/v1727870088/hd7kcjuz8jfjajnzmqkp.webp');
-                        fetchShopDetails(response.shop); // Fetch shop details based on product's shopId
+                        setSelectedImage(response?.images[0] || fallbackImage);
+                        fetchShopDetails(response?.shop); // Fetch shop details based on product's shopId
                     }
                 } catch (error) {
                     console.error("Error fetching product details: ", error);
@@ -58,7 +54,7 @@ const ProductDetails = () => {
         const fetchShopDetails = async (shopId) => {
             if (!shopId) return;
             const combinedShops = [...shops, ...singleShops];
-            const shop = combinedShops.find((shop) => shop.$id === shopId);
+            const shop = combinedShops?.find((shop) => shop.$id === shopId);
 
             if (shop) {
                 setShopDetail(shop);
@@ -66,7 +62,7 @@ const ProductDetails = () => {
                 try {
                     const response = await dispatch(fetchShopById(shopId));
                     if (response) {
-                        setShopDetail(response.payload);
+                        setShopDetail(response?.payload);
                     }
                 } catch (error) {
                     console.error("Error fetching shop details: ", error);
@@ -75,21 +71,19 @@ const ProductDetails = () => {
         };
 
         fetchProductDetails();
-    }, []);
-
-
+    }, [productId, products, shops, singleShops, dispatch, navigate]);  // Added dependencies
 
     const toggleDescription = () => {
         setShowDescription(!showDescription);
     };
 
     const handleImageClick = (index) => {
-        setSelectedImage(productDetail.images[index]);
+        setSelectedImage(productDetail?.images[index]);
     };
 
     const handleShopClick = () => {
         if (shopDetail) {
-            navigate(`/shop/${shopDetail.$id}`);
+            navigate(`/shop/${shopDetail?.$id}`);
         }
     };
 
@@ -110,7 +104,7 @@ const ProductDetails = () => {
                                     <img src={selectedImage} alt="Selected Product" id="product-details-img-selected" />
                                 </div>
                                 <div id="shop-details-thumbnails">
-                                    {productDetail.images?.map((image, index) => (
+                                    {productDetail?.images?.map((image, index) => (
                                         <div
                                             id="shop-details-thumbnail"
                                             key={index}
@@ -124,19 +118,15 @@ const ProductDetails = () => {
 
                                 <div id="product-details-info">
                                     <span id="product-details-trending-deals">Trending deal</span>
-                                    <p id="product-details-pid">Product # {productDetail.$id}</p>
-                                    <div id="product-details-title">{productDetail.title}</div>
-                                </div>
-                                <div id="product-detail-about" onClick={toggleDescription}>
-                                    <p>About Product</p>
-                                    {showDescription ? <IoIosArrowUp size={20} /> : <IoIosArrowDown size={20} />}
+                                    <p id="product-details-pid">Product # {productDetail?.$id}</p>
+                                    <div id="product-details-title">{productDetail?.title}</div>
                                 </div>
 
                                 <div
                                     id="product-details-see-all-brand-product"
-                                    onClick={() => navigate(`/search?query=${productDetail.brand}`)}
+                                    onClick={() => navigate(`/search?query=${productDetail?.brand}`)}
                                 >
-                                    See All {productDetail.brand} Products <MdOutlineKeyboardArrowRight size={11} />
+                                    See All {productDetail?.brand} Products <MdOutlineKeyboardArrowRight size={11} />
                                 </div>
 
                                 <div
@@ -150,19 +140,33 @@ const ProductDetails = () => {
 
                                 <div id="product-details-price-button">
                                     <div id="searchProductDetails-price-button-inner">
-                                        <p id="refurbishedProductDetails-price">₹{productDetail.price}</p>
-                                        <p id="refurbishedProductDetails-discounted-price">₹{productDetail.discountedPrice}</p>
+                                        <p id="refurbishedProductDetails-price">₹{productDetail?.price}</p>
+                                        <p id="refurbishedProductDetails-discounted-price">₹{productDetail?.discountedPrice}</p>
                                     </div>
-                                    <div id={`product-details-price-${productDetail.isInStock ? 'instock' : 'outofstock'}`}>
-                                        {productDetail.isInStock ? 'IN STOCK' : 'OUT OF STOCK'}
+                                    <div id={`product-details-price-${productDetail?.isInStock ? 'instock' : 'outofstock'}`}>
+                                        {productDetail?.isInStock ? 'IN STOCK' : 'OUT OF STOCK'}
                                     </div>
                                 </div>
 
-                                {showDescription && (
-                                    <div id="product-details-description">
-                                        Description: {productDetail.description}
+
+                                <div className="productDetails-description-text" onClick={toggleDescription}>DESCRIPTION</div>
+                                {showDescription &&
+                                    <div className="productDetails-description-div-pop-up">
+
+                                        <div
+                                            className="productDetails-description-div-pop-up-close"
+                                            onClick={toggleDescription}
+                                            aria-label="Close filter options"
+                                        >
+                                            <IoClose size={30} />
+                                        </div>
+                                        <div className="productDetails-filter-section-title">PRODUCT DETAILS</div>
+
+                                        <div className="productDetails-lists-description">
+                                            {productDetail?.brand && productDetail?.brand.trim() !== '' && <>Brand {productDetail?.brand} <br /> </>}
+                                        </div>
                                     </div>
-                                )}
+                                }
                             </div>
                         </>
                     )}
