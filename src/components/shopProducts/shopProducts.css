@@ -1,0 +1,21 @@
+
+#shop-products-footer {
+    width: 100vh;
+    display: flex;
+    color: rgba(255, 255, 255, 0.92);
+    height: 60px;
+    background-color: #021526;
+    position: fixed;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    bottom: 0;
+    z-index: 1000;
+}
+
+#shop-products-footer-sortby,
+#shop-products-footer-filterby {
+    display: flex;
+    width: 50vw;
+    font-size: 19px;
+    justify-content: center;
+    align-items: center;
+}

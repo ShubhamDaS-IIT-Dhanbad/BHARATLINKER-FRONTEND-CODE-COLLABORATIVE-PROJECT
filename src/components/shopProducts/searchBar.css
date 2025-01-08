@@ -1,6 +1,6 @@
 /* Header Container */
-.shop-page-header-visible,
-.shop-page-header-hidden {
+.shop-products-header-visible,
+.shop-products-header-hidden {
     display: flex;
     flex-direction: column;
     width: 100vw;
@@ -13,21 +13,20 @@
 }
 
 /* Header Visible/Hidden Styles */
-.shop-page-header-visible {
+.shop-products-header-visible {
     padding: 10px 0;
     height: 93px;
     transform: translateY(0);
 }
 
-.shop-page-header-hidden {
+.shop-products-header-hidden {
     padding: 10px 0;
     height: 87px;
-    transform: translateY(0);
     transform: translateY(-57px);
 }
 
 /* Header Container */
-.shop-page-header-container {
+.shop-products-header-container {
     padding: 0 0px 0px 10px;
     display: flex;
     align-items: center;
@@ -35,13 +34,13 @@
 }
 
 /* User Icon */
-.shop-page-user-icon {
+.shop-products-user-icon {
     margin-left: 4px;
     color: #ffffff;
 }
 
 /* User Section */
-.shop-page-header-user-section {
+.shop-products-header-user-section {
     display: flex;
     height: 52px;
     justify-content: center;
@@ -51,20 +50,20 @@
 }
 
 /* User Location */
-.shop-page-user-location {
+.shop-products-user-location {
     padding-left: 10px;
     display: flex;
     flex-direction: column;
 }
 
-.shop-page-location-label {
+.shop-products-location-label {
     font-size: 20px;
     font-weight: 600;
     margin: 0;
 }
 
 /* Location Value */
-.shop-page-location-value {
+.shop-products-location-value {
     display: flex;
     align-items: center;
     gap: 5px;
@@ -75,7 +74,7 @@
 }
 
 /* Search Section */
-.shop-page-search-section {
+.shop-products-search-section {
     height: 40px;
     margin-top: 5px;
     justify-content: center;
@@ -84,11 +83,11 @@
 }
 
 /* Search Input Container */
-.shop-page-search-input-container {
+.shop-products-search-input-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #021526;;
+    background-color: #021526;
     border: 2px solid #ffffff;
     border-radius: 11px;
     width: 96vw;
@@ -96,31 +95,32 @@
 }
 
 /* Search Icon */
-.shop-page-search-icon {
+.shop-products-search-icon {
     font-size: 29px;
     margin-left: 10px;
     color: #fcfcfc;
 }
 
 /* Search Input */
-.shop-page-search-input {
+.shop-products-search-input {
     border: none;
     color: #ffffff;
     font-size: 12px;
     padding-left: 10px;
     flex-grow: 1;
     outline: none;
-    background-color: #021526;;
+    background-color: #021526;
 }
 
 /* Autofill Styles for Chrome, Edge, and Safari */
-.shop-page-search-input:-webkit-autofill {
+.shop-products-search-input:-webkit-autofill {
     background-color: #fff !important;
     color: #ffffff !important;
     -webkit-box-shadow: 0 0 0px 1000px #fff inset !important;
     box-shadow: 0 0 0px 1000px #fff inset !important;
 }
-.shop-page-search-input::placeholder {
+
+.shop-products-search-input::placeholder {
     color: #ffffff !important;
     font-size: 0.9rem;
 }

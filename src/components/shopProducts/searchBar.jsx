@@ -3,49 +3,61 @@ import { useDispatch } from 'react-redux';
 import { BiSearchAlt } from 'react-icons/bi';
 import { FaArrowLeft } from 'react-icons/fa';
 import { useNavigate, useLocation } from 'react-router-dom';
+
 import './searchBar.css';
 
-import { resetShopProducts } from '../../redux/features/shopProducts/searchProductSlice'; // Corrected import path
+import { resetShopProducts } from '../../redux/features/shopProducts/searchProductSlice';
 
-const ProductSearchBar = ({shopId, inputValue, handleSearchChange, handleSearch }) => {
+const ProductSearchBar = ({ shopId, setInputValue, inputValue,handleSearchProduct}) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const [locationTab, setLocationTab] = useState(false); // You can remove locationTab state if unused
-
-    // Access the location object to get query parameters
     const location = useLocation();
-    const [shopName, setShopName] = useState("");
 
-    // Use useEffect to extract shopName from the query params
+    const [locationTab, setLocationTab] = useState(false);
+    const [shopName, setShopName] = useState("SHOP PRODUCTS");
+
     useEffect(() => {
         const queryParams = new URLSearchParams(location.search);
-        setShopName(queryParams.get('shopName') || "SHOP PRODUCTS"); // Default to "SHOP PRODUCTS" if shopName is not available
-    }, [location]);
+        setShopName(queryParams.get('shopName') || "SHOP PRODUCTS");
+        const query = queryParams.get('query') || '';
+        setInputValue(query);
+    }, [location, setInputValue]);
+
+
+    const handleSearch = () => {
+        if (inputValue.trim()) {
+            dispatch(resetShopProducts(shopId));
+        }
+    };
 
     const handleKeyDown = (event) => {
         if (event.key === 'Enter') {
-            dispatch(resetShopProducts()); // Reset products on Enter key
-            handleSearch();
+            dispatch(resetShopProducts(shopId));
         }
+    };
+
+    const handleInputChange = (event) => {
+        const value = event.target.value;
+        setInputValue(value);
     };
 
     return (
         <>
-            <div className='shop-page-header-visible'>
-                <div className='shop-page-header-container'>
-                    <div className='shop-page-header-user-section'>
+            <div className='shop-products-header-visible'>
+                <div className='shop-products-header-container'>
+                    <div className='shop-products-header-user-section'>
                         <FaArrowLeft
-                            id='shop-page-user-icon'
+                            id='shop-products-user-icon'
                             size={25}
-                            onClick={() => navigate(`/shop/${shopId}`)}  // Navigate to home when clicked
+                            onClick={() => navigate(`/shop/${shopId}`)}
                             aria-label="Go Back"
                             tabIndex={0}
                         />
-                        <div className='shop-page-user-location'>
-                            <p className='shop-page-location-label'>{shopName.toUpperCase()} PAGE</p> {/* Corrected to call toUpperCase() */}
+                        <div className='shop-products-user-location'>
+                            <p className='shop-products-location-label'>{shopName.toUpperCase()} PAGE</p>
                             <div
-                                className='shop-page-location-value'
-                                onClick={() => setLocationTab(true)} // Location handling if needed
+                                className='shop-products-location-value'
+                                onClick={() => setLocationTab(true)}
                                 aria-label="Change Location"
                                 tabIndex={0}
                             >
@@ -55,19 +67,19 @@ const ProductSearchBar = ({shopId, inputValue, handleSearchChange, handleSearch 
                     </div>
                 </div>
 
-                <div className='shop-page-search-section'>
-                    <div className='shop-page-search-input-container'>
+                <div className='shop-products-search-section'>
+                    <div className='shop-products-search-input-container'>
                         <BiSearchAlt
-                            className='shop-page-search-icon'
-                            onClick={handleSearch}  // Trigger search on icon click
+                            className='shop-products-search-icon'
+                            onClick={handleSearch}
                             aria-label="Search"
                             tabIndex={0}
                         />
                         <input
-                            className='shop-page-search-input'
-                            placeholder="Search By Product Name" 
+                            className='shop-products-search-input'
+                            placeholder="Search By Product Name"
                             value={inputValue}
-                            onChange={handleSearchChange}
+                            onChange={handleInputChange}
                             onKeyDown={handleKeyDown}
                             aria-label="Search input"
                         />

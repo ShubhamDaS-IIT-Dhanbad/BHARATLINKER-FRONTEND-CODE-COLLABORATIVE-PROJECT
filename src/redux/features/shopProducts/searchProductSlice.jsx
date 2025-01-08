@@ -5,7 +5,6 @@ import searchProductService from '../../../appWrite/searchProduct.js';
 export const fetchProducts = createAsyncThunk(
     'shopProducts/fetchProducts',
     async ({ shopId, inputValue, selectedCategories, selectedBrands, page, productsPerPage, sortByAsc, sortByDesc }, { rejectWithValue }) => {
-        
         try {
             const response = await searchProductService.getProducts({
                 inputValue,
@@ -17,7 +16,7 @@ export const fetchProducts = createAsyncThunk(
                 selectedCategories,
                 shopId
             });
-            
+
             if (response.products && response.success) {
                 return {
                     shopId,
@@ -50,7 +49,6 @@ export const loadMoreProducts = createAsyncThunk(
                 sortByDesc,
                 shopId
             });
-
             if (response.products && response.success) {
                 return {
                     shopId,
@@ -71,6 +69,7 @@ export const loadMoreProducts = createAsyncThunk(
 const initialState = {
     shops: {}, // Keyed by shopId
     loading: false,
+    loadingMoreProducts: false,
     error: null
 };
 
@@ -84,12 +83,13 @@ const shopProductsSlice = createSlice({
             if (shopId) {
                 delete state.shops[shopId];
             } else {
-                state.shops = {};
+                state.shops = {}; // Reset all shops data
             }
         },
         toggleShopSortOrder: (state, action) => {
             const { shopId, order } = action.payload;
             const shop = state.shops[shopId];
+        
             if (shop) {
                 if (order === 'asc') {
                     shop.sortByAsc = !shop.sortByAsc;
@@ -97,6 +97,17 @@ const shopProductsSlice = createSlice({
                 } else if (order === 'desc') {
                     shop.sortByDesc = !shop.sortByDesc;
                     if (shop.sortByDesc) shop.sortByAsc = false;
+                }
+        
+                if (shop.products && shop.products.length > 0) {
+                    const sortedProducts = [...shop.products];
+        
+                    if (shop.sortByAsc) {
+                        sortedProducts.sort((a, b) => a.price - b.price);
+                    } else if (shop.sortByDesc) {
+                        sortedProducts.sort((a, b) => b.price - a.price);
+                    }
+                    shop.products = sortedProducts;
                 }
             }
         },
@@ -115,7 +126,7 @@ const shopProductsSlice = createSlice({
                 shop.selectedBrands = [];
                 shop.sortByAsc = false;
                 shop.sortByDesc = false;
-                shop.priceRange = { min: Number.MIN_SAFE_INTEGER, max: Number.MAX_SAFE_INTEGER };
+                shop.priceRange = { min: 0, max: Number.MAX_SAFE_INTEGER };
             }
         },
     },
@@ -134,7 +145,7 @@ const shopProductsSlice = createSlice({
                         hasMoreProducts: true,
                         sortByAsc: false,
                         sortByDesc: false,
-                        priceRange: { min: Number.MIN_SAFE_INTEGER, max: Number.MAX_SAFE_INTEGER },
+                        priceRange: { min: 0, max: Number.MAX_SAFE_INTEGER },
                         selectedCategories: [],
                         selectedBrands: []
                     };
@@ -149,8 +160,9 @@ const shopProductsSlice = createSlice({
                 state.loading = false;
                 state.error = action.payload || 'Something went wrong';
             })
+
             .addCase(loadMoreProducts.pending, (state) => {
-                state.loading = true;
+                state.loadingMoreProducts = true;
                 state.error = null;
             })
             .addCase(loadMoreProducts.fulfilled, (state, action) => {
@@ -164,10 +176,10 @@ const shopProductsSlice = createSlice({
                     state.shops[shopId].hasMoreProducts = hasMoreProducts;
                     state.shops[shopId].currentPage += 1;
                 }
-                state.loading = false;
+                state.loadingMoreProducts = false;
             })
             .addCase(loadMoreProducts.rejected, (state, action) => {
-                state.loading = false;
+                state.loadingMoreProducts = false;
                 state.error = action.payload || 'Something went wrong';
             });
     }

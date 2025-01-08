@@ -133,7 +133,7 @@ const ShopDetails = () => {
                         </div>
 
                         <div id="shop-details-see-all-products" onClick={() => {
-                            navigate(`/shop/product/${shopDetail?.$id}?shopName=${shopDetail.shopName}`);
+                            navigate(`/shop/product/${shopDetail?.$id}?shopName=${shopDetail.shopName}&query=`);
                         }}
 
                         >
