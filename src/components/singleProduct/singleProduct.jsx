@@ -32,8 +32,9 @@ const ProductDetails = () => {
 
     useEffect(() => {
         const fetchProductDetails = async () => {
+            setLoading(true); // Ensure loading starts
             let product = products.find((product) => product.$id === productId);
-
+    
             if (product) {
                 setProductDetails(product);
                 setSelectedImage(product?.images[0] || fallbackImage);
@@ -51,14 +52,18 @@ const ProductDetails = () => {
                     navigate('/404');
                 }
             }
-            setLoading(false);
+    
+            // Delay for at least 1 second
+            setTimeout(() => {
+                setLoading(false);
+            }, 400); // 1000ms = 1 second
         };
-
+    
         const fetchShopDetails = async (shopId) => {
             if (!shopId) return;
             const combinedShops = [...shops, ...singleShops];
             const shop = combinedShops?.find((shop) => shop.$id === shopId);
-
+    
             if (shop) {
                 setShopDetail(shop);
             } else {
@@ -72,9 +77,10 @@ const ProductDetails = () => {
                 }
             }
         };
-
+    
         fetchProductDetails();
     }, []);
+    
 
     const toggleDescription = () => {
         setShowDescription(!showDescription);
@@ -98,8 +104,8 @@ const ProductDetails = () => {
 
             {loading ? (
                  <div className="refurbished-page-loading-container">
-                                    <RotatingLines width="60" height="60" color="#007bff" />
-                                </div>
+                    <RotatingLines width="60" height="60" color="#007bff" />
+                </div>
             ) : (
                 <Fragment>
                     {productDetail && (
@@ -134,7 +140,7 @@ const ProductDetails = () => {
                                     id="product-details-see-all-brand-product"
                                     onClick={() => navigate(`/search?query=${productDetail?.brand}`)}
                                 >
-                                    See All {productDetail?.brand} Products <MdOutlineKeyboardArrowRight size={11} />
+                                    See All {productDetail ? productDetail?.brand.toUpperCase() : "-"} Products <MdOutlineKeyboardArrowRight size={11} />
                                 </div>
 
                                 <div
@@ -142,7 +148,7 @@ const ProductDetails = () => {
                                     onClick={handleShopClick}
                                     style={{ cursor: 'pointer' }}
                                 >
-                                    Shop: {shopDetail ? shopDetail?.shopName : 'Loading...'}
+                                    Shop: {shopDetail ? shopDetail?.shopName.toUpperCase() : 'Loading...'}
                                     <HiOutlineArrowRightStartOnRectangle />
                                 </div>
 

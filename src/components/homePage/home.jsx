@@ -62,7 +62,7 @@ const Home = () => {
                 />
                 <FooterButton
                     icon={<MdOutlineAdminPanelSettings size={37} />}
-                    label="Retailer"
+                    label="Admin"
                     onClick={handleRetailerClick}
                 />
             </div>
