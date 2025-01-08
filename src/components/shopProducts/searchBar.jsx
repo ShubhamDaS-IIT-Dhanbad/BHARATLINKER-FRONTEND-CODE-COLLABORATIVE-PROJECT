@@ -42,7 +42,7 @@ const ProductSearchBar = ({shopId, inputValue, handleSearchChange, handleSearch 
                             tabIndex={0}
                         />
                         <div className='shop-page-user-location'>
-                            <p className='shop-page-location-label'>{shopName.toUpperCase()}</p> {/* Corrected to call toUpperCase() */}
+                            <p className='shop-page-location-label'>{shopName.toUpperCase()} PAGE</p> {/* Corrected to call toUpperCase() */}
                             <div
                                 className='shop-page-location-value'
                                 onClick={() => setLocationTab(true)} // Location handling if needed
