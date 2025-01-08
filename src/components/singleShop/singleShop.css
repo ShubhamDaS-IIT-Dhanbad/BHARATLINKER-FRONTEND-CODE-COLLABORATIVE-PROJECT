@@ -44,12 +44,12 @@
 
 .shop-detail-image-select{
     border-radius: 4px;
-    padding: 2px;scale: 1.4;height: 2px;width: 3px;
-    background-color: aqua;
+    padding: 1px;scale: 1.4;height: 2px;width: 2px;
+    background-color: rgb(255, 255, 255);border: 1px solid black;
 }
 .shop-detail-image-unselect{
     height: 5px;width: 5px;
-    background-color: rgb(81, 255, 240);border-radius: 2px;
+    background-color: rgb(0, 0, 0);border-radius: 2px;
   }
 
 
