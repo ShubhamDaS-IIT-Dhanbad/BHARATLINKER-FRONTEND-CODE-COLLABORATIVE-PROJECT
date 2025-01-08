@@ -13,6 +13,10 @@ import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { IoLocationOutline } from "react-icons/io5";
 import SingleShopSearchBar from "./singleShopSearchBar.jsx";
 
+
+import { FaPhoneAlt } from "react-icons/fa";
+import { CiLocationArrow1 } from "react-icons/ci";
+import { CiMail } from "react-icons/ci";
 const ShopDetails = () => {
     const { shopId } = useParams();
     const navigate = useNavigate();
@@ -21,9 +25,9 @@ const ShopDetails = () => {
     const { shops } = useSelector((state) => state.searchshops);
     const { singleShops } = useSelector((state) => state.singleshops);
 
-   
+
     const [shopName, setShopName] = useState("SHOP DETAIL");
-    
+
     const [shopDetail, setShopDetail] = useState(null);
     const [searchQuery, setSearchQuery] = useState("");
     const [showContact, setShowContact] = useState(false);
@@ -91,7 +95,7 @@ const ShopDetails = () => {
     return (
         <Fragment>
             <div id="product-details-search-container-top">
-                <SingleShopSearchBar shopName={shopName.toUpperCase()}/>
+                <SingleShopSearchBar shopName={shopName.toUpperCase()} />
             </div>
 
             {shopDetail ? (
@@ -127,9 +131,6 @@ const ShopDetails = () => {
                             <p id="shop-details-id">Shop # {shopDetail.$id}</p>
                             <div id="shop-details-title">
                                 {shopDetail.shopName?.toUpperCase()}
-                            </div>
-                            <div id="shop-details-location">
-                                LOCATION <MdOutlineKeyboardArrowRight size={21} onClick={redirectMap} />
                             </div>
                         </div>
 
@@ -187,6 +188,19 @@ const ShopDetails = () => {
             ) : (
                 <p>Loading shop details...</p>
             )}
+
+
+            <div id="shop-details-footer">
+                <div id="shop-details-footer-item-phn">
+                    <FaPhoneAlt  size={30} />
+                </div>
+                <div id="shop-details-footer-item-loc" >
+                    <CiLocationArrow1  size={35}  onClick={redirectMap} />
+                </div>
+                <div id="shop-details-footer-item-mail">
+                    <CiMail size={35} />
+                </div>
+            </div>
         </Fragment>
     );
 };
