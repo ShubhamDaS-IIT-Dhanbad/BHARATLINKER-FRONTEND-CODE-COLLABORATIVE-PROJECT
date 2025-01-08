@@ -53,10 +53,7 @@ const ProductDetails = () => {
                 }
             }
     
-            // Delay for at least 1 second
-            setTimeout(() => {
-                setLoading(false);
-            }, 100); // 1000ms = 1 second
+            setLoading(false);
         };
     
         const fetchShopDetails = async (shopId) => {
