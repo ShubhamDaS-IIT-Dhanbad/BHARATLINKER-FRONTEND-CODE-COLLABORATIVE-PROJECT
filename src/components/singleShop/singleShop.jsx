@@ -73,7 +73,7 @@ const ShopDetails = () => {
     };
 
     const handlePhoneClick = () => {
-        if (shopDetail?.phone) {
+        if (shopDetail?.customerCare) {
             window.location.href = `tel:${shopDetail?.customerCare}`;
         } else {
             alert("Phone number not available.");
