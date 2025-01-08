@@ -118,7 +118,7 @@ const ShopDetails = () => {
                                     key={index}
                                     onClick={() => setSelectedImage(image)}
                                     className={
-                                        selectedImage === image ? "image-select" : "image-unselect"
+                                        selectedImage === image ? "shop-detail-image-select" : "shop-detail-image-unselect"
                                     }
                                 ></div>
                             ))}
