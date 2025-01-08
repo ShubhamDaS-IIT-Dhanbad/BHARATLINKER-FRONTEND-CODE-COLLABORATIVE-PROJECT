@@ -161,7 +161,8 @@
 }
 #shop-details-footer-item-phn,
 #shop-details-footer-item-loc,
-#shop-details-footer-item-mail{
+#shop-details-footer-item-mail,
+#shop-details-footer-item-info{
     height: 34px;width: 52px; border: 2px solid rgba(65, 65, 65, 0.596);
     border-radius: 10px;display: flex;
     justify-content: center;align-items: center;
@@ -177,4 +178,7 @@
 }
 #shop-details-footer-item-mail{
     color: rgba(255, 0, 0, 0.785);
+}
+#shop-details-footer-item-info{
+    background-color:  rgb(8, 92, 206);color: white;border: 2px solid white;
 }

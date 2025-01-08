@@ -17,6 +17,9 @@ import SingleShopSearchBar from "./singleShopSearchBar.jsx";
 import { FaPhoneAlt } from "react-icons/fa";
 import { CiLocationArrow1 } from "react-icons/ci";
 import { CiMail } from "react-icons/ci";
+import { AiOutlineInfo } from "react-icons/ai";
+
+
 const ShopDetails = () => {
     const { shopId } = useParams();
     const navigate = useNavigate();
@@ -199,6 +202,9 @@ const ShopDetails = () => {
                 </div>
                 <div id="shop-details-footer-item-mail">
                     <CiMail size={35} />
+                </div>
+                <div id="shop-details-footer-item-info">
+                    <AiOutlineInfo size={35} />
                 </div>
             </div>
         </Fragment>
