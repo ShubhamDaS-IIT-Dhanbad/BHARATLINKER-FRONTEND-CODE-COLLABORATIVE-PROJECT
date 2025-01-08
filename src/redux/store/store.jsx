@@ -12,6 +12,8 @@ import searchshopfiltersection from '../features/searchShopFilterSectionSlice.js
 import searchshopsortbysection from '../features/searchShopSortbySectionSlice.jsx'
 import singleshops from '../features/singleShopSlice.jsx'
 
+//shop products
+import shopproducts from '../features/shopProducts/searchProductSlice.jsx'
 
 //refurbished products
 import refurbishedproducts from '../features/refurbishedPage/refurbishedProductsSlice.jsx'
@@ -34,10 +36,12 @@ const store=configureStore({
         searchshopsortbysection:searchshopsortbysection,
         singleshops:singleshops,
 
+        //shop products
+        shopproducts:shopproducts,
+
         //refurbished products
         refurbishedproducts:refurbishedproducts,
         refurbishedproductfiltersection:refurbishedproductfiltersection,
-
 
         //user refurbished products
         userRefurbishedProducts:userRefurbishedProducts,

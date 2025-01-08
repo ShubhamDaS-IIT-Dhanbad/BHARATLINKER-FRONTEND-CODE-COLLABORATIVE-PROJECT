@@ -18,6 +18,9 @@ import SingleProductCard from './components/singleProduct/singleProduct.jsx'
 import SearchShop from './components/searchShop/searchShop.jsx'
 import ShopSorybySection from './components/searchShop/sortBySection.jsx';
 import ShopFilterSection from './components/searchShop/filterSection.jsx';
+//shop products
+import ShopProducts from './components/shopProducts/shopProducts.jsx'
+
 //Shop Card
 import SingleShopCard from './components/singleShop/singleShop.jsx'
 
@@ -83,8 +86,16 @@ const RoutesWithConditionalHeader = React.memo(({ address }) => {
         <Route path="/shop" element={<SearchShop />} />
         <Route path="/shop/sortby" element={<ShopSorybySection />} />
         <Route path="shop/filterby" element={<ShopFilterSection/>}/>
+
+
+
          {/* Single Shop */}
          <Route path="/shop/:shopId" element={<SingleShopCard/>} />
+          {/* Shop Products */}
+          <Route path="/shop/product/:shopId" element={<ShopProducts/>} />
+
+
+
 
          {/* refurbished products */}
          <Route path="/refurbished" element={<RefurbishedPage />} />

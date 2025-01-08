@@ -26,9 +26,10 @@ class SearchProductService {
         userLon = 86.437171,
         radius,
         page,
-        productsPerPage = 4,  // Default to 10 products per page
+        productsPerPage = 4,
         sortByAsc = false,
         sortByDesc = false,
+        shopId
     }) {
         try {
             const inputTokens = inputValue
@@ -52,6 +53,7 @@ class SearchProductService {
                     Query.contains('keywords', selectedCategories),
                 ]));
             }
+
 
             // Geolocation filtering using bounding box
             if (userLat !== undefined && userLon !== undefined && radius !== undefined) {
@@ -84,6 +86,9 @@ class SearchProductService {
                 }
                 if (isInStock !== undefined) {
                     categoryQueries.push(Query.equal('isInStock', isInStock));
+                }
+                if (shopId!==undefined) {
+                    categoryQueries.push(Query.equal('shop', shopId));
                 }
 
 

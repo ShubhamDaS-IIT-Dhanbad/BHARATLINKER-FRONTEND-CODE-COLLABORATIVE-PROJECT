@@ -10,7 +10,7 @@ import { FaPhoneAlt } from "react-icons/fa";
 import { CiLocationArrow1, CiMail } from "react-icons/ci";
 import { AiOutlineInfo } from "react-icons/ai";
 import SingleShopSearchBar from "./singleShopSearchBar.jsx";
-import { IoClose} from 'react-icons/io5';
+import { IoClose } from 'react-icons/io5';
 
 const ShopDetails = () => {
     const { shopId } = useParams();
@@ -132,13 +132,17 @@ const ShopDetails = () => {
                             </div>
                         </div>
 
-                        <div id="shop-details-see-all-products">
+                        <div id="shop-details-see-all-products" onClick={() => {
+                            navigate(`/shop/product/${shopDetail?.$id}?shopName=${shopDetail.shopName}`);
+                        }}
+
+                        >
                             See All Products <MdOutlineKeyboardArrowRight size={11} />
                         </div>
 
                         <div id="shop-details-status">
                             <div
-                                className={`shop-details-status-button ${shopDetail.isOpened ? "opened" : "closed"
+                                className={`shop-details-status-button ${shopDetail?.isOpened ? "opened" : "closed"
                                     }`}
                             >
                                 {shopDetail.isOpened ? "OPENED" : "CLOSED"}
@@ -177,7 +181,7 @@ const ShopDetails = () => {
                     <div className="productDetails-filter-section-title">SHOP DETAILS</div>
 
                     <div className="productDetails-lists-description-container">
-                        
+
                         <div id="productDetails-description">
                             {shopDetail.description}
                         </div>
