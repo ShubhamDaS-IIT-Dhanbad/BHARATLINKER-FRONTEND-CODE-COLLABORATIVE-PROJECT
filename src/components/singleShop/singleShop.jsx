@@ -152,7 +152,7 @@ const ShopDetails = () => {
                             </div>
                         </div>
 
-                        <div id="shop-details-hr"></div>
+                        {/* <div id="shop-details-hr"></div>
 
                         <div
                             id="shop-details-about"
@@ -182,9 +182,8 @@ const ShopDetails = () => {
                                 <br />
                                 {shopDetail.email && `Email ${shopDetail.email}`}
                             </div>
-                        )}
+                        )} */}
 
-                        <div id="shop-details-hr"></div>
                     </div>
                     <div id="product-details-bottom-text">@Bharat Linker 2025</div>
                 </Fragment>
