@@ -6,7 +6,7 @@
     width: 100vw;
     position: fixed;
     top: 0;
-    background-color: rgb(28, 81, 155);
+    background-color: #021526;
     color: #ffffff;
     z-index: 1000;
     transition: transform 0.3s ease, opacity 0.3s ease;
@@ -93,7 +93,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: rgb(28, 81, 155);
+    background-color: #021526;
     border-radius: 11px;
     border: 2px solid rgb(255, 255, 255);
     width: 96vw;
@@ -113,14 +113,14 @@
     color: #ffffff;
     font-size: 1rem;
     padding-left: 10px;
-    background-color: rgb(28, 81, 155);
+    background-color: #021526;
     flex-grow: 1;
     outline: none;
 }
 
 /* Autofill Styles for Chrome, Edge, and Safari */
 .single-shop-search-input:-webkit-autofill {
-    background-color: rgb(28, 81, 155) !important;
+    background-color: #021526 !important;
     color: #ffffff !important;
     font-size: 1rem;
 }

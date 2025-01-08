@@ -185,7 +185,6 @@ const ShopDetails = () => {
                         )} */}
 
                     </div>
-                    <div id="product-details-bottom-text">@Bharat Linker 2025</div>
                 </Fragment>
             ) : (
                 <p>Loading shop details...</p>
