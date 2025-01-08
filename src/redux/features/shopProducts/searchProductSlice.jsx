@@ -5,6 +5,10 @@ import searchProductService from '../../../appWrite/searchProduct.js';
 export const fetchProducts = createAsyncThunk(
     'shopProducts/fetchProducts',
     async ({ shopId, inputValue, selectedCategories, selectedBrands, page, productsPerPage, sortByAsc, sortByDesc }, { rejectWithValue }) => {
+         // Set selectedCategories to an empty array if it's not provided
+        selectedCategories = selectedCategories || [];
+        selectedBrands = selectedBrands || [];
+    
         try {
             const response = await searchProductService.getProducts({
                 inputValue,
@@ -13,10 +17,10 @@ export const fetchProducts = createAsyncThunk(
                 sortByAsc,
                 sortByDesc,
                 selectedBrands,
-                selectedCategories,
+                selectedCategories, // send empty array if no categories selected
                 shopId
             });
-
+    
             if (response.products && response.success) {
                 return {
                     shopId,
@@ -32,6 +36,7 @@ export const fetchProducts = createAsyncThunk(
             return rejectWithValue(error.response?.data || error.message);
         }
     }
+    
 );
 
 // Async thunk to load more products for a specific shop
@@ -39,6 +44,11 @@ export const loadMoreProducts = createAsyncThunk(
     'shopProducts/loadMoreProducts',
     async ({ shopId, inputValue, selectedCategories, selectedBrands, page, productsPerPage, sortByAsc, sortByDesc }, { rejectWithValue }) => {
         try {
+
+
+            selectedCategories = selectedCategories || [];
+            selectedBrands = selectedBrands || [];
+
             const response = await searchProductService.getProducts({
                 inputValue,
                 page,
@@ -80,16 +90,45 @@ const shopProductsSlice = createSlice({
     reducers: {
         resetShopProducts: (state, action) => {
             const shopId = action.payload;
+        
             if (shopId) {
-                delete state.shops[shopId];
+                // Reset specific data for the shop, keeping selected categories, selected brands, and sorting settings intact
+                const shop = state.shops[shopId];
+        
+                if (shop) {
+                    state.shops[shopId] = {
+                        ...shop,
+                        products: [],
+                        selectedCategories: shop.selectedCategories,
+                        selectedBrands: shop.selectedBrands,
+                        sortByAsc: shop.sortByAsc,
+                        sortByDesc: shop.sortByDesc,
+                        currentPage: 0, // Reset current page to 1
+                    };
+                }
             } else {
-                state.shops = {}; // Reset all shops data
+                // Reset all shops data except for the properties we want to keep intact
+                for (const shopId in state.shops) {
+                    const shop = state.shops[shopId];
+                    if (shop) {
+                        state.shops[shopId] = {
+                            ...shop,
+                            products: [], // Reset products or any other data to be cleared
+                            selectedCategories: shop.selectedCategories,
+                            selectedBrands: shop.selectedBrands,
+                            sortByAsc: shop.sortByAsc,
+                            sortByDesc: shop.sortByDesc,
+                            currentPage: 0, // Reset current page to 1
+                        };
+                    }
+                }
             }
-        },
+        },        
+
         toggleShopSortOrder: (state, action) => {
             const { shopId, order } = action.payload;
             const shop = state.shops[shopId];
-        
+
             if (shop) {
                 if (order === 'asc') {
                     shop.sortByAsc = !shop.sortByAsc;
@@ -98,10 +137,10 @@ const shopProductsSlice = createSlice({
                     shop.sortByDesc = !shop.sortByDesc;
                     if (shop.sortByDesc) shop.sortByAsc = false;
                 }
-        
+
                 if (shop.products && shop.products.length > 0) {
                     const sortedProducts = [...shop.products];
-        
+
                     if (shop.sortByAsc) {
                         sortedProducts.sort((a, b) => a.price - b.price);
                     } else if (shop.sortByDesc) {
@@ -118,17 +157,33 @@ const shopProductsSlice = createSlice({
                 shop.priceRange = { min, max };
             }
         },
-        resetShopFilters: (state, action) => {
-            const shopId = action.payload;
+        toggleCategory: (state, action) => {
+            const { shopId, category } = action.payload;
             const shop = state.shops[shopId];
             if (shop) {
-                shop.selectedCategories = [];
-                shop.selectedBrands = [];
-                shop.sortByAsc = false;
-                shop.sortByDesc = false;
-                shop.priceRange = { min: 0, max: Number.MAX_SAFE_INTEGER };
+                const index = shop.selectedCategories.indexOf(category);
+                if (index === -1) {
+                    shop.selectedCategories.push(category);  // Add category
+                } else {
+                    shop.selectedCategories.splice(index, 1);  // Remove category
+                }
             }
         },
+
+        // Toggle a brand in selectedBrands
+        toggleBrand: (state, action) => {
+            const { shopId, brand } = action.payload;
+            const shop = state.shops[shopId];
+            if (shop) {
+                const index = shop.selectedBrands.indexOf(brand);
+                if (index === -1) {
+                    shop.selectedBrands.push(brand);  // Add brand
+                } else {
+                    shop.selectedBrands.splice(index, 1);  // Remove brand
+                }
+            }
+        },
+
     },
     extraReducers: (builder) => {
         builder
@@ -141,7 +196,7 @@ const shopProductsSlice = createSlice({
                 if (!state.shops[shopId]) {
                     state.shops[shopId] = {
                         products: [],
-                        currentPage: 1,
+                        currentPage: 1,  // Initialize currentPage
                         hasMoreProducts: true,
                         sortByAsc: false,
                         sortByDesc: false,
@@ -154,12 +209,17 @@ const shopProductsSlice = createSlice({
                 state.shops[shopId].products = products;
                 state.shops[shopId].hasMoreProducts = hasMoreProducts;
                 state.shops[shopId].totalPages = totalPages;
+                state.shops[shopId].currentPage = 1;  // Set currentPage to 1 for the initial fetch
                 state.loading = false;
             })
             .addCase(fetchProducts.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload || 'Something went wrong';
             })
+
+
+
+
 
             .addCase(loadMoreProducts.pending, (state) => {
                 state.loadingMoreProducts = true;
@@ -174,7 +234,7 @@ const shopProductsSlice = createSlice({
 
                     state.shops[shopId].products = [...state.shops[shopId].products, ...newProducts];
                     state.shops[shopId].hasMoreProducts = hasMoreProducts;
-                    state.shops[shopId].currentPage += 1;
+                    state.shops[shopId].currentPage += 1;  // Increment currentPage after loading more products
                 }
                 state.loadingMoreProducts = false;
             })
@@ -196,7 +256,8 @@ export const {
     resetShopProducts,
     toggleShopSortOrder,
     setShopPriceRange,
-    resetShopFilters
+    toggleBrand,
+    toggleCategory
 } = shopProductsSlice.actions;
 
 export default shopProductsSlice.reducer;

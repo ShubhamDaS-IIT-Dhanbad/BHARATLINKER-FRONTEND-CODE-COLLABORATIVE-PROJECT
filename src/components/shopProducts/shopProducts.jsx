@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 
@@ -20,34 +20,46 @@ const ProductSearch = () => {
     const dispatch = useDispatch();
     const { shopId, shopName } = useParams();
 
-    const productsPerPage = 2;
+    const productsPerPage = 20;
     const [inputValue, setInputValue] = useState('');
-    const [loadingMoreProducts, setLoadingMoreProducts] = useState(false); // State for loading more products
+    const [loadingMoreProducts, setLoadingMoreProducts] = useState(false);
 
     const shops = useSelector((state) => state.shopproducts.shops);
     const loading = useSelector((state) => state.shopproducts.loading);
 
     const shopData = shops[shopId] || {};
-    const { products = [], loading: shopLoading = false, hasMoreProducts = false, currentPage, sortByAsc = true, sortByDesc } = shopData;
+    const {
+        products = [],
+        loading: shopLoading = false,
+        hasMoreProducts = false,
+        currentPage = 1,
+        sortByAsc = true,
+        sortByDesc,
+        selectedBrands,
+        selectedCategories,
+    } = shopData;
 
     const [showSortBy, setShowSortBy] = useState(false);
     const [showFilterBy, setShowFilterBy] = useState(false);
 
-    const handleSearch = () => {
+    // Memoize handleSearch using useCallback
+    const handleSearch = useCallback(() => {
         const params = {
             inputValue,
             page: 1,
             productsPerPage,
             pinCodes: [742136],
-            selectedCategories: [],
+            selectedCategories,
+            selectedBrands,
             sortByAsc,
             sortByDesc,
             shopId,
         };
         dispatch(fetchProducts(params));
-    };
+    }, [dispatch, inputValue, selectedCategories, selectedBrands, sortByAsc, sortByDesc, shopId]);
 
-    const onLoadMore = () => {
+    // Memoize onLoadMore using useCallback
+    const onLoadMore = useCallback(() => {
         if (!hasMoreProducts || loadingMoreProducts) return;
         setLoadingMoreProducts(true);
         const params = {
@@ -55,21 +67,21 @@ const ProductSearch = () => {
             page: currentPage + 1,
             productsPerPage,
             pinCodes: [742136, 742137],
-            selectedCategories: [],
+            selectedCategories,
+            selectedBrands,
             sortByAsc,
             sortByDesc,
             shopId,
         };
-        dispatch(loadMoreProducts(params)).finally(() => {
-            setLoadingMoreProducts(false); // Reset loading state after fetching
-        });
-    };
+        dispatch(loadMoreProducts(params)).finally(() => setLoadingMoreProducts(false));
+    }, [dispatch, inputValue, currentPage, loadingMoreProducts, hasMoreProducts, selectedCategories, selectedBrands, sortByAsc, sortByDesc, shopId]);
 
+    // Trigger search when selectedCategories or selectedBrands change
     useEffect(() => {
-        if (shopId && !loading && !Object.keys(shopData).length) {
+        if (shopId && !loading && products.length === 0) {
             handleSearch();
         }
-    }, [shopId, shopData, loading]); // Add dependencies for proper triggering
+    }, [products.length]);
 
     return (
         <>
@@ -83,7 +95,7 @@ const ProductSearch = () => {
                 />
             </div>
 
-            {(loading || shopLoading ) && !loadingMoreProducts ? (
+            {(loading || shopLoading) && !loadingMoreProducts ? (
                 <div className="refurbished-page-loading-container">
                     <RotatingLines width="60" height="60" color="#007bff" />
                 </div>
@@ -111,8 +123,10 @@ const ProductSearch = () => {
             )}
             {showFilterBy && (
                 <ProductFilterBySection
+                    shopId={shopId}
+                    selectedBrands={selectedBrands}
+                    selectedCategories={selectedCategories}
                     handleSearch={handleSearch}
-                    showFilterBy={showFilterBy}
                     setShowFilterBy={setShowFilterBy}
                 />
             )}

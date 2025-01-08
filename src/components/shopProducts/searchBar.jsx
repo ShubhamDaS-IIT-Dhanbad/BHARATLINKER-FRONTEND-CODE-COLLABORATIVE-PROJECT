@@ -5,7 +5,6 @@ import { FaArrowLeft } from 'react-icons/fa';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 import './searchBar.css';
-
 import { resetShopProducts } from '../../redux/features/shopProducts/searchProductSlice';
 
 const ProductSearchBar = ({ shopId, setInputValue, inputValue,handleSearchProduct}) => {

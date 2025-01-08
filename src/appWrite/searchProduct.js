@@ -18,7 +18,8 @@ class SearchProductService {
     // Method to fetch products with filters including price range (minPrice, maxPrice)
     async getProducts({
         inputValue = '',
-        selectedCategories = [],
+        selectedCategories,
+        selectedBrands,
         minPrice,
         maxPrice,
         isInStock,
@@ -48,10 +49,11 @@ class SearchProductService {
 
             // Filter by categories
             if (selectedCategories.length > 0) {
-                queries.push(Query.or([
-                    Query.contains('productType', selectedCategories),
-                    Query.contains('keywords', selectedCategories),
-                ]));
+                queries.push(Query.contains('category', selectedCategories));
+            }
+            // Filter by categories
+            if (selectedBrands.length > 0) {
+                queries.push(Query.contains('brand', selectedBrands));
             }
 
 
