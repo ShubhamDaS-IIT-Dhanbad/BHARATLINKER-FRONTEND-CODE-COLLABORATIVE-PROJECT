@@ -148,8 +148,8 @@ const ProductDetails = () => {
 
                                 <div id="product-details-price-button">
                                     <div id="searchProductDetails-price-button-inner">
-                                        <p id="refurbishedProductDetails-price">₹{productDetail?.price}</p>
-                                        <p id="refurbishedProductDetails-discounted-price">₹{productDetail?.discountedPrice}</p>
+                                        <p id="productDetails-price">₹{productDetail?.price}</p>
+                                        <div id="productDetails-discounted-price">₹{productDetail?.discountedPrice}</div>
                                     </div>
 
                                     <div id={`product-details-price-${productDetail?.isInStock ? 'instock' : 'outofstock'}`}>
