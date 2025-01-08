@@ -28,7 +28,9 @@ const ProductDetails = () => {
             } else {
                 navigate('/refurbished');
             }
-            setLoading(false);
+            setTimeout(() => {
+                setLoading(false);
+            }, 400);
         };
 
         fetchProductDetails();
