@@ -45,7 +45,6 @@ const SingleRefurbishedProductSearchBar = () => {
                             tabIndex={0}
                         >
                             Baharampur, Murshidabad, WB
-                            <TbChevronDown size={15} />
                         </div>
                     </div>
                 </div>
