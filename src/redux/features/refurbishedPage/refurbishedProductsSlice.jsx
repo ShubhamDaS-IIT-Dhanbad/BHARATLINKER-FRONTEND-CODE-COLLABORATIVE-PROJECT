@@ -159,6 +159,9 @@ const refurbishedProductsSlice = createSlice({
         state.loading = false;
         state.error = action.error.message;
       })
+
+
+      
       // Load more refurbished products
       .addCase(loadMoreRefurbishedProducts.pending, (state) => {
         state.loadingMoreProducts = true;

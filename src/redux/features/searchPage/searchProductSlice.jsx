@@ -4,15 +4,15 @@ import searchProductService from '../../../appWrite/searchProduct.js';
 // Async thunk to fetch products
 export const fetchProducts = createAsyncThunk(
     'products/fetchProducts',
-    async ({ inputValue, selectedCategories, selectedBrands, pinCodes, page, productsPerPage, sortByAsc, sortByDesc }, { rejectWithValue }) => {
+    async ({ inputValue, selectedCategories, selectedBrands,page, productsPerPage, sortByAsc, sortByDesc }, { rejectWithValue }) => {
         try {
             const response = await searchProductService.getProducts({
-                inputValue, 
-                page, 
-                productsPerPage, 
-                sortByAsc, 
-                sortByDesc, 
-                selectedBrands, 
+                inputValue,
+                page,
+                productsPerPage,
+                sortByAsc,
+                sortByDesc,
+                selectedBrands,
                 selectedCategories
             });
 
@@ -41,18 +41,17 @@ export const fetchProducts = createAsyncThunk(
 // Async thunk to load more products
 export const loadMoreProducts = createAsyncThunk(
     'products/loadMoreProducts',
-    async ({ inputValue, selectedCategories, selectedBrands, pinCodes, page, productsPerPage, sortByAsc, sortByDesc }, { rejectWithValue }) => {
+    async ({ inputValue, selectedCategories, selectedBrands,page, productsPerPage, sortByAsc, sortByDesc }, { rejectWithValue }) => {
         try {
             const response = await searchProductService.getProducts({
-                inputValue, 
-                page, 
-                productsPerPage, 
-                selectedCategories, 
-                selectedBrands, 
-                sortByAsc, 
+                inputValue,
+                page,
+                productsPerPage,
+                selectedCategories,
+                selectedBrands,
+                sortByAsc,
                 sortByDesc
             });
-
             if (response.products && response.success) {
                 return {
                     products: response.products,
@@ -71,11 +70,15 @@ export const loadMoreProducts = createAsyncThunk(
 // Initial state
 const initialState = {
     products: [],
+
     loading: false,
     loadingMoreProducts: false,
+
     currentPage: 1,
+
     selectedCategories: [],
     selectedBrands: [],
+
     totalPages: 1,
     sortByAsc: false,
     sortByDesc: false,
@@ -96,14 +99,7 @@ const productsSlice = createSlice({
         resetProducts: (state) => {
             Object.assign(state, initialState);
         },
-        sortProductReducer: (state, action) => {
-            const { asc, desc } = action.payload;
-            if (asc) {
-                state.products.sort((a, b) => a.price - b.price);
-            } else if (desc) {
-                state.products.sort((a, b) => b.price - a.price);
-            }
-        },
+
         toggleSortOrder: (state, action) => {
             const order = action.payload;
             if (order === 'asc') {
@@ -114,6 +110,15 @@ const productsSlice = createSlice({
                 if (state.sortByDesc) state.sortByAsc = false;
             }
         },
+        sortProductReducer: (state) => {
+            const { sortByAsc, sortByDesc } = state;
+            if (sortByAsc) {
+                state.products = state.products.sort((a, b) => a.price - b.price);
+            } else if (sortByDesc) {
+                state.products = state.products.sort((a, b) => b.price - a.price);
+            }
+        },
+
         setPriceRange: (state, action) => {
             const { min, max } = action.payload;
             state.priceRange = { min, max };
@@ -130,7 +135,6 @@ const productsSlice = createSlice({
             } else {
                 state.selectedCategories.push(category);
             }
-            console.log(category, "lp", state.selectedCategories);
         },
         toggleBrand: (state, action) => {
             const brand = action.payload;
@@ -163,17 +167,32 @@ const productsSlice = createSlice({
                 state.hasMoreProducts = false;
             })
 
+
+
             .addCase(loadMoreProducts.pending, (state) => {
                 state.loadingMoreProducts = true;
                 state.error = null;
             })
             .addCase(loadMoreProducts.fulfilled, (state, action) => {
                 const { products, hasMoreProducts } = action.payload;
-                
-                const newProducts = products.filter(
-                    (product) => !state.products.some(existingProduct => existingProduct.$id === product.$id)
-                );
-                state.products = [...state.products, ...newProducts];
+
+                if (products.length > 0) {
+                    // Filter out duplicate products
+                    const newProducts = products.filter(
+                        (product) => !state.products.some(existingProduct => existingProduct.$id === product.$id)
+                    );
+
+                    // Merge the new products with the existing ones
+                    state.products = [...state.products, ...newProducts];
+
+                    // Sort products based on sortByAsc or sortByDesc
+                    if (state.sortByAsc) {
+                        state.products.sort((a, b) => a.price - b.price);
+                    } else if (state.sortByDesc) {
+                        state.products.sort((a, b) => b.price - a.price);
+                    }
+                }
+                // Update other state properties
                 state.currentPage += 1;
                 state.hasMoreProducts = hasMoreProducts;
                 state.loadingMoreProducts = false;
@@ -191,19 +210,19 @@ export const selectProducts = (state) => state.searchproducts.products;
 export const selectLoading = (state) => state.searchproducts.loading;
 export const selectCurrentPage = (state) => state.searchproducts.currentPage;
 export const selectError = (state) => state.searchproducts.error;
-export const selectSelectedCategories = (state) => state.searchproducts.selectedCategories; // New selector for selectedCategories
+export const selectedCategories = (state) => state.searchproducts.selectedCategories; // New selector for selectedCategories
 
 // Exporting actions and reducer
-export const { 
-    setCurrentPage, 
-    resetProducts, 
-    sortProductReducer, 
-    toggleSortOrder, 
-    toggleBrand, 
-    setPriceRange, 
-    resetSortFilters, 
-    resetFilters, 
-    toggleCategory 
+export const {
+    setCurrentPage,
+    resetProducts,
+    sortProductReducer,
+    toggleSortOrder,
+    toggleBrand,
+    setPriceRange,
+    resetSortFilters,
+    resetFilters,
+    toggleCategory
 } = productsSlice.actions;
 
 export default productsSlice.reducer;

@@ -24,6 +24,7 @@ const refurbishedFilterSectionSlice = createSlice({
             } else {
                 state.selectedCategories.push(category);
             }
+            
         },
         toggleRefurbishedBrand: (state, action) => {
             const brand = action.payload.toLowerCase(); // Convert brand to lowercase

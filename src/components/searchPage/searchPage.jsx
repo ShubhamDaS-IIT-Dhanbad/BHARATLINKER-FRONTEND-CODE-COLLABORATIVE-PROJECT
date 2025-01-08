@@ -14,8 +14,8 @@ import { RotatingLines } from 'react-loader-spinner';
 
 import InfiniteScroll from 'react-infinite-scroll-component';
 
-import ProductSortBySection from './sortbySection.jsx'
-import ProductFilterBySection from './filterSection.jsx'
+import ProductSortBySection from './sortbySection.jsx';
+import ProductFilterBySection from './filterSection.jsx';
 
 import './searchPage.css';
 
@@ -56,10 +56,11 @@ const SearchPage = () => {
     };
 
     const onLoadMore = () => {
+        if (!hasMoreProducts || loadingMoreProducts) return;
         const params = {
             inputValue,
             page: currenPage + 1,
-            productsPerPage: 2,
+            productsPerPage: 3,
             pinCodes: [742136, 742137],
             selectedCategories: [],
             selectedBrands: [],
@@ -67,12 +68,13 @@ const SearchPage = () => {
             sortByDesc,
         };
         dispatch(loadMoreProducts(params));
+
     };
 
     return (
         <>
             <ToastContainer />
-            <div id='productSearchPage-container-top'>
+            <div id="productSearchPage-container-top">
                 <SearchBar
                     inputValue={inputValue}
                     onInputChange={handleInputChange}
@@ -80,27 +82,24 @@ const SearchPage = () => {
                     onNavigateHome={() => navigate('/')}
                 />
             </div>
-            <>
-                {loading ? (
-                    <div className="refurbished-page-loading-container">
-                        <RotatingLines width="60" height="60" color="#007bff" />
-                    </div>
-                ) : (
-
-                    <InfiniteScroll
-                        dataLength={products.length}
-                        next={onLoadMore}
-                        hasMore={hasMoreProducts}
-                        loader={loadingMoreProducts && <h4>Loading more products...</h4>}
-                    >
-                        <ProductList
-                            products={products}
-                            hasMoreProducts={hasMoreProducts}
-                            loadingMoreProducts={loadingMoreProducts}
-                        />
-                    </InfiniteScroll>
-                )}
-            </>
+            {loading ? (
+                <div className="refurbished-page-loading-container">
+                    <RotatingLines width="60" height="60" color="#007bff" />
+                </div>
+            ) : (
+                <InfiniteScroll
+                    dataLength={products.length}
+                    next={onLoadMore}
+                    hasMore={hasMoreProducts}
+                    loader={loadingMoreProducts && <h4>Loading more products...</h4>}
+                >
+                    <ProductList
+                        products={products}
+                        hasMoreProducts={hasMoreProducts}
+                        loadingMoreProducts={loadingMoreProducts}
+                    />
+                </InfiniteScroll>
+            )}
             {showSortBy && (
                 <ProductSortBySection
                     handleSearch={executeSearch}
@@ -108,6 +107,7 @@ const SearchPage = () => {
                     setShowSortBy={setShowSortBy}
                     sortByAsc={sortByAsc}
                     sortByDesc={sortByDesc}
+                    products={products}
                 />
             )}
             {showFilterBy && (
@@ -118,16 +118,16 @@ const SearchPage = () => {
                 />
             )}
 
-            <div id='productSearchPage-footer'>
+            <div id="productSearchPage-footer">
                 <div
-                    id='productSearchPage-footer-sortby'
+                    id="productSearchPage-footer-sortby"
                     onClick={() => setShowSortBy(!showSortBy)}
                 >
                     <LiaSortSolid size={33} />
                     SORT BY
                 </div>
                 <div
-                    id='productSearchPage-footer-filterby'
+                    id="productSearchPage-footer-filterby"
                     onClick={() => setShowFilterBy(!showFilterBy)}
                 >
                     <MdFilterList size={33} />
@@ -139,4 +139,3 @@ const SearchPage = () => {
 };
 
 export default SearchPage;
-

@@ -20,8 +20,8 @@ const ProductDetails = () => {
     const { shops } = useSelector((state) => state.searchshops);
     const { singleShops } = useSelector((state) => state.singleshops);
 
-        
-    
+
+
     const { productId } = useParams();
 
     const [loading, setLoading] = useState(true);
@@ -34,7 +34,7 @@ const ProductDetails = () => {
     useEffect(() => {
         const fetchProductDetails = async () => {
             let product = products.find((product) => product.$id === productId);
-           
+
             if (product) {
                 setProductDetails(product);
                 setSelectedImage(product.images[0] || 'http://res.cloudinary.com/dthelgixr/image/upload/v1727870088/hd7kcjuz8jfjajnzmqkp.webp');
@@ -77,7 +77,7 @@ const ProductDetails = () => {
         fetchProductDetails();
     }, []);
 
-  
+
 
     const toggleDescription = () => {
         setShowDescription(!showDescription);
@@ -96,7 +96,7 @@ const ProductDetails = () => {
     return (
         <Fragment>
             <div id='product-details-search-container-top'>
-                <SingleProductSearchBar/>
+                <SingleProductSearchBar />
             </div>
 
             {loading ? (
@@ -149,7 +149,10 @@ const ProductDetails = () => {
                                 </div>
 
                                 <div id="product-details-price-button">
-                                    <p>₹{productDetail.price}</p>
+                                    <div id="searchProductDetails-price-button-inner">
+                                        <p id="refurbishedProductDetails-price">₹{productDetail.price}</p>
+                                        <p id="refurbishedProductDetails-discounted-price">₹{productDetail.discountedPrice}</p>
+                                    </div>
                                     <div id={`product-details-price-${productDetail.isInStock ? 'instock' : 'outofstock'}`}>
                                         {productDetail.isInStock ? 'IN STOCK' : 'OUT OF STOCK'}
                                     </div>
@@ -161,7 +164,6 @@ const ProductDetails = () => {
                                     </div>
                                 )}
                             </div>
-                            <div id="product-details-bottom-text">@Bharat Linker 2025</div>
                         </>
                     )}
                 </Fragment>

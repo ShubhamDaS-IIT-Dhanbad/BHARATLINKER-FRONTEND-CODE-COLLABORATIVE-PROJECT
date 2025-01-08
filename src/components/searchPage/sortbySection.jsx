@@ -1,17 +1,16 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch} from 'react-redux';
 import { toggleSortOrder,sortProductReducer } from '../../redux/features/searchPage/searchProductSlice.jsx';
 
 
 import { IoClose } from "react-icons/io5";
-const RefurbishedProductSortBySection = ({ showSortBy, setShowSortBy,sortByAsc, sortByDesc }) => {
+const RefurbishedProductSortBySection = ({ showSortBy, setShowSortBy,sortByAsc, sortByDesc}) => {
     const dispatch = useDispatch();
     
     // Handle sort order change
     const handleSortOrderChange = (order) => {
         dispatch(toggleSortOrder(order));
-        dispatch(sortProductReducer({ asc: sortByAsc, desc: sortByDesc }));
+        dispatch(sortProductReducer({ sortByAsc,sortByDesc}));
     };
 
     // Sort option component

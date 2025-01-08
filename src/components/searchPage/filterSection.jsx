@@ -1,40 +1,41 @@
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { IoClose, IoSearch } from 'react-icons/io5';
 
 import {
-  toggleCategory,
-  toggleBrand
-} from '../../redux/features/searchPage/searchProductSlice.jsx';
-import { resetProducts } from '../../redux/features/searchPage/searchProductSlice.jsx';
+  toggleSearchProductsCategory,
+  toggleSearchProductsBrand,
+  resetSearchProductsFilters,
+} from '../../redux/features/searchPage/searchProductFilterSectionSlice'; // Update the path as per your file structure
 
 import './filterSection.css';
 
-const RefurbishedProductFilterSection = ({ showFilterBy, setShowFilterBy }) => {
+const SearchProductFilterSection = ({ showFilterBy, setShowFilterBy }) => {
   const dispatch = useDispatch();
 
+  const selectedBrands= useSelector((state) => state.searchproductsfiltersection.selectedBrands);
+  const selectedCategories = useSelector(
+    (state) => state.searchproductsfiltersection.selectedCategories
+  );
+  
   const [searchTerms, setSearchTerms] = useState({
     category: '',
-    brand: ''
+    brand: '',
   });
 
-  const { selectedBrands, selectedCategories } = useSelector(
-    (state) => state.searchproducts
-  );
   const allFilters = {
-    category: ['Electronics', 'Fashion', 'Home', 'book', 'Module'],
+    category: ['Electronics', 'Fashion', 'Home', 'Books', 'Modules'],
     brand: ['Samsung', 'Apple', 'Sony', 'Dell', 'HP'],
   };
 
   const filterActions = {
-    category: toggleCategory,
-    brand: toggleBrand,
+    category: toggleSearchProductsCategory,
+    brand: toggleSearchProductsBrand,
   };
 
   const handleFilterClick = (filterType, value) => {
-    console.log(filterType,value)
     dispatch(filterActions[filterType](value.toLowerCase()));
-    dispatch(resetProducts());
+    dispatch(resetSearchProductsFilters());
   };
 
   const filterItems = useCallback(
@@ -48,6 +49,8 @@ const RefurbishedProductFilterSection = ({ showFilterBy, setShowFilterBy }) => {
 
   const renderFilter = (filterType, title) => {
     const filteredItems = filterItems(filterType);
+    const selectedItems =
+      filterType === 'category' ? selectedCategories : selectedBrands;
 
     return (
       <div className="product-page-filter-options" key={filterType}>
@@ -69,19 +72,16 @@ const RefurbishedProductFilterSection = ({ showFilterBy, setShowFilterBy }) => {
         <div className="filter-items">
           {filteredItems.length > 0 ? (
             filteredItems.map((item, index) => {
-              const isSelected =
-                (filterType === 'category'
-                  ? selectedCategories
-                  : selectedBrands
-                )?.includes(item.toLowerCase()) || false;
+              const isSelected = selectedItems.includes(item.toLowerCase());
 
               return (
                 <span
                   key={`${filterType}-${item}-${index}`}
-                  className={`filter-option ${isSelected
-                    ? 'product-page-selected-category'
-                    : 'product-page-unselected-category'
-                    }`}
+                  className={`filter-option ${
+                    isSelected
+                      ? 'product-page-selected-category'
+                      : 'product-page-unselected-category'
+                  }`}
                   onClick={() => handleFilterClick(filterType, item)}
                 >
                   {item}
@@ -97,7 +97,7 @@ const RefurbishedProductFilterSection = ({ showFilterBy, setShowFilterBy }) => {
   };
 
   return (
-    <div className="product-page-filter-section">
+    <div className={`product-page-filter-section ${showFilterBy ? 'show' : ''}`}>
       {showFilterBy && (
         <>
           <div
@@ -107,7 +107,7 @@ const RefurbishedProductFilterSection = ({ showFilterBy, setShowFilterBy }) => {
           >
             <IoClose size={25} />
           </div>
-          <div style={{ color: 'white' }}>FILTER SECTION</div>
+          <div className="filter-section-title">FILTER SECTION</div>
 
           <div className="product-page-filter-options-container">
             {renderFilter('category', 'Category')}
@@ -119,4 +119,4 @@ const RefurbishedProductFilterSection = ({ showFilterBy, setShowFilterBy }) => {
   );
 };
 
-export default RefurbishedProductFilterSection;
+export default SearchProductFilterSection;

@@ -4,6 +4,7 @@ import pincodestate from '../features/pincodeUpdatedSlice.jsx'
 
 // search page
 import searchproducts from '../features/searchPage/searchProductSlice.jsx'
+import searchproductsfiltersection from '../features/searchPage/searchProductFilterSectionSlice.jsx'
 
 //search shops
 import searchshops from '../features/searchShopSlice.jsx'
@@ -25,6 +26,7 @@ const store=configureStore({
 
         // search page
         searchproducts:searchproducts,
+        searchproductsfiltersection:searchproductsfiltersection,
 
         //search shops
         searchshops:searchshops,

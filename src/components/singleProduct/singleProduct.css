@@ -1,44 +1,10 @@
-#product-details-search-container-top-div {
-    display: flex;
-    justify-content: center;border: 1px solid black;
-    align-items: center;
-    background-color: rgb(255, 255, 255);
-    border-radius: 11px;
-   width: 97%;height: 40px;
- }
- 
- #product-details-search-container-top {
-        width: 100%;
-        height: 55px;
-        position: fixed;
-        top: 0;
-        background-color: rgb(135, 162, 255);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 999;
- }
- 
- 
- #product-details-search-bar {
-    width: 100%;
-    border: none; /* Removes the border */
-    outline: none; /* Removes default focus outline */
-    padding: 10px; /* Add padding if needed for better aesthetics */
-    padding-left: 0px;
-    box-sizing: border-box; /* Ensures padding is included in the element's total width */
-    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-    font-size: 13px;height: 35px;
- }
-
 
 
 #product-details-container {
     display: flex;
     flex-direction: column;
     min-height: 90vh;width: 100vw;
-    margin-top: 120px;
-    margin-bottom: 5vh;
+    margin-top: 120px;margin-bottom: 10vh;
 }
 
 #product-details-img {
@@ -97,14 +63,17 @@
 }
 
 #product-details-price-button {
-    margin: 10px 0px 30px 0px;
-    padding: 10px;flex-grow: 1;
-    display: flex;
+    margin: 10px 0px 0px 0px;
+    padding: 10px 0px 10px 0px;background-color: #252525;
+    display: flex;align-items: center;position: fixed;bottom: 0;
+    width: 100vw;
     justify-content: space-between;
     font-weight: 900;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
-
+#searchProductDetails-price-button-inner{
+    margin-left: 10px;
+}
 #product-details-price-button p {
     height: 40px;font-size: 20px;
     display: flex;font-weight: 900;
@@ -113,17 +82,17 @@
 }
 
 #product-details-price-outofstock {
-    width: 110px;
-    height: 40px;border: 1px solid rgb(228, 48, 48);
+    width: 110px;margin-right: 10px;
+    height: 40px;border: 1px solid rgb(208, 67, 67);
     display: flex;
-    justify-content: center;font-weight: 700;
+    justify-content: center;font-weight: 900;
     align-items: center;
     border-radius: 5px;
-    color: rgb(228, 54, 54);
-    padding: 2px;font-size: 12px;
+    color: rgb(225, 14, 14);
+    padding: 2px;font-size: 19px;
 }
 #product-details-price-instock {
-    width: 110px;
+    width: 110px;margin-right: 10px;
     height: 40px;border: 1px solid rgb(67, 208, 123);
     display: flex;
     justify-content: center;font-weight: 900;
