@@ -8,7 +8,7 @@ import './singleShopSearchBar.css';
 import { useDispatch } from 'react-redux'; // Import useDispatch for dispatching actions
 import { resetShops } from '../../redux/features/searchShopSlice.jsx'; // Ensure resetShops is imported
 
-const SingleShopSearchBar = () => {
+const SingleShopSearchBar = ({shopName}) => {
     const navigate = useNavigate();
     const dispatch = useDispatch(); // Initialize dispatch
     const [inputValue, setInputValue] = useState(''); // Initialize state for input value
@@ -37,7 +37,7 @@ const SingleShopSearchBar = () => {
                         tabIndex={0}
                     />
                     <div className='single-shop-search-header-location'>
-                        <p className='single-shop-search-location-label'>SHOP DETAIL</p>
+                        <p className='single-shop-search-location-label'>{shopName}</p>
                         <div 
                             className='single-shop-search-location-value' 
                             onClick={() => setLocationTab(true)}  // Navigate to pincode page

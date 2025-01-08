@@ -21,6 +21,9 @@ const ShopDetails = () => {
     const { shops } = useSelector((state) => state.searchshops);
     const { singleShops } = useSelector((state) => state.singleshops);
 
+   
+    const [shopName, setShopName] = useState("SHOP DETAIL");
+    
     const [shopDetail, setShopDetail] = useState(null);
     const [searchQuery, setSearchQuery] = useState("");
     const [showContact, setShowContact] = useState(false);
@@ -36,6 +39,7 @@ const ShopDetails = () => {
 
             if (shop) {
                 setShopDetail(shop);
+                setShopName(shop.shopName);
                 setSelectedImage(shop.shopImages[0] || ""); // Default to empty if no images
             } else {
                 try {
@@ -87,7 +91,7 @@ const ShopDetails = () => {
     return (
         <Fragment>
             <div id="product-details-search-container-top">
-                <SingleShopSearchBar />
+                <SingleShopSearchBar shopName={shopName.toUpperCase()}/>
             </div>
 
             {shopDetail ? (
