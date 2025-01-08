@@ -3,22 +3,14 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import "./singleShop.css";
 import {
-    MdOutlineKeyboardArrowLeft,
     MdOutlineKeyboardArrowRight,
 } from "react-icons/md";
 import { fetchShopById } from "../../redux/features/singleShopSlice.jsx";
-import { BiSearchAlt } from "react-icons/bi";
-import { MdOutlineStore } from "react-icons/md";
-import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
-import { IoLocationOutline } from "react-icons/io5";
-import SingleShopSearchBar from "./singleShopSearchBar.jsx";
-
-
 import { FaPhoneAlt } from "react-icons/fa";
-import { CiLocationArrow1 } from "react-icons/ci";
-import { CiMail } from "react-icons/ci";
+import { CiLocationArrow1, CiMail } from "react-icons/ci";
 import { AiOutlineInfo } from "react-icons/ai";
-
+import SingleShopSearchBar from "./singleShopSearchBar.jsx";
+import { IoClose} from 'react-icons/io5';
 
 const ShopDetails = () => {
     const { shopId } = useParams();
@@ -28,14 +20,10 @@ const ShopDetails = () => {
     const { shops } = useSelector((state) => state.searchshops);
     const { singleShops } = useSelector((state) => state.singleshops);
 
-
-    const [shopName, setShopName] = useState("SHOP DETAIL");
-
     const [shopDetail, setShopDetail] = useState(null);
-    const [searchQuery, setSearchQuery] = useState("");
-    const [showContact, setShowContact] = useState(false);
-    const [showAddress, setShowAddress] = useState(false);
+    const [shopName, setShopName] = useState("SHOP DETAIL");
     const [selectedImage, setSelectedImage] = useState("");
+    const [showDescription, setShowDescription] = useState(false);
 
     useEffect(() => {
         const fetchShopDetails = async () => {
@@ -47,7 +35,7 @@ const ShopDetails = () => {
             if (shop) {
                 setShopDetail(shop);
                 setShopName(shop.shopName);
-                setSelectedImage(shop.shopImages[0] || ""); // Default to empty if no images
+                setSelectedImage(shop.shopImages[0] || "");
             } else {
                 try {
                     const response = await dispatch(fetchShopById(shopId));
@@ -62,17 +50,6 @@ const ShopDetails = () => {
         };
         fetchShopDetails();
     }, [shopId, shops, singleShops, dispatch]);
-
-    const handleSearchChange = (e) => setSearchQuery(e.target.value);
-
-    const handleEnter = (e) => {
-        if (e.key === "Enter" && searchQuery.trim()) {
-            navigate(`/search?query=${searchQuery}`);
-        }
-    };
-
-    const toggleContact = () => setShowContact(!showContact);
-    const toggleAddress = () => setShowAddress(!showAddress);
 
     const redirectMap = () => {
         if (navigator.geolocation) {
@@ -95,6 +72,26 @@ const ShopDetails = () => {
         }
     };
 
+    const handlePhoneClick = () => {
+        if (shopDetail?.phone) {
+            window.location.href = `tel:${shopDetail?.customerCare}`;
+        } else {
+            alert("Phone number not available.");
+        }
+    };
+
+    const handleMailClick = () => {
+        if (shopDetail?.email) {
+            window.location.href = `mailto:${shopDetail.email}`;
+        } else {
+            alert("Email not available.");
+        }
+    };
+
+    const toggleDescription = () => {
+        setShowDescription((prev) => !prev);
+    };
+
     return (
         <Fragment>
             <div id="product-details-search-container-top">
@@ -104,11 +101,11 @@ const ShopDetails = () => {
             {shopDetail ? (
                 <Fragment>
                     <div id="shop-details-container">
-                        <div id="shop-details-img">
-                            <div id="shop-details-img-div">
+                        <div className="shop-card-container">
+                            <div className="shop-card-header">
                                 <img
                                     src={selectedImage}
-                                    id="shop-details-img-selected"
+                                    className="shop-card-image"
                                     alt="Selected Shop"
                                 />
                             </div>
@@ -123,9 +120,7 @@ const ShopDetails = () => {
                                     className={
                                         selectedImage === image ? "image-select" : "image-unselect"
                                     }
-                                >
-                                    <div id="shop-details-thumbnail-item"></div>
-                                </div>
+                                ></div>
                             ))}
                         </div>
 
@@ -137,11 +132,9 @@ const ShopDetails = () => {
                             </div>
                         </div>
 
-
                         <div id="shop-details-see-all-products">
                             See All Products <MdOutlineKeyboardArrowRight size={11} />
                         </div>
-
 
                         <div id="shop-details-status">
                             <div
@@ -151,60 +144,49 @@ const ShopDetails = () => {
                                 {shopDetail.isOpened ? "OPENED" : "CLOSED"}
                             </div>
                         </div>
-
-                        {/* <div id="shop-details-hr"></div>
-
-                        <div
-                            id="shop-details-about"
-                            onClick={toggleAddress}
-                        >
-                            <p style={{ fontSize: "19px", fontWeight: "700" }}>Address</p>
-                            {showAddress ? <IoIosArrowUp size={25} /> : <IoIosArrowDown size={25} />}
-                        </div>
-
-                        {showAddress && (
-                            <div id="shop-details-description">{shopDetail?.address}</div>
-                        )}
-
-                        <div id="shop-details-hr"></div>
-
-                        <div
-                            id="shop-detail-contact"
-                            onClick={toggleContact}
-                        >
-                            <p style={{ fontSize: "19px", fontWeight: "700" }}>Contact</p>
-                            {showContact ? <IoIosArrowUp size={25} /> : <IoIosArrowDown size={25} />}
-                        </div>
-
-                        {showContact && (
-                            <div id="shop-details-description">
-                                {shopDetail.phoneNumber && `PHN ${shopDetail.phoneNumber}`}
-                                <br />
-                                {shopDetail.email && `Email ${shopDetail.email}`}
-                            </div>
-                        )} */}
-
                     </div>
                 </Fragment>
             ) : (
                 <p>Loading shop details...</p>
             )}
 
-
             <div id="shop-details-footer">
-                <div id="shop-details-footer-item-phn">
-                    <FaPhoneAlt  size={30} />
+                <div id="shop-details-footer-item-phn" onClick={handlePhoneClick}>
+                    <FaPhoneAlt size={30} />
                 </div>
-                <div id="shop-details-footer-item-loc" >
-                    <CiLocationArrow1  size={35}  onClick={redirectMap} />
+                <div id="shop-details-footer-item-loc">
+                    <CiLocationArrow1 size={35} onClick={redirectMap} />
                 </div>
                 <div id="shop-details-footer-item-mail">
                     <CiMail size={35} />
                 </div>
-                <div id="shop-details-footer-item-info">
+                <div id="shop-details-footer-item-info" onClick={toggleDescription}>
                     <AiOutlineInfo size={35} />
                 </div>
             </div>
+
+            {showDescription && (
+                <div className="productDetails-description-div-pop-up">
+                    <div
+                        className="productDetails-description-div-pop-up-close"
+                        onClick={toggleDescription}
+                        aria-label="Close filter options"
+                    >
+                        <IoClose size={30} />
+                    </div>
+                    <div className="productDetails-filter-section-title">SHOP DETAILS</div>
+
+                    <div className="productDetails-lists-description-container">
+                        
+                        <div id="productDetails-description">
+                            {shopDetail.description}
+                        </div>
+                    </div>
+                </div>
+            )}
+
+
+
         </Fragment>
     );
 };
