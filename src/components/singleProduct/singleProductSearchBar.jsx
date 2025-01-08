@@ -34,13 +34,13 @@ const SingleProductSearchBar = () => {
             {/* Header Section */}
             <div className='single-product-search-header-container'>
                 <div className='single-product-search-header-user-section'>
-                    <FaArrowLeft
+                    {/* <FaArrowLeft
                         id='single-product-search-back-icon'
                         size={25}
                         onClick={() => navigate('/search')}
                         aria-label="Go Back"
                         tabIndex={0}
-                    />
+                    /> */}
                     <div className='single-product-search-header-location'>
                         <p className='single-product-search-location-label'>PRODUCT DETAIL</p>
                         <div
