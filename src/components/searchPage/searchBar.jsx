@@ -59,7 +59,7 @@ const SearchBar = ({ inputValue, onInputChange, onSearch }) => {
                             tabIndex={0}
                         >
                             {/* Display loading text or address if available */}
-                            {loading ? 'Loading...' : (location ? location.address.slice(0, 22) : 'Location not set')}
+                            {loading ? 'Loading...' : (location ? location.address.slice(0, 30) : 'Location not set')}
                             <TbChevronDown size={15} />
                         </div>
                     </div>

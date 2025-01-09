@@ -38,23 +38,25 @@ function LocationTab({ setLocationTab }) {
             setSuggestions([]);
             return;
         }
-
+    
         const apiKey = conf.geoapifyapikey; 
         const apiUrl = `https://api.geoapify.com/v1/geocode/search?text=${query}&apiKey=${apiKey}&lang=en`;
-
+    
         setLoading(true);
-
+    
         try {
             const response = await fetch(apiUrl);
             const data = await response.json();
             if (data.features && data.features.length > 0) {
-                const formattedSuggestions = data.features.map((feature) => ({
-                    label: feature.properties.formatted,
-                    lat: feature.geometry.coordinates[1],
-                    lon: feature.geometry.coordinates[0],
-                    country: feature.properties.country,
-                    state: feature.properties.state || feature.properties.city,
-                }));
+                const formattedSuggestions = data.features
+                    .filter((feature) => feature.properties.country === 'India' && feature.properties.state) // Filter only states in India
+                    .map((feature) => ({
+                        label: feature.properties.formatted,  // Use the state as the label
+                        lat: feature.geometry.coordinates[1],
+                        lon: feature.geometry.coordinates[0],
+                        country: feature.properties.country,
+                        state: feature.properties.state, 
+                    }));
                 setSuggestions(formattedSuggestions);
             } else {
                 setSuggestions([]);
@@ -66,6 +68,7 @@ function LocationTab({ setLocationTab }) {
             setLoading(false);
         }
     };
+    
 
     const handleSearch = () => {
         fetchSuggestions(searchQuery);
