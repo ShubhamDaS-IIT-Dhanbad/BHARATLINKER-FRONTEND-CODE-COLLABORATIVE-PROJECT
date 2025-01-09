@@ -157,12 +157,29 @@
 }
 
 
-
-
-
-
-
 .location-tab-loader{
     display: flex;justify-content: center;
     align-items: center;
+}
+
+
+
+
+
+
+
+
+
+
+.location-tab-radius-options{
+    display: flex;
+    justify-content: center;align-items: center;
+    gap: 3px;
+}
+.location-tab-radius-option.selected{
+    border: 2px solid rgb(72, 241, 72);padding: 10px;border-radius: 10px;
+}
+.location-tab-radius-option.unselected{
+    border: 2px solid rgb(0, 0, 0);
+    padding: 10px;border-radius: 10px;
 }

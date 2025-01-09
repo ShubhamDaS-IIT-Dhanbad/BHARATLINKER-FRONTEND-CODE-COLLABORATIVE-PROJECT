@@ -1,23 +1,36 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { IoClose } from "react-icons/io5";
 import { MdMyLocation } from "react-icons/md";
 import { IoSearch } from "react-icons/io5";
 import { SlLocationPin } from "react-icons/sl";
-import Cookies from 'js-cookie'; // Import js-cookie
-import useLocationFromCookie from '../../hooks/useLocationFromCookie.jsx'; // Import custom hook
+import Cookies from 'js-cookie';
+import useLocationFromCookie from '../../hooks/useLocationFromCookie.jsx';
 import conf from '../../conf/conf.js';
-import { RotatingLines } from 'react-loader-spinner'; // Import RotatingLines loader
+import { RotatingLines } from 'react-loader-spinner';
 
 import './locationTab.css';
 
 function LocationTab({ setLocationTab }) {
     const [searchQuery, setSearchQuery] = useState('');
     const [suggestions, setSuggestions] = useState([]);
-    const [loading, setLoading] = useState(false); // State for loading
+    const [radius, setRadius] = useState(5); // default value is 5 km
+    const [loading, setLoading] = useState(false);
     const [fetchingUserLocation, setFetchingUserLocation] = useState(false);
+    const [radiusOptions] = useState([1, 2, 3, 4, 5]); // Options for radius in km
 
     // Using the custom hook to get stored location and updateLocation
     const { updateLocation } = useLocationFromCookie();
+
+    // Check if BharatLinkerUserLocation exists in cookies initially
+    useEffect(() => {
+        const storedLocation = Cookies.get('BharatLinkerUserLocation') 
+            ? JSON.parse(Cookies.get('BharatLinkerUserLocation')) 
+            : null;
+        
+        if (storedLocation) {
+            setRadius(storedLocation.radius || 5);  // Default radius 5 km if not found
+        }
+    }, []);
 
     // Function to fetch location suggestions from Geoapify
     const fetchSuggestions = async (query) => {
@@ -26,10 +39,10 @@ function LocationTab({ setLocationTab }) {
             return;
         }
 
-        const apiKey = conf.geoapifyapikey; // Geoapify API key
+        const apiKey = conf.geoapifyapikey; 
         const apiUrl = `https://api.geoapify.com/v1/geocode/search?text=${query}&apiKey=${apiKey}&lang=en`;
 
-        setLoading(true); // Show loader before fetching
+        setLoading(true);
 
         try {
             const response = await fetch(apiUrl);
@@ -44,34 +57,30 @@ function LocationTab({ setLocationTab }) {
                 }));
                 setSuggestions(formattedSuggestions);
             } else {
-                setSuggestions([]); // Clear suggestions if no results
+                setSuggestions([]);
             }
         } catch (error) {
             console.error('Error fetching suggestions:', error);
-            setSuggestions([]); // Clear suggestions on error
+            setSuggestions([]);
         } finally {
-            setLoading(false); // Hide loader after fetching
+            setLoading(false);
         }
     };
 
-    // Handle search when user presses enter or triggers the search
     const handleSearch = () => {
         fetchSuggestions(searchQuery);
     };
 
-    // Handle the "Enter" key press for search
     const handleKeyDown = (e) => {
         if (e.key === 'Enter') {
             handleSearch();
         }
     };
 
-    // Handle address click to set lat, long, and address in cookies
     const handleAddressClick = (suggestion) => {
         setSearchQuery(suggestion.label);
         setSuggestions([]);
 
-        // Update the location using the updateLocation function from the hook
         updateLocation({
             lat: suggestion.lat,
             lon: suggestion.lon,
@@ -81,7 +90,6 @@ function LocationTab({ setLocationTab }) {
         });
     };
 
-    // Handle "Use Current Location" with Geoapify Reverse Geocoding
     const handleUseCurrentLocation = () => {
         if (navigator.geolocation) {
             setFetchingUserLocation(true);
@@ -89,39 +97,46 @@ function LocationTab({ setLocationTab }) {
                 async (position) => {
                     const { latitude, longitude } = position.coords;
 
-                    const apiKey = conf.opencageapikey; // Using env variable for API key
-                    const apiUrl = `${conf.opencageapiurl}?key=${apiKey}&q=${latitude},${longitude}&pretty=1&no_annotations=1`;  // Pass lat, lon to API
+                    const apiKey = conf.opencageapikey;
+                    const apiUrl = `${conf.opencageapiurl}?key=${apiKey}&q=${latitude},${longitude}&pretty=1&no_annotations=1`;
 
-                    // Fetch address from OpenCage Geocoding API
                     try {
                         const response = await fetch(apiUrl);
                         const data = await response.json();
                         if (data.results && data.results.length > 0) {
                             const address = data.results[0].formatted;
-                            // Store location in cookies with lat, lon, and address
                             updateLocation({
                                 lat: latitude,
                                 lon: longitude,
                                 address: address,
+                                radius: 5, // Default radius
                             });
+                            setRadius(5);
                         } else {
                             console.error('Address not found');
                         }
                     } catch (error) {
                         console.error('Error fetching address:', error);
                     } finally {
-                        setFetchingUserLocation(false); // Stop loading
+                        setFetchingUserLocation(false);
                     }
                 },
                 (error) => {
                     console.error('Error fetching current location:', error);
-                    setFetchingUserLocation(false); // Stop loading on error
+                    setFetchingUserLocation(false);
                 }
             );
         } else {
             console.error('Geolocation is not supported by this browser.');
-            setFetchingUserLocation(false); // Stop loading if geolocation is not supported
+            setFetchingUserLocation(false);
         }
+    };
+
+    const handleRadiusChange = (radius) => {
+        setRadius(radius); // Update radius state
+        updateLocation({
+            radius: radius 
+        });
     };
 
     return (
@@ -139,7 +154,7 @@ function LocationTab({ setLocationTab }) {
                             placeholder="Search your location"
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
-                            onKeyDown={handleKeyDown} // Listen for "Enter" key press
+                            onKeyDown={handleKeyDown}
                         />
                     </div>
                     <div
@@ -149,6 +164,18 @@ function LocationTab({ setLocationTab }) {
                         <MdMyLocation size={23} />
                         Use current location
                     </div>
+                </div>
+
+                <div className="location-tab-radius-options">
+                    {radiusOptions.map((option) => (
+                        <span
+                            key={option}
+                            className={`location-tab-radius-option ${option === radius ? 'selected' : 'unselected'}`}
+                            onClick={() => handleRadiusChange(option)}
+                        >
+                            {option} km
+                        </span>
+                    ))}
                 </div>
 
                 {/* Show loading spinner when fetching data */}
@@ -181,7 +208,6 @@ function LocationTab({ setLocationTab }) {
                         ))}
                     </div>
                 )}
-
             </div>
         </div>
     );

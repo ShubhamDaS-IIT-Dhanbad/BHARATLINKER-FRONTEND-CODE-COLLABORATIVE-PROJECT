@@ -27,7 +27,26 @@ const useLocationFromCookies = () => {
 
     // Function to update location in cookies and state
     const updateLocation = (newLocation) => {
-        Cookies.set('BharatLinkerUserLocation', JSON.stringify(newLocation), { expires: 7 });
+        const storedLocation = Cookies.get('BharatLinkerUserLocation');
+        if (!storedLocation) {
+            // If no location data exists, store the new location
+            Cookies.set('BharatLinkerUserLocation', JSON.stringify(newLocation), { expires: 7 });
+        } else {
+            try {
+                const parsedLocation = JSON.parse(storedLocation);
+
+                // Destructure the existing location and merge with new data (only updated fields)
+                const updatedLocation = {
+                    ...parsedLocation,
+                    ...newLocation // This will update only the fields that are provided in `newLocation`
+                };
+
+                // Store the updated location in cookies
+                Cookies.set('BharatLinkerUserLocation', JSON.stringify(updatedLocation), { expires: 7 });
+            } catch (error) {
+                console.error("Error parsing location data from cookies:", error);
+            }
+        }
     };
 
     return { location, loading, updateLocation };
