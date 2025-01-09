@@ -15,8 +15,8 @@ function LocationTab({ setLocationTab }) {
     const [suggestions, setSuggestions] = useState([]);
     const [refresh, setRefresh] = useState(false); // State to trigger re-fetch
 
-    // Using the custom hook to get stored location
-    const { location, loading } = useLocationFromCookie();
+    // Using the custom hook to get stored location and updateLocation
+    const {updateLocation } = useLocationFromCookie();
 
     // Function to fetch location suggestions from Geoapify
     const fetchSuggestions = async (query) => {
@@ -63,14 +63,14 @@ function LocationTab({ setLocationTab }) {
         setSearchQuery(suggestion.label);
         setSuggestions([]);
 
-        // Update the cookies with the new location
-        Cookies.set('BharatLinkerUserLocation', JSON.stringify({
+        // Update the location using the updateLocation function from the hook
+        updateLocation({
             lat: suggestion.lat,
             lon: suggestion.lon,
             address: suggestion.label,
             country: suggestion.country,
             state: suggestion.state,
-        }), { expires: 7 });
+        });
 
         // Trigger a re-fetch of location data by updating the refresh state
         setRefresh(!refresh);
@@ -93,14 +93,11 @@ function LocationTab({ setLocationTab }) {
                         if (data.results && data.results.length > 0) {
                             const address = data.results[0].formatted;
                             // Store location in cookies with lat, lon, and address
-                            Cookies.set('BharatLinkerUserLocation', JSON.stringify({
+                            updateLocation({
                                 lat: latitude,
                                 lon: longitude,
-                                address: address
-                            }), { expires: 7 }); // Expires in 7 days
-
-                            // Trigger a re-fetch of location data by updating the refresh state
-                            setRefresh(!refresh);
+                                address: address,
+                            });
                         } else {
                             console.error('Address not found');
                         }

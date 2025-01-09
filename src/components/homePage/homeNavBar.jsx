@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { HiOutlineUserCircle } from "react-icons/hi2";
 import { BiSearchAlt } from "react-icons/bi";
 import { TbCategory2 } from "react-icons/tb";
 import { TiArrowSortedDown } from "react-icons/ti";
-import useLocationFromCookies from '../../hooks/useLocationFromCookie.jsx'; // Custom hook
 import Cookies from 'js-cookie';
 import './homeNavBar.css';
 import { useDispatch } from 'react-redux';
@@ -16,10 +15,29 @@ function HomePageNavbar() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    const { location, loading } = useLocationFromCookies();
-
+    const [location, setLocation] = useState(null);
+    const [loading, setLoading] = useState(true);
     const [homePageSearchInput, setHomePageSearchInput] = useState('');
     const [locationTab, setLocationTab] = useState(false);
+
+    // Fetch location from cookies on component mount
+    useEffect(() => {
+        const fetchLocation = () => {
+            const storedLocation = Cookies.get('BharatLinkerUserLocation');
+            if (storedLocation) {
+                try {
+                    const parsedLocation = JSON.parse(storedLocation);
+                    setLocation(parsedLocation);
+                } catch (error) {
+                    console.error("Error parsing location data from cookies:", error);
+                    setLocation(null);
+                }
+            }
+            setLoading(false);
+        };
+
+        fetchLocation();
+    }, [locationTab]);
 
     const handleHomePageSearchSubmit = () => {
         const trimmedInput = homePageSearchInput.trim();
@@ -53,7 +71,7 @@ function HomePageNavbar() {
                             <p className='home-page-location-label'>Bharat | Linker</p>
                             <div className='home-page-location-value'>
                                 {/* Display loading text if location is still loading */}
-                                {loading ? 'Loading...' : (location ? location?.address.slice(0,30) : 'Location not set')}
+                                {loading ? 'Loading...' : (location ? location?.address.slice(0, 30) : 'Location not set')}
                                 <TiArrowSortedDown size={15} />
                             </div>
                         </div>

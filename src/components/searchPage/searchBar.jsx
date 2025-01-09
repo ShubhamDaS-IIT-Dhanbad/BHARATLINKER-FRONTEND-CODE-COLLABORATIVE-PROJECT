@@ -1,19 +1,38 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BiSearchAlt } from "react-icons/bi";
 import { TbHomeMove, TbChevronDown } from "react-icons/tb";
 import { FaArrowLeft } from 'react-icons/fa'; // Import FaArrowLeft
 import { useNavigate } from 'react-router-dom'; // Import navigate hook for routing
+import Cookies from 'js-cookie';  // Import Cookies to access cookies
 import LocationTab from '../locationTab/locationTab';
-import useLocationFromCookies from '../../hooks/useLocationFromCookie.jsx'; // Import the custom hook
 import './searchBar.css';
 
-const SearchBar = ({ inputValue, onInputChange, onSearch, onNavigateHome }) => {
+const SearchBar = ({ inputValue, onInputChange, onSearch }) => {
     const navigate = useNavigate(); // Initialize navigate hook
+    const [location, setLocation] = useState(null);
+    const [loading, setLoading] = useState(true);
     const [locationTab, setLocationTab] = useState(false);
 
-    // Using the custom hook to get user location from cookies
-    const { location, loading } = useLocationFromCookies();
+    // Fetch location from cookies when the component mounts
+    useEffect(() => {
+        const fetchLocation = () => {
+            const storedLocation = Cookies.get('BharatLinkerUserLocation');
+            if (storedLocation) {
+                try {
+                    const parsedLocation = JSON.parse(storedLocation);
+                    setLocation(parsedLocation);
+                } catch (error) {
+                    console.error("Error parsing location data from cookies:", error);
+                    setLocation(null);
+                }
+            }
+            setLoading(false); // Set loading to false after fetching location
+        };
 
+        fetchLocation();
+    }, []);
+
+    // Handle Enter key press for search
     const handleKeyPress = (e) => {
         if (e.key === 'Enter') {
             onSearch();
@@ -40,7 +59,7 @@ const SearchBar = ({ inputValue, onInputChange, onSearch, onNavigateHome }) => {
                             tabIndex={0}
                         >
                             {/* Display loading text or address if available */}
-                            {loading ? 'Loading...' : (location ? location.address : 'Location not set')}
+                            {loading ? 'Loading...' : (location ? location.address.slice(0, 22) : 'Location not set')}
                             <TbChevronDown size={15} />
                         </div>
                     </div>

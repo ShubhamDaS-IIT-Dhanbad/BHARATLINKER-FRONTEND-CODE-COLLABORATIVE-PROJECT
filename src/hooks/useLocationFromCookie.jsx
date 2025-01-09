@@ -5,7 +5,8 @@ const useLocationFromCookies = () => {
     const [location, setLocation] = useState(null);
     const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
+    // Fetch location from cookies and set it in state
+    const fetchLocation = () => {
         const storedLocation = Cookies.get('BharatLinkerUserLocation');
         if (storedLocation) {
             try {
@@ -17,9 +18,19 @@ const useLocationFromCookies = () => {
             }
         }
         setLoading(false);
+    };
+
+    // Load location when the component mounts
+    useEffect(() => {
+        fetchLocation();
     }, []);
 
-    return { location, loading }; // Return location and loading state
+    // Function to update location in cookies and state
+    const updateLocation = (newLocation) => {
+        Cookies.set('BharatLinkerUserLocation', JSON.stringify(newLocation), { expires: 7 });
+    };
+
+    return { location, loading, updateLocation };
 };
 
 export default useLocationFromCookies;
