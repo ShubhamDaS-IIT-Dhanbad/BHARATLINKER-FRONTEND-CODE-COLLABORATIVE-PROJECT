@@ -68,7 +68,7 @@ const SingleShopSearchBar = ({ shopName }) => {
                             aria-label="Change Location"
                             tabIndex={0}
                         >
-                            {loading ? 'Loading location...' : location ? location.address : 'Location not set'}
+                            {loading ? 'Loading location...' : location ? location.address.slice(0,22) : 'Location not set'}
                             <TbChevronDown size={15} />
                         </div>
                     </div>

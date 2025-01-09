@@ -86,7 +86,7 @@ const ProductSearchBar = ({ shopId, setInputValue, inputValue, handleSearchProdu
                                 aria-label="Change Location"
                                 tabIndex={0}
                             >
-                                {loading ? 'Loading location...' : locationData ? locationData.address : 'Location not set'}
+                                {loading ? 'Loading location...' : locationData ? locationData.address.slice(0,22) : 'Location not set'}
                             </div>
                         </div>
                     </div>

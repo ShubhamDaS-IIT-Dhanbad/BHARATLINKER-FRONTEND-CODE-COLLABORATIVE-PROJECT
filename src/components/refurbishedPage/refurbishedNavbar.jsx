@@ -63,7 +63,7 @@ function RefurbishedNavbar({ inputValue, handleSearchChange, handleSearch }) {
                 tabIndex={0}
               >
                 {/* Show loading or the location if available */}
-                {loading ? 'Loading location...' : (location ? location.address : 'Location not set')}
+                {loading ? 'Loading location...' : (location ? location.address.slice(0,22): 'Location not set')}
                 <TbChevronDown size={15} />
               </div>
             </div>
