@@ -9,20 +9,54 @@ import './userProfile.css';
 
 function UserRefurbishedProduct() {
   const navigate = useNavigate();
-  const [userData, setUserData] = useState({ phn: '8250846979' });
+  const [userData, setUserData] = useState({});
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [lat, setLat] = useState(null);
+  const [long, setLong] = useState(null);
+  const [locationAvailable, setLocationAvailable] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Name:", name, "Email:", email);
   };
 
+  const handleLocationClick = () => {
+    if (!lat || !long) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          setLat(latitude);
+          setLong(longitude);
+          setLocationAvailable(true);
+        },
+        (error) => {
+          console.log("Error getting location:", error);
+        }
+      );
+    }
+  };
+
+  useEffect(() => {
+    const userSession = Cookies.get('BharatLinkerUserData');
+    if (userSession) {
+      const parsedUserData = JSON.parse(userSession);
+      setUserData(parsedUserData);
+      if (parsedUserData.lat && parsedUserData.long) {
+        setLat(parsedUserData.lat);
+        setLong(parsedUserData.long);
+        setLocationAvailable(true);
+      }
+    }
+  }, []);
 
   useEffect(() => {
     const userSession = Cookies.get('BharatLinkerUser');
     if (userSession) {
-      setUserData(JSON.parse(userSession));
+      const parsedUserData = JSON.parse(userSession);
+      setUserData((prevState) => ({
+        ...prevState,
+        phn: parsedUserData.phn || prevState.phn, // Ensure the phone number is added
+      }));
     }
   }, []);
 
@@ -68,55 +102,57 @@ function UserRefurbishedProduct() {
         </div>
       </header>
 
-      <div className='user-profile-div'>
+      <div className="user-profile-div">
+        <form className="user-profile-form" onSubmit={handleSubmit}>
+          <div className="user-profile-form">
+            <label htmlFor="name" className="user-profile-form-label">
+              NAME <span className="required">*</span>
+            </label>
+            <input
+              type="text"
+              id="name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Enter your name"
+              className="user-profile-form-input"
+              required
+            />
+          </div>
 
-        <div className="user-profile-form">
-          <label htmlFor="name" className="user-profile-form-label">
-            NAME <span className="required">*</span>
-          </label>
-          <input
-            type="text"
-            id="name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            placeholder="Enter your name"
-            className="user-profile-form-input"
-            required
-          />
-        </div>
-
-        <div className="user-profile-form">
-          <label htmlFor="email" className="user-profile-form-label">
-            ADDRESS <span className="required">*</span>
-          </label>
-          <textarea
-            type="email"
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            placeholder="Enter your address"
-            className="user-profile-form-input"
-            required
-          />
-        </div>
+          <div className="user-profile-form">
+            <label htmlFor="email" className="user-profile-form-label">
+              ADDRESS <span className="required">*</span>
+            </label>
+            <textarea
+              id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Enter your address"
+              className="user-profile-form-input"
+              required
+            />
+          </div>
 
           <div className="user-profile-location">
-              <SlLocationPin size={30} />
+            <SlLocationPin
+              size={30}
+              color={locationAvailable ? "green" : "gray"}
+              onClick={handleLocationClick}
+              style={{ cursor: 'pointer' }}
+            />
           </div>
- 
-        <button
-          type="submit"
-          className={`user-profile-form-button ${name && email ? "active" : "disabled"}`}
-          disabled={!name || !email}
-        >
-          Submit
-        </button>
-      </div>
 
+          <button
+            type="submit"
+            className={`user-profile-form-button ${name && email ? "active" : "disabled"}`}
+            disabled={!name || !email}
+          >
+            Submit
+          </button>
+        </form>
+      </div>
     </div>
   );
 }
 
 export default UserRefurbishedProduct;
-
-
