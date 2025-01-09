@@ -93,14 +93,12 @@ const SingleProductSearchBar = () => {
                         className='single-product-search-input'
                         placeholder="Search Product"
                         value={inputValue}
-                        onKeyDown={handleKeyDown} // Updated to onKeyDown
+                        onKeyDown={handleKeyDown}
                         onChange={handleInputChange}
                         aria-label="Search input"
                     />
                 </div>
             </div>
-
-            {/* Location Tab */}
             {locationTab && <LocationTab setLocationTab={setLocationTab} />}
         </div>
     );
