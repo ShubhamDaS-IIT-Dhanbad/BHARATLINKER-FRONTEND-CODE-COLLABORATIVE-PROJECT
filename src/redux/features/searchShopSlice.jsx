@@ -10,7 +10,7 @@ export const fetchShops = createAsyncThunk(
                 inputValue, page, shopsPerPage, selectedCategories,
                 userLat, userLong, radius,
             });
-            
+            console.log(response)
             // Check if response has shops
             if (response.shops) {
                 return {
@@ -55,7 +55,7 @@ export const loadMoreShops = createAsyncThunk(
 
 const initialState = {
     shops: [],
-    loading: true,
+    loading: false,
     loadingMoreShops: false,
     currentPage: 1,
     hasMoreShops: true,
@@ -63,7 +63,7 @@ const initialState = {
 };
 
 const shopsSlice = createSlice({
-    name: 'searchShops',
+    name: 'searchshops',
     initialState,
     reducers: {
         setCurrentPage: (state, action) => {
@@ -74,6 +74,8 @@ const shopsSlice = createSlice({
             state.currentPage = 1;
             state.hasMoreShops = true;
             state.error = null;
+            state.loading= false;
+            state.loadingMoreShops= false;
         },
     },
     extraReducers: (builder) => {
@@ -89,15 +91,16 @@ const shopsSlice = createSlice({
                         (shop) => !state.shops.some(existingShop => existingShop.$id === shop.$id)
                     );
                     state.shops = [...state.shops, ...newShops];
-                    state.hasMoreShops = hasMoreShops;
-                    state.loading = false;
+                    state.hasMoreShops = hasMoreShops;  
                 }
+                state.loading = false;
             })
             .addCase(fetchShops.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.payload || 'Something went wrong';
                 state.hasMoreShops = false;
             })
+
 
             // Load more shops
             .addCase(loadMoreShops.pending, (state) => {

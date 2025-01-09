@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
 import { useDispatch } from 'react-redux'; // Import useDispatch for Redux actions
+
 import { resetProducts } from '../redux/features/searchPage/searchProductSlice.jsx';
+import { resetShops } from '../redux/features/searchShopSlice.jsx';
 
 const useLocationFromCookies = () => {
     const [location, setLocation] = useState(null);
@@ -38,8 +40,9 @@ const useLocationFromCookies = () => {
             };
 
             Cookies.set('BharatLinkerUserLocation', JSON.stringify(updatedLocation), { expires: 7 });
-            setLocation(updatedLocation); // Update state
-            dispatch(resetProducts()); // Dispatch Redux action
+            setLocation(updatedLocation);
+            dispatch(resetProducts());
+            dispatch(resetShops());
         } catch (error) {
             console.error("Error updating location data in cookies:", error);
         }

@@ -112,7 +112,7 @@ function LocationTab({ setLocationTab }) {
                                 lat: latitude,
                                 lon: longitude,
                                 address: address,
-                                radius: 5, // Default radius
+                                radius: 5,
                             });
                             setRadius(5);
                         } else {

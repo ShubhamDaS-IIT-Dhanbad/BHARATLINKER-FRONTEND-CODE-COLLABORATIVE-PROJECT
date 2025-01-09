@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchShops, resetShops, loadMoreShops } from '../../redux/features/searchShopSlice.jsx'; // Ensure resetShops is imported
+import { fetchShops,loadMoreShops } from '../../redux/features/searchShopSlice.jsx';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import SearchBar from './searchBar.jsx'; // Ensure file name casing matches
+import SearchBar from './searchBar.jsx';
 import { LiaSortSolid } from 'react-icons/lia';
 import { MdFilterList } from 'react-icons/md';
 import ShopList from './shopList.jsx';
-import { RotatingLines } from 'react-loader-spinner'; // Import the spinner component
-import './searchShop.css';
+import { RotatingLines } from 'react-loader-spinner';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Cookies from 'js-cookie';
 
+import './searchShop.css';
 const Shop = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -27,7 +27,7 @@ const Shop = () => {
     const storedLocation = Cookies.get('BharatLinkerUserLocation') ? JSON.parse(Cookies.get('BharatLinkerUserLocation')) : null;
     const userLat = storedLocation ? storedLocation.lat : null;
     const userLong = storedLocation ? storedLocation.lon : null;
-    const radius = storedLocation ? storedLocation.radius : 5; // Default radius if not found
+    const radius = storedLocation ? storedLocation.radius : 5;
 
     const handleSearch = () => {
         const params = {
@@ -35,7 +35,6 @@ const Shop = () => {
             inputValue,
             page: 1,
             shopsPerPage: productsPerPage,
-            pinCodes: [742136],
             selectedCategories,
             sortByAsc: null,
             sortByDesc: null,
@@ -45,9 +44,10 @@ const Shop = () => {
 
     useEffect(() => {
         if (shops.length === 0) {
+            console.log("lp")
             handleSearch();
         }
-    }, []);
+    }, [shops.length]);
 
     const handleInputChange = (event) => {
         const value = event.target.value;
@@ -65,7 +65,6 @@ const Shop = () => {
                 inputValue,
                 page: currentPage + 1,
                 shopsPerPage: productsPerPage,
-                pinCodes: [742136],
                 selectedCategories,
                 sortByAsc: null,
                 sortByDesc: null,
@@ -83,18 +82,18 @@ const Shop = () => {
                     handleSearch={handleSearch}
                 />
             </div>
-
+{console.log(loading,shops)}
             {loading ? (
                 <div className="refurbished-page-loading-container">
                     <RotatingLines width="60" height="60" color="#007bff" />
                 </div>
             ) : (
                 <InfiniteScroll
-                    dataLength={shops.length} // This should be the length of the current data array
-                    next={onLoadMore} // Function to load more data
-                    hasMore={hasMoreShops} // Boolean to indicate if more data is available
+                    dataLength={shops.length} 
+                    next={onLoadMore}
+                    hasMore={hasMoreShops} 
                     loader={loadingMoreShops && <div id='search-shop-load-more-shop-loader'><RotatingLines width="40" height="40"/></div>} // Loader displayed when fetching data
-                    endMessage={<p>No more shops to display.</p>} // Message shown when all data is loaded
+                    endMessage={<p>No more shops to display.</p>}
                 >
                     <ShopList
                         shops={shops}
