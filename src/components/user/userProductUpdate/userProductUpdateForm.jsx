@@ -13,6 +13,11 @@ const UploadBooksModulesForm = ({ productType }) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
+    const [selected, setSelected] = useState("");
+    const [coordinates, setCoordinates] = useState({ lat: null, long: null });
+    const [fetching, setFetching] = useState(false);
+
+
     const productId = useParams('id');
     const products = useSelector((state) => state.userRefurbishedProducts.refurbishedProducts);
 
@@ -111,7 +116,27 @@ const UploadBooksModulesForm = ({ productType }) => {
         const { name, value } = e.target;
         setFormData((prevData) => ({ ...prevData, [name]: value }));
     };
+    const handleCurrentLocationClick = () => {
 
+        setFetching(true);
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const { latitude, longitude } = position.coords;
+                    setCoordinates({ lat: latitude, long: longitude });
+                    console.log("Latitude:", latitude, "Longitude:", longitude);
+                },
+                (error) => {
+                    setSelected("ADDRESS LOCATION");
+                    console.error("Error retrieving location:", error.message);
+                }
+            );
+        } else {
+            console.error("Geolocation is not supported by this browser.");
+            setSelected("ADDRESS LOCATION");
+        }
+        setFetching(false);
+    };
     const handleClassSelect = (selectedClass) => {
         setFormData((prevFormData) => ({ ...prevFormData, class: selectedClass }));
         setPopUpState((prevState) => ({ ...prevState, classPopUp: false }));
@@ -153,7 +178,7 @@ const UploadBooksModulesForm = ({ productType }) => {
         setIsUpdate(false);
         setIsUpdating(true);
         try {
-            await userRefurbishedProduct.updateUserRefurbishedProduct(productId, toDeleteImagesUrls, { ...formData }, images);
+            await userRefurbishedProduct.updateUserRefurbishedProduct(productId, toDeleteImagesUrls, { ...formData,lat:coordinates.lat,long:coordinates.long }, images);
             setIsUpdateSuccessful(true);
             dispatch(resetUserRefurbishedProducts());
         } catch (error) {
@@ -277,7 +302,7 @@ const UploadBooksModulesForm = ({ productType }) => {
         const regex = /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/i;
         return regex.test(url);
     };
-    
+
 
 
     return (
@@ -342,7 +367,7 @@ const UploadBooksModulesForm = ({ productType }) => {
                         </div>
                     </>
                 }
-                {renderPopUp('classPopUp', ['1','2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'], handleClassSelect)}
+                {renderPopUp('classPopUp', ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'], handleClassSelect)}
                 {renderPopUp('languagePopUp', ['beng', 'eng'], handleLanguageSelect)}
                 {renderPopUp('subjectPopUp', ['math', 'science', 'history', 'english'], handleSubjectSelect)}
                 {renderPopUp('categoryPopUp', ['category', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'], handleCategorySelect)}
@@ -406,7 +431,7 @@ const UploadBooksModulesForm = ({ productType }) => {
                         <div key={index} className="user-refurbished-product-book-module-update-form-image-container">
                             {image ? (
                                 <img
-                                    src={typeof image === 'string' ? image : URL.createObjectURL(image)} 
+                                    src={typeof image === 'string' ? image : URL.createObjectURL(image)}
                                     className="user-refurbished-product-book-module-update-form-uploaded-image"
                                     alt={`Uploaded ${index + 1}`}
                                     onClick={() => removeImage(index)}
@@ -432,7 +457,22 @@ const UploadBooksModulesForm = ({ productType }) => {
                     ))}
                 </div>
 
-
+                <div id="user-refurbished-product-book-module-upload-location">
+                    <div
+                        className={`user-refurbished-product-book-module-upload-location-p ${selected === "CURRENT LOCATION" ? "selected" : ""
+                            }`}
+                        onClick={() => { setSelected("CURRENT LOCATION"); handleCurrentLocationClick(); }}
+                    >
+                        {fetching ? 'Fetching...' : 'CURRENT LOCATION'}
+                    </div>
+                    <div
+                        className={`user-refurbished-product-book-module-upload-location-p ${selected === "ADDRESS LOCATION" ? "selected" : ""
+                            }`}
+                        onClick={() => setSelected("ADDRESS LOCATION")}
+                    >
+                        ADDRESS LOCATION
+                    </div>
+                </div>
 
 
 

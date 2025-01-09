@@ -147,6 +147,8 @@ class UserRefurbishedProduct {
                 keywords: updatedData.keywords.split(','),
                 pinCodes: updatedData.pinCodes.split(',').map(pin => Number(pin)),
                 images: allImageUrls,
+                lat:updatedData.lat,
+                long:updatedData.long
             };
 
             const updatedDocument = await this.databases.updateDocument(
