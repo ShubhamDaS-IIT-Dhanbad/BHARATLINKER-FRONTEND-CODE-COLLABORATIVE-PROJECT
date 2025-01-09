@@ -126,9 +126,9 @@ const UploadBooksModulesForm = ({ userData, productType }) => {
 
         // Check if required fields are filled based on the product type
         const isModuleOrBookValid = (productType === 'module' || productType === 'book') &&
-            [title, price, discountedPrice, selectedClass, language].every(Boolean);
+            [title, price, discountedPrice].every(Boolean);
         const isGadgetValid = productType === 'gadget' &&
-            [title, price, discountedPrice, brand, category].every(Boolean);
+            [title, price, discountedPrice].every(Boolean);
 
         // If fields are not valid, show error and return
         if (!isModuleOrBookValid && !isGadgetValid) {
