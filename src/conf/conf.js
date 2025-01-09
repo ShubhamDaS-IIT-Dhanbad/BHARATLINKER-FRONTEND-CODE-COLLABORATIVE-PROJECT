@@ -1,6 +1,9 @@
 const conf = {
     appwriteUrl: String(import.meta.env.VITE_APPWRITE_URL),
 
+    geoapifyapikey: String(import.meta.env.VITE_REACT_APP_GEOAPIFY_API_KEY),
+    opencageapikey: String(import.meta.env.VITE_REACT_APP_OPENCAGE_API_KEY),
+    opencageapiurl: String(import.meta.env.VITE_REACT_APP_OPENCAGE_API_URL),
 
     //FIREBASE-USER
     firebaseApikey: String(import.meta.env.VITE_FIREBASE_API_KEY),
@@ -23,22 +26,22 @@ const conf = {
     // REFURBISHED PRODUCTS
     appwriteRefurbishProductProjectId: String(import.meta.env.VITE_APPWRITE_REFURBISHED_PRODUCTS_PROJECT_ID),
     appwriteRefurbishProductDatabaseId: String(import.meta.env.VITE_APPWRITE_REFURBISHED_PRODUCTS_DATABASE_ID),
-        //REFURBISHED PRODUCTS COLLECTIONS
-        appwriteRefurbishedBooksCollectionId: String(import.meta.env.VITE_APPWRITE_REFURBISHED_BOOKS_COLLECTION_ID),
-        appwriteRefurbishedModulesCollectionId: String(import.meta.env.VITE_APPWRITE_REFURBISHED_MODULE_COLLECTION_ID),
-        appwriteRefurbishedGadgetsCollectionId: String(import.meta.env.VITE_APPWRITE_REFURBISHED_GADGETS_COLLECTION_ID),
-        
-        //REFURBISHED PRODUCTS BUCKET
-        appwriteRefurbishProductImagesBucketId: String(import.meta.env.VITE_APPWRITE_REFURBISHED_PRODUCTS_IMAGES_BUCKET_ID),
-        // REFURBISHED PRODUCTS CLOUDINARY
-        refurbishProductCloudinaryCloudName: String(import.meta.env.VITE_CLOUDINARY_REFURBISHED_PRODUCTS_CLOUDINARY_CLOUD_NAME),
-        refurbishBooksCloudinaryPreset: String(import.meta.env.VITE_CLOUDINARY_REFURBISHED_BOOKS_CLOUDINARY_PRESET),
-        refurbishProductCloudinaryApiKey: String(import.meta.env.VITE_CLOUDINARY_REFURBISHED_PRODUCTS_CLOUDINARY_API_KEY),
-        refurbishProductCloudinaryApiSecret: String(import.meta.env.VITE_CLOUDINARY_REFURBISHED_PRODUCTS_CLOUDINARY_API_SECRET),
-        refurbishProductCloudinaryApiUrl: String(import.meta.env.VITE_CLOUDINARY_REFURBISHED_PRODUCTS_CLOUDINARY_URL),
+    //REFURBISHED PRODUCTS COLLECTIONS
+    appwriteRefurbishedBooksCollectionId: String(import.meta.env.VITE_APPWRITE_REFURBISHED_BOOKS_COLLECTION_ID),
+    appwriteRefurbishedModulesCollectionId: String(import.meta.env.VITE_APPWRITE_REFURBISHED_MODULE_COLLECTION_ID),
+    appwriteRefurbishedGadgetsCollectionId: String(import.meta.env.VITE_APPWRITE_REFURBISHED_GADGETS_COLLECTION_ID),
+
+    //REFURBISHED PRODUCTS BUCKET
+    appwriteRefurbishProductImagesBucketId: String(import.meta.env.VITE_APPWRITE_REFURBISHED_PRODUCTS_IMAGES_BUCKET_ID),
+    // REFURBISHED PRODUCTS CLOUDINARY
+    refurbishProductCloudinaryCloudName: String(import.meta.env.VITE_CLOUDINARY_REFURBISHED_PRODUCTS_CLOUDINARY_CLOUD_NAME),
+    refurbishBooksCloudinaryPreset: String(import.meta.env.VITE_CLOUDINARY_REFURBISHED_BOOKS_CLOUDINARY_PRESET),
+    refurbishProductCloudinaryApiKey: String(import.meta.env.VITE_CLOUDINARY_REFURBISHED_PRODUCTS_CLOUDINARY_API_KEY),
+    refurbishProductCloudinaryApiSecret: String(import.meta.env.VITE_CLOUDINARY_REFURBISHED_PRODUCTS_CLOUDINARY_API_SECRET),
+    refurbishProductCloudinaryApiUrl: String(import.meta.env.VITE_CLOUDINARY_REFURBISHED_PRODUCTS_CLOUDINARY_URL),
 
 
-    
+
     // PRODUCT
     appwriteProductsProjectId: String(import.meta.env.VITE_APPWRITE_PRODUCTS_PROJECT_ID),
     appwriteProductsDatabaseId: String(import.meta.env.VITE_APPWRITE_PRODUCTS_DATABASE_ID),
