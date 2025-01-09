@@ -17,6 +17,7 @@ const UploadBooksModulesForm = ({ userData, productType }) => {
     });
     const [selected, setSelected] = useState("ADDRESS LOCATION");
     const [coordinates, setCoordinates] = useState({ lat: null, long: null });
+    const [fetching, setFetching] = useState(false);
 
 
     const [uploadStatus, setUploadStatus] = useState({
@@ -52,8 +53,8 @@ const UploadBooksModulesForm = ({ userData, productType }) => {
         }));
     };
     const handleCurrentLocationClick = () => {
-        setSelected("CURRENT LOCATION");
-    
+        
+        setFetching(true);
         if (navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(
             (position) => {
@@ -62,12 +63,15 @@ const UploadBooksModulesForm = ({ userData, productType }) => {
               console.log("Latitude:", latitude, "Longitude:", longitude);
             },
             (error) => {
+                setSelected("ADDRESS LOCATION");
               console.error("Error retrieving location:", error.message);
             }
           );
         } else {
           console.error("Geolocation is not supported by this browser.");
+          setSelected("ADDRESS LOCATION");
         }
+        setFetching(false);
       };
     const handleDrop = (index, event) => {
         event.preventDefault();
@@ -368,7 +372,7 @@ const UploadBooksModulesForm = ({ userData, productType }) => {
                             }`}
                         onClick={() =>{setSelected("CURRENT LOCATION");handleCurrentLocationClick();}}
                     >
-                        CURRENT LOCATION
+                        {fetching ? 'Fetching...' : 'CURRENT LOCATION'}
                     </div>
                     <div
                         className={`user-refurbished-product-book-module-upload-location-p ${selected === "ADDRESS LOCATION" ? "selected" : ""
