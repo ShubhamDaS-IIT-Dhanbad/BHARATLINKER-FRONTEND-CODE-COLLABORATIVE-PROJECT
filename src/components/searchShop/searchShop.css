@@ -181,3 +181,25 @@
     border: 1.8px solid rgb(0, 0, 0);
     border-radius: 20px;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#search-shop-grid{
+    min-height: 80vh;overflow: scroll;margin-top: 100px;
+    margin-bottom: 97px;
+}
+#search-shop-load-more-shop-loader{
+    margin-bottom: 67px;
+    display: flex;justify-content: center;align-items: center;
+}

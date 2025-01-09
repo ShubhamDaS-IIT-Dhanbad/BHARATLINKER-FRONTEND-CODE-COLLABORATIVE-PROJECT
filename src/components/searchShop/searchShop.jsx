@@ -8,13 +8,13 @@ import { MdFilterList } from 'react-icons/md';
 import ShopList from './shopList.jsx';
 import { RotatingLines } from 'react-loader-spinner'; // Import the spinner component
 import './searchShop.css';
-
+import InfiniteScroll from 'react-infinite-scroll-component';
 import Cookies from 'js-cookie';
 
 const Shop = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const productsPerPage = 1;
+    const productsPerPage = 20;
 
     const [searchParams, setSearchParams] = useSearchParams();
     const query = searchParams.get('query') || '';
@@ -24,14 +24,14 @@ const Shop = () => {
     const selectedCategories = useSelector(state => state.searchshopfiltersection.selectedCategories);
 
 
-        const storedLocation = Cookies.get('BharatLinkerUserLocation') ? JSON.parse(Cookies.get('BharatLinkerUserLocation')) : null;
-        const userLat = storedLocation ? storedLocation.lat : null;
-        const userLong = storedLocation ? storedLocation.lon : null;
-        const radius = storedLocation ? storedLocation.radius : 5; // Default radius if not found
-    
+    const storedLocation = Cookies.get('BharatLinkerUserLocation') ? JSON.parse(Cookies.get('BharatLinkerUserLocation')) : null;
+    const userLat = storedLocation ? storedLocation.lat : null;
+    const userLong = storedLocation ? storedLocation.lon : null;
+    const radius = storedLocation ? storedLocation.radius : 5; // Default radius if not found
+
     const handleSearch = () => {
         const params = {
-            userLat,userLong,radius,
+            userLat, userLong, radius,
             inputValue,
             page: 1,
             shopsPerPage: productsPerPage,
@@ -61,7 +61,7 @@ const Shop = () => {
     const onLoadMore = () => {
         if (!loadingMoreShops && hasMoreShops) {
             const params = {
-                userLat,userLong,radius,
+                userLat, userLong, radius,
                 inputValue,
                 page: currentPage + 1,
                 shopsPerPage: productsPerPage,
@@ -89,15 +89,20 @@ const Shop = () => {
                     <RotatingLines width="60" height="60" color="#007bff" />
                 </div>
             ) : (
-                <div id='shopResults'>
+                <InfiniteScroll
+                    dataLength={shops.length} // This should be the length of the current data array
+                    next={onLoadMore} // Function to load more data
+                    hasMore={hasMoreShops} // Boolean to indicate if more data is available
+                    loader={loadingMoreShops && <div id='search-shop-load-more-shop-loader'><RotatingLines width="40" height="40"/></div>} // Loader displayed when fetching data
+                    endMessage={<p>No more shops to display.</p>} // Message shown when all data is loaded
+                >
                     <ShopList
                         shops={shops}
                         loading={loading}
                         loadingMoreShops={loadingMoreShops}
                         hasMoreShops={hasMoreShops}
-                        onLoadMore={onLoadMore}
                     />
-                </div>
+                </InfiniteScroll>
             )}
 
             <div id='searchShopPage-footer'>

@@ -39,15 +39,6 @@ class SearchShopService {
         page,
         shopId
     }) {
-        console.log( 
-            inputValue ,
-            shopsPerPage,
-            selectedCategories,
-            userLat,
-            userLong,
-            radius,
-            page,
-            shopId)
         try {
             const inputTokens = inputValue
                 .split(' ')
@@ -115,7 +106,6 @@ class SearchShopService {
             if (!Array.isArray(allShops)) {
                 throw new TypeError("Expected 'allShops' to be an array.");
             }
-    console.log(allShops)
             // If no input value, return the shops directly
             if (inputValue.length === 0) {
                 return { success: true, shops: allShops };
@@ -162,7 +152,6 @@ class SearchShopService {
             // Pagination logic
             const startIndex = (page - 1) * shopsPerPage;
             const paginatedShops = scoredShops.slice(startIndex, startIndex + shopsPerPage);
-    console.log(paginatedShops)
             return {
                 success: true,
                 shops: paginatedShops
