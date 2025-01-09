@@ -1,21 +1,45 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { BiSearchAlt } from 'react-icons/bi';
 import { TbChevronDown } from 'react-icons/tb';
 import { FaArrowLeft } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie'; // Import Cookies for cookie handling
 import './searchBar.css';
 import LocationTab from '../locationTab/locationTab';
 import { resetShops } from '../../redux/features/searchShopSlice';
-const ShopSearchBar = ({  inputValue, handleSearchChange, handleSearch }) => {
-    const dispatch=useDispatch();
+
+const ShopSearchBar = ({ inputValue, handleSearchChange, handleSearch }) => {
+    const dispatch = useDispatch();
     const navigate = useNavigate();
     const [locationTab, setLocationTab] = useState(false);
+    const [location, setLocation] = useState(null); // Declare location state
+    const [loading, setLoading] = useState(true); // Declare loading state
 
+    // Fetch location from cookies
+    useEffect(() => {
+        const fetchLocation = () => {
+            const storedLocation = Cookies.get('BharatLinkerUserLocation');
+            if (storedLocation) {
+                try {
+                    const parsedLocation = JSON.parse(storedLocation);
+                    setLocation(parsedLocation);
+                } catch (error) {
+                    console.error("Error parsing location data from cookies:", error);
+                    setLocation(null);
+                }
+            }
+            setLoading(false); // Set loading to false after fetching location
+        };
+
+        fetchLocation();
+    }, [locationTab]); // Re-run when locationTab changes
+
+    // Handle Enter key press for search
     const handleKeyDown = (event) => {
         if (event.key === 'Enter') {
-            dispatch(resetShops());
-            handleSearch();
+            dispatch(resetShops()); // Reset shops before the search
+            handleSearch(); // Trigger the search function
         }
     };
 
@@ -39,7 +63,8 @@ const ShopSearchBar = ({  inputValue, handleSearchChange, handleSearch }) => {
                                 aria-label="Change Location"
                                 tabIndex={0}
                             >
-                                Baharampur, Murshidabad, WB
+                                {/* Show loading or the location if available */}
+                                {loading ? 'Loading location...' : (location ? location.address.slice(0,22) : 'Location not set')}
                                 <TbChevronDown size={15} />
                             </div>
                         </div>
@@ -65,6 +90,7 @@ const ShopSearchBar = ({  inputValue, handleSearchChange, handleSearch }) => {
                     </div>
                 </div>
             </div>
+            {/* Render LocationTab if locationTab state is true */}
             {locationTab && <LocationTab setLocationTab={setLocationTab} />}
         </>
     );

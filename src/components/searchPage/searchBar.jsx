@@ -30,7 +30,7 @@ const SearchBar = ({ inputValue, onInputChange, onSearch }) => {
         };
 
         fetchLocation();
-    }, []);
+    }, [locationTab]);
 
     // Handle Enter key press for search
     const handleKeyPress = (e) => {
@@ -77,9 +77,9 @@ const SearchBar = ({ inputValue, onInputChange, onSearch }) => {
                     <input
                         className='product-page-search-input'
                         placeholder="Search Product"
-                        value={inputValue}  // Controlled input value
-                        onKeyPress={handleKeyPress} // Detect "Enter" key press
-                        onChange={onInputChange}  // Handle input change
+                        value={inputValue}
+                        onKeyPress={handleKeyPress}
+                        onChange={onInputChange}
                         aria-label="Search input"
                     />
                 </div>

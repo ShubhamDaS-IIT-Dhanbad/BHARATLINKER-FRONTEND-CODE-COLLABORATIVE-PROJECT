@@ -1,26 +1,50 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BiSearchAlt } from "react-icons/bi";
 import { TbChevronDown } from "react-icons/tb";
-import { FaArrowLeft } from 'react-icons/fa'; // Import FaArrowLeft
-import { useNavigate } from 'react-router-dom'; // Import navigate hook for routing
+import { FaArrowLeft } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
 import LocationTab from '../locationTab/locationTab';
+import Cookies from 'js-cookie'; // Import Cookies
 import './singleShopSearchBar.css';
-import { useDispatch } from 'react-redux'; // Import useDispatch for dispatching actions
+import { useDispatch } from 'react-redux';
 import { resetShops } from '../../redux/features/searchShopSlice.jsx'; // Ensure resetShops is imported
 
-const SingleShopSearchBar = ({shopName}) => {
+const SingleShopSearchBar = ({ shopName }) => {
     const navigate = useNavigate();
     const dispatch = useDispatch(); // Initialize dispatch
     const [inputValue, setInputValue] = useState(''); // Initialize state for input value
     const [locationTab, setLocationTab] = useState(false);
+    const [location, setLocation] = useState(null); // Add state for location
+    const [loading, setLoading] = useState(true); // Add state for loading
 
-    const handleKeyPress = (e) => {
+    // Fetch location from cookies
+    useEffect(() => {
+        const fetchLocation = () => {
+            const storedLocation = Cookies.get('BharatLinkerUserLocation');
+            if (storedLocation) {
+                try {
+                    const parsedLocation = JSON.parse(storedLocation);
+                    setLocation(parsedLocation);
+                } catch (error) {
+                    console.error("Error parsing location data from cookies:", error);
+                    setLocation(null);
+                }
+            }
+            setLoading(false); // Set loading to false after fetching location
+        };
+
+        fetchLocation();
+    }, [locationTab]); // Re-run when locationTab changes
+
+    // Handle key press for "Enter" key to trigger search
+    const handleKeyDown = (e) => {
         if (e.key === 'Enter') {
             dispatch(resetShops());
             navigate(`/shop?query=${inputValue}`);
         }
     };
 
+    // Handle input value change and update the state
     const handleInputChange = (e) => {
         setInputValue(e.target.value); // Update input value on typing
     };
@@ -44,7 +68,8 @@ const SingleShopSearchBar = ({shopName}) => {
                             aria-label="Change Location"
                             tabIndex={0}
                         >
-                            Baharampur, Murshidabad, WB
+                            {loading ? 'Loading location...' : location ? location.address : 'Location not set'}
+                            <TbChevronDown size={15} />
                         </div>
                     </div>
                 </div>
@@ -62,7 +87,7 @@ const SingleShopSearchBar = ({shopName}) => {
                         className='single-shop-search-input'
                         placeholder="Search Shop"
                         value={inputValue}  // Controlled input value
-                        onKeyPress={handleKeyPress} // Detect "Enter" key press
+                        onKeyDown={handleKeyDown} // Changed to onKeyDown
                         onChange={handleInputChange}  // Handle input change
                         aria-label="Search input"
                     />
