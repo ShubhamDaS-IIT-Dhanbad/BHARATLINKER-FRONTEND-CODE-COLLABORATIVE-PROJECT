@@ -34,7 +34,6 @@ const UploadBooksModulesForm = ({ userData, productType }) => {
         price: '',
         discountedPrice: '',
         keywords: '',
-        pinCodes: '740001,740002,740003,742136',
         productType,
         brand: '',
         category: '',
@@ -174,7 +173,6 @@ const UploadBooksModulesForm = ({ userData, productType }) => {
             price: '',
             discountedPrice: '',
             keywords: '',
-            pinCodes: '740001,740002,740003,742136',
             productType: 'module',
         });
         setImages([null, null, null]);

@@ -53,7 +53,6 @@ const UploadBooksModulesForm = ({ productType }) => {
         price: '',
         discountedPrice: '',
         keywords: '',
-        pinCodes: '740001,740002,740003,742136',
         productType: 'module',
         category: '', // Ensure this is initialized
         brand: ''
@@ -100,8 +99,7 @@ const UploadBooksModulesForm = ({ productType }) => {
                     brand,
                     discountedPrice,
                     keywords: keywords.join(','),
-                    author,
-                    pinCodes: '740001,740002,740003,742136',
+                    author
                 });
 
                 const paddedImages = [...productImages, null, null, null].slice(0, 3);
