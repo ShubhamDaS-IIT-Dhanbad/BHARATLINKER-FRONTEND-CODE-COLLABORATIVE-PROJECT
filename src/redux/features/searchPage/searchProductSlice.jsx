@@ -4,9 +4,10 @@ import searchProductService from '../../../appWrite/searchProduct.js';
 // Async thunk to fetch products
 export const fetchProducts = createAsyncThunk(
     'products/fetchProducts',
-    async ({ inputValue, selectedCategories, selectedBrands,page, productsPerPage, sortByAsc, sortByDesc }, { rejectWithValue }) => {
+    async ({ inputValue,userLat,userLong,radius, selectedCategories, selectedBrands,page, productsPerPage, sortByAsc, sortByDesc }, { rejectWithValue }) => {
         try {
             const response = await searchProductService.getProducts({
+                userLat,userLong,radius,
                 inputValue,
                 page,
                 productsPerPage,
@@ -41,9 +42,10 @@ export const fetchProducts = createAsyncThunk(
 // Async thunk to load more products
 export const loadMoreProducts = createAsyncThunk(
     'products/loadMoreProducts',
-    async ({ inputValue, selectedCategories, selectedBrands,page, productsPerPage, sortByAsc, sortByDesc }, { rejectWithValue }) => {
+    async ({ inputValue,userLat,userLong,radius, selectedCategories, selectedBrands,page, productsPerPage, sortByAsc, sortByDesc }, { rejectWithValue }) => {
         try {
             const response = await searchProductService.getProducts({
+                userLat,userLong,radius,
                 inputValue,
                 page,
                 productsPerPage,

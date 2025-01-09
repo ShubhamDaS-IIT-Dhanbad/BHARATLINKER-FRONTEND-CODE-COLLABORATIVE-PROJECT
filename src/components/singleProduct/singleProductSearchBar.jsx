@@ -65,12 +65,11 @@ const SingleProductSearchBar = () => {
                         <p className='single-product-search-location-label'>PRODUCT DETAIL</p>
                         <div
                             className='single-product-search-location-value'
-                            onClick={() => setLocationTab(true)}
                             aria-label="Change Location"
                             tabIndex={0}
                         >
                             {loading ? 'Loading location...' : location ? location.address.slice(0,30): 'Location not set'}
-                            <TbChevronDown size={15} />
+                           
                         </div>
                     </div>
                 </div>

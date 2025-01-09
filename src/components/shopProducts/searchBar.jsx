@@ -82,7 +82,6 @@ const ProductSearchBar = ({ shopId, setInputValue, inputValue, handleSearchProdu
                             <p className='shop-products-location-label'>{shopName.toUpperCase()} PAGE</p>
                             <div
                                 className='shop-products-location-value'
-                                onClick={() => setLocationTab(true)}
                                 aria-label="Change Location"
                                 tabIndex={0}
                             >

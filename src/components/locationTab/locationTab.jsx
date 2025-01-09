@@ -16,7 +16,7 @@ function LocationTab({ setLocationTab }) {
     const [radius, setRadius] = useState(5); // default value is 5 km
     const [loading, setLoading] = useState(false);
     const [fetchingUserLocation, setFetchingUserLocation] = useState(false);
-    const [radiusOptions] = useState([1, 2, 3, 4, 5]); // Options for radius in km
+    const [radiusOptions] = useState([1, 2, 4, 5, 7,10,15]); // Options for radius in km
 
     // Using the custom hook to get stored location and updateLocation
     const { updateLocation } = useLocationFromCookie();
@@ -83,7 +83,7 @@ function LocationTab({ setLocationTab }) {
     const handleAddressClick = (suggestion) => {
         setSearchQuery(suggestion.label);
         setSuggestions([]);
-
+        console.log(suggestion);
         updateLocation({
             lat: suggestion.lat,
             lon: suggestion.lon,

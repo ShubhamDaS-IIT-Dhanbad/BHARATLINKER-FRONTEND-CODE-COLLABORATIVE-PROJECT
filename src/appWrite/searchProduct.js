@@ -1,5 +1,6 @@
 import conf from '../conf/conf.js';
 import { Client, Databases, Storage, Query } from 'appwrite';
+import { getBoundsOfDistance } from 'geolib';
 
 class SearchProductService {
     client = new Client();
@@ -23,8 +24,8 @@ class SearchProductService {
         minPrice,
         maxPrice,
         isInStock,
-        userLat = 23.818637,
-        userLon = 86.437171,
+        userLat,
+        userLong,
         radius,
         page,
         productsPerPage = 4,
@@ -58,9 +59,9 @@ class SearchProductService {
 
 
             // Geolocation filtering using bounding box
-            if (userLat !== undefined && userLon !== undefined && radius !== undefined) {
+            if (userLat !== undefined && userLong !== undefined && radius !== undefined) {
                 const boundingBox = getBoundsOfDistance(
-                    { latitude: userLat, longitude: userLon },
+                    { latitude: userLat, longitude: userLong },
                     radius * 1000 // Convert radius from km to meters
                 );
 
@@ -132,12 +133,12 @@ class SearchProductService {
                     if (product.description.toLowerCase().startsWith(token)) score += 4;
                 });
 
-                // Only calculate the distance if the radius, userLat, and userLon are provided
-                if (radius && userLat && userLon) {
+                // Only calculate the distance if the radius, userLat, and userLong are provided
+                if (radius && userLat && userLong) {
                     // Haversine formula for distance
                     const toRadians = (deg) => (deg * Math.PI) / 180;
                     const dLat = toRadians(product.latitude - userLat);
-                    const dLon = toRadians(product.longitude - userLon);
+                    const dLon = toRadians(product.longitude - userLong);
                     const lat1 = toRadians(userLat);
                     const lat2 = toRadians(product.latitude);
 

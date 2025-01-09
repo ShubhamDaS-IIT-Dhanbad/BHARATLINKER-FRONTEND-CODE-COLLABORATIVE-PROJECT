@@ -3,6 +3,7 @@ import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { loadMoreProducts } from '../../redux/features/searchPage/searchProductSlice.jsx';
+import Cookies from 'js-cookie'; // Import Cookies
 
 import { useExecuteSearch } from '../../hooks/searchProductHook.jsx'; // Import the hook
 import { LiaSortSolid } from "react-icons/lia";
@@ -40,6 +41,12 @@ const SearchPage = () => {
         sortByDesc
     } = useSelector((state) => state.searchproducts);
 
+    // Retrieve lat, long, and radius from 'BharatLinkerUserLocation' cookie
+    const storedLocation = Cookies.get('BharatLinkerUserLocation') ? JSON.parse(Cookies.get('BharatLinkerUserLocation')) : null;
+    const lat = storedLocation ? storedLocation.lat : null;
+    const long = storedLocation ? storedLocation.lon : null;
+    const radius = storedLocation ? storedLocation.radius : 5; // Default radius if not found
+
     useEffect(() => {
         if (products.length === 0) {
             executeSearch();
@@ -58,6 +65,9 @@ const SearchPage = () => {
     const onLoadMore = () => {
         if (!hasMoreProducts || loadingMoreProducts) return;
         const params = {
+            lat,
+            long,
+            radius,
             inputValue,
             page: currenPage + 1,
             productsPerPage: 3,
@@ -68,7 +78,6 @@ const SearchPage = () => {
             sortByDesc,
         };
         dispatch(loadMoreProducts(params));
-
     };
 
     return (

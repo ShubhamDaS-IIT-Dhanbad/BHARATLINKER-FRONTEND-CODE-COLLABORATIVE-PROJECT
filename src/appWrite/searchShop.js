@@ -1,5 +1,6 @@
 import conf from '../conf/conf.js';
 import { Client, Databases, Storage, Query } from 'appwrite';
+import { getBoundsOfDistance } from 'geolib';
 
 /**
  * Service to search and manage shops.

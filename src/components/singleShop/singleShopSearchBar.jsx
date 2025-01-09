@@ -64,12 +64,11 @@ const SingleShopSearchBar = ({ shopName }) => {
                         <p className='single-shop-search-location-label'>{shopName}</p>
                         <div 
                             className='single-shop-search-location-value' 
-                            onClick={() => setLocationTab(true)}  // Navigate to pincode page
                             aria-label="Change Location"
                             tabIndex={0}
                         >
                             {loading ? 'Loading location...' : location ? location.address.slice(0,30) : 'Location not set'}
-                            <TbChevronDown size={15} />
+                        
                         </div>
                     </div>
                 </div>

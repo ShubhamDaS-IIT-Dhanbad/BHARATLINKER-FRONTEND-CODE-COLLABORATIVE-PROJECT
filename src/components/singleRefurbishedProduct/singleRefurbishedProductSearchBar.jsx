@@ -64,12 +64,11 @@ const SingleRefurbishedProductSearchBar = () => {
                         <p className='single-refurbished-product-search-location-label'>REFURBISHED PRODUCT</p>
                         <div
                             className='single-refurbished-product-search-location-value'
-                            onClick={() => setLocationTab(true)}
                             aria-label="Change Location"
                             tabIndex={0}
                         >
                             {loading ? 'Loading location...' : location ? location.address.slice(0,30) : 'Location not set'}
-                            <TbChevronDown size={15} />
+                            
                         </div>
                     </div>
                 </div>
