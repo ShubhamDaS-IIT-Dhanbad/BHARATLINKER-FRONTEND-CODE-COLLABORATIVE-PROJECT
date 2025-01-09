@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
-import { resetProducts, fetchProducts } from '../redux/features/searchPage/searchProductSlice';
+import { fetchProducts } from '../redux/features/searchPage/searchProductSlice';
 import { useState } from 'react';
 import Cookies from 'js-cookie'; // Import Cookies
 
@@ -18,7 +18,7 @@ export const useExecuteSearch = () => {
     const storedLocation = Cookies.get('BharatLinkerUserLocation') ? JSON.parse(Cookies.get('BharatLinkerUserLocation')) : null;
     const lat = storedLocation ? storedLocation.lat : null;
     const long = storedLocation ? storedLocation.lon : null;
-    const radius = storedLocation ? storedLocation.radius : 5; // Default radius if not found
+    const radius = storedLocation ? storedLocation.radius : 5; 
 
     const executeSearch = () => {
         const params = {
@@ -28,13 +28,11 @@ export const useExecuteSearch = () => {
             inputValue,
             page: 1,
             productsPerPage,
-            pinCodes: [742136, 742137],
             selectedCategories,
             selectedBrands,
             sortByAsc,
             sortByDesc,
         };
-        dispatch(resetProducts());
         dispatch(fetchProducts(params));
     };
 

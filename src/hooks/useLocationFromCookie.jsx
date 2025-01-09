@@ -1,11 +1,12 @@
 import { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
-import { useExecuteSearch } from './searchProductHook.jsx';
+import { useDispatch } from 'react-redux'; // Import useDispatch for Redux actions
+import { resetProducts } from '../redux/features/searchPage/searchProductSlice.jsx';
+
 const useLocationFromCookies = () => {
     const [location, setLocation] = useState(null);
     const [loading, setLoading] = useState(true);
-    
-    const { executeSearch } = useExecuteSearch();
+    const dispatch = useDispatch(); // Initialize dispatch for Redux actions
 
     // Fetch location from cookies and set it in state
     const fetchLocation = () => {
@@ -16,7 +17,6 @@ const useLocationFromCookies = () => {
                 setLocation(parsedLocation);
             } catch (error) {
                 console.error("Error parsing location data from cookies:", error);
-                setLocation(null);
             }
         }
         setLoading(false);
@@ -30,25 +30,18 @@ const useLocationFromCookies = () => {
     // Function to update location in cookies and state
     const updateLocation = (newLocation) => {
         const storedLocation = Cookies.get('BharatLinkerUserLocation');
-        if (!storedLocation) {
-            // If no location data exists, store the new location
-            Cookies.set('BharatLinkerUserLocation', JSON.stringify(newLocation), { expires: 7 });
-        } else {
-            try {
-                const parsedLocation = JSON.parse(storedLocation);
+        try {
+            const parsedLocation = storedLocation ? JSON.parse(storedLocation) : {};
+            const updatedLocation = {
+                ...parsedLocation,
+                ...newLocation, // Merge with new data
+            };
 
-                // Destructure the existing location and merge with new data (only updated fields)
-                const updatedLocation = {
-                    ...parsedLocation,
-                    ...newLocation // This will update only the fields that are provided in `newLocation`
-                };
-
-                // Store the updated location in cookies
-                Cookies.set('BharatLinkerUserLocation', JSON.stringify(updatedLocation), { expires: 7 });
-                executeSearch();
-            } catch (error) {
-                console.error("Error parsing location data from cookies:", error);
-            }
+            Cookies.set('BharatLinkerUserLocation', JSON.stringify(updatedLocation), { expires: 7 });
+            setLocation(updatedLocation); // Update state
+            dispatch(resetProducts()); // Dispatch Redux action
+        } catch (error) {
+            console.error("Error updating location data in cookies:", error);
         }
     };
 

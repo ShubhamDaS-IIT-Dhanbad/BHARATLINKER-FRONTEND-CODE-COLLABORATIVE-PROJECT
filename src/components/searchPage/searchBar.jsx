@@ -1,14 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { BiSearchAlt } from "react-icons/bi";
-import { TbHomeMove, TbChevronDown } from "react-icons/tb";
-import { FaArrowLeft } from 'react-icons/fa'; // Import FaArrowLeft
-import { useNavigate } from 'react-router-dom'; // Import navigate hook for routing
-import Cookies from 'js-cookie';  // Import Cookies to access cookies
+import { TbChevronDown } from "react-icons/tb";
+import { FaArrowLeft } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
+import Cookies from 'js-cookie';
 import LocationTab from '../locationTab/locationTab';
 import './searchBar.css';
+import { useDispatch } from 'react-redux';
+import { resetProducts } from '../../redux/features/searchPage/searchProductSlice';
 
-const SearchBar = ({ inputValue, onInputChange, onSearch }) => {
-    const navigate = useNavigate(); // Initialize navigate hook
+const SearchBar = ({ inputValue, onInputChange }) => {
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
     const [location, setLocation] = useState(null);
     const [loading, setLoading] = useState(true);
     const [locationTab, setLocationTab] = useState(false);
@@ -35,7 +38,7 @@ const SearchBar = ({ inputValue, onInputChange, onSearch }) => {
     // Handle Enter key press for search
     const handleKeyPress = (e) => {
         if (e.key === 'Enter') {
-            onSearch();
+            dispatch(resetProducts());
         }
     };
 
@@ -44,17 +47,17 @@ const SearchBar = ({ inputValue, onInputChange, onSearch }) => {
             <div className='product-page-header-container'>
                 <div className='product-page-header-user-section'>
                     <FaArrowLeft
-                        id='product-page-user-icon' 
-                        size={25} 
-                        onClick={() => navigate('/')}  // Navigate to home when clicked
-                        aria-label="Go to Home" 
+                        id='product-page-user-icon'
+                        size={25}
+                        onClick={() => navigate('/')} // Navigate to home when clicked
+                        aria-label="Go to Home"
                         tabIndex={0}
                     />
                     <div className='product-page-user-location'>
                         <p className='product-page-location-label'>PRODUCT SECTION</p>
-                        <div 
-                            className='product-page-location-value' 
-                            onClick={() => setLocationTab(true)}  // Navigate to location tab
+                        <div
+                            className='product-page-location-value'
+                            onClick={() => setLocationTab(true)} // Open location tab
                             aria-label="Change Location"
                             tabIndex={0}
                         >
@@ -68,9 +71,9 @@ const SearchBar = ({ inputValue, onInputChange, onSearch }) => {
 
             <div className='product-page-search-section'>
                 <div className='product-page-search-input-container'>
-                    <BiSearchAlt 
-                        className='product-page-search-icon' 
-                        onClick={onSearch}  // Trigger search on icon click
+                    <BiSearchAlt
+                        className='product-page-search-icon'
+                        onClick={() => dispatch(resetProducts())}
                         aria-label="Search"
                         tabIndex={0}
                     />

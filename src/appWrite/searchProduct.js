@@ -16,19 +16,23 @@ class SearchProductService {
         this.bucket = new Storage(this.client);
     }
 
-    // Method to fetch products with filters including price range (minPrice, maxPrice)
+
+
+
+
     async getProducts({
-        inputValue = '',
+        inputValue,
+
         selectedCategories,
         selectedBrands,
-        minPrice,
-        maxPrice,
-        isInStock,
+
         userLat,
         userLong,
         radius,
+
         page,
         productsPerPage = 4,
+
         sortByAsc = false,
         sortByDesc = false,
         shopId
@@ -77,19 +81,8 @@ class SearchProductService {
             }
 
             // Fetch products with optional price filtering and pagination
-            const fetchProducts = async (collectionId, applyPriceFilter = false) => {
+            const fetchProducts = async (collectionId) => {
                 const categoryQueries = [...queries];
-                if (applyPriceFilter) {
-                    if (minPrice !== undefined) {
-                        categoryQueries.push(Query.greaterThanEqual('price', minPrice));
-                    }
-                    if (maxPrice !== undefined) {
-                        categoryQueries.push(Query.lessThanEqual('price', maxPrice));
-                    }
-                }
-                if (isInStock !== undefined) {
-                    categoryQueries.push(Query.equal('isInStock', isInStock));
-                }
                 if (shopId!==undefined) {
                     categoryQueries.push(Query.equal('shop', shopId));
                 }
@@ -114,7 +107,6 @@ class SearchProductService {
             if (!Array.isArray(allProducts)) {
                 throw new TypeError("Expected 'allProducts' to be an array.");
             }
-
             // If no input value, return the products directly
             if (inputValue.length === 0) {
                 return { success: true, products: allProducts };

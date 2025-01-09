@@ -2,15 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { loadMoreProducts } from '../../redux/features/searchPage/searchProductSlice.jsx';
-import Cookies from 'js-cookie'; // Import Cookies
+import { loadMoreProducts, resetProducts } from '../../redux/features/searchPage/searchProductSlice.jsx'; // Import resetProducts
+import Cookies from 'js-cookie';
 
-import { useExecuteSearch } from '../../hooks/searchProductHook.jsx'; // Import the hook
+import { useExecuteSearch } from '../../hooks/searchProductHook.jsx';
 import { LiaSortSolid } from "react-icons/lia";
 import { MdFilterList } from "react-icons/md";
 import { ToastContainer } from 'react-toastify';
 import SearchBar from './searchBar';
-import ProductList from './productList.jsx'; // Ensure this is implemented
+import ProductList from './productList.jsx';
 import { RotatingLines } from 'react-loader-spinner';
 
 import InfiniteScroll from 'react-infinite-scroll-component';
@@ -38,20 +38,8 @@ const SearchPage = () => {
         loadingMoreProducts,
         hasMoreProducts,
         sortByAsc,
-        sortByDesc
+        sortByDesc,
     } = useSelector((state) => state.searchproducts);
-
-    // Retrieve lat, long, and radius from 'BharatLinkerUserLocation' cookie
-    const storedLocation = Cookies.get('BharatLinkerUserLocation') ? JSON.parse(Cookies.get('BharatLinkerUserLocation')) : null;
-    const lat = storedLocation ? storedLocation.lat : null;
-    const long = storedLocation ? storedLocation.lon : null;
-    const radius = storedLocation ? storedLocation.radius : 5; // Default radius if not found
-
-    useEffect(() => {
-        if (products.length === 0) {
-            executeSearch();
-        }
-    }, []);
 
     const handleInputChange = (event) => {
         const value = event.target.value;
@@ -62,11 +50,27 @@ const SearchPage = () => {
         }));
     };
 
+    // Retrieve lat, long, and radius from 'BharatLinkerUserLocation' cookie
+    const storedLocation = Cookies.get('BharatLinkerUserLocation') ? JSON.parse(Cookies.get('BharatLinkerUserLocation')) : null;
+    const userLat = storedLocation ? storedLocation.lat : null;
+    const userLong = storedLocation ? storedLocation.lon : null;
+    const radius = storedLocation ? storedLocation.radius : 5;
+
+    // Effect to reset products when userLat, userLong, or radius changes
+    useEffect(() => {
+        if (products.length == 0 && !loading) {
+            executeSearch();
+        }
+    }, [products.length]);
+
+
+
+
     const onLoadMore = () => {
         if (!hasMoreProducts || loadingMoreProducts) return;
         const params = {
-            lat,
-            long,
+            userLat,
+            userLong,
             radius,
             inputValue,
             page: currenPage + 1,
