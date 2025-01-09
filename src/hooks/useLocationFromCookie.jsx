@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
-
+import { useExecuteSearch } from './searchProductHook.jsx';
 const useLocationFromCookies = () => {
     const [location, setLocation] = useState(null);
     const [loading, setLoading] = useState(true);
+    
+    const { executeSearch } = useExecuteSearch();
 
     // Fetch location from cookies and set it in state
     const fetchLocation = () => {
@@ -43,6 +45,7 @@ const useLocationFromCookies = () => {
 
                 // Store the updated location in cookies
                 Cookies.set('BharatLinkerUserLocation', JSON.stringify(updatedLocation), { expires: 7 });
+                executeSearch();
             } catch (error) {
                 console.error("Error parsing location data from cookies:", error);
             }
