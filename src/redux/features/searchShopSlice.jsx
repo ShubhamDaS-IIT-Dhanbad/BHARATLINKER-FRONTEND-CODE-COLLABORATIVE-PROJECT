@@ -10,7 +10,7 @@ export const fetchShops = createAsyncThunk(
                 inputValue, page, shopsPerPage, selectedCategories,
                 userLat, userLong, radius,
             });
-
+            
             // Check if response has shops
             if (response.shops) {
                 return {
