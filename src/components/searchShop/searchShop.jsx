@@ -9,10 +9,12 @@ import ShopList from './shopList.jsx';
 import { RotatingLines } from 'react-loader-spinner'; // Import the spinner component
 import './searchShop.css';
 
+import Cookies from 'js-cookie';
+
 const Shop = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const productsPerPage = 20;
+    const productsPerPage = 1;
 
     const [searchParams, setSearchParams] = useSearchParams();
     const query = searchParams.get('query') || '';
@@ -21,8 +23,15 @@ const Shop = () => {
     const { shops, loading, currentPage, loadingMoreShops, hasMoreShops } = useSelector((state) => state.searchshops);
     const selectedCategories = useSelector(state => state.searchshopfiltersection.selectedCategories);
 
+
+        const storedLocation = Cookies.get('BharatLinkerUserLocation') ? JSON.parse(Cookies.get('BharatLinkerUserLocation')) : null;
+        const userLat = storedLocation ? storedLocation.lat : null;
+        const userLong = storedLocation ? storedLocation.lon : null;
+        const radius = storedLocation ? storedLocation.radius : 5; // Default radius if not found
+    
     const handleSearch = () => {
         const params = {
+            userLat,userLong,radius,
             inputValue,
             page: 1,
             shopsPerPage: productsPerPage,
@@ -52,6 +61,7 @@ const Shop = () => {
     const onLoadMore = () => {
         if (!loadingMoreShops && hasMoreShops) {
             const params = {
+                userLat,userLong,radius,
                 inputValue,
                 page: currentPage + 1,
                 shopsPerPage: productsPerPage,
