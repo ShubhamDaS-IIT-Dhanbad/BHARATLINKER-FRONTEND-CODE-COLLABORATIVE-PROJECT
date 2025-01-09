@@ -140,6 +140,8 @@ const UploadBooksModulesForm = ({ userData, productType }) => {
         const finalFormData = {
             ...formData,
             phn: `+91${userData?.phn || ''}`,
+            lat:coordinates.lat,
+            long:coordinates.long
         };
 
         // Start uploading

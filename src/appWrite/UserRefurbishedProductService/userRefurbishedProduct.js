@@ -79,6 +79,7 @@ class UserRefurbishedProduct {
         let uploadedImages = [];
 
         try {
+            console.log(productData);
             uploadedImages = await this.uploadImagesToCloudinary(files);
             const imageUrls = uploadedImages.map((image) => image.secure_url);
             const newProductData = {
@@ -95,8 +96,8 @@ class UserRefurbishedProduct {
                 brand: productData.brand.toLowerCase(),
                 pinCodes: productData.pinCodes.split(',').map((pin) => Number(pin)),
                 productType: productData.productType,
-                lat,
-                long
+                lat:productData.lat,
+                long:productData.long
             };
             // Create a document in the Appwrite database with the uploaded images
             const document = await this.databases.createDocument(
