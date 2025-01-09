@@ -94,7 +94,9 @@ class UserRefurbishedProduct {
                 category: productData.category.toLowerCase(),
                 brand: productData.brand.toLowerCase(),
                 pinCodes: productData.pinCodes.split(',').map((pin) => Number(pin)),
-                productType: productData.productType
+                productType: productData.productType,
+                lat,
+                long
             };
             // Create a document in the Appwrite database with the uploaded images
             const document = await this.databases.createDocument(

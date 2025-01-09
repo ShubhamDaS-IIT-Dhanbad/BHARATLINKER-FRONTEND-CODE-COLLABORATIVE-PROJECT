@@ -15,6 +15,9 @@ const UploadBooksModulesForm = ({ userData, productType }) => {
         categoryPopUp: false,
         brandPopUp: false,
     });
+    const [selected, setSelected] = useState("ADDRESS LOCATION");
+    const [coordinates, setCoordinates] = useState({ lat: null, long: null });
+
 
     const [uploadStatus, setUploadStatus] = useState({
         success: false,
@@ -48,7 +51,24 @@ const UploadBooksModulesForm = ({ userData, productType }) => {
             [name]: value,
         }));
     };
-
+    const handleCurrentLocationClick = () => {
+        setSelected("CURRENT LOCATION");
+    
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(
+            (position) => {
+              const { latitude, longitude } = position.coords;
+              setCoordinates({ lat: latitude, long: longitude });
+              console.log("Latitude:", latitude, "Longitude:", longitude);
+            },
+            (error) => {
+              console.error("Error retrieving location:", error.message);
+            }
+          );
+        } else {
+          console.error("Geolocation is not supported by this browser.");
+        }
+      };
     const handleDrop = (index, event) => {
         event.preventDefault();
         handleImageChange(index, event.dataTransfer.files);
@@ -102,26 +122,26 @@ const UploadBooksModulesForm = ({ userData, productType }) => {
 
 
     const handleSubmit = () => {
-        const { title, price, discountedPrice, class: selectedClass, language, category, brand } = formData;
-    
+        const { lat=coordinates.lat,long=coordinates.long,title, price, discountedPrice, class: selectedClass, language, category, brand } = formData;
+
         // Check if required fields are filled based on the product type
-        const isModuleOrBookValid = (productType === 'module' || productType === 'book') && 
+        const isModuleOrBookValid = (productType === 'module' || productType === 'book') &&
             [title, price, discountedPrice, selectedClass, language].every(Boolean);
-        const isGadgetValid = productType === 'gadget' && 
+        const isGadgetValid = productType === 'gadget' &&
             [title, price, discountedPrice, brand, category].every(Boolean);
-    
+
         // If fields are not valid, show error and return
         if (!isModuleOrBookValid && !isGadgetValid) {
             setAllFieldEntered(false);
             return;
         }
-    
+
         // Prepare the final form data
         const finalFormData = {
             ...formData,
             phn: `+91${userData?.phn || ''}`,
         };
-    
+
         // Start uploading
         setIsUploading(true);
         userRefurbishedProduct.uploadProductWithImages(finalFormData, images)
@@ -136,7 +156,7 @@ const UploadBooksModulesForm = ({ userData, productType }) => {
                 setIsUploading(false);
             });
     };
-    
+
 
     const resetForm = () => {
         setFormData({
@@ -340,7 +360,22 @@ const UploadBooksModulesForm = ({ userData, productType }) => {
                         </div>
                     ))}
                 </div>
-
+                <div id="user-refurbished-product-book-module-upload-location">
+                    <div
+                        className={`user-refurbished-product-book-module-upload-location-p ${selected === "CURRENT LOCATION" ? "selected" : ""
+                            }`}
+                        onClick={() =>{setSelected("CURRENT LOCATION");handleCurrentLocationClick();}}
+                    >
+                        CURRENT LOCATION
+                    </div>
+                    <div
+                        className={`user-refurbished-product-book-module-upload-location-p ${selected === "ADDRESS LOCATION" ? "selected" : ""
+                            }`}
+                        onClick={() => setSelected("ADDRESS LOCATION")}
+                    >
+                        ADDRESS LOCATION
+                    </div>
+                </div>
                 <div
                     className={`user-refurbished-product-book-module-upload-form-submit ${isUploading ? 'disabled' : ''}`}
                     onClick={isUploading ? null : handleSubmit}

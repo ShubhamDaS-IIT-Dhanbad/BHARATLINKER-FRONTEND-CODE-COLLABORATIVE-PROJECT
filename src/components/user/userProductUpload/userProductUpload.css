@@ -275,3 +275,34 @@
 .selected-green {
     border: 1.9px solid #28a745;
   }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  #user-refurbished-product-book-module-upload-location{
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    display: flex;flex-grow: 1;
+  }
+
+  
+  .user-refurbished-product-book-module-upload-location-p{
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    display: flex;flex-direction: column;
+    padding: 10px;border:2px solid  rgb(0, 0, 0);border-radius: 10px;
+    justify-content: center;align-items: center;margin: 10px;font-size: 13px;
+  }
+  .user-refurbished-product-book-module-upload-location-p.selected{
+    border: 2px solid greenyellow;
+  }
