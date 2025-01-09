@@ -4,7 +4,7 @@ import { HiOutlineUserCircle } from "react-icons/hi2";
 import { BiSearchAlt } from "react-icons/bi";
 import { TbCategory2 } from "react-icons/tb";
 import { TiArrowSortedDown } from "react-icons/ti";
-import { useUserLocation } from '../../hooks/userLocationHook.jsx';
+import useLocationFromCookies from '../../hooks/useLocationFromCookie.jsx'; // Custom hook
 import Cookies from 'js-cookie';
 import './homeNavBar.css';
 import { useDispatch } from 'react-redux';
@@ -15,7 +15,8 @@ import LocationTab from '../locationTab/locationTab.jsx';
 function HomePageNavbar() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const { address } = useUserLocation();
+
+    const { location, loading } = useLocationFromCookies();
 
     const [homePageSearchInput, setHomePageSearchInput] = useState('');
     const [locationTab, setLocationTab] = useState(false);
@@ -51,7 +52,8 @@ function HomePageNavbar() {
                         <div className='home-page-user-location' onClick={() => setLocationTab(true)}>
                             <p className='home-page-location-label'>Bharat | Linker</p>
                             <div className='home-page-location-value'>
-                                Baharampur, Murshidabad, WB
+                                {/* Display loading text if location is still loading */}
+                                {loading ? 'Loading...' : (location ? location?.address.slice(0,30) : 'Location not set')}
                                 <TiArrowSortedDown size={15} />
                             </div>
                         </div>
