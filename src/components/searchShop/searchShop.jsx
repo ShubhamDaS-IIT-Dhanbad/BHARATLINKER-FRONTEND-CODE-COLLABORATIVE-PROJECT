@@ -44,7 +44,6 @@ const Shop = () => {
 
     useEffect(() => {
         if (shops.length === 0) {
-            console.log("lp")
             handleSearch();
         }
     }, [shops.length]);
@@ -82,7 +81,6 @@ const Shop = () => {
                     handleSearch={handleSearch}
                 />
             </div>
-{console.log(loading,shops)}
             {loading ? (
                 <div className="refurbished-page-loading-container">
                     <RotatingLines width="60" height="60" color="#007bff" />

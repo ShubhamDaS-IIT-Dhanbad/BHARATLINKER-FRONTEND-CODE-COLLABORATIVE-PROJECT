@@ -18,8 +18,6 @@ export const fetchRefurbishedProducts = createAsyncThunk(
     },
     { rejectWithValue }
   ) => {
-    console.log(
-      userLat ,userLong,radius,)
     try {
       const response = await searchRefurbishedProductService.getRefurbishedProducts({
         inputValue,userLat ,userLong,radius,

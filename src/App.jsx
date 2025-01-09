@@ -33,6 +33,7 @@ import RetailerRoutes from './components/retailer/retailerRoutes.jsx';
 
 //user routes
 import User from './components/user/userHome.jsx'
+import UserProfile from './components/user/userProfile/userProfile.jsx';
 import UserProductPageMain from './components/user/productPage/userProductPageMain.jsx'
 import RefurbishedBooksUploadUser from './components/user/userProductUpload/userProductUpload.jsx'
 import UserUpdateBookModule  from './components/user/userProductUpdate/userProductUpdate.jsx';
@@ -107,6 +108,7 @@ const RoutesWithConditionalHeader = React.memo(({ address }) => {
 
         {/* user routes */}
         <Route path='/user' element={<User />} />
+        <Route path='/user/profile' element={<UserProfile />} />
         <Route path='/user/refurbished' element={<UserProductPageMain/>} />
         <Route path='/user/upload/:productType' element={<RefurbishedBooksUploadUser/>} />
         <Route path='/user/refurbished/update/:id' element={<UserUpdateBookModule/>}/>

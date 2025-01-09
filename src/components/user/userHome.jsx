@@ -1,4 +1,4 @@
-import React, { useEffect,useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { TbShieldMinus } from 'react-icons/tb';
 import { IoHomeOutline } from 'react-icons/io5';
 import { BiSearchAlt } from 'react-icons/bi';
@@ -15,14 +15,14 @@ import Cookies from 'js-cookie'
 import './userHome.css';
 import conf from '../../conf/conf.js';
 function UserHome() {
-    const [userData, setUserData] = useState({phn:8250846979});
+    const [userData, setUserData] = useState({ phn: 8250846979 });
     const [isLogout, setIsLogout] = useState(false);
     const navigate = useNavigate();
 
-    useEffect(()=>{
+    useEffect(() => {
         const userSession = Cookies.get('BharatLinkerUser');
         setUserData(JSON.parse(userSession));
-    },[])
+    }, [])
     const client = new Client()
         .setEndpoint('https://cloud.appwrite.io/v1')
         .setProject(conf.VITE_APPWRITE_USERS_PROJECT_ID);
@@ -32,14 +32,14 @@ function UserHome() {
         try {
             Cookies.remove('BharatLinkerUser');
             await account.deleteSession('current');
-            
+
             navigate('/login');
             console.log('Logged out successfully!');
         } catch (error) {
             console.error('Logout failed:', error.message);
         }
     };
-    
+
     return (
         <>
             <header>
@@ -51,7 +51,7 @@ function UserHome() {
                     />
                     <div className='dashboard-header-user'>
                         <p id='dashboard-header-user-location'>Bharat | Linker</p>
-                        <p id='dashboard-header-user-email'>{userData.phn ? userData.phn:""}</p>
+                        <p id='dashboard-header-user-email'>{userData.phn ? userData.phn : ""}</p>
                     </div>
                     <IoHomeOutline
                         size={25}
@@ -64,6 +64,10 @@ function UserHome() {
 
             <main>
                 <section className='dashboard-Your-information'>
+                    <article className='dashboard-Your-Refurbished' onClick={() => navigate('/user/profile')}>
+                        <HiOutlineUserCircle size={27} className='dashboard-Your-information-icons' aria-label="Your refurbished items" />
+                        <p className='dashboard-Your-info-p'>Profile</p>
+                    </article>
                     <article className='dashboard-Your-Refurbished' onClick={() => navigate('/user/refurbished')}>
                         <AiOutlineProduct className='dashboard-Your-information-icons' aria-label="Your refurbished items" />
                         <p className='dashboard-Your-info-p'>Your refurbished</p>
@@ -73,7 +77,7 @@ function UserHome() {
                         <p className='dashboard-Your-info-p'>Upload Books</p>
                     </article>
                     <article className='dashboard-Your-Refurbished' onClick={() => navigate('/user/upload/gadget')}>
-                        <TbDeviceMobileCharging  className='dashboard-Your-information-icons' aria-label="Upload books" />
+                        <TbDeviceMobileCharging className='dashboard-Your-information-icons' aria-label="Upload books" />
                         <p className='dashboard-Your-info-p'>Upload Gadgets</p>
                     </article>
                     <article className='dashboard-Your-Refurbished' onClick={() => navigate('/user/notification')} >
@@ -101,7 +105,7 @@ function UserHome() {
                             <div className='logout-pop-up-inner-div-no' onClick={() => setIsLogout(false)}>
                                 No
                             </div>
-                            <div className='logout-pop-up-inner-div-yes' onClick={()=>{handleLogout()}}>
+                            <div className='logout-pop-up-inner-div-yes' onClick={() => { handleLogout() }}>
                                 Yes
                             </div>
                         </div>
