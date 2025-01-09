@@ -165,18 +165,18 @@ const UploadBooksModulesForm = ({ productType }) => {
     const [allFieldEntered, setAllFieldEntered] = useState(true);
 
     const handleUpdate = async () => {
-        const { title, price, discountedPrice, class: selectedClass, language, category, brand } = formData;
-        if ((productType == 'module' || productType == 'book') && ![title, price, discountedPrice, selectedClass, language].every(Boolean)) {
-            setAllFieldEntered(false);
-            return;
-        }
-        if (productType == 'gadget' && ![title, price, discountedPrice, brand, category].every(Boolean)) {
-            setAllFieldEntered(false);
-            return;
-        }
-
         setIsUpdate(false);
         setIsUpdating(true);
+        const { title, price, discountedPrice } = formData;
+        if ((productType == 'module' || productType == 'book') && ![title, price, discountedPrice].every(Boolean)) {
+            setAllFieldEntered(false);
+            return;
+        }
+        if (productType == 'gadget' && ![title, price, discountedPrice].every(Boolean)) {
+            setAllFieldEntered(false);
+            return;
+        }
+        
         try {
             await userRefurbishedProduct.updateUserRefurbishedProduct(productId, toDeleteImagesUrls, { ...formData,lat:coordinates.lat,long:coordinates.long }, images);
             setIsUpdateSuccessful(true);
@@ -489,7 +489,7 @@ const UploadBooksModulesForm = ({ productType }) => {
             </div>
 
             {!allFieldEntered && (
-                <PopupSuccess message="All fields are required!" onClose={() => setAllFieldEntered(true)} isSuccess={false} />
+                <PopupSuccess message="All fields are required!" onClose={() =>{ setAllFieldEntered(true)}} isSuccess={false} />
             )}
             {(loading || isDeleting || isUpdating) && (
                 <div className='user-book-delete-pop-up'>
