@@ -94,7 +94,6 @@ class UserRefurbishedProduct {
                 phn: productData.phn,
                 category: productData.category.toLowerCase(),
                 brand: productData.brand.toLowerCase(),
-                pinCodes: productData.pinCodes.split(',').map((pin) => Number(pin)),
                 productType: productData.productType,
                 lat:productData.lat,
                 long:productData.long
@@ -145,12 +144,11 @@ class UserRefurbishedProduct {
                 category: updatedData?.category?.toLowerCase() || '',
                 brand: updatedData?.brand?.toLowerCase() || '',
                 keywords: updatedData.keywords.split(','),
-                pinCodes: updatedData.pinCodes.split(',').map(pin => Number(pin)),
                 images: allImageUrls,
                 lat:updatedData.lat,
                 long:updatedData.long
             };
-
+console.log(updatedData)
             const updatedDocument = await this.databases.updateDocument(
                 conf.appwriteRefurbishProductDatabaseId,
                 conf.appwriteRefurbishedModulesCollectionId,
