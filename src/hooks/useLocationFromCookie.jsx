@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux'; // Import useDispatch for Redux actio
 
 import { resetProducts } from '../redux/features/searchPage/searchProductSlice.jsx';
 import { resetShops } from '../redux/features/searchShopSlice.jsx';
+import { resetRefurbishedProducts } from '../redux/features/refurbishedPage/refurbishedProductsSlice.jsx';
 
 const useLocationFromCookies = () => {
     const [location, setLocation] = useState(null);
@@ -43,6 +44,7 @@ const useLocationFromCookies = () => {
             setLocation(updatedLocation);
             dispatch(resetProducts());
             dispatch(resetShops());
+            dispatch(resetRefurbishedProducts());
         } catch (error) {
             console.error("Error updating location data in cookies:", error);
         }

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { loadMoreProducts, resetProducts } from '../../redux/features/searchPage/searchProductSlice.jsx'; // Import resetProducts
+import { loadMoreProducts} from '../../redux/features/searchPage/searchProductSlice.jsx'; // Import resetProducts
 import Cookies from 'js-cookie';
 
 import { useExecuteSearch } from '../../hooks/searchProductHook.jsx';

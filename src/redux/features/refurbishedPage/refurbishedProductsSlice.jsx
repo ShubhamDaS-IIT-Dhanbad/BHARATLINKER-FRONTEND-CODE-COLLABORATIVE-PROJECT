@@ -8,7 +8,7 @@ export const fetchRefurbishedProducts = createAsyncThunk(
   async (
     {
       inputValue,
-      pinCodes,
+      userLat ,userLong,radius,
       page,
       productsPerPage,
       sortByAsc,
@@ -18,10 +18,11 @@ export const fetchRefurbishedProducts = createAsyncThunk(
     },
     { rejectWithValue }
   ) => {
+    console.log(
+      userLat ,userLong,radius,)
     try {
       const response = await searchRefurbishedProductService.getRefurbishedProducts({
-        inputValue,
-        pinCodes,
+        inputValue,userLat ,userLong,radius,
         page,
         productsPerPage,
         sortByAsc,
@@ -50,8 +51,7 @@ export const loadMoreRefurbishedProducts = createAsyncThunk(
   'refurbishedProducts/loadMoreRefurbishedProducts',
   async (
     {
-      inputValue,
-      pinCodes,
+      inputValue,userLat ,userLong,radius,
       page,
       productsPerPage,
       sortByAsc,
@@ -63,8 +63,7 @@ export const loadMoreRefurbishedProducts = createAsyncThunk(
   ) => {
     try {
       const response = await searchRefurbishedProductService.getRefurbishedProducts({
-        inputValue,
-        pinCodes,
+        inputValue,userLat ,userLong,radius,
         page,
         productsPerPage,
         sortByAsc,

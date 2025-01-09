@@ -17,13 +17,12 @@ class SearchRefurbishedProductService {
     // Method to fetch refurbished products from the Modules collection with various filters
     async getRefurbishedProducts({
         inputValue = '',
-        pinCodes = [],
         selectedCategories = [],
         minPrice,
         maxPrice,
         isInStock,
-        userLat = 23.818637,
-        userLon = 86.437171,
+        userLat,
+        userLong,
         radius,
         page,
         productsPerPage,
@@ -55,9 +54,9 @@ class SearchRefurbishedProductService {
             }
 
             // Geolocation filtering using bounding box
-            if (userLat !== undefined && userLon !== undefined && radius !== undefined) {
+            if (userLat !== undefined && userLong !== undefined && radius !== undefined) {
                 const boundingBox = getBoundsOfDistance(
-                    { latitude: userLat, longitude: userLon },
+                    { latitude: userLat, longitude: userLong },
                     radius * 1000 // Convert radius from km to meters
                 );
 
@@ -100,6 +99,7 @@ class SearchRefurbishedProductService {
             };
 
             const allProducts = await fetchProducts(conf.appwriteRefurbishedModulesCollectionId);
+            console.log(allProducts)
             if (!Array.isArray(allProducts)) {
                 throw new TypeError("Expected 'allProducts' to be an array.");
             }
@@ -123,11 +123,11 @@ class SearchRefurbishedProductService {
                 });
 
                 // Only calculate the distance if the radius, userLat, and userLon are provided
-                if (radius && userLat && userLon) {
+                if (radius && userLat && userLong) {
                     // Haversine formula for distance
                     const toRadians = (deg) => (deg * Math.PI) / 180;
                     const dLat = toRadians(product.latitude - userLat);
-                    const dLon = toRadians(product.longitude - userLon);
+                    const dLon = toRadians(product.longitude - userLong);
                     const lat1 = toRadians(userLat);
                     const lat2 = toRadians(product.latitude);
 

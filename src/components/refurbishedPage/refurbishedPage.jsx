@@ -13,6 +13,7 @@ import './refurbishedPage.css';
 
 import { RotatingLines } from 'react-loader-spinner';
 import { useSearchParams } from 'react-router-dom';
+import Cookies from 'js-cookie';
 
 const RefurbishedPage = () => {
   const dispatch = useDispatch();
@@ -42,13 +43,20 @@ const RefurbishedPage = () => {
   const selectedLanguages = useSelector((state) => state.refurbishedproductfiltersection.selectedLanguages);
   const selectedBoards = useSelector((state) => state.refurbishedproductfiltersection.selectedBoards);
 
+
+     const storedLocation = Cookies.get('BharatLinkerUserLocation') ? JSON.parse(Cookies.get('BharatLinkerUserLocation')) : null;
+      const userLat = storedLocation ? storedLocation.lat : null;
+      const userLong = storedLocation ? storedLocation.lon : null;
+      const radius = storedLocation ? storedLocation.radius : 5;
+  
+
   // Search handling function
   const handleSearch = () => {
     const params = {
-      inputValue,                
+      inputValue,    
+      userLat ,userLong,radius,            
       page: 1,                
-      productsPerPage: 3,      
-      pinCodes: [742136],
+      productsPerPage: 20,     
       selectedCategories: selectedCategories || [],
       selectedClasses: selectedClasses || [],        
       selectedExams: selectedExams || [],            
@@ -57,7 +65,6 @@ const RefurbishedPage = () => {
       sortByAsc: sortByAsc || false,                 
       sortByDesc: sortByDesc || false,               
     };
-
     dispatch(fetchRefurbishedProducts(params));
   };
 
@@ -78,7 +85,9 @@ const RefurbishedPage = () => {
     selectedExams,
     selectedLanguages,
     selectedBoards,
-    selectedBrands]);
+    selectedBrands,
+    refurbishedProducts.length
+  ]);
 
   // Handle loading more products
   const handleLoadMore = () => {
@@ -86,9 +95,9 @@ const RefurbishedPage = () => {
 
     const params = {
       inputValue,
+      userLat ,userLong,radius,
       page: currentPage + 1,
-      productsPerPage: 3,
-      pinCodes: [742136],
+      productsPerPage: 20,
       selectedCategories,
       selectedClasses,
       selectedExams,
