@@ -190,7 +190,7 @@ const UploadBooksModulesForm = ({ productType }) => {
             return;
         }
 
-        if (!lat || !long) {
+        if (!coordinates.lat || !coordinates.long) {
             alert('Your Address Location is not set or error in retriving location -> go to PROFILE and set LOCATION');  // Popup message
             return;
         }
