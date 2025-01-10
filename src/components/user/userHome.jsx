@@ -25,7 +25,7 @@ function UserHome() {
     }, [])
     const client = new Client()
         .setEndpoint('https://cloud.appwrite.io/v1')
-        .setProject(conf.VITE_APPWRITE_USERS_PROJECT_ID);
+        .setProject(conf.appwriteUsersProjectId);
 
     const account = new Account(client);
     const handleLogout = async () => {

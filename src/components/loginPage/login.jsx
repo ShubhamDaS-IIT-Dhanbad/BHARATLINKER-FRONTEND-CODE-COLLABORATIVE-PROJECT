@@ -8,7 +8,7 @@ import { Client, Account, ID } from 'appwrite';
 import { FaArrowLeft } from "react-icons/fa";
 import { FaCircleExclamation } from "react-icons/fa6";
 import Cookies from 'js-cookie'
-
+import {fetchUserByPhoneNumber} from '../../appWrite/userData/userData.js';
 function SignUpForm() {
   const navigate = useNavigate();
 
@@ -96,8 +96,8 @@ function SignUpForm() {
   const verifyOTP = async (otpCode) => {
     const loadingToast = toast.loading('Verifying OTP...');
     try {
-
-      const session = await account.createSession(userId, otpCode); // Use userId obtained from the token
+      // Verify OTP and create a session
+      const session = await account.createSession(userId, otpCode);
       toast.dismiss(loadingToast);
       toast.success('Phone verified successfully!');
       
@@ -107,11 +107,21 @@ function SignUpForm() {
       const sessionData = {
         $id: session.$id,
         userId: session.userId,
-        phn:phone
+        phn: phone,
       };
-      
+  
       Cookies.set('BharatLinkerUser', JSON.stringify(sessionData), { expires: 7, path: '' });
-      
+  
+      // Fetch user data by phone number
+      const userData = await fetchUserByPhoneNumber(phone);
+  
+      if (userData) {
+        Cookies.set('BharatLinkerUserData', JSON.stringify(userData), { expires: 7, path: '' });
+        console.log('User data fetched and stored:', userData);
+      } else {
+        console.warn('No user data found for the provided phone number');
+      }
+  
       navigate('/');
     } catch (error) {
       toast.dismiss(loadingToast);
@@ -119,6 +129,7 @@ function SignUpForm() {
       setOtp(new Array(6).fill(""));
     }
   };
+  
   
 
   return (
