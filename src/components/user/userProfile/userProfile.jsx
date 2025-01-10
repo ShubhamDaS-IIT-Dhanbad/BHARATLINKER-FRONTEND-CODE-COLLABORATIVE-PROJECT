@@ -6,7 +6,7 @@ import Cookies from 'js-cookie';
 import { SlLocationPin } from "react-icons/sl";
 import './userProfile.css';
 
-import updateUserByPhoneNumber from '../../../appWrite/userData/userData.js';
+import {updateUserByPhoneNumber} from '../../../appWrite/userData/userData.js';
 
 function UserRefurbishedProduct() {
   const navigate = useNavigate();
