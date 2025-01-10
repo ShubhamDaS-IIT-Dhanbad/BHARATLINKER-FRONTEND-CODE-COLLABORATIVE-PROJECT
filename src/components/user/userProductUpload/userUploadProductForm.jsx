@@ -6,6 +6,7 @@ import { TbBrandAirtable, TbWorldUpload } from "react-icons/tb";
 
 import { Oval } from 'react-loader-spinner';
 import userRefurbishedProduct from '../../../appWrite/UserRefurbishedProductService/userRefurbishedProduct.js';
+import Cookies from 'js-cookie';
 
 const UploadBooksModulesForm = ({ userData, productType }) => {
     const [popUpState, setPopUpState] = useState({
@@ -52,30 +53,43 @@ const UploadBooksModulesForm = ({ userData, productType }) => {
         }));
     };
     const handleCurrentLocationClick = () => {
-        
+
         setFetching(true);
         if (navigator.geolocation) {
-          navigator.geolocation.getCurrentPosition(
-            (position) => {
-              const { latitude, longitude } = position.coords;
-              setCoordinates({ lat: latitude, long: longitude });
-              console.log("Latitude:", latitude, "Longitude:", longitude);
-            },
-            (error) => {
-                setSelected("ADDRESS LOCATION");
-              console.error("Error retrieving location:", error.message);
-            }
-          );
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const { latitude, longitude } = position.coords;
+                    setCoordinates({ lat: latitude, long: longitude });
+                    console.log("Latitude:", latitude, "Longitude:", longitude);
+                },
+                (error) => {
+                    setSelected("ADDRESS LOCATION");
+                    console.error("Error retrieving location:", error.message);
+                }
+            );
         } else {
-          console.error("Geolocation is not supported by this browser.");
-          setSelected("ADDRESS LOCATION");
+            console.error("Geolocation is not supported by this browser.");
+            setSelected("ADDRESS LOCATION");
         }
         setFetching(false);
-      };
+    };
     const handleDrop = (index, event) => {
         event.preventDefault();
         handleImageChange(index, event.dataTransfer.files);
     };
+
+
+    useEffect(() => {
+        const userSession = Cookies.get('BharatLinkerUserData');
+        if (userSession) {
+            const parsedUserData = JSON.parse(userSession);
+            if (parsedUserData.lat && parsedUserData.long) {
+                setCoordinates({ lat: parsedUserData.lat, long: parsedUserData.long });
+            }
+        }
+    }, [])
+
+
 
     const handleImageChange = (index, files) => {
         if (files && files[0]) {
@@ -125,7 +139,7 @@ const UploadBooksModulesForm = ({ userData, productType }) => {
 
 
     const handleSubmit = () => {
-        const { lat=coordinates.lat,long=coordinates.long,title, price, discountedPrice, class: selectedClass, language, category, brand } = formData;
+        const { lat = coordinates.lat, long = coordinates.long, title, price, discountedPrice, class: selectedClass, language, category, brand } = formData;
 
         // Check if required fields are filled based on the product type
         const isModuleOrBookValid = (productType === 'module' || productType === 'book') &&
@@ -139,12 +153,18 @@ const UploadBooksModulesForm = ({ userData, productType }) => {
             return;
         }
 
+        // Check if lat and long are valid
+        if (!lat || !long) {
+            alert('Your Address Location is not set or error in retriving location -> go to PROFILE and set LOCATION');  // Popup message
+            return;
+        }
+
         // Prepare the final form data
         const finalFormData = {
             ...formData,
             phn: `+91${userData?.phn || ''}`,
-            lat:coordinates.lat,
-            long:coordinates.long
+            lat: coordinates.lat,
+            long: coordinates.long
         };
 
         // Start uploading
@@ -161,6 +181,7 @@ const UploadBooksModulesForm = ({ userData, productType }) => {
                 setIsUploading(false);
             });
     };
+
 
 
     const resetForm = () => {
@@ -368,7 +389,7 @@ const UploadBooksModulesForm = ({ userData, productType }) => {
                     <div
                         className={`user-refurbished-product-book-module-upload-location-p ${selected === "CURRENT LOCATION" ? "selected" : ""
                             }`}
-                        onClick={() =>{setSelected("CURRENT LOCATION");handleCurrentLocationClick();}}
+                        onClick={() => { setSelected("CURRENT LOCATION"); handleCurrentLocationClick(); }}
                     >
                         {fetching ? 'Fetching...' : 'CURRENT LOCATION'}
                     </div>

@@ -7,7 +7,6 @@
 
 
 .user-profile-div{
-    width: 100vw;
     padding: 10px;
 }
 .user-profile-form {
@@ -51,8 +50,9 @@
 
   .user-profile-location{
     display: flex;
-    border: 1.5px solid black;
-    width: 30px;height: 30px;
+    border: 1.5px solid black;justify-content: center;
+    align-items: center;gap: 10px;
+   height: 30px;font-size: 12px;
     padding: 7px;border-radius: 10px;
     margin-top: 20px;
   }

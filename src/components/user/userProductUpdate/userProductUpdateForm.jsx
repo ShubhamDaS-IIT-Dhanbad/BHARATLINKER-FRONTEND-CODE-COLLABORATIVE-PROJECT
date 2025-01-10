@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import userRefurbishedProduct from '../../../appWrite/UserRefurbishedProductService/userRefurbishedProduct.js';
 import { deleteProduct, resetUserRefurbishedProducts } from '../../../redux/features/user/userAllRefurbishedProductsSlice.jsx';
-
+import Cookies from 'js-cookie';
 const UploadBooksModulesForm = ({ productType }) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -62,10 +62,22 @@ const UploadBooksModulesForm = ({ productType }) => {
 
     useEffect(() => {
         setLoading(true);
-
+    
+        // Retrieve user data from cookies
+        const userSession = Cookies.get('BharatLinkerUserData');
+    
+        if (userSession) {
+            const parsedUserData = JSON.parse(userSession);
+            // Set coordinates if present
+            if (parsedUserData.lat && parsedUserData.long) {
+                setCoordinates({ lat: parsedUserData.lat, long: parsedUserData.long });
+            }
+        }
+    
+        // Check product ID and load product data
         if (productId) {
             const product = products.find((product) => product.$id === productId.id);
-
+    
             if (!product) {
                 navigate('/user/refurbished');
             } else {
@@ -85,7 +97,7 @@ const UploadBooksModulesForm = ({ productType }) => {
                     brand,
                     images: productImages,
                 } = product;
-
+    
                 setFormData({
                     class: prodClass,
                     language,
@@ -99,16 +111,19 @@ const UploadBooksModulesForm = ({ productType }) => {
                     brand,
                     discountedPrice,
                     keywords: keywords.join(','),
-                    author
+                    author,
                 });
-
+    
                 const paddedImages = [...productImages, null, null, null].slice(0, 3);
                 setImages(paddedImages);
             }
         }
-
+    
         setLoading(false);
+        console.log('Coordinates:', coordinates);
+    
     }, []);
+    
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -172,6 +187,11 @@ const UploadBooksModulesForm = ({ productType }) => {
         }
         if (productType == 'gadget' && ![title, price, discountedPrice].every(Boolean)) {
             setAllFieldEntered(false);
+            return;
+        }
+
+        if (!lat || !long) {
+            alert('Your Address Location is not set or error in retriving location -> go to PROFILE and set LOCATION');  // Popup message
             return;
         }
         

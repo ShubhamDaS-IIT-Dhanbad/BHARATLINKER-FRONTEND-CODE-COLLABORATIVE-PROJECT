@@ -3,25 +3,62 @@ import { useNavigate } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
 import { Helmet } from 'react-helmet';
 import Cookies from 'js-cookie';
-import { SlLocationPin } from "react-icons/sl";
-import './userProfile.css';
+import { SlLocationPin } from 'react-icons/sl';
+import { MdMyLocation } from 'react-icons/md';
 
-import {updateUserByPhoneNumber} from '../../../appWrite/userData/userData.js';
+import { Oval } from 'react-loader-spinner';
+import { IoSearch } from 'react-icons/io5';
+import { RotatingLines } from 'react-loader-spinner';
+import './userProfile.css';
+import { updateUserByPhoneNumber } from '../../../appWrite/userData/userData.js';
+import conf from '../../../conf/conf.js';
 
 function UserRefurbishedProduct() {
   const navigate = useNavigate();
   const [userData, setUserData] = useState({});
   const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
+  const [address, setAddress] = useState('');
   const [lat, setLat] = useState(null);
   const [long, setLong] = useState(null);
   const [locationAvailable, setLocationAvailable] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [suggestions, setSuggestions] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  const [isUpdating, setIsUpdating] = useState(false);
 
   const updateUserData = () => {
-    const updatedData = { name, address: email, lat, long, phn: userData?.phn };
-    console.log("Updating user data:", updatedData);
-    updateUserByPhoneNumber(updatedData);
+    if (!name || !address) {
+      alert('Please fill in all required fields.');
+      return;
+    }
+
+    const updatedData = { name, address, lat, long, phn: userData?.phn };
+
+    // Start the update process
+    setIsUpdating(true);
+
+    updateUserByPhoneNumber(updatedData)
+      .then(() => {
+        // Save the updated user data in cookies
+        Cookies.set('BharatLinkerUserData', JSON.stringify({
+          ...userData,
+          name,
+          address,
+          lat,
+          long,
+        }), { expires: 7 });
+      })
+      .catch((error) => {
+        console.error('Error updating user data:', error.message);
+        alert('Failed to update user data.');
+      })
+      .finally(() => {
+        setIsUpdating(false);
+      });
   };
+
+
 
   const handleLocationClick = () => {
     navigator.geolocation.getCurrentPosition(
@@ -32,9 +69,55 @@ function UserRefurbishedProduct() {
         setLocationAvailable(true);
       },
       (error) => {
-        console.error("Error getting location:", error.message);
+        console.error('Error getting location:', error.message);
       }
     );
+  };
+
+  const fetchSuggestions = async (query) => {
+    if (!query) {
+      setSuggestions([]);
+      return;
+    }
+
+    const apiKey = conf.geoapifyapikey; // Ensure this is defined in your environment
+    const apiUrl = `https://api.geoapify.com/v1/geocode/search?text=${query}&apiKey=${apiKey}&lang=en`;
+
+    setLoading(true);
+
+    try {
+      const response = await fetch(apiUrl);
+      const data = await response.json();
+      if (data.features && data.features.length > 0) {
+        const formattedSuggestions = data.features
+          .filter((feature) => feature.properties.country === 'India' && feature.properties.state)
+          .map((feature) => ({
+            label: feature.properties.formatted,
+            lat: feature.geometry.coordinates[1],
+            lon: feature.geometry.coordinates[0],
+            country: feature.properties.country,
+            state: feature.properties.state,
+          }));
+        setSuggestions(formattedSuggestions);
+      } else {
+        setSuggestions([]);
+      }
+    } catch (error) {
+      console.error('Error fetching suggestions:', error);
+      setSuggestions([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleSearch = () => fetchSuggestions(searchQuery);
+
+  const handleAddressClick = (suggestion) => {
+    setSearchQuery(suggestion.label);
+    setSuggestions([]);
+    setAddress(suggestion.label);
+    setLat(suggestion.lat);
+    setLong(suggestion.lon);
   };
 
   useEffect(() => {
@@ -48,7 +131,7 @@ function UserRefurbishedProduct() {
         phn: parsedPhoneData.phn || parsedUserData.phn || '',
       });
       setName(parsedUserData.name || '');
-      setEmail(parsedUserData.email || '');
+      setAddress(parsedUserData.address || '');
       setLat(parsedUserData.lat || null);
       setLong(parsedUserData.long || null);
       setLocationAvailable(!!(parsedUserData.lat && parsedUserData.long));
@@ -113,42 +196,127 @@ function UserRefurbishedProduct() {
         </div>
 
         <div className="user-profile-field">
-          <label htmlFor="email" className="user-profile-form-label">
+          <label htmlFor="address" className="user-profile-form-label">
             ADDRESS <span className="required">*</span>
           </label>
           <textarea
-            id="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            id="address"
+            value={address}
+            onChange={(e) => setAddress(e.target.value)}
             placeholder="Enter your address"
             className="user-profile-form-input"
             required
           />
         </div>
 
-        <div className="user-profile-location">
-          <SlLocationPin
-            size={30}
-            color={locationAvailable ? "green" : "gray"}
-            onClick={handleLocationClick}
+
+
+        <div className="user-profile-field">
+          <label htmlFor="name" className="user-profile-form-label">
+            LATITUDE <span className="required">*</span>
+          </label>
+          <input
+            type="text"
+            id="name"
+            value={lat ? lat : "Use  current location or search city"}
+            placeholder="Enter your name"
+            className="user-profile-form-input"
+            required
+          />
+        </div>
+
+
+        <div className="user-profile-field">
+          <label htmlFor="name" className="user-profile-form-label">
+            LONGITUDE <span className="required">*</span>
+          </label>
+          <input
+            type="text"
+            id="name"
+            value={long ? long : "Use  current location or search city"}
+            placeholder="Enter your name"
+            className="user-profile-form-input"
+            required
+          />
+        </div>
+
+
+
+        <div className="user-profile-location"
+          onClick={handleLocationClick}>
+          USE CURRENT LOCATION AS HOME LOCATION
+          <MdMyLocation
+            size={20}
+            color={locationAvailable ? 'green' : 'gray'}
             style={{ cursor: 'pointer' }}
             aria-label="Get Current Location"
           />
         </div>
+        OR
+        <div className="location-tab-bottom-div-input-div">
+          <IoSearch onClick={handleSearch} size={20} />
+          <input
+            className="location-tab-bottom-div-input"
+            placeholder="Search your city/village/town"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+                handleSearch();
+              }
+            }}
+          />
+        </div>
+        {loading && (
+          <div className="location-tab-loader">
+            <RotatingLines
+              width="50"
+              height="50"
+              color="#00BFFF"
+              ariaLabel="rotating-lines-loading"
+            />
+          </div>
+        )}
+        {!loading && suggestions.length > 0 && (
+          <div className="location-tab-suggestions">
+            {suggestions.map((suggestion, index) => (
+              <div
+                className="location-tab-suggestion-info-div"
+                key={index}
+                onClick={() => handleAddressClick(suggestion)}
+              >
+                <SlLocationPin size={17} />
+                <p className="location-tab-location-info-inner-div-2">
+                  {suggestion.label}
+                </p>
+              </div>
+            ))}
+          </div>
+        )}
 
-        <div
-          className={`user-profile-form-button ${name && email ? "active" : "disabled"}`}
+        <button
+          className={`user-profile-form-button ${name && address ? 'active' : 'disabled'}`}
           onClick={updateUserData}
-          style={{
-            cursor: name && email ? 'pointer' : 'not-allowed',
-          }}
+          disabled={!name || !address}
         >
           Submit
-        </div>
+        </button>
       </div>
+
+      {isUpdating &&
+        <div className='user-book-delete-pop-up'>
+          <Oval
+            height={40}
+            width={40}
+            color="#4A90E2"
+            secondaryColor="#ddd"
+            strokeWidth={4}
+            strokeWidthSecondary={2}
+          />
+        </div>}
     </div>
   );
 }
 
 export default UserRefurbishedProduct;
-
