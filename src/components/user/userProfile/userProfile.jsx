@@ -115,6 +115,7 @@ function UserRefurbishedProduct() {
   const handleAddressClick = (suggestion) => {
     setSearchQuery(suggestion.label);
     setSuggestions([]);
+    setAddress(suggestion.label);
     setLat(suggestion.lat);
     setLong(suggestion.lon);
   };
