@@ -110,14 +110,13 @@ function SignUpForm() {
         phn:phone
       };
       
-      // Store only the relevant session data in the cookie
       Cookies.set('BharatLinkerUser', JSON.stringify(sessionData), { expires: 7, path: '' });
       
-      navigate('/'); // Navigate to the desired page after verification
+      navigate('/');
     } catch (error) {
       toast.dismiss(loadingToast);
       toast.error(`Failed to verify OTP: ${error.message}`);
-      setOtp(new Array(6).fill("")); // Clear OTP fields on error
+      setOtp(new Array(6).fill(""));
     }
   };
   

@@ -1,5 +1,5 @@
 import conf from '../../conf/conf.js';
-import { Client, Databases,Query } from 'appwrite';
+import { Client, Databases, Query } from 'appwrite';
 
 const client = new Client();
 client
@@ -8,46 +8,67 @@ client
 
 const databases = new Databases(client);
 
+// Function to update user data by phone number
 async function updateUserByPhoneNumber(updatedData) {
     try {
         const { phn, ...restData } = updatedData;
-    
+
         if (!phn) {
             throw new Error("Phone number (phn) is required as the document ID.");
         }
-        const queries = [];
-        queries.push(Query.contains('phoneNumber', phn));
-        // Query the database for the document with the phoneNumber equal to phn
-        const searchQuery = [`phoneNumber=${phn}`]; // Query format may depend on your Appwrite version
+
+        const queries = [Query.equal('phoneNumber', phn)];
         const result = await databases.listDocuments(
             conf.appwriteUsersDatabaseId,
             conf.appwriteUsersCollectionId,
             queries
         );
-    console.log("lplpp",result)
+
         if (result.documents.length === 0) {
             throw new Error(`No document found with phoneNumber: ${phn}`);
         }
-    
-        // Assuming the first result is the correct one (if there are multiple results, you might want to handle that)
+
         const documentId = result.documents[0].$id;
-    
-        // Now, update the document using the document ID
+
         const updatedUser = await databases.updateDocument(
             conf.appwriteUsersDatabaseId,
             conf.appwriteUsersCollectionId,
             documentId,
-            restData 
+            restData
         );
-    
+
         console.log('User successfully updated:', updatedUser);
         return updatedUser;
     } catch (error) {
         console.error('Error in updateUserByPhoneNumber:', error);
-        return false; // Return false for errors
+        return false;
     }
-    
 }
 
-export default updateUserByPhoneNumber;
+// Function to fetch user data by phone number
+async function fetchUserByPhoneNumber(phn) {
+    try {
+        if (!phn) {
+            throw new Error("Phone number (phn) is required.");
+        }
 
+        const queries = [Query.equal('phoneNumber', phn)];
+        const result = await databases.listDocuments(
+            conf.appwriteUsersDatabaseId,
+            conf.appwriteUsersCollectionId,
+            queries
+        );
+
+        if (result.documents.length === 0) {
+            throw new Error(`No document found with phoneNumber: ${phn}`);
+        }
+
+        console.log('User data retrieved:', result.documents[0]);
+        return result.documents[0];
+    } catch (error) {
+        console.error('Error in fetchUserByPhoneNumber:', error);
+        return null;
+    }
+}
+
+export { updateUserByPhoneNumber, fetchUserByPhoneNumber };

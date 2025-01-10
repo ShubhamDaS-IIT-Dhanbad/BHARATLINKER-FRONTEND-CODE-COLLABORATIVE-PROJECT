@@ -16,9 +16,8 @@ function LocationTab({ setLocationTab }) {
     const [radius, setRadius] = useState(5); // default value is 5 km
     const [loading, setLoading] = useState(false);
     const [fetchingUserLocation, setFetchingUserLocation] = useState(false);
-    const [radiusOptions] = useState([1, 2, 4, 5, 7,10,15]); // Options for radius in km
+    const [radiusOptions] = useState([1, 2, 4, 5, 7,10,15]);
 
-    // Using the custom hook to get stored location and updateLocation
     const { updateLocation } = useLocationFromCookie();
 
     // Check if BharatLinkerUserLocation exists in cookies initially
@@ -26,12 +25,14 @@ function LocationTab({ setLocationTab }) {
         const storedLocation = Cookies.get('BharatLinkerUserLocation') 
             ? JSON.parse(Cookies.get('BharatLinkerUserLocation')) 
             : null;
-        
+    
         if (storedLocation) {
-            setRadius(storedLocation.radius || 5);  // Default radius 5 km if not found
+            setRadius(storedLocation.radius || 5); // Default radius 5 km if not found
+        } else {
+            handleUseCurrentLocation(); // Fetch the user's current location if no cookie is found
         }
     }, []);
-
+    
     // Function to fetch location suggestions from Geoapify
     const fetchSuggestions = async (query) => {
         if (!query) {
