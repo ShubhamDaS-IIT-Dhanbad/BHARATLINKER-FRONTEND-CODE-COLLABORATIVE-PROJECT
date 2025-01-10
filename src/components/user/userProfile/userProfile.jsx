@@ -224,7 +224,7 @@ function UserRefurbishedProduct() {
           />
         </div>
 
-        <div className="user-profile-field">
+        {/* <div className="user-profile-field">
           <label htmlFor="latitude" className="user-profile-form-label">
             LATITUDE <span className="required">*</span>
           </label>
@@ -234,7 +234,7 @@ function UserRefurbishedProduct() {
             value={lat || ""}
             placeholder="Use current location or search city"
             className="user-profile-form-input"
-            onChange={(e) =>{}} // Add this onChange handler
+            onChange={(e) =>{}} 
             required
           />
         </div>
@@ -252,7 +252,7 @@ function UserRefurbishedProduct() {
             onChange={(e) => {}}
             required
           />
-        </div>
+        </div> */}
 
 
         <div className="user-profile-location" onClick={handleLocationClick}>
