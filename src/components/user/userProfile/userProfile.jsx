@@ -5,7 +5,6 @@ import { Helmet } from 'react-helmet';
 import Cookies from 'js-cookie';
 import { SlLocationPin } from 'react-icons/sl';
 import { MdMyLocation } from 'react-icons/md';
-
 import { Oval } from 'react-loader-spinner';
 import { IoSearch } from 'react-icons/io5';
 import { RotatingLines } from 'react-loader-spinner';
@@ -24,8 +23,8 @@ function UserRefurbishedProduct() {
   const [searchQuery, setSearchQuery] = useState('');
   const [suggestions, setSuggestions] = useState([]);
   const [loading, setLoading] = useState(false);
-
   const [isUpdating, setIsUpdating] = useState(false);
+  const [fetchingUserLocation, setFetchingUserLocation] = useState(false);
 
   const updateUserData = () => {
     if (!name || !address) {
@@ -35,12 +34,10 @@ function UserRefurbishedProduct() {
 
     const updatedData = { name, address, lat, long, phn: userData?.phn };
 
-    // Start the update process
     setIsUpdating(true);
 
     updateUserByPhoneNumber(updatedData)
       .then(() => {
-        // Save the updated user data in cookies
         Cookies.set('BharatLinkerUserData', JSON.stringify({
           ...userData,
           name,
@@ -58,20 +55,38 @@ function UserRefurbishedProduct() {
       });
   };
 
-
-
   const handleLocationClick = () => {
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        const { latitude, longitude } = position.coords;
-        setLat(latitude);
-        setLong(longitude);
-        setLocationAvailable(true);
-      },
-      (error) => {
-        console.error('Error getting location:', error.message);
-      }
-    );
+    if (navigator.geolocation) {
+      setFetchingUserLocation(true);
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          const { latitude, longitude } = position.coords;
+
+          const apiKey = conf.opencageapikey;
+          const apiUrl = `${conf.opencageapiurl}?key=${apiKey}&q=${latitude},${longitude}&pretty=1&no_annotations=1`;
+
+          try {
+            const response = await fetch(apiUrl);
+            const data = await response.json();
+            const address = data.results[0].formatted;
+            setAddress(address);
+            setLat(latitude);
+            setLong(longitude);
+          } catch (error) {
+            console.error('Error fetching address:', error);
+          } finally {
+            setFetchingUserLocation(false);
+          }
+        },
+        (error) => {
+          console.error('Error fetching current location:', error);
+          setFetchingUserLocation(false);
+        }
+      );
+    } else {
+      console.error('Geolocation is not supported by this browser.');
+      setFetchingUserLocation(false);
+    }
   };
 
   const fetchSuggestions = async (query) => {
@@ -80,7 +95,7 @@ function UserRefurbishedProduct() {
       return;
     }
 
-    const apiKey = conf.geoapifyapikey; // Ensure this is defined in your environment
+    const apiKey = conf.geoapifyapikey;
     const apiUrl = `https://api.geoapify.com/v1/geocode/search?text=${query}&apiKey=${apiKey}&lang=en`;
 
     setLoading(true);
@@ -209,41 +224,38 @@ function UserRefurbishedProduct() {
           />
         </div>
 
-
-
         <div className="user-profile-field">
-          <label htmlFor="name" className="user-profile-form-label">
+          <label htmlFor="latitude" className="user-profile-form-label">
             LATITUDE <span className="required">*</span>
           </label>
           <input
             type="text"
-            id="name"
-            value={lat ? lat : "Use  current location or search city"}
-            placeholder="Enter your name"
+            id="latitude"
+            value={lat || ""}
+            placeholder="Use current location or search city"
             className="user-profile-form-input"
+            onChange={(e) =>{}} // Add this onChange handler
             required
           />
         </div>
 
-
         <div className="user-profile-field">
-          <label htmlFor="name" className="user-profile-form-label">
+          <label htmlFor="longitude" className="user-profile-form-label">
             LONGITUDE <span className="required">*</span>
           </label>
           <input
             type="text"
-            id="name"
-            value={long ? long : "Use  current location or search city"}
-            placeholder="Enter your name"
+            id="longitude"
+            value={long || ""}
+            placeholder="Use current location or search city"
             className="user-profile-form-input"
+            onChange={(e) => {}}
             required
           />
         </div>
 
 
-
-        <div className="user-profile-location"
-          onClick={handleLocationClick}>
+        <div className="user-profile-location" onClick={handleLocationClick}>
           USE CURRENT LOCATION AS HOME LOCATION
           <MdMyLocation
             size={20}
@@ -268,6 +280,7 @@ function UserRefurbishedProduct() {
             }}
           />
         </div>
+
         {loading && (
           <div className="location-tab-loader">
             <RotatingLines
@@ -304,7 +317,7 @@ function UserRefurbishedProduct() {
         </button>
       </div>
 
-      {isUpdating &&
+      {(isUpdating || fetchingUserLocation) && (
         <div className='user-book-delete-pop-up'>
           <Oval
             height={40}
@@ -314,7 +327,8 @@ function UserRefurbishedProduct() {
             strokeWidth={4}
             strokeWidthSecondary={2}
           />
-        </div>}
+        </div>
+      )}
     </div>
   );
 }
