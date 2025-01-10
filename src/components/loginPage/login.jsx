@@ -137,7 +137,7 @@ function SignUpForm() {
       {mob ? (
         <div className="signup-container">
           {!otpSent ? (
-            <>
+            <div className="signup-phn-container">
               <div className="login-verification-top-header">
                 <FaArrowLeft size={25} onClick={() => navigate('/')} style={{ position: "fixed", left: "10px" }} />
                 Bharat | Linker
@@ -156,10 +156,10 @@ function SignUpForm() {
               <div className="phone-input-container">
                 <div className="country-code">
                   <img src={i1} alt="India Flag" className="flag-icon" />
-                  <span>+91</span>
+                  <span style={{color:"black"}}>+91</span>
                 </div>
                 <input
-                  type="tel"
+                  type="number"
                   placeholder="Enter Mobile Number"
                   value={phone}
                   onChange={handlePhoneChange}
@@ -175,7 +175,7 @@ function SignUpForm() {
                 By providing my phone number, I hereby agree and accept the{' '}
                 <a href="#terms">Terms of Service</a> and <a href="#privacy">Privacy Policy</a> in use of this app.
               </p>
-            </>
+            </div>
           ) : (
             <div className="otp-verification">
               <div className="otp-verification-top-header">

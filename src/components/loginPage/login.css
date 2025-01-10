@@ -1,84 +1,32 @@
-/* 
-.phone-auth-container {
- width: 100vw;height: 100vh;
- max-height: 100vh;
- overflow: hidden;
- display: flex;flex-direction: column;
-}
-.phone-auth-container-top{
-    width: 100vw;
-    height: 55vh;
-}
-.phone-auth-container-bottom{
-    width: 100vw;
-    display: flex;height: 45vh;
-}
-.phone-auth-container-top-1{
-    height: 63px;color: rgb(37, 204, 167);
-    display: flex;align-items: center;
-    justify-content: space-between;
-    padding: 0px 13px 0px 13px;font-size: 20px;
-    font-weight: 700;font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-}
-.phone-auth-container-top-1-IoMdClose{
-    width: 35px;height: 35px; color: black;
-    display: flex;justify-content: center;align-items: center;
-    border-radius: 9px;box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px, rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px, rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
-
-}
-.phone-auth-container-top-2{
-    width: 100vw;height: 250px;
-    display: flex;justify-content: center;
-}
-.phone-auth-container-top-2 img{
-    width: 60vw;height: 250px;
-}
-.phone-auth-container-top-3{
-    width: 100vw;height: 70px;
-}
-.phone-auth-container-top-4{
-    width: 100vw;height: 73px;background-color: #ff00e1;
-}
-
-
-.phone-auth-container h2 {
-    text-align: center;
-    margin-bottom: 20px; 
-    font-size: 24px;
-    color: #333;
-}
-
-.phone-auth-container form {
-    display: flex; 
-    flex-direction: column; 
-}
-
-.phone-auth-container input[type="tel"],
-.phone-auth-container input[type="text"] {
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid #ddd; 
-    border-radius: 4px;
-    font-size: 16px;
-    outline: none;
-    transition: border-color 0.3s; 
-}
-
-.phone-auth-container input[type="tel"]:focus,
-.phone-auth-container input[type="text"]:focus {
-    border-color: #007BFF; 
-}
- */
 
 .signup-container {
-  
-  margin: 0 auto;
-  padding: 20px;
+  background-color: #1A1A2E;
+  padding: 0;margin: 0;
+}
+.signup-phn-container{
+  background-color: #1A1A2E;
+  margin: 0 auto;color: white;
   text-align: center;
   font-family: 'Roboto', sans-serif;
   display: flex;flex-direction: column;
-  align-items: center;
+  align-items: center;flex-grow: 1;
+  overflow: hidden;
+  height: 100vh;width: 100vw;
+  overflow: hidden;
 }
+.login-verification-top-header{
+  height: 60px;width: 100vw;
+  color: white;
+  display: flex;
+  justify-content:center;align-items:center;
+  font-size: 25px;letter-spacing: 1px;font-weight: 700;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.639);
+}
+
+
+
+
+
 
 .signup-container-text {
   display: flex;
@@ -96,7 +44,7 @@
 .signup-container-p {
   margin-top: 50px;width: 90vw;
   font-size: 11px;
-  color:rgba(0, 0, 0, 0.664);
+  color:rgba(255, 255, 255, 0.731);
 }
 
 
@@ -127,6 +75,7 @@
   margin-right: 8px;
 }
 
+
 .phone-input-container input {
   width: 100%;
   background-color: transparent;
@@ -143,7 +92,7 @@
 
 .send-otp-button {
   background-color: #e91e63;
-  color: white;
+  color: rgb(255, 255, 255);
   padding: 12px 20px;
   border: none;
   border-radius: 5px;
@@ -173,31 +122,23 @@
   text-decoration: underline;
 }
 
-@media screen and (max-width: 600px) {
-  .signup-container {
-    padding: 10px;
-  }
-}
 
 
 
 
-.login-verification-top-header{
-  height: 60px;width: 100vw;
-  
-  display: flex;
-  justify-content:center;align-items:center;
-  font-size: 25px;letter-spacing: 1px;font-weight: 700;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.639);
-}
+
 .otp-verification{
-  width: 100vw;
+  background-color: #1A1A2E;
+  color: white;height: 100vh;
+  display: flex;flex-direction: column;
+  align-items: center;
 }
 .otp-verification-top-header{
   height: 60px;padding: 0px 10px 0px 10px;
   display: flex;justify-content:space-between;align-items:center;
-  font-size: 19px;letter-spacing: 1px;flex-grow: 1;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.639);
+  font-size: 19px;letter-spacing: 1px;
+  width: calc(100vw - 20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.639);
 }
 .otp-verification-text-verify{
   font-size: 25px;font-weight: 700;

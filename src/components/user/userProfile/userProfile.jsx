@@ -224,37 +224,6 @@ function UserRefurbishedProduct() {
           />
         </div>
 
-        {/* <div className="user-profile-field">
-          <label htmlFor="latitude" className="user-profile-form-label">
-            LATITUDE <span className="required">*</span>
-          </label>
-          <input
-            type="text"
-            id="latitude"
-            value={lat || ""}
-            placeholder="Use current location or search city"
-            className="user-profile-form-input"
-            onChange={(e) =>{}} 
-            required
-          />
-        </div>
-
-        <div className="user-profile-field">
-          <label htmlFor="longitude" className="user-profile-form-label">
-            LONGITUDE <span className="required">*</span>
-          </label>
-          <input
-            type="text"
-            id="longitude"
-            value={long || ""}
-            placeholder="Use current location or search city"
-            className="user-profile-form-input"
-            onChange={(e) => {}}
-            required
-          />
-        </div> */}
-
-
         <div className="user-profile-location" onClick={handleLocationClick}>
           USE CURRENT LOCATION AS HOME LOCATION
           <MdMyLocation
