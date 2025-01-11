@@ -1,93 +1,155 @@
-.retailer-login{
-    background-color: #1A1A2E;
-    height: 100vh;width: 100vw;
-    color: white;
-      
+.retailer-login {
+  background-color: #1A1A2E;
+  height: 100vh;
+  width: 100vw;
+  color: white;
+  position: fixed;
+  top: 0;
   margin: 0 auto;
   text-align: center;
   font-family: 'Roboto', sans-serif;
-  display: flex;flex-direction: column;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow: scroll;
+}
+
+.retailer-login-top-header {
+  height: 60px;
+  width: 100vw;
+  position: fixed;
+  top: 0;
+  background-color: #1A1A2E;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 25px;
+  letter-spacing: 1px;
+  font-weight: 700;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.639);
+}
+
+.retailer-signup-container-p {
+  margin-top: 50px;
+  width: 90vw;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.664);
+}
+
+
+.retailer-login-p {
+  margin-top: 10vh;
+  font-size: 20px;
+}
+
+
+
+
+
+.retailer-login-phone-input-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;border-radius: 7px;
+  background-color: rgb(255, 255, 255);
+  margin-top: 7px;
+  width: 89vw;
+}
+
+.retailer-login-phone-input-container input {
+  width: 100%;
+  background-color: transparent;
+  border-radius: 0 5px 5px 0;
+  border-left: none;color: #1A1A2E;
+  outline: none;
+  font-size: 13px;border: none;
+  height: 25px;
+  font-weight: 500;
+  padding: 10px;
+}
+
+
+.retailer-login-send-otp-button {
+  background-color: rgb(3, 223, 193);
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 7px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 7px;
+  margin-bottom: 20px;
+  width: 89vw;
+  height: 50px;
+}
+
+.retailer-login-send-otp-button:hover {
+  background-color: #d81b60;
+}
+
+
+
+
+
+
+
+.retailer-login-terms-text {
+  font-size: 12px;
+  padding: 10px;
+  color: #999;
+}
+
+.retailer-login-terms-text a {
+  color: rgb(3, 223, 193);
+  text-decoration: none;
+}
+
+.retailer-login-terms-text a:hover {
+  text-decoration: underline;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.retailer-login-div-parent {
+  display: flex;
+  gap: 10px;
+  margin-top: 100px;
+  justify-content: center;
   align-items: center;
 }
-.retailer-login-top-header{
-    height: 60px;width: 100vw;
-    
-    display: flex;
-    justify-content:center;align-items:center;
-    font-size: 25px;letter-spacing: 1px;font-weight: 700;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.639);
-  }
-  .retailer-signup-container-p {
-    margin-top: 50px;width: 90vw;
-    font-size: 11px;
-    color:rgba(255, 255, 255, 0.664);
-  }
-  
 
-  .retailer-login-p{
-    margin-top: 10vh;font-size: 20px;
-  }
+.retailer-login-div {
+  padding: 10px;
+  width: 80px;
+  border: 2px solid #ffffff;
+  border-radius: 10px;
+}
 
-
-
-
-  
-.retailer-login-phone-input-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: 7px;width: 89vw;
-    background-color: aliceblue;
-  }
-  .retailer-login-phone-input-container input {
-    width: 100%;
-    background-color: transparent;
-    border-radius: 0 5px 5px 0;
-    border-top: 2px solid #ccc;
-    border-right: 2px solid #ccc;
-    border-bottom: 2px solid #ccc;
-    border-left: none;
-    outline: none;
-    font-size: 13px;
-    height: 25px;font-weight: 500;
-    padding: 10px;
-  }
-
-  
-.retailer-login-send-otp-button {
-    background-color: #e91e63;
-    color: white;
-    padding: 12px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    margin-top: 7px;
-    margin-bottom: 20px;
-    width: 89vw;
-    height: 50px;
-  }
-  
-  .retailer-login-send-otp-button:hover {
-    background-color: #d81b60;
-  }
+.retailer-login-register-div {
+  padding: 10px;
+  width: 80px;
+  border: 2px solid #ffffff;
+  border-radius: 10px;
+}
 
 
 
 
 
 
-  
-.retailer-login-terms-text {
-    font-size: 12px;
-    color: #999;
-  }
-  
-  .retailer-login-terms-text a {
-    color: #e91e63;
-    text-decoration: none;
-  }
-  
-  .retailer-login-terms-text a:hover {
-    text-decoration: underline;
-  }
+.retailer-login-img {
+  margin-top: 37px;
+  width: 65vw;
+}

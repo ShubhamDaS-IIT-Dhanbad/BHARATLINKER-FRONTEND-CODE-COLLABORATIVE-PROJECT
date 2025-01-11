@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+
 import i1 from '../../../assets/indian-flag.png';
+import i2 from './i1.png';
+
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { FaArrowLeft } from 'react-icons/fa';
@@ -89,10 +92,13 @@ function LoginForm() {
                         <FaArrowLeft size={25} onClick={() => navigate('/')} style={{ position: 'fixed', left: '10px' }} />
                         BHARAT | LINKER
                     </div>
-                    <div className="retailer-login-steps">
-                        <span>Login</span>
-                        <span onClick={() => navigate('/retailer/register')}>Register</span>
+                    <div className="retailer-login-div-parent">
+                        <div className='retailer-login-div' style={{borderColor:"rgb(3, 223, 193)"}}>Login</div>
+                        <div className='retailer-login-register-div' onClick={() => navigate('/retailer/register')}>Register</div>
                     </div>
+
+                    <img className='retailer-login-img' src={i2}/>
+                    
                     <p className="retailer-signup-container-p">
                         Add your phone number. We'll send you a verification code so we know you're real.
                     </p>

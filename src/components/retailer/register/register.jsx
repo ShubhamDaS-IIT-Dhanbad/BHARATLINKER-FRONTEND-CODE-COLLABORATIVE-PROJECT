@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+
 import i1 from '../../../assets/indian-flag.png';
+import i2 from './i1.png';
+
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { FaArrowLeft } from "react-icons/fa";
@@ -111,10 +114,19 @@ function SignUpForm() {
                         <FaArrowLeft size={25} onClick={() => navigate('/')} style={{ position: 'fixed', left: '10px' }} />
                         BHARAT | LINKER
                     </div>
-                    <div>
-                        <div>login</div>
-                        <div>register</div>
+                    <div className="retailer-login-div-parent">
+                        <div className='retailer-login-div' onClick={() => navigate('/retailer/login')}>Login</div>
+                        <div className='retailer-login-register-div'style={{borderColor:"rgb(162, 128, 249)"}} >Register</div>
                     </div>
+
+
+
+
+                      <img className='retailer-login-img' src={i2}/>
+
+
+
+
                     <div className="retailer-signup-container-p">
                         Add your phone number. We'll send you a verification code so we know you're real.
                     </div>
@@ -142,13 +154,13 @@ function SignUpForm() {
                         />
                     </div>
 
-                    <button className="retailer-login-send-otp-button" onClick={sendOTP}>
+                    <button style={{backgroundColor:"rgb(162, 128, 249)"}} className="retailer-login-send-otp-button" onClick={sendOTP}>
                         SEND OTP
                     </button>
 
                     <p className="retailer-login-terms-text">
                         By providing my phone number, I hereby agree and accept the{' '}
-                        <a href="#terms">Terms of Service</a> and <a href="#privacy">Privacy Policy</a> in use of this app.
+                        <a href="#terms" style={{color:"rgb(162, 128, 249)"}}>Terms of Service</a> and <a href="#privacy" style={{color:"rgb(162, 128, 249)"}}>Privacy Policy</a> in use of this app.
                     </p>
                 </>
             ) : (
