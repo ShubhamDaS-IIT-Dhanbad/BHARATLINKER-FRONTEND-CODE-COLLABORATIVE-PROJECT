@@ -92,7 +92,7 @@
 }
 
 .send-otp-button {
-  background-color: #e91e63;
+  background-color: rgb(91, 228, 168);
   color: rgb(255, 255, 255);
   padding: 12px 20px;
   border: none;
@@ -116,7 +116,7 @@
 }
 
 .terms-text a {
-  color: #e91e63;
+  color: rgb(91, 228, 168);
   text-decoration: none;
 }
 
@@ -168,7 +168,7 @@
 }
 
 .verify-otp-button{
-  background-color: #e91e63;
+  background-color: rgb(91, 228, 168);
   color: white;
   padding: 12px 20px;
   border: none;

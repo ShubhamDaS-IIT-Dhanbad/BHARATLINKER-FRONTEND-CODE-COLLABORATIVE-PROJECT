@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './login.css';
+
 import i1 from './indian-flag.png';
+import i2 from './i1.png';
+
+
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Client, Account, ID } from 'appwrite';
@@ -13,12 +17,12 @@ import { TailSpin } from 'react-loader-spinner';
 
 function SignUpForm() {
   const navigate = useNavigate();
-  const [verifyingOtp,setVerifyingOtp]=useState(false);
+  const [verifyingOtp, setVerifyingOtp] = useState(false);
   const [loading, setLoading] = useState(false);
   const [phone, setPhone] = useState('');
   const [userId, setUserId] = useState('');
   const [otpSent, setOtpSent] = useState(false);
-  const [otp, setOtp] = useState(new Array(6).fill("")); 
+  const [otp, setOtp] = useState(new Array(6).fill(""));
   const [timer, setTimer] = useState(30);
   const [isResendDisabled, setIsResendDisabled] = useState(true);
 
@@ -48,7 +52,7 @@ function SignUpForm() {
 
     const otpCode = newOtp.join('');
     if (otpCode.length === 6) {
-      verifyOTP(otpCode); 
+      verifyOTP(otpCode);
     }
   };
 
@@ -103,7 +107,7 @@ function SignUpForm() {
 
 
   const verifyOTP = async (otpCode) => {
-    if(otpCode.length!=6) return;
+    if (otpCode.length != 6) return;
     setVerifyingOtp(true);
     try {
       const session = await account.createSession(userId, otpCode);
@@ -142,12 +146,12 @@ function SignUpForm() {
             Bharat | Linker
           </div>
 
+          <img className='retailer-login-img' src={i2} />
           <div className="signup-container-text">
             <div>Sign up to keep</div>
             <div style={{ marginTop: "-7px" }}>discovering the best your</div>
             <div style={{ marginTop: "-7px" }}> locality has to offer!</div>
           </div>
-
           <div className="signup-container-p">
             Add your phone number. We'll send you a verification code so we know you're real.
           </div>
@@ -202,7 +206,7 @@ function SignUpForm() {
               />
             ))}
           </div>
-          {verifyingOtp && <div style={{marginTop:"30px"}}><TailSpin  height={20} width={20} color="#ffffff" /></div>}
+          {verifyingOtp && <div style={{ marginTop: "30px" }}><TailSpin height={20} width={20} color="#ffffff" /></div>}
           <p className="resend-text">Didn't receive the code?</p>
           <div
             className={`resend-btn ${isResendDisabled ? 'disabled' : ''}`}
