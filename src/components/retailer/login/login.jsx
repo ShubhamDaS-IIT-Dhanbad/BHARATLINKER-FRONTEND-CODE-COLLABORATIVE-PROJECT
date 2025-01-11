@@ -3,15 +3,12 @@ import { useNavigate } from 'react-router-dom';
 
 import i1 from '../../../assets/indian-flag.png';
 import i2 from './i1.png';
-
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import { FaArrowLeft } from 'react-icons/fa';
 import { FaCircleExclamation } from 'react-icons/fa6';
 
 import Cookies from 'js-cookie';
 
-import { sendOtp, createSession, getShopData,clearUserSessions } from '../../../appWrite/shop/shop.js';
+import { sendOtp, createSession, getShopData, clearUserSessions } from '../../../appWrite/shop/shop.js';
 import './login.css';
 
 function LoginForm() {
@@ -23,7 +20,10 @@ function LoginForm() {
     const [isResendDisabled, setIsResendDisabled] = useState(true);
     const [userId, setUserId] = useState(null);
 
-    const handlePhoneChange = (e) => setPhone(e.target.value);
+    const handlePhoneChange = (e) => {
+        const value = e.target.value.replace(/[^0-9]/g, ''); // Allow only numeric values
+        setPhone(value.slice(0, 10)); // Limit to 10 digits
+    };
 
     useEffect(() => {
         let countdown;
@@ -35,7 +35,6 @@ function LoginForm() {
         return () => clearInterval(countdown);
     }, [timer]);
 
-    // Send OTP
     const sendOTP = async () => {
         try {
             const response = await sendOtp(phone);
@@ -43,44 +42,44 @@ function LoginForm() {
             setOtpSent(true);
             setIsResendDisabled(true);
             setTimer(30);
-        } catch (error) {
-            toast.error(`Failed to send OTP: ${error.message}`);
+        } catch (err) {
+            console.error(`Failed to send OTP: ${err.message}`);
+            alert('Failed to send OTP. Please try again.');
         }
     };
 
-    // Verify OTP
     const verifyOTP = async (otpCode) => {
-        const loadingToast = toast.loading('Verifying OTP...');
         try {
-            await clearUserSessions()
+            await clearUserSessions();
             await createSession(userId, otpCode);
-            await getShopData(phone);
+
+            const phoneNumber=`+91${phone}`;
+            console.log(phoneNumber);
+            const shopData = await getShopData(phoneNumber);
+
+            Cookies.set('BharatLinkerShopData', JSON.stringify(shopData), { expires: 7 });
             navigate('/');
-        } catch (error) {
-            toast.dismiss(loadingToast);
-            toast.error(`Failed to verify OTP: ${error.message}`);
+        } catch (err) {
+            console.error(`Failed to verify OTP: ${err.message}`);
+            alert('Invalid OTP. Please try again.');
             setOtp(new Array(6).fill(''));
         }
     };
 
-    // Handle OTP input change
     const handleOTPChange = (e, index) => {
+        const value = e.target.value.replace(/[^0-9]/g, ''); // Ensure only numeric input
         let otpCopy = [...otp];
-        otpCopy[index] = e.value;
+        otpCopy[index] = value;
         setOtp(otpCopy);
 
-        // Move to the next input after entering a value
-        if (e.value !== '' && index < otp.length - 1) {
+        if (value !== '' && index < otp.length - 1) {
             document.getElementById(`otp-input-${index + 1}`).focus();
         }
     };
 
-    // Handle backspace in OTP inputs
     const handleKeyDown = (e, index) => {
-        if (e.key === 'Backspace' && otp[index] === '') {
-            if (index > 0) {
-                document.getElementById(`otp-input-${index - 1}`).focus();
-            }
+        if (e.key === 'Backspace' && otp[index] === '' && index > 0) {
+            document.getElementById(`otp-input-${index - 1}`).focus();
         }
     };
 
@@ -89,16 +88,25 @@ function LoginForm() {
             {!otpSent ? (
                 <>
                     <div className="retailer-login-top-header">
-                        <FaArrowLeft size={25} onClick={() => navigate('/')} style={{ position: 'fixed', left: '10px' }} />
+                        <FaArrowLeft
+                            size={25}
+                            onClick={() => navigate('/')}
+                            className="retailer-login-back-arrow"
+                        />
                         BHARAT | LINKER
                     </div>
                     <div className="retailer-login-div-parent">
-                        <div className='retailer-login-div' style={{borderColor:"rgb(3, 223, 193)"}}>Login</div>
-                        <div className='retailer-login-register-div' onClick={() => navigate('/retailer/register')}>Register</div>
+                        <div className="retailer-login-div" style={{ borderColor: 'rgb(3, 223, 193)' }}>Login</div>
+                        <div
+                            className="retailer-login-register-div"
+                            onClick={() => navigate('/retailer/register')}
+                        >
+                            Register
+                        </div>
                     </div>
 
-                    <img className='retailer-login-img' src={i2}/>
-                    
+                    <img className="retailer-login-img" src={i2} alt="Retailer Login" />
+
                     <p className="retailer-signup-container-p">
                         Add your phone number. We'll send you a verification code so we know you're real.
                     </p>
@@ -109,15 +117,18 @@ function LoginForm() {
                             <span style={{ color: 'black' }}>+91</span>
                         </div>
                         <input
-                            type="number"
+                            type="text"
                             placeholder="Enter Mobile Number"
                             value={phone}
                             onChange={handlePhoneChange}
-                            maxLength="10"
                         />
                     </div>
 
-                    <button className="retailer-login-send-otp-button" onClick={sendOTP} disabled={!phone}>
+                    <button
+                        className="retailer-login-send-otp-button"
+                        onClick={sendOTP}
+                        disabled={phone.length !== 10}
+                    >
                         SEND OTP
                     </button>
 
@@ -147,12 +158,12 @@ function LoginForm() {
                         {otp.map((data, index) => (
                             <input
                                 className="otp-input"
-                                type="number"
+                                type="text"
                                 maxLength="1"
                                 key={index}
                                 value={data}
                                 id={`otp-input-${index}`}
-                                onChange={(e) => handleOTPChange(e.target, index)}
+                                onChange={(e) => handleOTPChange(e, index)}
                                 onFocus={(e) => e.target.select()}
                                 onKeyDown={(e) => handleKeyDown(e, index)}
                             />
@@ -177,8 +188,6 @@ function LoginForm() {
                     </button>
                 </div>
             )}
-
-            <ToastContainer />
         </div>
     );
 }

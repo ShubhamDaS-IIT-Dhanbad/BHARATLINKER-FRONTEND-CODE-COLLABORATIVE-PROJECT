@@ -13,7 +13,6 @@ const databases = new Databases(client);
 
 const sendOtp = async (phoneNumber) => {
     try {
-        // Send OTP to the given phone number
         const token = await account.createPhoneToken(ID.unique(), `+91${phoneNumber}`);
         console.log(token)
         return token.userId;
@@ -21,8 +20,12 @@ const sendOtp = async (phoneNumber) => {
         throw new Error(`Failed to send OTP: ${error.message}`);
     }
 };
-const createSession = async (userId,otpCode) => {
 
+
+
+
+
+const createSession = async (userId,otpCode) => {
     try {
         const session = await account.createSession(userId, otpCode);
         return session;
@@ -38,6 +41,17 @@ const deleteSession = async (sessionId) => {
         console.error(`Failed to delete session: ${error.message}`);
     }
 };
+async function clearUserSessions() {
+    try {
+        await account.deleteSessions();
+        console.log(`All sessions cleared`);
+    } catch (error) {
+        console.error('Error clearing sessions:', error);
+    }
+}
+
+
+
 
 const registerShop = async (shopName, phone) => {
     console.log(shopName,phone);
@@ -72,11 +86,11 @@ const getShopData = async (phoneNumber) => {
         const response = await databases.listDocuments(
             conf.appwriteShopsDatabaseId,
             conf.appwriteShopsCollectionId,
-            [Query.equal('phoneNumber', `+91${phoneNumber}`)]
+            [Query.equal('phoneNumber', phoneNumber)]
         );
 
         if (response.total > 0) {
-            return response.documents[0]; // Return the first matching document (if any)
+            return response.documents[0];
         } else {
             throw new Error('Shop not found for the given phone number.');
         }
@@ -85,13 +99,6 @@ const getShopData = async (phoneNumber) => {
         throw error;
     }
 };
-async function clearUserSessions() {
-    try {
-        await account.deleteSessions();
-        console.log(`All sessions cleared`);
-    } catch (error) {
-        console.error('Error clearing sessions:', error);
-    }
-}
+
 
 export { registerShop,sendOtp,createSession,deleteSession,getShopData,clearUserSessions };

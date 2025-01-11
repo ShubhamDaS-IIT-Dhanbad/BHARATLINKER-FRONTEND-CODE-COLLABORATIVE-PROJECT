@@ -1,0 +1,42 @@
+.retailer-pending{
+  height: 100vh;width: 100vw;
+  background-color: #1A1A2E;
+  color: white;display: flex;flex-direction: column;
+  justify-content: center;align-items: center;
+}
+.retailer-pending-shopname{
+  color: white;margin-top: 17px;
+  display: flex;justify-content: center;align-items: center;
+  width: 100vw;height: 50px;
+  font-size: 25px;
+}
+.retailer-pending-container-p {
+  width: 90vw;
+  font-size: 10px;
+  color: rgb(77, 183, 253);
+}
+
+.retailer-pending-container-p2 {
+  width: 90vw;
+  font-size: 19px;
+  color: rgb(243, 198, 73);display: flex;
+  justify-content: center;align-items: center;
+}
+
+
+
+
+.retailer-pending-actions{
+  display: flex;justify-content: center;align-items: center;
+  gap: 5px;margin-top: 70px;
+}
+.retailer-pending-support-button,
+.retailer-pending-home-button,
+.retailer-pending-refresh-button{
+   width: 90px;border: none;
+  height: 50px;border-radius: 7px;
+  border: 2.3px solid rgb(212, 74, 157);
+  background-color: transparent;
+  color: white;display: flex;
+  justify-content: center;align-items: center;
+}
