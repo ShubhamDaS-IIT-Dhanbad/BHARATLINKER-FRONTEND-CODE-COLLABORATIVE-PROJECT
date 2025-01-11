@@ -134,7 +134,7 @@ function SignUpForm() {
   };
 
   return (
-    <div className="signup-container">
+    <div className='user-login-container'>
       {!otpSent ? (
         <div className="signup-phn-container">
           <div className="login-verification-top-header">
@@ -144,8 +144,8 @@ function SignUpForm() {
 
           <div className="signup-container-text">
             <div>Sign up to keep</div>
-            <div style={{ marginTop: "-7px" }}>discovering the best your locality</div>
-            <div style={{ marginTop: "-7px" }}>has to offer!</div>
+            <div style={{ marginTop: "-7px" }}>discovering the best your</div>
+            <div style={{ marginTop: "-7px" }}> locality has to offer!</div>
           </div>
 
           <div className="signup-container-p">
