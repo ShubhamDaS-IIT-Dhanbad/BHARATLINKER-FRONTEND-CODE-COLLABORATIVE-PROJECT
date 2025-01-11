@@ -1,7 +1,7 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
-import RetailerLogin from './retailerLogin.jsx';
-// import RetailerSignup from './retailerSignup.jsx';
+import RetailerLogin from './login/login.jsx';
+import RetailerRegister from './register/register.jsx';
 // import ProtectedRoute from '../components/protectedRouteRetailer.jsx';
 // import RetailerHome from './retailerHome.jsx';
 // import RetailerShop from './retailerShopPage.jsx';
@@ -14,7 +14,7 @@ const RetailerRoutes = () => {
     <Routes>
       {/* Public Routes */}
       <Route path="/retailer/login" element={<RetailerLogin />} />
-      {/* <Route path="/retailer/signup" element={<RetailerSignup />} /> */}
+      <Route path="/retailer/register" element={<RetailerRegister />} />
       
       {/* Protected Routes */}
       {/* <Route path="/retailer/home" element={<ProtectedRoute element={<RetailerHome />} />} />

@@ -32,7 +32,7 @@ const Home = () => {
 
     const handleRetailerClick = useCallback(() => {
         const retailerCookie = getCookieValue('BharatLinkerRetailer');
-        navigate(retailerCookie ? '/retailer/home' : '/retailer');
+        navigate(retailerCookie ? '/retailer/home' : '/retailer/login');
     }, [navigate]);
 
     return (

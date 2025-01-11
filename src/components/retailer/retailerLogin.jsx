@@ -115,7 +115,7 @@ const PhoneAuth = () => {
 
         try {
             const token = await account.createPhoneToken(ID.unique(), phone);
-            setUserId(token.userId); // Store the returned user ID
+            setUserId(token.userId);
             toast.dismiss(loadingToast);
             toast.success('SMS sent! Please check your phone.');
         } catch (error) {

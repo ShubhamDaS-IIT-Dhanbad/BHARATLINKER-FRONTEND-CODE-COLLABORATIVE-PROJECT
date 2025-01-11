@@ -55,7 +55,7 @@ const conf = {
 
 
 
-    // SHOP
+    // SHOP | SERVICES
     appwriteShopsProjectId: String(import.meta.env.VITE_APPWRITE_SHOPS_PROJECT_ID),
     appwriteShopsDatabaseId: String(import.meta.env.VITE_APPWRITE_SHOPS_DATABASE_ID),
     appwriteShopsCollectionId: String(import.meta.env.VITE_APPWRITE_SHOPS_COLLECTION_ID),
