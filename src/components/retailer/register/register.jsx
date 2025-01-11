@@ -13,12 +13,12 @@ import { registerShop, sendOtp, createSession, deleteSession } from '../../../ap
 function SignUpForm() {
     const navigate = useNavigate();
 
-    const [phone, setPhone] = useState(''); 
+    const [phone, setPhone] = useState('');
     const [shopName, setShopName] = useState('');
-    const [userId, setUserId] = useState(''); 
+    const [userId, setUserId] = useState('');
     const [otpSent, setOtpSent] = useState(false);
     const [otp, setOtp] = useState(new Array(6).fill(''));
-    const [timer, setTimer] = useState(30); 
+    const [timer, setTimer] = useState(30);
     const [isResendDisabled, setIsResendDisabled] = useState(true);
 
     const handleShopNameChange = (e) => setShopName(e.target.value);
@@ -87,16 +87,17 @@ function SignUpForm() {
         const loadingToast = toast.loading('Verifying OTP...');
         try {
             const session = await createSession(userId, otpCode);
-            const sessionId=session.$id;
+            const sessionId = session.$id;
             await deleteSession(sessionId);
             try {
-                await registerShop(shopName, phone);
+                const shopData = await registerShop(shopName, phone);
+                Cookies.set('BharatLinkerShopData', JSON.stringify(shopData), { expires: 7 });
                 toast.success('Shop registered successfully!');
             } catch (error) {
                 toast.error(`Failed to register shop: ${error.message}`);
                 throw error;
             }
-            
+
 
             navigate('/');
         } catch (error) {
@@ -116,17 +117,9 @@ function SignUpForm() {
                     </div>
                     <div className="retailer-login-div-parent">
                         <div className='retailer-login-div' onClick={() => navigate('/retailer/login')}>Login</div>
-                        <div className='retailer-login-register-div'style={{borderColor:"rgb(162, 128, 249)"}} >Register</div>
+                        <div className='retailer-login-register-div' style={{ borderColor: "rgb(162, 128, 249)" }} >Register</div>
                     </div>
-
-
-
-
-                      <img className='retailer-login-img' src={i2}/>
-
-
-
-
+                    <img className='retailer-login-img' src={i2} />
                     <div className="retailer-signup-container-p">
                         Add your phone number. We'll send you a verification code so we know you're real.
                     </div>
@@ -154,13 +147,13 @@ function SignUpForm() {
                         />
                     </div>
 
-                    <button style={{backgroundColor:"rgb(162, 128, 249)"}} className="retailer-login-send-otp-button" onClick={sendOTP}>
+                    <button style={{ backgroundColor: "rgb(162, 128, 249)" }} className="retailer-login-send-otp-button" onClick={sendOTP}>
                         SEND OTP
                     </button>
 
                     <p className="retailer-login-terms-text">
                         By providing my phone number, I hereby agree and accept the{' '}
-                        <a href="#terms" style={{color:"rgb(162, 128, 249)"}}>Terms of Service</a> and <a href="#privacy" style={{color:"rgb(162, 128, 249)"}}>Privacy Policy</a> in use of this app.
+                        <a href="#terms" style={{ color: "rgb(162, 128, 249)" }}>Terms of Service</a> and <a href="#privacy" style={{ color: "rgb(162, 128, 249)" }}>Privacy Policy</a> in use of this app.
                     </p>
                 </>
             ) : (
