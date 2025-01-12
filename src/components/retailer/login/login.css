@@ -129,6 +129,13 @@
 
 
 
+
+
+
+
+
+
+
 .retailer-login-div-parent {
   display: flex;
   gap: 10px;
@@ -159,4 +166,76 @@
 .retailer-login-img {
   margin-top: 37px;
   width: 65vw;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.retailer-login-otp-verification{
+  background-color: #1A1A2E;
+  color: white;height: 100vh;
+  display: flex;flex-direction: column;
+  align-items: center;
+}
+.retailer-login-otp-verification-top-header{
+  height: 60px;padding: 0px 10px 0px 10px;
+  display: flex;justify-content:space-between;align-items:center;
+  font-size: 19px;letter-spacing: 1px;
+  width: calc(100vw - 20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.639);
+}
+.retailer-login-otp-verification-text{
+  font-size: 25px;font-weight: 700;
+  margin-top: 35px;
+}
+.retailer-login-otp-verification-text-p{
+  margin-top: 30px;
+}
+
+
+.otp-inputs{
+  display: flex;margin-top: 10px;gap: 5px;
+  justify-content: center;align-items: center;
+}
+.otp-input{
+  width: 40px;height: 40px;
+  border-radius: 10px;background-color: #ffffff;
+  border: none;font-size: 30px;display: flex;
+  justify-content: center;align-items: center;
+  text-align: center;border: 1px solid black;
+}
+
+.retailer-login-verify-otp-button{
+  border: 2px solid rgb(91, 228, 168);
+  color: rgb(255, 255, 255);background-color: #1A1A2E;
+  padding: 12px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 15px;font-weight: 700;
+  margin-top: 50px;
+  margin-bottom: 20px;
+  width: 40vw;
+  height: 50px;
+}
+
+
+
+
+
+.retailer-login-resend-btn{
+ color: rgb(3, 223, 193);background-color: transparent;
+ border: none;
 }

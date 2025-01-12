@@ -1,3 +1,4 @@
+// Import necessary libraries and components
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -53,8 +54,7 @@ function LoginForm() {
             await clearUserSessions();
             await createSession(userId, otpCode);
 
-            const phoneNumber=`+91${phone}`;
-            console.log(phoneNumber);
+            const phoneNumber = `+91${phone}`;
             const shopData = await getShopData(phoneNumber);
 
             Cookies.set('BharatLinkerShopData', JSON.stringify(shopData), { expires: 7 });
@@ -82,6 +82,13 @@ function LoginForm() {
             document.getElementById(`otp-input-${index - 1}`).focus();
         }
     };
+
+    // Trigger OTP verification when all fields are filled
+    useEffect(() => {
+        if (otp.every((digit) => digit !== '')) {
+            verifyOTP(otp.join('')); // Join the OTP array into a string and verify
+        }
+    }, [otp]);
 
     return (
         <div className="retailer-login">
@@ -138,8 +145,8 @@ function LoginForm() {
                     </p>
                 </>
             ) : (
-                <div className="otp-verification">
-                    <div className="otp-verification-top-header">
+                <div className="retailer-login-otp-verification">
+                    <div className="retailer-login-otp-verification-top-header">
                         <FaArrowLeft
                             size={25}
                             onClick={() => {
@@ -151,8 +158,7 @@ function LoginForm() {
                         <FaCircleExclamation size={25} />
                     </div>
 
-                    <p className="otp-verification-text">Verify your phone number</p>
-                    <p className="otp-verification-text-p">Enter your OTP code here</p>
+                    <p className="retailer-login-otp-verification-text-p">Enter your OTP code here</p>
 
                     <div className="otp-inputs">
                         {otp.map((data, index) => (
@@ -166,25 +172,18 @@ function LoginForm() {
                                 onChange={(e) => handleOTPChange(e, index)}
                                 onFocus={(e) => e.target.select()}
                                 onKeyDown={(e) => handleKeyDown(e, index)}
+                                aria-label={`OTP digit ${index + 1}`}
                             />
                         ))}
                     </div>
 
                     <p className="resend-text">Didn't receive the code?</p>
                     <button
-                        className={`resend-btn ${isResendDisabled ? 'disabled' : ''}`}
+                        className={`retailer-login-resend-btn ${isResendDisabled ? 'disabled' : ''}`}
                         onClick={!isResendDisabled ? sendOTP : null}
                         disabled={isResendDisabled}
                     >
                         Resend new code {isResendDisabled && `in (${timer}s)`}
-                    </button>
-
-                    <button
-                        className="verify-otp-button"
-                        onClick={() => verifyOTP(otp.join(''))}
-                        disabled={otp.join('').length !== 6}
-                    >
-                        Verify OTP
                     </button>
                 </div>
             )}

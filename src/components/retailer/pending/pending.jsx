@@ -6,7 +6,7 @@ import { FaArrowLeft } from 'react-icons/fa';
 import { IoIosRefresh } from "react-icons/io";
 import { CiHome } from "react-icons/ci";
 import { MdOutlineContactSupport } from "react-icons/md";
-
+import { RiLogoutCircleRLine } from "react-icons/ri";
 import { TailSpin } from 'react-loader-spinner'; // Import the loader
 import "./pending.css";
 import i1 from './i1.png';
@@ -38,6 +38,11 @@ const RetailerPending = () => {
     } finally {
       setIsLoading(false); // Stop loader
     }
+  };
+
+  const handleLogOut = () => {
+    Cookies.remove("BharatLinkerShopData"); // Remove the shop data cookie
+    navigate("/"); // Redirect to the home page
   };
 
   useEffect(() => {
@@ -73,8 +78,8 @@ const RetailerPending = () => {
       </p>
 
       <div className="retailer-pending-actions">
-        <button onClick={() => navigate("/")} className="retailer-pending-support-button">
-          <CiHome size={33} />
+        <button onClick={handleLogOut} className="retailer-pending-support-button">
+          <RiLogoutCircleRLine size={33} />
         </button>
 
         <button onClick={fetchShopData} className="retailer-pending-refresh-button">

@@ -8,6 +8,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { FaArrowLeft } from "react-icons/fa";
 
+import { FaCircleExclamation } from 'react-icons/fa6';
 import { registerShop, sendOtp, createSession, deleteSession } from '../../../appWrite/shop/shop.js';
 
 function SignUpForm() {
@@ -91,6 +92,7 @@ function SignUpForm() {
             await deleteSession(sessionId);
             try {
                 const shopData = await registerShop(shopName, phone);
+                console.log(shopData);
                 Cookies.set('BharatLinkerShopData', JSON.stringify(shopData), { expires: 7 });
                 toast.success('Shop registered successfully!');
             } catch (error) {
@@ -157,15 +159,20 @@ function SignUpForm() {
                     </p>
                 </>
             ) : (
-                <div className="otp-verification">
-                    <div className="otp-verification-top-header">
-                        <FaArrowLeft size={25} onClick={() => { setOtpSent(false); setOtp(new Array(6).fill('')); }} />
+                <div className="retailer-login-otp-verification">
+                    <div className="retailer-login-otp-verification-top-header">
+                        <FaArrowLeft
+                            size={25}
+                            onClick={() => {
+                                setOtpSent(false);
+                                setOtp(new Array(6).fill(''));
+                            }}
+                        />
                         OTP Verification
+                        <FaCircleExclamation size={25} />
                     </div>
 
-                    <div className="otp-verification-text-verify">Verify your</div>
-                    <div className="otp-verification-text-phn">Phone number</div>
-                    <p className="otp-verification-text-p">Enter your OTP code here</p>
+                    <p className="retailer-login-otp-verification-text-p">Enter your OTP code here</p>
 
                     <div className="otp-inputs">
                         {otp.map((data, index) => (
@@ -186,6 +193,7 @@ function SignUpForm() {
                     <div
                         className={`resend-btn ${isResendDisabled ? 'disabled' : ''}`}
                         onClick={!isResendDisabled ? sendOTP : null}
+                        style={{color:"rgb(162, 128, 249)"}}
                     >
                         Resend new code {isResendDisabled && `in (${timer}s)`}
                     </div>
