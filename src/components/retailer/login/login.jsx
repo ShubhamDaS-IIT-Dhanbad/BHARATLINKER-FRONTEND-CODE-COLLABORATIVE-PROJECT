@@ -118,14 +118,13 @@ function LoginForm() {
                     <span style={{ color: 'black' }}>+91</span>
                 </div>
                 <input
-                    type="text"
+                    type="number"
                     placeholder="Enter Mobile Number"
                     value={phone}
                     onChange={handlePhoneChange}
                 />
             </div>
             <button
-                type='number'
                 className="retailer-login-send-otp-button"
                 onClick={sendOTP}
                 disabled={phone.length !== 10 || loading}
