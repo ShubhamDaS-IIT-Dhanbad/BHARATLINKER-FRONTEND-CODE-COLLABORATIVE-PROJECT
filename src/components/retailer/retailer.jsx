@@ -65,12 +65,14 @@ function UserHome() {
 
       <main>
         <section className='retailer-home-your-information'>
-          <article className='retailer-home-your-refurbished'>
-            <HiOutlineUserCircle size={27} className='retailer-home-your-information-icons' aria-label="Your refurbished items" />
+          <article className='retailer-home-your-refurbished'  onClick={()=>{navigate('/retailer/dashboard')}}>
+            <HiOutlineUserCircle size={27} className='retailer-home-your-information-icons' aria-label="Your refurbished items" 
+           />
             <p className='retailer-home-your-info-p'>Dashboard</p>
           </article>
-          <article className='retailer-home-your-refurbished'>
-            <AiOutlineProduct className='retailer-home-your-information-icons' aria-label="Your refurbished items" />
+          <article className='retailer-home-your-refurbished' onClick={()=>{navigate('/retailer/dashboard')}}>
+            <AiOutlineProduct className='retailer-home-your-information-icons' aria-label="Your refurbished items" 
+           />
             <p className='retailer-home-your-info-p'>Your Products</p>
           </article>
           <article className='retailer-home-your-refurbished'>

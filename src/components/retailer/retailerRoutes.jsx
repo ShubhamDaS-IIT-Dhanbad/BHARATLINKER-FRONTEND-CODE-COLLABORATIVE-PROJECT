@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { Routes, Route, useNavigate, Navigate } from "react-router-dom";
 import Cookies from "js-cookie";
 
 import Retailer from "./retailer.jsx";
+import RetailerDashboard from './dashboard/dashboard.jsx';
 import RetailerLogin from "./login/login.jsx";
 import RetailerRegister from "./register/register.jsx";
 import RetailerPending from "./pending/pending.jsx";
@@ -10,10 +11,19 @@ import RetailerPending from "./pending/pending.jsx";
 import { ThreeDots } from 'react-loader-spinner';
 import './retailer.css';
 
+const ProtectedRoute = ({ element: Component }) => {
+  const shopData = Cookies.get("BharatLinkerShopData");
+  if (shopData) {
+    return <Component />;
+  } else {
+    return <Navigate to="/retailer/login" replace />;
+  }
+};
+
 const RetailerRoutes = () => {
   const navigate = useNavigate();
   const [isInitialCheckDone, setIsInitialCheckDone] = useState(false);
-  const [isLoading, setIsLoading] = useState(true); // New state to track loading
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     if (!isInitialCheckDone) {
@@ -32,7 +42,6 @@ const RetailerRoutes = () => {
             }
             setIsLoading(false);
           }, 1000);
-
         } catch (error) {
           console.error("Failed to parse BharatLinkerShopData from cookies:", error);
           setIsLoading(false);
@@ -60,7 +69,32 @@ const RetailerRoutes = () => {
           <Route path="/retailer/login" element={<RetailerLogin />} />
           <Route path="/retailer/register" element={<RetailerRegister />} />
           <Route path="/retailer/pending" element={<RetailerPending />} />
-          <Route path="/retailer" element={<Retailer />} />
+
+          {/* Protected routes */}
+          <Route
+            path="/retailer"
+            element={<ProtectedRoute element={Retailer} />}
+          />
+          <Route
+            path="/retailer/dashboard"
+            element={<ProtectedRoute element={RetailerDashboard} />}
+          />
+          <Route
+            path="/retailer/products"
+            element={<ProtectedRoute element={Retailer} />}
+          />
+          <Route
+            path="/retailer/upload"
+            element={<ProtectedRoute element={Retailer} />}
+          />
+          <Route
+            path="/retailer/update"
+            element={<ProtectedRoute element={Retailer} />}
+          />
+          <Route
+            path="/retailer/notification"
+            element={<ProtectedRoute element={Retailer} />}
+          />
         </Routes>
       )}
     </>
