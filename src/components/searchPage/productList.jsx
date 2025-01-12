@@ -38,7 +38,6 @@ const ProductList = () => {
             {hasMoreProducts && loadingMoreProducts && (
                 <div className='productSearchPage-loading-more-products'>
                     <Oval height={20} width={20} color="white" secondaryColor="gray" ariaLabel="loading" />
-
                 </div>
             )}
         </>

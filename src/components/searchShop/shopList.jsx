@@ -2,9 +2,9 @@ import React from 'react';
 import ShopCard from './shopCard.jsx';
 import { TbClockSearch } from 'react-icons/tb';
 
-const ShopList = ({ shops, loading}) => {
+const ShopList = ({ shops, loading,hasMoreShops,loadingMoreShops}) => {
 
-  if (!loading && shops.length === 0) {
+  if (!loading && shops.length === 0 && !hasMoreShops) {
     return (
       <div className='search-no-shop-found'>
         <TbClockSearch size={60} />
