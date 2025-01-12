@@ -43,14 +43,11 @@ const SearchPage = () => {
             query: value,
         }));
     };
-
-
     useEffect(() => {
         if (products.length == 0 && !loading) {
-
             executeSearch();
         }
-    }, [products.length]);
+    }, [products.length,inputValue]);
 
     return (
         <>

@@ -1,13 +1,21 @@
 import React from 'react';
 import { Oval } from 'react-loader-spinner';
-import { useSelector}from 'react-redux';
-import NoProductsFound from './noProductFound.jsx';
+import { useSelector } from 'react-redux';
 import SearchPageProductCard from '../productCards/searchPageProductCard.jsx';
+import { SiIconfinder } from "react-icons/si";
 
 import './productList.css';
 
+
+const NoProductsFound = () => {
+    return (
+        <div className='search-page-no-product-found' style={{ color: "#EB3678" }}>
+            < SiIconfinder size={60} />
+        </div>
+    );
+};
 const ProductList = () => {
-    const { products, loading,loadingMoreProducts,hasMoreProducts } = useSelector((state) => state.searchproducts); 
+    const { products, loading, loadingMoreProducts, hasMoreProducts } = useSelector((state) => state.searchproducts);
     if (!loading && products.length === 0 && !hasMoreProducts) {
         return <NoProductsFound />;
     }
@@ -29,8 +37,8 @@ const ProductList = () => {
 
             {hasMoreProducts && loadingMoreProducts && (
                 <div className='productSearchPage-loading-more-products'>
-                     <Oval height={20} width={20} color="white" secondaryColor="gray" ariaLabel="loading" />
-                                            
+                    <Oval height={20} width={20} color="white" secondaryColor="gray" ariaLabel="loading" />
+
                 </div>
             )}
         </>
