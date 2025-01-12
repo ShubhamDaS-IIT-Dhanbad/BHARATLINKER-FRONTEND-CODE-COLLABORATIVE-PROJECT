@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'; // Import the skeleton loader component
-import { FaArrowLeft } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';import { FaArrowLeft } from 'react-icons/fa';
 import { FaCircleExclamation } from 'react-icons/fa6';
 import Cookies from 'js-cookie';
 
@@ -19,9 +17,8 @@ function LoginForm() {
     const [timer, setTimer] = useState(30);
     const [isResendDisabled, setIsResendDisabled] = useState(true);
     const [userId, setUserId] = useState(null);
-    const [loading, setLoading] = useState(false); // State to track loading status
-    const [loadingVerification, setLoadingVerification] = useState(false); // Loading state for OTP verification
-    const [isContentLoading, setIsContentLoading] = useState(true); // To track if the content is loading
+    const [loading, setLoading] = useState(false);
+    const [loadingVerification, setLoadingVerification] = useState(false);
 
     const handlePhoneChange = (e) => {
         const value = e.target.value.replace(/[^0-9]/g, ''); // Allow only numeric values
@@ -98,21 +95,8 @@ function LoginForm() {
         }
     }, [otp]);
 
-    useEffect(() => {
-        // Simulate content loading (e.g., fetch shop data, etc.)
-        const timer = setTimeout(() => {
-            setIsContentLoading(false); // Content has finished loading
-        }, 1000); // Simulating a 2-second delay for demo
-        return () => clearTimeout(timer);
-    }, []);
 
-    const renderSkeletonLoader = () => (
-        <div className='retailer-login-img-skleton-container'>
-            <SkeletonTheme baseColor="#202020" highlightColor="#444">
-                <Skeleton className='retailer-login-img-react-skeleton' height={50} count={1} />
-            </SkeletonTheme>
-        </div>
-    );
+  
 
     const renderLoginForm = () => (
         <>
@@ -124,7 +108,7 @@ function LoginForm() {
                 <div className="retailer-login-div" style={{ borderColor: 'rgb(3, 223, 193)' }}>Login</div>
                 <div className="retailer-login-register-div" onClick={() => navigate('/retailer/register')}>Register</div>
             </div>
-            {isContentLoading ? renderSkeletonLoader() : <img className="retailer-login-img" src={i2} alt="Retailer Login" />}
+            <img className="retailer-login-img" src={i2} alt="Retailer Login" />
             <p className="retailer-signup-container-p">
                 Add your phone number. We'll send you a verification code so we know you're real.
             </p>

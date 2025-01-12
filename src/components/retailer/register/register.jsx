@@ -7,8 +7,6 @@ import i2 from './i1.png';
 
 import { FaArrowLeft } from 'react-icons/fa';
 import { FaCircleExclamation } from 'react-icons/fa6';
-
-import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'; 
 import { registerShop, sendOtp, createSession, deleteSession } from '../../../appWrite/shop/shop.js';
 
 function SignUpForm() {
@@ -21,10 +19,8 @@ function SignUpForm() {
     const [otp, setOtp] = useState(new Array(6).fill(''));
     const [timer, setTimer] = useState(30);
     const [isResendDisabled, setIsResendDisabled] = useState(true);
-    const [loading, setLoading] = useState(false); // Added loading state for OTP sending
-    const [loadingVerification, setLoadingVerification] = useState(false); // Added loading state for OTP verification
-    const [isContentLoading, setIsContentLoading] = useState(true); // To track if the content is loading
-
+    const [loading, setLoading] = useState(false);
+    const [loadingVerification, setLoadingVerification] = useState(false);
 
     const handleShopNameChange = (e) => setShopName(e.target.value);
     const handlePhoneChange = (e) => setPhone(e.target.value);
@@ -73,13 +69,7 @@ function SignUpForm() {
 
         return () => clearInterval(countdown);
     }, [timer]);
-    useEffect(() => {
-        // Simulate content loading (e.g., fetch shop data, etc.)
-        const timer = setTimeout(() => {
-            setIsContentLoading(false); // Content has finished loading
-        }, 1000); // Simulating a 2-second delay for demo
-        return () => clearTimeout(timer);
-    }, []);
+
 
     const sendOTP = async () => {
         setLoading(true); // Start loading when OTP is sent
@@ -121,13 +111,6 @@ function SignUpForm() {
             setLoadingVerification(false); // Stop loading after OTP verification
         }
     };
-    const renderSkeletonLoader = () => (
-        <div className='retailer-login-img-skleton-container'>
-            <SkeletonTheme baseColor="#202020" highlightColor="#444">
-                <Skeleton className='retailer-login-img-react-skeleton' height={50} count={1} />
-            </SkeletonTheme>
-        </div>
-    );
     return (
         <div className="retailer-login">
             {!otpSent ? (
@@ -140,7 +123,7 @@ function SignUpForm() {
                         <div className='retailer-login-div' onClick={() => navigate('/retailer/login')}>Login</div>
                         <div className='retailer-login-register-div' style={{ borderColor: "rgb(162, 128, 249)" }}>Register</div>
                     </div>
-                    {isContentLoading ? renderSkeletonLoader() : <img className="retailer-login-img" src={i2} alt="Retailer Login" />}
+                    <img className="retailer-login-img" src={i2} alt="Retailer Login" />
 
                     <div className="retailer-signup-container-p">
                         Add your phone number. We'll send you a verification code so we know you're real.
