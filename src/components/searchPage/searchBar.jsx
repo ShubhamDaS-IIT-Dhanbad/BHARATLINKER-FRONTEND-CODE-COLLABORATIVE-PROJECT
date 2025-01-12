@@ -43,52 +43,55 @@ const SearchBar = ({ inputValue, onInputChange }) => {
     };
 
     return (
-        <div className='product-page-header-visible'>
-            <div className='product-page-header-container'>
-                <div className='product-page-header-user-section'>
-                    <FaArrowLeft
-                        id='product-page-user-icon'
-                        size={25}
-                        onClick={() => navigate('/')} // Navigate to home when clicked
-                        aria-label="Go to Home"
-                        tabIndex={0}
-                    />
-                    <div className='product-page-user-location'>
-                        <p className='product-page-location-label'>PRODUCT SECTION</p>
-                        <div
-                            className='product-page-location-value'
-                            onClick={() => setLocationTab(true)} // Open location tab
-                            aria-label="Change Location"
+        <>
+            <div className='product-page-header-visible'>
+                <div className='product-page-header-container'>
+                    <div className='product-page-header-user-section'>
+                        <FaArrowLeft
+                            id='product-page-user-icon'
+                            size={25}
+                            onClick={() => navigate('/')} // Navigate to home when clicked
+                            aria-label="Go to Home"
                             tabIndex={0}
-                        >
-                            {/* Display loading text or address if available */}
-                            {loading ? 'Loading...' : (location ? location.address.slice(0, 30) : 'Location not set')}
-                            <TbChevronDown size={15} />
+                        />
+                        <div className='product-page-user-location'>
+                            <p className='product-page-location-label'>PRODUCT SECTION</p>
+                            <div
+                                className='product-page-location-value'
+                                onClick={() => setLocationTab(true)} // Open location tab
+                                aria-label="Change Location"
+                                tabIndex={0}
+                            >
+                                {/* Display loading text or address if available */}
+                                {loading ? 'Loading...' : (location ? location.address.slice(0, 30) : 'Location not set')}
+                                <TbChevronDown size={15} />
+                            </div>
                         </div>
                     </div>
                 </div>
+
+                <div className='product-page-search-section'>
+                    <div className='product-page-search-input-container'>
+                        <BiSearchAlt
+                            className='product-page-search-icon'
+                            onClick={() => dispatch(resetProducts())}
+                            aria-label="Search"
+                            tabIndex={0}
+                        />
+                        <input
+                            className='product-page-search-input'
+                            placeholder="Search Product"
+                            value={inputValue}
+                            onKeyPress={handleKeyPress}
+                            onChange={onInputChange}
+                            aria-label="Search input"
+                        />
+                    </div>
+                </div>
+
             </div>
 
-            <div className='product-page-search-section'>
-                <div className='product-page-search-input-container'>
-                    <BiSearchAlt
-                        className='product-page-search-icon'
-                        onClick={() => dispatch(resetProducts())}
-                        aria-label="Search"
-                        tabIndex={0}
-                    />
-                    <input
-                        className='product-page-search-input'
-                        placeholder="Search Product"
-                        value={inputValue}
-                        onKeyPress={handleKeyPress}
-                        onChange={onInputChange}
-                        aria-label="Search input"
-                    />
-                </div>
-            </div>
-            {locationTab && <LocationTab setLocationTab={setLocationTab} />}
-        </div>
+            {locationTab && <LocationTab setLocationTab={setLocationTab} />}</>
     );
 };
 

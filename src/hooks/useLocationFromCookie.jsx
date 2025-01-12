@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
-import { useDispatch } from 'react-redux'; // Import useDispatch for Redux actions
+import { useDispatch } from 'react-redux';
 
 import { resetProducts } from '../redux/features/searchPage/searchProductSlice.jsx';
 import { resetShops } from '../redux/features/searchShopSlice.jsx';
@@ -9,44 +9,54 @@ import { resetRefurbishedProducts } from '../redux/features/refurbishedPage/refu
 const useLocationFromCookies = () => {
     const [location, setLocation] = useState(null);
     const [loading, setLoading] = useState(true);
-    const dispatch = useDispatch(); // Initialize dispatch for Redux actions
+    const dispatch = useDispatch();
 
-    // Fetch location from cookies and set it in state
+    // Improved fetchLocation to handle potential errors and optimize state updates
     const fetchLocation = () => {
-        const storedLocation = Cookies.get('BharatLinkerUserLocation');
-        if (storedLocation) {
-            try {
+        try {
+            setLoading(true);
+            const storedLocation = Cookies.get('BharatLinkerUserLocation');
+            if (storedLocation) {
                 const parsedLocation = JSON.parse(storedLocation);
                 setLocation(parsedLocation);
-            } catch (error) {
-                console.error("Error parsing location data from cookies:", error);
             }
+        } catch (error) {
+            console.error('Error fetching location from cookies:', error);
+            setLocation(null); // Ensure location is reset in case of an error
+        } finally {
+            setLoading(false);
         }
-        setLoading(false);
     };
 
-    // Load location when the component mounts
     useEffect(() => {
         fetchLocation();
     }, []);
 
-    // Function to update location in cookies and state
+    // Optimized updateLocation with improved error handling
     const updateLocation = (newLocation) => {
-        const storedLocation = Cookies.get('BharatLinkerUserLocation');
         try {
+            const storedLocation = Cookies.get('BharatLinkerUserLocation');
             const parsedLocation = storedLocation ? JSON.parse(storedLocation) : {};
+
             const updatedLocation = {
                 ...parsedLocation,
-                ...newLocation, // Merge with new data
+                ...newLocation,
             };
 
-            Cookies.set('BharatLinkerUserLocation', JSON.stringify(updatedLocation), { expires: 7 });
-            setLocation(updatedLocation);
-            dispatch(resetProducts());
-            dispatch(resetShops());
-            dispatch(resetRefurbishedProducts());
+            // Ensure valid data before updating
+            if (updatedLocation.lat && updatedLocation.lon && updatedLocation.address) {
+                Cookies.set('BharatLinkerUserLocation', JSON.stringify(updatedLocation), { expires: 7 });
+                setLocation(updatedLocation);
+
+                // Dispatch actions to reset relevant product and shop data after location update
+                dispatch(resetProducts());
+                dispatch(resetShops());
+                dispatch(resetRefurbishedProducts());
+            } else {
+                console.warn('Invalid location data. Location update failed.');
+            }
         } catch (error) {
-            console.error("Error updating location data in cookies:", error);
+            console.error('Error updating location in cookies:', error);
         }
     };
 
@@ -54,3 +64,4 @@ const useLocationFromCookies = () => {
 };
 
 export default useLocationFromCookies;
+
