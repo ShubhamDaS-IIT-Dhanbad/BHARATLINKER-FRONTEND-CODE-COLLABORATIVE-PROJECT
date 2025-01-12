@@ -6,8 +6,6 @@ import { SlLocationPin } from "react-icons/sl";
 import Cookies from 'js-cookie';
 import useLocationFromCookie from '../../hooks/useLocationFromCookie.jsx';
 import conf from '../../conf/conf.js';
-import { RotatingLines } from 'react-loader-spinner';
-
 import { ThreeDots } from 'react-loader-spinner';
 import './locationTab.css';
 
@@ -83,7 +81,7 @@ function LocationTab({ setLocationTab }) {
 
     const handleAddressClick = (suggestion) => {
         setSearchQuery(suggestion.label);
-        setSuggestions([]);
+        setSuggestions([]); // Clear suggestions after selection
         setShowRadiusOptions(true); // Show radius options after selecting a suggestion
         console.log(suggestion);
         updateLocation({
@@ -138,7 +136,6 @@ function LocationTab({ setLocationTab }) {
         }
     };
 
-
     const handleRadiusChange = (radius) => {
         setRadius(radius);
         updateLocation({
@@ -190,14 +187,6 @@ function LocationTab({ setLocationTab }) {
 
                 {/* Show loading spinner when fetching data */}
                 {(loading || fetchingUserLocation) && (
-                    // <div className="location-tab-loader">
-                    //     <RotatingLines
-                    //         width="50"
-                    //         height="50"
-                    //         color="#00BFFF"
-                    //         ariaLabel="rotating-lines-loading"
-                    //     />
-                    // </div>
                     <div className="location-tab-loader">
                         <ThreeDots size={20} color="green" />
                     </div>
