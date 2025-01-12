@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchShops,loadMoreShops } from '../../redux/features/searchShopSlice.jsx';
+import { fetchShops, loadMoreShops } from '../../redux/features/searchShopSlice.jsx';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import SearchBar from './searchBar.jsx';
 import { LiaSortSolid } from 'react-icons/lia';
 import { MdFilterList } from 'react-icons/md';
 import ShopList from './shopList.jsx';
-import { RotatingLines } from 'react-loader-spinner';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import Cookies from 'js-cookie';
 
+import { Oval } from 'react-loader-spinner';
 import './searchShop.css';
 const Shop = () => {
     const navigate = useNavigate();
@@ -82,15 +82,15 @@ const Shop = () => {
                 />
             </div>
             {loading ? (
-                <div className="refurbished-page-loading-container">
-                    <RotatingLines width="60" height="60" color="#007bff" />
+                <div className="productSearchPage-loading-container">
+                    <Oval height={40} width={45} color="white" secondaryColor="gray" ariaLabel="loading" />
                 </div>
             ) : (
                 <InfiniteScroll
-                    dataLength={shops.length} 
+                    dataLength={shops.length}
                     next={onLoadMore}
-                    hasMore={hasMoreShops} 
-                    loader={loadingMoreShops && <div id='search-shop-load-more-shop-loader'><RotatingLines width="40" height="40"/></div>} // Loader displayed when fetching data
+                    hasMore={hasMoreShops}
+                    loader={loadingMoreShops && <div id='search-shop-load-more-shop-loader'><RotatingLines width="40" height="40" /></div>} // Loader displayed when fetching data
                     endMessage={<p>No more shops to display.</p>}
                 >
                     <ShopList
