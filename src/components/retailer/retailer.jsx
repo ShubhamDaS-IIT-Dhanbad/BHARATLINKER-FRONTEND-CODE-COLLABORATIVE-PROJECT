@@ -7,10 +7,12 @@ import { FiUploadCloud } from "react-icons/fi";
 import { CiBellOn } from "react-icons/ci";
 import { TbDeviceMobileCharging } from "react-icons/tb";
 import { AiOutlineProduct } from "react-icons/ai";
-import { Client, Account, ID } from 'appwrite';
-import Cookies from 'js-cookie'
-import conf from '../../conf/conf.js';
-import './retailer.css'
+
+import Cookies from 'js-cookie';
+import {logout} from '../../appWrite/shop/shop.js'
+
+import './retailer.css';
+
 function UserHome() {
   const [userData, setUserData] = useState({ phn: 8250846979 });
   const [isLogout, setIsLogout] = useState(false);
@@ -19,19 +21,19 @@ function UserHome() {
   useEffect(() => {
     const userSession = Cookies.get('BharatLinkerShopData');
     setUserData(JSON.parse(userSession));
-  }, [])
-  const client = new Client()
-    .setEndpoint('https://cloud.appwrite.io/v1')
-    .setProject(conf.appwriteUsersProjectId);
+  }, []);
 
-  const account = new Account(client);
   const handleLogout = async () => {
     try {
-      Cookies.remove('BharatLinkerUser');
-      await account.deleteSession('current');
-
-      navigate('/login');
-      console.log('Logged out successfully!');
+      const userId = userData?.sessionId?.userId;
+      if (userId) {
+        await logout(userId);
+        Cookies.remove('BharatLinkerShopData');
+        navigate('/login');
+        console.log('Logged out successfully!');
+      } else {
+        console.error("No session ID found for logout.");
+      }
     } catch (error) {
       console.error('Logout failed:', error.message);
     }
@@ -63,32 +65,37 @@ function UserHome() {
         <section className='retailer-home-your-information'>
           <article className='retailer-home-your-refurbished'>
             <HiOutlineUserCircle size={27} className='retailer-home-your-information-icons' aria-label="Your refurbished items" />
-            <p className='retailer-home-your-info-p'>Profile</p>
+            <p className='retailer-home-your-info-p'>Dashboard</p>
           </article>
           <article className='retailer-home-your-refurbished'>
             <AiOutlineProduct className='retailer-home-your-information-icons' aria-label="Your refurbished items" />
-            <p className='retailer-home-your-info-p'>Your refurbished</p>
+            <p className='retailer-home-your-info-p'>Your Products</p>
           </article>
           <article className='retailer-home-your-refurbished'>
             <FiUploadCloud className='retailer-home-your-information-icons' aria-label="Upload books" />
-            <p className='retailer-home-your-info-p'>Upload Books</p>
+            <p className='retailer-home-your-info-p'>Upload Products</p>
           </article>
           <article className='retailer-home-your-refurbished'>
             <TbDeviceMobileCharging className='retailer-home-your-information-icons' aria-label="Upload books" />
-            <p className='retailer-home-your-info-p'>Upload Gadgets</p>
+            <p className='retailer-home-your-info-p'>Orders</p>
           </article>
           <article className='retailer-home-your-refurbished'>
             <CiBellOn className='retailer-home-your-information-icons' aria-label="Update refurbished items" />
             <p className='retailer-home-your-info-p'>Notification</p>
           </article>
-          <article className='retailer-home-your-refurbished'>
-            <MdOutlineAdminPanelSettings className='retailer-home-your-information-icons' aria-label="Logout" />
+          <article className='retailer-home-your-refurbished'
+          onClick={() => setIsLogout(true)}>
+            <MdOutlineAdminPanelSettings
+              className='retailer-home-your-information-icons'
+              aria-label="Logout"
+               
+            />
             <p className='retailer-home-your-info-p'>Logout</p>
           </article>
         </section>
       </main>
 
-      {isLogout &&
+      {isLogout && (
         <div className='retailer-home-logout-pop-up'>
           <div className='retailer-home-logout-pop-up-inner-div'>
             <div className='retailer-home-logout-pop-up-inner-div-logout-statement'>
@@ -98,15 +105,14 @@ function UserHome() {
               <div className='retailer-home-logout-pop-up-inner-div-no' onClick={() => setIsLogout(false)}>
                 No
               </div>
-              <div className='retailer-home-logout-pop-up-inner-div-yes' onClick={() => { handleLogout() }}>
+              <div className='retailer-home-logout-pop-up-inner-div-yes' onClick={handleLogout}>
                 Yes
               </div>
             </div>
           </div>
         </div>
-      }
+      )}
     </>
-
   );
 }
 

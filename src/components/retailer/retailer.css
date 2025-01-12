@@ -115,37 +115,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 .retailer-footer-text {
    text-align: center;
 }
@@ -219,4 +188,38 @@
 
 .retailer-book-delete-option-no {
     color: red; /* Delete Confirmation */
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+.retailer-home-logout-pop-up{
+    background-color: rgba(4, 4, 4, 0.651);
+    width: 100vw;height: 100vh;color: #EB3678;
+    position: fixed;top: 0;z-index: 2000;
+    display: flex;justify-content: center;align-items: center;
+}
+.retailer-home-logout-pop-up-inner-div{
+    background-color: #EB3678;padding:17px 13px 15px 13px;
+    color: white;border-radius: 9px;
+}
+.retailer-home-logout-pop-up-inner-div-no-yes{
+    display: flex;
+    justify-content: center;align-items: center;
+    gap: 10px;margin-top: 15px;
+}
+.retailer-home-logout-pop-up-inner-div-yes,
+.retailer-home-logout-pop-up-inner-div-no{
+    border:2px solid  #1A1A2E;padding: 10px;
+    width: 60px;height: 30px;border-radius: 9px;
+    display: flex;justify-content: center;align-items: center;
 }

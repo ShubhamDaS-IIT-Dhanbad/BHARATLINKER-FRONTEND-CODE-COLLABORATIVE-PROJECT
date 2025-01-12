@@ -1,5 +1,5 @@
 import conf from '../../conf/conf.js';
-import { Client, Account,ID, Databases, Query } from 'appwrite';
+import { Client, Account, ID, Databases, Query } from 'appwrite';
 
 const client = new Client()
     .setEndpoint('https://cloud.appwrite.io/v1')
@@ -8,24 +8,17 @@ const client = new Client()
 const account = new Account(client);
 const databases = new Databases(client);
 
-
-
-
 const sendOtp = async (phoneNumber) => {
     try {
         const token = await account.createPhoneToken(ID.unique(), `+91${phoneNumber}`);
-        console.log(token)
+        console.log(token);
         return token.userId;
     } catch (error) {
         throw new Error(`Failed to send OTP: ${error.message}`);
     }
 };
 
-
-
-
-
-const createSession = async (userId,otpCode) => {
+const createSession = async (userId, otpCode) => {
     try {
         const session = await account.createSession(userId, otpCode);
         return session;
@@ -33,25 +26,24 @@ const createSession = async (userId,otpCode) => {
         throw new Error(`Failed to create session: ${error.message}`);
     }
 };
-const deleteSession = async (sessionId) => {
+
+const deleteSession = async (userId) => {
     try {
-        await account.deleteSession(sessionId);
-        console.log('Session deleted successfully.');
+      await account.deleteSessions(userId);
+      console.log('All sessions deleted successfully.');
     } catch (error) {
-        console.error(`Failed to delete session: ${error.message}`);
+      console.error(`Failed to delete sessions: ${error.message}`);
+    }
+  };
+  
+const logout = async (sessionId) => {
+    try {
+        await deleteSession(sessionId);
+        console.log('Logged out successfully.');
+    } catch (error) {
+        console.error(`Failed to log out: ${error.message}`);
     }
 };
-async function clearUserSessions() {
-    try {
-        await account.deleteSessions();
-        console.log(`All sessions cleared`);
-    } catch (error) {
-        console.error('Error clearing sessions:', error);
-    }
-}
-
-
-
 
 const registerShop = async (shopName, phone) => {
     try {
@@ -87,7 +79,6 @@ const getShopData = async (phoneNumber) => {
             conf.appwriteShopsCollectionId,
             [Query.equal('phoneNumber', phoneNumber)]
         );
-
         if (response.total > 0) {
             return response.documents[0];
         } else {
@@ -99,5 +90,4 @@ const getShopData = async (phoneNumber) => {
     }
 };
 
-
-export { registerShop,sendOtp,createSession,deleteSession,getShopData,clearUserSessions };
+export { registerShop, sendOtp, createSession, deleteSession, getShopData,  logout };

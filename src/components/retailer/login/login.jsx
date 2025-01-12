@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';import { FaArrowLeft } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom'; import { FaArrowLeft } from 'react-icons/fa';
 import { FaCircleExclamation } from 'react-icons/fa6';
 import Cookies from 'js-cookie';
 
-import { sendOtp, createSession, getShopData, clearUserSessions } from '../../../appWrite/shop/shop.js';
+import { sendOtp, createSession, getShopData} from '../../../appWrite/shop/shop.js';
 import { Oval } from 'react-loader-spinner'; // Import the loader
 import './login.css';
 import i1 from '../../../assets/indian-flag.png';
@@ -54,13 +54,17 @@ function LoginForm() {
     const verifyOTP = async (otpCode) => {
         setLoadingVerification(true);
         try {
-            await clearUserSessions();
-            await createSession(userId, otpCode);
+            const sessionId = await createSession(userId, otpCode);
 
             const phoneNumber = `+91${phone}`;
             const shopData = await getShopData(phoneNumber);
 
+            // Add sessionId to the shopData
+            shopData.sessionId = sessionId;
+console.log(shopData)
+            // Store the updated shopData with sessionId in the cookie
             Cookies.set('BharatLinkerShopData', JSON.stringify(shopData), { expires: 7 });
+
             navigate('/retailer');
         } catch (err) {
             console.error(`Failed to verify OTP: ${err.message}`);
@@ -70,6 +74,7 @@ function LoginForm() {
             setLoadingVerification(false); // Stop verification loading
         }
     };
+
 
     const handleOTPChange = (e, index) => {
         const value = e.target.value.replace(/[^0-9]/g, ''); // Ensure only numeric input
@@ -96,7 +101,7 @@ function LoginForm() {
     }, [otp]);
 
 
-  
+
 
     const renderLoginForm = () => (
         <>
