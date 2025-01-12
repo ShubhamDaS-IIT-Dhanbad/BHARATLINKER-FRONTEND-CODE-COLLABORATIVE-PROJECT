@@ -173,16 +173,18 @@ function LocationTab({ setLocationTab }) {
 
                 {/* Show radius options only if showRadiusOptions is true */}
                 {true && (
-                    <div className="location-tab-radius-options">
-                        {radiusOptions.map((option) => (
-                            <span
-                                key={option}
-                                className={`location-tab-radius-option ${option === radius ? 'selected' : 'unselected'}`}
-                                onClick={() => handleRadiusChange(option)}
-                            >
-                                {option} km
-                            </span>
-                        ))}
+                    <div  className="location-tab-radius-options-container">
+                        <div className="location-tab-radius-options">
+                            {radiusOptions.map((option) => (
+                                <span
+                                    key={option}
+                                    className={`location-tab-radius-option ${option === radius ? 'selected' : 'unselected'}`}
+                                    onClick={() => handleRadiusChange(option)}
+                                >
+                                    {option} km
+                                </span>
+                            ))}
+                        </div>
                     </div>
                 )}
 
