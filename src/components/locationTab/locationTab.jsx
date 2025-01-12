@@ -156,7 +156,7 @@ function LocationTab({ setLocationTab }) {
                         <IoSearch onClick={handleSearch} size={20} />
                         <input
                             className="location-tab-bottom-div-input"
-                            placeholder="Search your location"
+                            placeholder="Search your city / pincode"
                             value={searchQuery}
                             onChange={(e) => setSearchQuery(e.target.value)}
                             onKeyDown={handleKeyDown}
