@@ -1,0 +1,222 @@
+.retailer-routes-loading{
+    width: 100vw;height: 100vh;
+    position: fixed;top: 0;
+    background-color: #1A1A2E;
+    display: flex;
+    justify-content: center;align-items: center;
+}
+
+
+
+.retailer-home-header-parent{
+    display: flex;
+    height: 50px;
+    align-items: center;
+    background-color: #1A1A2E; /* More readable hex for white */
+    color: #ffffff;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    padding:15px;
+    z-index: 1000; /* Ensure the header stays on top of other content */
+}
+
+.retailer-home-header-user {
+    display: flex;
+    flex-grow: 1;
+    flex-direction: column;
+    padding-left: 10px;
+}
+
+.retailer-home-header-user > p {
+    padding: 0;
+    margin: 0;
+}
+
+#retailer-home-header-user-location {
+    font-size: 19px; /* Reduced slightly for consistency */
+    font-weight: 700;
+    white-space: nowrap; /* Prevents text from wrapping */
+    overflow: hidden;
+    text-overflow: ellipsis; /* Ensures long text is truncated with "..." */
+}
+
+#retailer-home-header-user-email {
+    margin-top: -5px;
+    font-weight: 100;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-size: 14px; /* Adjust for better readability */
+    color: #ffffff; /* Slightly softer color */
+}
+
+#retailer-home-header-parent-icon{
+    cursor: pointer; 
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+.retailer-home-your-information {
+    background-color: #1A1A2E;
+    display: flex;color: white;
+    flex-direction: column;
+    gap: 10px;
+    padding-top: 100px;
+    min-height: 90vh;
+}
+
+.retailer-home-your-refurbished {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    gap: 10px;
+    margin-left: 20px;
+}
+
+.retailer-home-your-information-icons {
+    border: 2px solid white;
+    max-height: 40px;
+    max-width: 40px;
+    padding: 5px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 25px;
+}
+.retailer-home-your-info-p {
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-size: 18px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.retailer-footer-text {
+   text-align: center;
+}
+
+/* Common Styles for Pop-Up Container */
+.retailer-logout-pop-up, .retailer-book-update-pop-up, .retailer-book-delete-pop-up {
+    position: fixed;
+    top: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    background-color: #1b1818e5;
+    height: 100vh;
+    z-index: 20000;
+}
+
+/* Common Styles for Pop-Up Inner Div */
+.retailer-logout-pop-up-inner, .retailer-book-update-pop-up-inner, .retailer-book-delete-pop-up-inner {
+    background-color: #fff;
+    border-radius: 10px;
+    width: 85vw;
+    height: 130px;
+}
+
+/* Common Styles for Pop-Up Statement Text */
+.retailer-logout-pop-up-statement,
+.retailer-book-update-pop-up-message,
+.retailer-book-delete-pop-up-message {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 45%;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.075);
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+/* Common Styles for No and Yes Options */
+.retailer-logout-pop-up-options,
+.retailer-book-update-pop-up-options,
+.retailer-book-delete-pop-up-options {
+    display: flex;
+    height: 100%;
+}
+
+.retailer-logout-pop-up-no, .retailer-book-update-option-no, .retailer-book-delete-option-no {
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50%;
+    border-right: 1px solid rgba(0, 0, 0, 0.053);
+}
+
+.retailer-logout-pop-up-yes, .retailer-book-update-option-yes, .retailer-book-delete-option-yes {
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50%;
+}
+
+/* Specific Colors for Action Confirmation */
+.retailer-logout-pop-up-yes {
+    color: green; /* Logout Confirmation */
+}
+
+.retailer-book-update-option-yes {
+    color: blue; /* Update Confirmation */
+}
+
+.retailer-book-delete-option-no {
+    color: red; /* Delete Confirmation */
+}

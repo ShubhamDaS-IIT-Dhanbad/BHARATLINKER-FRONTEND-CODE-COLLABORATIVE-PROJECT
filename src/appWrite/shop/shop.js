@@ -54,7 +54,6 @@ async function clearUserSessions() {
 
 
 const registerShop = async (shopName, phone) => {
-    console.log(shopName,phone);
     try {
         const response = await databases.listDocuments(
             conf.appwriteShopsDatabaseId,
