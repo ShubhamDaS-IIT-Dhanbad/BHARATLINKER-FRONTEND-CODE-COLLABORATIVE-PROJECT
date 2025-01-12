@@ -33,8 +33,8 @@ class SearchProductService {
         page,
         productsPerPage = 4,
 
-        sortByAsc = false,
-        sortByDesc = false,
+        sortByAsc,
+        sortByDesc,
         shopId
     }) {
         try {

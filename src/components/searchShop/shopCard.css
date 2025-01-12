@@ -2,10 +2,10 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center;
+    align-items: center;color: white;
     transition: transform 0.3s ease;
     width: 90vw;
-    padding: 10px 0px;
+    padding: 10px 0px;background-color: #021526;
     outline: none;
 }
 
@@ -34,7 +34,7 @@
 .shop-card-name {
     font-size: 18px;
     font-weight: bold;
-    color: #333;
+    color: #ffffff;
     margin-bottom: 10px;
 }
 
@@ -56,7 +56,7 @@
 
 .shop-card-divider {
     margin: 5px 10px 0 10px;
-    background-color: rgba(0, 0, 0, 0.35);
+    background-color: rgba(255, 255, 255, 0.35);
     height: 1px;
 }
 

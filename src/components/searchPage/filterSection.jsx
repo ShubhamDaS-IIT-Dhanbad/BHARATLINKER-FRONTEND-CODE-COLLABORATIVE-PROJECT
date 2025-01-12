@@ -6,7 +6,7 @@ import {
   toggleSearchProductsCategory,
   toggleSearchProductsBrand,
   resetSearchProductsFilters,
-} from '../../redux/features/searchPage/searchProductFilterSectionSlice'; // Update the path as per your file structure
+} from '../../redux/features/searchPage/searchProductFilterSectionSlice';
 
 import './filterSection.css';
 

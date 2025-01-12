@@ -197,9 +197,9 @@
 
 #search-shop-grid{
     min-height: 80vh;overflow: scroll;margin-top: 100px;
-    margin-bottom: 97px;
+    padding-bottom: 97px;background-color: #021526;color: white;
 }
 #search-shop-load-more-shop-loader{
-    margin-bottom: 67px;
+    padding-bottom: 67px;
     display: flex;justify-content: center;align-items: center;
 }

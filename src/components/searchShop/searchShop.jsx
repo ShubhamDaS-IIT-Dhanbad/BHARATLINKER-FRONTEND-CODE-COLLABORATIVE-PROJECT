@@ -103,11 +103,11 @@ const Shop = () => {
             )}
 
             <div id='searchShopPage-footer'>
-                <div id='searchShopPage-footer-sortby' onClick={() => { navigate('/shop/sortby') }}>
+                <div id='searchShopPage-footer-sortby' >
                     <LiaSortSolid size={33} />
                     SORT BY
                 </div>
-                <div id='searchShopPage-footer-filterby' onClick={() => { navigate('/shop/filterby') }}>
+                <div id='searchShopPage-footer-filterby' >
                     <MdFilterList size={33} />
                     FILTER BY
                 </div>
