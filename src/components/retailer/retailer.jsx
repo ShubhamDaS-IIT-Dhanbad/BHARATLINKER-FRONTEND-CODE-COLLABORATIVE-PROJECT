@@ -47,7 +47,7 @@ function UserHome() {
             aria-label="User profile"
           />
           <div className='retailer-home-header-user'>
-            <p id='retailer-home-header-user-location'>{userData?.shopName}</p>
+            <p id='retailer-home-header-user-location'>{userData.shopName ? userData?.shopName.toUpperCase() : ""}</p>
             <p id='retailer-home-header-user-email'>{userData?.phoneNumber ? userData?.phoneNumber : ""}</p>
           </div>
           <IoHomeOutline

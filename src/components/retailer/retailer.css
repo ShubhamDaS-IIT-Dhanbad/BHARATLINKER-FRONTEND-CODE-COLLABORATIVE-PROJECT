@@ -13,7 +13,7 @@
     height: 50px;
     align-items: center;
     background-color: #1A1A2E; /* More readable hex for white */
-    color: #ffffff;
+    color: #EB3678;
     position: fixed;
     top: 0;
     left: 0;
@@ -84,7 +84,7 @@
 }
 
 .retailer-home-your-information-icons {
-    border: 2px solid white;
+    border: 2px solid #EB3678;
     max-height: 40px;
     max-width: 40px;
     padding: 5px;

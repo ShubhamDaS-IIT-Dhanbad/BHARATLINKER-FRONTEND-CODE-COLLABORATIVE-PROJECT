@@ -7,7 +7,7 @@ import RetailerLogin from "./login/login.jsx";
 import RetailerRegister from "./register/register.jsx";
 import RetailerPending from "./pending/pending.jsx";
 
-import { TailSpin } from 'react-loader-spinner';
+import { ThreeDots } from 'react-loader-spinner';
 import './retailer.css';
 
 const RetailerRoutes = () => {
@@ -46,11 +46,11 @@ const RetailerRoutes = () => {
   }, [navigate, isInitialCheckDone]);
 
   // Loader component
-  const Loader = () =>
+  const Loader = () => (
     <div className="retailer-routes-loading">
-      <TailSpin height={50} width={50} color="white" ariaLabel="loading" />
+      <ThreeDots size={20} color="#EB3678" />
     </div>
-    ;
+  );
 
   return (
     <>
