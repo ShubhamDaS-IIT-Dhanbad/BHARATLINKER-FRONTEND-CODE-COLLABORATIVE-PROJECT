@@ -43,7 +43,7 @@ function LocationTab({ setLocationTab }) {
         const apiUrl = `https://api.geoapify.com/v1/geocode/search?text=${query}&apiKey=${apiKey}&lang=en`;
 
         setLoading(true);
-        setShowRadiusOptions(false); // Hide radius options when fetching suggestions
+        setShowRadiusOptions(false);
 
         try {
             const response = await fetch(apiUrl);
@@ -82,8 +82,8 @@ function LocationTab({ setLocationTab }) {
 
     const handleAddressClick = (suggestion) => {
         setSearchQuery(suggestion.label);
-        setSuggestions([]); // Clear suggestions after selection
-        setShowRadiusOptions(true); // Show radius options after selecting a suggestion
+        setSuggestions([]);
+        setShowRadiusOptions(true);
         console.log(suggestion);
         updateLocation({
             lat: suggestion.lat,
@@ -109,7 +109,7 @@ function LocationTab({ setLocationTab }) {
                         const data = await response.json();
                         if (data.results && data.results.length > 0) {
                             const address = data.results[0].formatted;
-                            setSearchQuery(address); // Set the formatted address in the search query
+                            setSearchQuery(address);
                             updateLocation({
                                 lat: latitude,
                                 lon: longitude,
