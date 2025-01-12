@@ -8,55 +8,56 @@ import useLocationFromCookie from '../../hooks/useLocationFromCookie.jsx';
 import conf from '../../conf/conf.js';
 import { RotatingLines } from 'react-loader-spinner';
 
+import { ThreeDots } from 'react-loader-spinner';
 import './locationTab.css';
 
 function LocationTab({ setLocationTab }) {
     const [searchQuery, setSearchQuery] = useState('');
     const [suggestions, setSuggestions] = useState([]);
-    const [radius, setRadius] = useState(5); // default value is 5 km
+    const [radius, setRadius] = useState(5);
     const [loading, setLoading] = useState(false);
     const [fetchingUserLocation, setFetchingUserLocation] = useState(false);
-    const [radiusOptions] = useState([1, 2, 4, 5, 7,10,15]);
+    const [radiusOptions] = useState([1, 2, 4, 5, 7, 10]);
+    const [showRadiusOptions, setShowRadiusOptions] = useState(true);
 
     const { updateLocation } = useLocationFromCookie();
 
-    // Check if BharatLinkerUserLocation exists in cookies initially
     useEffect(() => {
-        const storedLocation = Cookies.get('BharatLinkerUserLocation') 
-            ? JSON.parse(Cookies.get('BharatLinkerUserLocation')) 
+        const storedLocation = Cookies.get('BharatLinkerUserLocation')
+            ? JSON.parse(Cookies.get('BharatLinkerUserLocation'))
             : null;
-    
+
         if (storedLocation) {
-            setRadius(storedLocation.radius || 5); // Default radius 5 km if not found
+            setRadius(storedLocation.radius || 5);
         } else {
-            handleUseCurrentLocation(); // Fetch the user's current location if no cookie is found
+            handleUseCurrentLocation();
         }
     }, []);
-    
-    // Function to fetch location suggestions from Geoapify
+
     const fetchSuggestions = async (query) => {
         if (!query) {
             setSuggestions([]);
             return;
         }
-    
-        const apiKey = conf.geoapifyapikey; 
+
+        const apiKey = conf.geoapifyapikey;
         const apiUrl = `https://api.geoapify.com/v1/geocode/search?text=${query}&apiKey=${apiKey}&lang=en`;
-    
+
         setLoading(true);
-    
+        setShowRadiusOptions(false); // Hide radius options when fetching suggestions
+
         try {
             const response = await fetch(apiUrl);
             const data = await response.json();
             if (data.features && data.features.length > 0) {
                 const formattedSuggestions = data.features
-                    .filter((feature) => feature.properties.country === 'India' && feature.properties.state) // Filter only states in India
+                    .filter((feature) => feature.properties.country === 'India' && feature.properties.state)
                     .map((feature) => ({
-                        label: feature.properties.formatted,  // Use the state as the label
+                        label: feature.properties.formatted,
                         lat: feature.geometry.coordinates[1],
                         lon: feature.geometry.coordinates[0],
                         country: feature.properties.country,
-                        state: feature.properties.state, 
+                        state: feature.properties.state,
                     }));
                 setSuggestions(formattedSuggestions);
             } else {
@@ -69,7 +70,6 @@ function LocationTab({ setLocationTab }) {
             setLoading(false);
         }
     };
-    
 
     const handleSearch = () => {
         fetchSuggestions(searchQuery);
@@ -84,6 +84,7 @@ function LocationTab({ setLocationTab }) {
     const handleAddressClick = (suggestion) => {
         setSearchQuery(suggestion.label);
         setSuggestions([]);
+        setShowRadiusOptions(true); // Show radius options after selecting a suggestion
         console.log(suggestion);
         updateLocation({
             lat: suggestion.lat,
@@ -109,6 +110,7 @@ function LocationTab({ setLocationTab }) {
                         const data = await response.json();
                         if (data.results && data.results.length > 0) {
                             const address = data.results[0].formatted;
+                            setSearchQuery(address); // Set the formatted address in the search query
                             updateLocation({
                                 lat: latitude,
                                 lon: longitude,
@@ -136,10 +138,11 @@ function LocationTab({ setLocationTab }) {
         }
     };
 
+
     const handleRadiusChange = (radius) => {
-        setRadius(radius); // Update radius state
+        setRadius(radius);
         updateLocation({
-            radius: radius 
+            radius: radius
         });
     };
 
@@ -170,27 +173,33 @@ function LocationTab({ setLocationTab }) {
                     </div>
                 </div>
 
-                <div className="location-tab-radius-options">
-                    {radiusOptions.map((option) => (
-                        <span
-                            key={option}
-                            className={`location-tab-radius-option ${option === radius ? 'selected' : 'unselected'}`}
-                            onClick={() => handleRadiusChange(option)}
-                        >
-                            {option} km
-                        </span>
-                    ))}
-                </div>
+                {/* Show radius options only if showRadiusOptions is true */}
+                {showRadiusOptions && (
+                    <div className="location-tab-radius-options">
+                        {radiusOptions.map((option) => (
+                            <span
+                                key={option}
+                                className={`location-tab-radius-option ${option === radius ? 'selected' : 'unselected'}`}
+                                onClick={() => handleRadiusChange(option)}
+                            >
+                                {option} km
+                            </span>
+                        ))}
+                    </div>
+                )}
 
                 {/* Show loading spinner when fetching data */}
                 {(loading || fetchingUserLocation) && (
+                    // <div className="location-tab-loader">
+                    //     <RotatingLines
+                    //         width="50"
+                    //         height="50"
+                    //         color="#00BFFF"
+                    //         ariaLabel="rotating-lines-loading"
+                    //     />
+                    // </div>
                     <div className="location-tab-loader">
-                        <RotatingLines
-                            width="50"
-                            height="50"
-                            color="#00BFFF"
-                            ariaLabel="rotating-lines-loading"
-                        />
+                        <ThreeDots size={20} color="green" />
                     </div>
                 )}
 

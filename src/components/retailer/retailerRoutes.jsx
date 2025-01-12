@@ -45,7 +45,6 @@ const RetailerRoutes = () => {
     }
   }, [navigate, isInitialCheckDone]);
 
-  // Loader component
   const Loader = () => (
     <div className="retailer-routes-loading">
       <ThreeDots size={20} color="#EB3678" />

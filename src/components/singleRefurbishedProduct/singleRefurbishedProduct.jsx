@@ -2,9 +2,8 @@ import React, { Fragment, useEffect, useState } from "react";
 import { useParams, useNavigate } from 'react-router-dom';
 import "./singleRefurbishedProduct.css";
 
-import { useDispatch, useSelector } from 'react-redux';
+import {useSelector } from 'react-redux';
 import SingleRefurbishedProductSearchBar from './singleRefurbishedProductSearchBar.jsx';
-import LoadingSingleProduct from "../loading/loadingSingleProduct.jsx";
 
 const ProductDetails = () => {
     const navigate = useNavigate();
@@ -66,7 +65,7 @@ const ProductDetails = () => {
             <SingleRefurbishedProductSearchBar />
 
             {loading ? (
-                <LoadingSingleProduct />
+               <>loading...</>
             ) : (
                 <Fragment>
                     {productDetail ? (

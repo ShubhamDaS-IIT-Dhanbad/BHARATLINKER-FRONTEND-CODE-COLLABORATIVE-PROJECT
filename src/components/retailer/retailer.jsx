@@ -23,6 +23,8 @@ function UserHome() {
     setUserData(JSON.parse(userSession));
   }, []);
 
+  
+
   const handleLogout = async () => {
     try {
       const userId = userData?.sessionId?.userId;
