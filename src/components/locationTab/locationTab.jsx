@@ -26,6 +26,7 @@ function LocationTab({ setLocationTab }) {
             : null;
 
         if (storedLocation) {
+            setSearchQuery(storedLocation.address);
             setRadius(storedLocation.radius || 5);
         } else {
             handleUseCurrentLocation();
