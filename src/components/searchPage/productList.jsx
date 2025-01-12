@@ -3,6 +3,7 @@ import { IoIosArrowDown } from "react-icons/io";
 import { useSelector}from 'react-redux';
 import NoProductsFound from './noProductFound.jsx';
 import SearchPageProductCard from '../productCards/searchPageProductCard.jsx';
+import './productList.css';
 
 const ProductList = ({ onLoadMore }) => {
     const { products, loading,loadingMoreProducts,hasMoreProducts } = useSelector((state) => state.searchproducts);

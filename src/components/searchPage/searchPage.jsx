@@ -1,14 +1,10 @@
+/*COMPLETE*/
 import React, { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
-
-import { loadMoreProducts} from '../../redux/features/searchPage/searchProductSlice.jsx'; // Import resetProducts
-import Cookies from 'js-cookie';
-
+import { useSelector} from 'react-redux';
 import { useExecuteSearch } from '../../hooks/searchProductHook.jsx';
 import { LiaSortSolid } from "react-icons/lia";
 import { MdFilterList } from "react-icons/md";
-import { ToastContainer } from 'react-toastify';
 import SearchBar from './searchBar';
 import ProductList from './productList.jsx';
 import { RotatingLines } from 'react-loader-spinner';
@@ -22,19 +18,16 @@ import './searchPage.css';
 
 const SearchPage = () => {
     const navigate = useNavigate();
-    const dispatch = useDispatch();
-    const { inputValue, setInputValue, executeSearch } = useExecuteSearch();
+    const [searchParams, setSearchParams] = useSearchParams();
+
+    const { inputValue, setInputValue, executeSearch,onLoadMore } = useExecuteSearch();
 
     const [showSortBy, setShowSortBy] = useState(false);
     const [showFilterBy, setShowFilterBy] = useState(false);
 
-    const [searchParams, setSearchParams] = useSearchParams();
-    const query = searchParams.get('query') || '';
-
     const {
         products,
         loading,
-        currenPage = 1,
         loadingMoreProducts,
         hasMoreProducts,
         sortByAsc,
@@ -50,43 +43,13 @@ const SearchPage = () => {
         }));
     };
 
-    // Retrieve lat, long, and radius from 'BharatLinkerUserLocation' cookie
-    const storedLocation = Cookies.get('BharatLinkerUserLocation') ? JSON.parse(Cookies.get('BharatLinkerUserLocation')) : null;
-    const userLat = storedLocation ? storedLocation.lat : null;
-    const userLong = storedLocation ? storedLocation.lon : null;
-    const radius = storedLocation ? storedLocation.radius : 5;
-
-    // Effect to reset products when userLat, userLong, or radius changes
+   
     useEffect(() => {
-        if (products.length == 0 && !loading) {
-            executeSearch();
-        }
+        if (products.length == 0 && !loading) {executeSearch();}
     }, [products.length]);
-
-
-
-
-    const onLoadMore = () => {
-        if (!hasMoreProducts || loadingMoreProducts) return;
-        const params = {
-            userLat,
-            userLong,
-            radius,
-            inputValue,
-            page: currenPage + 1,
-            productsPerPage: 3,
-            pinCodes: [742136, 742137],
-            selectedCategories: [],
-            selectedBrands: [],
-            sortByAsc,
-            sortByDesc,
-        };
-        dispatch(loadMoreProducts(params));
-    };
 
     return (
         <>
-            <ToastContainer />
             <div id="productSearchPage-container-top">
                 <SearchBar
                     inputValue={inputValue}

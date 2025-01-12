@@ -1,6 +1,8 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
 import { fetchProducts } from '../redux/features/searchPage/searchProductSlice';
+import { loadMoreProducts} from '../redux/features/searchPage/searchProductSlice.jsx'; // Import resetProducts
+
 import { useState } from 'react';
 import Cookies from 'js-cookie'; // Import Cookies
 
@@ -12,7 +14,7 @@ export const useExecuteSearch = () => {
     const query = searchParams.get('query') || '';
     const [inputValue, setInputValue] = useState(query);
     
-    const { selectedBrands, selectedCategories, sortByAsc, sortByDesc } = useSelector((state) => state.searchproducts);
+    const { selectedBrands,hasMoreProducts,loadingMoreProducts,currentPage, selectedCategories, sortByAsc, sortByDesc } = useSelector((state) => state.searchproducts);
 
     // Get lat, long, and radius from 'BharatLinkerUserLocation' cookie
     const storedLocation = Cookies.get('BharatLinkerUserLocation') ? JSON.parse(Cookies.get('BharatLinkerUserLocation')) : null;
@@ -35,8 +37,24 @@ export const useExecuteSearch = () => {
         };
         dispatch(fetchProducts(params));
     };
+    const onLoadMore = () => {
+            if (!hasMoreProducts || loadingMoreProducts) return;
+            const params = {
+                userLat:lat,
+                userLong:long,
+                radius,
+                inputValue,
+                page: currentPage + 1,
+                productsPerPage,
+                selectedCategories,
+                selectedBrands,
+                sortByAsc,
+                sortByDesc,
+            };
+            dispatch(loadMoreProducts(params));
+        };
 
-    return { inputValue, setInputValue, executeSearch };
+    return { inputValue, setInputValue, executeSearch,onLoadMore };
 };
 
            

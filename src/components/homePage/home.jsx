@@ -13,7 +13,6 @@ import HomeTestimonial from './homeTestimonial.jsx';
 import './home.css';
 
 const Home = () => {
-    // Initialize ref with null, not true
     const containerRef = useRef(null);
     const navigate = useNavigate();
 

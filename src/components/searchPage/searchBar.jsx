@@ -16,7 +16,6 @@ const SearchBar = ({ inputValue, onInputChange }) => {
     const [loading, setLoading] = useState(true);
     const [locationTab, setLocationTab] = useState(false);
 
-    // Fetch location from cookies when the component mounts
     useEffect(() => {
         const fetchLocation = () => {
             const storedLocation = Cookies.get('BharatLinkerUserLocation');
@@ -29,13 +28,13 @@ const SearchBar = ({ inputValue, onInputChange }) => {
                     setLocation(null);
                 }
             }
-            setLoading(false); // Set loading to false after fetching location
+            setLoading(false);
         };
 
         fetchLocation();
     }, [locationTab]);
 
-    // Handle Enter key press for search
+  
     const handleKeyPress = (e) => {
         if (e.key === 'Enter') {
             dispatch(resetProducts());
@@ -50,7 +49,7 @@ const SearchBar = ({ inputValue, onInputChange }) => {
                         <FaArrowLeft
                             id='product-page-user-icon'
                             size={25}
-                            onClick={() => navigate('/')} // Navigate to home when clicked
+                            onClick={() => navigate('/')} 
                             aria-label="Go to Home"
                             tabIndex={0}
                         />
@@ -58,11 +57,10 @@ const SearchBar = ({ inputValue, onInputChange }) => {
                             <p className='product-page-location-label'>PRODUCT SECTION</p>
                             <div
                                 className='product-page-location-value'
-                                onClick={() => setLocationTab(true)} // Open location tab
+                                onClick={() => setLocationTab(true)}
                                 aria-label="Change Location"
                                 tabIndex={0}
                             >
-                                {/* Display loading text or address if available */}
                                 {loading ? 'Loading...' : (location ? location.address.slice(0, 30) : 'Location not set')}
                                 <TbChevronDown size={15} />
                             </div>
