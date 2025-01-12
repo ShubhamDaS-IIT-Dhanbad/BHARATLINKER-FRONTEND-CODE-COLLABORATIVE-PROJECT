@@ -94,16 +94,13 @@ function SignUpForm() {
             await deleteSession(sessionId);
             try {
                 const shopData = await registerShop(shopName, phone);
-                console.log(shopData);
-                // Store shop data in cookies (replace with your method)
                 document.cookie = `BharatLinkerShopData=${JSON.stringify(shopData)}; expires=${new Date(Date.now() + 7 * 86400000).toUTCString()}`;
                 console.log('Shop registered successfully!');
             } catch (error) {
                 console.error(`Failed to register shop: ${error.message}`);
                 throw error;
             }
-
-            navigate('/');
+            navigate('/retailer');
         } catch (error) {
             console.error(`Failed to verify OTP: ${error.message}`);
             setOtp(new Array(6).fill(''));

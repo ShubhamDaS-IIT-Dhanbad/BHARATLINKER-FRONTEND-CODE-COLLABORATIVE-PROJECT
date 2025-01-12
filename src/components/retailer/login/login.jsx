@@ -52,7 +52,7 @@ function LoginForm() {
     };
 
     const verifyOTP = async (otpCode) => {
-        setLoadingVerification(true); // Start verification loading
+        setLoadingVerification(true);
         try {
             await clearUserSessions();
             await createSession(userId, otpCode);
@@ -61,7 +61,7 @@ function LoginForm() {
             const shopData = await getShopData(phoneNumber);
 
             Cookies.set('BharatLinkerShopData', JSON.stringify(shopData), { expires: 7 });
-            navigate('/');
+            navigate('/retailer');
         } catch (err) {
             console.error(`Failed to verify OTP: ${err.message}`);
             alert('Invalid OTP. Please try again.');
@@ -91,7 +91,7 @@ function LoginForm() {
     // Trigger OTP verification when all fields are filled
     useEffect(() => {
         if (otp.every((digit) => digit !== '')) {
-            verifyOTP(otp.join('')); // Join the OTP array into a string and verify
+            verifyOTP(otp.join(''));
         }
     }, [otp]);
 
@@ -125,6 +125,7 @@ function LoginForm() {
                 />
             </div>
             <button
+                type='number'
                 className="retailer-login-send-otp-button"
                 onClick={sendOTP}
                 disabled={phone.length !== 10 || loading}
@@ -161,7 +162,7 @@ function LoginForm() {
                 {otp.map((data, index) => (
                     <input
                         className="otp-input"
-                        type="text"
+                        type="number"
                         maxLength="1"
                         key={index}
                         value={data}
