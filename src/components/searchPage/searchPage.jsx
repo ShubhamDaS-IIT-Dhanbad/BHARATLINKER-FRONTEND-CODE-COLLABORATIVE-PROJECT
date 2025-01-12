@@ -8,7 +8,6 @@ import { MdFilterList } from "react-icons/md";
 import SearchBar from './searchBar';
 import ProductList from './productList.jsx';
 
-import { RotatingLines } from 'react-loader-spinner';
 import { Oval } from 'react-loader-spinner';
 
 import InfiniteScroll from 'react-infinite-scroll-component';
@@ -65,8 +64,7 @@ const SearchPage = () => {
             </div>
             {loading ? (
                 <div className="productSearchPage-loading-container">
-                     <Oval height={40} width={45} color="white" secondaryColor="gray" ariaLabel="loading" />
-                                
+                     <Oval height={40} width={45} color="white" secondaryColor="gray" ariaLabel="loading" />           
                 </div>
             ) : (
                 <InfiniteScroll

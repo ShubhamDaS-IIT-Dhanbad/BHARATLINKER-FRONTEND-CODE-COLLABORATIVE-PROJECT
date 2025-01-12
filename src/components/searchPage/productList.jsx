@@ -1,15 +1,14 @@
 import React from 'react';
-import { IoIosArrowDown } from "react-icons/io";
+import { Oval } from 'react-loader-spinner';
 import { useSelector}from 'react-redux';
 import NoProductsFound from './noProductFound.jsx';
 import SearchPageProductCard from '../productCards/searchPageProductCard.jsx';
 
 import './productList.css';
 
-const ProductList = ({ onLoadMore }) => {
-    const { products, loading,loadingMoreProducts,hasMoreProducts } = useSelector((state) => state.searchproducts);
-    if (loading) return <>Loading...</>;
-    if (!loading && products.length === 0) {
+const ProductList = () => {
+    const { products, loading,loadingMoreProducts,hasMoreProducts } = useSelector((state) => state.searchproducts); 
+    if (!loading && products.length === 0 && !hasMoreProducts) {
         return <NoProductsFound />;
     }
 
@@ -28,13 +27,11 @@ const ProductList = ({ onLoadMore }) => {
                 ))}
             </div>
 
-            {hasMoreProducts && !loadingMoreProducts && (
-                <div className='search-page-load-more-container'>
-                    <IoIosArrowDown size={30} className="search-page-load-more-icon" onClick={onLoadMore} />
-                </div>
-            )}
             {hasMoreProducts && loadingMoreProducts && (
-                <>Loading more products...</>
+                <div className='productSearchPage-loading-more-products'>
+                     <Oval height={20} width={20} color="white" secondaryColor="gray" ariaLabel="loading" />
+                                            
+                </div>
             )}
         </>
     );
