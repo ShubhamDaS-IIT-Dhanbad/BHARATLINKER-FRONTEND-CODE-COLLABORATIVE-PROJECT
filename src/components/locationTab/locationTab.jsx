@@ -15,7 +15,7 @@ function LocationTab({ setLocationTab }) {
     const [radius, setRadius] = useState(5);
     const [loading, setLoading] = useState(false);
     const [fetchingUserLocation, setFetchingUserLocation] = useState(false);
-    const [radiusOptions] = useState([1, 2, 4, 5, 7, 10]);
+    const [radiusOptions] = useState([2, 3, 5, 7, 10]);
     const [showRadiusOptions, setShowRadiusOptions] = useState(true);
 
     const { updateLocation } = useLocationFromCookie();
