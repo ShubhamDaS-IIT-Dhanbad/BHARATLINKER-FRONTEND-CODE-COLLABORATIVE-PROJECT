@@ -1,9 +1,11 @@
 /*COMPLETE*/
-.productSearchPage-loading-container{
+.productSearchPage-loading-container,
+.search-page-no-product-found{
     width: 100vw;height:98vh;
     display: flex;justify-content: center;align-items: center;
     background-color: #1A1A2E;
 }
+
 #productSearchPage-container-top {
     width: 100%;
     height: 70px;

@@ -1,12 +1,9 @@
 import React from 'react';
-import { TbClockSearch } from "react-icons/tb";
-
+import { SiIconfinder } from "react-icons/si";
 const NoProductsFound = () => {
     return (
-        <div className='search-page-no-product-found'>
-            <TbClockSearch size={60} />
-            <div>No Product Found</div>
-            <div style={{ fontWeight: "900" }}>In Your Area</div>
+        <div className='search-page-no-product-found' style={{color:"#EB3678"}}>
+            < SiIconfinder size={60} />
         </div>
     );
 };
