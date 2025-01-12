@@ -1,3 +1,5 @@
+/*COMPLETE*/
+
 import { useState, useEffect } from 'react';
 import Cookies from 'js-cookie';
 import { useDispatch } from 'react-redux';
@@ -48,7 +50,6 @@ const useLocationFromCookies = () => {
                 Cookies.set('BharatLinkerUserLocation', JSON.stringify(updatedLocation), { expires: 7 });
                 setLocation(updatedLocation);
 
-                // Dispatch actions to reset relevant product and shop data after location update
                 dispatch(resetProducts());
                 dispatch(resetShops());
                 dispatch(resetRefurbishedProducts());
