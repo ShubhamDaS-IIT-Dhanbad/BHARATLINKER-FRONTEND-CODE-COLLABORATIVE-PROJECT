@@ -11,9 +11,10 @@
   font-size: 25px;
 }
 .retailer-pending-container-p {
-  width: 90vw;
+  width: 100vw;
   font-size: 10px;
-  color: rgb(77, 183, 253);
+  color: rgb(77, 183, 253);display: flex;
+  justify-content: center;align-items: center;
 }
 
 .retailer-pending-container-p2 {
