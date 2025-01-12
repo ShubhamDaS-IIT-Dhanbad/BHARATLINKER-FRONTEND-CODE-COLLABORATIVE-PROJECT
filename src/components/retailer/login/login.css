@@ -169,6 +169,14 @@
 
 
 
+.retailer-login-img-skleton-container{
+  margin-top: 37px;
+  width: 65vw;
+  min-height: 20vh;
+}
+.retailer-login-img-react-skeleton {
+  min-height: 20vh;
+}
 
 
 

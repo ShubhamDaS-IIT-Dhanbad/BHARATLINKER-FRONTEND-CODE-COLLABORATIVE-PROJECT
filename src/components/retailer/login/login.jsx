@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-
-import i1 from '../../../assets/indian-flag.png';
-import i2 from './i1.png';
+import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'; // Import the skeleton loader component
 import { FaArrowLeft } from 'react-icons/fa';
 import { FaCircleExclamation } from 'react-icons/fa6';
-
 import Cookies from 'js-cookie';
 
 import { sendOtp, createSession, getShopData, clearUserSessions } from '../../../appWrite/shop/shop.js';
 import { Oval } from 'react-loader-spinner'; // Import the loader
 import './login.css';
+import i1 from '../../../assets/indian-flag.png';
+import i2 from './i1.png';
 
 function LoginForm() {
     const navigate = useNavigate();
@@ -22,6 +21,7 @@ function LoginForm() {
     const [userId, setUserId] = useState(null);
     const [loading, setLoading] = useState(false); // State to track loading status
     const [loadingVerification, setLoadingVerification] = useState(false); // Loading state for OTP verification
+    const [isContentLoading, setIsContentLoading] = useState(true); // To track if the content is loading
 
     const handlePhoneChange = (e) => {
         const value = e.target.value.replace(/[^0-9]/g, ''); // Allow only numeric values
@@ -98,124 +98,119 @@ function LoginForm() {
         }
     }, [otp]);
 
-    return (
-        <div className="retailer-login">
-            {otpSent ? (
-                <div className="retailer-login-otp-verification">
-                    <div className="retailer-login-otp-verification-top-header">
-                        <FaArrowLeft
-                            size={25}
-                            onClick={() => {
-                                setOtpSent(false);
-                                setOtp(new Array(6).fill(''));
-                            }}
-                        />
-                        OTP Verification
-                        <FaCircleExclamation size={25} />
-                    </div>
+    useEffect(() => {
+        // Simulate content loading (e.g., fetch shop data, etc.)
+        const timer = setTimeout(() => {
+            setIsContentLoading(false); // Content has finished loading
+        }, 1000); // Simulating a 2-second delay for demo
+        return () => clearTimeout(timer);
+    }, []);
 
-                    <p className="retailer-login-otp-verification-text-p">Enter your OTP code here</p>
+    const renderSkeletonLoader = () => (
+        <div className='retailer-login-img-skleton-container'>
+            <SkeletonTheme baseColor="#202020" highlightColor="#444">
+                <Skeleton className='retailer-login-img-react-skeleton' height={50} count={1} />
+            </SkeletonTheme>
+        </div>
+    );
 
-                    <div className="otp-inputs">
-                        {otp.map((data, index) => (
-                            <input
-                                className="otp-input"
-                                type="text"
-                                maxLength="1"
-                                key={index}
-                                value={data}
-                                id={`otp-input-${index}`}
-                                onChange={(e) => handleOTPChange(e, index)}
-                                onFocus={(e) => e.target.select()}
-                                onKeyDown={(e) => handleKeyDown(e, index)}
-                                aria-label={`OTP digit ${index + 1}`}
-                            />
-                        ))}
-                    </div>
+    const renderLoginForm = () => (
+        <>
+            <div className="retailer-login-top-header">
+                <FaArrowLeft size={25} onClick={() => navigate('/')} className="retailer-login-back-arrow" />
+                BHARAT | LINKER
+            </div>
+            <div className="retailer-login-div-parent">
+                <div className="retailer-login-div" style={{ borderColor: 'rgb(3, 223, 193)' }}>Login</div>
+                <div className="retailer-login-register-div" onClick={() => navigate('/retailer/register')}>Register</div>
+            </div>
+            {isContentLoading ? renderSkeletonLoader() : <img className="retailer-login-img" src={i2} alt="Retailer Login" />}
+            <p className="retailer-signup-container-p">
+                Add your phone number. We'll send you a verification code so we know you're real.
+            </p>
+            <div className="retailer-login-phone-input-container">
+                <div className="country-code">
+                    <img src={i1} alt="India Flag" className="flag-icon" />
+                    <span style={{ color: 'black' }}>+91</span>
+                </div>
+                <input
+                    type="text"
+                    placeholder="Enter Mobile Number"
+                    value={phone}
+                    onChange={handlePhoneChange}
+                />
+            </div>
+            <button
+                className="retailer-login-send-otp-button"
+                onClick={sendOTP}
+                disabled={phone.length !== 10 || loading}
+                style={{ backgroundColor: "rgb(3, 223, 193)" }}
+            >
+                {loading ? (
+                    <Oval height={24} width={24} color="white" secondaryColor="gray" ariaLabel="loading" />
+                ) : (
+                    'SEND OTP'
+                )}
+            </button>
+            <p className="retailer-login-terms-text">
+                By providing my phone number, I hereby agree and accept the{' '}
+                <a href="#terms">Terms of Service</a> and <a href="#privacy">Privacy Policy</a>.
+            </p>
+        </>
+    );
 
-                    {loadingVerification ? (
-                        <div className="loader-container" style={{ margin: "20px" }}>
-                            <Oval height={24} width={24} color="rgb(3, 223, 193)" secondaryColor="gray" ariaLabel="loading" />
-                        </div>
-                    ) : (
-                        <>
-                            <p className="resend-text">Didn't receive the code?</p>
-                            <button
-                                className={`retailer-login-resend-btn ${isResendDisabled ? 'disabled' : ''}`}
-                                onClick={!isResendDisabled ? sendOTP : null}
-                                disabled={isResendDisabled}
-                            >
-                                Resend new code {isResendDisabled && `in (${timer}s)`}
-                            </button>
-                        </>
-                    )}
-
-
+    const renderOtpVerificationForm = () => (
+        <div className="retailer-login-otp-verification">
+            <div className="retailer-login-otp-verification-top-header">
+                <FaArrowLeft
+                    size={25}
+                    onClick={() => {
+                        setOtpSent(false);
+                        setOtp(new Array(6).fill(''));
+                    }}
+                />
+                OTP Verification
+                <FaCircleExclamation size={25} />
+            </div>
+            <p className="retailer-login-otp-verification-text-p">Enter your OTP code here</p>
+            <div className="otp-inputs">
+                {otp.map((data, index) => (
+                    <input
+                        className="otp-input"
+                        type="text"
+                        maxLength="1"
+                        key={index}
+                        value={data}
+                        id={`otp-input-${index}`}
+                        onChange={(e) => handleOTPChange(e, index)}
+                        onFocus={(e) => e.target.select()}
+                        onKeyDown={(e) => handleKeyDown(e, index)}
+                        aria-label={`OTP digit ${index + 1}`}
+                    />
+                ))}
+            </div>
+            {loadingVerification ? (
+                <div className="loader-container" style={{ margin: "20px" }}>
+                    <Oval height={24} width={24} color="rgb(3, 223, 193)" secondaryColor="gray" ariaLabel="loading" />
                 </div>
             ) : (
                 <>
-                    <div className="retailer-login-top-header">
-                        <FaArrowLeft
-                            size={25}
-                            onClick={() => navigate('/')}
-                            className="retailer-login-back-arrow"
-                        />
-                        BHARAT | LINKER
-                    </div>
-                    <div className="retailer-login-div-parent">
-                        <div className="retailer-login-div" style={{ borderColor: 'rgb(3, 223, 193)' }}>Login</div>
-                        <div
-                            className="retailer-login-register-div"
-                            onClick={() => navigate('/retailer/register')}
-                        >
-                            Register
-                        </div>
-                    </div>
-
-                    <img className="retailer-login-img" src={i2} alt="Retailer Login" />
-
-                    <p className="retailer-signup-container-p">
-                        Add your phone number. We'll send you a verification code so we know you're real.
-                    </p>
-
-                    <div className="retailer-login-phone-input-container">
-                        <div className="country-code">
-                            <img src={i1} alt="India Flag" className="flag-icon" />
-                            <span style={{ color: 'black' }}>+91</span>
-                        </div>
-                        <input
-                            type="text"
-                            placeholder="Enter Mobile Number"
-                            value={phone}
-                            onChange={handlePhoneChange}
-                        />
-                    </div>
-
+                    <p className="resend-text">Didn't receive the code?</p>
                     <button
-                        className="retailer-login-send-otp-button"
-                        onClick={sendOTP}
-                        disabled={phone.length !== 10 || loading}
-                        style={{ backgroundColor: "rgb(3, 223, 193)" }}
+                        className={`retailer-login-resend-btn ${isResendDisabled ? 'disabled' : ''}`}
+                        onClick={!isResendDisabled ? sendOTP : null}
+                        disabled={isResendDisabled}
                     >
-                        {loading ? (
-                            <Oval
-                                height={24}
-                                width={24}
-                                color="white"
-                                secondaryColor="gray"
-                                ariaLabel="loading"
-                            />
-                        ) : (
-                            'SEND OTP'
-                        )}
+                        Resend new code {isResendDisabled && `in (${timer}s)`}
                     </button>
-
-                    <p className="retailer-login-terms-text">
-                        By providing my phone number, I hereby agree and accept the{' '}
-                        <a href="#terms">Terms of Service</a> and <a href="#privacy">Privacy Policy</a>.
-                    </p>
                 </>
             )}
+        </div>
+    );
+
+    return (
+        <div className="retailer-login">
+            {otpSent ? renderOtpVerificationForm() : renderLoginForm()}
         </div>
     );
 }
