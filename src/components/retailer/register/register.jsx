@@ -1,14 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Oval } from 'react-loader-spinner'; // Correct import for Oval spinner
 
 import i1 from '../../../assets/indian-flag.png';
 import i2 from './i1.png';
 
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { FaArrowLeft } from "react-icons/fa";
-
+import { FaArrowLeft } from 'react-icons/fa';
 import { FaCircleExclamation } from 'react-icons/fa6';
+
 import { registerShop, sendOtp, createSession, deleteSession } from '../../../appWrite/shop/shop.js';
 
 function SignUpForm() {
@@ -21,6 +20,8 @@ function SignUpForm() {
     const [otp, setOtp] = useState(new Array(6).fill(''));
     const [timer, setTimer] = useState(30);
     const [isResendDisabled, setIsResendDisabled] = useState(true);
+    const [loading, setLoading] = useState(false); // Added loading state for OTP sending
+    const [loadingVerification, setLoadingVerification] = useState(false); // Added loading state for OTP verification
 
     const handleShopNameChange = (e) => setShopName(e.target.value);
     const handlePhoneChange = (e) => setPhone(e.target.value);
@@ -42,7 +43,6 @@ function SignUpForm() {
             verifyOTP(otpCode);
         }
     };
-
 
     const handleKeyDown = (event, index) => {
         if (event.key === 'Backspace') {
@@ -71,8 +71,8 @@ function SignUpForm() {
         return () => clearInterval(countdown);
     }, [timer]);
 
-
     const sendOTP = async () => {
+        setLoading(true); // Start loading when OTP is sent
         try {
             const response = await sendOtp(phone);
             setUserId(response);
@@ -80,12 +80,14 @@ function SignUpForm() {
             setIsResendDisabled(true);
             setTimer(30);
         } catch (error) {
-            toast.error(`Failed to send OTP: ${error.message}`);
+            console.error(`Failed to send OTP: ${error.message}`);
+        } finally {
+            setLoading(false); // Stop loading after OTP is sent
         }
     };
 
     const verifyOTP = async (otpCode) => {
-        const loadingToast = toast.loading('Verifying OTP...');
+        setLoadingVerification(true); // Start loading during OTP verification
         try {
             const session = await createSession(userId, otpCode);
             const sessionId = session.$id;
@@ -93,19 +95,20 @@ function SignUpForm() {
             try {
                 const shopData = await registerShop(shopName, phone);
                 console.log(shopData);
-                Cookies.set('BharatLinkerShopData', JSON.stringify(shopData), { expires: 7 });
-                toast.success('Shop registered successfully!');
+                // Store shop data in cookies (replace with your method)
+                document.cookie = `BharatLinkerShopData=${JSON.stringify(shopData)}; expires=${new Date(Date.now() + 7 * 86400000).toUTCString()}`;
+                console.log('Shop registered successfully!');
             } catch (error) {
-                toast.error(`Failed to register shop: ${error.message}`);
+                console.error(`Failed to register shop: ${error.message}`);
                 throw error;
             }
 
-
             navigate('/');
         } catch (error) {
-            toast.dismiss(loadingToast);
-            toast.error(`Failed to verify OTP: ${error.message}`);
+            console.error(`Failed to verify OTP: ${error.message}`);
             setOtp(new Array(6).fill(''));
+        } finally {
+            setLoadingVerification(false); // Stop loading after OTP verification
         }
     };
 
@@ -119,9 +122,9 @@ function SignUpForm() {
                     </div>
                     <div className="retailer-login-div-parent">
                         <div className='retailer-login-div' onClick={() => navigate('/retailer/login')}>Login</div>
-                        <div className='retailer-login-register-div' style={{ borderColor: "rgb(162, 128, 249)" }} >Register</div>
+                        <div className='retailer-login-register-div' style={{ borderColor: "rgb(162, 128, 249)" }}>Register</div>
                     </div>
-                    <img className='retailer-login-img' src={i2} />
+                    <img className='retailer-login-img' src={i2} alt="Illustration" />
                     <div className="retailer-signup-container-p">
                         Add your phone number. We'll send you a verification code so we know you're real.
                     </div>
@@ -150,7 +153,17 @@ function SignUpForm() {
                     </div>
 
                     <button style={{ backgroundColor: "rgb(162, 128, 249)" }} className="retailer-login-send-otp-button" onClick={sendOTP}>
-                        SEND OTP
+                        {loading ? (
+                            <Oval
+                                height={24}
+                                width={24}
+                                color="white"
+                                secondaryColor="gray"
+                                ariaLabel="loading"
+                            />
+                        ) : (
+                            'SEND OTP'
+                        )}
                     </button>
 
                     <p className="retailer-login-terms-text">
@@ -189,18 +202,26 @@ function SignUpForm() {
                             />
                         ))}
                     </div>
-                    <p className="resend-text">Didn't receive the code?</p>
-                    <div
-                        className={`resend-btn ${isResendDisabled ? 'disabled' : ''}`}
-                        onClick={!isResendDisabled ? sendOTP : null}
-                        style={{color:"rgb(162, 128, 249)"}}
-                    >
-                        Resend new code {isResendDisabled && `in (${timer}s)`}
-                    </div>
+
+                    {loadingVerification ? (
+                        <div className="loader-container" style={{ margin: "20px" }}>
+                            <Oval height={24} width={24} color="rgb(162, 128, 249)" secondaryColor="gray" ariaLabel="loading" />
+                        </div>
+                    ) : (
+                        <>
+                            <p className="resend-text">Didn't receive the code?</p>
+                            <button
+                                className={`retailer-login-resend-btn ${isResendDisabled ? 'disabled' : ''}`}
+                                onClick={!isResendDisabled ? sendOTP : null}
+                                disabled={isResendDisabled}
+                                style={{ color: "rgb(162, 128, 249)" }}
+                            >
+                                Resend new code {isResendDisabled && `in (${timer}s)` }
+                            </button>
+                        </>
+                    )}
                 </div>
             )}
-
-            <ToastContainer />
         </div>
     );
 }

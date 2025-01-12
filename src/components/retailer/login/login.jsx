@@ -1,4 +1,3 @@
-// Import necessary libraries and components
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -10,6 +9,7 @@ import { FaCircleExclamation } from 'react-icons/fa6';
 import Cookies from 'js-cookie';
 
 import { sendOtp, createSession, getShopData, clearUserSessions } from '../../../appWrite/shop/shop.js';
+import { Oval } from 'react-loader-spinner'; // Import the loader
 import './login.css';
 
 function LoginForm() {
@@ -20,6 +20,8 @@ function LoginForm() {
     const [timer, setTimer] = useState(30);
     const [isResendDisabled, setIsResendDisabled] = useState(true);
     const [userId, setUserId] = useState(null);
+    const [loading, setLoading] = useState(false); // State to track loading status
+    const [loadingVerification, setLoadingVerification] = useState(false); // Loading state for OTP verification
 
     const handlePhoneChange = (e) => {
         const value = e.target.value.replace(/[^0-9]/g, ''); // Allow only numeric values
@@ -37,6 +39,7 @@ function LoginForm() {
     }, [timer]);
 
     const sendOTP = async () => {
+        setLoading(true); // Start loading
         try {
             const response = await sendOtp(phone);
             setUserId(response);
@@ -46,10 +49,13 @@ function LoginForm() {
         } catch (err) {
             console.error(`Failed to send OTP: ${err.message}`);
             alert('Failed to send OTP. Please try again.');
+        } finally {
+            setLoading(false); // Stop loading
         }
     };
 
     const verifyOTP = async (otpCode) => {
+        setLoadingVerification(true); // Start verification loading
         try {
             await clearUserSessions();
             await createSession(userId, otpCode);
@@ -63,6 +69,8 @@ function LoginForm() {
             console.error(`Failed to verify OTP: ${err.message}`);
             alert('Invalid OTP. Please try again.');
             setOtp(new Array(6).fill(''));
+        } finally {
+            setLoadingVerification(false); // Stop verification loading
         }
     };
 
@@ -92,7 +100,59 @@ function LoginForm() {
 
     return (
         <div className="retailer-login">
-            {!otpSent ? (
+            {otpSent ? (
+                <div className="retailer-login-otp-verification">
+                    <div className="retailer-login-otp-verification-top-header">
+                        <FaArrowLeft
+                            size={25}
+                            onClick={() => {
+                                setOtpSent(false);
+                                setOtp(new Array(6).fill(''));
+                            }}
+                        />
+                        OTP Verification
+                        <FaCircleExclamation size={25} />
+                    </div>
+
+                    <p className="retailer-login-otp-verification-text-p">Enter your OTP code here</p>
+
+                    <div className="otp-inputs">
+                        {otp.map((data, index) => (
+                            <input
+                                className="otp-input"
+                                type="text"
+                                maxLength="1"
+                                key={index}
+                                value={data}
+                                id={`otp-input-${index}`}
+                                onChange={(e) => handleOTPChange(e, index)}
+                                onFocus={(e) => e.target.select()}
+                                onKeyDown={(e) => handleKeyDown(e, index)}
+                                aria-label={`OTP digit ${index + 1}`}
+                            />
+                        ))}
+                    </div>
+
+                    {loadingVerification ? (
+                        <div className="loader-container" style={{ margin: "20px" }}>
+                            <Oval height={24} width={24} color="rgb(3, 223, 193)" secondaryColor="gray" ariaLabel="loading" />
+                        </div>
+                    ) : (
+                        <>
+                            <p className="resend-text">Didn't receive the code?</p>
+                            <button
+                                className={`retailer-login-resend-btn ${isResendDisabled ? 'disabled' : ''}`}
+                                onClick={!isResendDisabled ? sendOTP : null}
+                                disabled={isResendDisabled}
+                            >
+                                Resend new code {isResendDisabled && `in (${timer}s)`}
+                            </button>
+                        </>
+                    )}
+
+
+                </div>
+            ) : (
                 <>
                     <div className="retailer-login-top-header">
                         <FaArrowLeft
@@ -134,9 +194,20 @@ function LoginForm() {
                     <button
                         className="retailer-login-send-otp-button"
                         onClick={sendOTP}
-                        disabled={phone.length !== 10}
+                        disabled={phone.length !== 10 || loading}
+                        style={{ backgroundColor: "rgb(3, 223, 193)" }}
                     >
-                        SEND OTP
+                        {loading ? (
+                            <Oval
+                                height={24}
+                                width={24}
+                                color="white"
+                                secondaryColor="gray"
+                                ariaLabel="loading"
+                            />
+                        ) : (
+                            'SEND OTP'
+                        )}
                     </button>
 
                     <p className="retailer-login-terms-text">
@@ -144,48 +215,6 @@ function LoginForm() {
                         <a href="#terms">Terms of Service</a> and <a href="#privacy">Privacy Policy</a>.
                     </p>
                 </>
-            ) : (
-                <div className="retailer-login-otp-verification">
-                    <div className="retailer-login-otp-verification-top-header">
-                        <FaArrowLeft
-                            size={25}
-                            onClick={() => {
-                                setOtpSent(false);
-                                setOtp(new Array(6).fill(''));
-                            }}
-                        />
-                        OTP Verification
-                        <FaCircleExclamation size={25} />
-                    </div>
-
-                    <p className="retailer-login-otp-verification-text-p">Enter your OTP code here</p>
-
-                    <div className="otp-inputs">
-                        {otp.map((data, index) => (
-                            <input
-                                className="otp-input"
-                                type="text"
-                                maxLength="1"
-                                key={index}
-                                value={data}
-                                id={`otp-input-${index}`}
-                                onChange={(e) => handleOTPChange(e, index)}
-                                onFocus={(e) => e.target.select()}
-                                onKeyDown={(e) => handleKeyDown(e, index)}
-                                aria-label={`OTP digit ${index + 1}`}
-                            />
-                        ))}
-                    </div>
-
-                    <p className="resend-text">Didn't receive the code?</p>
-                    <button
-                        className={`retailer-login-resend-btn ${isResendDisabled ? 'disabled' : ''}`}
-                        onClick={!isResendDisabled ? sendOTP : null}
-                        disabled={isResendDisabled}
-                    >
-                        Resend new code {isResendDisabled && `in (${timer}s)`}
-                    </button>
-                </div>
             )}
         </div>
     );
