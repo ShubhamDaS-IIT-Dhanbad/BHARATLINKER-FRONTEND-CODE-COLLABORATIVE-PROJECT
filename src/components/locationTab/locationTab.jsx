@@ -145,7 +145,7 @@ function LocationTab({ setLocationTab }) {
     };
 
     return (
-        <div className="location-tab active">
+        <div className="location-tab">
             <div className="location-tab-IoIosCloseCircle" onClick={() => setLocationTab(false)}>
                 <IoClose size={25} />
             </div>
@@ -172,7 +172,7 @@ function LocationTab({ setLocationTab }) {
                 </div>
 
                 {/* Show radius options only if showRadiusOptions is true */}
-                {showRadiusOptions && (
+                {true && (
                     <div className="location-tab-radius-options">
                         {radiusOptions.map((option) => (
                             <span
