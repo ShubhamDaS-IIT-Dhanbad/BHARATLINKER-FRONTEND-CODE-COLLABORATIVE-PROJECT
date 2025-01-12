@@ -4,7 +4,7 @@ import { FaCircleExclamation } from 'react-icons/fa6';
 import Cookies from 'js-cookie';
 
 import { sendOtp, createSession, getShopData} from '../../../appWrite/shop/shop.js';
-import { Oval } from 'react-loader-spinner'; // Import the loader
+import { Oval } from 'react-loader-spinner';
 import './login.css';
 import i1 from '../../../assets/indian-flag.png';
 import i2 from './i1.png';

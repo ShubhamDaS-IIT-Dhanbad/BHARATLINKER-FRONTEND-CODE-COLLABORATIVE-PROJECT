@@ -17,7 +17,7 @@
     min-height: 155px;max-height: 155px;
     display: flex;
     justify-content: center;align-items: center;
-    background-color: rgb(255, 255, 255);
+    background-color: #1A1A2E;
 }
 
 .search-page-product-card-top-image {
@@ -45,7 +45,7 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    color: #000000;background-color: rgb(255, 255, 255);
+    color: #ffffff;background-color: #1A1A2E;
     overflow: scroll;
 }
 
@@ -60,12 +60,12 @@
 .search-page-product-card-shop {
     font-size: 21px;
     margin-top: 19px;
-    color: rgb(0, 0, 0);
+    color: rgb(255, 255, 255);
     font-weight: 1000;
 }
 
 .search-page-product-card-bottom-stock.instock {
-    background-color: rgb(255, 255, 255);
+    background-color: #1A1A2E;
     display: flex;align-self: center;
     justify-content: center;
     align-items: center;

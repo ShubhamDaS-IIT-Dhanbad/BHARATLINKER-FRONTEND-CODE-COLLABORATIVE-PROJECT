@@ -1,13 +1,15 @@
 /*COMPLETE*/
 import React, { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import { useSelector} from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useExecuteSearch } from '../../hooks/searchProductHook.jsx';
 import { LiaSortSolid } from "react-icons/lia";
 import { MdFilterList } from "react-icons/md";
 import SearchBar from './searchBar';
 import ProductList from './productList.jsx';
+
 import { RotatingLines } from 'react-loader-spinner';
+import { Oval } from 'react-loader-spinner';
 
 import InfiniteScroll from 'react-infinite-scroll-component';
 
@@ -20,7 +22,7 @@ const SearchPage = () => {
     const navigate = useNavigate();
     const [searchParams, setSearchParams] = useSearchParams();
 
-    const { inputValue, setInputValue, executeSearch,onLoadMore } = useExecuteSearch();
+    const { inputValue, setInputValue, executeSearch, onLoadMore } = useExecuteSearch();
 
     const [showSortBy, setShowSortBy] = useState(false);
     const [showFilterBy, setShowFilterBy] = useState(false);
@@ -43,9 +45,12 @@ const SearchPage = () => {
         }));
     };
 
-   
+
     useEffect(() => {
-        if (products.length == 0 && !loading) {executeSearch();}
+        if (products.length == 0 && !loading) {
+
+            executeSearch();
+        }
     }, [products.length]);
 
     return (
@@ -59,8 +64,9 @@ const SearchPage = () => {
                 />
             </div>
             {loading ? (
-                <div className="refurbished-page-loading-container">
-                    <RotatingLines width="60" height="60" color="#007bff" />
+                <div className="productSearchPage-loading-container">
+                     <Oval height={40} width={45} color="white" secondaryColor="gray" ariaLabel="loading" />
+                                
                 </div>
             ) : (
                 <InfiniteScroll
@@ -76,6 +82,9 @@ const SearchPage = () => {
                     />
                 </InfiniteScroll>
             )}
+
+
+
             {showSortBy && (
                 <ProductSortBySection
                     handleSearch={executeSearch}
