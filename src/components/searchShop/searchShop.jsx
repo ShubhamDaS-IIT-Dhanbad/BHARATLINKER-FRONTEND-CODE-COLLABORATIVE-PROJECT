@@ -90,7 +90,11 @@ const Shop = () => {
                     dataLength={shops.length}
                     next={onLoadMore}
                     hasMore={hasMoreShops}
-                    loader={loadingMoreShops && <div id='search-shop-load-more-shop-loader'><RotatingLines width="40" height="40" /></div>} // Loader displayed when fetching data
+                    loader={loadingMoreShops && <div id='search-shop-load-more-shop-loader'>
+                        <div className="productSearchPage-loading-container">
+                            <Oval height={40} width={45} color="white" secondaryColor="gray" ariaLabel="loading" />
+                        </div>
+                    </div>}
                     endMessage={<p>No more shops to display.</p>}
                 >
                     <ShopList
