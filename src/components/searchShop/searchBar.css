@@ -5,7 +5,7 @@
     width: 100vw;
     position: fixed;
     top: 0;
-    color: #021526;background-color: rgb(182 241 213);
+    color: #021526;background-color: rgb(255, 194, 0);
     z-index: 1000;
     transition: transform 0.3s ease, opacity 0.3s ease;
 }
@@ -85,8 +85,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: white;
-    border: 2px solid #021526;
+    background-color: transparent;
+    border: 2px solid #ffffff;
     border-radius: 11px;
     width: 96vw;
     height: 41px;
@@ -104,13 +104,13 @@
     font-size: 12px;
     padding-left: 10px;
     flex-grow: 1;
-    outline: none;
+    outline: none;background-color: transparent;
 }
 
 /* Autofill Styles for Chrome, Edge, and Safari */
 .shop-page-search-input:-webkit-autofill {
     
-    background-color: #fff !important;
+    background-color: transparent !important;
     color: #000 !important;font-size: 1rem;
     -webkit-box-shadow: 0 0 0px 1000px #fff inset !important;
     box-shadow: 0 0 0px 1000px #fff inset !important;

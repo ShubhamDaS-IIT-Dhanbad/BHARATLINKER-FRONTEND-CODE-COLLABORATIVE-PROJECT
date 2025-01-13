@@ -5,7 +5,7 @@
     width: 100vw;
     position: fixed;
     top: 0;
-    background-color: rgb(182 241 213);;
+    background-color: rgb(255, 194, 0);
     color: #000000;
     z-index: 1000;
     transition: transform 0.3s ease, opacity 0.3s ease;
@@ -91,9 +91,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #ffffff;
+    background-color:transparent;
     border-radius: 11px;
-    border: 2px solid rgb(0, 0, 0);
+    border: 2px solid rgb(255, 255, 255);
     width: 96vw;
     height: 41px;
 }
@@ -107,7 +107,7 @@
 /* Search Input */
 .single-shop-search-input {
     border: none;
-    color: #000000;
+    color: #000000;background-color: transparent;
     font-size: 1rem;
     padding-left: 10px;
     flex-grow: 1;

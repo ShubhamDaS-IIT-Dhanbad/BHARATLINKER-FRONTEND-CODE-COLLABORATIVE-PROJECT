@@ -86,6 +86,8 @@
     justify-content: center;
     align-items: center;
 }
+#searchShopPage-footer-filterby  {
+    display: flex;background-color: rgb(255, 194, 0);}
 
 
 #filter-category-options {

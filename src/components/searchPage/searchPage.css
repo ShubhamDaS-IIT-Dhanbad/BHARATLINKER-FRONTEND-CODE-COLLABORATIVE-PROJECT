@@ -39,3 +39,7 @@
     align-items: center;
 }
 
+#productSearchPage-footer-filterby {
+    display: flex;background-color: rgb(255, 194, 0);
+
+}

@@ -173,23 +173,9 @@
 #shop-details-footer-item-loc,
 #shop-details-footer-item-mail,
 #shop-details-footer-item-info{
-    height: 34px;width: 52px; border: 2px solid rgba(65, 65, 65, 0.596);
+    height: 34px;width: 52px; border: 1.1px solid rgb(0, 0, 0);
     border-radius: 10px;display: flex;
     justify-content: center;align-items: center;
-    padding: 4px;background-color: black;
-}
-#shop-details-footer-item-phn{
-    background-color: rgb(0, 0, 0);
-    color: rgb(255, 255, 255);
-}
-#shop-details-footer-item-loc{
-    color:rgb(255, 255, 255);
-    
-}
-#shop-details-footer-item-mail{
-    color: rgb(255, 255, 255);
-}
-#shop-details-footer-item-info{
-    color: white;
-    background-color:  rgb(0, 0, 0);
+    padding: 4px;background-color: rgb(255, 194, 0);
+    color: rgb(27, 26, 26);
 }
