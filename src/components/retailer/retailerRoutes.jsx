@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { Routes, Route, useNavigate, Navigate } from "react-router-dom";
-import Cookies from "js-cookie";
+import React from "react";
+import { Routes, Route} from "react-router-dom";
 
 import Retailer from "./retailer.jsx";
 import RetailerDashboard from './dashboard/dashboard.jsx';
@@ -8,95 +7,42 @@ import RetailerLogin from "./login/login.jsx";
 import RetailerRegister from "./register/register.jsx";
 import RetailerPending from "./pending/pending.jsx";
 
-import { ThreeDots } from 'react-loader-spinner';
 import './retailer.css';
 
-const ProtectedRoute = ({ element: Component }) => {
-  const shopData = Cookies.get("BharatLinkerShopData");
-  if (shopData) {
-    return <Component />;
-  } else {
-    return <Navigate to="/retailer/login" replace />;
-  }
-};
-
 const RetailerRoutes = () => {
-  const navigate = useNavigate();
-  const [isInitialCheckDone, setIsInitialCheckDone] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    if (!isInitialCheckDone) {
-      const shopData = Cookies.get("BharatLinkerShopData");
-
-      if (shopData) {
-        try {
-          const parsedData = JSON.parse(shopData);
-          const { registrationStatus } = parsedData;
-
-          setTimeout(() => {
-            if (registrationStatus === "pending") {
-              navigate("/retailer/pending");
-            } else if (registrationStatus === "approved") {
-              navigate("/retailer");
-            }
-            setIsLoading(false);
-          }, 1000);
-        } catch (error) {
-          console.error("Failed to parse BharatLinkerShopData from cookies:", error);
-          setIsLoading(false);
-        }
-      } else {
-        setIsLoading(false);
-      }
-
-      setIsInitialCheckDone(true);
-    }
-  }, [navigate, isInitialCheckDone]);
-
-  const Loader = () => (
-    <div className="retailer-routes-loading">
-      <ThreeDots size={20} color="#EB3678" />
-    </div>
-  );
-
   return (
     <>
-      {isLoading ? (
-        <Loader />
-      ) : (
-        <Routes>
-          <Route path="/retailer/login" element={<RetailerLogin />} />
-          <Route path="/retailer/register" element={<RetailerRegister />} />
-          <Route path="/retailer/pending" element={<RetailerPending />} />
+      <Routes>
+        <Route path="/retailer/login" element={<RetailerLogin />} />
+        <Route path="/retailer/register" element={<RetailerRegister />} />
+        <Route path="/retailer/pending" element={<RetailerPending />} />
 
-          {/* Protected routes */}
-          <Route
-            path="/retailer"
-            element={<ProtectedRoute element={Retailer} />}
-          />
-          <Route
-            path="/retailer/dashboard"
-            element={<ProtectedRoute element={RetailerDashboard} />}
-          />
-          <Route
-            path="/retailer/products"
-            element={<ProtectedRoute element={Retailer} />}
-          />
-          <Route
-            path="/retailer/upload"
-            element={<ProtectedRoute element={Retailer} />}
-          />
-          <Route
-            path="/retailer/update"
-            element={<ProtectedRoute element={Retailer} />}
-          />
-          <Route
-            path="/retailer/notification"
-            element={<ProtectedRoute element={Retailer} />}
-          />
-        </Routes>
-      )}
+        {/* Protected routes */}
+        <Route
+          path="/retailer"
+          element={<Retailer />}
+        />
+        <Route
+          path="/retailer/dashboard"
+          element={<RetailerDashboard />}
+        />
+        <Route
+          path="/retailer/products"
+          element={<Retailer />}
+        />
+        <Route
+          path="/retailer/upload"
+          element={<Retailer />}
+        />
+        <Route
+          path="/retailer/update"
+          element={<Retailer />}
+        />
+        <Route
+          path="/retailer/notification"
+          element={<Retailer />}
+        />
+      </Routes>
     </>
   );
 };

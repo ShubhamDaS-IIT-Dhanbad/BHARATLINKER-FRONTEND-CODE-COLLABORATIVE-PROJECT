@@ -3,8 +3,9 @@ import { useNavigate } from 'react-router-dom'; import { FaArrowLeft } from 'rea
 import { FaCircleExclamation } from 'react-icons/fa6';
 import Cookies from 'js-cookie';
 
-import { sendOtp, createSession, getShopData} from '../../../appWrite/shop/shop.js';
+import { sendOtp, createSession, getShopData } from '../../../appWrite/shop/shop.js';
 import { Oval } from 'react-loader-spinner';
+import { ThreeDots } from 'react-loader-spinner';
 import './login.css';
 import i1 from '../../../assets/indian-flag.png';
 import i2 from './i1.png';
@@ -20,23 +21,42 @@ function LoginForm() {
     const [loading, setLoading] = useState(false);
     const [loadingVerification, setLoadingVerification] = useState(false);
 
+    const [loadingPage, setLoadingPage] = useState(true);
     const handlePhoneChange = (e) => {
-        const value = e.target.value.replace(/[^0-9]/g, ''); // Allow only numeric values
-        setPhone(value.slice(0, 10)); // Limit to 10 digits
+        const value = e.target.value.replace(/[^0-9]/g, '');
+        setPhone(value.slice(0, 10));
     };
 
     useEffect(() => {
         let countdown;
+        let pageLoadTimeout;
+    
         if (timer > 0) {
-            countdown = setInterval(() => setTimer((prev) => prev - 1), 1000);
+          countdown = setInterval(() => setTimer((prev) => prev - 1), 1000);
         } else {
-            setIsResendDisabled(false);
+          setIsResendDisabled(false);
         }
-        return () => clearInterval(countdown);
-    }, [timer]);
+    
+        // Simulate page load completion after 1 second
+        pageLoadTimeout = setTimeout(() => {
+          setLoadingPage(false);
+    
+          // Check shopData after setting loadingPage
+          const shopData = Cookies.get('BharatLinkerShopData');
+          if (shopData) {
+            navigate('/retailer');
+          }
+        }, 1000);
+    
+        // Cleanup intervals and timeouts
+        return () => {
+          clearInterval(countdown);
+          clearTimeout(pageLoadTimeout);
+        };
+      }, [timer, navigate]);
 
     const sendOTP = async () => {
-        setLoading(true); // Start loading
+        setLoading(true);
         try {
             const response = await sendOtp(phone);
             setUserId(response);
@@ -59,10 +79,7 @@ function LoginForm() {
             const phoneNumber = `+91${phone}`;
             const shopData = await getShopData(phoneNumber);
 
-            // Add sessionId to the shopData
             shopData.sessionId = sessionId;
-console.log(shopData)
-            // Store the updated shopData with sessionId in the cookie
             Cookies.set('BharatLinkerShopData', JSON.stringify(shopData), { expires: 7 });
 
             navigate('/retailer');
@@ -71,13 +88,13 @@ console.log(shopData)
             alert('Invalid OTP. Please try again.');
             setOtp(new Array(6).fill(''));
         } finally {
-            setLoadingVerification(false); // Stop verification loading
+            setLoadingVerification(false);
         }
     };
 
 
     const handleOTPChange = (e, index) => {
-        const value = e.target.value.replace(/[^0-9]/g, ''); // Ensure only numeric input
+        const value = e.target.value.replace(/[^0-9]/g, '');
         let otpCopy = [...otp];
         otpCopy[index] = value;
         setOtp(otpCopy);
@@ -197,6 +214,13 @@ console.log(shopData)
         </div>
     );
 
+
+    const Loader = () => (
+        <div className="retailer-routes-loading">
+            <ThreeDots size={20} color="#EB3678" />
+        </div>
+    );
+    if(loadingPage) return <Loader/>
     return (
         <div className="retailer-login">
             {otpSent ? renderOtpVerificationForm() : renderLoginForm()}
