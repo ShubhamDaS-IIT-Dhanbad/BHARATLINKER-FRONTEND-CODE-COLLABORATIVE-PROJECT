@@ -42,7 +42,7 @@
     border-top-left-radius: 20px; /* Rounded top-left corner */
     border-top-right-radius: 20px; /* Rounded top-right corner */
     padding: 7px; /* Padding for spacing */
-    box-sizing: border-box; /* Include padding in width calculation */
+    box-sizing: border-box; 
     overflow:hidden;
     gap: 10px;color: black;
     padding-bottom: 10vh;padding-top: 10px;
@@ -95,8 +95,8 @@
 }
 .product-page-filter-items{
     width: 100%;
-    display: flex;gap: 10px;
-    overflow-x: scroll;margin-top: 1px;
+    display: flex;gap: 10px;flex-wrap: wrap;
+   margin-top: 1px;
    padding: 0px 0px 2px 0px;
 }
 
