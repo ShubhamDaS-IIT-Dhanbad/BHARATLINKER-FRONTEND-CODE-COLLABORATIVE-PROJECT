@@ -148,7 +148,6 @@ class UserRefurbishedProduct {
                 lat:updatedData.lat,
                 long:updatedData.long
             };
-console.log(updatedData)
             const updatedDocument = await this.databases.updateDocument(
                 conf.appwriteRefurbishProductDatabaseId,
                 conf.appwriteRefurbishedModulesCollectionId,
