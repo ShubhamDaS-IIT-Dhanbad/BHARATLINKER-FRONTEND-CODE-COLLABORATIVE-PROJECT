@@ -6,8 +6,9 @@ import {
     MdOutlineKeyboardArrowRight,
 } from "react-icons/md";
 import { fetchShopById } from "../../redux/features/singleShopSlice.jsx";
-import { FaPhoneAlt } from "react-icons/fa";
-import { CiLocationArrow1, CiMail } from "react-icons/ci";
+import { CiPhone } from "react-icons/ci";
+import { CiLocationOn } from "react-icons/ci";
+import { CiMail } from "react-icons/ci";
 import { AiOutlineInfo } from "react-icons/ai";
 import SingleShopSearchBar from "./singleShopSearchBar.jsx";
 import { IoClose } from 'react-icons/io5';
@@ -137,7 +138,7 @@ const ShopDetails = () => {
                         }}
 
                         >
-                            See All Products <MdOutlineKeyboardArrowRight size={11} />
+                            SEE ALL PRODUCTS <MdOutlineKeyboardArrowRight size={11} />
                         </div>
 
                         <div id="shop-details-status">
@@ -156,10 +157,10 @@ const ShopDetails = () => {
 
             <div id="shop-details-footer">
                 <div id="shop-details-footer-item-phn" onClick={handlePhoneClick}>
-                    <FaPhoneAlt size={30} />
+                    <CiPhone size={35} />
                 </div>
                 <div id="shop-details-footer-item-loc">
-                    <CiLocationArrow1 size={35} onClick={redirectMap} />
+                    <CiLocationOn size={33} onClick={redirectMap} />
                 </div>
                 <div id="shop-details-footer-item-mail">
                     <CiMail size={35} />
