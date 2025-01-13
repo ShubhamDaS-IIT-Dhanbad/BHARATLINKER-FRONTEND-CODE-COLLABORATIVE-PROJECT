@@ -17,7 +17,7 @@ const SearchProductFilterSection = ({ showFilterBy, setShowFilterBy }) => {
   const selectedCategories = useSelector(
     (state) => state.searchproductsfiltersection.selectedCategories
   );
-  
+
   const [searchTerms, setSearchTerms] = useState({
     category: '',
     brand: '',
@@ -54,8 +54,8 @@ const SearchProductFilterSection = ({ showFilterBy, setShowFilterBy }) => {
 
     return (
       <div className="product-page-filter-options" key={filterType}>
-        <div className="filter-header">
-          <IoSearch size={20} />
+        <div className="product-page-filter-header">
+          <IoSearch className='product-page-search-icon' size={20} />
           <input
             type="text"
             value={searchTerms[filterType]}
@@ -66,16 +66,16 @@ const SearchProductFilterSection = ({ showFilterBy, setShowFilterBy }) => {
               }))
             }
             placeholder={`Search ${title}`}
-            className="filter-input"
+            className="product-page-filter-input"
           />
         </div>
-        <div className="filter-items">
+        <div className="product-page-filter-items">
           {filteredItems.length > 0 ? (
             filteredItems.map((item, index) => {
               const isSelected = selectedItems.includes(item.toLowerCase());
 
               return (
-                <span
+                <div
                   key={`${filterType}-${item}-${index}`}
                   className={`filter-option ${
                     isSelected
@@ -85,11 +85,11 @@ const SearchProductFilterSection = ({ showFilterBy, setShowFilterBy }) => {
                   onClick={() => handleFilterClick(filterType, item)}
                 >
                   {item}
-                </span>
+                </div>
               );
             })
           ) : (
-            <p className="no-results">No {title.toLowerCase()} found</p>
+            <p className="product-page-no-results">No {title.toLowerCase()} found</p>
           )}
         </div>
       </div>
@@ -109,7 +109,7 @@ const SearchProductFilterSection = ({ showFilterBy, setShowFilterBy }) => {
           </div>
           <div className="filter-section-title" style={{color:"white"}}>FILTER SECTION</div>
 
-          <div className="product-page-filter-options-container">
+          <div className="product-page-filter-options-container" style={{backgroundColor:"aliceblue"}}>
             {renderFilter('category', 'Category')}
             {renderFilter('brand', 'Brand')}
           </div>
