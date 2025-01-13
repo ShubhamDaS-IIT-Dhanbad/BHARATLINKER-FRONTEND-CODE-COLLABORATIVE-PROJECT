@@ -13,11 +13,24 @@
     border-radius: 10px;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 .search-page-product-card-top {
-    min-height: 155px;max-height: 155px;
+    min-height: 165px;max-height: 165px;
     display: flex;
     justify-content: center;align-items: center;
-    background-color: #ffffff;
+    overflow: hidden;
 }
 
 .search-page-product-card-top-image {
@@ -34,6 +47,20 @@
     font-weight: 900;
     justify-content: space-between;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

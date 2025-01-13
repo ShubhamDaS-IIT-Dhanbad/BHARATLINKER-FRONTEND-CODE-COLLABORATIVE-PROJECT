@@ -107,7 +107,7 @@ const SearchProductFilterSection = ({ showFilterBy, setShowFilterBy }) => {
           >
             <IoClose size={25} />
           </div>
-          <div className="filter-section-title">FILTER SECTION</div>
+          <div className="filter-section-title" style={{color:"white"}}>FILTER SECTION</div>
 
           <div className="product-page-filter-options-container">
             {renderFilter('category', 'Category')}

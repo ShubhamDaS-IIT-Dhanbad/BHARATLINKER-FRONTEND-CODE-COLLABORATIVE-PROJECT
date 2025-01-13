@@ -6,11 +6,12 @@
     background-color: rgba(0, 0, 0, 0.9);
     display: flex;justify-content: flex-end;flex-direction: column;
     align-items: center;gap: 10px;
-    z-index: 9999;color: black;
+    z-index: 9999;color: rgb(255, 255, 255);
 }
 .product-page-close-filter-section{
-    color: white;background-color: black;
-    padding: 7px;border-radius: 50%;font-weight: 900;
+    color: white;background-color: black;border: 1.7px solid white;
+    display: flex;justify-content: center;align-items: center;
+    padding: 0px;border-radius: 50%;font-weight: 900;
 }
 
 
@@ -42,9 +43,17 @@
     border-top-right-radius: 20px; /* Rounded top-right corner */
     padding: 7px; /* Padding for spacing */
     box-sizing: border-box; /* Include padding in width calculation */
-    overflow: hidden; /* Hide any overflow content */
-    gap: 10px;
+    overflow:hidden;
+    gap: 10px;color: black;
     padding-bottom: 10vh;padding-top: 10px;
     overflow-y:scroll ;
 }
 
+
+
+
+
+.product-page-filter-options{
+    background-color: aqua;
+    min-height: 90vh;
+}
