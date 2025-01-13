@@ -1,13 +1,11 @@
 /* Header Container */
-.shop-page-header-visible,
-.shop-page-header-hidden {
+.shop-page-header-visible{
     display: flex;
     flex-direction: column;
     width: 100vw;
     position: fixed;
     top: 0;
-    background-color: #021526;
-    color: #ffffff;
+    color: #021526;background-color: rgb(182 241 213);
     z-index: 1000;
     transition: transform 0.3s ease, opacity 0.3s ease;
 }
@@ -37,7 +35,6 @@
 /* User Icon */
 .shop-page-user-icon {
     margin-left: 4px;
-    color: #ffffff;
 }
 
 /* User Section */
@@ -88,8 +85,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #021526;;
-    border: 2px solid #ffffff;
+    background-color: white;
+    border: 2px solid #021526;
     border-radius: 11px;
     width: 96vw;
     height: 41px;
@@ -99,28 +96,26 @@
 .shop-page-search-icon {
     font-size: 29px;
     margin-left: 10px;
-    color: #fcfcfc;
 }
 
 /* Search Input */
 .shop-page-search-input {
     border: none;
-    color: #ffffff;
     font-size: 12px;
     padding-left: 10px;
     flex-grow: 1;
     outline: none;
-    background-color: #021526;;
 }
 
 /* Autofill Styles for Chrome, Edge, and Safari */
 .shop-page-search-input:-webkit-autofill {
+    
     background-color: #fff !important;
-    color: #ffffff !important;
+    color: #000 !important;font-size: 1rem;
     -webkit-box-shadow: 0 0 0px 1000px #fff inset !important;
     box-shadow: 0 0 0px 1000px #fff inset !important;
 }
 .shop-page-search-input::placeholder {
-    color: #ffffff !important;
-    font-size: 0.9rem;
+    color: #000000 !important;
+    font-size: 0.9rem;font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }

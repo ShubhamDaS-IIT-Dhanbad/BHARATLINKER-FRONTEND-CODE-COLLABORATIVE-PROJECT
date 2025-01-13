@@ -6,7 +6,7 @@
     justify-content: center;
     margin-top: 110px;
     padding-bottom: 77px;
-    background-color: #1A1A2E;
+    background-color: #ffffff;
     min-height: calc(100vh - 120px - 80px);
 
 }
@@ -139,6 +139,5 @@
 
 .productSearchPage-loading-more-products{
     width: 100vw;height: 50px;padding-bottom: 50px;
-    background-color: #1A1A2E;
     display: flex;justify-content: center;align-items: center;
 }

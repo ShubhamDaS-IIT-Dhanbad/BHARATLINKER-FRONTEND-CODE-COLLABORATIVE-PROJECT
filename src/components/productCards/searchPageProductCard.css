@@ -4,7 +4,7 @@
     max-width: 200px;
     display: flex;
     flex-direction: column;
-    min-height: 310px;
+    min-height: 350px;
     max-height: 310px;
     margin-top: 10px;align-items: center;
     z-index: 3;
@@ -17,7 +17,7 @@
     min-height: 155px;max-height: 155px;
     display: flex;
     justify-content: center;align-items: center;
-    background-color: #1A1A2E;
+    background-color: #ffffff;
 }
 
 .search-page-product-card-top-image {
@@ -30,7 +30,7 @@
     flex-direction: column;
     font-size: 19px;
     height: 100%;
-    padding: 3px 5px;
+    padding: 10px 5px;
     font-weight: 900;
     justify-content: space-between;
 }
@@ -45,7 +45,7 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    color: #ffffff;background-color: #1A1A2E;
+    color: #000000;background-color:transparent;
     overflow: scroll;
 }
 
@@ -59,13 +59,11 @@
 
 .search-page-product-card-shop {
     font-size: 21px;
-    margin-top: 19px;
-    color: rgb(255, 255, 255);
+    margin-top: 19px;color:rgb(0, 0, 0);
     font-weight: 1000;
 }
 
 .search-page-product-card-bottom-stock.instock {
-    background-color: #1A1A2E;
     display: flex;align-self: center;
     justify-content: center;
     align-items: center;

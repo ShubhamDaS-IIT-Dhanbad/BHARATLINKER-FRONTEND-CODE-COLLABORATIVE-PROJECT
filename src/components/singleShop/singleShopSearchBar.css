@@ -1,13 +1,12 @@
 /* Header Container */
-.single-shop-search-header-visible,
-.single-shop-search-header-hidden {
+.single-shop-search-header-visible{
     display: flex;
     flex-direction: column;
     width: 100vw;
     position: fixed;
     top: 0;
-    background-color: #021526;
-    color: #ffffff;
+    background-color: rgb(182 241 213);;
+    color: #000000;
     z-index: 1000;
     transition: transform 0.3s ease, opacity 0.3s ease;
 }
@@ -37,7 +36,6 @@
 /* User Icon */
 .single-shop-search-back-icon {
     margin-left: 4px;
-    color: #ffffff;
 }
 
 /* User Section */
@@ -93,9 +91,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #021526;
+    background-color: #ffffff;
     border-radius: 11px;
-    border: 2px solid rgb(255, 255, 255);
+    border: 2px solid rgb(0, 0, 0);
     width: 96vw;
     height: 41px;
 }
@@ -104,28 +102,29 @@
 .single-shop-search-icon {
     font-size: 29px;
     margin-left: 10px;
-    color: #ffffff;
 }
 
 /* Search Input */
 .single-shop-search-input {
     border: none;
-    color: #ffffff;
+    color: #000000;
     font-size: 1rem;
     padding-left: 10px;
-    background-color: #021526;
     flex-grow: 1;
     outline: none;
 }
 
 /* Autofill Styles for Chrome, Edge, and Safari */
 .single-shop-search-input:-webkit-autofill {
-    background-color: #021526 !important;
-    color: #ffffff !important;
-    font-size: 1rem;
+    
+    background-color: #fff !important;
+    color: #000 !important;font-size: 1rem;
+    -webkit-box-shadow: 0 0 0px 1000px #fff inset !important;
+    box-shadow: 0 0 0px 1000px #fff inset !important;
 }
 
 .single-shop-search-input::placeholder {
-    color: #ffffff !important;
-    font-size: 0.9rem;
+    color: #000000 !important;
+    font-size: 0.9rem;font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
+

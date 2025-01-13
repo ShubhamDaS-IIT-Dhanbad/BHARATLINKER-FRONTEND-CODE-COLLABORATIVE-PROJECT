@@ -5,8 +5,8 @@
     width: 100vw;
     position: fixed;
     top: 0;
-    background-color:#1A1A2E;
-    color: #ffffff;padding: 10px;
+    background-color:rgb(182 241 213);
+    color: #000000;padding:10px 10px 7px 10px;
     z-index: 1000;
     transition: transform 0.3s ease, opacity 0.3s ease;
 }
@@ -21,7 +21,6 @@
 /* User Icon */
 .product-page-user-icon {
     margin-left: 4px;
-    color: #ffffff;
 }
 
 /* User Section */
@@ -77,8 +76,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #1A1A2E;
-    border-radius: 11px;border: 2px solid rgba(255, 255, 255);
+    background-color: rgb(255, 255, 255);
+    border-radius: 11px;border: 2px solid rgb(0, 0, 0);
     width: 96vw;
     height: 41px;
 }
@@ -87,16 +86,15 @@
 .product-page-search-icon {
     font-size: 29px;
     margin-left: 10px;
-    color: #ffffff;
 }
 
 /* Search Input */
 .product-page-search-input {
     border: none;
-    color: #ffffff;
+    color: #000000;
     font-size: 1rem;
     padding-left: 10px;
-    background-color: #1A1A2E;
+    background-color: rgb(255, 255, 255);
     flex-grow: 1;
     outline: none;
 }
@@ -109,6 +107,6 @@
     box-shadow: 0 0 0px 1000px #fff inset !important;
 }
 .product-page-search-input::placeholder {
-    color: #ffffff !important;
+    color: #000000 !important;
     font-size: 0.9rem;font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }

@@ -69,10 +69,9 @@
 
 #searchShopPage-footer {
     width: 100vh;
-    display: flex;
-    color: rgba(255, 255, 255, 0.92);
+    display: flex;background-color: white;
+    color: black;
     height: 60px;
-    background-color: #021526;
     position: fixed;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     bottom: 0;
@@ -197,7 +196,7 @@
 
 #search-shop-grid{
     min-height: 80vh;overflow: scroll;margin-top: 100px;
-    padding-bottom: 97px;background-color: #021526;color: white;
+    padding-bottom: 97px;background-color: #ffffff;color: rgb(0, 0, 0);
 }
 #search-shop-load-more-shop-loader{
     padding-bottom: 67px;

@@ -3,7 +3,6 @@
 .search-page-no-product-found{
     width: 100vw;height:98vh;
     display: flex;justify-content: center;align-items: center;
-    background-color: #1A1A2E;
 }
 
 #productSearchPage-container-top {
@@ -11,8 +10,7 @@
     height: 70px;
     position: fixed;
     top: 0;
-    background-color: white;
-    display: flex;
+    display: flex;background-color: transparent;
     align-items: center;
     justify-content: center;
     z-index: 1000;
@@ -23,9 +21,9 @@
 #productSearchPage-footer {
     width: 100vw;
     display: flex;
-    color: rgba(255, 255, 255, 0.92);
+    color: rgb(8, 10, 9);
     height: 60px;
-    background-color: #1A1A2E;
+    background-color: #ffffff;
     position: fixed;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     bottom: 0;
