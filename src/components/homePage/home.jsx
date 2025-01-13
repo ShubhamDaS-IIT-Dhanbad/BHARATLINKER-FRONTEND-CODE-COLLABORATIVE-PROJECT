@@ -30,8 +30,8 @@ const Home = () => {
     };
 
     const handleRetailerClick = useCallback(() => {
-        const retailerCookie = getCookieValue('BharatLinkerRetailer');
-        navigate(retailerCookie ? '/retailer/home' : '/retailer/login');
+        const retailerCookie = getCookieValue('BharatLinkerShopData');
+        navigate(retailerCookie ? '/retailer' : '/retailer/login');
     }, [navigate]);
 
     return (

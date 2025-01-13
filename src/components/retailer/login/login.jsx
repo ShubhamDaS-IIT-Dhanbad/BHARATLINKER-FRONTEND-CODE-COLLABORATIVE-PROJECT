@@ -220,7 +220,7 @@ function LoginForm() {
             <ThreeDots size={20} color="#EB3678" />
         </div>
     );
-    if(loadingPage) return <Loader/>
+  
     return (
         <div className="retailer-login">
             {otpSent ? renderOtpVerificationForm() : renderLoginForm()}
