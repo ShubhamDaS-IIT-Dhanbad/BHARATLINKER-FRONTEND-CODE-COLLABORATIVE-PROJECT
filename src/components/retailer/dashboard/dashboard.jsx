@@ -40,7 +40,6 @@ const ShopManager = () => {
     if (shopData) {
       const parsedShopData = JSON.parse(shopData);
       setShopData(parsedShopData);
-  
       const {
         id = parsedShopData.$id,
         phoneNumber,

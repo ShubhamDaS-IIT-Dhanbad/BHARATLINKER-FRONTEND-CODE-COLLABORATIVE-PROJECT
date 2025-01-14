@@ -12,7 +12,7 @@ const databases = new Databases(client);
 
 
 
-const uploadImageToCloudinary= async (file)=> {
+const uploadImageToCloudinary = async (file) => {
     const formData = new FormData();
     formData.append('file', file);
     formData.append('upload_preset', conf.refurbishBooksCloudinaryPreset);
@@ -31,7 +31,7 @@ const uploadImageToCloudinary= async (file)=> {
     }
 }
 
-const uploadImagesToCloudinary=async (files)=> {
+const uploadImagesToCloudinary = async (files) => {
     const validFiles = files.filter(file => file && typeof file === 'object');
     const uploadPromises = validFiles.map(file => uploadImageToCloudinary(file));
     return await Promise.all(uploadPromises);
@@ -75,7 +75,7 @@ const deleteImageFromCloudinary = async (imageUrl) => {
         });
 
         const data = await response.json();
-        
+
         if (data.result !== 'ok') {
             throw new Error('Image deletion failed');
         }
@@ -131,13 +131,13 @@ const createSession = async (userId, otpCode) => {
 
 const deleteSession = async (userId) => {
     try {
-      await account.deleteSessions(userId);
-      console.log('All sessions deleted successfully.');
+        await account.deleteSessions(userId);
+        console.log('All sessions deleted successfully.');
     } catch (error) {
-      console.error(`Failed to delete sessions: ${error.message}`);
+        console.error(`Failed to delete sessions: ${error.message}`);
     }
-  };
-  
+};
+
 const logout = async (sessionId) => {
     try {
         await deleteSession(sessionId);
@@ -198,94 +198,92 @@ const updateShopData = async (shopId, toDeleteImagesUrls, updatedData, newFiles)
     let uploadedImages = [];
     let allImageUrls = updatedData.images || [];
     try {
-      // Step 1: Delete specified images if provided
-      if (toDeleteImagesUrls.length > 0) {
-        await cleanupUploadedImages([toDeleteImagesUrls]);
-      }
-  
-      // Step 2: Separate valid URLs and new file objects
-      const validUrls = newFiles.filter((url) => url !== null && typeof url === 'string');
-      const filesToUpload = newFiles.filter((file) => file !== null && typeof file === 'object');
-  
-      // Step 3: Upload new files to Cloudinary
-      if (filesToUpload.length > 0) {
-        uploadedImages = await uploadImagesToCloudinary(filesToUpload);
-        const newImageUrls = uploadedImages.map((image) => image.secure_url);
-        allImageUrls = [...validUrls, ...allImageUrls, ...newImageUrls];
-      } else {
-        allImageUrls = [...validUrls, ...allImageUrls];
-      }
-      
-      allImageUrls.sort((a, b) => {
-        if (!a) return 1;
-        if (!b) return -1;
-        return 0; 
-      });
-  
-      const updatedShopData = {
-        shopImages: allImageUrls,
-        shopName: updatedData?.shopName?.toLowerCase() || '',
-        address: updatedData?.address?.toLowerCase() || '',
-        category: updatedData?.category?.toLowerCase() || '',
-        description: updatedData?.description?.toLowerCase() || '',
-        customerCare: updatedData?.customerCare ? Number(updatedData.customerCare) : null,
-        email: updatedData?.email?.toLowerCase() || '',
-        lat: updatedData?.lat ? parseFloat(updatedData.lat) : null,
-        long: updatedData?.long ? parseFloat(updatedData.long) : null,
-      };
-  
-  
-      // Step 6: Update the shop document in the database
-      const updatedDocument = await databases.updateDocument(
-        conf.appwriteShopsDatabaseId,
-        conf.appwriteShopsCollectionId,
-        shopId,
-        updatedShopData
-      );
-  
-      return updatedDocument;
+        // Step 1: Delete specified images if provided
+        if (toDeleteImagesUrls.length > 0) {
+            await cleanupUploadedImages([toDeleteImagesUrls]);
+        }
+
+        // Step 2: Separate valid URLs and new file objects
+        const validUrls = newFiles.filter((url) => url !== null && typeof url === 'string');
+        const filesToUpload = newFiles.filter((file) => file !== null && typeof file === 'object');
+
+        // Step 3: Upload new files to Cloudinary
+        if (filesToUpload.length > 0) {
+            uploadedImages = await uploadImagesToCloudinary(filesToUpload);
+            const newImageUrls = uploadedImages.map((image) => image.secure_url);
+            allImageUrls = [...validUrls, ...allImageUrls, ...newImageUrls];
+        } else {
+            allImageUrls = [...validUrls, ...allImageUrls];
+        }
+
+        allImageUrls.sort((a, b) => {
+            if (!a) return 1;
+            if (!b) return -1;
+            return 0;
+        });
+
+        const updatedShopData = {
+            shopImages: allImageUrls,
+            shopName: updatedData?.shopName?.toLowerCase() || '',
+            address: updatedData?.address?.toLowerCase() || '',
+            category: updatedData?.category?.toLowerCase() || '',
+            description: updatedData?.description?.toLowerCase() || '',
+            customerCare: updatedData?.customerCare ? Number(updatedData.customerCare) : null,
+            email: updatedData?.email?.toLowerCase() || '',
+            lat: updatedData?.lat ? parseFloat(updatedData.lat) : null,
+            long: updatedData?.long ? parseFloat(updatedData.long) : null,
+        };
+
+
+        // Step 6: Update the shop document in the database
+        const updatedDocument = await databases.updateDocument(
+            conf.appwriteShopsDatabaseId,
+            conf.appwriteShopsCollectionId,
+            shopId,
+            updatedShopData
+        );
+
+        return updatedDocument;
     } catch (error) {
-      console.error('Error updating shop:', error);
-  
-      // Cleanup any uploaded images if an error occurs
-      if (uploadedImages.length > 0) {
-        await cleanupUploadedImages(uploadedImages.map((img) => img.secure_url));
-      }
-  
-      throw error;
+        console.error('Error updating shop:', error);
+
+        // Cleanup any uploaded images if an error occurs
+        if (uploadedImages.length > 0) {
+            await cleanupUploadedImages(uploadedImages.map((img) => img.secure_url));
+        }
+
+        throw error;
     }
-  };
-  
-  
+};
+
+
 
 
 //upload module imp
-const uploadProductWithImages=async(productData, files = [])=> {
+const uploadProductWithImages = async (productData, files = []) => {
+    console.log(productData);
     let uploadedImages = [];
 
     try {
-        uploadedImages = await this.uploadImagesToCloudinary(files);
+        uploadedImages = await uploadImagesToCloudinary(files);
         const imageUrls = uploadedImages.map((image) => image.secure_url);
         const newProductData = {
-            class: productData.class,
-            language: productData.language.toLowerCase(),
-            subject: productData.subject.toLowerCase(),
             title: productData.title.toLowerCase(),
             description: productData.description.toLowerCase(),
             price: Number(productData.price),
             discountedPrice: Number(productData.discountedPrice),
             keywords: productData.keywords.split(','),
-            phn: productData.phn,
             category: productData.category.toLowerCase(),
             brand: productData.brand.toLowerCase(),
-            productType: productData.productType,
-            lat:productData.lat,
-            long:productData.long
+            lat: productData.lat,
+            isInStock: productData.isInStock,
+            long: productData.long,
+            shop: productData.shop
         };
         // Create a document in the Appwrite database with the uploaded images
-        const document = await this.databases.createDocument(
-            conf.appwriteRefurbishProductDatabaseId,
-            conf.appwriteRefurbishedModulesCollectionId,
+        const document = await databases.createDocument(
+            conf.appwriteProductsDatabaseId,
+            conf.appwriteProductsCollectionId,
             ID.unique(),
             {
                 ...newProductData,
@@ -299,8 +297,55 @@ const uploadProductWithImages=async(productData, files = [])=> {
         throw error;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /*imp*/
-const updateUserRefurbishedProduct=async(productId, toDeleteImagesUrls, updatedData, newFiles = [])=> {
+const updateUserRefurbishedProduct = async (productId, toDeleteImagesUrls, updatedData, newFiles = []) => {
     let uploadedImages = [];
     let allImageUrls = updatedData.images || [];
     try {
@@ -329,8 +374,8 @@ const updateUserRefurbishedProduct=async(productId, toDeleteImagesUrls, updatedD
             brand: updatedData?.brand?.toLowerCase() || '',
             keywords: updatedData.keywords.split(','),
             images: allImageUrls,
-            lat:updatedData.lat,
-            long:updatedData.long
+            lat: updatedData.lat,
+            long: updatedData.long
         };
         const updatedDocument = await this.databases.updateDocument(
             conf.appwriteRefurbishProductDatabaseId,
@@ -348,7 +393,7 @@ const updateUserRefurbishedProduct=async(productId, toDeleteImagesUrls, updatedD
 }
 
 /*imp*/
-const deleteProduct=async(productId, imagesToDelete)=> {
+const deleteProduct = async (productId, imagesToDelete) => {
     try {
         imagesToDelete = imagesToDelete.filter(url => url !== null);
         if (imagesToDelete.length > 0) {
@@ -375,7 +420,7 @@ const deleteProduct=async(productId, imagesToDelete)=> {
 
 
 
-const getUserRefurbishedProducts=async({
+const getUserRefurbishedProducts = async ({
     inputValue = '',
     selectedCategories,
     selectedBrands,
@@ -387,7 +432,7 @@ const getUserRefurbishedProducts=async({
     sortByAsc = false,
     sortByDesc = false,
     phn
-})=> {
+}) => {
     if (!phn) {
         return { success: false, error: 'Phone number is required to fetch products.' };
     }
@@ -499,7 +544,9 @@ const getUserRefurbishedProducts=async({
 
 
 
-export { registerShop, sendOtp, createSession, deleteSession, getShopData,  logout ,
 
-    updateShopData
+
+export {
+    registerShop, sendOtp, createSession, deleteSession, getShopData, logout,
+    uploadProductWithImages, updateShopData
 };

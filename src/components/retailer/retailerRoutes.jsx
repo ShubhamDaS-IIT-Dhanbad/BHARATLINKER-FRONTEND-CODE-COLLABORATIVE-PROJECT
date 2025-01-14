@@ -1,8 +1,12 @@
 import React from "react";
 import { Routes, Route} from "react-router-dom";
 
+
 import Retailer from "./retailer.jsx";
+
 import RetailerDashboard from './dashboard/dashboard.jsx';
+import RetailerUpload from './upload/upload.jsx';
+
 import RetailerLogin from "./login/login.jsx";
 import RetailerRegister from "./register/register.jsx";
 import RetailerPending from "./pending/pending.jsx";
@@ -28,11 +32,11 @@ const RetailerRoutes = () => {
         />
         <Route
           path="/retailer/products"
-          element={<Retailer />}
+          element={<RetailerDashboard />}
         />
         <Route
           path="/retailer/upload"
-          element={<Retailer />}
+          element={<RetailerUpload />}
         />
         <Route
           path="/retailer/update"

@@ -64,12 +64,12 @@ function UserHome() {
            />
             <p className='retailer-home-your-info-p'>Dashboard</p>
           </article>
-          <article className='retailer-home-your-refurbished' onClick={()=>{navigate('/retailer/dashboard')}}>
+          <article className='retailer-home-your-refurbished' onClick={()=>{navigate('/retailer/upload')}}>
             <AiOutlineProduct className='retailer-home-your-information-icons' aria-label="Your refurbished items" 
            />
             <p className='retailer-home-your-info-p'>Your Products</p>
           </article>
-          <article className='retailer-home-your-refurbished'>
+          <article className='retailer-home-your-refurbished' onClick={()=>{navigate('/retailer/upload')}}>
             <FiUploadCloud className='retailer-home-your-information-icons' aria-label="Upload books" />
             <p className='retailer-home-your-info-p'>Upload Products</p>
           </article>
