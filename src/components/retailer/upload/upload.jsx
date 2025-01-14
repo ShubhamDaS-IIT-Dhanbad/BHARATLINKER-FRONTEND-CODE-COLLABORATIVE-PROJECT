@@ -31,11 +31,11 @@ const UploadProduct = () => {
                 <div className='user-upload-books-header-inner-div'>
                     <p className='user-upload-books-header-inner-div-p'>UPLOAD PRODUCTS</p>
                     <div
-                        className={`user-upload-books-header-inner-div-phn-div`}
+                        className={`retailer-upload-product-header-shopname`}
                         aria-label="Change Location"
                         tabIndex={0}
                     >
-                        {userData?.phoneNumber}
+                        {userData?.shopName?.toUpperCase()}
                     </div>
                 </div>
             </div>
