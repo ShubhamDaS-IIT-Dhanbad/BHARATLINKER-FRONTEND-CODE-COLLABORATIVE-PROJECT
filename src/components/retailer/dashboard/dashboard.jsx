@@ -200,9 +200,6 @@ const ShopManager = () => {
             {shopData?.phoneNumber && (
               <div
                 className="user-refurbished-product-page-header-phn-div"
-                onClick={() => navigate('/pincode')}
-                aria-label="Change Location"
-                role="button"
               >
                 {shopData?.phoneNumber}
               </div>
@@ -234,6 +231,7 @@ const ShopManager = () => {
               <textarea
                 type="text"
                 name="address"
+                style={{minHeight:"30px"}}
                 value={formData.address || ''}
                 className='retailer-dashboard-div-form-label-input'
                 onChange={handleInputChange}
@@ -269,6 +267,7 @@ const ShopManager = () => {
               <textarea
                 type="text"
                 name="category"
+                style={{minHeight:"30px"}}
                 value={formData.category || ''}
                 className='retailer-dashboard-div-form-label-input'
                 onChange={handleInputChange}
