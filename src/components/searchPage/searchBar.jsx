@@ -58,12 +58,11 @@ const SearchBar = ({ inputValue, onInputChange }) => {
                             <p className='product-page-location-label'>PRODUCT SECTION</p>
                             <div
                                 className='product-page-location-value'
-                                onClick={() => setLocationTab(true)}
                                 aria-label="Change Location"
                                 tabIndex={0}
                             >
                                 {loading ? 'Loading...' : (location ? location.address.slice(0, 30) : 'Location not set')}
-                                <TbChevronDown size={15} />
+                                <TbChevronDown size={15} onClick={() => setLocationTab(true)}/>
                             </div>
                         </div>
                     </div>
