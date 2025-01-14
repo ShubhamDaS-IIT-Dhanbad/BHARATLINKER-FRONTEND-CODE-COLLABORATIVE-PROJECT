@@ -229,8 +229,8 @@ const UploadBooksModulesForm = () => {
                 </>
 
 
-                {renderPopUp('categoryPopUp', ['category', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'], handleCategorySelect)}
-                {renderPopUp('brandPopUp', ['brand', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'], handleBrandSelect)}
+                {renderPopUp('categoryPopUp', ['Electronics', 'Clothing', 'Home & Kitchen', 'Books', 'Beauty & Personal Care', 'Toys & Games', 'Sports & Outdoors', 'Automotive', 'Furniture', 'Health & Wellness', 'Office Supplies', 'Groceries'], handleCategorySelect)}
+{renderPopUp('brandPopUp', ['Nike', 'Samsung', 'Apple', 'Sony', 'LG', 'Adidas', 'Microsoft', 'Philips', 'Lenovo', 'Puma', 'HP', 'Dell'], handleBrandSelect)}
 
 
 
