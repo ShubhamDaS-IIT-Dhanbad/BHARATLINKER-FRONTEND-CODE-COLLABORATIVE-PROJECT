@@ -2,12 +2,16 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import { CiImageOn } from 'react-icons/ci';  // Ensure CiImageOn is imported correctly
-
+import { Oval } from 'react-loader-spinner';
+import { FaArrowLeft } from 'react-icons/fa';
 import { updateShopData, getShopData } from '../../../appWrite/shop/shop.js';
 import conf from '../../../conf/conf.js';
 
+import './dashboard.css'
 const ShopManager = () => {
   const navigate = useNavigate();
+
+
   const [shopData, setShopData] = useState({});
   const [images, setImages] = useState([null, null, null]);
   const [toDeleteImagesUrls, setToDeleteImagesUrls] = useState([]);
@@ -34,6 +38,7 @@ const ShopManager = () => {
 
       const {
         id = parsedShopData.$id,
+        phoneNumber,
         shopName = '',
         address = '',
         customerCare = '',
@@ -47,6 +52,7 @@ const ShopManager = () => {
       setFormData({
         id,
         shopName,
+        phoneNumber,
         address,
         category,
         email,
@@ -75,27 +81,27 @@ const ShopManager = () => {
       const { id, ...shopDetails } = formData;
       const newFiles = images.filter(image => image !== null); // Filter out null values
       const toDeleteImages = toDeleteImagesUrls; // Images to be deleted
-  
+
       // Update shop data in the database
       await updateShopData(id, toDeleteImages, shopDetails, newFiles);
-  
+
       // Fetch updated shop data
       const fetchShopData = await getShopData(shopData.phoneNumber);  // Assuming phoneNumber is available
-  
+
       // Set updated shop data in Cookies
       Cookies.set('BharatLinkerShopData', JSON.stringify(fetchShopData), { expires: 7 });
-  
+
       // Update form data with the new data
       setFormData({
         ...formData,
         ...fetchShopData,
         images: fetchShopData.shopImages || formData.images,
       });
-  
+
       // Reset images and toDeleteImagesUrls after successful update
       setImages([null, null, null]);  // Reset the images state
       setToDeleteImagesUrls([]);  // Reset the URLs to delete
-  
+
       alert('Shop details updated successfully!');
     } catch (error) {
       console.error('Error updating shop:', error);
@@ -177,103 +183,141 @@ const ShopManager = () => {
   };
 
   return (
-    <div>
-      <h1>Shop Manager</h1>
-      {loading ? (
-        <p>Loading...</p>
-      ) : (
-        <form>
-          <label>
-            Shop Name:
-            <input
-              type="text"
-              name="shopName"
-              value={formData.shopName || ''}  
-              onChange={handleInputChange}
-            />
-          </label>
-          <label>
-            Address:
-            <input
-              type="text"
-              name="address"
-              value={formData.address || ''}  
-              onChange={handleInputChange}
-            />
-          </label>
-          <label>
-            Email:
-            <input
-              type="email"
-              name="email"
-              value={formData.email || ''}  
-              onChange={handleInputChange}
-            />
-          </label>
-          <label>
-            Customer Care:
-            <input
-              type="text"
-              name="customerCare"
-              value={formData.customerCare || ''}  
-              onChange={handleInputChange}
-            />
-          </label>
-
-          {/* Category Input */}
-          <label>
-            Category:
-            <input
-              type="text"
-              name="category"
-              value={formData.category || ''}  
-              onChange={handleInputChange}
-            />
-          </label>
-
-          {/* Image Uploads */}
-          <label>Images:</label>
-          <div className="user-refurbished-product-book-module-update-form-image-section">
-            {images.map((image, index) => (
-              <div key={index} className="user-refurbished-product-book-module-update-form-image-container">
-                {image ? (
-                  <img
-                    src={typeof image === 'string' ? image : URL.createObjectURL(image)}
-                    className="user-refurbished-product-book-module-update-form-uploaded-image"
-                    alt={`Uploaded ${index + 1}`}
-                    onClick={() => removeImage(index)}
-                    onLoad={(e) => {
-                      if (typeof image !== 'string') URL.revokeObjectURL(e.target.src);
-                    }}
-                  />
-                ) : (
-                  <div
-                    className="user-refurbished-product-book-module-update-form-image-placeholder"
-                    onClick={() => document.getElementById(`image-upload-${index}`).click()}
-                  >
-                    <CiImageOn size={50} />
-                  </div>
-                )}
-                <input
-                  type="file"
-                  id={`image-upload-${index}`}
-                  style={{ display: 'none' }}
-                  onChange={(e) => handleImageChange(index, e.target.files[0])}
-                />
+    <>
+      <header>
+        <div className="retailer-dashboard-page-header-upper-div">
+          <FaArrowLeft
+            id="user-refurbished-product-page-left-icon"
+            size={25}
+            onClick={() => navigate('/retailer')}
+            aria-label="Go back to User Account"
+            role="button"
+          />
+          <div className="user-refurbished-product-page-header-inner">
+            <h1 className="user-refurbished-product-page-header-text">
+              RETAILER DASHBOARD
+            </h1>
+            {shopData?.phoneNumber && (
+              <div
+                className="user-refurbished-product-page-header-phn-div"
+                onClick={() => navigate('/pincode')}
+                aria-label="Change Location"
+                role="button"
+              >
+                {shopData?.phoneNumber}
               </div>
-            ))}
+            )}
           </div>
+        </div>
+      </header>
+      {loading ? (
+        <div className='retailer-dashboard-loader'>
+           <Oval height={40} width={45} color="white" secondaryColor="gray" ariaLabel="loading" />           
+        </div>
+      ) : (
+        <div className='retailer-dashboard-div'>
+          <form className='retailer-dashboard-div-form'>
 
-          <button type="button" onClick={handleLocationClick} disabled={fetchingUserLocation}>
-            {fetchingUserLocation ? 'Fetching location...' : 'Get Current Location'}
-          </button>
+            <label className='retailer-dashboard-div-form-label'>
+              <p className='retailer-dashboard-div-form-label-p'>SHOP NAME</p>
+              <textarea
+                type="text"
+                name="shopName"
+                className='retailer-dashboard-div-form-label-input'
+                value={formData.shopName || ''}
+                onChange={handleInputChange}
+              />
+            </label>
 
-          <button type="button" onClick={handleUpdate} disabled={isUpdating}>
-            {isUpdating ? 'Updating...' : 'Update Shop'}
-          </button>
-        </form>
+            <label className='retailer-dashboard-div-form-label'>
+              SHOP ADDRESS
+              <textarea
+                type="text"
+                name="address"
+                value={formData.address || ''}
+                className='retailer-dashboard-div-form-label-input'
+                onChange={handleInputChange}
+              />
+            </label>
+            <div className='retailer-dashboard-shop-location'onClick={handleLocationClick} disabled={fetchingUserLocation}>
+              {fetchingUserLocation ? 'Fetching location...' : 'Get Current Location'}
+            </div>
+            <label className='retailer-dashboard-div-form-label'>
+              EMAIL
+              <input
+                type="email"
+                name="email"
+                value={formData.email || ''}
+                className='retailer-dashboard-div-form-label-input'
+                onChange={handleInputChange}
+              />
+            </label>
+            <label className='retailer-dashboard-div-form-label'>
+              CUSTOMER CARE
+              <input
+                type="text"
+                name="customerCare"
+                value={formData.customerCare || ''}
+                className='retailer-dashboard-div-form-label-input'
+                onChange={handleInputChange}
+              />
+            </label>
+
+            {/* Category Input */}
+            <label className='retailer-dashboard-div-form-label'>
+              CATEGORY OF YOUR SHOP
+              <textarea
+                type="text"
+                name="category"
+                value={formData.category || ''}
+                className='retailer-dashboard-div-form-label-input'
+                onChange={handleInputChange}
+              />
+            </label>
+
+            {/* Image Uploads */}
+            <div className="retailer-dashboard-form-image-section-div">
+              <label >SHOP IMAGES</label>
+              <div className="retailer-dashboard-form-image-section">
+                {images.map((image, index) => (
+                  <div key={index} className="user-refurbished-product-book-module-update-form-image-container">
+                    {image ? (
+                      <img
+                        src={typeof image === 'string' ? image : URL.createObjectURL(image)}
+                        className="user-refurbished-product-book-module-update-form-uploaded-image"
+                        alt={`Uploaded ${index + 1}`}
+                        onClick={() => removeImage(index)}
+                        onLoad={(e) => {
+                          if (typeof image !== 'string') URL.revokeObjectURL(e.target.src);
+                        }}
+                      />
+                    ) : (
+                      <div
+                        className="user-refurbished-product-book-module-update-form-image-placeholder"
+                        onClick={() => document.getElementById(`image-upload-${index}`).click()}
+                      >
+                        <CiImageOn size={50} />
+                      </div>
+                    )}
+                    <input
+                      type="file"
+                      id={`image-upload-${index}`}
+                      style={{ display: 'none' }}
+                      onChange={(e) => handleImageChange(index, e.target.files[0])}
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+           
+
+            <div className='retailer-dashboard-shop-update' onClick={handleUpdate} disabled={isUpdating}>
+              {isUpdating ? 'Updating...' : 'UPDATE SHOP DATA'}
+            </div>
+          </form>
+        </div>
       )}
-    </div>
+    </>
   );
 };
 
