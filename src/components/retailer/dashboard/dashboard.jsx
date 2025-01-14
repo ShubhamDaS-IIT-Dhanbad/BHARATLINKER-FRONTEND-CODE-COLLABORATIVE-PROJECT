@@ -14,6 +14,7 @@ const ShopManager = () => {
   const navigate = useNavigate();
 
   const [showUpdatePopUp, setShowUpdatePopUp] = useState();
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   const [shopData, setShopData] = useState({});
   const [images, setImages] = useState([null, null, null]);
@@ -112,6 +113,7 @@ const ShopManager = () => {
 
 
   const refreshShopData = async () => {
+    setIsRefreshing(true);
     try {
       const fetchShopData = await getShopData(shopData.phoneNumber);
       Cookies.set('BharatLinkerShopData', JSON.stringify(fetchShopData), { expires: 7 });
@@ -119,7 +121,7 @@ const ShopManager = () => {
     } catch (error) {
       console.error('Error updating shop data:', error);
     } finally {
-      setIsUpdating(false);
+      setIsRefreshing(false);
     }
   };
   
@@ -365,8 +367,9 @@ const ShopManager = () => {
               {isUpdating ? <Oval height={20} width={25} color="white" secondaryColor="gray" ariaLabel="loading" />
                 : 'UPDATE SHOP DATA'}
             </div>
-            <div className='retailer-dashboard-shop-update' onClick={() => { refreshShopData() }} >
-              REFRESH SHOP DATA
+            <div className='retailer-dashboard-shop-update' onClick={() => { refreshShopData() }} disabled={isRefreshing}>
+            {isRefreshing ? <Oval height={20} width={25} color="white" secondaryColor="gray" ariaLabel="loading" />
+                : 'REFRESH SHOP DATA'}
             </div>
           </form>
 
