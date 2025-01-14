@@ -31,8 +31,23 @@ const Home = () => {
 
     const handleRetailerClick = useCallback(() => {
         const retailerCookie = getCookieValue('BharatLinkerShopData');
-        navigate(retailerCookie ? '/retailer' : '/retailer/login');
+    
+        if (retailerCookie) {
+            const shopData = JSON.parse(retailerCookie);
+    
+            // Redirect based on registrationStatus
+            if (shopData.registrationStatus === 'pending') {
+                navigate('/retailer/pending');
+            } else if (shopData.registrationStatus === 'rejected') {
+                navigate('/retailer/rejected');
+            } else {
+                navigate('/retailer');
+            }
+        } else {
+            navigate('/retailer/login');
+        }
     }, [navigate]);
+    
 
     return (
         <>

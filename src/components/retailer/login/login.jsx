@@ -75,14 +75,21 @@ function LoginForm() {
         setLoadingVerification(true);
         try {
             const sessionId = await createSession(userId, otpCode);
-
+    
             const phoneNumber = `+91${phone}`;
             const shopData = await getShopData(phoneNumber);
-
+    
             shopData.sessionId = sessionId;
             Cookies.set('BharatLinkerShopData', JSON.stringify(shopData), { expires: 7 });
-
-            navigate('/retailer');
+    
+            // Redirect based on registrationStatus
+            if (shopData.registrationStatus === 'pending') {
+                navigate('/retailer/pending');
+            } else if (shopData.registrationStatus === 'rejected') {
+                navigate('/retailer/rejected');
+            } else {
+                navigate('/retailer');
+            }
         } catch (err) {
             console.error(`Failed to verify OTP: ${err.message}`);
             alert('Invalid OTP. Please try again.');
@@ -91,6 +98,7 @@ function LoginForm() {
             setLoadingVerification(false);
         }
     };
+    
 
 
     const handleOTPChange = (e, index) => {
