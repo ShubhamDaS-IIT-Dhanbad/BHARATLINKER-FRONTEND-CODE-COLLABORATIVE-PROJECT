@@ -26,9 +26,9 @@ const RetailerPending = () => {
         setShopData(freshShopData);
 
         if (freshShopData.registrationStatus === "approved") {
-          navigate("retailer/approved");
+          navigate("/retailer/approved");
         } else if (freshShopData.registrationStatus === "canceled") {
-          navigate("retailer/canceled");
+          navigate("/retailer/canceled");
         }
       } else {
         console.error("Failed to fetch fresh shop data.");
