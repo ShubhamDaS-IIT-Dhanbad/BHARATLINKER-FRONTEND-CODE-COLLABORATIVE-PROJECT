@@ -111,15 +111,15 @@ const ProductDetails = () => {
                                 <div id="product-details-img">
                                     <img src={selectedImage} alt="Selected Product" id="product-details-img-selected" />
                                 </div>
-                                <div id="shop-details-thumbnails">
+
+                                <div id="product-details-thumbnails">
                                     {productDetail?.images?.map((image, index) => (
                                         <div
-                                            id="shop-details-thumbnail"
+                                            id="product-details-thumbnail"
                                             key={index}
                                             onClick={() => handleImageClick(index)}
-                                            className={selectedImage === image ? "image-select" : "image-unselect"}
+                                            className={selectedImage === image ? "product-detail-image-select" : "image-unselect"}
                                         >
-                                            <div id="shop-details-thumbnail-item"></div>
                                         </div>
                                     ))}
                                 </div>

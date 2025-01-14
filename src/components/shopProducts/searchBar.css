@@ -1,6 +1,5 @@
 /* Header Container */
-.shop-products-header-visible,
-.shop-products-header-hidden {
+.shop-products-header-visible {
     display: flex;
     flex-direction: column;
     width: 100vw;
