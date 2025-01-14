@@ -20,7 +20,7 @@ const UploadProduct = () => {
 
     return (
         <>
-            <div className='user-upload-books-header'>
+            <div className='retailer-upload-product-header'>
                 <FaArrowLeft
                     id='user-upload-books-header-left-icon'
                     size={25}
@@ -43,9 +43,6 @@ const UploadProduct = () => {
 
             <UploadBooksForm userData={userData} />
 
-            <footer>
-                <p className='dashboard-footer-p'>© 2025 Bharat Linker</p>
-            </footer>
         </>
     );
 };

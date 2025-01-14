@@ -212,16 +212,16 @@ const UploadBooksModulesForm = () => {
 
     return (
         <>
-            <div className="user-refurbished-product-book-module-upload-form">
+            <div className="retailer-upload-product-form">
 
                 <>
                     <div className='user-refurbished-product-category-brand-div' style={{ marginTop: "50px", display: 'flex', gap: '10px' }}>
                         <div
-                            className={`user-refurbished-product-book-module-upload-form-category ${formData.category ? 'active' : ''}`}
+                            className={`retailer-upload-product-form-upload-category ${formData.category ? 'active' : ''}`}
                             onClick={() => setPopUpState(prevState => ({ ...prevState, categoryPopUp: !prevState.categoryPopUp }))}>
                             <MdOutlineCategory size={30} />
                         </div>
-                        <div className={`user-refurbished-product-book-module-upload-form-brand ${formData.brand ? 'active' : ''}`}
+                        <div className={`retailer-upload-product-form-upload-brand ${formData.brand ? 'active' : ''}`}
                             onClick={() => setPopUpState(prevState => ({ ...prevState, brandPopUp: !prevState.brandPopUp }))}>
                             <TbBrandAirtable size={30} />
                         </div>
@@ -240,16 +240,16 @@ const UploadBooksModulesForm = () => {
                         name="title"
                         value={formData.title}
                         onChange={handleInputChange}
-                        placeholder="Enter a relevant title"
-                        className='user-refurbished-product-book-module-upload-form-textarea'
+                        placeholder="Enter a relevant TITLE"
+                        className='retailer-upload-product-form-textarea'
                         style={{ maxWidth: "90vw", minHeight: "10vh" }}
                     />
                     <textarea
                         name="description"
                         value={formData.description}
                         onChange={handleInputChange}
-                        placeholder="Enter a relevant description"
-                        className='user-refurbished-product-book-module-upload-form-textarea'
+                        placeholder="Enter a relevant DESCRIPTION"
+                        className='retailer-upload-product-form-textarea'
                         style={{ maxWidth: "90vw", minHeight: "20vh" }}
                     />
                 </div>
@@ -261,18 +261,18 @@ const UploadBooksModulesForm = () => {
                         name="price"
                         value={formData.price}
                         onChange={handleInputChange}
-                        placeholder="Enter original price"
+                        placeholder="Enter ORIGINAL PRICE"
                         style={{ maxWidth: "90vw", height: "4vh" }}
-                        className='user-refurbished-product-book-module-upload-form-textarea'
+                        className='retailer-upload-product-form-textarea'
                     />
                     <input
                         type="number"
                         name="discountedPrice"
                         value={formData.discountedPrice}
                         onChange={handleInputChange}
-                        placeholder="Enter discounted price"
+                        placeholder="Enter DISCOUNTED PRICE"
                         style={{ maxWidth: "90vw", height: "4vh" }}
-                        className='user-refurbished-product-book-module-upload-form-textarea'
+                        className='retailer-upload-product-form-textarea'
                     />
                 </div>
 
@@ -281,7 +281,7 @@ const UploadBooksModulesForm = () => {
                     placeholder="Keywords (separated by commas [,])"
                     value={formData.keywords}
                     onChange={handleInputChange}
-                    className='user-refurbished-product-book-module-upload-form-textarea'
+                    className='retailer-upload-product-form-textarea'
                     style={{ maxWidth: "90vw", minHeight: "20vh" }}
                 />
 
@@ -315,7 +315,7 @@ const UploadBooksModulesForm = () => {
                 </div>
 
                 <div
-                    className={`user-refurbished-product-book-module-upload-form-submit ${isUploading ? 'disabled' : ''}`}
+                    className={`retailer-upload-product-form-submit ${isUploading ? 'disabled' : ''}`}
                     onClick={isUploading ? null : handleSubmit}
                 >
                     <TbWorldUpload size={35} />
