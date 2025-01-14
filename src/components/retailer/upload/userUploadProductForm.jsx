@@ -101,38 +101,39 @@ const UploadBooksModulesForm = () => {
 
 
 
-    const handleSubmit = () => {
-        const { lat = coordinates.lat, long = coordinates.long, title, description, price, discountedPrice, category, brand } = formData;
-
-       
+    const handleSubmit = async () => {
+        const { title, description, price, discountedPrice, category, brand } = formData;
+        const lat = formData.lat || coordinates.lat;
+        const long = formData.long || coordinates.long;
+    
         // Check if lat and long are valid
         if (!lat || !long) {
-            alert('Your Address Location is not set or error in retriving location -> go to PROFILE and set LOCATION');  // Popup message
+            alert('Your Address Location is not set or error in retrieving location -> go to PROFILE and set LOCATION'); // Popup message
             return;
         }
-
+    
         // Prepare the final form data
         const finalFormData = {
             ...formData,
             shop: shopData.$id,
-            lat: coordinates.lat,
-            long: coordinates.long
+            lat,
+            long,
         };
-
+    
         // Start uploading
         setIsUploading(true);
-        uploadProductWithImages(finalFormData, images)
-            .then(() => {
-                setUploadStatus({ success: true, fail: false });
-                resetForm();
-            })
-            .catch(() => {
-                setUploadStatus({ success: false, fail: true });
-            })
-            .finally(() => {
-                setIsUploading(false);
-            });
+        try {
+            await uploadProductWithImages(finalFormData, images);
+            setUploadStatus({ success: true, fail: false });
+            resetForm(); // Assuming this resets the form correctly
+        } catch (error) {
+            console.error('Upload failed:', error);
+            setUploadStatus({ success: false, fail: true });
+        } finally {
+            setIsUploading(false);
+        }
     };
+    
 
 
 
@@ -146,7 +147,7 @@ const UploadBooksModulesForm = () => {
             brand: '',
             category: '',
             isInstock: true,
-            shop,
+            shop:shopData?.$id,
         });
         setImages([null, null, null]);
     };
@@ -332,7 +333,7 @@ const UploadBooksModulesForm = () => {
                 </div>
             )}
             {uploadStatus.success && (
-                <PopupSuccess message={`product uploaded successfully!`} onClose={() => setUploadStatus({ success: false, fail: false })} isSuccess />
+                <PopupSuccess message={`product uploaded successfully!`} onClose={() => setUploadStatus({ success: false, fail: false })} isSuccess={true} />
             )}
             {uploadStatus.fail && (
                 <PopupFail message={`Failed to upload product. Please try again!`} onClose={() => setUploadStatus({ success: false, fail: false })} isSuccess={false} />
