@@ -4,10 +4,10 @@ import Cookies from "js-cookie";
 
 import { FaArrowLeft } from 'react-icons/fa';
 import { IoIosRefresh } from "react-icons/io";
-import { CiHome } from "react-icons/ci";
+
 import { MdOutlineContactSupport } from "react-icons/md";
 import { RiLogoutCircleRLine } from "react-icons/ri";
-import { TailSpin } from 'react-loader-spinner'; // Import the loader
+import { TailSpin } from 'react-loader-spinner';
 import "./pending.css";
 import i1 from './i1.png';
 import { getShopData } from '../../../appWrite/shop/shop.js';
@@ -15,10 +15,10 @@ import { getShopData } from '../../../appWrite/shop/shop.js';
 const RetailerPending = () => {
   const navigate = useNavigate();
   const [shopData, setShopData] = useState(null);
-  const [isLoading, setIsLoading] = useState(false); // Loading state
+  const [isLoading, setIsLoading] = useState(false);
 
   const fetchShopData = async () => {
-    setIsLoading(true); // Start loader
+    setIsLoading(true);
     try {
       const freshShopData = await getShopData(shopData?.phoneNumber);
       if (freshShopData) {
@@ -26,8 +26,10 @@ const RetailerPending = () => {
         setShopData(freshShopData);
 
         if (freshShopData.registrationStatus === "approved") {
-          navigate("/retailer/approved");
-        } else if (freshShopData.registrationStatus === "canceled") {
+          navigate("/retailer");
+        } else if (freshShopData.registrationStatus === "pending") {
+          navigate("/retailer/pending");
+        }else if (freshShopData.registrationStatus === "canceled") {
           navigate("/retailer/canceled");
         }
       } else {
@@ -36,13 +38,13 @@ const RetailerPending = () => {
     } catch (error) {
       console.error("Error fetching shop data:", error);
     } finally {
-      setIsLoading(false); // Stop loader
+      setIsLoading(false);
     }
   };
 
   const handleLogOut = () => {
-    Cookies.remove("BharatLinkerShopData"); // Remove the shop data cookie
-    navigate("/"); // Redirect to the home page
+    Cookies.remove("BharatLinkerShopData"); 
+    navigate("/"); 
   };
 
   useEffect(() => {
