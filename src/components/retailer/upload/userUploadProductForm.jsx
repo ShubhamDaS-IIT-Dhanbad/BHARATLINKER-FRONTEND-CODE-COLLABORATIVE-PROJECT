@@ -318,7 +318,7 @@ const UploadBooksModulesForm = () => {
                     className={`retailer-upload-product-form-submit ${isUploading ? 'disabled' : ''}`}
                     onClick={isUploading ? null : handleSubmit}
                 >
-                    <TbWorldUpload size={35} />
+                    UPLOAD <TbWorldUpload size={35} />
                 </div>
 
 
