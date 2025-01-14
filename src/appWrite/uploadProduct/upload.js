@@ -129,8 +129,8 @@ const uploadProductWithImages = async (productData, files = []) => {
             isInStock: productData.isInStock ?? true,
             long: productData.long,
             shop: productData.shop
-        };console.log(newProductData)
-        // Create a document in the Appwrite database with the uploaded images
+        };
+        
         const document = await databases.createDocument(
             conf.appwriteProductsDatabaseId,
             conf.appwriteProductsCollectionId,
