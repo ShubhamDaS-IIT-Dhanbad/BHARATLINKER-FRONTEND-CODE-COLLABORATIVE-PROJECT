@@ -1,16 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Cookies from 'js-cookie';
-import { CiImageOn } from 'react-icons/ci';  // Ensure CiImageOn is imported correctly
+import { CiImageOn } from 'react-icons/ci';
 import { Oval } from 'react-loader-spinner';
 import { FaArrowLeft } from 'react-icons/fa';
 import { updateShopData, getShopData } from '../../../appWrite/shop/shop.js';
 import conf from '../../../conf/conf.js';
 
+
+import { IoClose } from "react-icons/io5";
 import './dashboard.css'
 const ShopManager = () => {
   const navigate = useNavigate();
 
+  const [showUpdatePopUp, setShowUpdatePopUp] = useState();
 
   const [shopData, setShopData] = useState({});
   const [images, setImages] = useState([null, null, null]);
@@ -29,13 +32,14 @@ const ShopManager = () => {
     long: '',
   });
 
-  useEffect(() => {
-    const shopData = Cookies.get('BharatLinkerShopData');
 
+  const initializeShopData = async () => {
+    const shopData = Cookies.get('BharatLinkerShopData');
+  
     if (shopData) {
       const parsedShopData = JSON.parse(shopData);
       setShopData(parsedShopData);
-
+  
       const {
         id = parsedShopData.$id,
         phoneNumber,
@@ -48,7 +52,7 @@ const ShopManager = () => {
         long = '',
         images = parsedShopData.shopImages || [],
       } = parsedShopData;
-
+  
       setFormData({
         id,
         shopName,
@@ -60,56 +64,103 @@ const ShopManager = () => {
         lat,
         long,
       });
-
-      // Set images from the shop data, ensuring exactly 3 images
+  
       setImages([...images, null, null, null].slice(0, 3));
     } else {
       navigate('/retailer/login');
     }
-
+  
     setLoading(false);
-  }, [navigate]);
+  };
+  useEffect(() => {
+    initializeShopData();
+  }, []);
+  
+
+
+
+
+
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
-  const handleUpdate = async () => {
-    setIsUpdating(true);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  const refreshShopData = async () => {
     try {
-      const { id, ...shopDetails } = formData;
-      const newFiles = images.filter(image => image !== null); // Filter out null values
-      const toDeleteImages = toDeleteImagesUrls; // Images to be deleted
-
-      // Update shop data in the database
-      await updateShopData(id, toDeleteImages, shopDetails, newFiles);
-
-      // Fetch updated shop data
-      const fetchShopData = await getShopData(shopData.phoneNumber);  // Assuming phoneNumber is available
-
-      // Set updated shop data in Cookies
+      const fetchShopData = await getShopData(shopData.phoneNumber);
       Cookies.set('BharatLinkerShopData', JSON.stringify(fetchShopData), { expires: 7 });
-
-      // Update form data with the new data
-      setFormData({
-        ...formData,
-        ...fetchShopData,
-        images: fetchShopData.shopImages || formData.images,
-      });
-
-      // Reset images and toDeleteImagesUrls after successful update
-      setImages([null, null, null]);  // Reset the images state
-      setToDeleteImagesUrls([]);  // Reset the URLs to delete
-
-      alert('Shop details updated successfully!');
+      initializeShopData();
     } catch (error) {
-      console.error('Error updating shop:', error);
-      alert('Failed to update shop details.');
+      console.error('Error updating shop data:', error);
     } finally {
       setIsUpdating(false);
     }
   };
+  
+  const handleUpdate = async () => {
+    setIsUpdating(true);
+    try {
+      const { id, ...shopDetails } = formData;
+      const newFiles = images.filter(image => image !== null);
+      const toDeleteImages = toDeleteImagesUrls;
+
+      await updateShopData(id, toDeleteImages, shopDetails, newFiles);
+      refreshShopData();
+    } catch (error) {
+      console.error('Error updating shop:', error);
+    } finally {
+      setIsUpdating(false);
+    }
+  };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   const handleLocationClick = () => {
     if (navigator.geolocation) {
@@ -209,7 +260,7 @@ const ShopManager = () => {
       </header>
       {loading ? (
         <div className='retailer-dashboard-loader'>
-           <Oval height={40} width={45} color="white" secondaryColor="gray" ariaLabel="loading" />           
+          <Oval height={40} width={45} color="white" secondaryColor="gray" ariaLabel="loading" />
         </div>
       ) : (
         <div className='retailer-dashboard-div'>
@@ -231,13 +282,13 @@ const ShopManager = () => {
               <textarea
                 type="text"
                 name="address"
-                style={{minHeight:"30px"}}
+                style={{ minHeight: "30px" }}
                 value={formData.address || ''}
                 className='retailer-dashboard-div-form-label-input'
                 onChange={handleInputChange}
               />
             </label>
-            <div className='retailer-dashboard-shop-location'onClick={handleLocationClick} disabled={fetchingUserLocation}>
+            <div className='retailer-dashboard-shop-location' onClick={handleLocationClick} disabled={fetchingUserLocation}>
               {fetchingUserLocation ? 'Fetching location...' : 'Get Current Location'}
             </div>
             <label className='retailer-dashboard-div-form-label'>
@@ -267,7 +318,7 @@ const ShopManager = () => {
               <textarea
                 type="text"
                 name="category"
-                style={{minHeight:"30px"}}
+                style={{ minHeight: "30px" }}
                 value={formData.category || ''}
                 className='retailer-dashboard-div-form-label-input'
                 onChange={handleInputChange}
@@ -308,12 +359,56 @@ const ShopManager = () => {
                 ))}
               </div>
             </div>
-           
 
-            <div className='retailer-dashboard-shop-update' onClick={handleUpdate} disabled={isUpdating}>
-              {isUpdating ? 'Updating...' : 'UPDATE SHOP DATA'}
+
+            <div className='retailer-dashboard-shop-update' onClick={() => { setShowUpdatePopUp(true) }} disabled={isUpdating}>
+              {isUpdating ? <Oval height={20} width={25} color="white" secondaryColor="gray" ariaLabel="loading" />
+                : 'UPDATE SHOP DATA'}
+            </div>
+            <div className='retailer-dashboard-shop-update' onClick={() => { refreshShopData() }} >
+              REFRESH SHOP DATA
             </div>
           </form>
+
+
+
+
+          {showUpdatePopUp && (
+
+            <div className="refurbished-page-sort-by-tab">
+              <div className='location-tab-IoIosCloseCircle' onClick={() => setShowUpdatePopUp(false)} aria-label="Close sort options">
+                <IoClose size={25} />
+              </div>
+              <div style={{ color: "white" }}>CONFIRM UPDATE</div>
+              <div id="refurbished-page-sort-by-header">
+                <div id="refurbished-page-sortby-options">
+                  <div
+                    className="refurbished-page-sortby-option-title"
+                    onClick={() => { handleUpdate(); setShowUpdatePopUp(false) }}
+                  >
+                    <div
+                      className={'refurbished-sortby-item-unselected'}
+                    >
+                      YES
+                    </div>
+
+                  </div>
+                  <div
+                    className="refurbished-page-sortby-option-title"
+                    onClick={() => { setShowUpdatePopUp(false) }}
+                  >
+                    <div
+                      className={'refurbished-sortby-item-unselected'}
+                    >
+                      NO
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          )}
         </div>
       )}
     </>

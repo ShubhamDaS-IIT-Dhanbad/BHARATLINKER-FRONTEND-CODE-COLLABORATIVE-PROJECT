@@ -27,15 +27,9 @@ function UserHome() {
 
   const handleLogout = async () => {
     try {
-      const userId = userData?.sessionId?.userId;
-      if (userId) {
-        await logout(userId);
         Cookies.remove('BharatLinkerShopData');
-        navigate('/login');
+        navigate('retailer/login');
         console.log('Logged out successfully!');
-      } else {
-        console.error("No session ID found for logout.");
-      }
     } catch (error) {
       console.error('Logout failed:', error.message);
     }
