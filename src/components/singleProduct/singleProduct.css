@@ -294,9 +294,9 @@
 }
 #product-details-thumbnail{
     width: 6px; height: 6px;
-    border: 1.5px solid black;
+    background-color: #000000;
     border-radius: 50%;
 }
 .product-detail-image-select{
-   background-color: rgb(255, 217, 27);
+    border: 1.5px solid black;
 }
