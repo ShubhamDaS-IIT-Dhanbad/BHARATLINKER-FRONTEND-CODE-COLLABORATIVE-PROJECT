@@ -95,7 +95,6 @@ const Shop = () => {
                             <Oval height={40} width={45} color="white" secondaryColor="gray" ariaLabel="loading" />
                         </div>
                     </div>}
-                    endMessage={<p>No more shops to display.</p>}
                 >
                     <ShopList
                         shops={shops}

@@ -81,13 +81,14 @@
 #searchShopPage-footer-sortby,
 #searchShopPage-footer-filterby {
     display: flex;
-    width: 50vw;
+    width: 50vw;color: white;
     font-size: 19px;
     justify-content: center;
     align-items: center;
 }
+#searchShopPage-footer-sortby{color: black;}
 #searchShopPage-footer-filterby  {
-    display: flex;background-color: rgb(255, 194, 0);}
+    display: flex;background-color:  #f27aa6;}
 
 
 #filter-category-options {
@@ -102,7 +103,7 @@
     align-self: center;
     align-items: center;padding-left: 10px;gap: 10px;
     border-radius: 10px;font-size: 13px;
-    color: rgb(0, 0, 0);font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    color: rgb(255, 255, 255);font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     font-weight: 700;border: 1px solid rgba(0, 0, 0, 0.203);
 }
 .searchShopPage-footer-filterby-input{

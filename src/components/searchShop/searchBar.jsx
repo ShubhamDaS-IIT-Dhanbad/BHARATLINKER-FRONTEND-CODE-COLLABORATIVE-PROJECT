@@ -13,8 +13,8 @@ const ShopSearchBar = ({ inputValue, handleSearchChange, handleSearch }) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [locationTab, setLocationTab] = useState(false);
-    const [location, setLocation] = useState(null); // Declare location state
-    const [loading, setLoading] = useState(true); // Declare loading state
+    const [location, setLocation] = useState(null);
+    const [loading, setLoading] = useState(true);
 
     // Fetch location from cookies
     useEffect(() => {

@@ -5,7 +5,7 @@
     width: 100vw;
     position: fixed;
     top: 0;
-    color: #021526;background-color: rgb(255, 194, 0);
+    color: #ffffff;background-color: #f27aa6;
     z-index: 1000;
     transition: transform 0.3s ease, opacity 0.3s ease;
 }
@@ -85,8 +85,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: transparent;
-    border: 2px solid #ffffff;
+    background-color: white;
+    border: 2px solid #000000;
     border-radius: 11px;
     width: 96vw;
     height: 41px;
@@ -94,7 +94,7 @@
 
 /* Search Icon */
 .shop-page-search-icon {
-    font-size: 29px;
+    font-size: 29px;color: black;
     margin-left: 10px;
 }
 
