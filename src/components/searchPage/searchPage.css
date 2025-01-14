@@ -21,7 +21,7 @@
 #productSearchPage-footer {
     width: 100vw;
     display: flex;
-    color: rgb(8, 10, 9);
+    color: rgb(0, 0, 0);
     height: 60px;
     background-color: #ffffff;
     position: fixed;
@@ -40,6 +40,6 @@
 }
 
 #productSearchPage-footer-filterby {
-    display: flex;background-color: rgb(255, 194, 0);
+    display: flex;background-color: rgb(255, 216, 90);
 
 }

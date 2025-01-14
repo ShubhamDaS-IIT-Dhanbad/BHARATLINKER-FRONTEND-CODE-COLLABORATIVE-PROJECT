@@ -7,7 +7,7 @@ import Cookies from 'js-cookie';
 import useLocationFromCookie from '../../hooks/useLocationFromCookie.jsx';
 import conf from '../../conf/conf.js';
 import { ThreeDots } from 'react-loader-spinner';
-
+import { IoIosCloseCircleOutline } from "react-icons/io";
 import './locationTab.css';
 
 function LocationTab({ setLocationTab }) {
@@ -160,6 +160,7 @@ function LocationTab({ setLocationTab }) {
                             onKeyDown={handleKeyDown}
                             aria-label="Search for location"
                         />
+                        <IoIosCloseCircleOutline size={30} onClick={()=>{setSearchQuery('')}}/>
                     </div>
                     <div
                         className="location-tab-bottom-div-current-location"
