@@ -215,20 +215,20 @@ const updateShopData = async (shopId, toDeleteImagesUrls, updatedData, newFiles)
       } else {
         allImageUrls = [...validUrls, ...allImageUrls];
       }
-      // Step 4: Sort the image URLs to move null or empty values to the end
+      
       allImageUrls.sort((a, b) => {
-        if (!a) return 1; // Move null or empty values to the end
+        if (!a) return 1;
         if (!b) return -1;
-        return 0; // Keep the rest in the original order
+        return 0; 
       });
   
-      // Step 5: Convert lat and long to double (float in JavaScript) and customerCare to number
       const updatedShopData = {
         shopImages: allImageUrls,
         shopName: updatedData?.shopName?.toLowerCase() || '',
         address: updatedData?.address?.toLowerCase() || '',
+        category: updatedData?.category?.toLowerCase() || '',
         description: updatedData?.description?.toLowerCase() || '',
-        customerCare: updatedData?.customerCare ? Number(updatedData.customerCare) : null, // Convert to number
+        customerCare: updatedData?.customerCare ? Number(updatedData.customerCare) : null,
         email: updatedData?.email?.toLowerCase() || '',
         lat: updatedData?.lat ? parseFloat(updatedData.lat) : null,
         long: updatedData?.long ? parseFloat(updatedData.long) : null,
