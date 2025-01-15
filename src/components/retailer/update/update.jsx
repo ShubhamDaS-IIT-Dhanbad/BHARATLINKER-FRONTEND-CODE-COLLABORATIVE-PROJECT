@@ -41,7 +41,6 @@ const UploadProduct = () => {
                     </p>
                     <div
                         className="user-update-book-module-header-inner-div-phn-div"
-                        onClick={() => navigate('/pincode')}
                         aria-label="Change Location"
                         tabIndex={0}
                     >

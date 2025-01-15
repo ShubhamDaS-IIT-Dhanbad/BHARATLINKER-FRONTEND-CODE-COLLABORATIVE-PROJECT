@@ -50,7 +50,7 @@ function userRefurbishedProduct() {
             sortByAsc: false,
             sortByDesc: false,
             shopId:userData.$id,
-        };console.log("hetre",userData,params)
+        };
         dispatch(resetProducts());
         dispatch(fetchProducts(params));
     };
@@ -105,7 +105,7 @@ function userRefurbishedProduct() {
     return (
         <div className="user-product-page-body">
             <Helmet>
-                <title>Your Refurbished Products | Bharat Linker</title>
+                <title>Retailer Products | Bharat Linker</title>
                 <meta name="description" content="Browse and search for refurbished products offered by Bharat Linker." />
                 <meta name="keywords" content="refurbished products, buy refurbished, Bharat Linker" />
             </Helmet>
@@ -120,15 +120,15 @@ function userRefurbishedProduct() {
                             tabIndex={0}
                         />
                         <div className="user-refurbished-product-page-header-inner">
-                            <h1 className="user-refurbished-product-page-header-text">YOUR REFURBISHED</h1>
-                            {userData?.phn && (
+                            <h1 className="user-refurbished-product-page-header-text">ALL PRODUCTS</h1>
+                            {userData?.shopName && (
                                 <div
                                     className="user-refurbished-product-page-header-phn-div"
-                                    onClick={() => navigate('/pincode')}
                                     aria-label="Change Location"
                                     tabIndex={0}
+                                    style={{color:"black"}}
                                 >
-                                    {userData.phn}
+                                    {userData?.shopName}
                                 </div>
                             )}
                         </div>
