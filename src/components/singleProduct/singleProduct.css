@@ -49,8 +49,9 @@
     font-weight: 700;
     flex-wrap: wrap;
     margin-top: 10px;
-    font-size: 18px;
+    font-size: 18px;background-color: aqua;
     line-height: 1.2;color: #100f0fdb;
+    max-width: 80vw;
     letter-spacing: 0.28px;
 }
 
