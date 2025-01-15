@@ -114,8 +114,8 @@
 
 
 #product-details-price-button {
-    margin: 10px 0px 0px 0px;
-    padding: 10px 0px 20px 0px;
+    margin: 10px 10px 0px 10px;
+    padding: 0px 0px 20px 0px;
     display: flex; border-bottom: 0.1px solid rgba(183, 183, 183, 0.475);
     align-items: center;
     width: 100vw;
@@ -125,7 +125,6 @@
 }
 
 #searchProductDetails-price-button-inner {
-    margin-left: 10px;
     display: flex;flex-wrap: wrap;
     flex-direction: column;
     justify-content: flex-start;gap: 0px;font-weight: 400;
