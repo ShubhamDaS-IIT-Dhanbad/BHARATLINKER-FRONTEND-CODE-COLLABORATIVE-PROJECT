@@ -77,10 +77,6 @@ const ProductDetails = () => {
         fetchProductDetails();
     }, []);
 
-    const toggleDescription = () => {
-        setShowDescription(!showDescription);
-    };
-
     const handleImageClick = (index) => {
         setSelectedImage(productDetail?.images[index]);
     };

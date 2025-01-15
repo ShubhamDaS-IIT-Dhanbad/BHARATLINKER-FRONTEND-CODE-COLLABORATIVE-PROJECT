@@ -1,23 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { BiSearchAlt } from "react-icons/bi";
-import { TbChevronDown } from "react-icons/tb";
-import { FaArrowLeft } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom';
+import { FaCaretDown } from "react-icons/fa";
+import { FaArrowLeft } from 'react-icons/fa'; 
+import { useNavigate } from 'react-router-dom'; 
 import LocationTab from '../locationTab/locationTab';
-import Cookies from 'js-cookie'; // Import Cookies
+import Cookies from 'js-cookie';
 import './singleShopSearchBar.css';
-import { useDispatch } from 'react-redux';
-import { resetShops } from '../../redux/features/searchShopSlice.jsx'; // Ensure resetShops is imported
 
-const SingleShopSearchBar = ({ shopName }) => {
+const SingleProductSearchBar = () => {
     const navigate = useNavigate();
-    const dispatch = useDispatch(); // Initialize dispatch
-    const [inputValue, setInputValue] = useState(''); // Initialize state for input value
     const [locationTab, setLocationTab] = useState(false);
-    const [location, setLocation] = useState(null); // Add state for location
-    const [loading, setLoading] = useState(true); // Add state for loading
+    const [location, setLocation] = useState(null);
+    const [loading, setLoading] = useState(true); 
 
-    // Fetch location from cookies
     useEffect(() => {
         const fetchLocation = () => {
             const storedLocation = Cookies.get('BharatLinkerUserLocation');
@@ -30,71 +24,40 @@ const SingleShopSearchBar = ({ shopName }) => {
                     setLocation(null);
                 }
             }
-            setLoading(false); // Set loading to false after fetching location
+            setLoading(false);
         };
 
         fetchLocation();
-    }, [locationTab]); // Re-run when locationTab changes
-
-    // Handle key press for "Enter" key to trigger search
-    const handleKeyDown = (e) => {
-        if (e.key === 'Enter') {
-            dispatch(resetShops());
-            navigate(`/shop?query=${inputValue}`);
-        }
-    };
-
-    // Handle input value change and update the state
-    const handleInputChange = (e) => {
-        setInputValue(e.target.value); // Update input value on typing
-    };
+    }, [locationTab]);
 
     return (
-        <div className='single-shop-search-header-visible'>
-            <div className='single-shop-search-header-container'>
-                <div className='single-shop-search-header-user-section'>
+        <>
+            <div className='single-product-search-header-visible'>
+                <div className='single-product-search-header-user-section'>
                     <FaArrowLeft
-                        id='single-shop-search-back-icon' 
-                        size={25} 
-                        onClick={() => navigate('/shop')}
+                        id='single-product-search-back-icon'
+                        size={25}
+                        onClick={() => navigate(-1)}  // This will navigate to the previous page
                         aria-label="Go Back"
                         tabIndex={0}
                     />
-                    <div className='single-shop-search-header-location'>
-                        <p className='single-shop-search-location-label'>{shopName}</p>
-                        <div 
-                            className='single-shop-search-location-value' 
+                    <div className='single-product-search-header-location'>
+                        <p className='single-product-search-location-label'>SHOP INFO</p>
+                        <div
+                            className='single-product-search-location-value'
                             aria-label="Change Location"
                             tabIndex={0}
                         >
                             {loading ? 'Loading location...' : location ? location.address.slice(0,30) : 'Location not set'}
-                        
+                           <FaCaretDown size={15}/>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div className='single-shop-search-input-section'>
-                <div className='single-shop-search-input-container'>
-                    <BiSearchAlt 
-                        className='single-shop-search-icon' 
-                        onClick={() => navigate(`/search?query=${inputValue}`)}
-                        aria-label="Search"
-                        tabIndex={0}
-                    />
-                    <input
-                        className='single-shop-search-input'
-                        placeholder="Search Shop"
-                        value={inputValue}  // Controlled input value
-                        onKeyDown={handleKeyDown} // Changed to onKeyDown
-                        onChange={handleInputChange}  // Handle input change
-                        aria-label="Search input"
-                    />
-                </div>
-            </div>
             {locationTab && <LocationTab setLocationTab={setLocationTab} />}
-        </div>
+        </>
     );
 };
 
-export default SingleShopSearchBar;
+export default SingleProductSearchBar;
