@@ -172,7 +172,6 @@ const getRetailerProducts = async ({
     }
 
     try {
-        // Convert inputValue to an array of tokens
         const inputTokens = inputValue.split(' ').filter(token => token.trim() !== '').map(token => token.toLowerCase());
 
         const queries = [];

@@ -45,8 +45,7 @@ const SearchPage = () => {
     };
     useEffect(() => {
         if (products.length == 0 && !loading) {
-            executeSearch();
-        }
+            executeSearch();}
     }, [products.length,inputValue]);
 
     return (
