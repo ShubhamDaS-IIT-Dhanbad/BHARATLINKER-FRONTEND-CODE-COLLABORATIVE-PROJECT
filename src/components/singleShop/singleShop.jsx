@@ -57,7 +57,7 @@ const ShopDetails = () => {
             navigator.geolocation.getCurrentPosition(
                 (position) => {
                     const { latitude: userLat, longitude: userLon } = position.coords;
-                    const { lat: shopLat, lon: shopLon } = shopDetail;
+                    const { lat: shopLat, long: shopLon } = shopDetail;
 
                     const googleMapsDirectionsUrl = `https://www.google.com/maps/dir/?api=1&origin=${userLat},${userLon}&destination=${shopLat},${shopLon}&travelmode=driving`;
 
@@ -74,20 +74,23 @@ const ShopDetails = () => {
     };
 
     const handlePhoneClick = () => {
-        if (shopDetail?.customerCare) {
-            window.location.href = `tel:${shopDetail?.customerCare}`;
+        const phone = shopDetail?.customerCare;
+        if (phone && /^[0-9+()\s-]+$/.test(phone)) {
+            window.location.href = `tel:${phone}`;
         } else {
-            alert("Phone number not available.");
+            alert("Valid phone number not available.");
         }
     };
-
+    
     const handleMailClick = () => {
-        if (shopDetail?.email) {
-            window.location.href = `mailto:${shopDetail.email}`;
+        const email = shopDetail?.email;
+        if (email && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+            window.location.href = `mailto:${email}`;
         } else {
-            alert("Email not available.");
+            alert("Valid email not available.");
         }
     };
+    
 
     const toggleDescription = () => {
         setShowDescription((prev) => !prev);
