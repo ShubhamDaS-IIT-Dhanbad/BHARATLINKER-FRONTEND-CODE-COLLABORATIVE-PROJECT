@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BiSearchAlt } from "react-icons/bi";
-import { TbChevronDown } from "react-icons/tb";
+import { FaCaretDown } from "react-icons/fa";
 import { FaArrowLeft } from 'react-icons/fa'; // Back icon
 import { useNavigate } from 'react-router-dom'; // Navigate hook for routing
 import LocationTab from '../locationTab/locationTab';
@@ -34,20 +33,7 @@ const SingleProductSearchBar = () => {
         };
 
         fetchLocation();
-    }, [locationTab]); // Re-run when locationTab changes
-
-    // Handle key press for "Enter" key to trigger search
-    const handleKeyDown = (e) => {
-        if (e.key === 'Enter' && inputValue.trim()) {
-            dispatch(resetProducts());
-            navigate(`/search?query=${inputValue.trim()}`);
-        }
-    };
-
-    // Handle input value change and update the state
-    const handleInputChange = (e) => {
-        setInputValue(e.target.value);
-    };
+    }, [locationTab]);
 
     return (
         <>
@@ -69,7 +55,7 @@ const SingleProductSearchBar = () => {
                             tabIndex={0}
                         >
                             {loading ? 'Loading location...' : location ? location.address.slice(0,30): 'Location not set'}
-                           
+                           <FaCaretDown size={15}/>
                         </div>
                     </div>
                 </div>
