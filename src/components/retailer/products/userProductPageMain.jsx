@@ -115,7 +115,7 @@ function userRefurbishedProduct() {
                         <FaArrowLeft
                             id="user-refurbished-product-page-left-icon"
                             size={25}
-                            onClick={() => navigate('/user')}
+                            onClick={() => navigate('/retailer')}
                             aria-label="Go back to User Account"
                             tabIndex={0}
                         />
