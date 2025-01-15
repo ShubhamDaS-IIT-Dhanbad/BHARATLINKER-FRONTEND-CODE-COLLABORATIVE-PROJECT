@@ -269,14 +269,14 @@
   }
   
   .description-heading {
-    font-size: 15px;font-weight: 300;
+    font-size: 15px;font-weight: 500;
     line-height: 1.2;font-family: Arial, Helvetica, sans-serif;
-    margin-bottom: 10px;
+    margin-bottom: 10px;color: black;
   }
   
   .description-content {
     max-width: 90vw;
-    font-size: 14px;font-weight: 300;
+    font-size: 14px;font-weight: 400;
     line-height: 1.2;font-family: Arial, Helvetica, sans-serif;
   }
   
