@@ -8,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import {updateProduct, deleteProduct} from '../../../appWrite/uploadProduct/upload.js'
-import { resetProducts } from '../../../redux/features/retailer/product.jsx';
+import { resetProducts,deleteProductS } from '../../../redux/features/retailer/product.jsx';
 
 import Cookies from 'js-cookie';
 const UploadBooksModulesForm = () => {
@@ -182,7 +182,7 @@ const UploadBooksModulesForm = () => {
         setIsDelete(false);
         try {
             await deleteProduct(productId, toDeleteImagesUrls);
-            dispatch(deleteProduct(productId));
+            dispatch(deleteProductS(productId));
             setIsDeleteSuccessful(true);
             console.log('Product deleted successfully.');
         } catch (error) {
@@ -470,7 +470,7 @@ const UploadBooksModulesForm = () => {
                 />
             )}
 
-            {isDeleteSuccessful && (<PopupSuccess message="Product deleted successfully!" onClose={() => navigate('/user/refurbished')} />)}
+            {isDeleteSuccessful && (<PopupSuccess message="Product deleted successfully!" onClose={() => navigate('/retailer/products')} />)}
             {isUpdateSuccessful && (<PopupSuccess message="Product updated successfully!" onClose={() => setIsUpdateSuccessful(false)} />)}
 
             {deleteFail && <PopupFail message="Failed to delete product. Please try again!" onClose={() => setDeleteFail(false)} />}

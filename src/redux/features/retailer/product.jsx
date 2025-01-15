@@ -152,7 +152,7 @@ const retailerProductsSlice = createSlice({
             state.selectedCategories = [];
             state.selectedBrands = [];
         },
-        deleteProduct: (state, action) => {
+        deleteProductS: (state, action) => {
             const productId = action.payload;
             state.products = state.products.filter((product) => product.$id !== productId.id);
         },
@@ -228,7 +228,7 @@ export const {
     resetSortFilters,
     resetFilters,
     toggleCategory,
-    deleteProduct,
+    deleteProductS,
     updateProduct,
 } = retailerProductsSlice.actions;
 
