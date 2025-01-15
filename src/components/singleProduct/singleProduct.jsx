@@ -3,15 +3,12 @@ import { useParams, useNavigate } from 'react-router-dom';
 import "./singleProduct.css";
 import searchProductService from '../../appWrite/searchProduct.js';
 import { FaCaretRight } from "react-icons/fa";
-import { HiOutlineArrowRightStartOnRectangle } from "react-icons/hi2";
 import { useDispatch, useSelector } from 'react-redux';
 import SingleProductSearchBar from './singleProductSearchBar.jsx';
-import { TbListDetails } from "react-icons/tb";
 import { RotatingLines } from 'react-loader-spinner';
 
 import { fetchShopById } from '../../redux/features/singleShopSlice.jsx';
-import { IoClose } from 'react-icons/io5';
-import { BsQuestionCircle } from "react-icons/bs";
+import { RiShareForwardLine } from "react-icons/ri";
 
 const fallbackImage = 'http://res.cloudinary.com/dthelgixr/image/upload/v1727870088/hd7kcjuz8jfjajnzmqkp.webp';
 
@@ -24,13 +21,11 @@ const ProductDetails = () => {
 
     const { productId } = useParams();
     const [descriptionSections, setDescriptionSections] = useState([]);
-
     const [loading, setLoading] = useState(true);
     const [productDetail, setProductDetails] = useState(null);
     const [shopDetail, setShopDetail] = useState(null);
     const [selectedImage, setSelectedImage] = useState(fallbackImage);
     const [showDescription, setShowDescription] = useState(false);
-
 
     const parseDescription = (description) => {
         if (!description) return [];
@@ -82,7 +77,6 @@ const ProductDetails = () => {
         fetchProductDetails();
     }, []);
 
-
     const toggleDescription = () => {
         setShowDescription(!showDescription);
     };
@@ -97,13 +91,20 @@ const ProductDetails = () => {
         }
     };
 
-
-
-
-
-
-
-
+    const handleShare = () => {
+        if (navigator.share) {
+            navigator
+                .share({
+                    title: productDetail?.title || "Product",
+                    text: `Check out this product: ${productDetail?.title || ""}`,
+                    url: window.location.href,
+                })
+                .then(() => console.log("Product shared successfully"))
+                .catch((error) => console.error("Error sharing product:", error));
+        } else {
+            alert("Sharing not supported on this browser.");
+        }
+    };
 
     return (
         <Fragment>
@@ -134,9 +135,11 @@ const ProductDetails = () => {
                                     ))}
                                 </div>
 
-
                                 <div id="product-details-info">
                                     <div id="product-details-title">{productDetail?.title}</div>
+                                    <div className="product-detaile-share" onClick={handleShare}>
+                                        <RiShareForwardLine size={20} />
+                                    </div>
                                 </div>
 
                                 <div
@@ -153,10 +156,6 @@ const ProductDetails = () => {
                                 >
                                     Shop: {shopDetail ? shopDetail?.shopName.toUpperCase() : 'Loading...'}
                                 </div>
-
-
-
-
 
                                 <div id="product-details-price-button">
                                     <div id="searchProductDetails-price-button-inner">
@@ -192,7 +191,6 @@ const ProductDetails = () => {
                                         ))}
                                     </div>
                                 </div>
-
                             </div>
                         </>
                     )}
