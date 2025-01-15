@@ -27,6 +27,7 @@ const ProductList = () => {
                     <SearchPageProductCard
                         key={product.$id}
                         id={product.$id}
+                        discountedPrice={product.discountedPrice}
                         image={product.images}
                         title={product.title.length > 45 ? `${product.title.substr(0, 45)}...` : product.title}
                         price={product.price}
