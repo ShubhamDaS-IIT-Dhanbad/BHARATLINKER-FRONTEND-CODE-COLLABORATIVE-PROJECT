@@ -118,7 +118,6 @@
     padding: 0px 0px 20px 0px;
     display: flex; border-bottom: 0.1px solid rgba(183, 183, 183, 0.475);
     align-items: center;
-    width: 100vw;
     justify-content: space-between;
     font-weight: 500;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
