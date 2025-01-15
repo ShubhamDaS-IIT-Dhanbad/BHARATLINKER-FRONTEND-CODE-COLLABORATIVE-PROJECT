@@ -57,9 +57,7 @@ const ShopDetails = () => {
             navigator.geolocation.getCurrentPosition(
                 (position) => {
                     const { latitude: userLat, longitude: userLon } = position.coords;
-                    const { lat: shopLat, long: shopLon } = shopDetail;
-
-                    const googleMapsDirectionsUrl = `https://www.google.com/maps/dir/?api=1&origin=${userLat},${userLon}&destination=${shopLat},${shopLon}&travelmode=driving`;
+                    const googleMapsDirectionsUrl = `https://www.google.com/maps/dir/?api=1&origin=${userLat},${userLon}&destination=${shopDetail?.lat},${shopDetail?.lang}&travelmode=driving`;
 
                     window.location.href = googleMapsDirectionsUrl;
                 },
