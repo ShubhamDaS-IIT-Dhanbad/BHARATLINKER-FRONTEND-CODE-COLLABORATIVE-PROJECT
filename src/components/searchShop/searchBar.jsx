@@ -46,12 +46,14 @@ const ShopSearchBar = ({ inputValue, handleSearchChange, handleSearch }) => {
     return (
         <>
             <div className='shop-page-header-visible'>
+
                 <div className='shop-page-header-container'>
+
                     <div className='shop-page-header-user-section'>
                         <FaArrowLeft
                             id='shop-page-user-icon'
                             size={25}
-                            onClick={() => navigate('/')}  // Navigate to home when clicked
+                            onClick={() => navigate('/')}
                             aria-label="Go Back"
                             tabIndex={0}
                         />
@@ -63,19 +65,20 @@ const ShopSearchBar = ({ inputValue, handleSearchChange, handleSearch }) => {
                                 aria-label="Change Location"
                                 tabIndex={0}
                             >
-                                {/* Show loading or the location if available */}
-                                {loading ? 'Loading location...' : (location ? location.address.slice(0,30) : 'Location not set')}
+                                {loading ? 'Loading location...' : (location ? location.address.slice(0,30) : 'SET LOCATION , INDIA')}
                                 <TbChevronDown size={15} />
                             </div>
                         </div>
                     </div>
+
                 </div>
+
 
                 <div className='shop-page-search-section'>
                     <div className='shop-page-search-input-container'>
                         <BiSearchAlt
                             className='shop-page-search-icon'
-                            onClick={handleSearch}  // Trigger search on icon click
+                            onClick={handleSearch} 
                             aria-label="Search"
                             tabIndex={0}
                         />

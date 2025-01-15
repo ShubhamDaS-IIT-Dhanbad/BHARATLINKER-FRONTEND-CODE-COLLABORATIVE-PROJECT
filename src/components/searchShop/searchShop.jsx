@@ -10,6 +10,8 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import Cookies from 'js-cookie';
 
 import { Oval } from 'react-loader-spinner';
+
+
 import './searchShop.css';
 const Shop = () => {
     const navigate = useNavigate();

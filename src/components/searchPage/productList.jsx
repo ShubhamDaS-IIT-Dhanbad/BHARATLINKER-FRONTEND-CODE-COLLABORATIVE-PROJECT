@@ -2,15 +2,14 @@ import React from 'react';
 import { Oval } from 'react-loader-spinner';
 import { useSelector } from 'react-redux';
 import SearchPageProductCard from '../productCards/searchPageProductCard.jsx';
-import { SiIconfinder } from "react-icons/si";
-
+import notfound from '../../assets/notfound.png';
 import './productList.css';
 
 
 const NoProductsFound = () => {
     return (
-        <div className='search-page-no-product-found' style={{ color: "#EB3678" }}>
-            < SiIconfinder size={60} />
+        <div className='search-shop-no-shop-found'>
+            <img src={notfound} />
         </div>
     );
 };

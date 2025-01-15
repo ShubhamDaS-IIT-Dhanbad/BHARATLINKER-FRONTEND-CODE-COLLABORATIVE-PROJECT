@@ -71,7 +71,7 @@
     width: 100vh;
     display: flex;background-color: white;
     color: black;
-    height: 60px;
+    height: 55px;
     position: fixed;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     bottom: 0;
@@ -88,7 +88,7 @@
 }
 #searchShopPage-footer-sortby{color: black;}
 #searchShopPage-footer-filterby  {
-    display: flex;background-color:  #f27aa6;}
+    display: flex;background-color:  #000000;}
 
 
 #filter-category-options {
@@ -119,12 +119,7 @@
     margin-top: 120px;margin-bottom: 60px;
     background-color: rgb(255, 255, 255);
 }
-/* No shop found */
-.search-no-shop-found{
-    display: flex;flex-direction: column;
-    align-items: center;justify-content: center;
-    height: 50vh;
-}
+
 
 #shop-page-filter-by-options{
     display: flex;
@@ -204,4 +199,36 @@
 #search-shop-load-more-shop-loader{
     padding-bottom: 67px;
     display: flex;justify-content: center;align-items: center;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* No shop found */
+.search-shop-no-shop-found{
+    display: flex;flex-direction: column;
+    align-items: center;justify-content: center;
+    height: 90vh;
+}
+.search-shop-no-shop-found img{
+    width: 80vw;
 }

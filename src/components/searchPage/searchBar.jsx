@@ -61,7 +61,7 @@ const SearchBar = ({ inputValue, onInputChange }) => {
                                 aria-label="Change Location"
                                 tabIndex={0}
                             >
-                                {loading ? 'Loading...' : (location ? location.address.slice(0, 30) : 'Location not set')}
+                                {loading ? 'Loading...' : (location ? location.address.slice(0, 30) : 'SET LOCATION , INDIA')}
                                 <TbChevronDown size={15} onClick={() => setLocationTab(true)}/>
                             </div>
                         </div>

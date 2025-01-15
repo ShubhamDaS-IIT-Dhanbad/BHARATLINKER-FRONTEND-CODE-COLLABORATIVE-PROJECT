@@ -70,8 +70,7 @@ function HomePageNavbar() {
                         <div className='home-page-user-location'>
                             <p className='home-page-location-label'>Bharat | Linker</p>
                             <div className='home-page-location-value'>
-                                {/* Display loading text if location is still loading */}
-                                {loading ? 'Loading...' : (location ? location?.address.slice(0, 30) : 'Location not set')}
+                                {loading ? 'Loading...' : (location ? location?.address.slice(0, 30) : 'SET LOCATION , INDIA')}
                                 <TiArrowSortedDown size={15} onClick={() => setLocationTab(true)}/>
                             </div>
                         </div>
