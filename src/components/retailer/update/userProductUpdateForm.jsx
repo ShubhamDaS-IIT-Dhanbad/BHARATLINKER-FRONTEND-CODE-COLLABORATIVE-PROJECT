@@ -9,6 +9,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 
 import {updateProduct, deleteProduct} from '../../../appWrite/uploadProduct/upload.js'
 import { resetProducts } from '../../../redux/features/retailer/product.jsx';
+
 import Cookies from 'js-cookie';
 const UploadBooksModulesForm = () => {
     const dispatch = useDispatch();
@@ -20,7 +21,7 @@ const UploadBooksModulesForm = () => {
 
 
     const productId = useParams('id');
-    const products = useSelector((state) => state.retailerproducts.products);
+    const products = useSelector((state) => state.retailerProducts.products);
 
     const [loading, setLoading] = useState(true);
     const [isDeleting, setIsDeleting] = useState(false);
