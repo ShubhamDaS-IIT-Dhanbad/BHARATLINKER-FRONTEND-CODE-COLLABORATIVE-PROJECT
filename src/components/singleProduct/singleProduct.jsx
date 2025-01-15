@@ -160,7 +160,20 @@ const ProductDetails = () => {
 
                                 <div id="product-details-price-button">
                                     <div id="searchProductDetails-price-button-inner">
-                                        <div id="productDetails-discounted-price">₹{productDetail?.discountedPrice} <div className="product-detail-discount-container">10% off</div></div>
+                                        <div id="productDetails-discounted-price">₹{productDetail?.discountedPrice} <div className="product-detail-discount-container">
+                                            {productDetail?.price && productDetail?.discountedPrice ? (
+                                                <>
+                                                    <span>
+                                                        {Math.round(
+                                                            ((productDetail.price - productDetail.discountedPrice) / productDetail.price) * 100
+                                                        )}% off
+                                                    </span>
+                                                </>
+                                            ) : (
+                                                "Price not available"
+                                            )}
+                                        </div>
+                                        </div>
                                         <p id="productDetails-price1">MRP <p id="productDetails-price2">₹{productDetail?.price}</p></p>
                                     </div>
                                     <div id={`product-details-price-${productDetail?.isInStock ? 'instock' : 'outofstock'}`}>
