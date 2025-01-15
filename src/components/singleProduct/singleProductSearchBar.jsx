@@ -1,22 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { FaCaretDown } from "react-icons/fa";
-import { FaArrowLeft } from 'react-icons/fa'; // Back icon
-import { useNavigate } from 'react-router-dom'; // Navigate hook for routing
+import { FaArrowLeft } from 'react-icons/fa'; 
+import { useNavigate } from 'react-router-dom'; 
 import LocationTab from '../locationTab/locationTab';
-import { useDispatch } from 'react-redux';
-import Cookies from 'js-cookie'; // Import Cookies
-import { resetProducts } from '../../redux/features/searchPage/searchProductSlice.jsx';
+import Cookies from 'js-cookie';
 import './singleProductSearchBar.css';
 
 const SingleProductSearchBar = () => {
-    const dispatch = useDispatch();
     const navigate = useNavigate();
-    const [inputValue, setInputValue] = useState(""); // State to hold input value
     const [locationTab, setLocationTab] = useState(false);
-    const [location, setLocation] = useState(null); // Location state
-    const [loading, setLoading] = useState(true); // Loading state
+    const [location, setLocation] = useState(null);
+    const [loading, setLoading] = useState(true); 
 
-    // Fetch location from cookies
     useEffect(() => {
         const fetchLocation = () => {
             const storedLocation = Cookies.get('BharatLinkerUserLocation');
@@ -29,7 +24,7 @@ const SingleProductSearchBar = () => {
                     setLocation(null);
                 }
             }
-            setLoading(false); // Set loading to false after fetching location
+            setLoading(false);
         };
 
         fetchLocation();
@@ -37,7 +32,6 @@ const SingleProductSearchBar = () => {
 
     return (
         <>
-            {/* Header Section */}
             <div className='single-product-search-header-visible'>
                 <div className='single-product-search-header-user-section'>
                     <FaArrowLeft
