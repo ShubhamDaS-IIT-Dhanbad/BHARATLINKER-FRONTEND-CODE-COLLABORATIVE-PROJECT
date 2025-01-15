@@ -30,7 +30,7 @@ function ShopCard({ shop }) {
                 <div className="shop-card-info">
                     <div className="shop-card-divider"></div>
                     <div className="shop-card-address-toggle" onClick={toggleAddress}>
-                        <div>{shop?.category?.length > 0 ? shop.category : <>About</>}</div>
+                        <div>{shop?.category?.length > 0 ? shop.category.toUpperCase() : <>About</>}</div>
                         {showAddress ? <IoIosArrowUp size={20} /> : <IoIosArrowDown size={20} />}
                     </div>
 
