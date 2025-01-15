@@ -129,6 +129,17 @@
     justify-content: flex-start;gap: 0px;font-weight: 400;
     font-size: 18px;font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
+.product-detail-discount-container{
+background-color: rgb(83, 140, 238);color: white;
+font-size: 11px;display: flex;justify-content: center;align-items: center;
+border-radius: 5px;padding: 3px 7px 3px 7px;
+margin-left: 5px;
+
+}
+#productDetails-discounted-price{
+    display: flex;gap: 5px;justify-content: center;
+    align-items: center;
+}
 #productDetails-price1 {
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     color: #00000068;
