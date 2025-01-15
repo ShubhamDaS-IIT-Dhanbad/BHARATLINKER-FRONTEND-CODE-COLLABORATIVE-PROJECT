@@ -1,14 +1,14 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import searchProductService from '../../../appWrite/searchProduct.js';
+import {getRetailerProducts} from '../../../appWrite/uploadProduct/upload.js';
 
 // Async thunk to fetch products
 export const fetchProducts = createAsyncThunk(
     'products/fetchProducts',
-    async ({ inputValue,userLat,userLong,radius, selectedCategories, selectedBrands,page, productsPerPage, sortByAsc, sortByDesc }, { rejectWithValue }) => {
+    async ({ inputValue,shopId, selectedCategories, selectedBrands,page, productsPerPage, sortByAsc, sortByDesc }, { rejectWithValue }) => {
 
         try {
-            const response = await searchProductService.getProducts({
-                userLat,userLong,radius,
+            const response = await getRetailerProducts({
+                shopId,
                 inputValue,
                 page,
                 productsPerPage,
@@ -43,11 +43,11 @@ export const fetchProducts = createAsyncThunk(
 // Async thunk to load more products
 export const loadMoreProducts = createAsyncThunk(
     'products/loadMoreProducts',
-    async ({ inputValue,userLat,userLong,radius, selectedCategories, selectedBrands,page, productsPerPage, sortByAsc, sortByDesc }, { rejectWithValue }) => {
+    async ({ inputValue,shopId, selectedCategories, selectedBrands,page, productsPerPage, sortByAsc, sortByDesc }, { rejectWithValue }) => {
       
         try {
-            const response = await searchProductService.getProducts({
-                userLat,userLong,radius,
+            const response = await getRetailerProducts({
+                shopId,
                 inputValue,
                 page,
                 productsPerPage,
@@ -89,7 +89,7 @@ const initialState = {
     priceRange: { min: Number.MIN_SAFE_INTEGER, max: Number.MAX_SAFE_INTEGER },
     hasMoreProducts: true,
     error: null,
-    productsPerPage: 10, // Added productsPerPage to state
+    productsPerPage: 10, 
 };
 
 // Slice
@@ -158,6 +158,16 @@ const productsSlice = createSlice({
             state.selectedCategories = [];
             state.selectedBrands = [];
         },
+        
+    deleteProduct: (state, action) => {
+        const productId = action.payload;
+        state.refurbishedProducts = state.refurbishedProducts.filter(
+          (product) => product.$id !== productId.id
+        );
+      },
+      updateProduct: (state, action) => {
+        // You can implement update logic here if needed
+      },
     },
     extraReducers: (builder) => {
         builder
@@ -187,7 +197,6 @@ const productsSlice = createSlice({
                 const { products, hasMoreProducts } = action.payload;
 
                 if (products.length > 0) {
-                    // Filter out duplicate products
                     const newProducts = products.filter(
                         (product) => !state.products.some(existingProduct => existingProduct.$id === product.$id)
                     );
@@ -232,7 +241,9 @@ export const {
     setPriceRange,
     resetSortFilters,
     resetFilters,
-    toggleCategory
+    toggleCategory,
+    deleteProduct,
+    updateProduct
 } = productsSlice.actions;
 
 export default productsSlice.reducer;

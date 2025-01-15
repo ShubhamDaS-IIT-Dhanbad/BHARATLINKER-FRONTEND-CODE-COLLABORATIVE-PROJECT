@@ -22,6 +22,8 @@ import refurbishedproductfiltersection from '../features/refurbishedPage/refurbi
 //user refurbished products
 import userRefurbishedProducts from '../features/user/userAllRefurbishedProductsSlice.jsx'
 
+//retailer products
+import retailerproducts from '../features/retailer/product.jsx'
 const store=configureStore({
     reducer:{
         pincodestate:pincodestate,
@@ -46,6 +48,8 @@ const store=configureStore({
         //user refurbished products
         userRefurbishedProducts:userRefurbishedProducts,
 
+        //retailer products
+        retailerproducts:retailerproducts
     }
 });
 export default store;

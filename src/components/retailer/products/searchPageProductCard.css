@@ -1,0 +1,81 @@
+.user-refurbished-product-card {
+    color: black;
+    width: 46vw;
+    max-width: 200px;
+    display: flex;
+    flex-direction: column;
+    min-height: 290px;
+    max-height: 350px;
+    align-items: center;
+    z-index: 3;
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+    background-color: rgb(255, 255, 255);
+    border-radius: 2px;
+}
+
+.user-refurbished-product-card-top {
+    min-height: 155px;
+    max-height: 155px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.user-refurbished-product-card-top-image {
+    width: 90%;max-height: 115px;
+    height: auto;
+    border-radius: 5px;
+}
+
+.user-refurbished-product-card-info {
+    display: flex;
+    flex-direction: column;
+    font-size: 19px;
+    height: 100%;
+    padding: 3px 5px;
+    font-weight: 900;
+    justify-content: space-between;
+}
+
+.user-refurbished-product-card-bottom {
+    width: 100%;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    color: #000000;
+    overflow: scroll;
+}
+.user-refurbished-product-card-title {
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-size: 15px;
+    font-weight: 900;
+    letter-spacing: 1px;
+}
+
+.user-refurbished-product-card-price {
+    font-size: 21px;
+    margin-top: 19px;
+    color: rgb(0, 0, 0);
+    font-weight: 1000;
+}
+
+.user-refurbished-product-card-edit{
+    /* background-color: rgb(106, 232, 74); */
+    display: flex;
+    align-self: center;
+    justify-content: center;
+    align-items: center;
+    color: rgb(0, 205, 21);
+    font-weight: 900;
+    border-radius: 5px;
+    font-size: 15px;letter-spacing: 2px;
+    border: 1.5px solid rgb(106, 232, 74);
+    /* border: 1px solid black; */
+    width: 98%;
+    margin-bottom: 7px;
+    min-height: 40px;
+    max-height: 40px;
+}
+

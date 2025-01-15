@@ -143,7 +143,7 @@ const uploadProductWithImages = async (productData, files = []) => {
         return document;
     } catch (error) {
         console.error('Error uploading product:', error);
-        await this.cleanupUploadedImages(uploadedImages);
+        await cleanupUploadedImages(uploadedImages);
         throw error;
     }
 }
@@ -153,5 +153,200 @@ const uploadProductWithImages = async (productData, files = []) => {
 
 
 
+const getRetailerProducts = async ({
+    shopId,
+    inputValue = '',
+    selectedCategories,
+    selectedBrands,
+    minPrice,
+    maxPrice,
+    isInStock,
+    page,
+    productsPerPage,
+    sortByAsc = false,
+    sortByDesc = false
+    
+}) => {
+    if (!shopId) {
+        return { success: false, error: 'Phone number is required to fetch products.' };
+    }
 
-export {uploadProductWithImages};
+    try {
+        // Convert inputValue to an array of tokens
+        const inputTokens = inputValue.split(' ').filter(token => token.trim() !== '').map(token => token.toLowerCase());
+
+        const queries = [];
+        queries.push(Query.equal('shop', shopId));
+        if (selectedCategories.length > 0) {
+            queries.push(Query.or([
+                Query.contains('productType', selectedCategories),
+                Query.contains('keywords', selectedCategories)
+            ]));
+        }
+        if (inputValue.length > 0) {
+            queries.push(Query.or([
+                Query.contains('title', inputTokens),
+                Query.contains('description', inputTokens)
+            ]));
+        }
+
+        if (sortByAsc) {
+            queries.push(Query.orderAsc('price'));
+        }
+        if (sortByDesc) {
+            queries.push(Query.orderDesc('price'));
+        }
+
+        const offset = (page - 1) * productsPerPage;
+        queries.push(Query.limit(productsPerPage), Query.offset(offset));
+
+        const fetchProducts = async (collectionId, applyPriceFilter = false) => {
+            const categoryQueries = [...queries];
+            if (applyPriceFilter) {
+                if (minPrice !== undefined) {
+                    categoryQueries.push(Query.greaterThanEqual('price', minPrice));
+                }
+                if (maxPrice !== undefined) {
+                    categoryQueries.push(Query.lessThanEqual('price', maxPrice));
+                }
+            }
+            if (isInStock !== undefined) {
+                categoryQueries.push(Query.equal('isInStock', isInStock));
+            }
+            const response = await databases.listDocuments(
+                conf.appwriteProductsDatabaseId,
+                collectionId,
+                categoryQueries
+            );
+            return response.documents || [];
+        };
+
+        const allProducts = await fetchProducts(conf.appwriteProductsCollectionId);
+        if (!Array.isArray(allProducts)) {
+            throw new TypeError("Expected 'allProducts' to be an array.");
+        }
+
+        // Skip scoring when inputValue is empty
+        if (inputValue.length === 0) {
+            return {
+                success: true,
+                products: allProducts
+            };
+        }
+
+        // Scoring and filtering
+        const scoredProducts = allProducts.map(product => {
+            let score = 0;
+
+            // Check matches in title and description
+            inputTokens.forEach(token => {
+                if (product.title.toLowerCase().includes(token)) score += 3; // Exact match in title
+                if (product.description.toLowerCase().includes(token)) score += 2; // Exact match in description
+                if (product.title.toLowerCase().startsWith(token)) score += 5; // Title starts with token
+                if (product.description.toLowerCase().startsWith(token)) score += 4; // Description starts with token
+            });
+
+            return { ...product, score }; // Attach score to each product
+        });
+
+        // Filter out products with no score (if necessary)
+        const filteredProducts = scoredProducts.filter(product => product.score > 0);
+
+        // Sort by score in descending order
+        filteredProducts.sort((a, b) => b.score - a.score);
+
+        // Apply additional sorting by price if needed
+        if (sortByAsc) {
+            filteredProducts.sort((a, b) => a.price - b.price);
+        }
+        if (sortByDesc) {
+            filteredProducts.sort((a, b) => b.price - a.price);
+        }
+
+        return {
+            success: true,
+            products: filteredProducts
+        };
+
+    } catch (error) {
+        console.error('Error fetching user refurbished products:', error);
+        return { success: false, error: error.message || 'Unknown error' };
+    }
+}
+
+
+
+/*imp*/
+const updateProduct = async (productId, toDeleteImagesUrls, updatedData, newFiles = []) => {
+    let uploadedImages = [];
+    let allImageUrls = updatedData.images || [];
+    try {
+        if (toDeleteImagesUrls.length > 0) {
+            await cleanupUploadedImages(toDeleteImagesUrls);
+        }
+        const validUrls = newFiles.filter(url => url !== null && typeof url === 'string');
+        const filesToUpload = newFiles.filter(file => typeof file === 'object');
+
+        if (filesToUpload.length > 0) {
+            uploadedImages = await uploadImagesToCloudinary(filesToUpload);
+            const newImageUrls = uploadedImages.map(image => image.secure_url);
+            allImageUrls = [...validUrls, ...allImageUrls, ...newImageUrls];
+        } else {
+            allImageUrls = [...validUrls, ...allImageUrls];
+        }
+        const updatedProductData = {
+            ...updatedData,
+            title: updatedData.title.toLowerCase(),
+            description: updatedData.description.toLowerCase(),
+            price: Number(updatedData.price),
+            discountedPrice: Number(updatedData.discountedPrice),
+            category: updatedData?.category?.toLowerCase() || '',
+            brand: updatedData?.brand?.toLowerCase() || '',
+            keywords: updatedData.keywords,
+            images: allImageUrls,
+            lat: updatedData.lat,
+            long: updatedData.long
+        };
+        const updatedDocument = await databases.updateDocument(
+            conf.appwriteProductsDatabaseId,
+            conf.appwriteProductsCollectionId,
+            productId.id,
+            updatedProductData
+        );
+
+        return updatedDocument;
+    } catch (error) {
+        console.error('Error updating product:', error);
+        if (uploadedImages.length > 0) await cleanupUploadedImages(uploadedImages);
+        throw error;
+    }
+}
+
+/*imp*/
+const deleteProduct = async (productId, imagesToDelete) => {
+    try {
+        imagesToDelete = imagesToDelete.filter(url => url !== null);
+        if (imagesToDelete.length > 0) {
+            await cleanupUploadedImages(imagesToDelete);
+            console.log(`Successfully deleted images: ${imagesToDelete.join(', ')}`);
+        }
+        const response = await databases.deleteDocument(
+            conf.appwriteProductsDatabaseId,
+            conf.appwriteProductsCollectionId,
+            productId.id
+        );
+        console.log('Product deleted successfully:', response);
+        return { status: "success" };
+    } catch (error) {
+        console.error('Error deleting product:', error);
+        throw error;
+    }
+}
+
+
+
+
+
+export {uploadProductWithImages,getRetailerProducts,
+    updateProduct,deleteProduct
+};
