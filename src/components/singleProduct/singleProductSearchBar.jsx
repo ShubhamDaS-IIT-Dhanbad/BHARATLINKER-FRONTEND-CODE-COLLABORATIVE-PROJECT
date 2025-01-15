@@ -50,9 +50,9 @@ const SingleProductSearchBar = () => {
     };
 
     return (
-        <div className='single-product-search-header-visible'>
+        <>
             {/* Header Section */}
-            <div className='single-product-search-header-container'>
+            <div className='single-product-search-header-visible'>
                 <div className='single-product-search-header-user-section'>
                     <FaArrowLeft
                         id='single-product-search-back-icon'
@@ -62,7 +62,7 @@ const SingleProductSearchBar = () => {
                         tabIndex={0}
                     />
                     <div className='single-product-search-header-location'>
-                        <p className='single-product-search-location-label'>PRODUCT DETAIL</p>
+                        <p className='single-product-search-location-label'>PRODUCT INFO</p>
                         <div
                             className='single-product-search-location-value'
                             aria-label="Change Location"
@@ -75,31 +75,8 @@ const SingleProductSearchBar = () => {
                 </div>
             </div>
 
-            {/* Search Section */}
-            <div className='single-product-search-input-section'>
-                <div className='single-product-search-input-container'>
-                    <BiSearchAlt
-                        className='single-product-search-icon'
-                        onClick={() => {
-                            if (inputValue.trim()) {
-                                navigate(`/search?query=${inputValue.trim()}`);
-                            }
-                        }}
-                        aria-label="Search"
-                        tabIndex={0}
-                    />
-                    <input
-                        className='single-product-search-input'
-                        placeholder="Search Product"
-                        value={inputValue}
-                        onKeyDown={handleKeyDown}
-                        onChange={handleInputChange}
-                        aria-label="Search input"
-                    />
-                </div>
-            </div>
             {locationTab && <LocationTab setLocationTab={setLocationTab} />}
-        </div>
+        </>
     );
 };
 
