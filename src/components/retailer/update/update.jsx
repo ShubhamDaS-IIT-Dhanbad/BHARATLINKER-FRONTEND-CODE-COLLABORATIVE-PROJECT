@@ -9,7 +9,7 @@ import './userProductUpdate.css';
 
 const UploadProduct = () => {
     const navigate = useNavigate();
-    const { id: productId} = useParams();
+    const { id: productId } = useParams();
 
     const products = useSelector((state) => state.userRefurbishedProducts.refurbishedProducts);
     const [userData, setUserData] = useState(null);
@@ -27,32 +27,32 @@ const UploadProduct = () => {
 
     return (
         <>
-            <div className="user-update-book-module-header">
+            <div className="retailer-update-header">
                 <FaArrowLeft
-                    id="user-update-book-module-header-left-icon"
+                    id="retailer-update-header-left-icon"
                     size={25}
                     onClick={() => navigate('/retailer/products')}
                     aria-label="User Account"
                     tabIndex={0}
                 />
-                <div className="user-update-book-module-header-inner-div">
-                    <p className="user-update-book-module-header-inner-div-p">
+                <div className="retailer-update-header-inner-div">
+                    <p className="retailer-update-header-inner-div-p">
                         UPDATE PRODUCT
                     </p>
-                    <div
-                        className="user-update-book-module-header-inner-div-phn-div"
-                        aria-label="Change Location"
-                        tabIndex={0}
-                    >
-                        {userData?.shopName.toUpperCase() || 'No Phone Number'}
-                    </div>
+                    {userData?.shopName && (
+                        <div
+                            className={`retailer-upload-product-header-shopname`}
+                            aria-label="Change Location"
+                            tabIndex={0}
+                        >
+                            {userData?.shopName?.toUpperCase()}
+                        </div>
+                    )}
                 </div>
             </div>
 
             <UploadBooksForm userData={userData} />
-            <footer>
-                <p className="dashboard-footer-p">© 2025 Bharat Linker</p>
-            </footer>
+
         </>
     );
 };

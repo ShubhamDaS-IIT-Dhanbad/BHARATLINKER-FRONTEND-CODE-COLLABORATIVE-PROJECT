@@ -194,16 +194,16 @@ const UploadBooksModulesForm = () => {
     };
 
     const ConfirmationPopup = ({ message, onClose, onConfirm, isDelete }) => (
-        <div className={`user-refurbished-book-module-${isDelete ? 'delete' : 'update'}-popup`}>
-            <div className={`user-refurbished-book-module-${isDelete ? 'delete' : 'update'}-popup-inner`}>
-                <div className={`user-refurbished-book-module-${isDelete ? 'delete' : 'update'}-popup-message`}>
+        <div className={`retailer-module-${isDelete ? 'delete' : 'update'}-popup`}>
+            <div className={`retailer-module-${isDelete ? 'delete' : 'update'}-popup-inner`}>
+                <div className={`retailer-module-${isDelete ? 'delete' : 'update'}-popup-message`}>
                     {message}
                 </div>
-                <div className={`user-refurbished-book-module-${isDelete ? 'delete' : 'update'}-popup-options`}>
-                    <div className={`user-refurbished-book-module-${isDelete ? 'delete' : 'update'}-popup-option-no`} onClick={onClose}>
+                <div className={`retailer-module-${isDelete ? 'delete' : 'update'}-popup-options`}>
+                    <div className={`retailer-module-${isDelete ? 'delete' : 'update'}-popup-option-no`} onClick={onClose}>
                         No
                     </div>
-                    <div className={`user-refurbished-book-module-${isDelete ? 'delete' : 'update'}-popup-option-yes`} onClick={onConfirm}>
+                    <div className={`retailer-module-${isDelete ? 'delete' : 'update'}-popup-option-yes`} onClick={onConfirm}>
                         Yes
                     </div>
                 </div>
@@ -212,12 +212,12 @@ const UploadBooksModulesForm = () => {
     );
 
     const PopupSuccess = ({ message, onClose }) => (
-        <div className="user-refurbished-book-module-success-popup">
-            <div className="user-refurbished-book-module-success-popup-inner">
-                <div className="user-refurbished-book-module-success-popup-message">
+        <div className="retailer-module-success-popup">
+            <div className="retailer-module-success-popup-inner">
+                <div className="retailer-module-success-popup-message">
                     {message}
                 </div>
-                <div className="user-refurbished-book-module-success-popup-ok" onClick={onClose}>
+                <div className="retailer-module-success-popup-ok" onClick={onClose}>
                     Ok
                 </div>
             </div>
@@ -225,12 +225,12 @@ const UploadBooksModulesForm = () => {
     );
 
     const PopupFail = ({ message, onClose }) => (
-        <div className="user-refurbished-book-module-fail-popup">
-            <div className="user-refurbished-book-module-fail-popup-inner">
-                <div className="user-refurbished-book-module-fail-popup-message">
+        <div className="retailer-module-fail-popup">
+            <div className="retailer-module-fail-popup-inner">
+                <div className="retailer-module-fail-popup-message">
                     {message}
                 </div>
-                <div className="user-refurbished-book-module-fail-popup-ok" onClick={onClose}>
+                <div className="retailer-module-fail-popup-ok" onClick={onClose}>
                     Ok
                 </div>
             </div>
@@ -299,11 +299,7 @@ const UploadBooksModulesForm = () => {
 
 
 
-            <div className="user-refurbished-product-book-module-update-form">
-
-
-
-
+            <div className="retailer-update-form">
                 <>
                     <div className='user-refurbished-product-category-brand-div' style={{ display: "flex", gap: "5px", marginTop: "90px", marginBottom: "17px" }}>
                         <div
@@ -329,7 +325,7 @@ const UploadBooksModulesForm = () => {
                         value={formData.title}
                         onChange={handleInputChange}
                         placeholder="Enter book title"
-                        className='user-refurbished-product-book-module-update-form-textarea'
+                        className='retailer-update-form-textarea'
                         style={{ maxWidth: "90vw", minHeight: "10vh" }}
                     />
                     <textarea
@@ -337,7 +333,7 @@ const UploadBooksModulesForm = () => {
                         value={formData.description}
                         onChange={handleInputChange}
                         placeholder="Enter description"
-                        className='user-refurbished-product-book-module-update-form-textarea'
+                        className='retailer-update-form-textarea'
                         style={{ maxWidth: "90vw", minHeight: "20vh" }}
                     />
                 </div>
@@ -351,7 +347,7 @@ const UploadBooksModulesForm = () => {
                         onChange={handleInputChange}
                         placeholder="Enter original price"
                         style={{ maxWidth: "90vw", height: "4vh" }}
-                        className='user-refurbished-product-book-module-update-form-textarea'
+                        className='retailer-update-form-textarea'
                     />
                     <textarea
                         type="number"
@@ -360,7 +356,7 @@ const UploadBooksModulesForm = () => {
                         onChange={handleInputChange}
                         placeholder="Enter discounted price"
                         style={{ maxWidth: "90vw", height: "4vh" }}
-                        className='user-refurbished-product-book-module-update-form-textarea'
+                        className='retailer-update-form-textarea'
                     />
                 </div>
 
@@ -369,17 +365,17 @@ const UploadBooksModulesForm = () => {
                     name="keywords"
                     value={formData.keywords}
                     onChange={handleInputChange}
-                    className='user-refurbished-product-book-module-update-form-textarea'
+                    className='retailer-update-form-textarea'
                     style={{ maxWidth: "90vw", minHeight: "20vh" }}
                 />
 
-                <div className="user-refurbished-product-book-module-update-form-image-section">
+                <div className="retailer-update-form-image-section">
                     {images.map((image, index) => (
-                        <div key={index} className="user-refurbished-product-book-module-update-form-image-container">
+                        <div key={index} className="retailer-update-form-image-container">
                             {image ? (
                                 <img
                                     src={typeof image === 'string' ? image : URL.createObjectURL(image)}
-                                    className="user-refurbished-product-book-module-update-form-uploaded-image"
+                                    className="retailer-update-form-uploaded-image"
                                     alt={`Uploaded ${index + 1}`}
                                     onClick={() => removeImage(index)}
                                     onLoad={(e) => {
@@ -388,7 +384,7 @@ const UploadBooksModulesForm = () => {
                                 />
                             ) : (
                                 <div
-                                    className="user-refurbished-product-book-module-update-form-image-placeholder"
+                                    className="retailer-update-form-image-placeholder"
                                     onClick={() => document.getElementById(`image-upload-${index}`).click()}
                                 >
                                     <CiImageOn size={50} />
@@ -423,11 +419,11 @@ const UploadBooksModulesForm = () => {
 
 
 
-                <div id='user-refurbished-book-product-footer'>
-                    <div id='user-refurbished-book-product-update' onClick={() => setIsUpdate(true)}>
+                <div id='retailer-product-footer'>
+                    <div id='retailer-product-update' onClick={() => setIsUpdate(true)}>
                         UPDATE
                     </div>
-                    <div id='user-refurbished-book-product-delete' onClick={() => setIsDelete(true)}>
+                    <div id='retailer-product-delete' onClick={() => setIsDelete(true)}>
                         DELETE
                     </div>
                 </div>

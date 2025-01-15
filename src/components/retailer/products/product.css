@@ -1,5 +1,5 @@
 
-.user-refurbished-product-page-header {
+.retailer-product-page-header {
     position: fixed;
     top: 0;
     height: 115px;
@@ -11,11 +11,13 @@
     justify-content: center;
     gap: 10px;
     width: 100vw;
-    z-index: 999;  background-color: white;
-    color: rgb(0, 0, 0);
+    z-index: 999;
+    
+    background-color: #1A1A2E;
+    color: #ffffff;
 }
 
-.user-refurbished-product-page-header-upper {
+.retailer-product-page-header-upper {
     height: 60px;
     display: flex;
     flex-grow: 1;
@@ -25,24 +27,24 @@
     width: 100vw;
 }
 
-.user-refurbished-product-page-left-icon {
+.retailer-product-page-left-icon {
     margin-left: 4px;
     color: white;
 }
 
-.user-refurbished-product-page-header-inner {
+.retailer-product-page-header-inner {
     padding-left: 10px;
     display: flex;
     flex-direction: column;
 }
 
-.user-refurbished-product-page-header-text {
+.retailer-product-page-header-text {
     font-size: 25px;
     font-weight: 600;
     margin: 0;
 }
 
-.user-refurbished-product-page-header-phn-div {
+.retailer-product-page-header-phn-div {
     display: flex;
     align-items: center;
     gap: 5px;
@@ -54,7 +56,7 @@
 
 
 /* Search Section */
-.user-refurbished-product-page-search-section {
+.retailer-product-page-search-section {
     height: 40px;
     margin-top: 5px;
     justify-content: center;
@@ -63,52 +65,71 @@
 }
 
 /* Search Input Container */
-.user-refurbished-product-page-search-input-container {
+.retailer-product-page-search-input-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: white;
-    border: 1px solid #00000080;
-    border-radius: 11px;
+    background-color: transparent;
+    border: 1px solid #EB3678;
+    border-radius: 11px;color: white;
     width: 96vw;
     height: 41px;
 }
 
 /* Search Icon */
-.user-refurbished-product-page-search-icon {
+.retailer-product-page-search-icon {
     font-size: 29px;
     margin-left: 10px;
-    color: #000;
 }
 
 /* Search Input */
-.user-refurbished-product-page-search-input {
+.retailer-product-page-search-input {
     border: none;
-    color: #000;
+    color: #ffffff;
     font-size: 12px;
     padding-left: 10px;
     flex-grow: 1;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     outline: none;
-    background-color: white;
+    background-color: transparent;
 }
 
 /* Autofill Styles for Chrome, Edge, and Safari */
-.user-refurbished-product-page-search-input:-webkit-autofill {
+.retailer-product-page-search-input:-webkit-autofill {
     background-color: #fff !important;
-    color: #000 !important;
+    color: #ffffff !important;
     -webkit-box-shadow: 0 0 0px 1000px #fff inset !important;
     box-shadow: 0 0 0px 1000px #fff inset !important;
 }
 
 
-#user-refurbished-product-page-grid {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#retailer-product-page-grid {
     display: flex;
     flex-wrap: wrap;gap: 10px;
     width: 100vw;min-height:100vh;
     justify-content: center;
     position:relative;margin-top: 70px;
-    background-color:white;
+   
+    background-color: #1A1A2E;
+    color: #ffffff;
     padding-bottom: 20px;
    
 }
@@ -120,7 +141,7 @@
     
  }
 
- .user-refurbished-product-page-loading-more{
+ .retailer-product-page-loading-more{
     display: flex;
     justify-content: center;
     align-items: center;

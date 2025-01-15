@@ -14,7 +14,7 @@ import {
 } from '../../../redux/features/retailer/product.jsx';
 
 import ProductList from './productList.jsx';
-import './userProductPageMain.css';
+import './product.css';
 import Cookies from 'js-cookie';
 
 const retailerProduct = () => {
@@ -111,39 +111,38 @@ const retailerProduct = () => {
                 <meta name="keywords" content="refurbished products, buy refurbished, Bharat Linker" />
             </Helmet>
             <header>
-                <div className="user-refurbished-product-page-header">
-                    <div className="user-refurbished-product-page-header-upper">
+                <div className="retailer-product-page-header">
+                    <div className="retailer-product-page-header-upper">
                         <FaArrowLeft
-                            id="user-refurbished-product-page-left-icon"
+                            id="retailer-product-page-left-icon"
                             size={25}
                             onClick={() => navigate('/retailer')}
                             aria-label="Go back to User Account"
                             tabIndex={0}
                         />
-                        <div className="user-refurbished-product-page-header-inner">
-                            <h1 className="user-refurbished-product-page-header-text">ALL PRODUCTS</h1>
+                        <div className="retailer-product-page-header-inner">
+                            <h1 className="retailer-product-page-header-text">ALL PRODUCTS</h1>
                             {userData?.shopName && (
                                 <div
-                                    className="user-refurbished-product-page-header-phn-div"
+                                    className={`retailer-upload-product-header-shopname`}
                                     aria-label="Change Location"
                                     tabIndex={0}
-                                    style={{ color: "black" }}
                                 >
-                                    {userData?.shopName}
+                                    {userData?.shopName?.toUpperCase()}
                                 </div>
                             )}
                         </div>
                     </div>
-                    <div className="user-refurbished-product-page-search-section">
-                        <div className="user-refurbished-product-page-search-input-container">
+                    <div className="retailer-product-page-search-section">
+                        <div className="retailer-product-page-search-input-container">
                             <BiSearchAlt
-                                className="user-refurbished-product-page-search-icon"
+                                className="retailer-product-page-search-icon"
                                 onClick={handleSearch}
                                 aria-label="Search Products"
                                 tabIndex={0}
                             />
                             <input
-                                className="user-refurbished-product-page-search-input"
+                                className="retailer-product-page-search-input"
                                 placeholder="Search Products"
                                 value={inputValue}
                                 onChange={handleInputChange}
@@ -169,7 +168,7 @@ const retailerProduct = () => {
                     </InfiniteScroll>
                 )}
                 {loadingMoreProducts && (
-                    <div className="user-refurbished-product-page-loading-more">
+                    <div className="retailer-product-page-loading-more">
                         <RotatingLines width="40" height="40" color="#007bff" />
                     </div>
                 )}

@@ -9,19 +9,19 @@ function UserRefurbishedAllProductPage({ id, image, title, price, productType}) 
     const productPrice = price || '0';
     
     return (
-        <div className="user-refurbished-product-card">
-            <div className="user-refurbished-product-card-top">
-                <img className="user-refurbished-product-card-top-image" src={imageUrl} alt={productName} />
+        <div className="retailer-product-card">
+            <div className="retailer-product-card-top">
+                <img className="retailer-product-card-top-image" src={imageUrl} alt={productName} />
             </div>
-            <div className="user-refurbished-product-card-bottom">
-                <div className="user-refurbished-product-card-info">
-                    <span className="user-refurbished-product-card-title">{productName}</span>
-                    <span className="user-refurbished-product-card-price">
+            <div className="retailer-product-card-bottom">
+                <div className="retailer-product-card-info">
+                    <span className="retailer-product-card-title">{productName}</span>
+                    <span className="retailer-product-card-price">
                         ₹{productPrice}
                     </span>
                 </div>
                 
-                <div className="user-refurbished-product-card-edit" onClick={() => navigate(`/retailer/product/update/${id}`)}>
+                <div className="retailer-product-card-edit" onClick={() => navigate(`/retailer/product/update/${id}`)}>
                     <span>Edit</span>
                 </div>
             </div>
