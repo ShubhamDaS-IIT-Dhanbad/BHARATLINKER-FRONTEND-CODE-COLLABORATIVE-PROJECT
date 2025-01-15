@@ -6,7 +6,7 @@ import { FaCaretRight } from "react-icons/fa";
 import { HiOutlineArrowRightStartOnRectangle } from "react-icons/hi2";
 import { useDispatch, useSelector } from 'react-redux';
 import SingleProductSearchBar from './singleProductSearchBar.jsx';
-
+import { TbListDetails } from "react-icons/tb";
 import { RotatingLines } from 'react-loader-spinner';
 
 import { fetchShopById } from '../../redux/features/singleShopSlice.jsx';
@@ -23,6 +23,7 @@ const ProductDetails = () => {
     const { singleShops } = useSelector((state) => state.singleshops);
 
     const { productId } = useParams();
+    const [descriptionSections, setDescriptionSections] = useState([]);
 
     const [loading, setLoading] = useState(true);
     const [productDetail, setProductDetails] = useState(null);
@@ -30,51 +31,54 @@ const ProductDetails = () => {
     const [selectedImage, setSelectedImage] = useState(fallbackImage);
     const [showDescription, setShowDescription] = useState(false);
 
-    useEffect(() => {
-        const fetchProductDetails = async () => {
-            setLoading(true); // Ensure loading starts
-            let product = products.find((product) => product.$id === productId);
+
+    const parseDescription = (description) => {
+        if (!description) return [];
+        const sections = description.split("#").slice(1);
+        return sections.map((section) => {
+            const [heading, ...contents] = section.split("*");
+            return { heading: heading.trim(), content: contents.join("*").trim() };
+        });
+    };
+
+    const fetchShopDetails = async (shopId) => {
+        if (!shopId) return;
+
+        const shop =
+            [...shops, ...singleShops].find((shop) => shop.$id === shopId) ||
+            (await dispatch(fetchShopById(shopId))).payload;
+
+        if (shop) {
+            setShopDetail(shop);
+        } else {
+            console.error("Shop not found");
+        }
+    };
+
+    const fetchProductDetails = async () => {
+        setLoading(true);
+        try {
+            const product =
+                products.find((product) => product.$id === productId) ||
+                (await searchProductService.getProductById(productId));
 
             if (product) {
                 setProductDetails(product);
                 setSelectedImage(product?.images[0] || fallbackImage);
-                fetchShopDetails(product?.shop);
+                setDescriptionSections(parseDescription(product?.description));
+                await fetchShopDetails(product?.shop);
             } else {
-                try {
-                    const response = await searchProductService.getProductById(productId);
-                    if (response) {
-                        setProductDetails(response);
-                        setSelectedImage(response?.images[0] || fallbackImage);
-                        fetchShopDetails(response?.shop);
-                    }
-                } catch (error) {
-                    console.error("Error fetching product details: ", error);
-                    navigate('/404');
-                }
+                navigate("/404");
             }
-
+        } catch (error) {
+            console.error("Error fetching product details:", error);
+            navigate("/404");
+        } finally {
             setLoading(false);
-        };
+        }
+    };
 
-        const fetchShopDetails = async (shopId) => {
-            if (!shopId) return;
-            const combinedShops = [...shops, ...singleShops];
-            const shop = combinedShops?.find((shop) => shop.$id === shopId);
-
-            if (shop) {
-                setShopDetail(shop);
-            } else {
-                try {
-                    const response = await dispatch(fetchShopById(shopId));
-                    if (response) {
-                        setShopDetail(response?.payload);
-                    }
-                } catch (error) {
-                    console.error("Error fetching shop details: ", error);
-                }
-            }
-        };
-
+    useEffect(() => {
         fetchProductDetails();
     }, []);
 
@@ -92,6 +96,14 @@ const ProductDetails = () => {
             navigate(`/shop/${shopDetail?.$id}`);
         }
     };
+
+
+
+
+
+
+
+
 
     return (
         <Fragment>
@@ -156,33 +168,18 @@ const ProductDetails = () => {
                                     </div>
                                 </div>
 
-
-
-
-
-
-                                {showDescription && (
-                                    <div className="productDetails-description-div-pop-up">
-                                        <div
-                                            className="productDetails-description-div-pop-up-close"
-                                            onClick={toggleDescription}
-                                            aria-label="Close filter options"
-                                        >
-                                            <IoClose size={30} />
-                                        </div>
-                                        <div className="productDetails-filter-section-title">PRODUCT DETAILS</div>
-
-                                        <div className="productDetails-lists-description-container">
-                                            <div className="productDetails-lists-description">
-                                                {productDetail?.brand && productDetail?.brand !== '' && <>Brand: {productDetail.brand} <br></br> </>}
-                                                {productDetail?.category && productDetail?.category !== '' && <>Category: {productDetail.category} <br></br></>}
+                                <div className="product-detail-description-container">
+                                    <div>Product Details</div>
+                                    <div className="productDetails-lists-description-container">
+                                        {descriptionSections?.map((section, index) => (
+                                            <div key={index} className="description-section">
+                                                <div className="description-heading">{section.heading}</div>
+                                                <div className="description-content">{section.content}</div>
                                             </div>
-                                            <div id="productDetails-description">
-                                                {productDetail.description}
-                                            </div>
-                                        </div>
+                                        ))}
                                     </div>
-                                )}
+                                </div>
+
                             </div>
                         </>
                     )}
