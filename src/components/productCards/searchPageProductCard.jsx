@@ -2,12 +2,12 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import "./searchPageProductCard.css";
 
-function SearchPageProductCard({ id, image, title, price, isInStock }) {
+function SearchPageProductCard({ id, image, title,discountedPrice, price, isInStock }) {
     const navigate = useNavigate();
 
     const imageUrl = image[0] || 'http://res.cloudinary.com/dthelgixr/image/upload/v1727870088/hd7kcjuz8jfjajnzmqkp.webp';
     const productName = title ? (title.length > 45 ? title.substr(0, 45) + '..' : title) : 'Product Name';
-    const productPrice = price || '0';
+    const productPrice = discountedPrice || '0';
 
     return (
         <div className="search-page-product-card" onClick={()=>{navigate(`/product/${id}`)}}>
