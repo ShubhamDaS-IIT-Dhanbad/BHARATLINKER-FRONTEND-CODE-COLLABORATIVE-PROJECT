@@ -1,11 +1,11 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import {getRetailerProducts} from '../../../appWrite/uploadProduct/upload.js';
 
-// Async thunk to fetch products
-export const fetchProducts = createAsyncThunk(
-    'products/fetchProducts',
-    async ({ inputValue,shopId, selectedCategories, selectedBrands,page, productsPerPage, sortByAsc, sortByDesc }, { rejectWithValue }) => {
 
+
+export const fetchProducts = createAsyncThunk(
+    'retailerproducts/fetchProducts',
+    async ({ inputValue, shopId, selectedCategories, selectedBrands, page, productsPerPage, sortByAsc, sortByDesc }, { rejectWithValue }) => {
         try {
             const response = await getRetailerProducts({
                 shopId,
@@ -40,11 +40,10 @@ export const fetchProducts = createAsyncThunk(
     }
 );
 
-// Async thunk to load more products
+// Exported Thunk
 export const loadMoreProducts = createAsyncThunk(
-    'products/loadMoreProducts',
-    async ({ inputValue,shopId, selectedCategories, selectedBrands,page, productsPerPage, sortByAsc, sortByDesc }, { rejectWithValue }) => {
-      
+    'retailerProducts/loadMoreProducts',
+    async ({ inputValue, shopId, selectedCategories, selectedBrands, page, productsPerPage, sortByAsc, sortByDesc }, { rejectWithValue }) => {
         try {
             const response = await getRetailerProducts({
                 shopId,
@@ -54,7 +53,7 @@ export const loadMoreProducts = createAsyncThunk(
                 selectedCategories,
                 selectedBrands,
                 sortByAsc,
-                sortByDesc
+                sortByDesc,
             });
             if (response.products && response.success) {
                 return {
@@ -74,27 +73,23 @@ export const loadMoreProducts = createAsyncThunk(
 // Initial state
 const initialState = {
     products: [],
-
     loading: false,
     loadingMoreProducts: false,
-
     currentPage: 1,
-
     selectedCategories: [],
     selectedBrands: [],
-
     totalPages: 1,
     sortByAsc: false,
     sortByDesc: false,
     priceRange: { min: Number.MIN_SAFE_INTEGER, max: Number.MAX_SAFE_INTEGER },
     hasMoreProducts: true,
     error: null,
-    productsPerPage: 10, 
+    productsPerPage: 10,
 };
 
 // Slice
-const productsSlice = createSlice({
-    name: 'retailerproducts',
+const retailerProductsSlice = createSlice({
+    name: 'retailerProducts',
     initialState,
     reducers: {
         setCurrentPage: (state, action) => {
@@ -109,7 +104,7 @@ const productsSlice = createSlice({
             state.hasMoreProducts = true;
             state.error = null;
             state.productsPerPage = 10;
-        },        
+        },
         toggleSortOrder: (state, action) => {
             const order = action.payload;
             if (order === 'asc') {
@@ -128,7 +123,6 @@ const productsSlice = createSlice({
                 state.products = state.products.sort((a, b) => b.price - a.price);
             }
         },
-
         setPriceRange: (state, action) => {
             const { min, max } = action.payload;
             state.priceRange = { min, max };
@@ -141,7 +135,7 @@ const productsSlice = createSlice({
         toggleCategory: (state, action) => {
             const category = action.payload;
             if (state.selectedCategories.includes(category)) {
-                state.selectedCategories = state.selectedCategories.filter(item => item !== category);
+                state.selectedCategories = state.selectedCategories.filter((item) => item !== category);
             } else {
                 state.selectedCategories.push(category);
             }
@@ -149,7 +143,7 @@ const productsSlice = createSlice({
         toggleBrand: (state, action) => {
             const brand = action.payload;
             if (state.selectedBrands.includes(brand)) {
-                state.selectedBrands = state.selectedBrands.filter(item => item !== brand);
+                state.selectedBrands = state.selectedBrands.filter((item) => item !== brand);
             } else {
                 state.selectedBrands.push(brand);
             }
@@ -158,16 +152,13 @@ const productsSlice = createSlice({
             state.selectedCategories = [];
             state.selectedBrands = [];
         },
-        
-    deleteProduct: (state, action) => {
-        const productId = action.payload;
-        state.refurbishedProducts = state.refurbishedProducts.filter(
-          (product) => product.$id !== productId.id
-        );
-      },
-      updateProduct: (state, action) => {
-        // You can implement update logic here if needed
-      },
+        deleteProduct: (state, action) => {
+            const productId = action.payload;
+            state.products = state.products.filter((product) => product.$id !== productId.id);
+        },
+        updateProduct: (state, action) => {
+            // You can implement update logic here if needed
+        },
     },
     extraReducers: (builder) => {
         builder
@@ -186,9 +177,6 @@ const productsSlice = createSlice({
                 state.error = action.payload || 'Something went wrong';
                 state.hasMoreProducts = false;
             })
-
-
-
             .addCase(loadMoreProducts.pending, (state) => {
                 state.loadingMoreProducts = true;
                 state.error = null;
@@ -198,20 +186,18 @@ const productsSlice = createSlice({
 
                 if (products.length > 0) {
                     const newProducts = products.filter(
-                        (product) => !state.products.some(existingProduct => existingProduct.$id === product.$id)
+                        (product) => !state.products.some((existingProduct) => existingProduct.$id === product.$id)
                     );
 
-                    // Merge the new products with the existing ones
                     state.products = [...state.products, ...newProducts];
 
-                    // Sort products based on sortByAsc or sortByDesc
                     if (state.sortByAsc) {
                         state.products.sort((a, b) => a.price - b.price);
                     } else if (state.sortByDesc) {
                         state.products.sort((a, b) => b.price - a.price);
                     }
                 }
-                // Update other state properties
+
                 state.currentPage += 1;
                 state.hasMoreProducts = hasMoreProducts;
                 state.loadingMoreProducts = false;
@@ -225,11 +211,11 @@ const productsSlice = createSlice({
 });
 
 // Selectors
-export const selectProducts = (state) => state.searchproducts.products;
-export const selectLoading = (state) => state.searchproducts.loading;
-export const selectCurrentPage = (state) => state.searchproducts.currentPage;
-export const selectError = (state) => state.searchproducts.error;
-export const selectedCategories = (state) => state.searchproducts.selectedCategories; // New selector for selectedCategories
+export const selectRetailerProducts = (state) => state.retailerProducts.products;
+export const selectLoading = (state) => state.retailerProducts.loading;
+export const selectCurrentPage = (state) => state.retailerProducts.currentPage;
+export const selectError = (state) => state.retailerProducts.error;
+export const selectSelectedCategories = (state) => state.retailerProducts.selectedCategories;
 
 // Exporting actions and reducer
 export const {
@@ -243,7 +229,7 @@ export const {
     resetFilters,
     toggleCategory,
     deleteProduct,
-    updateProduct
-} = productsSlice.actions;
+    updateProduct,
+} = retailerProductsSlice.actions;
 
-export default productsSlice.reducer;
+export default retailerProductsSlice.reducer;

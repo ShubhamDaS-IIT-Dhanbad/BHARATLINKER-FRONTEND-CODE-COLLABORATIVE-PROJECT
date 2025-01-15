@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
@@ -6,16 +6,18 @@ import { BiSearchAlt } from "react-icons/bi";
 import { Helmet } from 'react-helmet';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { RotatingLines } from 'react-loader-spinner';
+
 import {
     fetchProducts,
     loadMoreProducts,
     resetProducts,
 } from '../../../redux/features/retailer/product.jsx';
+
 import ProductList from './productList.jsx';
 import './userProductPageMain.css';
 import Cookies from 'js-cookie';
 
-function userRefurbishedProduct() {
+const retailerProduct = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const {
@@ -25,7 +27,7 @@ function userRefurbishedProduct() {
         currentPage,
         hasMoreProducts,
         loadingMoreProducts,
-    } = useSelector((state) => state.retailerproducts);
+    } = useSelector((state) => state.retailerProducts);
 
     const [inputValue, setInputValue] = useState('');
     const [userData, setUserData] = useState(null);
@@ -38,8 +40,8 @@ function userRefurbishedProduct() {
         }
     }, []);
 
-    // Handle search functionality
-    const handleSearch = () => {
+    // Debounced search function
+    const handleSearch = useCallback(() => {
         if (!userData?.$id) return;
         const params = {
             inputValue,
@@ -49,11 +51,11 @@ function userRefurbishedProduct() {
             selectedBrands: [],
             sortByAsc: false,
             sortByDesc: false,
-            shopId:userData.$id,
+            shopId: userData.$id,
         };
         dispatch(resetProducts());
         dispatch(fetchProducts(params));
-    };
+    }, [dispatch, inputValue, userData]);
 
     // Input change handler for search
     const handleInputChange = (event) => {
@@ -70,10 +72,9 @@ function userRefurbishedProduct() {
     // Fetch products on initial render if no products exist
     useEffect(() => {
         if (products.length === 0 && userData) {
-            console.log("here")
             handleSearch();
         }
-    }, [userData]);
+    }, [userData, products.length, handleSearch]);
 
     // Handle loading more products
     const handleLoadMore = () => {
@@ -87,7 +88,7 @@ function userRefurbishedProduct() {
             selectedBrands: [],
             sortByAsc: false,
             sortByDesc: false,
-            shopId:userData.$id,
+            shopId: userData.$id,
         };
         dispatch(loadMoreProducts(params));
     };
@@ -126,7 +127,7 @@ function userRefurbishedProduct() {
                                     className="user-refurbished-product-page-header-phn-div"
                                     aria-label="Change Location"
                                     tabIndex={0}
-                                    style={{color:"black"}}
+                                    style={{ color: "black" }}
                                 >
                                     {userData?.shopName}
                                 </div>
@@ -172,10 +173,9 @@ function userRefurbishedProduct() {
                         <RotatingLines width="40" height="40" color="#007bff" />
                     </div>
                 )}
-
             </main>
         </div>
     );
-}
+};
 
-export default userRefurbishedProduct;
+export default retailerProduct;
