@@ -182,7 +182,6 @@
 
 #product-details-price-outofstock {
     min-width: 110px;max-width: 110px;
-    margin-right: 10px;
     height: 40px;
     border: 1px solid rgb(208, 67, 67);
     display: flex;
@@ -197,7 +196,6 @@
 
 #product-details-price-instock {
     min-width: 110px;max-width: 110px;
-    margin-right: 10px;
     height: 40px;
     border: 1px solid rgb(67, 208, 123);
     background-color: rgb(37, 147, 37);
