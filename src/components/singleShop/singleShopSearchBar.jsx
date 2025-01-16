@@ -37,7 +37,7 @@ const SingleProductSearchBar = () => {
                     <FaArrowLeft
                         id='single-product-search-back-icon'
                         size={25}
-                        onClick={() => navigate(-1)}  // This will navigate to the previous page
+                        onClick={() => navigate('/shop')}  // This will navigate to the previous page
                         aria-label="Go Back"
                         tabIndex={0}
                     />

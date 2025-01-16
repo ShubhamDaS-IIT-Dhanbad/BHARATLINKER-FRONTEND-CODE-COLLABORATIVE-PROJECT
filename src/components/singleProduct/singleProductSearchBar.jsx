@@ -32,7 +32,7 @@ const SingleProductSearchBar = () => {
 
     // Handle the back navigation
     const handleBackClick = () => {
-        navigate(-1);
+        navigate('/search');
     };
 
     return (
