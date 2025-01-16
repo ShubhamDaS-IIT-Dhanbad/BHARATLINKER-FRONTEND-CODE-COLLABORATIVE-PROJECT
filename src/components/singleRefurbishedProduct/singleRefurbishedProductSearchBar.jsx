@@ -41,7 +41,7 @@ const SingleProductSearchBar = () => {
                         tabIndex={0}
                     />
                     <div className='single-product-search-header-location'>
-                        <p className='single-product-search-location-label'>PRODUCT INFO</p>
+                        <p className='single-product-search-location-label'>REFURBISHED INFO</p>
                         <div
                             className='single-product-search-location-value'
                             aria-label="Change Location"
