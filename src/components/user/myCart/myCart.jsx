@@ -55,11 +55,11 @@ const MyCartPage = ({setShowMyCart}) => {
 
                 Promise.all(updatedCartItems).then((items) => {
                     setCartItems(items);
-                    setLoading(false); // Set loading to false after data is fetched
+                    setLoading(false);
                 });
             } catch (error) {
                 console.error("Error fetching cart data from cookie:", error);
-                setLoading(false); // Ensure loading is stopped in case of error
+                setLoading(false);
             }
         };
 
@@ -85,7 +85,7 @@ const MyCartPage = ({setShowMyCart}) => {
             }
             return acc;
         }, 0);
-        return (totalDistance * deliveryCostPerKm).toFixed(1); // Delivery charge per km
+        return (totalDistance * deliveryCostPerKm).toFixed(1);
     };
 
     const calculateGrandTotal = () => {
@@ -161,6 +161,9 @@ const MyCartPage = ({setShowMyCart}) => {
                                             <p className="item-price-strikethrough">₹{item.price}</p>
                                             <p className="item-price">₹{item.discountedPrice}</p>
                                         </div>
+                                        {userLat && userLong && item.lat && item.long && (
+                                    <span className='my-cart-item-distance'>{calculateDistance(userLat, userLong, item.lat, item.long)} km away</span>
+                                )}
                                     </div>
                                     <div className="my-cart-count-container-parent">
                                         <div className="my-cart-count-container">
