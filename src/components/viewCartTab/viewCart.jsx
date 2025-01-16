@@ -4,7 +4,7 @@ import { IoMdCart } from "react-icons/io";
 import { FaCaretRight } from "react-icons/fa";
 import { useNavigate } from 'react-router-dom';
 
-const AddToCartTab = ({ cart}) => {
+const AddToCartTab = ({ cart }) => {
   const navigate = useNavigate();
 
   if (!Array.isArray(cart)) {
@@ -37,10 +37,11 @@ const AddToCartTab = ({ cart}) => {
       </div>
 
       <div
+        onClick={handleViewCart}
         className={`view-cart-button ${totalCount > 0 ? '' : 'disabled'}`}
-        
+
       >
-        View Cart <FaCaretRight onClick={handleViewCart} size={25} />
+        View Cart <FaCaretRight size={25} />
       </div>
     </div>
   );
