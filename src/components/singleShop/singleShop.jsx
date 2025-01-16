@@ -135,11 +135,15 @@ const ProductDetails = () => {
 
                     <div
                         id="shop-detail-view-all-product"
-                        onClick={() => navigate(`/search?query=${shopDetail?.shopName}`)}
+                        onClick={() => {
+                            const shopNameQuery = encodeURIComponent(shopDetail?.shopName || '-'); // Encode the shopName to ensure it's URL-safe
+                            navigate(`/shop/product/${shopDetail.$id}?shopName=${shopNameQuery}`);
+                        }}
                     >
                         View all products of {shopDetail?.shopName ? shopDetail?.shopName : "-"}
                         <FaCaretRight size={20} />
                     </div>
+
 
                     <div className="shop-detail-options">
                         <div

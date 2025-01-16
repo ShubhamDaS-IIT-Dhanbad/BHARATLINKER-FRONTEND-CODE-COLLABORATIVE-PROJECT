@@ -25,7 +25,6 @@ const ProductDetails = () => {
     const [productDetail, setProductDetails] = useState(null);
     const [shopDetail, setShopDetail] = useState(null);
     const [selectedImage, setSelectedImage] = useState(fallbackImage);
-    const [showDescription, setShowDescription] = useState(false);
 
     const parseDescription = (description) => {
         if (!description) return [];

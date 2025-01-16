@@ -23,11 +23,10 @@ const ProductSearch = () => {
     const productsPerPage = 20;
     const [inputValue, setInputValue] = useState('');
     const [loadingMoreProducts, setLoadingMoreProducts] = useState(false);
+    const [showSortBy, setShowSortBy] = useState(false);
+    const [showFilterBy, setShowFilterBy] = useState(false);
 
-    const shops = useSelector((state) => state.shopproducts.shops);
-    const loading = useSelector((state) => state.shopproducts.loading);
-
-    const shopData = shops[shopId] || {};
+    const shopData = useSelector((state) => state.shopproducts.shops[shopId]) || {};
     const {
         products = [],
         loading: shopLoading = false,
@@ -39,10 +38,8 @@ const ProductSearch = () => {
         selectedCategories,
     } = shopData;
 
-    const [showSortBy, setShowSortBy] = useState(false);
-    const [showFilterBy, setShowFilterBy] = useState(false);
+    const globalLoading = useSelector((state) => state.shopproducts.loading);
 
-    // Memoize handleSearch using useCallback
     const handleSearch = useCallback(() => {
         const params = {
             inputValue,
@@ -58,7 +55,6 @@ const ProductSearch = () => {
         dispatch(fetchProducts(params));
     }, [dispatch, inputValue, selectedCategories, selectedBrands, sortByAsc, sortByDesc, shopId]);
 
-    // Memoize onLoadMore using useCallback
     const onLoadMore = useCallback(() => {
         if (!hasMoreProducts || loadingMoreProducts) return;
         setLoadingMoreProducts(true);
@@ -76,17 +72,17 @@ const ProductSearch = () => {
         dispatch(loadMoreProducts(params)).finally(() => setLoadingMoreProducts(false));
     }, [dispatch, inputValue, currentPage, loadingMoreProducts, hasMoreProducts, selectedCategories, selectedBrands, sortByAsc, sortByDesc, shopId]);
 
-    // Trigger search when selectedCategories or selectedBrands change
     useEffect(() => {
-        if (shopId && !loading && products.length === 0) {
+        if (shopId && products.length === 0 && !globalLoading) {
             handleSearch();
         }
-    }, [products.length]);
+    }, [shopId, products.length, globalLoading, handleSearch]);
 
     return (
         <>
             <div id="shopSearchPage-container-top">
                 <SearchBar
+                    shopData={shopData}
                     shopId={shopId}
                     setInputValue={setInputValue}
                     shopName={shopName}
@@ -95,7 +91,7 @@ const ProductSearch = () => {
                 />
             </div>
 
-            {(loading || shopLoading) && !loadingMoreProducts ? (
+            {(globalLoading || shopLoading) && !loadingMoreProducts ? (
                 <div className="refurbished-page-loading-container">
                     <RotatingLines width="60" height="60" color="#007bff" />
                 </div>

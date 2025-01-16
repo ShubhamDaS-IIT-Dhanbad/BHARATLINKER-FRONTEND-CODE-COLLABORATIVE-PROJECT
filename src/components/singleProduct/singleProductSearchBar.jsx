@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FaCaretDown } from "react-icons/fa";
-import { FaArrowLeft } from 'react-icons/fa'; 
+import { FaCaretDown, FaArrowLeft } from "react-icons/fa"; 
 import { useNavigate } from 'react-router-dom'; 
 import LocationTab from '../locationTab/locationTab';
 import Cookies from 'js-cookie';
@@ -12,6 +11,7 @@ const SingleProductSearchBar = () => {
     const [location, setLocation] = useState(null);
     const [loading, setLoading] = useState(true); 
 
+    // Effect to fetch location data from cookies
     useEffect(() => {
         const fetchLocation = () => {
             const storedLocation = Cookies.get('BharatLinkerUserLocation');
@@ -28,7 +28,13 @@ const SingleProductSearchBar = () => {
         };
 
         fetchLocation();
-    }, [locationTab]);
+    }, []);
+
+    // Handle the back navigation
+    const handleBackClick = () => {
+        console.log("Back button clicked");
+        navigate(-1);
+    };
 
     return (
         <>
@@ -37,9 +43,7 @@ const SingleProductSearchBar = () => {
                     <FaArrowLeft
                         id='single-product-search-back-icon'
                         size={25}
-                        onClick={() => navigate('/search')}
-                        aria-label="Go Back"
-                        tabIndex={0}
+                        onClick={handleBackClick} // Ensure this works with one click
                     />
                     <div className='single-product-search-header-location'>
                         <p className='single-product-search-location-label'>PRODUCT INFO</p>
@@ -48,8 +52,12 @@ const SingleProductSearchBar = () => {
                             aria-label="Change Location"
                             tabIndex={0}
                         >
-                            {loading ? 'Loading location...' : location ? location.address.slice(0,30): 'Location not set'}
-                           <FaCaretDown size={15}/>
+                            {loading 
+                                ? 'Loading location...' 
+                                : location 
+                                    ? location.address.slice(0, 30) 
+                                    : 'Location not set'}
+                            <FaCaretDown size={15} />
                         </div>
                     </div>
                 </div>
