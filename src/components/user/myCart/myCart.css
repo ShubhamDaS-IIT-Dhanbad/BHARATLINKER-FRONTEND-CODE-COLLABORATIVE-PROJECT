@@ -11,7 +11,7 @@
     background-color: aliceblue;
     padding: 10px;
     display: flex;flex-direction: column;
-    gap: 10px;min-height: 100vh;
+    gap: 15px;min-height: 100vh;
     padding-top: 70px;
   }
   .my-cart-total-saving{
@@ -24,9 +24,45 @@
     color: rgb(44, 115, 240);
   }
   .my-cart-items-container{
-    background-color: white;
+    background-color: white;display: flex;
+    flex-direction: column;gap: 10px;
     min-height: 90px;border-radius: 10px;
   }
+
+
+
   .my-cart-item{
-    border-radius: 10px;
+    display: flex;
+    gap: 10px;
+    padding: 10px;width: calc(100% - 20px);
   }
+  .my-cart-item-img{
+    width: 50px;
+  }
+  .my-cart-item-second {
+    max-width: 40vw;
+}
+.my-cart-item-second p{
+    font-size: 14px;font-weight: 400;
+    line-height: 1.2;font-family: Arial, Helvetica, sans-serif;
+}
+
+.my-cart-count-container-parent{
+    display: flex;flex-grow: 1;
+    justify-content:flex-end;align-items: center;
+    padding-right: 10px;
+}
+.my-cart-count-container{
+    min-width: 10px;
+    height: 20px;
+    border: 1px solid rgb(67, 208, 123);
+    background-color: rgb(37, 147, 37);
+    display: flex;
+    justify-content: center;
+    font-weight: 900;
+    align-items: center;gap: 10px;
+    border-radius: 5px;
+    color: rgb(255, 255, 255);
+    padding: 6px 7px 6px 7px;
+    font-size: 12px;
+}
