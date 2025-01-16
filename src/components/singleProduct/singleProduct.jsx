@@ -10,6 +10,7 @@ import { RotatingLines } from 'react-loader-spinner';
 import { fetchShopById } from '../../redux/features/singleShopSlice.jsx';
 import { RiShareForwardLine } from "react-icons/ri";
 
+import AddToCartTab from '../viewCartTab/viewCart.jsx';
 const fallbackImage = 'http://res.cloudinary.com/dthelgixr/image/upload/v1727870088/hd7kcjuz8jfjajnzmqkp.webp';
 
 const ProductDetails = () => {
@@ -189,8 +190,11 @@ const ProductDetails = () => {
                             </div>
                         </>
                     )}
+                    <AddToCartTab />
                 </Fragment>
+                
             )}
+
         </Fragment>
     );
 };
