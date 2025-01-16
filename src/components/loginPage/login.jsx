@@ -124,11 +124,15 @@ function SignUpForm() {
       const userData = await fetchUserByPhoneNumber(phone);
 
       if (userData) {
+        if (userData.cart) {
+            userData.cart = JSON.parse(userData.cart);
+        }
         Cookies.set('BharatLinkerUserData', JSON.stringify(userData), { expires: 7, path: '' });
         console.log('User data fetched and stored:', userData);
-      } else {
+    } else {
         console.warn('No user data found for the provided phone number');
-      }
+    }
+    
 
       navigate('/');
     } catch (error) {

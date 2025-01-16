@@ -10,6 +10,8 @@ import { fetchShopById } from "../../redux/features/singleShopSlice.jsx";
 import { RiShareForwardLine } from "react-icons/ri";
 import AddToCartTab from "../viewCartTab/viewCart.jsx";
 
+import { updateCartByPhoneNumber } from '../../appWrite/userData/userData.js'
+
 import { FaPlus } from "react-icons/fa";
 import { FaMinus } from "react-icons/fa";
 const fallbackImage = "http://res.cloudinary.com/dthelgixr/image/upload/v1727870088/hd7kcjuz8jfjajnzmqkp.webp";
@@ -117,7 +119,7 @@ const ProductDetails = () => {
 
     const checkProductInCart = () => {
         if (!productId) return;
-    
+
         try {
             const userData = JSON.parse(
                 decodeURIComponent(
@@ -128,18 +130,18 @@ const ProductDetails = () => {
                 )
             );
             let cart = userData?.cart || [];
-    
+
             // Remove any duplicate products by productId
-            cart = cart.filter((item, index, self) => 
+            cart = cart.filter((item, index, self) =>
                 index === self.findIndex((t) => t.id === item.id)
             );
-    
+
             // Update the cart in the cookie after removing duplicates
             userData.cart = cart;
             document.cookie = `BharatLinkerUserData=${encodeURIComponent(
                 JSON.stringify(userData)
             )}; path=/`;
-    
+
             // Check if the product is in the cart
             const productInCart = cart.find((item) => item.id === productId);
             if (productInCart) {
@@ -152,8 +154,8 @@ const ProductDetails = () => {
             console.error("Error checking product in cart:", error);
         }
     };
-    
-    
+
+
 
     const handleIncrement = () => {
         try {
@@ -167,13 +169,13 @@ const ProductDetails = () => {
             );
             const cart = userData.cart || [];
             const productIndex = cart.findIndex((item) => item.id === productId);
-    
+
             if (productIndex !== -1) {
                 const updatedCart = [...cart];
                 updatedCart[productIndex].count += 1;
                 updatedCart[productIndex].price = productDetail.price;
                 updatedCart[productIndex].discountedPrice = productDetail.discountedPrice;
-    
+
                 setCount((prev) => prev + 1);
                 updateCartData(updatedCart);
             } else {
@@ -183,7 +185,7 @@ const ProductDetails = () => {
             console.error("Error incrementing product count:", error);
         }
     };
-    
+
     const handleDecrement = () => {
         try {
             const userData = JSON.parse(
@@ -196,17 +198,17 @@ const ProductDetails = () => {
             );
             const cart = userData.cart || [];
             const productIndex = cart.findIndex((item) => item.id === productId);
-    
+
             if (productIndex !== -1) {
                 const updatedCart = [...cart];
                 updatedCart[productIndex].count -= 1;
                 updatedCart[productIndex].price = productDetail.price;
                 updatedCart[productIndex].discountedPrice = productDetail.discountedPrice;
-    
+
                 if (updatedCart[productIndex].count === 0) {
-                    updatedCart.splice(productIndex, 1); // Remove the product if count reaches 0
+                    updatedCart.splice(productIndex, 1);
                 }
-    
+
                 setCount((prev) => Math.max(prev - 1, 0));
                 updateCartData(updatedCart);
                 console.log("Product count decremented!");
@@ -217,7 +219,7 @@ const ProductDetails = () => {
             console.error("Error decrementing product count:", error);
         }
     };
-    
+
 
     useEffect(() => {
         fetchProductDetails();
@@ -227,35 +229,50 @@ const ProductDetails = () => {
 
 
 
-    const updateCartData = (updatedCart) => {
+
+    let debounceTimeout;
+    const updateCartData = async (updatedCart) => {
         try {
-            const userData = JSON.parse(
-                decodeURIComponent(
-                    document.cookie.replace(
-                        /(?:(?:^|.*;\s*)BharatLinkerUserData\s*\=\s*([^;]*).*$)|^.*$/,
-                        "$1"
-                    )
-                )
-            );
-            userData.cart = updatedCart;
-            document.cookie = `BharatLinkerUserData=${encodeURIComponent(
-                JSON.stringify(userData)
-            )}; path=/`;
-    
-            const productInCart = updatedCart.find((item) => item.id === productId);
-            if (productInCart) {
-                setCount(productInCart.count);
-                setCart(updatedCart);
-            } else {
-                setCount(0);
-                console.log("Product not found in cart");
+            // Clear the previous timeout if a new request comes in before the previous one completes
+            if (debounceTimeout) {
+                clearTimeout(debounceTimeout);
             }
+
+            // Set a new timeout to update the cart after a delay (e.g., 500ms)
+            debounceTimeout = setTimeout(async () => {
+                const userData = JSON.parse(
+                    decodeURIComponent(
+                        document.cookie.replace(
+                            /(?:(?:^|.*;\s*)BharatLinkerUserData\s*\=\s*([^;]*).*$)|^.*$/,
+                            "$1"
+                        )
+                    )
+                );
+
+                const productInCart = updatedCart.find((item) => item.id === productId);
+                if (productInCart) {
+                    setCount(productInCart.count);
+                    const updatedCartData = await updateCartByPhoneNumber(userData.phoneNumber, updatedCart);
+
+                    const updatedUserData = updatedCartData;
+                    document.cookie = `BharatLinkerUserData=${encodeURIComponent(
+                        JSON.stringify(updatedUserData)
+                    )}; path=/`;
+
+                    setCart(updatedCartData.cart);
+                } else {
+                    setCount(0);
+                    console.log("Product not found in cart");
+                }
+            }, 500); // Adjust the delay (500ms) as necessary
         } catch (error) {
             console.error("Error updating cart data:", error);
         }
     };
-    
-    
+
+
+
+
     return (
         <Fragment>
             <div id="product-details-search-container-top">
@@ -341,9 +358,9 @@ const ProductDetails = () => {
                                             <div onClick={handleAddToCart}>add to cart</div>
                                         ) : (
                                             <div className="product-details-count-container">
-                                                <FaMinus size={13} onClick={handleDecrement}/>
+                                                <FaMinus size={13} onClick={handleDecrement} />
                                                 {count}
-                                                <FaPlus size={15} onClick={handleIncrement}/>
+                                                <FaPlus size={15} onClick={handleIncrement} />
                                             </div>
                                         )}
                                     </div>
@@ -363,7 +380,7 @@ const ProductDetails = () => {
                             </div>
                         </>
                     )}
-                    {count !=0 && <AddToCartTab cart={cart}/>}
+                    {count != 0 && <AddToCartTab cart={cart} />}
                 </Fragment>
             )}
         </Fragment>
