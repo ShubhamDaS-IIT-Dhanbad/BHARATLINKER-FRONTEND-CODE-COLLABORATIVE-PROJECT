@@ -33,7 +33,7 @@ const SearchBar = ({ inputValue, onInputChange }) => {
         };
 
         fetchLocation();
-    }, [locationTab]);
+    }, []);
 
   
     const handleKeyPress = (e) => {
@@ -50,7 +50,7 @@ const SearchBar = ({ inputValue, onInputChange }) => {
                         <FaArrowLeft
                             id='product-page-user-icon'
                             size={25}
-                            onClick={() => navigate('/')} 
+                            onClick={() => navigate(-1)} 
                             aria-label="Go to Home"
                             tabIndex={0}
                         />

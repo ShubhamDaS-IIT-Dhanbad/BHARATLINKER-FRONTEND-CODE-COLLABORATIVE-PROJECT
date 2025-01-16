@@ -11,7 +11,7 @@ function SearchPageProductCard({ id, image, title,discountedPrice, price, isInSt
 
     return (
         <div className="search-page-product-card" onClick={()=>{navigate(`/product/${id}`)}}>
-            <div className="search-page-product-card-top" onClick={() => navigate(`/product/${id}`)}>
+            <div className="search-page-product-card-top" >
                 <img className="search-page-product-card-top-image" src={imageUrl} alt={productName} />
             </div>
             <div className='search-page-product-card-bottom'>
