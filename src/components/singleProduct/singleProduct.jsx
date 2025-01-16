@@ -388,7 +388,7 @@ const ProductDetails = () => {
                             </div>
                         </>
                     )}
-                    {count != 0 && <AddToCartTab cart={cart} />}
+                    {true && <AddToCartTab cart={cart} />}
                 </Fragment>
             )}
         </Fragment>
