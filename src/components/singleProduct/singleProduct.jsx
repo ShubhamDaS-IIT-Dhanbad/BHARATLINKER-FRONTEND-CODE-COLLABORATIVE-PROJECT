@@ -326,8 +326,8 @@ const ProductDetails = () => {
                                     View all products by {productDetail ? productDetail?.brand : "-"}
                                     <FaCaretRight size={20} />
                                 </div>
-                                <div id="product-details-shop" onClick={handleShopClick} style={{ cursor: "pointer" }}>
-                                    Shop: {shopDetail ? shopDetail?.shopName.toUpperCase() : "Loading..."}
+                                <div id="product-details-shop" style={{ cursor: "pointer" }}>
+                                    Shop: <span onClick={handleShopClick} >{shopDetail ? shopDetail?.shopName.toUpperCase() : "Loading..."}</span>
                                 </div>
 
 
