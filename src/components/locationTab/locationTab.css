@@ -61,7 +61,9 @@
     font-weight: 700;
     border: 1.5px solid rgb(0, 0, 0);
 }
-
+.location-tab-bottom-div-input-div form{
+    width: 100%;
+}
 .location-tab-bottom-div-input {
     outline: none;background-color: transparent;
     border: none;color: rgb(0, 0, 0);display: flex;flex-grow: 1;

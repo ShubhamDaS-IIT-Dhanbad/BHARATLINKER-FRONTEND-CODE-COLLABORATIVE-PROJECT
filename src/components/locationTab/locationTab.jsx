@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { IoClose } from "react-icons/io5";
 import { MdMyLocation } from "react-icons/md";
 import { IoSearch } from "react-icons/io5";
@@ -71,17 +71,15 @@ function LocationTab({ setLocationTab }) {
         }
     }, []);
 
-    const handleSearch = () => {
+    const handleSearch = useCallback(() => {
         fetchSuggestions(searchQuery);
-    };
+    }, [searchQuery, fetchSuggestions]);
 
-    const handleKeyDown = (e) => {
+    const handleKeyDownSearch = (e) => {
         if (e.key === 'Enter') {
-            e.preventDefault(); // Prevent default behavior
-            handleSearch(); // Call your search handler
+            handleSearch();
         }
     };
-    
 
     const handleAddressClick = (suggestion) => {
         setSearchQuery(suggestion.label);
@@ -146,7 +144,7 @@ function LocationTab({ setLocationTab }) {
         }
         setRadius(newRadius);
         updateLocation({
-            radius: newRadius
+            radius: newRadius,
         });
     };
 
@@ -155,7 +153,7 @@ function LocationTab({ setLocationTab }) {
         if (value >= 1 && value <= 300) {
             setRadius(value);
             updateLocation({
-                radius: value
+                radius: value,
             });
         }
     };
@@ -170,14 +168,27 @@ function LocationTab({ setLocationTab }) {
                 <div className="location-tab-bottom-top-div">
                     <div className="location-tab-bottom-div-input-div">
                         <IoSearch onClick={handleSearch} size={20} />
-                        <input
-                            className="location-tab-bottom-div-input"
-                            placeholder="Search your city / pincode"
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                            onKeyDown={handleKeyDown}
-                            aria-label="Search for location"
-                        />
+                        <form
+                            onSubmit={(e) => {
+                                e.preventDefault(); // Prevent form submission from reloading the page
+                                handleSearch(); // Call your search function
+                            }}
+                        >
+                            <input
+                                className="location-tab-bottom-div-input"
+                                placeholder="Search your city / pincode"
+                                value={searchQuery}
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                                onKeyDown={(e) => {
+                                    if (e.key === 'Enter') {
+                                        e.preventDefault(); // Prevent form submission on Enter key press
+                                        handleSearch();
+                                    }
+                                }}
+                                aria-label="Search for location"
+                            />
+                        </form>
+
                         <IoIosCloseCircleOutline size={30} onClick={() => setSearchQuery('')} />
                     </div>
                     <div
@@ -192,19 +203,20 @@ function LocationTab({ setLocationTab }) {
 
                 <div className="location-tab-radius-options-container">
                     <div className="location-tab-radius-options">
-                        <CiSquareMinus size={40} onClick={() => handleRadiusChange('decrease')}/>
-                            <div 
-                            className='location-tab-radius-input'>
-                        <input
-                            type="number"
-                            placeholder={radius}
-                            min="1"
-                            max="300"
-                            onChange={handleManualRadiusChange}
-                            aria-label="Set radius manually"
-                        />km
+                        <CiSquareMinus size={40} onClick={() => handleRadiusChange('decrease')} />
+                        <div className="location-tab-radius-input">
+
+                            <input
+                                type="number"
+                                placeholder={radius}
+                                min="1"
+                                max="300"
+                                value={radius}
+                                onChange={handleManualRadiusChange}
+                                aria-label="Set radius manually"
+                            />km
                         </div>
-                       <CiSquarePlus size={40} onClick={() => handleRadiusChange('increase')}/>
+                        <CiSquarePlus size={40} onClick={() => handleRadiusChange('increase')} />
                     </div>
                 </div>
 
