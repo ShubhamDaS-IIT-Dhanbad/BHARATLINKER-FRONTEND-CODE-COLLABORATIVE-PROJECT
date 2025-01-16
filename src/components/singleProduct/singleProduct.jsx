@@ -325,7 +325,7 @@ const ProductDetails = () => {
                                     View all products by {productDetail ? productDetail?.brand : "-"}
                                     <FaCaretRight onClick={() => navigate(`/search?query=${productDetail?.brand}`)} size={20} />
                                 </div>
-                                <div id="product-details-shop" style={{ cursor: "pointer" }}>
+                                <div id="product-details-shop">
                                     Shop: <span onClick={handleShopClick} >{shopDetail ? shopDetail?.shopName.toUpperCase() : "Loading..."}</span>
                                 </div>
 
