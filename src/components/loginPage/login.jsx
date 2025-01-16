@@ -5,7 +5,6 @@ import './login.css';
 import i1 from './indian-flag.png';
 import i2 from './i1.png';
 
-import {conf} from '../../conf.js';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { Client, Account, ID } from 'appwrite';
