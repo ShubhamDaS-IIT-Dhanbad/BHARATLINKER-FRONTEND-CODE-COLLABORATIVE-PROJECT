@@ -8,12 +8,14 @@ import { FaPlus } from "react-icons/fa";
 import { FaMinus } from "react-icons/fa";
 import Cookies from 'js-cookie';
 import { getDistance } from 'geolib'; // Import getDistance from geolib
+import { RotatingLines } from "react-loader-spinner"; // Import loader spinner
 
 const MyCartPage = ({setShowMyCart}) => {
     const navigate = useNavigate();
     const [cartItems, setCartItems] = useState([]);
     const [userLat, setUserLat] = useState(null);
     const [userLong, setUserLong] = useState(null);
+    const [loading, setLoading] = useState(true); // Loading state
     const { products } = useSelector((state) => state.searchproducts);
 
     const deliveryCostPerKm = 10;
@@ -51,9 +53,13 @@ const MyCartPage = ({setShowMyCart}) => {
                     };
                 });
 
-                Promise.all(updatedCartItems).then(setCartItems);
+                Promise.all(updatedCartItems).then((items) => {
+                    setCartItems(items);
+                    setLoading(false); // Set loading to false after data is fetched
+                });
             } catch (error) {
                 console.error("Error fetching cart data from cookie:", error);
+                setLoading(false); // Ensure loading is stopped in case of error
             }
         };
 
@@ -128,69 +134,72 @@ const MyCartPage = ({setShowMyCart}) => {
     };
 
     return (
-        <div className='my-cart-grand-parent' >
+        <div>
             <div className="mycart-header">
                 <span>My Cart</span>
                 <IoIosCloseCircleOutline onClick={() => { setShowMyCart(false) }} size={30} />
             </div>
             <div className="my-cart-container">
-                <div className='my-cart-total-saving'>
-                    <span>Your total savings</span>
-                    <span>₹{calculateSavings()}</span>
-                </div>
-
-                <div className="my-cart-items-container">
-                    {cartItems.map((item) => (
-                        <div key={item.id} className="my-cart-item">
-                            <img onClick={() => navigate(`/product/${item.id}`)} className="my-cart-item-img" src={item.image} alt={item.name} />
-                            <div className="my-cart-item-second">
-                                <p className="item-name">{item.name}</p>
-                                <div className="price-container">
-                                    <p className="item-price-strikethrough">₹{item.price}</p>
-                                    <p className="item-price">₹{item.discountedPrice}</p>
-                                </div>
-                                {userLat && userLong && item.lat && item.long && (
-                                    <span className='my-cart-item-distance'>{calculateDistance(userLat, userLong, item.lat, item.long)} km away</span>
-                                )}
-                            </div>
-                            <div className="my-cart-count-container-parent">
-                                <div className="my-cart-count-container">
-                                    <FaMinus size={12} onClick={() => handleQuantityChange(item.id, 'decrease')} />
-                                    {item.count}
-                                    <FaPlus size={13} onClick={() => handleQuantityChange(item.id, 'increase')} />
-                                </div>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-
-                <div className="my-cart-items-bill-details-container">
-                    Bill details
-                    <div className="my-cart-items-bill-details-items">
-                        <div className="my-cart-items-bill-details-item">
-                            <p className="item-name">Item total cost</p>
-                            <p className="item-price"><span style={{ textDecoration: "line-through", paddingRight: "5px" }}>₹{calculateDiscountdPrice()}</span>₹{calculateTotal()}</p>
-                        </div>
-                        <div className="my-cart-items-bill-details-item">
-                            <p className="item-name">Delivery charge</p>
-                            <p className="item-price">₹{calculateDeliveryCharge()}</p>
-                        </div>
-                        <div className="my-cart-items-bill-details-item">
-                            <p className="item-name">Handling charge</p>
-                            <p className="item-price">₹{handlingCharge}</p>
-                        </div>
-                        <div className="my-cart-items-bill-details-item">
-                            <p className="item-name">Grand total</p>
-                            <p className="item-price">₹{calculateGrandTotal()}</p>
-                        </div>
+                {loading ? (
+                    <div className="my-cart-loading-container">
+                        <RotatingLines width="50" height="50" />
                     </div>
-                </div>
+                ) : (
+                    <>
+                        <div className='my-cart-total-saving'>
+                            <span>Your total savings</span>
+                            <span>₹{calculateSavings()}</span>
+                        </div>
 
+                        <div className="my-cart-items-container">
+                            {cartItems.map((item) => (
+                                <div key={item.id} className="my-cart-item">
+                                    <img onClick={() => navigate(`/product/${item.id}`)} className="my-cart-item-img" src={item.image} alt={item.name} />
+                                    <div className="my-cart-item-second">
+                                        <p className="item-name">{item.name}</p>
+                                        <div className="price-container">
+                                            <p className="item-price-strikethrough">₹{item.price}</p>
+                                            <p className="item-price">₹{item.discountedPrice}</p>
+                                        </div>
+                                    </div>
+                                    <div className="my-cart-count-container-parent">
+                                        <div className="my-cart-count-container">
+                                            <FaMinus size={12} onClick={() => handleQuantityChange(item.id, 'decrease')} />
+                                            {item.count}
+                                            <FaPlus size={13} onClick={() => handleQuantityChange(item.id, 'increase')} />
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
 
+                        <div className="my-cart-items-bill-details-container">
+                            Bill details
+                            <div className="my-cart-items-bill-details-items">
+                                <div className="my-cart-items-bill-details-item">
+                                    <p className="item-name">Item total cost</p>
+                                    <p className="item-price"><span style={{ textDecoration: "line-through", paddingRight: "5px" }}>₹{calculateDiscountdPrice()}</span>₹{calculateTotal()}</p>
+                                </div>
+                                <div className="my-cart-items-bill-details-item">
+                                    <p className="item-name">Delivery charge</p>
+                                    <p className="item-price">₹{calculateDeliveryCharge()}</p>
+                                </div>
+                                <div className="my-cart-items-bill-details-item">
+                                    <p className="item-name">Handling charge</p>
+                                    <p className="item-price">₹{handlingCharge}</p>
+                                </div>
+                                <div className="my-cart-items-bill-details-item">
+                                    <p className="item-name">Grand total</p>
+                                    <p className="item-price">₹{calculateGrandTotal()}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </>
+                )}
             </div>
-            <div className="my-cart-address-selection">
+           {!loading && <div className="my-cart-address-selection">
                 <div className="select-address">Please select an address</div>
-            </div>
+            </div>}
         </div>
     );
 };

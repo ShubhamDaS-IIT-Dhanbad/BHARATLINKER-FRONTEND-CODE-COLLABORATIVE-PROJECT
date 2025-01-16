@@ -59,7 +59,7 @@ const ProductDetails = () => {
             const product =
                 products.find((product) => product.$id === productId) ||
                 (await searchProductService.getProductById(productId));
-                
+
             if (product) {
                 setProductDetails(product);
                 setSelectedImage(product?.images[0] || fallbackImage);
@@ -95,8 +95,8 @@ const ProductDetails = () => {
                 id: productDetail.$id,
                 price: productDetail.price,
                 discountedPrice: productDetail.discountedPrice,
-                lat:productDetail.lat,
-                long:productDetail.long,
+                lat: productDetail.lat,
+                long: productDetail.long,
                 count: 1,
             };
 
@@ -188,17 +188,17 @@ const ProductDetails = () => {
             const productIndex = cart.findIndex((item) => item.id === productId);
 
             if (productIndex !== -1) {
-                
+
                 const updatedCart = [...cart];
-                if(updatedCart[productIndex].count==3){
+                if (updatedCart[productIndex].count == 3) {
                     alert("maximum 3 element can be selected");
                     return;
                 }
-                    
+
                 updatedCart[productIndex].count += 1;
                 updatedCart[productIndex].price = productDetail.price;
                 updatedCart[productIndex].discountedPrice = productDetail.discountedPrice;
-                console.log("up",updatedCart)
+                console.log("up", updatedCart)
                 setCount((prev) => prev + 1);
                 updateCartData(updatedCart);
             } else {
@@ -244,9 +244,13 @@ const ProductDetails = () => {
 
 
     useEffect(() => {
-        fetchProductDetails();
         checkProductInCart();
     }, [showMyCart]);
+
+    useEffect(() => {
+        fetchProductDetails();
+    }, []);
+
 
 
 
@@ -263,11 +267,11 @@ const ProductDetails = () => {
                 )
             );
             userData.cart = updatedCart;
-    
+
             document.cookie = `BharatLinkerUserData=${encodeURIComponent(
                 JSON.stringify(userData)
             )}; path=/`;
-    
+
             const productInCart = updatedCart.find((item) => item.id === productId);
             if (productInCart) {
                 setCount(productInCart.count);
@@ -280,16 +284,16 @@ const ProductDetails = () => {
             console.error("Error updating cart data:", error);
         }
     };
-    
+
 
 
 
 
     return (
         <Fragment>
-            <div id="product-details-search-container-top">
+            {!showMyCart && <div id="product-details-search-container-top">
                 <SingleProductSearchBar />
-            </div>
+            </div>}
 
             {loading ? (
                 <div className="refurbished-page-loading-container">
@@ -297,7 +301,7 @@ const ProductDetails = () => {
                 </div>
             ) : (
                 <Fragment>
-                    {productDetail && (
+                    {productDetail && !showMyCart && (
                         <>
                             <div id="product-details-container">
                                 <div id="product-details-img">
@@ -388,10 +392,13 @@ const ProductDetails = () => {
                                     </div>
                                 </div>
                             </div>
+
+
                         </>
+
                     )}
-                    <AddToCartTab cart={cart} setShowMyCart={setShowMyCart}/>
-                    {showMyCart && <MyCart setShowMyCart={setShowMyCart}/>}
+                     {!showMyCart && <AddToCartTab cart={cart} setShowMyCart={setShowMyCart} />}
+                    {showMyCart && <MyCart setShowMyCart={setShowMyCart} />}
                 </Fragment>
             )}
         </Fragment>
