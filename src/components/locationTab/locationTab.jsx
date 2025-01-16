@@ -10,17 +10,19 @@ import { ThreeDots } from 'react-loader-spinner';
 import { IoIosCloseCircleOutline } from "react-icons/io";
 import './locationTab.css';
 
+import { CiSquareMinus } from "react-icons/ci";
+import { CiSquarePlus } from "react-icons/ci";
+
 function LocationTab({ setLocationTab }) {
     const [loading, setLoading] = useState(false);
     const [fetchingUserLocation, setFetchingUserLocation] = useState(false);
-
     const [searchQuery, setSearchQuery] = useState('');
     const [radius, setRadius] = useState(5);
-
     const [suggestions, setSuggestions] = useState([]);
     const [radiusOptions] = useState([2, 3, 5, 7, 10]);
 
-    const {updateLocation } = useLocationFromCookie();
+    const { updateLocation } = useLocationFromCookie();
+
     useEffect(() => {
         const storedLocation = Cookies.get('BharatLinkerUserLocation')
             ? JSON.parse(Cookies.get('BharatLinkerUserLocation'))
@@ -133,14 +135,28 @@ function LocationTab({ setLocationTab }) {
         }
     };
 
-    const handleRadiusChange = (radius) => {
-        setRadius(radius);
+    const handleRadiusChange = (operation) => {
+        let newRadius = radius;
+        if (operation === 'increase' && radius < 200) {
+            newRadius = radius + 1;
+        } else if (operation === 'decrease' && radius > 1) {
+            newRadius = radius - 1;
+        }
+        setRadius(newRadius);
         updateLocation({
-            radius: radius
+            radius: newRadius
         });
     };
 
-    const memoizedRadiusOptions = useMemo(() => radiusOptions, [radiusOptions]);
+    const handleManualRadiusChange = (e) => {
+        const value = parseInt(e.target.value, 10);
+        if (value >= 1 && value <= 300) {
+            setRadius(value);
+            updateLocation({
+                radius: value
+            });
+        }
+    };
 
     return (
         <div className="location-tab">
@@ -160,7 +176,7 @@ function LocationTab({ setLocationTab }) {
                             onKeyDown={handleKeyDown}
                             aria-label="Search for location"
                         />
-                        <IoIosCloseCircleOutline size={30} onClick={()=>{setSearchQuery('')}}/>
+                        <IoIosCloseCircleOutline size={30} onClick={() => setSearchQuery('')} />
                     </div>
                     <div
                         className="location-tab-bottom-div-current-location"
@@ -174,17 +190,19 @@ function LocationTab({ setLocationTab }) {
 
                 <div className="location-tab-radius-options-container">
                     <div className="location-tab-radius-options">
-                        {memoizedRadiusOptions.map((option) => (
-                            <span
-                                key={option}
-                                className={`location-tab-radius-option ${option === radius ? 'selected' : 'unselected'}`}
-                                onClick={() => handleRadiusChange(option)}
-                                role="button"
-                                aria-label={`Set radius to ${option} km`}
-                            >
-                                {option} km
-                            </span>
-                        ))}
+                        <CiSquareMinus size={40} onClick={() => handleRadiusChange('decrease')}/>
+                            <div 
+                            className='location-tab-radius-input'>
+                        <input
+                            type="number"
+                            placeholder={radius}
+                            min="1"
+                            max="300"
+                            onChange={handleManualRadiusChange}
+                            aria-label="Set radius manually"
+                        />km
+                        </div>
+                       <CiSquarePlus size={40} onClick={() => handleRadiusChange('increase')}/>
                     </div>
                 </div>
 
