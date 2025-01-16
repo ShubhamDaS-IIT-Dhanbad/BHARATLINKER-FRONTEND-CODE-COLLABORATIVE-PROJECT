@@ -67,7 +67,7 @@
 .location-tab-bottom-div-input {
     outline: none;background-color: transparent;
     border: none;color: rgb(0, 0, 0);display: flex;flex-grow: 1;
-    padding-right: 5px;
+    padding-right: 5px;width: 100%;
 }
 
 .location-tab-bottom-div-input::placeholder {
