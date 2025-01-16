@@ -297,7 +297,6 @@ const ProductDetails = () => {
                                             key={index}
                                             onClick={() => handleImageClick(index)}
                                             className={selectedImage === image ? "product-detail-image-select" : "product-detail-image-unselect"}
-                                            style={{ border: selectedImage === image ? "2px solid blue" : "none" }}
                                         ></div>
                                     ))}
                                 </div>
