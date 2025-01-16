@@ -32,7 +32,6 @@ const SingleProductSearchBar = () => {
 
     // Handle the back navigation
     const handleBackClick = () => {
-        console.log("Back button clicked");
         navigate(-1);
     };
 
