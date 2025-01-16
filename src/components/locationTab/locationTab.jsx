@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { IoClose } from "react-icons/io5";
 import { MdMyLocation } from "react-icons/md";
 import { IoSearch } from "react-icons/io5";
@@ -71,26 +71,17 @@ function LocationTab({ setLocationTab }) {
         }
     }, []);
 
-    // Debounce implementation
-    useEffect(() => {
-        const delayDebounceFn = setTimeout(() => {
-            if (searchQuery.trim()) {
-                fetchSuggestions(searchQuery);
-            }
-        }, 500); // Adjust debounce time as needed
-
-        return () => clearTimeout(delayDebounceFn);
-    }, [searchQuery, fetchSuggestions]);
-
     const handleSearch = () => {
         fetchSuggestions(searchQuery);
     };
 
     const handleKeyDown = (e) => {
         if (e.key === 'Enter') {
-            handleSearch();
+            e.preventDefault(); // Prevent default behavior
+            handleSearch(); // Call your search handler
         }
     };
+    
 
     const handleAddressClick = (suggestion) => {
         setSearchQuery(suggestion.label);
@@ -202,17 +193,18 @@ function LocationTab({ setLocationTab }) {
                 <div className="location-tab-radius-options-container">
                     <div className="location-tab-radius-options">
                         <CiSquareMinus size={40} onClick={() => handleRadiusChange('decrease')}/>
-                        <div className='location-tab-radius-input'>
-                            <input
-                                type="number"
-                                placeholder={radius}
-                                min="1"
-                                max="300"
-                                onChange={handleManualRadiusChange}
-                                aria-label="Set radius manually"
-                            />km
+                            <div 
+                            className='location-tab-radius-input'>
+                        <input
+                            type="number"
+                            placeholder={radius}
+                            min="1"
+                            max="300"
+                            onChange={handleManualRadiusChange}
+                            aria-label="Set radius manually"
+                        />km
                         </div>
-                        <CiSquarePlus size={40} onClick={() => handleRadiusChange('increase')}/>
+                       <CiSquarePlus size={40} onClick={() => handleRadiusChange('increase')}/>
                     </div>
                 </div>
 
