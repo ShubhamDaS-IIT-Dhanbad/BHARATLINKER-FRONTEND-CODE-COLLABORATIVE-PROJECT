@@ -50,7 +50,7 @@ const SearchBar = ({ inputValue, onInputChange }) => {
                         <FaArrowLeft
                             id='product-page-user-icon'
                             size={25}
-                            onClick={() => navigate(-1)} 
+                            onClick={() => navigate('/')} 
                             aria-label="Go to Home"
                             tabIndex={0}
                         />
