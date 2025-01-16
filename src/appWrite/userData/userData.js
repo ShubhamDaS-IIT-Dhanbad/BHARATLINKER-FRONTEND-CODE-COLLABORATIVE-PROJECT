@@ -44,6 +44,26 @@ async function updateUserByPhoneNumber(updatedData) {
         return false;
     }
 }
+async function updateCartByPhoneNumber(updatedData) {
+    try {
+        const { phn, cart } = updatedData;
+
+        // Use the phone number as the query to update the cart directly
+        const updatedUser = await databases.updateDocument(
+            conf.appwriteUsersDatabaseId,
+            conf.appwriteUsersCollectionId,
+            phn,
+            { cart }
+        );
+
+        console.log('User successfully updated:', updatedUser);
+        return updatedUser;
+    } catch (error) {
+        console.error('Error in updateCartByPhoneNumber:', error);
+        throw error; // Throwing error for better handling
+    }
+}
+
 
 // Function to fetch user data by phone number
 async function fetchUserByPhoneNumber(phn) {
@@ -71,4 +91,4 @@ async function fetchUserByPhoneNumber(phn) {
     }
 }
 
-export { updateUserByPhoneNumber, fetchUserByPhoneNumber };
+export { updateUserByPhoneNumber,updateCartByPhoneNumber, fetchUserByPhoneNumber };
