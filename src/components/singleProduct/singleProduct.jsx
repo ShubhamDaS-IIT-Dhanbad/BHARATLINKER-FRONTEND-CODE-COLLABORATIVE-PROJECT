@@ -77,16 +77,16 @@ const ProductDetails = () => {
         try {
             // Check if BharatLinkerUserData exists in the cookies
             const userDataCookie = document.cookie.replace(/(?:(?:^|.*;\s*)BharatLinkerUserData\s*\=\s*([^;]*).*$)|^.*$/, "$1");
-    
+
             if (!userDataCookie) {
                 // If BharatLinkerUserData is not found, redirect to login
                 window.location.href = '/login';
                 return;
             }
-    
+
             // Parse the user data from the cookie
             const userData = JSON.parse(decodeURIComponent(userDataCookie));
-    
+
             // Create the updated cart item
             const updatedCartItem = {
                 id: productDetail.$id,
@@ -94,19 +94,19 @@ const ProductDetails = () => {
                 discountedPrice: productDetail.discountedPrice,
                 count: 1,
             };
-    
+
             // Update the cart
             const updatedCart = [...(userData.cart || []), updatedCartItem];
             userData.cart = updatedCart;
             document.cookie = `BharatLinkerUserData=${encodeURIComponent(JSON.stringify(userData))}; path=/`;
-    
+
             // Update the cart data on the backend
             updateCartData(updatedCart);
         } catch (error) {
             console.error("Error adding product to cart:", error);
         }
     };
-    
+
 
 
     const handleImageClick = (index) => setSelectedImage(productDetail?.images[index]);
@@ -183,7 +183,13 @@ const ProductDetails = () => {
             const productIndex = cart.findIndex((item) => item.id === productId);
 
             if (productIndex !== -1) {
+                
                 const updatedCart = [...cart];
+                if(updatedCart[productIndex].count==3){
+                    alert("maximum 3 element can be selected");
+                    return;
+                }
+                    
                 updatedCart[productIndex].count += 1;
                 updatedCart[productIndex].price = productDetail.price;
                 updatedCart[productIndex].discountedPrice = productDetail.discountedPrice;
@@ -241,46 +247,37 @@ const ProductDetails = () => {
 
 
 
-
-    let debounceTimeout;
     const updateCartData = async (updatedCart) => {
         try {
-            // Clear the previous timeout if a new request comes in before the previous one completes
-            if (debounceTimeout) {
-                clearTimeout(debounceTimeout);
-            }
-
-            // Set a new timeout to update the cart after a delay (e.g., 500ms)
-            debounceTimeout = setTimeout(async () => {
-                const userData = JSON.parse(
-                    decodeURIComponent(
-                        document.cookie.replace(
-                            /(?:(?:^|.*;\s*)BharatLinkerUserData\s*\=\s*([^;]*).*$)|^.*$/,
-                            "$1"
-                        )
+            setCart(updatedCart);
+            const userData = JSON.parse(
+                decodeURIComponent(
+                    document.cookie.replace(
+                        /(?:(?:^|.*;\s*)BharatLinkerUserData\s*\=\s*([^;]*).*$)|^.*$/,
+                        "$1"
                     )
-                );
-
-                const productInCart = updatedCart.find((item) => item.id === productId);
-                if (productInCart) {
-                    setCount(productInCart.count);
-                    const updatedCartData = await updateCartByPhoneNumber(userData.phoneNumber, updatedCart);
-
-                    const updatedUserData = updatedCartData;
-                    document.cookie = `BharatLinkerUserData=${encodeURIComponent(
-                        JSON.stringify(updatedUserData)
-                    )}; path=/`;
-
-                    setCart(updatedCartData.cart);
-                } else {
-                    setCount(0);
-                    console.log("Product not found in cart");
-                }
-            }, 500); // Adjust the delay (500ms) as necessary
+                )
+            );
+            userData.cart = updatedCart;
+    
+            document.cookie = `BharatLinkerUserData=${encodeURIComponent(
+                JSON.stringify(userData)
+            )}; path=/`;
+    
+            const productInCart = updatedCart.find((item) => item.id === productId);
+            if (productInCart) {
+                setCount(productInCart.count);
+                const updatedCartData = await updateCartByPhoneNumber(userData.phoneNumber, updatedCart);
+                console.log("updated",updatedCartData);
+            } else {
+                setCount(0);
+                console.log("Product not found in cart");
+            }
         } catch (error) {
             console.error("Error updating cart data:", error);
         }
     };
+    
 
 
 

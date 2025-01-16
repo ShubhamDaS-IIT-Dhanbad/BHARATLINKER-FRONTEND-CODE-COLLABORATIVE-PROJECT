@@ -49,9 +49,6 @@ async function updateCartByPhoneNumber(phoneNumber, updatedCart) {
     try {
         // Ensure phoneNumber is a string
         const phoneNumberString = String(phoneNumber);
-        console.log(phoneNumberString, updatedCart);
-
-        // Query to find the document with the given phone number
         const queries = [Query.equal('phoneNumber', phoneNumberString)];
 
         const result = await databases.listDocuments(
@@ -59,19 +56,11 @@ async function updateCartByPhoneNumber(phoneNumber, updatedCart) {
             conf.appwriteUsersCollectionId,
             queries
         );
-
-        // Check if a document was found
         if (result.documents.length === 0) {
             throw new Error(`No document found with phoneNumber: ${phoneNumberString}`);
         }
-
-        // Get the document ID of the first result
         const documentId = result.documents[0].$id;
-
-        // Convert updatedCart (array of objects) to a string
-        const cartAsString = JSON.stringify(updatedCart); // Convert the entire array of objects into a string
-
-        // Update the cart with the stringified array
+        const cartAsString = JSON.stringify(updatedCart);
         const updatedUser = await databases.updateDocument(
             conf.appwriteUsersDatabaseId,
             conf.appwriteUsersCollectionId,
