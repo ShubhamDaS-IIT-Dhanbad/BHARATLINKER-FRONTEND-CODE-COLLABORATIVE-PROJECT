@@ -47,7 +47,7 @@ const MyCartPage = ({setShowMyCart}) => {
                         price: product?.price,
                         discountedPrice: product?.discountedPrice,
                         lat: product?.lat,
-                        long: product?.long // Assuming products have lat and long properties
+                        long: product?.long
                     };
                 });
 

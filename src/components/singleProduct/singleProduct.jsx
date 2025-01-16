@@ -246,7 +246,7 @@ const ProductDetails = () => {
     useEffect(() => {
         fetchProductDetails();
         checkProductInCart();
-    }, []);
+    }, [showMyCart]);
 
 
 
