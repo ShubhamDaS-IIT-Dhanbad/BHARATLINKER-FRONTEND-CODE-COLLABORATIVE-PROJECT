@@ -14,6 +14,8 @@ import { updateCartByPhoneNumber } from '../../appWrite/userData/userData.js'
 
 import { FaPlus } from "react-icons/fa";
 import { FaMinus } from "react-icons/fa";
+
+import MyCart from '../user/myCart/myCart.jsx';
 const fallbackImage = "http://res.cloudinary.com/dthelgixr/image/upload/v1727870088/hd7kcjuz8jfjajnzmqkp.webp";
 
 const ProductDetails = () => {
@@ -32,6 +34,7 @@ const ProductDetails = () => {
     const [selectedImage, setSelectedImage] = useState(fallbackImage);
 
     const [cart, setCart] = useState([]);
+    const [showMyCart, setShowMyCart] = useState(false);
 
     const parseDescription = (description) => {
         if (!description) return [];
@@ -92,6 +95,8 @@ const ProductDetails = () => {
                 id: productDetail.$id,
                 price: productDetail.price,
                 discountedPrice: productDetail.discountedPrice,
+                lat:productDetail.lat,
+                long:productDetail.long,
                 count: 1,
             };
 
@@ -193,7 +198,7 @@ const ProductDetails = () => {
                 updatedCart[productIndex].count += 1;
                 updatedCart[productIndex].price = productDetail.price;
                 updatedCart[productIndex].discountedPrice = productDetail.discountedPrice;
-
+                console.log("up",updatedCart)
                 setCount((prev) => prev + 1);
                 updateCartData(updatedCart);
             } else {
@@ -385,7 +390,8 @@ const ProductDetails = () => {
                             </div>
                         </>
                     )}
-                    <AddToCartTab cart={cart} />
+                    <AddToCartTab cart={cart} setShowMyCart={setShowMyCart}/>
+                    {showMyCart && <MyCart setShowMyCart={setShowMyCart}/>}
                 </Fragment>
             )}
         </Fragment>

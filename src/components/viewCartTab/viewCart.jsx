@@ -4,7 +4,7 @@ import { IoMdCart } from "react-icons/io";
 import { FaCaretRight } from "react-icons/fa";
 import { useNavigate } from 'react-router-dom';
 
-const AddToCartTab = ({ cart }) => {
+const AddToCartTab = ({ cart,setShowMyCart }) => {
   const navigate = useNavigate();
 
   if (!Array.isArray(cart)) {
@@ -18,7 +18,7 @@ const AddToCartTab = ({ cart }) => {
 
   const handleViewCart = () => {
     if (totalCount > 0) {
-      navigate('/mycart'); // Redirect to /mycart if there are items in the cart
+      setShowMyCart(true);
     }
   };
 

@@ -6,16 +6,30 @@ import { IoIosCloseCircleOutline } from "react-icons/io";
 import searchProductService from "../../../appWrite/searchProduct.js";
 import { FaPlus } from "react-icons/fa";
 import { FaMinus } from "react-icons/fa";
+import Cookies from 'js-cookie';
+import { getDistance } from 'geolib'; // Import getDistance from geolib
 
-const MyCartPage = () => {
+const MyCartPage = ({setShowMyCart}) => {
     const navigate = useNavigate();
     const [cartItems, setCartItems] = useState([]);
+    const [userLat, setUserLat] = useState(null);
+    const [userLong, setUserLong] = useState(null);
     const { products } = useSelector((state) => state.searchproducts);
-    console.log(cartItems);
+
+    const deliveryCostPerKm = 10;
+    const handlingCharge = 5;
 
     useEffect(() => {
         const getCartFromCookie = () => {
             try {
+                const storedLocation = Cookies.get('BharatLinkerUserLocation')
+                    ? JSON.parse(Cookies.get('BharatLinkerUserLocation'))
+                    : null;
+                if (storedLocation) {
+                    setUserLat(storedLocation.lat);
+                    setUserLong(storedLocation.lon);
+                }
+
                 const userDataCookie = document.cookie.replace(/(?:(?:^|.*;\s*)BharatLinkerUserData\s*\=\s*([^;]*).*$)|^.*$/, "$1");
                 if (!userDataCookie) {
                     window.location.href = '/login';
@@ -24,27 +38,57 @@ const MyCartPage = () => {
                 const userData = JSON.parse(decodeURIComponent(userDataCookie));
                 const cart = userData.cart || [];
 
-                // Fetch product details for each cart item asynchronously
                 const updatedCartItems = cart.map(async (item) => {
                     const product = products.find((prod) => prod.$id === item.id) || await searchProductService.getProductById(item.id);
-                    return { ...item, image: product?.images[0], name: product?.title, price: product?.price, discountedPrice: product?.discountedPrice };
+                    return {
+                        ...item,
+                        image: product?.images[0],
+                        name: product?.title,
+                        price: product?.price,
+                        discountedPrice: product?.discountedPrice,
+                        lat: product?.lat,
+                        long: product?.long // Assuming products have lat and long properties
+                    };
                 });
 
-                // Wait for all product details to be fetched and update the cart items
                 Promise.all(updatedCartItems).then(setCartItems);
             } catch (error) {
                 console.error("Error fetching cart data from cookie:", error);
             }
         };
+
         getCartFromCookie();
     }, [products]);
 
     const calculateTotal = () => {
-        return cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
+        return (cartItems.reduce((acc, item) => acc + (item.discountedPrice || item.price) * item.count, 0)).toFixed(1);
+    };
+    const calculateDiscountdPrice = () => {
+        return (cartItems.reduce((acc, item) => acc + (item.price || item.discountedPrice) * item.count, 0)).toFixed(1);
     };
 
     const calculateSavings = () => {
-        return cartItems.reduce((acc, item) => acc + (item.originalPrice - item.price) * item.quantity, 0);
+        return (cartItems.reduce((acc, item) => acc + (item.price - item.discountedPrice) * item.count, 0)).toFixed(1);
+    };
+
+    const calculateDeliveryCharge = () => {
+        const totalDistance = cartItems.reduce((acc, item) => {
+            if (userLat && userLong && item.lat && item.long) {
+                const distance = calculateDistance(userLat, userLong, item.lat, item.long);
+                return acc + parseFloat(distance);
+            }
+            return acc;
+        }, 0);
+        return (totalDistance * deliveryCostPerKm).toFixed(1); // Delivery charge per km
+    };
+
+    const calculateGrandTotal = () => {
+        const totalCost = parseFloat(calculateTotal());
+        const deliveryCharge = parseFloat(calculateDeliveryCharge());
+        const handling = handlingCharge;
+
+        const grandTotal = totalCost + deliveryCharge + handling;
+        return grandTotal.toFixed(1);
     };
 
     const handleQuantityChange = (id, type) => {
@@ -56,45 +100,58 @@ const MyCartPage = () => {
                     item.count = item.count - 1;
                 }
 
-                // If quantity becomes 0, remove the item from the cart
                 if (item.count === 0) {
-                    return null; // Mark for removal
+                    return null;
                 }
             }
             return item;
-        }).filter(item => item !== null); 
-
+        }).filter(item => item !== null);
         setCartItems(updatedCart);
 
-        // Update the cookie with the new cart
         const userDataCookie = document.cookie.replace(/(?:(?:^|.*;\s*)BharatLinkerUserData\s*\=\s*([^;]*).*$)|^.*$/, "$1");
         if (userDataCookie) {
             const userData = JSON.parse(decodeURIComponent(userDataCookie));
-            userData.cart = updatedCart; // Update the cart
-            document.cookie = `BharatLinkerUserData=${encodeURIComponent(JSON.stringify(userData))}; path=/`; // Update the cookie
-        }console.log("updated",updatedCart)
+            userData.cart = updatedCart;
+            Cookies.set('BharatLinkerUserData', JSON.stringify(userData), { path: '/' });
+        }
+    };
+
+    const calculateDistance = (lat1, long1, lat2, long2) => {
+        if (lat1 && long1 && lat2 && long2) {
+            const distanceInMeters = getDistance(
+                { latitude: lat1, longitude: long1 },
+                { latitude: lat2, longitude: long2 }
+            );
+            return (distanceInMeters / 1000).toFixed(2);
+        }
+        return 0;
     };
 
     return (
-        <>
+        <div className='my-cart-grand-parent' >
             <div className="mycart-header">
                 <span>My Cart</span>
-                <IoIosCloseCircleOutline onClick={() => { navigate(-1) }} size={30} />
+                <IoIosCloseCircleOutline onClick={() => { setShowMyCart(false) }} size={30} />
             </div>
             <div className="my-cart-container">
                 <div className='my-cart-total-saving'>
                     <span>Your total savings</span>
-                    <span>₹73</span>
+                    <span>₹{calculateSavings()}</span>
                 </div>
 
                 <div className="my-cart-items-container">
                     {cartItems.map((item) => (
                         <div key={item.id} className="my-cart-item">
-
-                            <img className="my-cart-item-img" src={item.image} alt={item.name} />
+                            <img onClick={() => navigate(`/product/${item.id}`)} className="my-cart-item-img" src={item.image} alt={item.name} />
                             <div className="my-cart-item-second">
                                 <p className="item-name">{item.name}</p>
-                                <p className="item-price">₹{item.price}</p>
+                                <div className="price-container">
+                                    <p className="item-price-strikethrough">₹{item.price}</p>
+                                    <p className="item-price">₹{item.discountedPrice}</p>
+                                </div>
+                                {userLat && userLong && item.lat && item.long && (
+                                    <span className='my-cart-item-distance'>{calculateDistance(userLat, userLong, item.lat, item.long)} km away</span>
+                                )}
                             </div>
                             <div className="my-cart-count-container-parent">
                                 <div className="my-cart-count-container">
@@ -103,16 +160,38 @@ const MyCartPage = () => {
                                     <FaPlus size={13} onClick={() => handleQuantityChange(item.id, 'increase')} />
                                 </div>
                             </div>
-
                         </div>
                     ))}
                 </div>
 
-                <div className="address-selection">
-                    <button className="select-address">Please select an address</button>
+                <div className="my-cart-items-bill-details-container">
+                    Bill details
+                    <div className="my-cart-items-bill-details-items">
+                        <div className="my-cart-items-bill-details-item">
+                            <p className="item-name">Item total cost</p>
+                            <p className="item-price"><span style={{ textDecoration: "line-through", paddingRight: "5px" }}>₹{calculateDiscountdPrice()}</span>₹{calculateTotal()}</p>
+                        </div>
+                        <div className="my-cart-items-bill-details-item">
+                            <p className="item-name">Delivery charge</p>
+                            <p className="item-price">₹{calculateDeliveryCharge()}</p>
+                        </div>
+                        <div className="my-cart-items-bill-details-item">
+                            <p className="item-name">Handling charge</p>
+                            <p className="item-price">₹{handlingCharge}</p>
+                        </div>
+                        <div className="my-cart-items-bill-details-item">
+                            <p className="item-name">Grand total</p>
+                            <p className="item-price">₹{calculateGrandTotal()}</p>
+                        </div>
+                    </div>
                 </div>
+
+
             </div>
-        </>
+            <div className="my-cart-address-selection">
+                <div className="select-address">Please select an address</div>
+            </div>
+        </div>
     );
 };
 
