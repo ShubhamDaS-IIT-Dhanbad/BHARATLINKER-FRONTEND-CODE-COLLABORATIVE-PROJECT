@@ -32,7 +32,7 @@ const SingleProductSearchBar = () => {
 
     // Handle the back navigation
     const handleBackClick = () => {
-        navigate(-1);
+        navigate('/search');
     };
 
     return (
@@ -42,7 +42,7 @@ const SingleProductSearchBar = () => {
                     <FaArrowLeft
                         id='single-product-search-back-icon'
                         size={25}
-                        onClick={handleBackClick} // Ensure this works with one click
+                        onClick={handleBackClick}
                     />
                     <div className='single-product-search-header-location'>
                         <p className='single-product-search-location-label'>PRODUCT INFO</p>

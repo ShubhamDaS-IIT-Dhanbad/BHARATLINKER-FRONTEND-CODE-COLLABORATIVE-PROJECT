@@ -55,7 +55,7 @@ const SearchPage = () => {
                     inputValue={inputValue}
                     onInputChange={handleInputChange}
                     onSearch={executeSearch}
-                    onNavigateHome={() => navigate('/')}
+                    onClick={() => navigate('/')}
                 />
             </div>
             {loading ? (
