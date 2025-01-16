@@ -75,9 +75,18 @@ const ProductDetails = () => {
 
     const handleAddToCart = () => {
         try {
+            // Check if BharatLinkerUserData exists in the cookies
+            const userDataCookie = document.cookie.replace(/(?:(?:^|.*;\s*)BharatLinkerUserData\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+    
+            if (!userDataCookie) {
+                // If BharatLinkerUserData is not found, redirect to login
+                window.location.href = '/login';
+                return;
+            }
+    
             // Parse the user data from the cookie
-            const userData = JSON.parse(decodeURIComponent(document.cookie.replace(/(?:(?:^|.*;\s*)BharatLinkerUserData\s*\=\s*([^;]*).*$)|^.*$/, "$1")));
-
+            const userData = JSON.parse(decodeURIComponent(userDataCookie));
+    
             // Create the updated cart item
             const updatedCartItem = {
                 id: productDetail.$id,
@@ -85,16 +94,19 @@ const ProductDetails = () => {
                 discountedPrice: productDetail.discountedPrice,
                 count: 1,
             };
-
+    
             // Update the cart
             const updatedCart = [...(userData.cart || []), updatedCartItem];
             userData.cart = updatedCart;
             document.cookie = `BharatLinkerUserData=${encodeURIComponent(JSON.stringify(userData))}; path=/`;
+    
+            // Update the cart data on the backend
             updateCartData(updatedCart);
         } catch (error) {
             console.error("Error adding product to cart:", error);
         }
     };
+    
 
 
     const handleImageClick = (index) => setSelectedImage(productDetail?.images[index]);
