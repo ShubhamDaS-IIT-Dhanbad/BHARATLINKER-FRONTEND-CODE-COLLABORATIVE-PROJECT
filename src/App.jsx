@@ -12,7 +12,7 @@ import SearchPage from './components/searchPage/searchPage.jsx';
 import SearchSorybySection from './components/searchPage/sortbySection.jsx';
 import SearchFilterSection from './components/searchPage/filterSection.jsx';
 //Product Card
-import SingleProductCard from './components/singleProduct/singleProduct.jsx'
+import SingleProduct from './components/singleProduct/singleProduct.jsx'
 
 //search shop
 import SearchShop from './components/searchShop/searchShop.jsx'
@@ -37,6 +37,7 @@ import UserProductPageMain from './components/user/productPage/userProductPageMa
 import RefurbishedBooksUploadUser from './components/user/userProductUpload/userProductUpload.jsx'
 import UserUpdateBookModule  from './components/user/userProductUpdate/userProductUpdate.jsx';
 import UserNotification from './components/user/notification/userNotification.jsx'
+import  UserCart from './components/user/myCart/myCart.jsx'
 
 
 
@@ -80,7 +81,7 @@ const RoutesWithConditionalHeader = React.memo(({ address }) => {
         <Route path="/search/sortby" element={<SearchSorybySection />} />
         <Route path="search/filterby" element={<SearchFilterSection/>}/>
         {/* Single Product */}
-        <Route path="/product/:productId" element={<SingleProductCard/>} />
+        <Route path="/product/:productId" element={<SingleProduct/>} />
 
         {/* search shop */}
         <Route path="/shop" element={<SearchShop />} />
@@ -111,7 +112,7 @@ const RoutesWithConditionalHeader = React.memo(({ address }) => {
         <Route path='/user/upload/:productType' element={<RefurbishedBooksUploadUser/>} />
         <Route path='/user/refurbished/update/:id' element={<UserUpdateBookModule/>}/>
         <Route path='/user/notification' element={<UserNotification/>}/>
-        <Route path='/user/privacy' element={<>private boss</>} />
+        <Route path='/mycart' element={<UserCart/>} />
 
       </Routes>
     </>

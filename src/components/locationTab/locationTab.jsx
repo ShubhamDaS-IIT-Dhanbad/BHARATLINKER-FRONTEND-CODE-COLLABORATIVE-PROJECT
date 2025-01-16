@@ -211,7 +211,6 @@ function LocationTab({ setLocationTab }) {
                                 placeholder={radius}
                                 min="1"
                                 max="300"
-                                value={radius}
                                 onChange={handleManualRadiusChange}
                                 aria-label="Set radius manually"
                             />km

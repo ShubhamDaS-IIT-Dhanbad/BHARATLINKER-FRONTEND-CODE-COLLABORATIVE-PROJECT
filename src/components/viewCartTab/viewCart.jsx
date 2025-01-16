@@ -2,16 +2,25 @@ import React from 'react';
 import './viewCart.css';
 import { IoMdCart } from "react-icons/io";
 import { FaCaretRight } from "react-icons/fa";
+import { useNavigate } from 'react-router-dom';
 
-const AddToCartTab = ({ cart, onViewCart }) => {
+const AddToCartTab = ({ cart}) => {
+  const navigate = useNavigate();
+
   if (!Array.isArray(cart)) {
     console.error("Cart is not an array:", cart);
-    return null; // or you can return an empty state or fallback UI
+    return null;
   }
 
   // Calculate total discounted price and total count
   const totalPrice = cart.reduce((acc, item) => acc + item.discountedPrice * item.count, 0);
   const totalCount = cart.reduce((acc, item) => acc + item.count, 0);
+
+  const handleViewCart = () => {
+    if (totalCount > 0) {
+      navigate('/mycart'); // Redirect to /mycart if there are items in the cart
+    }
+  };
 
   return (
     <div className="add-to-cart-tab">
@@ -27,8 +36,11 @@ const AddToCartTab = ({ cart, onViewCart }) => {
         </div>
       </div>
 
-      <div className="view-cart-button" onClick={onViewCart}>
-        View Cart <FaCaretRight size={25} />
+      <div
+        className={`view-cart-button ${totalCount > 0 ? '' : 'disabled'}`}
+        
+      >
+        View Cart <FaCaretRight onClick={handleViewCart} size={25} />
       </div>
     </div>
   );

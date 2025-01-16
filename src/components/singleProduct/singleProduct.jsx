@@ -56,7 +56,7 @@ const ProductDetails = () => {
             const product =
                 products.find((product) => product.$id === productId) ||
                 (await searchProductService.getProductById(productId));
-
+                
             if (product) {
                 setProductDetails(product);
                 setSelectedImage(product?.images[0] || fallbackImage);
@@ -156,9 +156,9 @@ const ProductDetails = () => {
 
             // Check if the product is in the cart
             const productInCart = cart.find((item) => item.id === productId);
+            setCart(userData.cart);
             if (productInCart) {
                 setCount((prev) => Math.max(productInCart.count, 0));
-                setCart(cart);
             } else {
                 setCount(0);
             }
@@ -228,7 +228,6 @@ const ProductDetails = () => {
                 }
 
                 setCount((prev) => Math.max(prev - 1, 0));
-                updateCartData(updatedCart);
                 console.log("Product count decremented!");
             } else {
                 console.error("Product not found in cart!");
@@ -268,7 +267,6 @@ const ProductDetails = () => {
             if (productInCart) {
                 setCount(productInCart.count);
                 const updatedCartData = await updateCartByPhoneNumber(userData.phoneNumber, updatedCart);
-                console.log("updated",updatedCartData);
             } else {
                 setCount(0);
                 console.log("Product not found in cart");
@@ -354,7 +352,7 @@ const ProductDetails = () => {
                                             </div>
                                         </div>
                                         <p id="productDetails-price1">
-                                            MRP <p id="productDetails-price2">₹{productDetail?.price}</p>
+                                            MRP <span id="productDetails-price2">₹{productDetail?.price}</span>
                                         </p>
                                     </div>
                                     <div
@@ -387,7 +385,7 @@ const ProductDetails = () => {
                             </div>
                         </>
                     )}
-                    {true && <AddToCartTab cart={cart} />}
+                    <AddToCartTab cart={cart} />
                 </Fragment>
             )}
         </Fragment>
