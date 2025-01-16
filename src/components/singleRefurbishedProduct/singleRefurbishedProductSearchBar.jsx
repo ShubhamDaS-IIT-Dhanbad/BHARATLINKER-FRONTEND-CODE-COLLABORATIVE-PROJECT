@@ -1,23 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { BiSearchAlt } from "react-icons/bi";
-import { TbChevronDown } from "react-icons/tb";
-import { FaArrowLeft } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom';
+import { FaCaretDown } from "react-icons/fa";
+import { FaArrowLeft } from 'react-icons/fa'; 
+import { useNavigate } from 'react-router-dom'; 
 import LocationTab from '../locationTab/locationTab';
-import Cookies from 'js-cookie'; // Import Cookies
-import { resetRefurbishedProducts } from "../../redux/features/refurbishedPage/refurbishedProductsSlice.jsx";
-import './singleRefurbishedProductSearchBar.css';
+import Cookies from 'js-cookie';
 
-const SingleRefurbishedProductSearchBar = () => {
-    const dispatch = useDispatch();
+const SingleProductSearchBar = () => {
     const navigate = useNavigate();
-    const [inputValue, setInputValue] = useState("");
     const [locationTab, setLocationTab] = useState(false);
-    const [location, setLocation] = useState(null); // Location state
-    const [loading, setLoading] = useState(true); // Loading state
+    const [location, setLocation] = useState(null);
+    const [loading, setLoading] = useState(true); 
 
-    // Fetch location from cookies
     useEffect(() => {
         const fetchLocation = () => {
             const storedLocation = Cookies.get('BharatLinkerUserLocation');
@@ -30,71 +23,40 @@ const SingleRefurbishedProductSearchBar = () => {
                     setLocation(null);
                 }
             }
-            setLoading(false); // Set loading to false after fetching location
+            setLoading(false);
         };
 
         fetchLocation();
-    }, [locationTab]); // Re-run when locationTab changes
-
-    // Handle key press for "Enter" key to trigger search
-    const handleKeyDown = (e) => {
-        if (e.key === 'Enter') {
-            dispatch(resetRefurbishedProducts());
-            navigate(`/refurbished?query=${inputValue}`);
-        }
-    };
-
-    // Handle input value change and update the state
-    const handleInputChange = (e) => {
-        setInputValue(e.target.value);
-    };
+    }, [locationTab]);
 
     return (
-        <div className='single-refurbished-product-search-header-visible'>
-            <div className='single-refurbished-product-search-header-container'>
-                <div className='single-refurbished-product-search-header-user-section'>
+        <>
+            <div className='single-product-search-header-visible'>
+                <div className='single-product-search-header-user-section'>
                     <FaArrowLeft
-                        id='single-refurbished-product-search-back-icon'
+                        id='single-product-search-back-icon'
                         size={25}
-                        onClick={() => navigate('/refurbished')}
+                        onClick={() => navigate('/search')}
                         aria-label="Go Back"
                         tabIndex={0}
                     />
-                    <div className='single-refurbished-product-search-header-location'>
-                        <p className='single-refurbished-product-search-location-label'>REFURBISHED PRODUCT</p>
+                    <div className='single-product-search-header-location'>
+                        <p className='single-product-search-location-label'>PRODUCT INFO</p>
                         <div
-                            className='single-refurbished-product-search-location-value'
+                            className='single-product-search-location-value'
                             aria-label="Change Location"
                             tabIndex={0}
                         >
-                            {loading ? 'Loading location...' : location ? location.address.slice(0,30) : 'Location not set'}
-                            
+                            {loading ? 'Loading location...' : location ? location.address.slice(0,30): 'Location not set'}
+                           <FaCaretDown size={15}/>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div className='single-refurbished-product-search-input-section'>
-                <div className='single-refurbished-product-search-input-container'>
-                    <BiSearchAlt
-                        className='single-refurbished-product-search-icon'
-                        onClick={() => navigate(`/refurbished?query=${inputValue}`)}
-                        aria-label="Search"
-                        tabIndex={0}
-                    />
-                    <input
-                        className='single-refurbished-product-search-input'
-                        placeholder="Search Product"
-                        value={inputValue}
-                        onKeyDown={handleKeyDown} // Changed to onKeyDown
-                        onChange={handleInputChange}
-                        aria-label="Search input"
-                    />
-                </div>
-            </div>
             {locationTab && <LocationTab setLocationTab={setLocationTab} />}
-        </div>
+        </>
     );
 };
 
-export default SingleRefurbishedProductSearchBar;
+export default SingleProductSearchBar;

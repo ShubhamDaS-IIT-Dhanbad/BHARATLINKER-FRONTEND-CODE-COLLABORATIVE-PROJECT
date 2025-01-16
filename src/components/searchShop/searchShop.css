@@ -71,7 +71,7 @@
     width: 100vh;
     display: flex;background-color: white;
     color: black;
-    height: 55px;
+    height: 50px;
     position: fixed;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     bottom: 0;
@@ -147,7 +147,7 @@
 
 
 #filter-section-shop-page {
-    height: 60px;
+    height: 50px;
     width: 100vw;
     display: flex;
     color: rgba(0, 0, 0, 0.655);
