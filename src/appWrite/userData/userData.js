@@ -78,15 +78,18 @@ async function updateCartByPhoneNumber(phoneNumber, updatedCart) {
 
 
 
-
-// Function to fetch user data by phone number
+// Function to fetch or create user data by phone number
 async function fetchUserByPhoneNumber(phn) {
+    console.log(phn);
     try {
         if (!phn) {
             throw new Error("Phone number (phn) is required.");
         }
 
-        const queries = [Query.equal('phoneNumber', phn)];
+        // Convert phone number to string if it's a number
+        const phoneNumber = typeof phn === 'number' ? phn.toString() : phn;
+
+        const queries = [Query.equal('phoneNumber', phoneNumber)];
         const result = await databases.listDocuments(
             conf.appwriteUsersDatabaseId,
             conf.appwriteUsersCollectionId,
@@ -94,7 +97,27 @@ async function fetchUserByPhoneNumber(phn) {
         );
 
         if (result.documents.length === 0) {
-            throw new Error(`No document found with phoneNumber: ${phn}`);
+            console.log(`No document found for phoneNumber: ${phoneNumber}. Creating new document...`);
+
+            // Create a new user document with the provided phone number
+            const newUser = {
+                phoneNumber: phoneNumber,  // Ensure phoneNumber is stored as a string
+                address: null,
+                lat: null,
+                long: null,
+                cart: '[]'
+            };
+
+            // Pass the correct 'data' parameter when creating the document
+            const createdDocument = await databases.createDocument(
+                conf.appwriteUsersDatabaseId,
+                conf.appwriteUsersCollectionId,
+                "unique()", // Pass a unique ID or use "unique()" to generate one
+                newUser     // Ensure the user data is passed as the second parameter (data)
+            );
+
+            console.log('New user created:', createdDocument);
+            return createdDocument;
         }
 
         console.log('User data retrieved:', result.documents[0]);
@@ -104,7 +127,6 @@ async function fetchUserByPhoneNumber(phn) {
         return null;
     }
 }
-
 
 async function fetchUserCartByPhoneNumber(phn) {
     try {

@@ -7,15 +7,18 @@ import searchProductService from "../../../appWrite/searchProduct.js";
 import { FaPlus } from "react-icons/fa";
 import { FaMinus } from "react-icons/fa";
 import Cookies from 'js-cookie';
-import { getDistance } from 'geolib'; // Import getDistance from geolib
-import { RotatingLines } from "react-loader-spinner"; // Import loader spinner
+import { getDistance } from 'geolib';
+import { RotatingLines } from "react-loader-spinner";
+import { IoIosAddCircleOutline } from "react-icons/io";
 
-const MyCartPage = ({setShowMyCart}) => {
+const MyCartPage = ({ setShowMyCart }) => {
     const navigate = useNavigate();
+    const [userData, setUserData] = useState(null);
+
     const [cartItems, setCartItems] = useState([]);
     const [userLat, setUserLat] = useState(null);
     const [userLong, setUserLong] = useState(null);
-    const [loading, setLoading] = useState(true); // Loading state
+    const [loading, setLoading] = useState(true);
     const { products } = useSelector((state) => state.searchproducts);
 
     const deliveryCostPerKm = 10;
@@ -25,17 +28,17 @@ const MyCartPage = ({setShowMyCart}) => {
         const getCartFromCookie = () => {
             try {
                 const userDataCookie = Cookies.get('BharatLinkerUserData');
-                
+
                 if (!userDataCookie) {
                     window.location.href = '/login';
                     return;
                 }
                 const userData = JSON.parse(decodeURIComponent(userDataCookie));
                 if (userData) {
+                    setUserData(userData);
                     setUserLat(userData.lat);
                     setUserLong(userData.long);
                 }
-                console.log(userData)
                 const cart = userData.cart || [];
 
                 const updatedCartItems = cart.map(async (item) => {
@@ -99,7 +102,7 @@ const MyCartPage = ({setShowMyCart}) => {
         const updatedCart = cartItems.map(item => {
             if (item.id === id) {
                 if (type === 'increase') {
-                    if(item.count>=3){alert("maximum quantity reached");return item;}
+                    if (item.count >= 3) { alert("maximum quantity reached"); return item; }
                     item.count = item.count + 1;
                 } else if (type === 'decrease') {
                     item.count = item.count - 1;
@@ -162,8 +165,8 @@ const MyCartPage = ({setShowMyCart}) => {
                                             <p className="item-price">₹{item.discountedPrice}</p>
                                         </div>
                                         {userLat && userLong && item.lat && item.long && (
-                                    <span className='my-cart-item-distance'>{calculateDistance(userLat, userLong, item.lat, item.long)} km away</span>
-                                )}
+                                            <span className='my-cart-item-distance'>{calculateDistance(userLat, userLong, item.lat, item.long)} km away</span>
+                                        )}
                                     </div>
                                     <div className="my-cart-count-container-parent">
                                         <div className="my-cart-count-container">
@@ -197,11 +200,38 @@ const MyCartPage = ({setShowMyCart}) => {
                                 </div>
                             </div>
                         </div>
+
+                        <div className="my-cart-delivery-address-container">
+                            Delivery Address {console.log(userData)}
+
+                            {userData?.address ? (
+                                <div className="my-cart-items-bill-details-items">
+                                    <div className="my-cart-items-bill-details-item">
+                                        <p className="item-name">Address</p>
+                                        <p className="item-price">{userData?.address}</p>
+                                    </div>
+                                    <div className="my-cart-items-bill-details-item">
+                                        <p className="item-name">Latitude</p>
+                                        <p className="item-price">{userData?.lat}</p>
+                                    </div>
+                                    <div className="my-cart-items-bill-details-item">
+                                        <p className="item-name">Longitude</p>
+                                        <p className="item-price">{userData?.long}</p>
+                                    </div>
+                                </div>
+                            ) : (
+                                <div className="add-delivery-address">
+                                    <IoIosAddCircleOutline size={24} color="gray" />
+                                    <p className="add-address-text">Add Delivery Address</p>
+                                </div>
+                            )}
+                        </div>
+
                     </>
                 )}
             </div>
-           {!loading && <div className="my-cart-address-selection">
-                <div className="select-address">Please select an address</div>
+            {!loading && <div className="my-cart-address-selection">
+                <div className="select-address">Procedd to checkout</div>
             </div>}
         </div>
     );
