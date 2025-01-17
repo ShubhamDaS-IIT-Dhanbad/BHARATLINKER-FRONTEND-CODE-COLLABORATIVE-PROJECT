@@ -69,6 +69,11 @@ const conf = {
     shopCloudinaryApiSecret: String(import.meta.env.VITE_CLOUDINARY_SHOPS_CLOUDINARY_API_SECRET),
     shopCloudinaryApiUrl: String(import.meta.env.VITE_CLOUDINARY_SHOPS_CLOUDINARY_URL),
 
+
+
+
+    emailSender: String(import.meta.env.VITE_EMAIL_SENDER),
+    emailPassword:String(import.meta.env.VITE_EMAIL_PASSWORD),
 }
 
 export default conf;

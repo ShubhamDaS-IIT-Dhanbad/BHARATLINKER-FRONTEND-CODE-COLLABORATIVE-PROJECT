@@ -3,13 +3,25 @@ import { Client, Databases, ID } from 'appwrite';
 
 // Initialize the Appwrite client
 const client = new Client()
-    .setEndpoint('https://cloud.appwrite.io/v1') // Set your Appwrite endpoint
-    .setProject(conf.appwriteShopsProjectId);    // Set your Appwrite project ID
+    .setEndpoint('https://cloud.appwrite.io/v1')
+    .setProject(conf.appwriteShopsProjectId);
 
-// Initialize the database instance
 const databases = new Databases(client);
 
-// Function to request browser notification permission
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 const requestNotificationPermission = async () => {
     if (!("Notification" in window)) {
         console.error("This browser does not support desktop notifications.");
@@ -17,7 +29,7 @@ const requestNotificationPermission = async () => {
     }
 
     if (Notification.permission === "granted") {
-        return true; // Permission already granted
+        return true;
     }
 
     if (Notification.permission !== "denied") {
@@ -28,16 +40,56 @@ const requestNotificationPermission = async () => {
     return false;
 };
 
-// Function to send a browser notification
 const sendBrowserNotification = (title, body) => {
     if (Notification.permission === "granted") {
         new Notification(title, {
-            body
+            body,
         });
     }
 };
 
-// Define function to place an order
+if ('Notification' in window && 'serviceWorker' in navigator) {
+    requestNotificationPermission().then(permissionGranted => {
+        if (permissionGranted) {
+            console.log('Notification permission granted');
+            sendBrowserNotification("Hi brothers", "You have a new message!");
+        } else {
+            console.error('Notification permission denied');
+        }
+    });
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 const placeOrderProvider = async (
     userId,
     shopId,
@@ -49,9 +101,8 @@ const placeOrderProvider = async (
     userLat,
     userLong
 ) => {
-    console.log(userId, shopId, productId, count, price, discountedPrice, address, userLat, userLong);
     try {
-        // Validate input data
+        // Validate input
         if (
             typeof count !== 'number' || count <= 0 ||
             typeof price !== 'number' || price <= 0 ||
@@ -88,15 +139,13 @@ const placeOrderProvider = async (
     }
 };
 
-// Realtime subscription for new orders
+
 const subscribeToNewOrders = async () => {
-    // Request browser notification permission
     const isPermissionGranted = await requestNotificationPermission();
     if (!isPermissionGranted) {
         console.warn("Notification permission not granted.");
     }
 
-    // Subscribe to real-time order events
     const subscription = client.subscribe(
         `databases.${conf.appwriteShopsDatabaseId}.collections.${conf.appwriteOrdersCollectionId}.documents`,
         (response) => {
@@ -111,14 +160,13 @@ const subscribeToNewOrders = async () => {
                     "New Order Received",
                     `Order ID: ${order.$id} from User: ${order.userId}`
                 );
-
                 console.log('Realtime New Order:', order);
             }
         }
     );
-
     console.log('Subscribed to new order events.');
     return subscription;
 };
+
 subscribeToNewOrders();
 export { placeOrderProvider, subscribeToNewOrders };
