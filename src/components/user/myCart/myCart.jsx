@@ -116,7 +116,8 @@ const MyCartPage = ({setShowMyCart}) => {
         }).filter(item => item !== null);
         setCartItems(updatedCart);
 
-        const userDataCookie = document.cookie.replace(/(?:(?:^|.*;\s*)BharatLinkerUserData\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+
+        const userDataCookie = Cookies.get('BharatLinkerUser');
         if (userDataCookie) {
             const userData = JSON.parse(decodeURIComponent(userDataCookie));
             userData.cart = updatedCart;
