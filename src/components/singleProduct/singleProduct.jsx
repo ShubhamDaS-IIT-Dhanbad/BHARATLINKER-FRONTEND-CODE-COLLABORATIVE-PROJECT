@@ -20,6 +20,7 @@ const fallbackImage = "http://res.cloudinary.com/dthelgixr/image/upload/v1727870
 const ProductDetails = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
+    
     const { products } = useSelector((state) => state.searchproducts);
     const { shops } = useSelector((state) => state.searchshops);
     const { singleShops } = useSelector((state) => state.singleshops);
@@ -86,7 +87,6 @@ const ProductDetails = () => {
             // Parse the user data from the cookie
             const userData = JSON.parse(decodeURIComponent(userDataCookie));
 
-            // Create the updated cart item
             const updatedCartItem = {
                 id: productDetail.$id,
                 price: productDetail.price,
@@ -94,6 +94,7 @@ const ProductDetails = () => {
                 lat: productDetail.lat,
                 long: productDetail.long,
                 count: 1,
+                shopId:productDetail.shop
             };
 
             // Update the cart

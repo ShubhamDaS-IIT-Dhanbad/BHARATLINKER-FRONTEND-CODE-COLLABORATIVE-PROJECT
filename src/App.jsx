@@ -35,18 +35,19 @@ import User from './components/user/userHome.jsx'
 import UserProfile from './components/user/userProfile/userProfile.jsx';
 import UserProductPageMain from './components/user/productPage/userProductPageMain.jsx'
 import RefurbishedBooksUploadUser from './components/user/userProductUpload/userProductUpload.jsx'
-import UserUpdateBookModule  from './components/user/userProductUpdate/userProductUpdate.jsx';
+import UserUpdateBookModule from './components/user/userProductUpdate/userProductUpdate.jsx';
 import UserNotification from './components/user/notification/userNotification.jsx'
-import  UserCart from './components/user/myCart/myCart.jsx'
+import UserCart from './components/user/myCart/myCart.jsx'
 
 
+import Not from './components/not.jsx';
 
 function App() {
 
   return (
     <Router>
       <Suspense fallback={<LoadingFallback />}>
-        <RoutesWithConditionalHeader/>
+        <RoutesWithConditionalHeader />
       </Suspense>
     </Router>
   );
@@ -73,34 +74,35 @@ const RoutesWithConditionalHeader = React.memo(({ address }) => {
   return (
     <>
       <Routes>
-        <Route path="/" element={<HomePage/>} />
-        <Route path="/login" element={<LoginPage/>} />
+        <Route path="/not" element={<Not />} />
+        <Route path="/" element={<HomePage />} />
+        <Route path="/login" element={<LoginPage />} />
 
         {/* search section */}
         <Route path="/search" element={<SearchPage />} />
         <Route path="/search/sortby" element={<SearchSorybySection />} />
-        <Route path="search/filterby" element={<SearchFilterSection/>}/>
+        <Route path="search/filterby" element={<SearchFilterSection />} />
         {/* Single Product */}
-        <Route path="/product/:productId" element={<SingleProduct/>} />
+        <Route path="/product/:productId" element={<SingleProduct />} />
 
         {/* search shop */}
         <Route path="/shop" element={<SearchShop />} />
         <Route path="/shop/sortby" element={<ShopSorybySection />} />
-        <Route path="shop/filterby" element={<ShopFilterSection/>}/>
+        <Route path="shop/filterby" element={<ShopFilterSection />} />
 
 
 
-         {/* Single Shop */}
-         <Route path="/shop/:shopId" element={<SingleShopCard/>} />
-          {/* Shop Products */}
-          <Route path="/shop/product/:shopId" element={<ShopProducts/>} />
+        {/* Single Shop */}
+        <Route path="/shop/:shopId" element={<SingleShopCard />} />
+        {/* Shop Products */}
+        <Route path="/shop/product/:shopId" element={<ShopProducts />} />
 
 
 
 
-         {/* refurbished products */}
-         <Route path="/refurbished" element={<RefurbishedPage />} />
-         <Route path="/refurbished/:refurbishedId" element={<SingleRefurbishedProductCard/>} />
+        {/* refurbished products */}
+        <Route path="/refurbished" element={<RefurbishedPage />} />
+        <Route path="/refurbished/:refurbishedId" element={<SingleRefurbishedProductCard />} />
 
         {/* retailer routes */}
         <Route path="/*" element={<RetailerRoutes />} />
@@ -108,11 +110,11 @@ const RoutesWithConditionalHeader = React.memo(({ address }) => {
         {/* user routes */}
         <Route path='/user' element={<User />} />
         <Route path='/user/profile' element={<UserProfile />} />
-        <Route path='/user/refurbished' element={<UserProductPageMain/>} />
-        <Route path='/user/upload/:productType' element={<RefurbishedBooksUploadUser/>} />
-        <Route path='/user/refurbished/update/:id' element={<UserUpdateBookModule/>}/>
-        <Route path='/user/notification' element={<UserNotification/>}/>
-        <Route path='/mycart' element={<UserCart/>} />
+        <Route path='/user/refurbished' element={<UserProductPageMain />} />
+        <Route path='/user/upload/:productType' element={<RefurbishedBooksUploadUser />} />
+        <Route path='/user/refurbished/update/:id' element={<UserUpdateBookModule />} />
+        <Route path='/user/notification' element={<UserNotification />} />
+        <Route path='/mycart' element={<UserCart />} />
 
       </Routes>
     </>

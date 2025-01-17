@@ -61,6 +61,9 @@ const conf = {
     appwriteShopsCollectionId: String(import.meta.env.VITE_APPWRITE_SHOPS_COLLECTION_ID),
     appwriteShopsImagesBucketId: String(import.meta.env.VITE_APPWRITE_SHOPS_IMAGES_BUCKET_ID),
 
+    
+    appwriteOrdersCollectionId: String(import.meta.env.VITE_APPWRITE_ORDERS_COLLECTION_ID),
+
     shopCloudinaryCloudName: String(import.meta.env.VITE_CLOUDINARY_SHOPS_CLOUDINARY_CLOUD_NAME),
     shopCloudinaryApiKey: String(import.meta.env.VITE_CLOUDINARY_SHOPS_CLOUDINARY_API_KEY),
     shopCloudinaryApiSecret: String(import.meta.env.VITE_CLOUDINARY_SHOPS_CLOUDINARY_API_SECRET),

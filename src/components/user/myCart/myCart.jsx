@@ -17,6 +17,7 @@ import conf from '../../../conf/conf.js';
 import { IoSearch } from "react-icons/io5";
 import { MdMyLocation } from "react-icons/md";
 
+import {placeOrderProvider} from '../../../appWrite/order/order.js'
 
 const MyCartPage = ({ setShowMyCart, updateCartData }) => {
     const navigate = useNavigate();
@@ -54,7 +55,8 @@ const MyCartPage = ({ setShowMyCart, updateCartData }) => {
                         price: product?.price,
                         discountedPrice: product?.discountedPrice,
                         lat: product?.lat,
-                        long: product?.long
+                        long: product?.long,
+                        shopId: product?.shop
                     };
                 });
 
@@ -260,6 +262,62 @@ const MyCartPage = ({ setShowMyCart, updateCartData }) => {
 
 
 
+    const placeOrder = async (cartItems) => {
+
+        if(!address || !userLat || !userLong) {alert("address is empty latitude and longitude");return;}
+        try {
+            for (const cartItem of cartItems) {
+                console.log(cartItem)
+
+
+                const userId = userData.$id;
+                const productId = cartItem.id;
+                const count = cartItem.count;
+                const discountedPrice = cartItem.discountedPrice;
+                const price = cartItem.price;
+                const shopId = cartItem.shopId;
+               
+
+    
+                await placeOrderProvider(userId, shopId,productId, 
+                    count,
+                    price,
+                    discountedPrice,
+                    address,userLat,userLong
+                );
+            }
+
+
+            
+
+            const userDataCookie = Cookies.get('BharatLinkerUserData');
+            if (userDataCookie) {
+                const userData = JSON.parse(decodeURIComponent(userDataCookie));
+                userData.cart = '';
+                Cookies.set('BharatLinkerUserData', JSON.stringify(userData), { path: '/' });
+
+                updateCartData([]);
+            }
+
+            setCartItems([]);
+
+            console.log("All orders placed successfully!");
+        } catch (error) {
+            console.error("Error placing orders:", error);
+        }
+    };
+    
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -441,7 +499,7 @@ const MyCartPage = ({ setShowMyCart, updateCartData }) => {
 
                             </>
                             ) : (
-                                <>hi</>
+                                <></>
                             )}
                         </div>
 
@@ -468,7 +526,7 @@ const MyCartPage = ({ setShowMyCart, updateCartData }) => {
                 )}
             </div>
             {!loading && <div className="my-cart-address-selection">
-                <div className="select-address">Procedd to checkout</div>
+                <div className="select-address" onClick={()=>{placeOrder(cartItems)}}>Procedd to checkout</div>
             </div>}
         </div>
     );
