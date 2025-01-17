@@ -382,7 +382,7 @@ const MyCartPage = ({ setShowMyCart, updateCartData }) => {
                                     <p className="add-address-text">Add Delivery Address</p>
 
                                     <div className="user-profile-location" onClick={handleLocationClick}>
-                                        USE CURRENT LOCATION AS HOME LOCATION
+                                        USE CURRENT LOCATION AS DELIVERY LOCATION
                                         <MdMyLocation
                                             size={20}
                                             color={locationAvailable ? "green" : "gray"}
