@@ -143,7 +143,6 @@ const ProductDetails = () => {
             const userData = JSON.parse(userSession);
             const phn = userData.phn;
             let cart = await fetchUserCartByPhoneNumber(phn);
-            console.log("cart",cart)
             if (!cart) {
                 throw new Error("No cart found for the user.");
             }
@@ -282,7 +281,6 @@ const ProductDetails = () => {
 
 
     useEffect(() => {
-        console.log("her")
         checkProductInCart();
     }, [showMyCart]);
     useEffect(() => {
@@ -301,15 +299,12 @@ const ProductDetails = () => {
     
             // Parse the user session and update the cart
             const userData = JSON.parse(userSession);
-            console.log("User data before update:", userData);
     
             // Update the user's cart immediately
             userData.cart = updatedCart;
             document.cookie = `BharatLinkerUserData=${encodeURIComponent(
                 JSON.stringify(userData)
             )}; path=/`;
-    
-            console.log("User data after cart update:", userData);
     
             // Find the product in the updated cart
             const productInCart = updatedCart.find((item) => item.id === productId);
