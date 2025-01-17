@@ -44,9 +44,18 @@
   .my-cart-item-second {
     max-width: 40vw;
 }
-.my-cart-item-second p{
+.my-cart-item-second,
+.item-name{
     font-size: 14px;font-weight: 400;
     line-height: 1.2;font-family: Arial, Helvetica, sans-serif;
+}
+.item-price-strikethrough {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.2;
+  font-family: Arial, Helvetica, sans-serif;
+  text-decoration: line-through; /* Adds the line-through effect */
+  color: #888; /* Optional: Gives a lighter color to indicate a discount */
 }
 
 .my-cart-count-container-parent{

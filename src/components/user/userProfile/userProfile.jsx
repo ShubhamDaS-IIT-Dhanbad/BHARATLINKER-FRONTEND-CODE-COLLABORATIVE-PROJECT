@@ -210,7 +210,7 @@ function UserRefurbishedProduct() {
 
         <div className="user-profile-field">
           <label htmlFor="address" className="user-profile-form-label">
-            ADDRESS <span className="required">*</span>
+            DELIVERY ADDRESS <span className="required">*</span>
           </label>
           <textarea
             id="address"
