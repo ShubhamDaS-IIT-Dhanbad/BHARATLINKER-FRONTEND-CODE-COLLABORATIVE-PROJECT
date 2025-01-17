@@ -230,6 +230,7 @@ const ProductDetails = () => {
                 }
 
                 setCount((prev) => Math.max(prev - 1, 0));
+                updateCartData(updatedCart);
                 console.log("Product count decremented!");
             } else {
                 console.error("Product not found in cart!");
