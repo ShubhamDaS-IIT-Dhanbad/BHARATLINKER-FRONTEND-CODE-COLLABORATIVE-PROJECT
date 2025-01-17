@@ -288,7 +288,7 @@ const ProductDetails = () => {
 
     const updateCartData = async (updatedCart) => {
         try {
-            // Update the cart state
+            if(updatedCart.length==0) setShowMyCart(false);
             setCart(updatedCart);
             const userSession = Cookies.get('BharatLinkerUserData');
             if (!userSession) {

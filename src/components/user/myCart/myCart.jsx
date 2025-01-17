@@ -59,7 +59,7 @@ const MyCartPage = ({ setShowMyCart, updateCartData }) => {
                         shopId: product?.shop
                     };
                 });
-
+              
                 Promise.all(updatedCartItems).then((items) => {
                     setCartItems(items);
                     setLoading(false);
