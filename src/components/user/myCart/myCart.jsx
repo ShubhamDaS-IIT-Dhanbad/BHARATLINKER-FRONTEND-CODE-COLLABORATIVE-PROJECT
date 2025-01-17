@@ -157,7 +157,7 @@ const MyCartPage = ({ setShowMyCart }) => {
                         <div className="my-cart-items-container">
                             {cartItems.map((item) => (
                                 <div key={item.id} className="my-cart-item">
-                                    <img onClick={() => navigate(`/product/${item.id}`)} className="my-cart-item-img" src={item.image} alt={item.name} />
+                                    <img onClick={() =>{setShowMyCart(false); navigate(`/product/${item.id}`)}} className="my-cart-item-img" src={item.image} alt={item.name} />
                                     <div className="my-cart-item-second">
                                         <p className="item-name">{item.name}</p>
                                         <div className="price-container">
