@@ -32,7 +32,8 @@ const MyCartPage = ({setShowMyCart}) => {
                     setUserLong(storedLocation.lon);
                 }
 
-                const userDataCookie = document.cookie.replace(/(?:(?:^|.*;\s*)BharatLinkerUserData\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+               
+                const userDataCookie = Cookies.get('BharatLinkerUser');
                 if (!userDataCookie) {
                     window.location.href = '/login';
                     return;
@@ -101,6 +102,7 @@ const MyCartPage = ({setShowMyCart}) => {
         const updatedCart = cartItems.map(item => {
             if (item.id === id) {
                 if (type === 'increase') {
+                    if(item.count>=3){alert("maximum quantity reached");return item;}
                     item.count = item.count + 1;
                 } else if (type === 'decrease') {
                     item.count = item.count - 1;

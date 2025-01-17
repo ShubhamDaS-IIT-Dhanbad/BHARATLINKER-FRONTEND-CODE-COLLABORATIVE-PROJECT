@@ -9,13 +9,13 @@ import { RotatingLines } from "react-loader-spinner";
 import { fetchShopById } from "../../redux/features/singleShopSlice.jsx";
 import { RiShareForwardLine } from "react-icons/ri";
 import AddToCartTab from "../viewCartTab/viewCart.jsx";
-
-import { updateCartByPhoneNumber } from '../../appWrite/userData/userData.js'
+import { fetchUserCartByPhoneNumber, updateCartByPhoneNumber } from '../../appWrite/userData/userData.js'
 import Cookies from 'js-cookie'
 import { FaPlus } from "react-icons/fa";
 import { FaMinus } from "react-icons/fa";
 
 import MyCart from '../user/myCart/myCart.jsx';
+import { parse } from "dotenv";
 const fallbackImage = "http://res.cloudinary.com/dthelgixr/image/upload/v1727870088/hd7kcjuz8jfjajnzmqkp.webp";
 
 const ProductDetails = () => {
@@ -78,7 +78,7 @@ const ProductDetails = () => {
 
     const handleAddToCart = () => {
         try {
-             const userDataCookie = Cookies.get('BharatLinkerUser');
+            const userDataCookie = Cookies.get('BharatLinkerUser');
             if (!userDataCookie) {
                 window.location.href = '/login';
                 return;
@@ -131,36 +131,47 @@ const ProductDetails = () => {
 
 
 
-    const checkProductInCart = () => {
+    const checkProductInCartRefresh = async () => {
         if (!productId) return;
-
+    
         try {
-            const userData = JSON.parse(
-                decodeURIComponent(
-                    document.cookie.replace(
-                        /(?:(?:^|.*;\s*)BharatLinkerUserData\s*\=\s*([^;]*).*$)|^.*$/,
-                        "$1"
-                    )
-                )
-            );
-            let cart = userData?.cart || [];
-
-            // Remove any duplicate products by productId
-            cart = cart.filter((item, index, self) =>
+            const userSession = Cookies.get('BharatLinkerUser');
+            if (!userSession) {
+                throw new Error("User session not found in cookies.");
+            }
+    
+            // Parse the user session
+            const userData = JSON.parse(userSession);
+            const phn = userData.phn;
+            let cart = await fetchUserCartByPhoneNumber(phn);
+            console.log("cart",cart)
+            if (!cart) {
+                throw new Error("No cart found for the user.");
+            }
+    
+            // Parse cart if it's a string
+            if (typeof cart === 'string') {
+                cart = JSON.parse(cart);
+            }
+    
+            // Remove duplicate products by productId
+            const uniqueCart = cart.filter((item, index, self) =>
                 index === self.findIndex((t) => t.id === item.id)
             );
-
-            // Update the cart in the cookie after removing duplicates
-            userData.cart = cart;
-            document.cookie = `BharatLinkerUserData=${encodeURIComponent(
+    
+            // Update the user's cart in cookies
+            userData.cart = uniqueCart;
+            document.cookie = `BharatLinkerUser=${encodeURIComponent(
                 JSON.stringify(userData)
             )}; path=/`;
-
-            // Check if the product is in the cart
-            const productInCart = cart.find((item) => item.id === productId);
-            setCart(userData.cart);
+    
+            // Check if the specific product is in the cart
+            const productInCart = uniqueCart.find((item) => item.id === productId);
+            setCart(uniqueCart);
+    
+            // Set the product count or default to 0
             if (productInCart) {
-                setCount((prev) => Math.max(productInCart.count, 0));
+                setCount(Math.max(productInCart.count, 0));
             } else {
                 setCount(0);
             }
@@ -168,33 +179,71 @@ const ProductDetails = () => {
             console.error("Error checking product in cart:", error);
         }
     };
-
+    const checkProductInCart = async () => {
+        if (!productId) return;
+    
+        try {
+            const userSession = Cookies.get('BharatLinkerUser');
+            if (!userSession) {
+                throw new Error("User session not found in cookies.");
+            }
+    
+            // Parse the user session
+            const userData = JSON.parse(userSession);
+            let cart = userData.cart;
+            if (!cart) {
+                throw new Error("No cart found for the user.");
+            }
+    
+            // Parse cart if it's a string
+            if (typeof cart === 'string') {
+                cart = JSON.parse(cart);
+            }
+    
+            // Remove duplicate products by productId
+            const uniqueCart = cart.filter((item, index, self) =>
+                index === self.findIndex((t) => t.id === item.id)
+            );
+    
+            // Update the user's cart in cookies
+            userData.cart = uniqueCart;
+            document.cookie = `BharatLinkerUser=${encodeURIComponent(
+                JSON.stringify(userData)
+            )}; path=/`;
+    
+            // Check if the specific product is in the cart
+            const productInCart = uniqueCart.find((item) => item.id === productId);
+            setCart(uniqueCart);
+    
+            // Set the product count or default to 0
+            if (productInCart) {
+                setCount(Math.max(productInCart.count, 0));
+            } else {
+                setCount(0);
+            }
+        } catch (error) {
+            console.error("Error checking product in cart:", error);
+        }
+    };
+    
 
 
     const handleIncrement = () => {
         try {
-            const userData = JSON.parse(
-                decodeURIComponent(
-                    document.cookie.replace(
-                        /(?:(?:^|.*;\s*)BharatLinkerUserData\s*\=\s*([^;]*).*$)|^.*$/,
-                        "$1"
-                    )
-                )
-            );
+            const userData = JSON.parse(Cookies.get('BharatLinkerUser'));
             const cart = userData.cart || [];
             const productIndex = cart.findIndex((item) => item.id === productId);
 
             if (productIndex !== -1) {
 
                 const updatedCart = [...cart];
-                if (updatedCart[productIndex].count == 3) {
-                    alert("maximum 3 element can be selected");
-                    return;
-                }
 
+                
+                if(updatedCart[productIndex].count>=3){alert('maximum quantity of product can be 3');return;}
                 updatedCart[productIndex].count += 1;
                 updatedCart[productIndex].price = productDetail.price;
                 updatedCart[productIndex].discountedPrice = productDetail.discountedPrice;
+
                 setCount((prev) => prev + 1);
                 updateCartData(updatedCart);
             } else {
@@ -207,14 +256,8 @@ const ProductDetails = () => {
 
     const handleDecrement = () => {
         try {
-            const userData = JSON.parse(
-                decodeURIComponent(
-                    document.cookie.replace(
-                        /(?:(?:^|.*;\s*)BharatLinkerUserData\s*\=\s*([^;]*).*$)|^.*$/,
-                        "$1"
-                    )
-                )
-            );
+            
+            const userData = JSON.parse(Cookies.get('BharatLinkerUser'));
             const cart = userData.cart || [];
             const productIndex = cart.findIndex((item) => item.id === productId);
 
@@ -242,44 +285,50 @@ const ProductDetails = () => {
     useEffect(() => {
         checkProductInCart();
     }, [showMyCart]);
-
     useEffect(() => {
         fetchProductDetails();
     }, []);
 
 
-
-
-
     const updateCartData = async (updatedCart) => {
         try {
+            // Update the cart state
             setCart(updatedCart);
-            const userData = JSON.parse(
-                decodeURIComponent(
-                    document.cookie.replace(
-                        /(?:(?:^|.*;\s*)BharatLinkerUserData\s*\=\s*([^;]*).*$)|^.*$/,
-                        "$1"
-                    )
-                )
-            );
+            const userSession = Cookies.get('BharatLinkerUser');
+            if (!userSession) {
+                throw new Error("User session not found in cookies.");
+            }
+    
+            // Parse the user session and update the cart
+            const userData = JSON.parse(userSession);
+            console.log("User data before update:", userData);
+    
+            // Update the user's cart immediately
             userData.cart = updatedCart;
-
-            document.cookie = `BharatLinkerUserData=${encodeURIComponent(
+            document.cookie = `BharatLinkerUser=${encodeURIComponent(
                 JSON.stringify(userData)
             )}; path=/`;
-
+    
+            console.log("User data after cart update:", userData);
+    
+            // Find the product in the updated cart
             const productInCart = updatedCart.find((item) => item.id === productId);
+    
             if (productInCart) {
+                console.log("Product found in cart");
                 setCount(productInCart.count);
-                const updatedCartData = await updateCartByPhoneNumber(userData.phn, updatedCart);
+    
+                // Update the cart data in the backend
+                await updateCartByPhoneNumber(userData.phn, updatedCart);
             } else {
-                setCount(0);
                 console.log("Product not found in cart");
+                setCount(0);
             }
         } catch (error) {
             console.error("Error updating cart data:", error);
         }
     };
+    
 
 
 
@@ -393,7 +442,7 @@ const ProductDetails = () => {
                         </>
 
                     )}
-                     {!showMyCart && <AddToCartTab cart={cart} setShowMyCart={setShowMyCart} />}
+                    {!showMyCart && <AddToCartTab cart={cart} setShowMyCart={setShowMyCart} checkProductInCartRefresh={checkProductInCartRefresh}/>}
                     {showMyCart && <MyCart setShowMyCart={setShowMyCart} />}
                 </Fragment>
             )}

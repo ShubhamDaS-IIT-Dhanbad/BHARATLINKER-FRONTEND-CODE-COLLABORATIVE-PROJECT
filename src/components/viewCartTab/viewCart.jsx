@@ -4,9 +4,13 @@ import { IoMdCart } from "react-icons/io";
 import { FaCaretRight } from "react-icons/fa";
 import { useNavigate } from 'react-router-dom';
 
-const AddToCartTab = ({ cart,setShowMyCart }) => {
+import { LuRefreshCw } from "react-icons/lu";
+const AddToCartTab = ({ cart,setShowMyCart ,checkProductInCartRefresh}) => {
   const navigate = useNavigate();
 
+
+
+  
   if (!Array.isArray(cart)) {
     console.error("Cart is not an array:", cart);
     return null;
@@ -26,8 +30,9 @@ const AddToCartTab = ({ cart,setShowMyCart }) => {
     <div className="add-to-cart-tab">
       <div className="cart-info">
         <div className="cart-icon">
-          <IoMdCart size={25} className="shopping-cart" />
+          <LuRefreshCw onClick={()=>{checkProductInCartRefresh()}} size={25} className="shopping-cart" />
         </div>
+        
         <div className="cart-details">
           <span className="item-count">
             {totalCount} item{totalCount > 1 ? 's' : ''}

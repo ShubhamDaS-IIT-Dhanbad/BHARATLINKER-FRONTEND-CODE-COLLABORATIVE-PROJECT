@@ -105,4 +105,32 @@ async function fetchUserByPhoneNumber(phn) {
     }
 }
 
-export { updateUserByPhoneNumber,updateCartByPhoneNumber, fetchUserByPhoneNumber };
+
+async function fetchUserCartByPhoneNumber(phn) {
+    try {
+        if (!phn) {
+            throw new Error("Phone number (phn) is required.");
+        }
+
+        const queries = [Query.equal('phoneNumber', phn)];
+        const result = await databases.listDocuments(
+            conf.appwriteUsersDatabaseId,
+            conf.appwriteUsersCollectionId,
+            queries
+        );
+        if (result.documents.length === 0) {
+            throw new Error(`No document found with phoneNumber: ${phn}`);
+        }
+        const userCart = result.documents[0].cart;
+
+        if (!userCart) {
+            throw new Error(`No cart found for phoneNumber: ${phn}`);
+        }
+        return userCart;
+    } catch (error) {
+        console.error('Error in fetchUserCartByPhoneNumber:', error);
+        return null;
+    }
+}
+
+export { fetchUserCartByPhoneNumber, updateUserByPhoneNumber,updateCartByPhoneNumber, fetchUserByPhoneNumber };
