@@ -11,7 +11,14 @@ import { getDistance } from 'geolib';
 import { RotatingLines } from "react-loader-spinner";
 import { IoIosAddCircleOutline } from "react-icons/io";
 
-const MyCartPage = ({ setShowMyCart , updateCartData }) => {
+import { SlLocationPin } from 'react-icons/sl';
+import conf from '../../../conf/conf.js';
+
+import { IoSearch } from "react-icons/io5";
+import { MdMyLocation } from "react-icons/md";
+
+
+const MyCartPage = ({ setShowMyCart, updateCartData }) => {
     const navigate = useNavigate();
     const [userData, setUserData] = useState(null);
 
@@ -36,11 +43,8 @@ const MyCartPage = ({ setShowMyCart , updateCartData }) => {
                 const userData = JSON.parse(decodeURIComponent(userDataCookie));
                 if (userData) {
                     setUserData(userData);
-                    setUserLat(userData.lat);
-                    setUserLong(userData.long);
                 }
                 const cart = userData.cart || [];
-
                 const updatedCartItems = cart.map(async (item) => {
                     const product = products.find((prod) => prod.$id === item.id) || await searchProductService.getProductById(item.id);
                     return {
@@ -111,12 +115,12 @@ const MyCartPage = ({ setShowMyCart , updateCartData }) => {
                 if (item.count === 0) {
                     return null;
                 }
-                
+
             }
             return item;
         }).filter(item => item !== null);
         setCartItems(updatedCart);
-        updateCartData(updatedCart );
+        updateCartData(updatedCart);
 
         const userDataCookie = Cookies.get('BharatLinkerUserData');
         if (userDataCookie) {
@@ -136,6 +140,129 @@ const MyCartPage = ({ setShowMyCart , updateCartData }) => {
         }
         return 0;
     };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    const [loadingSuggestion, setLoadingSuggestion] = useState(false);
+    const [address, setAddress] = useState("");
+    const [suggestion, setSuggestions] = useState(""); // Longitude
+    const [searchQuery, setSearchQuery] = useState("");
+    const [locationAvailable, setLocationAvailable] = useState(false); // Location available status
+    const [fetchingUserLocation, setFetchingUserLocation] = useState(false); // Fetching location state
+
+    // Function to handle current location click
+    const handleLocationClick = () => {
+        if (navigator.geolocation) {
+            setFetchingUserLocation(true);
+            navigator.geolocation.getCurrentPosition(
+                async (position) => {
+                    const { latitude, longitude } = position.coords;
+                    const apiKey = conf.opencageapikey;
+                    const apiUrl = `${conf.opencageapiurl}?key=${apiKey}&q=${latitude},${longitude}&pretty=1&no_annotations=1`;
+
+                    try {
+                        const response = await fetch(apiUrl);
+                        const data = await response.json();
+                        const address = data.results[0].formatted;
+                        setAddress(address);
+                        setUserLat(latitude);
+                        setUserLong(longitude);
+                        setLocationAvailable(true);
+                    } catch (error) {
+                        console.error("Error fetching address:", error);
+                    } finally {
+                        setFetchingUserLocation(false);
+                    }
+                },
+                (error) => {
+                    console.error("Error fetching current location:", error);
+                    setFetchingUserLocation(false);
+                }
+            );
+        } else {
+            console.error("Geolocation is not supported by this browser.");
+            setFetchingUserLocation(false);
+        }
+    };
+
+    // Function to fetch suggestions based on query
+    const fetchSuggestions = async (query) => {
+        if (!query) {
+            setSuggestions([]);
+            return;
+        }
+
+        const apiKey = conf.geoapifyapikey;
+        const apiUrl = `https://api.geoapify.com/v1/geocode/search?text=${query}&apiKey=${apiKey}&lang=en`;
+
+        setLoadingSuggestion(true);
+
+        try {
+            const response = await fetch(apiUrl);
+            const data = await response.json();
+            if (data.features && data.features.length > 0) {
+                const formattedSuggestions = data.features
+                    .filter(
+                        (feature) =>
+                            feature.properties.country === "India" && feature.properties.state
+                    )
+                    .map((feature) => ({
+                        label: feature.properties.formatted,
+                        lat: feature.geometry.coordinates[1],
+                        lon: feature.geometry.coordinates[0],
+                        country: feature.properties.country,
+                        state: feature.properties.state,
+                    }));
+                setSuggestions(formattedSuggestions);
+            } else {
+                setSuggestions([]);
+            }
+        } catch (error) {
+            console.error("Error fetching suggestions:", error);
+            setSuggestions([]);
+        } finally {
+            setLoadingSuggestion(false);
+        }
+    };
+
+    // Handle search query
+    const handleSearch = () => fetchSuggestions(searchQuery);
+    const handleAddressClick = (suggestion) => {
+        setSearchQuery(suggestion.label);
+        setSuggestions([]);
+        setAddress(suggestion.label);
+        setUserLat(suggestion.lat);
+        setUserLong(suggestion.lon);
+    };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     return (
         <div>
@@ -158,7 +285,7 @@ const MyCartPage = ({ setShowMyCart , updateCartData }) => {
                         <div className="my-cart-items-container">
                             {cartItems.map((item) => (
                                 <div key={item.id} className="my-cart-item">
-                                    <img onClick={() =>{setShowMyCart(false); navigate(`/product/${item.id}`)}} className="my-cart-item-img" src={item.image} alt={item.name} />
+                                    <img onClick={() => { setShowMyCart(false); navigate(`/product/${item.id}`) }} className="my-cart-item-img" src={item.image} alt={item.name} />
                                     <div className="my-cart-item-second">
                                         <p className="item-name">{item.name}</p>
                                         <div className="price-container">
@@ -202,31 +329,140 @@ const MyCartPage = ({ setShowMyCart , updateCartData }) => {
                             </div>
                         </div>
 
-                        <div className="my-cart-delivery-address-container">
-                            Delivery Address 
 
-                            {userData?.address ? (
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                        <div className="my-cart-delivery-address-container">
+                            Delivery Address
+
+                            {address.length >= 0 ? (<>
                                 <div className="my-cart-items-bill-details-items">
                                     <div className="my-cart-items-bill-details-item">
                                         <p className="item-name">Address</p>
-                                        <p className="item-price">{userData?.address}</p>
+                                        <p className="item-price">{address}</p>
                                     </div>
                                     <div className="my-cart-items-bill-details-item">
                                         <p className="item-name">Latitude</p>
-                                        <p className="item-price">{userData?.lat}</p>
+                                        <p className="item-price">{userLat}</p>
                                     </div>
                                     <div className="my-cart-items-bill-details-item">
                                         <p className="item-name">Longitude</p>
-                                        <p className="item-price">{userData?.long}</p>
+                                        <p className="item-price">{userLong}</p>
                                     </div>
                                 </div>
-                            ) : (
+
+
+
                                 <div className="add-delivery-address">
                                     <IoIosAddCircleOutline size={24} color="gray" />
                                     <p className="add-address-text">Add Delivery Address</p>
+
+                                    <div className="user-profile-location" onClick={handleLocationClick}>
+                                        USE CURRENT LOCATION AS HOME LOCATION
+                                        <MdMyLocation
+                                            size={20}
+                                            color={locationAvailable ? "green" : "gray"}
+                                            style={{ cursor: "pointer" }}
+                                            aria-label="Get Current Location"
+                                        />
+                                    </div>
+
+                                    OR
+
+                                    <div className="location-tab-bottom-div-input-div">
+                                        <IoSearch onClick={handleSearch} size={20} />
+                                        <input
+                                            className="location-tab-bottom-div-input"
+                                            placeholder="Search your city/village/town"
+                                            value={searchQuery}
+                                            onChange={(e) => setSearchQuery(e.target.value)}
+                                            onKeyDown={(e) => {
+                                                if (e.key === "Enter") {
+                                                    e.preventDefault();
+                                                    handleSearch();
+                                                }
+                                            }}
+                                        />
+                                    </div>
+
+                                    {loadingSuggestion && (
+                                        <div className="location-tab-loader">
+                                            <RotatingLines
+                                                width="50"
+                                                height="50"
+                                                color="#00BFFF"
+                                                ariaLabel="rotating-lines-loading"
+                                            />
+                                        </div>
+                                    )}
+
+                                    {!loading && suggestion.length > 0 && (
+                                        <div className="location-tab-suggestions">
+                                            {suggestion.map((suggestion, index) => (
+                                                <div
+                                                    className="location-tab-suggestion-info-div"
+                                                    key={index}
+                                                    onClick={() => handleAddressClick(suggestion)}
+                                                >
+                                                    <SlLocationPin size={17} />
+                                                    <p className="location-tab-location-info-inner-div-2">
+                                                        {suggestion.label}
+                                                    </p>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+
                                 </div>
+
+                            </>
+                            ) : (
+                                <>hi</>
                             )}
                         </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
                     </>
                 )}
