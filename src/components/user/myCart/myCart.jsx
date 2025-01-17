@@ -33,7 +33,7 @@ const MyCartPage = ({setShowMyCart}) => {
                 }
 
                
-                const userDataCookie = Cookies.get('BharatLinkerUser');
+                const userDataCookie = Cookies.get('BharatLinkerUserData');
                 if (!userDataCookie) {
                     window.location.href = '/login';
                     return;
@@ -117,7 +117,7 @@ const MyCartPage = ({setShowMyCart}) => {
         setCartItems(updatedCart);
 
 
-        const userDataCookie = Cookies.get('BharatLinkerUser');
+        const userDataCookie = Cookies.get('BharatLinkerUserData');
         if (userDataCookie) {
             const userData = JSON.parse(decodeURIComponent(userDataCookie));
             userData.cart = updatedCart;

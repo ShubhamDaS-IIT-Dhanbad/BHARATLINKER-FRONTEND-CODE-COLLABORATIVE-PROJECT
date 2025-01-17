@@ -77,7 +77,7 @@ const ProductDetails = () => {
 
     const handleAddToCart = () => {
         try {
-            const userDataCookie = Cookies.get('BharatLinkerUser');
+            const userDataCookie = Cookies.get('BharatLinkerUserData');
             if (!userDataCookie) {
                 window.location.href = '/login';
                 return;
@@ -134,7 +134,7 @@ const ProductDetails = () => {
         if (!productId) return;
     
         try {
-            const userSession = Cookies.get('BharatLinkerUser');
+            const userSession = Cookies.get('BharatLinkerUserData');
             if (!userSession) {
                 throw new Error("User session not found in cookies.");
             }
@@ -160,7 +160,7 @@ const ProductDetails = () => {
     
             // Update the user's cart in cookies
             userData.cart = uniqueCart;
-            document.cookie = `BharatLinkerUser=${encodeURIComponent(
+            document.cookie = `BharatLinkerUserData=${encodeURIComponent(
                 JSON.stringify(userData)
             )}; path=/`;
     
@@ -182,7 +182,7 @@ const ProductDetails = () => {
         if (!productId) return;
     
         try {
-            const userSession = Cookies.get('BharatLinkerUser');
+            const userSession = Cookies.get('BharatLinkerUserData');
             if (!userSession) {
                 throw new Error("User session not found in cookies.");
             }
@@ -206,7 +206,7 @@ const ProductDetails = () => {
     
             // Update the user's cart in cookies
             userData.cart = uniqueCart;
-            document.cookie = `BharatLinkerUser=${encodeURIComponent(
+            document.cookie = `BharatLinkerUserData=${encodeURIComponent(
                 JSON.stringify(userData)
             )}; path=/`;
     
@@ -229,7 +229,7 @@ const ProductDetails = () => {
 
     const handleIncrement = () => {
         try {
-            const userData = JSON.parse(Cookies.get('BharatLinkerUser'));
+            const userData = JSON.parse(Cookies.get('BharatLinkerUserData'));
             const cart = userData.cart || [];
             const productIndex = cart.findIndex((item) => item.id === productId);
 
@@ -256,7 +256,7 @@ const ProductDetails = () => {
     const handleDecrement = () => {
         try {
             
-            const userData = JSON.parse(Cookies.get('BharatLinkerUser'));
+            const userData = JSON.parse(Cookies.get('BharatLinkerUserData'));
             const cart = userData.cart || [];
             const productIndex = cart.findIndex((item) => item.id === productId);
 
@@ -282,6 +282,7 @@ const ProductDetails = () => {
 
 
     useEffect(() => {
+        console.log("her")
         checkProductInCart();
     }, [showMyCart]);
     useEffect(() => {
@@ -293,7 +294,7 @@ const ProductDetails = () => {
         try {
             // Update the cart state
             setCart(updatedCart);
-            const userSession = Cookies.get('BharatLinkerUser');
+            const userSession = Cookies.get('BharatLinkerUserData');
             if (!userSession) {
                 throw new Error("User session not found in cookies.");
             }
@@ -304,7 +305,7 @@ const ProductDetails = () => {
     
             // Update the user's cart immediately
             userData.cart = updatedCart;
-            document.cookie = `BharatLinkerUser=${encodeURIComponent(
+            document.cookie = `BharatLinkerUserData=${encodeURIComponent(
                 JSON.stringify(userData)
             )}; path=/`;
     

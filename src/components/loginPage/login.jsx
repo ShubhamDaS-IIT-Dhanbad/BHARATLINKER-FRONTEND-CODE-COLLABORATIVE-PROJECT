@@ -112,14 +112,6 @@ function SignUpForm() {
       const session = await account.createSession(userId, otpCode);
       console.log('OTP verified, session created:', session);
 
-      // Extract $id and userId and store them in a cookie
-      const sessionData = {
-        $id: session.$id,
-        userId: session.userId,
-        phn: phone,
-      };
-
-      Cookies.set('BharatLinkerUser', JSON.stringify(sessionData), { expires: 7, path: '' });
       const userData = await fetchUserByPhoneNumber(phone);
 
       if (userData) {
