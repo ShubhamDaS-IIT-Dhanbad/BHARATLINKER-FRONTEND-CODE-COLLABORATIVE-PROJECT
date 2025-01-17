@@ -13,7 +13,6 @@
     "@cloudinary/react": "^1.13.0",
     "@cloudinary/url-gen": "^1.21.0",
     "@reduxjs/toolkit": "^2.2.7",
-    "ably": "^2.6.2",
     "appwrite": "^16.0.2",
     "axios": "^1.7.9",
     "cloudinary": "^2.5.1",
