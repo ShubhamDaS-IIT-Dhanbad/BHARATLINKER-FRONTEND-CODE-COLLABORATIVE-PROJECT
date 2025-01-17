@@ -32,7 +32,7 @@ function userRefurbishedProduct() {
 
     // Fetch user data from cookies on component mount
     useEffect(() => {
-        const userSession = Cookies.get('BharatLinkerUser');
+        const userSession = Cookies.get('BharatLinkerUserData');
         if (userSession) {
             setUserData(JSON.parse(userSession));
         }
@@ -40,7 +40,7 @@ function userRefurbishedProduct() {
 
     // Handle search functionality
     const handleSearch = () => {
-        if (!userData?.phn) return;
+        if (!userData?.phoneNumber) return;
         const params = {
             inputValue,
             page: 1,
@@ -54,7 +54,7 @@ function userRefurbishedProduct() {
             selectedBrands: [],
             sortByAsc: false,
             sortByDesc: false,
-            phn: `+91${userData.phn}`,
+            phn: `+91${userData?.phoneNumber}`,
         };
         dispatch(resetUserRefurbishedProducts());
         dispatch(fetchUserRefurbishedProducts(params));
@@ -81,7 +81,7 @@ function userRefurbishedProduct() {
 
     // Handle loading more products
     const handleLoadMore = () => {
-        if (!hasMoreProducts || loadingMoreProducts || !userData?.phn) return;
+        if (!hasMoreProducts || loadingMoreProducts || !userData?.phoneNumber) return;
 
         const params = {
             inputValue,
@@ -96,7 +96,7 @@ function userRefurbishedProduct() {
             selectedBrands: [],
             sortByAsc: false,
             sortByDesc: false,
-            phn: `+91${userData.phn}`,
+            phn: `+91${userData?.phoneNumber}`,
         };
         dispatch(loadMoreUserRefurbishedProducts(params));
     };
@@ -130,14 +130,14 @@ function userRefurbishedProduct() {
                         />
                         <div className="user-refurbished-product-page-header-inner">
                             <h1 className="user-refurbished-product-page-header-text">YOUR REFURBISHED</h1>
-                            {userData?.phn && (
+                            {userData?.phoneNumber && (
                                 <div
                                     className="user-refurbished-product-page-header-phn-div"
                                     onClick={() => navigate('/pincode')}
                                     aria-label="Change Location"
                                     tabIndex={0}
                                 >
-                                    {userData.phn}
+                                    {userData?.phoneNumber}
                                 </div>
                             )}
                         </div>

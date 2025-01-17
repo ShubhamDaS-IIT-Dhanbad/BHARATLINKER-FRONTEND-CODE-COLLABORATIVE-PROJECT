@@ -24,21 +24,18 @@ const MyCartPage = ({setShowMyCart}) => {
     useEffect(() => {
         const getCartFromCookie = () => {
             try {
-                const storedLocation = Cookies.get('BharatLinkerUserLocation')
-                    ? JSON.parse(Cookies.get('BharatLinkerUserLocation'))
-                    : null;
-                if (storedLocation) {
-                    setUserLat(storedLocation.lat);
-                    setUserLong(storedLocation.lon);
-                }
-
-               
                 const userDataCookie = Cookies.get('BharatLinkerUserData');
+                
                 if (!userDataCookie) {
                     window.location.href = '/login';
                     return;
                 }
                 const userData = JSON.parse(decodeURIComponent(userDataCookie));
+                if (userData) {
+                    setUserLat(userData.lat);
+                    setUserLong(userData.long);
+                }
+                console.log(userData)
                 const cart = userData.cart || [];
 
                 const updatedCartItems = cart.map(async (item) => {

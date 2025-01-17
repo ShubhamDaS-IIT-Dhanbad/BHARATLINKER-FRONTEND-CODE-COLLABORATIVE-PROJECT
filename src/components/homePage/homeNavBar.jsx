@@ -48,7 +48,7 @@ function HomePageNavbar() {
     };
 
     const handleHomePageUserIconClick = () => {
-        const userSession = Cookies.get('BharatLinkerUser');
+        const userSession = Cookies.get('BharatLinkerUserData');
 
         if (userSession) {
             navigate('/user');

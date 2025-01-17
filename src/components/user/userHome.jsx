@@ -1,28 +1,35 @@
 import React, { useEffect, useState } from 'react';
-import { TbShieldMinus } from 'react-icons/tb';
 import { IoHomeOutline } from 'react-icons/io5';
-import { BiSearchAlt } from 'react-icons/bi';
 import { useNavigate } from 'react-router-dom';
 import { MdOutlineAdminPanelSettings } from "react-icons/md";
 import { HiOutlineUserCircle } from "react-icons/hi2";
 import { FiUploadCloud } from "react-icons/fi";
-import { CiLock } from "react-icons/ci";
 import { CiBellOn } from "react-icons/ci";
 import { TbDeviceMobileCharging } from "react-icons/tb";
 import { AiOutlineProduct } from "react-icons/ai";
-import { Client, Account, ID } from 'appwrite';
+import { Client, Account } from 'appwrite';
 import Cookies from 'js-cookie'
 import './userHome.css';
 import conf from '../../conf/conf.js';
 function UserHome() {
-    const [userData, setUserData] = useState({ phn: 8250846979 });
+    const [userData, setUserData] = useState();
     const [isLogout, setIsLogout] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
-        const userSession = Cookies.get('BharatLinkerUser');
-        setUserData(JSON.parse(userSession));
-    }, [])
+        try {
+            const userSession = Cookies.get('BharatLinkerUserData');
+            if (userSession) {
+                const parsedUserSession = JSON.parse(userSession);
+                setUserData(parsedUserSession);
+            } else {
+                console.warn("No user session found in cookies.");
+            }
+        } catch (error) {
+            console.error("Error parsing user session:", error);
+        }
+    }, []);
+    
     const client = new Client()
         .setEndpoint('https://cloud.appwrite.io/v1')
         .setProject(conf.appwriteUsersProjectId);
@@ -30,7 +37,7 @@ function UserHome() {
     const account = new Account(client);
     const handleLogout = async () => {
         try {
-            Cookies.remove('BharatLinkerUser');
+            Cookies.remove('BharatLinkerUserData');
             await account.deleteSession('current');
 
             navigate('/login');
@@ -51,7 +58,7 @@ function UserHome() {
                     />
                     <div className='dashboard-header-user'>
                         <p id='dashboard-header-user-location'>Bharat | Linker</p>
-                        <p id='dashboard-header-user-email'>{userData.phn ? userData.phn : ""}</p>
+                        <p id='dashboard-header-user-email'>{userData?.phoneNumber ? userData?.phoneNumber : ""}</p>
                     </div>
                     <IoHomeOutline
                         size={25}

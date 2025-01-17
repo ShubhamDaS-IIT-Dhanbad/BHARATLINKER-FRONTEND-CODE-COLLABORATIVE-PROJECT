@@ -32,7 +32,7 @@ function UserRefurbishedProduct() {
       return;
     }
 
-    const updatedData = { name, address, lat, long, phn: userData?.phn };
+    const updatedData = { name, address, lat, long, phn: userData?.phoneNumber };
 
     setIsUpdating(true);
 
@@ -137,13 +137,11 @@ function UserRefurbishedProduct() {
 
   useEffect(() => {
     const userSession = Cookies.get('BharatLinkerUserData');
-    const userPhoneSession = Cookies.get('BharatLinkerUser');
-    if (userSession || userPhoneSession) {
+    if (userSession ) {
       const parsedUserData = userSession ? JSON.parse(userSession) : {};
-      const parsedPhoneData = userPhoneSession ? JSON.parse(userPhoneSession) : {};
       setUserData({
         ...parsedUserData,
-        phn: parsedPhoneData.phn || parsedUserData.phn || '',
+        phn: parsedUserData.phoneNumber ||'',
       });
       setName(parsedUserData.name || '');
       setAddress(parsedUserData.address || '');
@@ -180,14 +178,14 @@ function UserRefurbishedProduct() {
             <h1 className="user-refurbished-product-page-header-text">
               USER DATA
             </h1>
-            {userData?.phn && (
+            {userData?.phoneNumber && (
               <div
                 className="user-refurbished-product-page-header-phn-div"
                 onClick={() => navigate('/pincode')}
                 aria-label="Change Location"
                 role="button"
               >
-                {userData.phn}
+                {userData.phoneNumber}
               </div>
             )}
           </div>

@@ -16,7 +16,7 @@ const UploadProduct = () => {
     const [userData, setUserData] = useState(null);
 
     useEffect(() => {
-        const userSession = Cookies.get('BharatLinkerUser');
+        const userSession = Cookies.get('BharatLinkerUserData');
         if (userSession) {
             const parsedUserData = JSON.parse(userSession);
             setUserData(parsedUserData);
@@ -49,7 +49,7 @@ const UploadProduct = () => {
                         aria-label="Change Location"
                         tabIndex={0}
                     >
-                        {userData?.phn || 'No Phone Number'}
+                        {userData?.phoneNumber || 'No Phone Number'}
                     </div>
                 </div>
             </div>

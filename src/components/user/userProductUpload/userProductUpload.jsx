@@ -13,7 +13,7 @@ const UploadProduct = () => {
     const { productType } = useParams();
 
     useEffect(() => {
-        const userSession = Cookies.get('BharatLinkerUser');
+        const userSession = Cookies.get('BharatLinkerUserData');
         if (userSession) {
             setUserData(JSON.parse(userSession));
         }
@@ -36,7 +36,7 @@ const UploadProduct = () => {
                         aria-label="Change Location"
                         tabIndex={0}
                     >
-                        {userData?.phn}
+                        {userData?.phoneNumber}
                     </div>
                 </div>
             </div>
