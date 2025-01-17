@@ -1,6 +1,5 @@
 import conf from '../../conf/conf.js';
-import { Client, Account, ID, Databases } from 'appwrite';
-import CryptoJS from 'crypto-js';
+import { Client, Databases, ID } from 'appwrite';
 
 // Initialize the Appwrite client
 const client = new Client()
@@ -10,6 +9,34 @@ const client = new Client()
 // Initialize the database instance
 const databases = new Databases(client);
 
+// Function to request browser notification permission
+const requestNotificationPermission = async () => {
+    if (!("Notification" in window)) {
+        console.error("This browser does not support desktop notifications.");
+        return false;
+    }
+
+    if (Notification.permission === "granted") {
+        return true; // Permission already granted
+    }
+
+    if (Notification.permission !== "denied") {
+        const permission = await Notification.requestPermission();
+        return permission === "granted";
+    }
+
+    return false;
+};
+
+// Function to send a browser notification
+const sendBrowserNotification = (title, body) => {
+    if (Notification.permission === "granted") {
+        new Notification(title, {
+            body
+        });
+    }
+};
+
 // Define function to place an order
 const placeOrderProvider = async (
     userId,
@@ -17,43 +44,39 @@ const placeOrderProvider = async (
     productId,
     count,
     price,
-    discountedPrice,address,userLat,userLong
-) => {console.log(userId,
-    shopId,
-    productId,
-    count,
-    price,
-    discountedPrice,address,userLat,userLong)
+    discountedPrice,
+    address,
+    userLat,
+    userLong
+) => {
+    console.log(userId, shopId, productId, count, price, discountedPrice, address, userLat, userLong);
     try {
-        // Validate that price, discountedPrice, and count are valid numbers
+        // Validate input data
         if (
-            typeof count !== 'number' ||
-            count <= 0 ||
-            typeof price !== 'number' ||
-            price <= 0 ||
-            typeof discountedPrice !== 'number' ||
-            discountedPrice < 0
+            typeof count !== 'number' || count <= 0 ||
+            typeof price !== 'number' || price <= 0 ||
+            typeof discountedPrice !== 'number' || discountedPrice < 0
         ) {
             throw new Error(
                 'Invalid input: count, price, and discountedPrice must be valid positive numbers. discountedPrice can be zero.'
             );
         }
 
-        // Create document in Appwrite
+        // Create a document in the Appwrite database
         const response = await databases.createDocument(
-            conf.appwriteShopsDatabaseId, // Database ID
-            conf.appwriteOrdersCollectionId, // Collection ID
-            ID.unique(), // Unique document ID
+            conf.appwriteShopsDatabaseId,
+            conf.appwriteOrdersCollectionId,
+            ID.unique(),
             {
-                userId: userId,
-                shopId: shopId,
-                productId: productId,
+                userId,
+                shopId,
+                productId,
                 count,
                 price,
-                discountedPrice: discountedPrice, 
+                discountedPrice,
                 address,
-                lat:userLat,
-                long:userLong
+                lat: userLat,
+                long: userLong,
             }
         );
 
@@ -65,4 +88,37 @@ const placeOrderProvider = async (
     }
 };
 
-export {placeOrderProvider};
+// Realtime subscription for new orders
+const subscribeToNewOrders = async () => {
+    // Request browser notification permission
+    const isPermissionGranted = await requestNotificationPermission();
+    if (!isPermissionGranted) {
+        console.warn("Notification permission not granted.");
+    }
+
+    // Subscribe to real-time order events
+    const subscription = client.subscribe(
+        `databases.${conf.appwriteShopsDatabaseId}.collections.${conf.appwriteOrdersCollectionId}.documents`,
+        (response) => {
+            if (response.events.includes('databases.*.collections.*.documents.*.create')) {
+                const order = response.payload;
+
+                // Alert message
+                alert('New order received!');
+
+                // Browser notification
+                sendBrowserNotification(
+                    "New Order Received",
+                    `Order ID: ${order.$id} from User: ${order.userId}`
+                );
+
+                console.log('Realtime New Order:', order);
+            }
+        }
+    );
+
+    console.log('Subscribed to new order events.');
+    return subscription;
+};
+subscribeToNewOrders();
+export { placeOrderProvider, subscribeToNewOrders };
