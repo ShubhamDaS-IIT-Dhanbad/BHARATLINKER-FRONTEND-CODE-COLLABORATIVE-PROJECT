@@ -10,7 +10,7 @@ import Cookies from 'js-cookie';
 import { getDistance } from 'geolib';
 import { RotatingLines } from "react-loader-spinner";
 import { IoIosAddCircleOutline } from "react-icons/io";
-
+import { GrCaretNext } from "react-icons/gr";
 import { SlLocationPin } from 'react-icons/sl';
 import conf from '../../../conf/conf.js';
 
@@ -510,7 +510,7 @@ const MyCartPage = ({ setShowMyCart, updateCartData }) => {
             </div>
             {
                 !loading && <div className="my-cart-address-selection">
-                    <div className="select-address" onClick={() => { placeOrder(cartItems) }}>Procedd to checkout</div>
+                    <div className="select-address" onClick={() => { placeOrder(cartItems) }}>Proceed to Place order <GrCaretNext style={{marginLeft:"7px"}}/></div>
                 </div>
             }
         </div >
