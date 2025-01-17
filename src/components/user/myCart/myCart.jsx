@@ -441,7 +441,7 @@ const MyCartPage = ({ setShowMyCart, updateCartData }) => {
                                 USE CURRENT LOCATION AS DELIVERY LOCATION
                                 <MdMyLocation
                                     size={20}
-                                    color={locationAvailable ? "black" : "white"}
+                                    color={"white"}
                                     style={{ cursor: "pointer" }}
                                     aria-label="Get Current Location"
                                 />

@@ -203,7 +203,7 @@
 .user-cart-location{
   background-color: rgb(37, 147, 37);
   color: white;height: 30px;
-  font-size: 11px;font-weight: 400;letter-spacing: 0px;
+  font-size: 11px;font-weight: 700;
   line-height: 1;font-family: Arial, Helvetica, sans-serif;
   border: 1px solid black;border-radius: 10px;padding: 5px;
   display: flex;justify-content: space-evenly;align-items: center;
