@@ -11,7 +11,7 @@ import { RiShareForwardLine } from "react-icons/ri";
 import AddToCartTab from "../viewCartTab/viewCart.jsx";
 
 import { updateCartByPhoneNumber } from '../../appWrite/userData/userData.js'
-
+import Cookies from 'js-cookie'
 import { FaPlus } from "react-icons/fa";
 import { FaMinus } from "react-icons/fa";
 
@@ -78,11 +78,8 @@ const ProductDetails = () => {
 
     const handleAddToCart = () => {
         try {
-            // Check if BharatLinkerUserData exists in the cookies
-            const userDataCookie = document.cookie.replace(/(?:(?:^|.*;\s*)BharatLinkerUserData\s*\=\s*([^;]*).*$)|^.*$/, "$1");
-
+             const userDataCookie = Cookies.get('BharatLinkerUser');
             if (!userDataCookie) {
-                // If BharatLinkerUserData is not found, redirect to login
                 window.location.href = '/login';
                 return;
             }
