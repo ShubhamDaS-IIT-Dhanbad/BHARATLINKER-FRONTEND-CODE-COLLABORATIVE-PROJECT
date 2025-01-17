@@ -15,7 +15,6 @@ import { FaPlus } from "react-icons/fa";
 import { FaMinus } from "react-icons/fa";
 
 import MyCart from '../user/myCart/myCart.jsx';
-import { parse } from "dotenv";
 const fallbackImage = "http://res.cloudinary.com/dthelgixr/image/upload/v1727870088/hd7kcjuz8jfjajnzmqkp.webp";
 
 const ProductDetails = () => {
