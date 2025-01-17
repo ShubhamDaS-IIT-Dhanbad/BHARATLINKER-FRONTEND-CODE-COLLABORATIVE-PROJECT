@@ -17,7 +17,7 @@ import conf from '../../../conf/conf.js';
 import { IoSearch } from "react-icons/io5";
 import { MdMyLocation } from "react-icons/md";
 
-import {placeOrderProvider} from '../../../appWrite/order/order.js'
+import { placeOrderProvider } from '../../../appWrite/order/order.js'
 
 const MyCartPage = ({ setShowMyCart, updateCartData }) => {
     const navigate = useNavigate();
@@ -59,7 +59,7 @@ const MyCartPage = ({ setShowMyCart, updateCartData }) => {
                         shopId: product?.shop
                     };
                 });
-              
+
                 Promise.all(updatedCartItems).then((items) => {
                     setCartItems(items);
                     setLoading(false);
@@ -264,7 +264,7 @@ const MyCartPage = ({ setShowMyCart, updateCartData }) => {
 
     const placeOrder = async (cartItems) => {
 
-        if(!address || !userLat || !userLong) {alert("address is empty latitude and longitude");return;}
+        if (!address || !userLat || !userLong) { alert("address is empty latitude and longitude"); return; }
         try {
             for (const cartItem of cartItems) {
 
@@ -275,19 +275,19 @@ const MyCartPage = ({ setShowMyCart, updateCartData }) => {
                 const discountedPrice = cartItem.discountedPrice;
                 const price = cartItem.price;
                 const shopId = cartItem.shopId;
-               
 
-    
-                await placeOrderProvider(userId, shopId,productId, 
+
+
+                await placeOrderProvider(userId, shopId, productId,
                     count,
                     price,
                     discountedPrice,
-                    address,userLat,userLong
+                    address, userLat, userLong
                 );
             }
 
 
-            
+
 
             const userDataCookie = Cookies.get('BharatLinkerUserData');
             if (userDataCookie) {
@@ -304,7 +304,7 @@ const MyCartPage = ({ setShowMyCart, updateCartData }) => {
             console.error("Error placing orders:", error);
         }
     };
-    
+
 
 
 
@@ -414,119 +414,97 @@ const MyCartPage = ({ setShowMyCart, updateCartData }) => {
 
                         <div className="my-cart-delivery-address-container">
                             Delivery Address
-
-                            {address.length >= 0 ? (<>
-                                <div className="my-cart-items-bill-details-items">
-                                    <div className="my-cart-items-bill-details-item">
-                                        <p className="item-name">Address</p>
-                                        <p className="item-price">{address}</p>
-                                    </div>
-                                    <div className="my-cart-items-bill-details-item">
-                                        <p className="item-name">Latitude</p>
-                                        <p className="item-price">{userLat}</p>
-                                    </div>
-                                    <div className="my-cart-items-bill-details-item">
-                                        <p className="item-name">Longitude</p>
-                                        <p className="item-price">{userLong}</p>
-                                    </div>
+                            <div className="my-cart-items-bill-details-items">
+                                <div className="my-cart-items-bill-details-item">
+                                    <p className="item-name">Address</p>
+                                    <p className="item-address">{address}</p>
                                 </div>
-
-
-
-                                <div className="add-delivery-address">
-                                    <IoIosAddCircleOutline size={24} color="gray" />
-                                    <p className="add-address-text">Add Delivery Address</p>
-
-                                    <div className="user-profile-location" onClick={handleLocationClick}>
-                                        USE CURRENT LOCATION AS DELIVERY LOCATION
-                                        <MdMyLocation
-                                            size={20}
-                                            color={locationAvailable ? "green" : "gray"}
-                                            style={{ cursor: "pointer" }}
-                                            aria-label="Get Current Location"
-                                        />
-                                    </div>
-
-                                    OR
-
-                                    <div className="location-tab-bottom-div-input-div">
-                                        <IoSearch onClick={handleSearch} size={20} />
-                                        <input
-                                            className="location-tab-bottom-div-input"
-                                            placeholder="Search your city/village/town"
-                                            value={searchQuery}
-                                            onChange={(e) => setSearchQuery(e.target.value)}
-                                            onKeyDown={(e) => {
-                                                if (e.key === "Enter") {
-                                                    e.preventDefault();
-                                                    handleSearch();
-                                                }
-                                            }}
-                                        />
-                                    </div>
-
-                                    {loadingSuggestion && (
-                                        <div className="location-tab-loader">
-                                            <RotatingLines
-                                                width="50"
-                                                height="50"
-                                                color="#00BFFF"
-                                                ariaLabel="rotating-lines-loading"
-                                            />
-                                        </div>
-                                    )}
-
-                                    {!loading && suggestion.length > 0 && (
-                                        <div className="location-tab-suggestions">
-                                            {suggestion.map((suggestion, index) => (
-                                                <div
-                                                    className="location-tab-suggestion-info-div"
-                                                    key={index}
-                                                    onClick={() => handleAddressClick(suggestion)}
-                                                >
-                                                    <SlLocationPin size={17} />
-                                                    <p className="location-tab-location-info-inner-div-2">
-                                                        {suggestion.label}
-                                                    </p>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    )}
-
+                                <div className="my-cart-items-bill-details-item">
+                                    <p className="item-name">Landmark</p>
+                                    <textarea></textarea>
                                 </div>
-
-                            </>
-                            ) : (
-                                <></>
-                            )}
+                                <div className="my-cart-items-bill-details-item">
+                                    <p className="item-name">Latitude</p>
+                                    <p className="item-price">{userLat}</p>
+                                </div>
+                                <div className="my-cart-items-bill-details-item">
+                                    <p className="item-name">Longitude</p>
+                                    <p className="item-price">{userLong}</p>
+                                </div>
+                            </div>
                         </div>
 
 
+                        <div className="my-cart-delivery-location-container">
+                            <p className="add-address-text">Search Address</p>
+                            <div className="user-cart-location" onClick={handleLocationClick}>
+                                USE CURRENT LOCATION AS DELIVERY LOCATION
+                                <MdMyLocation
+                                    size={20}
+                                    color={locationAvailable ? "black" : "white"}
+                                    style={{ cursor: "pointer" }}
+                                    aria-label="Get Current Location"
+                                />
+                            </div>
+                            <div className="location-tab-bottom-div-input-div">
+                                <IoSearch onClick={handleSearch} size={20} />
+                                <input
+                                    className="location-tab-bottom-div-input"
+                                    placeholder="Search your city/village/town"
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                    onKeyDown={(e) => {
+                                        if (e.key === "Enter") {
+                                            e.preventDefault();
+                                            handleSearch();
+                                        }
+                                    }}
+                                />
+                            </div>
+
+                        </div>
 
 
+                        <div className="my-cart-delivery-suggestion-container">
+                            {loadingSuggestion || fetchingUserLocation && (
+                                <div className="location-tab-loader">
+                                    <RotatingLines
+                                        width="50"
+                                        height="50"
+                                        color="#00BFFF"
+                                        ariaLabel="rotating-lines-loading"
+                                    />
+                                </div>
+                            )}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
+                            {!loading && suggestion.length > 0 && (
+                                <div className="location-tab-suggestions">
+                                    {suggestion.map((suggestion, index) => (
+                                        <div
+                                            className="location-tab-suggestion-info-div"
+                                            key={index}
+                                            onClick={() => handleAddressClick(suggestion)}
+                                        >
+                                            <SlLocationPin size={17} />
+                                            <p className="location-tab-location-info-inner-div-2">
+                                                {suggestion.label}
+                                            </p>
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
+                        </div>
 
 
                     </>
                 )}
             </div>
-            {!loading && <div className="my-cart-address-selection">
-                <div className="select-address" onClick={()=>{placeOrder(cartItems)}}>Procedd to checkout</div>
-            </div>}
-        </div>
+            {
+                !loading && <div className="my-cart-address-selection">
+                    <div className="select-address" onClick={() => { placeOrder(cartItems) }}>Procedd to checkout</div>
+                </div>
+            }
+        </div >
     );
 };
 
