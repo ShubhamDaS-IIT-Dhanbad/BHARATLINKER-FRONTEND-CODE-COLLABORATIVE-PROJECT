@@ -466,7 +466,7 @@ const MyCartPage = ({ setShowMyCart, updateCartData }) => {
 
 
                         <div className="my-cart-delivery-suggestion-container">
-                            {loadingSuggestion || fetchingUserLocation && (
+                            {(loadingSuggestion || fetchingUserLocation) && (
                                 <div className="location-tab-loader">
                                     <RotatingLines
                                         width="50"
@@ -500,7 +500,7 @@ const MyCartPage = ({ setShowMyCart, updateCartData }) => {
                         <div className="my-cart-delivery-address-container" style={{ marginBottom: "20vh" }}>
                             Return Policy
                             <div className="my-cart-return-policy">
-                            For returns and enquiry about delivery, please contact the shop owner directly. Shop details are available on their page in the "Shop" section.
+                                For returns and enquiry about delivery, please contact the shop owner directly. Shop details are available on their page in the "Shop" section.
                             </div>
                         </div>
 
@@ -510,7 +510,7 @@ const MyCartPage = ({ setShowMyCart, updateCartData }) => {
             </div>
             {
                 !loading && <div className="my-cart-address-selection">
-                    <div className="select-address" onClick={() => { placeOrder(cartItems) }}>Proceed to Place order <GrCaretNext style={{marginLeft:"7px"}}/></div>
+                    <div className="select-address" onClick={() => { placeOrder(cartItems) }}>Proceed to Place order <GrCaretNext style={{ marginLeft: "7px" }} /></div>
                 </div>
             }
         </div >
