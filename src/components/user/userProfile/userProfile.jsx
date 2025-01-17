@@ -210,7 +210,7 @@ function UserRefurbishedProduct() {
 
         <div className="user-profile-field">
           <label htmlFor="address" className="user-profile-form-label">
-            DELIVERY ADDRESS <span className="required">*</span>
+            HOMR ADDRESS <span className="required">*</span>thisaddress will be used in your refurbished product for your locality searching feature
           </label>
           <textarea
             id="address"
