@@ -141,7 +141,7 @@ const ProductDetails = () => {
     
             // Parse the user session
             const userData = JSON.parse(userSession);
-            const phn = userData.phn;
+            const phn = userData?.phoneNumber;
             let cart = await fetchUserCartByPhoneNumber(phn);
             if (!cart) {
                 throw new Error("No cart found for the user.");
@@ -314,7 +314,7 @@ const ProductDetails = () => {
                 setCount(productInCart.count);
     
                 // Update the cart data in the backend
-                await updateCartByPhoneNumber(userData.phn, updatedCart);
+                await updateCartByPhoneNumber(userData?.phoneNumber, updatedCart);
             } else {
                 console.log("Product not found in cart");
                 setCount(0);
