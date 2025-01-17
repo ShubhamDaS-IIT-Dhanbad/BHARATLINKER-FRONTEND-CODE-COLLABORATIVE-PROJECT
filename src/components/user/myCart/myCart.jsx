@@ -348,9 +348,9 @@ const MyCartPage = ({ setShowMyCart, updateCartData }) => {
                                             <p className="item-price-strikethrough">₹{item.price}</p>
                                             <p className="item-price">₹{item.discountedPrice}</p>
                                         </div>
-                                        {userLat && userLong && item.lat && item.long && (
+                                        {userLat && userLong && item.lat && item.long ? (
                                             <span className='my-cart-item-distance'>{calculateDistance(userLat, userLong, item.lat, item.long)} km away</span>
-                                        )}
+                                        ):<span className='my-cart-item-distance'>--- km away from shop</span>}
                                     </div>
                                     <div className="my-cart-count-container-parent">
                                         <div className="my-cart-count-container">
@@ -417,15 +417,15 @@ const MyCartPage = ({ setShowMyCart, updateCartData }) => {
                             <div className="my-cart-items-bill-details-items">
                                 <div className="my-cart-items-bill-details-item">
                                     <p className="item-name">Address</p>
-                                    <p className="item-address">{address}</p>
+                                    <p className="item-address">{address ? address : "- - - -"}</p>
                                 </div>
                                 <div className="my-cart-items-bill-details-item">
                                     <p className="item-name">Latitude</p>
-                                    <p className="item-price">{userLat}</p>
+                                    <p className="item-price">{userLat  ? userLat : "- - - -"}</p>
                                 </div>
                                 <div className="my-cart-items-bill-details-item">
                                     <p className="item-name">Longitude</p>
-                                    <p className="item-price">{userLong}</p>
+                                    <p className="item-price">{userLong  ? userLong : "- - - -"}</p>
                                 </div>
                                 <div className="my-cart-items-bill-details-item">
                                     <p className="item-name">Landmark</p>
