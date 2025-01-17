@@ -421,7 +421,7 @@ const MyCartPage = ({ setShowMyCart, updateCartData }) => {
                                 </div>
                                 <div className="my-cart-items-bill-details-item">
                                     <p className="item-name">Landmark</p>
-                                    <input placeholder='-0 : 0-'></input>
+                                    <input className='cart-landmark-div-input' placeholder='-0 : 0-'></input>
                                 </div>
                                 <div className="my-cart-items-bill-details-item">
                                     <p className="item-name">Latitude</p>
