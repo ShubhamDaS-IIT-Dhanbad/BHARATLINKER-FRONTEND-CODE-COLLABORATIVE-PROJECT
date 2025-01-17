@@ -133,21 +133,19 @@ async function fetchUserCartByPhoneNumber(phn) {
         if (!phn) {
             throw new Error("Phone number (phn) is required.");
         }
-
-        const queries = [Query.equal('phoneNumber', phn)];
+  // Convert phone number to string if it's a number
+  const phoneNumber = typeof phn === 'number' ? phn.toString() : phn;
+console.log(phoneNumber,"kookokko")
+        const queries = [Query.equal('phoneNumber', phoneNumber)];
         const result = await databases.listDocuments(
             conf.appwriteUsersDatabaseId,
             conf.appwriteUsersCollectionId,
             queries
-        );
+        );console.log("result",result)
         if (result.documents.length === 0) {
-            throw new Error(`No document found with phoneNumber: ${phn}`);
+            throw new Error(`No document found with phoneNumber: ${phoneNumber}`);
         }
         const userCart = result.documents[0].cart;
-
-        if (!userCart) {
-            throw new Error(`No cart found for phoneNumber: ${phn}`);
-        }
         return userCart;
     } catch (error) {
         console.error('Error in fetchUserCartByPhoneNumber:', error);

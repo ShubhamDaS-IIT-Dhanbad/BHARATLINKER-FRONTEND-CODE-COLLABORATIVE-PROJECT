@@ -11,7 +11,7 @@ import { getDistance } from 'geolib';
 import { RotatingLines } from "react-loader-spinner";
 import { IoIosAddCircleOutline } from "react-icons/io";
 
-const MyCartPage = ({ setShowMyCart }) => {
+const MyCartPage = ({ setShowMyCart , updateCartData }) => {
     const navigate = useNavigate();
     const [userData, setUserData] = useState(null);
 
@@ -111,11 +111,12 @@ const MyCartPage = ({ setShowMyCart }) => {
                 if (item.count === 0) {
                     return null;
                 }
+                
             }
             return item;
         }).filter(item => item !== null);
         setCartItems(updatedCart);
-
+        updateCartData(updatedCart );
 
         const userDataCookie = Cookies.get('BharatLinkerUserData');
         if (userDataCookie) {
@@ -202,7 +203,7 @@ const MyCartPage = ({ setShowMyCart }) => {
                         </div>
 
                         <div className="my-cart-delivery-address-container">
-                            Delivery Address {console.log(userData)}
+                            Delivery Address 
 
                             {userData?.address ? (
                                 <div className="my-cart-items-bill-details-items">

@@ -143,10 +143,7 @@ const ProductDetails = () => {
             const userData = JSON.parse(userSession);
             const phn = userData?.phoneNumber;
             let cart = await fetchUserCartByPhoneNumber(phn);
-            if (!cart) {
-                throw new Error("No cart found for the user.");
-            }
-    
+            
             // Parse cart if it's a string
             if (typeof cart === 'string') {
                 cart = JSON.parse(cart);
@@ -306,17 +303,14 @@ const ProductDetails = () => {
                 JSON.stringify(userData)
             )}; path=/`;
     
-            // Find the product in the updated cart
             const productInCart = updatedCart.find((item) => item.id === productId);
     
             if (productInCart) {
                 console.log("Product found in cart");
                 setCount(productInCart.count);
-    
-                // Update the cart data in the backend
                 await updateCartByPhoneNumber(userData?.phoneNumber, updatedCart);
             } else {
-                console.log("Product not found in cart");
+                await updateCartByPhoneNumber(userData?.phoneNumber, updatedCart);
                 setCount(0);
             }
         } catch (error) {
@@ -438,7 +432,7 @@ const ProductDetails = () => {
 
                     )}
                     {!showMyCart && <AddToCartTab cart={cart} setShowMyCart={setShowMyCart} checkProductInCartRefresh={checkProductInCartRefresh}/>}
-                    {showMyCart && <MyCart setShowMyCart={setShowMyCart} />}
+                    {showMyCart && <MyCart setShowMyCart={setShowMyCart} updateCartData={updateCartData}/>}
                 </Fragment>
             )}
         </Fragment>
