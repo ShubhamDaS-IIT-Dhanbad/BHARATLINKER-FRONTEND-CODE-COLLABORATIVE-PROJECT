@@ -420,16 +420,16 @@ const MyCartPage = ({ setShowMyCart, updateCartData }) => {
                                     <p className="item-address">{address}</p>
                                 </div>
                                 <div className="my-cart-items-bill-details-item">
-                                    <p className="item-name">Landmark</p>
-                                    <input className='cart-landmark-div-input' placeholder='-0 : 0-'></input>
-                                </div>
-                                <div className="my-cart-items-bill-details-item">
                                     <p className="item-name">Latitude</p>
                                     <p className="item-price">{userLat}</p>
                                 </div>
                                 <div className="my-cart-items-bill-details-item">
                                     <p className="item-name">Longitude</p>
                                     <p className="item-price">{userLong}</p>
+                                </div>
+                                <div className="my-cart-items-bill-details-item">
+                                    <p className="item-name">Landmark</p>
+                                    <input className='cart-landmark-div-input' placeholder='Street / statue / building'></input>
                                 </div>
                             </div>
                         </div>
