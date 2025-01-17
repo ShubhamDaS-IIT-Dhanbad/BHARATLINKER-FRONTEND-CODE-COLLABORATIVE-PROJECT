@@ -40,7 +40,6 @@ import UserNotification from './components/user/notification/userNotification.js
 import UserCart from './components/user/myCart/myCart.jsx'
 
 
-import Not from './components/not.jsx';
 
 function App() {
 
@@ -74,7 +73,6 @@ const RoutesWithConditionalHeader = React.memo(({ address }) => {
   return (
     <>
       <Routes>
-        <Route path="/not" element={<Not />} />
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
 

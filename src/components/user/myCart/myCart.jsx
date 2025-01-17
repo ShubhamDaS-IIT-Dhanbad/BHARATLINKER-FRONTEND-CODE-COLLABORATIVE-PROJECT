@@ -267,7 +267,6 @@ const MyCartPage = ({ setShowMyCart, updateCartData }) => {
         if(!address || !userLat || !userLong) {alert("address is empty latitude and longitude");return;}
         try {
             for (const cartItem of cartItems) {
-                console.log(cartItem)
 
 
                 const userId = userData.$id;
@@ -301,7 +300,6 @@ const MyCartPage = ({ setShowMyCart, updateCartData }) => {
 
             setCartItems([]);
 
-            console.log("All orders placed successfully!");
         } catch (error) {
             console.error("Error placing orders:", error);
         }

@@ -307,7 +307,6 @@ const ProductDetails = () => {
             const productInCart = updatedCart.find((item) => item.id === productId);
     
             if (productInCart) {
-                console.log("Product found in cart");
                 setCount(productInCart.count);
                 await updateCartByPhoneNumber(userData?.phoneNumber, updatedCart);
             } else {

@@ -7,12 +7,6 @@ const client = new Client()
     .setProject(conf.appwriteShopsProjectId);
 
 const databases = new Databases(client);
-
-
-
-
-
-// Order placing function
 const placeOrderProvider = async (
     userId,
     shopId,
@@ -53,12 +47,6 @@ const placeOrderProvider = async (
                 long: userLong,
             }
         );
-
-        console.log('Order placed successfully:', response);
-        const shopPhoneNumber = '+1234567890'; 
-        const message = `You have a new order from user ${userId}. Order details: ${count}x product ${productId}, total price: ${price}.`;
-      
-
         return response;
     } catch (error) {
         console.error('Error placing order:', error.message);
