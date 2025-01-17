@@ -195,7 +195,6 @@ const ProductDetails = () => {
                 updatedCart[productIndex].count += 1;
                 updatedCart[productIndex].price = productDetail.price;
                 updatedCart[productIndex].discountedPrice = productDetail.discountedPrice;
-                console.log("up", updatedCart)
                 setCount((prev) => prev + 1);
                 updateCartData(updatedCart);
             } else {
@@ -231,7 +230,6 @@ const ProductDetails = () => {
 
                 setCount((prev) => Math.max(prev - 1, 0));
                 updateCartData(updatedCart);
-                console.log("Product count decremented!");
             } else {
                 console.error("Product not found in cart!");
             }
@@ -273,7 +271,7 @@ const ProductDetails = () => {
             const productInCart = updatedCart.find((item) => item.id === productId);
             if (productInCart) {
                 setCount(productInCart.count);
-                const updatedCartData = await updateCartByPhoneNumber(userData.phoneNumber, updatedCart);
+                const updatedCartData = await updateCartByPhoneNumber(userData.phn, updatedCart);
             } else {
                 setCount(0);
                 console.log("Product not found in cart");
