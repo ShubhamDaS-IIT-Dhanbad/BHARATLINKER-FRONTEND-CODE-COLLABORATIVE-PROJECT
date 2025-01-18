@@ -80,7 +80,7 @@ function Order() {
                             <p className="coordinates">
                                 <strong>Coordinates:</strong> Lat {order.lat}, Long {order.long}
                             </p>
-                            {order.state === 'pending' && (
+                            {(order.state === 'pending' || order.state === 'confirmed') && (
                                 <button
                                     className="cancel-button"
                                     onClick={() => handleCancelOrder(order.$id)}
