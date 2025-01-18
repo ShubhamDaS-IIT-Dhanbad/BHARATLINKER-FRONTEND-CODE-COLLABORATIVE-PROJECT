@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import {useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { getOrderByUserId, updateOrderState } from '../../../appWrite/order/order.js';
 import Cookies from 'js-cookie';
 import { FaAngleLeft } from "react-icons/fa";
 import './order.css';
 
 function Order() {
-    const navigate=useNavigate();
+    const navigate = useNavigate();
     const [orders, setOrders] = useState([]);
     const [filter, setFilter] = useState('all'); // State for the selected filter
 
@@ -63,16 +63,48 @@ function Order() {
 
     return (
         <div className="order-container">
-            <h1 className="order-title"> <FaAngleLeft size={30} onClick={()=>navigate('/user')}/> My Orders</h1>
+            <div className="order-title">
+                 <FaAngleLeft size={20} onClick={() => navigate('/user')} /> My Orders
+            </div>
 
             {/* Filter Buttons */}
             <div className="order-filters">
-                <button onClick={() => setFilter('all')}>All</button>
-                <button onClick={() => setFilter('pending')}>Pending</button>
-                <button onClick={() => setFilter('confirmed')}>Confirmed</button>
-                <button onClick={() => setFilter('dispatched')}>Dispatched</button>
-                <button onClick={() => setFilter('canceled')}>Canceled</button>
-                <button onClick={() => setFilter('completed')}>Completed</button>
+                <button 
+                    className={`filter-button ${filter === 'all' ? 'selected' : ''}`} 
+                    onClick={() => setFilter('all')}
+                >
+                    All
+                </button>
+                <button 
+                    className={`filter-button ${filter === 'pending' ? 'selected' : ''}`} 
+                    onClick={() => setFilter('pending')}
+                >
+                    Pending
+                </button>
+                <button 
+                    className={`filter-button ${filter === 'confirmed' ? 'selected' : ''}`} 
+                    onClick={() => setFilter('confirmed')}
+                >
+                    Confirmed
+                </button>
+                <button 
+                    className={`filter-button ${filter === 'dispatched' ? 'selected' : ''}`} 
+                    onClick={() => setFilter('dispatched')}
+                >
+                    Dispatched
+                </button>
+                <button 
+                    className={`filter-button ${filter === 'canceled' ? 'selected' : ''}`} 
+                    onClick={() => setFilter('canceled')}
+                >
+                    Canceled
+                </button>
+                <button 
+                    className={`filter-button ${filter === 'completed' ? 'selected' : ''}`} 
+                    onClick={() => setFilter('completed')}
+                >
+                    Completed
+                </button>
             </div>
 
             <ul className="order-list">
