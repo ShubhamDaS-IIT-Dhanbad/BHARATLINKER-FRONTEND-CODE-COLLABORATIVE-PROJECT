@@ -8,13 +8,13 @@ import { FaAngleLeft } from "react-icons/fa";
 
 import './order.css';
 
-import Modal from './modal.jsx'; 
+import Modal from './modal.jsx';
 
 function Order() {
     const navigate = useNavigate();
     const [orders, setOrders] = useState([]);
     const [filter, setFilter] = useState('all');
-    const [selectedOrder, setSelectedOrder] = useState(null); 
+    const [selectedOrder, setSelectedOrder] = useState(null);
 
     useEffect(() => {
         const fetchOrders = async () => {
@@ -31,7 +31,6 @@ function Order() {
                 if (userId) {
                     const orders = await getOrderByUserId(userId);
                     const sortedOrders = orders.sort((a, b) => new Date(b.$updatedAt) - new Date(a.$updatedAt));
-
                     setOrders(sortedOrders);
                 } else {
                     console.error('User ID is missing in cookie data');
@@ -119,20 +118,29 @@ function Order() {
             <ul className="order-list">
                 {filteredOrders.length > 0 ? (
                     filteredOrders.map((order) => (
-                        <li key={order.$id} className="order-item">
-                            <p className="order-summary" onClick={() => handleSelectOrder(order)}>
-                                <strong>Order ID:</strong> {order.$id}  {order.title} | <strong>Price:</strong> ${order.price}
-                                <br />
-                                {order.product && <span><strong>Product:</strong> {order.product.title}</span>}
-                            </p>
-                        </li>
+                        <div key={order.$id} className="order-item">
+                            <img onClick={() => { navigate(`/product/${order.$id}`) }} className="my-cart-item-img" src={order.image} alt={order.title} />
+                            <div className="my-cart-item-second">
+                                <p className="item-name">{order.title}</p>
+                                <div className="price-container">
+                                    <p className="item-price-strikethrough">₹{order.price}</p>
+                                    <p className="item-price">₹{order.discountedPrice}</p>
+
+                                </div>
+                                <div className="order-cancel-container">
+                                    <div className="my-cart-count-container">
+                                        cancel
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
                     ))
                 ) : (
                     <p>No orders found</p>
                 )}
             </ul>
 
-            {/* Modal for order details */}
             {selectedOrder && (
                 <Modal order={selectedOrder} onClose={handleCloseModal} />
             )}

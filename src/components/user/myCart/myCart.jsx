@@ -275,23 +275,23 @@ const MyCartPage = ({ setShowMyCart, updateCartData }) => {
         try {
             for (const cartItem of cartItems) {
 
-console.log(cartItem)
+
                 const userId = userData.$id;
                 const productId = cartItem.id;
                 const count = cartItem.count;
                 const discountedPrice = cartItem.discountedPrice;
                 const price = cartItem.price;
                 const shopId = cartItem.shopId;
-                const title = cartItem.name;
-                const image = cartItem.image;
+                const name = cartItem.name;
+                const img = cartItem.image;
 
 
-
-                await placeOrderProvider(userId, shopId, productId,
+                await placeOrderProvider(
+                    userId, shopId, productId,
                     count,
                     price,
                     discountedPrice,
-                    address, userLat, userLong,title,image
+                    address, userLat, userLong,name,img
                 );
             }
 
@@ -360,7 +360,7 @@ console.log(cartItem)
                                         </div>
                                         {userLat && userLong && item.lat && item.long ? (
                                             <span className='my-cart-item-distance'>{calculateDistance(userLat, userLong, item.lat, item.long)} km away</span>
-                                        ) : <span className='my-cart-item-distance'>--- km away from shop</span>}
+                                        ) : <span className='my-cart-item-distance'></span>}
                                     </div>
                                     <div className="my-cart-count-container-parent">
                                         <div className="my-cart-count-container">

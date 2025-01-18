@@ -18,8 +18,8 @@ const placeOrderProvider = async (
     address,
     userLat,
     userLong,
-    image,
-    title
+    img,
+    name
 ) => {
     try {
         if (
@@ -33,10 +33,10 @@ const placeOrderProvider = async (
         }
 
         // Ensure title is a string and slice it to 50 characters
-        if (typeof title !== 'string') {
+        if (typeof img !== 'string') {
             throw new Error('Invalid title: Title must be a string.');
         }
-        title = title.length > 50 ? title.slice(0, 50) : title;
+        const title = img.length > 50 ? img.slice(0, 50) : img;
 
         // Create a document in the Appwrite database
         const response = await databases.createDocument(
@@ -53,8 +53,8 @@ const placeOrderProvider = async (
                 address,
                 lat: userLat,
                 long: userLong,
-                image,
-                title  // Now sliced to 50 characters if necessary
+                image:name,
+                title:img  
             }
         );
         return response;
