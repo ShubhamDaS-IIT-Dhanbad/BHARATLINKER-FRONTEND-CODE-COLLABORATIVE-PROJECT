@@ -1,5 +1,6 @@
 import conf from '../../conf/conf.js';
-import { Client, Databases, ID } from 'appwrite';
+
+import { Client, Databases,ID, Query } from 'appwrite';
 
 // Initialize the Appwrite client
 const client = new Client()
@@ -19,7 +20,6 @@ const placeOrderProvider = async (
     userLong
 ) => {
     try {
-        // Validate input
         if (
             typeof count !== 'number' || count <= 0 ||
             typeof price !== 'number' || price <= 0 ||
@@ -54,5 +54,53 @@ const placeOrderProvider = async (
     }
 };
 
-export { placeOrderProvider };
+
+
+const getOrderByUserId = async (userId) => {
+    try {
+        if (!userId) {
+            throw new Error('User ID is missing');
+        }
+
+        // Construct query to filter by userId
+        
+        const queries = [Query.equal('userId', userId)];// Appwrite expects query strings in this format
+
+        // Fetch documents from the Appwrite database
+        const response = await databases.listDocuments(
+            conf.appwriteShopsDatabaseId,
+            conf.appwriteOrdersCollectionId,
+            queries
+        );
+
+        return response.documents;
+    } catch (error) {
+        console.error('Error fetching orders by userId:', error.message);
+        throw error;
+    }
+};
+
+
+
+
+const updateOrderState = async (orderId,state) => {
+    try {
+        if (!orderId) {
+            throw new Error('User ID is missing');
+        }
+        const response = await databases.updateDocument(
+            conf.appwriteShopsDatabaseId,
+            conf.appwriteOrdersCollectionId,
+            orderId,
+            state
+        );
+
+        return response.documents;
+    } catch (error) {
+        console.error('Error fetching orders by userId:', error.message);
+        throw error;
+    }
+};
+
+export { placeOrderProvider,getOrderByUserId,updateOrderState };
 
