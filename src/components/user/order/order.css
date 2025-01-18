@@ -182,3 +182,9 @@
     padding: 6px 7px 6px 7px;
     font-size: 12=5px;
 }
+
+
+.order-loading-container{
+    height: 70vh;display: flex;justify-content: center;
+    align-items: center;
+}
