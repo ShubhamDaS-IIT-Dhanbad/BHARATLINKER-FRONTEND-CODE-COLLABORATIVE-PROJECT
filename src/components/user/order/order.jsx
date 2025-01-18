@@ -139,7 +139,6 @@ function Order() {
                                         <div
                                             className="my-cart-count-container"
                                             style={{ width: "90px", height: "22px", cursor: "pointer" }}
-                                            onClick={() => handleCancelOrder(order.$id)}
                                         >
                                             Cancel
                                         </div>
