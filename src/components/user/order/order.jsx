@@ -75,7 +75,6 @@ function Order() {
                 <FaAngleLeft size={20} onClick={() => navigate('/user')} /> My Orders
             </div>
 
-            {/* Filter Buttons */}
             <div className="order-filters">
                 <button
                     className={`filter-button ${filter === 'all' ? 'selected' : ''}`}
@@ -115,6 +114,7 @@ function Order() {
                 </button>
             </div>
 
+
             <ul className="order-list">
                 {filteredOrders.length > 0 ? (
                     filteredOrders.map((order) => (
@@ -134,7 +134,7 @@ function Order() {
                                     <p className="item-price-strikethrough">₹{order.price}</p>
                                     <p className="item-price">₹{order.discountedPrice}</p>
                                 </div>
-                                {['pending', 'confirmed'].includes(order.state) && ( // Render cancel button conditionally
+                                {['pending', 'confirmed'].includes(order.state) && (
                                     <div className="order-cancel-container">
                                         <div
                                             className="my-cart-count-container"

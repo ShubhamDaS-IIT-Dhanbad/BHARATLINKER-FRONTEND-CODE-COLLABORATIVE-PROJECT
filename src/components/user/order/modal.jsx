@@ -1,5 +1,5 @@
 import React from 'react';
-import './modal.css'; // Add custom styles for the modal
+import './modal.css';
 
 function Modal({ handleCancelOrder, order, onClose }) {
     return (
