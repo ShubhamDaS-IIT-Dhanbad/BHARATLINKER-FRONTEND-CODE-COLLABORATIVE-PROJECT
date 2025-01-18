@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { getOrderByUserId, updateOrderState } from '../../../appWrite/order/order.js';
 import Cookies from 'js-cookie';
-import './Order.css';
+import './order.css';
 
 function Order() {
     const [orders, setOrders] = useState([]);
