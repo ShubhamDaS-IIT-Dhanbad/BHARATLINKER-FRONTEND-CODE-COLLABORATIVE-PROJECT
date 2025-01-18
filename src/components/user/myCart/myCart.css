@@ -294,6 +294,6 @@ position: fixed;bottom: 0;z-index: 90000;
 .my-cart-confirm-order-div-no{
   width: 45%;height: 100%;
   display: flex;justify-content: center;align-items: center;
-  border-radius: 7px;color: white;
+  border-radius: 7px;color: white;border: none;
   background-color: rgb(37, 147, 37);
 }

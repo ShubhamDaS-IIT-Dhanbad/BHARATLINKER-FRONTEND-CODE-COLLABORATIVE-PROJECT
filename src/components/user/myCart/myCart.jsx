@@ -528,10 +528,10 @@ const MyCartPage = ({ setShowMyCart, updateCartData }) => {
                         Confirm Cash On Delivery Order
                         <div className='my-cart-confirm-order-div-img-div' ><img className='my-cart-confirm-order-div-img' src={d1}></img></div>
                         <div className='my-cart-confirm-order-div-yes-no-div' >
-                            <div className='my-cart-confirm-order-div-yes' onClick={() => { setConfirmOrder(false) }}>Cancel</div>
-                            <button className='my-cart-confirm-order-div-yes' onClick={() => { placeOrderConfirm(cartItems) }} disabled={orderPlacing}>
+                            <div className='my-cart-confirm-order-div-yes' onClick={() => { if(!orderPlacing) setConfirmOrder(false) }} >Cancel</div>
+                            <button className='my-cart-confirm-order-div-no' onClick={() => { placeOrderConfirm(cartItems) }} disabled={orderPlacing}>
                                 {orderPlacing ? (
-                                    <TailSpin height={20} width={20}  />
+                                    <TailSpin height={25} width={25}  />
                                 ) : (
                                     "Confirm order"
                                 )}
