@@ -14,11 +14,12 @@ import { GrCaretNext } from "react-icons/gr";
 import { SlLocationPin } from 'react-icons/sl';
 import conf from '../../../conf/conf.js';
 
+import { TailSpin } from 'react-loader-spinner';
 import { IoSearch } from "react-icons/io5";
 import { MdMyLocation } from "react-icons/md";
 
 import { placeOrderProvider } from '../../../appWrite/order/order.js'
-
+import d1 from './d1.png';
 const MyCartPage = ({ setShowMyCart, updateCartData }) => {
     const navigate = useNavigate();
     const [userData, setUserData] = useState(null);
@@ -27,6 +28,8 @@ const MyCartPage = ({ setShowMyCart, updateCartData }) => {
     const [userLat, setUserLat] = useState(null);
     const [userLong, setUserLong] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [orderPlacing, setOrderPlacing] = useState(false);
+    const [confirmOrder, setConfirmOrder] = useState(false);
     const { products } = useSelector((state) => state.searchproducts);
 
     const deliveryCostPerKm = 10;
@@ -262,9 +265,13 @@ const MyCartPage = ({ setShowMyCart, updateCartData }) => {
 
 
 
-    const placeOrder = async (cartItems) => {
-
+    const placeOrder = async () => {
         if (!address || !userLat || !userLong) { alert("address is empty latitude and longitude"); return; }
+        setConfirmOrder(true);
+    };
+    const placeOrderConfirm = async (cartItems) => {
+        if (!address || !userLat || !userLong) { alert("address is empty latitude and longitude"); return; }
+        setOrderPlacing(true);
         try {
             for (const cartItem of cartItems) {
 
@@ -299,10 +306,11 @@ const MyCartPage = ({ setShowMyCart, updateCartData }) => {
             }
 
             setCartItems([]);
-
+            navigate('/');
         } catch (error) {
             console.error("Error placing orders:", error);
         }
+        setOrderPlacing(false);
     };
 
 
@@ -507,10 +515,29 @@ const MyCartPage = ({ setShowMyCart, updateCartData }) => {
 
                     </>
                 )}
+
             </div>
             {
                 !loading && <div className="my-cart-address-selection">
-                    <div className="select-address" onClick={() => { placeOrder(cartItems) }}>Proceed to Place order <GrCaretNext style={{ marginLeft: "7px" }} /></div>
+                    <div className="select-address" onClick={() => { placeOrder() }}>Proceed to Place order <GrCaretNext style={{ marginLeft: "7px" }} /></div>
+                </div>
+            }
+            {confirmOrder &&
+                <div className='my-cart-confirm-order-parent' >
+                    <div className='my-cart-confirm-order-div' >
+                        Confirm Cash On Delivery Order
+                        <div className='my-cart-confirm-order-div-img-div' ><img className='my-cart-confirm-order-div-img' src={d1}></img></div>
+                        <div className='my-cart-confirm-order-div-yes-no-div' >
+                            <div className='my-cart-confirm-order-div-yes' onClick={() => { setConfirmOrder(false) }}>Cancel</div>
+                            <button className='my-cart-confirm-order-div-yes' onClick={() => { placeOrderConfirm(cartItems) }} disabled={orderPlacing}>
+                                {orderPlacing ? (
+                                    <TailSpin height={20} width={20}  />
+                                ) : (
+                                    "Confirm order"
+                                )}
+                            </button>
+                        </div>
+                    </div>
                 </div>
             }
         </div >

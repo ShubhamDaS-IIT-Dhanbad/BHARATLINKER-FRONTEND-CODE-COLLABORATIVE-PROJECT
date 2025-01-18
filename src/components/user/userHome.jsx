@@ -87,6 +87,10 @@ function UserHome() {
                         <TbDeviceMobileCharging className='dashboard-Your-information-icons' aria-label="Upload books" />
                         <p className='dashboard-Your-info-p'>Upload Gadgets</p>
                     </article>
+                    <article className='dashboard-Your-Refurbished' onClick={() => navigate('/user/order')} >
+                        <CiBellOn className='dashboard-Your-information-icons' aria-label="Update refurbished items" />
+                        <p className='dashboard-Your-info-p'>Order</p>
+                    </article>
                     <article className='dashboard-Your-Refurbished' onClick={() => navigate('/user/notification')} >
                         <CiBellOn className='dashboard-Your-information-icons' aria-label="Update refurbished items" />
                         <p className='dashboard-Your-info-p'>Notification</p>

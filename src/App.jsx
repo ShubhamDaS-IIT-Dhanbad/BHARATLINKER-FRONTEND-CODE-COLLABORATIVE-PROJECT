@@ -37,7 +37,7 @@ import UserProductPageMain from './components/user/productPage/userProductPageMa
 import RefurbishedBooksUploadUser from './components/user/userProductUpload/userProductUpload.jsx'
 import UserUpdateBookModule from './components/user/userProductUpdate/userProductUpdate.jsx';
 import UserNotification from './components/user/notification/userNotification.jsx'
-import UserCart from './components/user/myCart/myCart.jsx'
+import UserOrder from './components/user/order/order.jsx'
 
 
 
@@ -112,7 +112,7 @@ const RoutesWithConditionalHeader = React.memo(({ address }) => {
         <Route path='/user/upload/:productType' element={<RefurbishedBooksUploadUser />} />
         <Route path='/user/refurbished/update/:id' element={<UserUpdateBookModule />} />
         <Route path='/user/notification' element={<UserNotification />} />
-        <Route path='/mycart' element={<UserCart />} />
+        <Route path='/user/order' element={<UserOrder />} />
 
       </Routes>
     </>
