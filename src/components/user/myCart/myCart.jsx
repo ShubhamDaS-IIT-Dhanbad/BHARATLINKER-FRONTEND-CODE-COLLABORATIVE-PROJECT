@@ -275,13 +275,15 @@ const MyCartPage = ({ setShowMyCart, updateCartData }) => {
         try {
             for (const cartItem of cartItems) {
 
-
+console.log(cartItem)
                 const userId = userData.$id;
                 const productId = cartItem.id;
                 const count = cartItem.count;
                 const discountedPrice = cartItem.discountedPrice;
                 const price = cartItem.price;
                 const shopId = cartItem.shopId;
+                const title = cartItem.name;
+                const image = cartItem.image;
 
 
 
@@ -289,7 +291,7 @@ const MyCartPage = ({ setShowMyCart, updateCartData }) => {
                     count,
                     price,
                     discountedPrice,
-                    address, userLat, userLong
+                    address, userLat, userLong,title,image
                 );
             }
 

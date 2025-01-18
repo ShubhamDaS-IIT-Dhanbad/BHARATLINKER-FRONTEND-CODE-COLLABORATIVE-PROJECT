@@ -17,7 +17,9 @@ const placeOrderProvider = async (
     discountedPrice,
     address,
     userLat,
-    userLong
+    userLong,
+    image,
+    title
 ) => {
     try {
         if (
@@ -29,6 +31,12 @@ const placeOrderProvider = async (
                 'Invalid input: count, price, and discountedPrice must be valid positive numbers. discountedPrice can be zero.'
             );
         }
+
+        // Ensure title is a string and slice it to 50 characters
+        if (typeof title !== 'string') {
+            throw new Error('Invalid title: Title must be a string.');
+        }
+        title = title.length > 50 ? title.slice(0, 50) : title;
 
         // Create a document in the Appwrite database
         const response = await databases.createDocument(
@@ -45,6 +53,8 @@ const placeOrderProvider = async (
                 address,
                 lat: userLat,
                 long: userLong,
+                image,
+                title  // Now sliced to 50 characters if necessary
             }
         );
         return response;

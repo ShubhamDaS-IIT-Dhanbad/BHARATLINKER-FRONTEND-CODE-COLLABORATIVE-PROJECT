@@ -2,15 +2,19 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getOrderByUserId, updateOrderState } from '../../../appWrite/order/order.js';
 import Cookies from 'js-cookie';
+
+import { useSelector } from 'react-redux';
 import { FaAngleLeft } from "react-icons/fa";
+
 import './order.css';
-import Modal from './modal.jsx'; // Import the Modal component
+
+import Modal from './modal.jsx'; 
 
 function Order() {
     const navigate = useNavigate();
     const [orders, setOrders] = useState([]);
     const [filter, setFilter] = useState('all');
-    const [selectedOrder, setSelectedOrder] = useState(null); // To store the selected order's details
+    const [selectedOrder, setSelectedOrder] = useState(null); 
 
     useEffect(() => {
         const fetchOrders = async () => {
@@ -27,6 +31,7 @@ function Order() {
                 if (userId) {
                     const orders = await getOrderByUserId(userId);
                     const sortedOrders = orders.sort((a, b) => new Date(b.$updatedAt) - new Date(a.$updatedAt));
+
                     setOrders(sortedOrders);
                 } else {
                     console.error('User ID is missing in cookie data');
@@ -47,7 +52,6 @@ function Order() {
                     order.$id === orderId ? { ...order, state: 'canceled', $updatedAt: new Date().toISOString() } : order
                 ).sort((a, b) => new Date(b.$updatedAt) - new Date(a.$updatedAt))
             );
-            console.log(`Order ${orderId} has been canceled.`);
         } catch (error) {
             console.error(`Error canceling order ${orderId}:`, error.message);
         }
@@ -59,11 +63,11 @@ function Order() {
     });
 
     const handleSelectOrder = (order) => {
-        setSelectedOrder(order); // Show the selected order's details in the modal
+        setSelectedOrder(order);
     };
 
     const handleCloseModal = () => {
-        setSelectedOrder(null); // Close the modal
+        setSelectedOrder(null);
     };
 
     return (
@@ -117,7 +121,9 @@ function Order() {
                     filteredOrders.map((order) => (
                         <li key={order.$id} className="order-item">
                             <p className="order-summary" onClick={() => handleSelectOrder(order)}>
-                                <strong>Order ID:</strong> {order.$id} | <strong>Price:</strong> ${order.price}
+                                <strong>Order ID:</strong> {order.$id}  {order.title} | <strong>Price:</strong> ${order.price}
+                                <br />
+                                {order.product && <span><strong>Product:</strong> {order.product.title}</span>}
                             </p>
                         </li>
                     ))
