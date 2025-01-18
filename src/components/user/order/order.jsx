@@ -119,21 +119,33 @@ function Order() {
                 {filteredOrders.length > 0 ? (
                     filteredOrders.map((order) => (
                         <div key={order.$id} className="order-item">
-                            <img onClick={() => { navigate(`/product/${order.productId}`) }} className="my-cart-item-img" src={order.image} alt={order.title} />
-                            <div className="order-item-second" onClick={()=>{handleSelectOrder(order)}}>
+                            <img
+                                onClick={() => { navigate(`/product/${order.productId}`); }}
+                                className="my-cart-item-img"
+                                src={order.image}
+                                alt={order.title}
+                            />
+                            <div
+                                className="order-item-second"
+                                onClick={() => { handleSelectOrder(order); }}
+                            >
                                 <div className="price-container">
                                     <p className="item-name">{order.title}</p>
                                     <p className="item-price-strikethrough">₹{order.price}</p>
                                     <p className="item-price">₹{order.discountedPrice}</p>
-
                                 </div>
-                                <div className="order-cancel-container">
-                                    <div className="my-cart-count-container" style={{width:"90px",height:"22px"}}>
-                                        cancel
+                                {['pending', 'confirmed'].includes(order.state) && ( // Render cancel button conditionally
+                                    <div className="order-cancel-container">
+                                        <div
+                                            className="my-cart-count-container"
+                                            style={{ width: "90px", height: "22px", cursor: "pointer" }}
+                                            onClick={() => handleCancelOrder(order.$id)}
+                                        >
+                                            Cancel
+                                        </div>
                                     </div>
-                                </div>
+                                )}
                             </div>
-
                         </div>
                     ))
                 ) : (
@@ -141,8 +153,9 @@ function Order() {
                 )}
             </ul>
 
+
             {selectedOrder && (
-                <Modal order={selectedOrder} onClose={handleCloseModal} />
+                <Modal handleCancelOrder={handleCancelOrder} order={selectedOrder} onClose={handleCloseModal} />
             )}
         </div>
     );

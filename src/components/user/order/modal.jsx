@@ -1,7 +1,7 @@
 import React from 'react';
 import './modal.css'; // Add custom styles for the modal
 
-function Modal({ order, onClose }) {
+function Modal({ handleCancelOrder, order, onClose }) {
     return (
         <div className="modal-overlay">
             <div className="modal-content">
@@ -15,7 +15,7 @@ function Modal({ order, onClose }) {
                 <p><strong>Last Updated:</strong> {new Date(order.$updatedAt).toLocaleString()}</p>
                 <p><strong>Coordinates:</strong> Lat {order.lat}, Long {order.long}</p>
                 {(order.state === 'pending' || order.state === 'confirmed') && (
-                    <button className="cancel-button" onClick={() => onClose()}>Cancel Order</button>
+                    <button className="cancel-button" onClick={() => handleCancelOrder(order.$id)}>Cancel Order</button>
                 )}
             </div>
         </div>

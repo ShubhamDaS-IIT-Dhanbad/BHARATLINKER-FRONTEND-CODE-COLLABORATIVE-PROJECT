@@ -98,16 +98,19 @@ const updateOrderState = async (orderId,state) => {
         if (!orderId) {
             throw new Error('User ID is missing');
         }
+        const documentId=orderId;
         const response = await databases.updateDocument(
             conf.appwriteShopsDatabaseId,
             conf.appwriteOrdersCollectionId,
-            orderId,
+            documentId,
+            {
             state
+            }
         );
-
+console.log(response)
         return response.documents;
     } catch (error) {
-        console.error('Error fetching orders by userId:', error.message);
+        console.error('Error fetching orders by orderId:', error.message);
         throw error;
     }
 };
