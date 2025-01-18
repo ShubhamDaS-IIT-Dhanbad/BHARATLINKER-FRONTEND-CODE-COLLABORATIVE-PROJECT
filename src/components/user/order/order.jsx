@@ -119,8 +119,8 @@ function Order() {
                 {filteredOrders.length > 0 ? (
                     filteredOrders.map((order) => (
                         <div key={order.$id} className="order-item">
-                            <img onClick={() => { navigate(`/product/${order.$id}`) }} className="my-cart-item-img" src={order.image} alt={order.title} />
-                            <div className="order-item-second">
+                            <img onClick={() => { navigate(`/product/${order.productId}`) }} className="my-cart-item-img" src={order.image} alt={order.title} />
+                            <div className="order-item-second" onClick={()=>{handleSelectOrder(order)}}>
                                 <div className="price-container">
                                     <p className="item-name">{order.title}</p>
                                     <p className="item-price-strikethrough">₹{order.price}</p>
