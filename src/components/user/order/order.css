@@ -159,3 +159,7 @@
 .order-cancel-container{
     margin-top: 20px;
 }
+.order-item-second{
+    display: flex;flex-direction: column;
+    justify-content: space-between;
+}

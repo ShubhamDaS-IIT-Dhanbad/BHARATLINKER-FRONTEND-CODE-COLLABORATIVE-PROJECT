@@ -120,15 +120,15 @@ function Order() {
                     filteredOrders.map((order) => (
                         <div key={order.$id} className="order-item">
                             <img onClick={() => { navigate(`/product/${order.$id}`) }} className="my-cart-item-img" src={order.image} alt={order.title} />
-                            <div className="my-cart-item-second">
-                                <p className="item-name">{order.title}</p>
+                            <div className="order-item-second">
                                 <div className="price-container">
+                                    <p className="item-name">{order.title}</p>
                                     <p className="item-price-strikethrough">₹{order.price}</p>
                                     <p className="item-price">₹{order.discountedPrice}</p>
 
                                 </div>
                                 <div className="order-cancel-container">
-                                    <div className="my-cart-count-container">
+                                    <div className="my-cart-count-container" style={{width:"90px",height:"22px"}}>
                                         cancel
                                     </div>
                                 </div>
