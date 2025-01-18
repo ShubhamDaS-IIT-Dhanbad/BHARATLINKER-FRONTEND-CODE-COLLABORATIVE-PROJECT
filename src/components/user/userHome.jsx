@@ -7,6 +7,7 @@ import { FiUploadCloud } from "react-icons/fi";
 import { CiBellOn } from "react-icons/ci";
 import { TbDeviceMobileCharging } from "react-icons/tb";
 import { AiOutlineProduct } from "react-icons/ai";
+import { CiBoxList } from "react-icons/ci";
 import { Client, Account } from 'appwrite';
 import Cookies from 'js-cookie'
 import './userHome.css';
@@ -88,7 +89,7 @@ function UserHome() {
                         <p className='dashboard-Your-info-p'>Upload Gadgets</p>
                     </article>
                     <article className='dashboard-Your-Refurbished' onClick={() => navigate('/user/order')} >
-                        <CiBellOn className='dashboard-Your-information-icons' aria-label="Update refurbished items" />
+                        <CiBoxList className='dashboard-Your-information-icons' aria-label="Update refurbished items" />
                         <p className='dashboard-Your-info-p'>Order</p>
                     </article>
                     <article className='dashboard-Your-Refurbished' onClick={() => navigate('/user/notification')} >
