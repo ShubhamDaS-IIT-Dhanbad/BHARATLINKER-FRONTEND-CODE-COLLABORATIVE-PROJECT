@@ -127,23 +127,31 @@ function Order() {
                             />
                             <div
                                 className="order-item-second"
-                                onClick={() => { handleSelectOrder(order); }}
+                                
                             >
                                 <div className="price-container">
                                     <p className="item-name">{order.title}</p>
                                     <p className="item-price-strikethrough">₹{order.price}</p>
                                     <p className="item-price">₹{order.discountedPrice}</p>
                                 </div>
-                                {['pending', 'confirmed'].includes(order.state) && (
-                                    <div className="order-cancel-container">
+                                <div className='order-states-container'>
                                         <div
-                                            className="my-cart-count-container"
-                                            style={{ width: "90px", height: "22px", cursor: "pointer" }}
+                                        className='order-states-container-states'
+                                            style={{ width: "90px", height: "22px"}}
                                         >
-                                            Cancel
+                                            {order.state}
                                         </div>
-                                    </div>
-                                )}
+                                    {['pending', 'confirmed'].includes(order.state) && (
+                                            <div
+                                                className="my-cart-count-container"
+                                                style={{ width: "90px", height: "22px" }}
+                                                onClick={() => { handleSelectOrder(order); }}
+                                            >
+                                                Cancel Order
+                                            </div>
+                                    )}
+                                </div>
+
                             </div>
                         </div>
                     ))
