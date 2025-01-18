@@ -2,12 +2,9 @@
 
 /* Order Container */
 .order-container {
-    max-width: 1200px;
-    margin: 20px auto;
-    padding: 20px;
+    width: calc(100vw - 20px);
+    padding: 10px;min-height: 100vh;
     background-color: #ffffff;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
 }
 
 /* Title */
@@ -104,3 +101,17 @@
 .button.secondary:hover {
     background-color: #c0c0c0;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+

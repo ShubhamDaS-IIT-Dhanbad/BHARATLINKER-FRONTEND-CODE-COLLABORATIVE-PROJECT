@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from 'react';
+import {useNavigate} from 'react-router-dom';
 import { getOrderByUserId, updateOrderState } from '../../../appWrite/order/order.js';
 import Cookies from 'js-cookie';
+import { FaAngleLeft } from "react-icons/fa";
 import './order.css';
 
 function Order() {
+    const navigate=useNavigate();
     const [orders, setOrders] = useState([]);
+    const [filter, setFilter] = useState('all'); // State for the selected filter
 
     useEffect(() => {
         const fetchOrders = async () => {
@@ -52,12 +56,28 @@ function Order() {
         }
     };
 
+    const filteredOrders = orders.filter((order) => {
+        if (filter === 'all') return true;
+        return order.state === filter;
+    });
+
     return (
         <div className="order-container">
-            <h1 className="order-title">Order List</h1>
+            <h1 className="order-title"> <FaAngleLeft size={30} onClick={()=>navigate('/user')}/> My Orders</h1>
+
+            {/* Filter Buttons */}
+            <div className="order-filters">
+                <button onClick={() => setFilter('all')}>All</button>
+                <button onClick={() => setFilter('pending')}>Pending</button>
+                <button onClick={() => setFilter('confirmed')}>Confirmed</button>
+                <button onClick={() => setFilter('dispatched')}>Dispatched</button>
+                <button onClick={() => setFilter('canceled')}>Canceled</button>
+                <button onClick={() => setFilter('completed')}>Completed</button>
+            </div>
+
             <ul className="order-list">
-                {orders.length > 0 ? (
-                    orders.map((order) => (
+                {filteredOrders.length > 0 ? (
+                    filteredOrders.map((order) => (
                         <li key={order.$id} className="order-item">
                             <p className="order-detail">
                                 <strong>Order ID:</strong> {order.$id}
