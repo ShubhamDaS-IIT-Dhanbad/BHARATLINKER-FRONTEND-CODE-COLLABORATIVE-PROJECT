@@ -12,6 +12,7 @@ import Modal from './modal.jsx';
 function Order() {
     const navigate = useNavigate();
     const [filteredOrders, setFilteredOrders] = useState(null);
+    
     const [loading, setLoading] = useState(true);
     const [orders, setOrders] = useState([]);
     const [filter, setFilter] = useState('all');
@@ -73,6 +74,18 @@ function Order() {
         }
     };
 
+useEffect(()=>{
+console.log("ko");
+},[filteredOrders])
+    const filterProduct = (order) => {
+        setLoading(true);
+        const filteredOrder = orders.filter((order) => {
+            if (filter === 'all') return true;
+            return order.state === filter;
+        });
+        setFilteredOrders(filteredOrder);
+        setLoading(false);
+    };
 
     const handleSelectOrder = (order) => {
         setSelectedOrder(order);
@@ -89,42 +102,15 @@ function Order() {
             </div>
 
             <div className="order-filters">
-                <button
-                    className={`filter-button ${filter === 'all' ? 'selected' : ''}`}
-                    onClick={() => setFilter('all')}
-                >
-                    All
-                </button>
-                <button
-                    className={`filter-button ${filter === 'pending' ? 'selected' : ''}`}
-                    onClick={() => setFilter('pending')}
-                >
-                    Pending
-                </button>
-                <button
-                    className={`filter-button ${filter === 'confirmed' ? 'selected' : ''}`}
-                    onClick={() => setFilter('confirmed')}
-                >
-                    Confirmed
-                </button>
-                <button
-                    className={`filter-button ${filter === 'dispatched' ? 'selected' : ''}`}
-                    onClick={() => setFilter('dispatched')}
-                >
-                    Dispatched
-                </button>
-                <button
-                    className={`filter-button ${filter === 'canceled' ? 'selected' : ''}`}
-                    onClick={() => setFilter('canceled')}
-                >
-                    Canceled
-                </button>
-                <button
-                    className={`filter-button ${filter === 'completed' ? 'selected' : ''}`}
-                    onClick={() => setFilter('completed')}
-                >
-                    Completed
-                </button>
+                {['all', 'pending', 'confirmed', 'dispatched', 'canceled', 'completed'].map((state) => (
+                    <button
+                        key={state}
+                        className={`filter-button ${filter === state ? 'selected' : ''}`}
+                        onClick={() =>{ filterProduct(state); setFilter(state)}}
+                    >
+                        {state.charAt(0).toUpperCase() + state.slice(1)}
+                    </button>
+                ))}
             </div>
 
             {loading? (
