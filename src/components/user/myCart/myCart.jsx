@@ -306,7 +306,7 @@ const MyCartPage = ({ setShowMyCart, updateCartData }) => {
             }
 
             setCartItems([]);
-            navigate('/');
+            navigate('/user/order');
         } catch (error) {
             console.error("Error placing orders:", error);
         }
