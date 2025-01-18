@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { getOrderByUserId } from '../../../appWrite/order/order.js';
+import { getOrderByUserId, updateOrderState } from '../../../appWrite/order/order.js';
 import Cookies from 'js-cookie';
-import './Order.css'; // Import the CSS file
+import './Order.css';
 
 function Order() {
     const [orders, setOrders] = useState([]);
@@ -20,7 +20,13 @@ function Order() {
 
                 if (userId) {
                     const orders = await getOrderByUserId(userId);
-                    setOrders(orders);
+
+                    // Sort orders by updatedAt (descending)
+                    const sortedOrders = orders.sort((a, b) => 
+                        new Date(b.$updatedAt) - new Date(a.$updatedAt)
+                    );
+
+                    setOrders(sortedOrders);
                 } else {
                     console.error('User ID is missing in cookie data');
                 }
@@ -31,6 +37,20 @@ function Order() {
 
         fetchOrders();
     }, []);
+
+    const handleCancelOrder = async (orderId) => {
+        try {
+            await updateOrderState(orderId, 'canceled');
+            setOrders((prevOrders) =>
+                prevOrders.map((order) =>
+                    order.$id === orderId ? { ...order, state: 'canceled', $updatedAt: new Date().toISOString() } : order
+                ).sort((a, b) => new Date(b.$updatedAt) - new Date(a.$updatedAt))
+            );
+            console.log(`Order ${orderId} has been canceled.`);
+        } catch (error) {
+            console.error(`Error canceling order ${orderId}:`, error.message);
+        }
+    };
 
     return (
         <div className="order-container">
@@ -55,11 +75,19 @@ function Order() {
                                 <strong>State:</strong> {order.state}
                             </p>
                             <p className="order-detail">
-                                <strong>Created At:</strong> {new Date(order.$createdAt).toLocaleString()}
+                                <strong>Last Updated:</strong> {new Date(order.$updatedAt).toLocaleString()}
                             </p>
                             <p className="coordinates">
                                 <strong>Coordinates:</strong> Lat {order.lat}, Long {order.long}
                             </p>
+                            {order.state === 'pending' && (
+                                <button
+                                    className="cancel-button"
+                                    onClick={() => handleCancelOrder(order.$id)}
+                                >
+                                    Cancel Order
+                                </button>
+                            )}
                         </li>
                     ))
                 ) : (
