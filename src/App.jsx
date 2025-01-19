@@ -5,18 +5,18 @@ import { Helmet, HelmetProvider } from "react-helmet-async";
 import { Oval } from 'react-loader-spinner';
 import './App.css';
 
-const HomePage = lazy(() => import('./components/homePage/home.jsx'));
-const LoginPage = lazy(() => import('./components/loginPage/login.jsx'));
-const SearchPage = lazy(() => import('./components/searchPage/searchPage.jsx'));
-const SearchSorybySection = lazy(() => import('./components/searchPage/sortbySection.jsx'));
-const SearchFilterSection = lazy(() => import('./components/searchPage/filterSection.jsx'));
-const SingleProduct = lazy(() => import('./components/singleProduct/singleProduct.jsx'));
-const SearchShop = lazy(() => import('./components/searchShop/searchShop.jsx'));
+import  HomePage from './components/homePage/home.jsx';
+
+import SearchPage from './components/searchPage/searchPage.jsx';
+import SearchShop from './components/searchShop/searchShop.jsx';
+import RefurbishedPage from './components/refurbishedPage/refurbishedPage.jsx';
 const ShopProducts = lazy(() => import('./components/shopProducts/shopProducts.jsx'));
-const SingleShopCard = lazy(() => import('./components/singleShop/singleShop.jsx'));
-const RefurbishedPage = lazy(() => import('./components/refurbishedPage/refurbishedPage.jsx'));
-const SingleRefurbishedProductCard = lazy(() => import('./components/singleRefurbishedProduct/singleRefurbishedProduct.jsx'));
-const RetailerRoutes = lazy(() => import('./components/retailer/retailerRoutes.jsx'));
+
+import SingleProduct from './components/singleProduct/singleProduct.jsx';
+import SingleShopCard from './components/singleShop/singleShop.jsx';
+import SingleRefurbishedProductCard from './components/singleRefurbishedProduct/singleRefurbishedProduct.jsx';
+
+const LoginPage = lazy(() => import('./components/loginPage/login.jsx'));
 const User = lazy(() => import('./components/user/userHome.jsx'));
 const UserProfile = lazy(() => import('./components/user/userProfile/userProfile.jsx'));
 const UserProductPageMain = lazy(() => import('./components/user/productPage/userProductPageMain.jsx'));
@@ -24,12 +24,14 @@ const RefurbishedBooksUploadUser = lazy(() => import('./components/user/userProd
 const UserUpdateBookModule = lazy(() => import('./components/user/userProductUpdate/userProductUpdate.jsx'));
 const UserNotification = lazy(() => import('./components/user/notification/userNotification.jsx'));
 const UserOrder = lazy(() => import('./components/user/order/order.jsx'));
+
+const RetailerRoutes = lazy(() => import('./components/retailer/retailerRoutes.jsx'));
+
 function App() {
   const [showFallback, setShowFallback] = useState(true);
-
   useEffect(() => {
-    const timer = setTimeout(() => setShowFallback(false), 1000); // 1 second delay
-    return () => clearTimeout(timer); // Clean up the timer
+    const timer = setTimeout(() => setShowFallback(false), 1000);
+    return () => clearTimeout(timer);
   }, []);
 
   return (
@@ -39,14 +41,14 @@ function App() {
           fallback={
             showFallback && (
               <div className="fallback-loading">
-                <Oval
-                  secondaryColor="white"
-                  height="35"
-                  width="35"
-                  color="gray"
-                  ariaLabel="loading"
-                  visible={true}
-                />
+                
+                 <Oval 
+                 height={40} 
+                 width={45} 
+                 color="white" 
+                 secondaryColor="gray" 
+                 ariaLabel="loading" />
+                             
               </div>
             )
           }
@@ -100,8 +102,6 @@ const RoutesWithConditionalHeader = React.memo(() => (
           </>
         }
       />
-      <Route path="/search/sortby" element={<SearchSorybySection />} />
-      <Route path="/search/filterby" element={<SearchFilterSection />} />
 
       {/* Single Product */}
       <Route
