@@ -1,19 +1,41 @@
+/* Global Styles */
 :root {
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
   line-height: 1.5;
   font-weight: 400;
-
+padding: 0;margin: 0;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-*{
-  padding: 0;margin: 0;
+
+
+
+/* Specific element styles */
+p,
+div {
+  margin: 0;
+  padding: 0;
 }
-p{
-  margin: 0;padding: 0;
+
+/* You can add more global styles below */
+
+/* Example of adding base body styles */
+body {
+  font-family: inherit; /* Inherit font-family from :root */
+  background-color: #f9f9f9; /* Background color for the page */
+  color: #333; /* Base text color */
+  line-height: 1.6;padding: 0;margin: 0;
 }
-div{
-  margin: 0;padding: 0;
+
+/* Links styles (optional) */
+a {
+  color: inherit; /* Remove default link color */
+  text-decoration: none; /* Remove underline */
 }
+
+a:hover {
+  text-decoration: underline; /* Add underline on hover */
+}
+

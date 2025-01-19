@@ -91,6 +91,7 @@ const refurbishedProductsSlice = createSlice({
     refurbishedProducts: [],
     loading: true,
     currentPage: 1,
+    updated:0,
     totalPages: 1,
     hasMoreProducts: true,
     error: null,
@@ -115,6 +116,7 @@ const refurbishedProductsSlice = createSlice({
       state.currentPage = 1;
       state.totalPages = 1;
       state.hasMoreProducts = true;
+      state.updated=state.updated+1;
       state.error = null;
       state.loadingMoreProducts = false;
     },

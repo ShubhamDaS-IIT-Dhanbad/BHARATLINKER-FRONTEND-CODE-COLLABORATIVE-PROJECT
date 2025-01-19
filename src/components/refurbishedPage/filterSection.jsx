@@ -3,10 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { IoClose } from 'react-icons/io5';
 import { IoSearch } from 'react-icons/io5';
 
-import {
-  toggleRefurbishedCategory,
-  toggleRefurbishedBrand
-} from '../../redux/features/refurbishedPage/refurbishedProductFilterSectionSlice.jsx';
 import { resetRefurbishedProducts } from '../../redux/features/refurbishedPage/refurbishedProductsSlice.jsx';
 
 import './filterSection.css';
@@ -27,8 +23,8 @@ const RefurbishedProductFilterSection = ({showFilterBy, setShowFilterBy }) => {
 
 
   const selectedFilters = useSelector((state) => ({
-    categorys: state.refurbishedproductfiltersection.selectedCategories,
-    brands: state.refurbishedproductfiltersection.selectedBrands
+    categorys: ['Electronics', 'Fashion', 'Home', 'Book', 'Module'],
+    brand: ['Samsung', 'Apple', 'Sony', 'Dell', 'HP'],
   }));
 
   const allFilters = {

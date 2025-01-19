@@ -54,6 +54,7 @@ export const loadMoreShops = createAsyncThunk(
 
 const initialState = {
     shops: [],
+    updated:0,
     loading: false,
     loadingMoreShops: false,
     currentPage: 1,
@@ -70,6 +71,7 @@ const shopsSlice = createSlice({
         },
         resetShops: (state) => {
             state.shops = [];
+            state.updated =state.updated+1;
             state.currentPage = 1;
             state.hasMoreShops = true;
             state.error = null;

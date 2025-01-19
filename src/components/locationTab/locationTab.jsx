@@ -3,77 +3,37 @@ import { IoClose } from "react-icons/io5";
 import { MdMyLocation } from "react-icons/md";
 import { IoSearch } from "react-icons/io5";
 import { SlLocationPin } from "react-icons/sl";
-import Cookies from 'js-cookie';
-import useLocationFromCookie from '../../hooks/useLocationFromCookie.jsx';
-import conf from '../../conf/conf.js';
 import { ThreeDots } from 'react-loader-spinner';
 import { IoIosCloseCircleOutline } from "react-icons/io";
+import { CiSquareMinus, CiSquarePlus } from "react-icons/ci";
+import useLocationFromCookie from '../../hooks/useLocationFromCookie.jsx';
 import './locationTab.css';
-
-import { CiSquareMinus } from "react-icons/ci";
-import { CiSquarePlus } from "react-icons/ci";
 
 function LocationTab({ setLocationTab }) {
     const [loading, setLoading] = useState(false);
+
     const [fetchingUserLocation, setFetchingUserLocation] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
     const [radius, setRadius] = useState(5);
     const [suggestions, setSuggestions] = useState([]);
-    const [radiusOptions] = useState([2, 3, 5, 7, 10]);
 
-    const { updateLocation } = useLocationFromCookie();
+    const {location, updateLocation, fetchLocationSuggestions, fetchCurrentLocation } = useLocationFromCookie();
 
     useEffect(() => {
-        const storedLocation = Cookies.get('BharatLinkerUserLocation')
-            ? JSON.parse(Cookies.get('BharatLinkerUserLocation'))
-            : null;
-        if (storedLocation) {
-            setSearchQuery(storedLocation.address);
-            setRadius(storedLocation.radius || 5);
+        if (location) {
+            setSearchQuery(location.address);
+            setRadius(location.radius || 5);
         } else {
             handleUseCurrentLocation();
         }
-    }, []);
+    }, [location]);
 
-    const fetchSuggestions = useCallback(async (query) => {
-        if (!query) {
-            setSuggestions([]);
-            return;
-        }
-
-        const apiKey = conf.geoapifyapikey;
-        const apiUrl = `https://api.geoapify.com/v1/geocode/search?text=${query}&apiKey=${apiKey}&lang=en`;
-
+    const handleSearch = useCallback(async () => {
         setLoading(true);
-
-        try {
-            const response = await fetch(apiUrl);
-            const data = await response.json();
-            if (data.features && data.features.length > 0) {
-                const formattedSuggestions = data.features
-                    .filter((feature) => feature.properties.country === 'India' && feature.properties.state)
-                    .map((feature) => ({
-                        label: feature.properties.formatted,
-                        lat: feature.geometry.coordinates[1],
-                        lon: feature.geometry.coordinates[0],
-                        country: feature.properties.country,
-                        state: feature.properties.state,
-                    }));
-                setSuggestions(formattedSuggestions);
-            } else {
-                setSuggestions([]);
-            }
-        } catch (error) {
-            console.error('Error fetching suggestions:', error);
-            setSuggestions([]);
-        } finally {
-            setLoading(false);
-        }
-    }, []);
-
-    const handleSearch = useCallback(() => {
-        fetchSuggestions(searchQuery);
-    }, [searchQuery, fetchSuggestions]);
+        const newSuggestions = await fetchLocationSuggestions(searchQuery);
+        setSuggestions(newSuggestions);
+        setLoading(false);
+    }, [searchQuery, fetchLocationSuggestions]);
 
     const handleKeyDownSearch = (e) => {
         if (e.key === 'Enter') {
@@ -93,46 +53,10 @@ function LocationTab({ setLocationTab }) {
         });
     };
 
-    const handleUseCurrentLocation = () => {
-        if (navigator.geolocation) {
-            setFetchingUserLocation(true);
-            navigator.geolocation.getCurrentPosition(
-                async (position) => {
-                    const { latitude, longitude } = position.coords;
-                    const apiKey = conf.opencageapikey;
-                    const apiUrl = `${conf.opencageapiurl}?key=${apiKey}&q=${latitude},${longitude}&pretty=1&no_annotations=1`;
-
-                    try {
-                        const response = await fetch(apiUrl);
-                        const data = await response.json();
-                        if (data.results && data.results.length > 0) {
-                            const address = data.results[0].formatted;
-                            setSearchQuery(address);
-                            updateLocation({
-                                lat: latitude,
-                                lon: longitude,
-                                address: address,
-                                radius: 5,
-                            });
-                            setRadius(5);
-                        } else {
-                            console.error('Address not found');
-                        }
-                    } catch (error) {
-                        console.error('Error fetching address:', error);
-                    } finally {
-                        setFetchingUserLocation(false);
-                    }
-                },
-                (error) => {
-                    console.error('Error fetching current location:', error);
-                    setFetchingUserLocation(false);
-                }
-            );
-        } else {
-            console.error('Geolocation is not supported by this browser.');
-            setFetchingUserLocation(false);
-        }
+    const handleUseCurrentLocation = async () => {
+        setFetchingUserLocation(true);
+        await fetchCurrentLocation();
+        setFetchingUserLocation(false);
     };
 
     const handleRadiusChange = (operation) => {
@@ -170,8 +94,8 @@ function LocationTab({ setLocationTab }) {
                         <IoSearch onClick={handleSearch} size={20} />
                         <form
                             onSubmit={(e) => {
-                                e.preventDefault(); // Prevent form submission from reloading the page
-                                handleSearch(); // Call your search function
+                                e.preventDefault();
+                                handleSearch();
                             }}
                         >
                             <input
@@ -179,12 +103,7 @@ function LocationTab({ setLocationTab }) {
                                 placeholder="Search your city / pincode"
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
-                                onKeyDown={(e) => {
-                                    if (e.key === 'Enter') {
-                                        e.preventDefault(); // Prevent form submission on Enter key press
-                                        handleSearch();
-                                    }
-                                }}
+                                onKeyDown={handleKeyDownSearch}
                                 aria-label="Search for location"
                             />
                         </form>
@@ -205,7 +124,6 @@ function LocationTab({ setLocationTab }) {
                     <div className="location-tab-radius-options">
                         <CiSquareMinus size={40} onClick={() => handleRadiusChange('decrease')} />
                         <div className="location-tab-radius-input">
-
                             <input
                                 type="number"
                                 placeholder={radius}

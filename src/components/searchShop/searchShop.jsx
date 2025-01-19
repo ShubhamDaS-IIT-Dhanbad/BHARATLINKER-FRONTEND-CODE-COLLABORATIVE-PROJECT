@@ -1,86 +1,34 @@
-import React, { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { fetchShops, loadMoreShops } from '../../redux/features/searchShopSlice.jsx';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import SearchBar from './searchBar.jsx';
+import React, { useEffect} from 'react';
+import { useSelector} from 'react-redux';
+import SearchBar from '../a.navbarComponent/navbar.jsx';
 import { LiaSortSolid } from 'react-icons/lia';
 import { MdFilterList } from 'react-icons/md';
 import ShopList from './shopList.jsx';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import Cookies from 'js-cookie';
 
 import { Oval } from 'react-loader-spinner';
 
 
+import { useSearchShop } from '../../hooks/searchShopHook.jsx';
+
 import './searchShop.css';
 const Shop = () => {
-    const navigate = useNavigate();
-    const dispatch = useDispatch();
-    const productsPerPage = 20;
+    const { shops,updated, loading,loadingMoreShops, hasMoreShops } = useSelector((state) => state.searchshops);
+    const { executeSearchShop, onLoadMoreShop } = useSearchShop();
 
-    const [searchParams, setSearchParams] = useSearchParams();
-    const query = searchParams.get('query') || '';
-    const [inputValue, setInputValue] = useState(query);
-
-    const { shops, loading, currentPage, loadingMoreShops, hasMoreShops } = useSelector((state) => state.searchshops);
-    const selectedCategories = useSelector(state => state.searchshopfiltersection.selectedCategories);
-
-
-    const storedLocation = Cookies.get('BharatLinkerUserLocation') ? JSON.parse(Cookies.get('BharatLinkerUserLocation')) : null;
-    const userLat = storedLocation ? storedLocation.lat : null;
-    const userLong = storedLocation ? storedLocation.lon : null;
-    const radius = storedLocation ? storedLocation.radius : 5;
-
-    const handleSearch = () => {
-        const params = {
-            userLat, userLong, radius,
-            inputValue,
-            page: 1,
-            shopsPerPage: productsPerPage,
-            selectedCategories,
-            sortByAsc: null,
-            sortByDesc: null,
-        };
-        dispatch(fetchShops(params));
-    };
 
     useEffect(() => {
         if (shops.length === 0) {
-            handleSearch();
+            executeSearchShop();
         }
-    }, [shops.length]);
+    }, [shops.length,updated]);
 
-    const handleInputChange = (event) => {
-        const value = event.target.value;
-        setInputValue(value);
-        setSearchParams((prev) => ({
-            ...prev,
-            query: value,
-        }));
-    };
-
-    const onLoadMore = () => {
-        if (!loadingMoreShops && hasMoreShops) {
-            const params = {
-                userLat, userLong, radius,
-                inputValue,
-                page: currentPage + 1,
-                shopsPerPage: productsPerPage,
-                selectedCategories,
-                sortByAsc: null,
-                sortByDesc: null,
-            };
-            dispatch(loadMoreShops(params));
-        }
-    };
 
     return (
         <>
             <div id='shopSearchPage-container-top'>
                 <SearchBar
-                    inputValue={inputValue}
-                    handleSearchChange={handleInputChange}
-                    handleSearch={handleSearch}
+                    headerTitle={"SEARCH SHOP"}
                 />
             </div>
             {loading ? (
@@ -90,7 +38,7 @@ const Shop = () => {
             ) : (
                 <InfiniteScroll
                     dataLength={shops.length}
-                    next={onLoadMore}
+                    next={onLoadMoreShop}
                     hasMore={hasMoreShops}
                     loader={loadingMoreShops && <div id='search-shop-load-more-shop-loader'>
                         <div className="productSearchPage-loading-container">

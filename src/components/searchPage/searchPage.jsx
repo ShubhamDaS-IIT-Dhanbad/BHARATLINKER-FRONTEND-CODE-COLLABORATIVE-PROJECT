@@ -1,11 +1,10 @@
 /*COMPLETE*/
 import React, { useEffect, useState } from 'react';
-import { useSearchParams, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useExecuteSearch } from '../../hooks/searchProductHook.jsx';
 import { LiaSortSolid } from "react-icons/lia";
 import { MdFilterList } from "react-icons/md";
-import SearchBar from './searchBar';
+import SearchBar from '../a.navbarComponent/navbar.jsx';
 import ProductList from './productList.jsx';
 
 import { Oval } from 'react-loader-spinner';
@@ -18,15 +17,13 @@ import ProductFilterBySection from './filterSection.jsx';
 import './searchPage.css';
 
 const SearchPage = () => {
-    const navigate = useNavigate();
-    const [searchParams, setSearchParams] = useSearchParams();
-
-    const { inputValue, setInputValue, executeSearch, onLoadMore } = useExecuteSearch();
+    const { executeSearch, onLoadMore } = useExecuteSearch();
 
     const [showSortBy, setShowSortBy] = useState(false);
     const [showFilterBy, setShowFilterBy] = useState(false);
 
     const {
+        updated,
         products,
         loading,
         loadingMoreProducts,
@@ -35,31 +32,23 @@ const SearchPage = () => {
         sortByDesc,
     } = useSelector((state) => state.searchproducts);
 
-    const handleInputChange = (event) => {
-        const value = event.target.value;
-        setInputValue(value);
-        setSearchParams((prev) => ({
-            ...Object.fromEntries(prev.entries()),
-            query: value,
-        }));
-    };
     useEffect(() => {
-        if (products.length == 0 && !loading) {
-            executeSearch();}
-    }, [products.length,inputValue]);
+        if (products.length == 0) {
+            executeSearch();
+        }
+    }, [products.length,updated]);
 
     return (
         <>
             <div id="productSearchPage-container-top">
                 <SearchBar
-                    inputValue={inputValue}
-                    onInputChange={handleInputChange}
-                    onSearch={executeSearch}
+                    headerTitle={"SEARCH PAGE"}
+                    handleSearchSubmit={executeSearch}
                 />
             </div>
             {loading ? (
                 <div className="productSearchPage-loading-container">
-                     <Oval height={40} width={45} color="white" secondaryColor="gray" ariaLabel="loading" />           
+                    <Oval height={40} width={45} color="white" secondaryColor="gray" ariaLabel="loading" />
                 </div>
             ) : (
                 <InfiniteScroll

@@ -79,7 +79,7 @@ const initialState = {
     loadingMoreProducts: false,
 
     currentPage: 1,
-
+    updated:0,
     selectedCategories: [],
     selectedBrands: [],
 
@@ -89,7 +89,7 @@ const initialState = {
     priceRange: { min: Number.MIN_SAFE_INTEGER, max: Number.MAX_SAFE_INTEGER },
     hasMoreProducts: true,
     error: null,
-    productsPerPage: 10, // Added productsPerPage to state
+    productsPerPage: 10,
 };
 
 // Slice
@@ -109,6 +109,7 @@ const productsSlice = createSlice({
             state.hasMoreProducts = true;
             state.error = null;
             state.productsPerPage = 10;
+            state.updated=state.updated+1;
         },        
         toggleSortOrder: (state, action) => {
             const order = action.payload;
@@ -137,6 +138,7 @@ const productsSlice = createSlice({
             state.sortByAsc = false;
             state.sortByDesc = false;
             state.priceRange = { min: Number.MIN_SAFE_INTEGER, max: Number.MAX_SAFE_INTEGER };
+           
         },
         toggleCategory: (state, action) => {
             const category = action.payload;
@@ -216,6 +218,7 @@ const productsSlice = createSlice({
 });
 
 // Selectors
+export const selectUpdated = (state) => state.searchproducts.updated;
 export const selectProducts = (state) => state.searchproducts.products;
 export const selectLoading = (state) => state.searchproducts.loading;
 export const selectCurrentPage = (state) => state.searchproducts.currentPage;

@@ -1,6 +1,5 @@
 import {configureStore} from '@reduxjs/toolkit';
 
-import pincodestate from '../features/pincodeUpdatedSlice.jsx'
 
 // search page
 import searchproducts from '../features/searchPage/searchProductSlice.jsx'
@@ -17,17 +16,16 @@ import shopproducts from '../features/shopProducts/searchProductSlice.jsx'
 
 //refurbished products
 import refurbishedproducts from '../features/refurbishedPage/refurbishedProductsSlice.jsx'
-import refurbishedproductfiltersection from '../features/refurbishedPage/refurbishedProductFilterSectionSlice.jsx'
 
 //user refurbished products
 import userRefurbishedProducts from '../features/user/userAllRefurbishedProductsSlice.jsx'
 
 //retailer products
 import retailerProducts from '../features/retailer/product.jsx'
+
+
 const store=configureStore({
     reducer:{
-        pincodestate:pincodestate,
-
         // search page
         searchproducts:searchproducts,
         searchproductsfiltersection:searchproductsfiltersection,
@@ -43,7 +41,6 @@ const store=configureStore({
 
         //refurbished products
         refurbishedproducts:refurbishedproducts,
-        refurbishedproductfiltersection:refurbishedproductfiltersection,
 
         //user refurbished products
         userRefurbishedProducts:userRefurbishedProducts,

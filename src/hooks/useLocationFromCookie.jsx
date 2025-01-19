@@ -1,70 +1,106 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState } from 'react';
 import Cookies from 'js-cookie';
+import conf from '../conf/conf.js';
+
 import { useDispatch } from 'react-redux';
 import { resetProducts } from '../redux/features/searchPage/searchProductSlice.jsx';
 import { resetShops } from '../redux/features/searchShopSlice.jsx';
 import { resetRefurbishedProducts } from '../redux/features/refurbishedPage/refurbishedProductsSlice.jsx';
 
-const useLocationFromCookies = () => {
-    const [location, setLocation] = useState(null);
-    const [loading, setLoading] = useState(true);
+const useLocationFromCookie = () => {
     const dispatch = useDispatch();
     const [debounceTimer, setDebounceTimer] = useState(null);
 
-    const fetchLocation = () => {
+    const getLocationFromCookie = () => {
+        const storedLocation = Cookies.get('BharatLinkerUserLocation')
+            ? JSON.parse(Cookies.get('BharatLinkerUserLocation'))
+            : { lat: 0, lon: 0, address: '', radius: 5 };
+        return storedLocation;
+    };
+
+    const [location, setLocation] = useState(getLocationFromCookie);
+
+    const updateLocation = (newLocation) => {
+        setLocation((prevLocation) => {
+            const updatedLocation = { ...prevLocation, ...newLocation };
+            Cookies.set('BharatLinkerUserLocation', JSON.stringify(updatedLocation), { expires: 1 });
+            return updatedLocation;
+        });
+
+        if (debounceTimer) {
+            clearTimeout(debounceTimer);
+        }
+        const newDebounceTimer = setTimeout(() => {
+            dispatch(resetProducts());
+            dispatch(resetShops());
+            dispatch(resetRefurbishedProducts());
+        }, 100);
+
+        setDebounceTimer(newDebounceTimer);
+    };
+
+    const fetchLocationSuggestions = async (query) => {
+        if (!query) return [];
+
+        const apiKey = conf.geoapifyapikey;
+        const apiUrl = `https://api.geoapify.com/v1/geocode/search?text=${query}&apiKey=${apiKey}&lang=en`;
+
         try {
-            setLoading(true);
-            const storedLocation = Cookies.get('BharatLinkerUserLocation');
-            if (storedLocation) {
-                const parsedLocation = JSON.parse(storedLocation);
-                setLocation(parsedLocation);
+            const response = await fetch(apiUrl);
+            const data = await response.json();
+            if (data.features && data.features.length > 0) {
+                return data.features
+                    .filter((feature) => feature.properties.country === 'India' && feature.properties.state)
+                    .map((feature) => ({
+                        label: feature.properties.formatted,
+                        lat: feature.geometry.coordinates[1],
+                        lon: feature.geometry.coordinates[0],
+                        country: feature.properties.country,
+                        state: feature.properties.state,
+                    }));
+            } else {
+                return [];
             }
         } catch (error) {
-            console.error('Error fetching location from cookies:', error);
-            setLocation(null);
-        } finally {
-            setLoading(false);
+            console.error('Error fetching suggestions:', error);
+            return [];
         }
     };
 
-    useEffect(() => {
-        fetchLocation();
-    }, []);
-
-    const updateLocation = useCallback((newLocation) => {
-        try {
-            const storedLocation = Cookies.get('BharatLinkerUserLocation');
-            const parsedLocation = storedLocation ? JSON.parse(storedLocation) : {};
-
-            const updatedLocation = {
-                ...parsedLocation,
-                ...newLocation,
-            };
-
-            if (updatedLocation.lat && updatedLocation.lon && updatedLocation.address) {
-                Cookies.set('BharatLinkerUserLocation', JSON.stringify(updatedLocation), { expires: 7 });
-                setLocation(updatedLocation);
-
-                // Debounce mechanism to prevent dispatching reset actions too quickly
-                if (debounceTimer) {
-                    clearTimeout(debounceTimer);
+    const fetchCurrentLocation = async () => {
+        if (navigator.geolocation) {
+            try {
+                const position = await new Promise((resolve, reject) => {
+                    navigator.geolocation.getCurrentPosition(resolve, reject);
+                });
+                const { latitude, longitude } = position.coords;
+                const apiUrl = `${conf.opencageapiurl}?key=${conf.opencageapikey}&q=${latitude},${longitude}&pretty=1&no_annotations=1`;
+                const response = await fetch(apiUrl);
+                const data = await response.json();
+                if (data.results && data.results.length > 0) {
+                    const address = data.results[0].formatted;
+                    updateLocation({
+                        lat: latitude,
+                        lon: longitude,
+                        address: address,
+                        radius: 5,
+                    });
                 }
-                const newDebounceTimer = setTimeout(() => {
-                    dispatch(resetProducts());
-                    dispatch(resetShops());
-                    dispatch(resetRefurbishedProducts());
-                }, 500); // Set delay as per your preference (500ms in this case)
-
-                setDebounceTimer(newDebounceTimer);
-            } else {
-                console.warn('Invalid location data. Location update failed.');
+            } catch (error) {
+                console.error('Error fetching current location:', error);
             }
-        } catch (error) {
-            console.error('Error updating location in cookies:', error);
+        } else {
+            console.error('Geolocation is not supported by this browser.');
         }
-    }, [debounceTimer, dispatch]);
+    };
 
-    return { location, loading, updateLocation };
+    return {
+        location,
+        getLocationFromCookie,
+        updateLocation,
+        fetchLocationSuggestions,
+        fetchCurrentLocation,
+    };
 };
 
-export default useLocationFromCookies;
+export default useLocationFromCookie;
