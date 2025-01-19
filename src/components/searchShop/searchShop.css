@@ -3,7 +3,7 @@
     height: 70px;
     position: fixed;
     top: 0;
-    background-color: rgb(255, 255, 255);
+    background-color: rgb(249, 249, 249);
     color: rgb(0, 0, 0);
     display: flex;
     align-items: center;
@@ -27,7 +27,7 @@
     justify-content: center;
     border: 1px solid rgba(0, 0, 0, 0.21);
     align-items: center;
-    background-color: rgb(255, 255, 255);
+    background-color: rgb(249, 249, 249);
     border-radius: 10px;
     width: 96%;
     height: 49px;
@@ -103,7 +103,7 @@
     align-self: center;
     align-items: center;padding-left: 10px;gap: 10px;
     border-radius: 10px;font-size: 13px;
-    color: rgb(255, 255, 255);font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    color: rgb(249, 249, 249);font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     font-weight: 700;border: 1px solid rgba(0, 0, 0, 0.203);
 }
 .searchShopPage-footer-filterby-input{
@@ -117,7 +117,7 @@
 /* shop results */
 #shopResults{
     margin-top: 120px;margin-bottom: 60px;
-    background-color: rgb(255, 255, 255);
+    background-color: rgb(249, 249, 249);
 }
 
 
@@ -194,10 +194,11 @@
 
 #search-shop-grid{
     min-height: 80vh;overflow: scroll;margin-top: 100px;
-    padding-bottom: 97px;background-color: #ffffff;color: rgb(0, 0, 0);
+    padding-bottom: 97px;background-color: rgb(249, 249, 249);color: rgb(0, 0, 0);
 }
 #search-shop-load-more-shop-loader{
-    padding-bottom: 67px;
+    padding-bottom: 67px;background-color: rgb(249, 249, 249);
+    width: 100vw;
     display: flex;justify-content: center;align-items: center;
 }
 

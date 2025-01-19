@@ -5,7 +5,7 @@
     width: 100vw;
     position: fixed;
     top: 0;
-    background-color: rgb(255, 255, 255);
+    background-color: rgb(249, 249, 249);
     color: #000000;
     z-index: 1000;
     padding: 10px 0;
@@ -25,7 +25,7 @@
 /* User Icon */
 .single-product-search-back-icon {
     margin-left: 4px;
-    color: #ffffff;
+    color: rgb(249, 249, 249);
 }
 
 /* User Section */
@@ -102,7 +102,7 @@
     color: #000000;
     font-size: 1rem;
     padding-left: 10px;
-    background-color: #ffffff;
+    background-color: rgb(249, 249, 249);
     flex-grow: 1;
     outline: none;
 }

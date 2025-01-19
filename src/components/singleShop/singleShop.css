@@ -220,7 +220,7 @@ margin-left: 5px;
     font-weight: 900;
     align-items: center;
     border-radius: 5px;
-    color: rgb(255, 255, 255);
+    color: rgb(249, 249, 249);
     padding: 2px;
     font-size: 15px;
 }
@@ -271,7 +271,7 @@ margin-left: 5px;
 
 .product-detail-description-container {
     padding: 10px;
-    background-color: #ffffff;
+    background-color: rgb(249, 249, 249);
     border-radius: 8px;
     font-family: Arial, sans-serif;
   }
