@@ -19,7 +19,7 @@ import { IoSearch } from "react-icons/io5";
 import { MdMyLocation } from "react-icons/md";
 
 import { placeOrderProvider } from '../../../appWrite/order/order.js'
-import d1 from './d1.png';
+
 const MyCartPage = ({ setShowMyCart, updateCartData }) => {
     const navigate = useNavigate();
     const [userData, setUserData] = useState(null);
@@ -528,7 +528,7 @@ const MyCartPage = ({ setShowMyCart, updateCartData }) => {
                 <div className='my-cart-confirm-order-parent' >
                     <div className='my-cart-confirm-order-div' >
                         Confirm Cash On Delivery Order
-                        <div className='my-cart-confirm-order-div-img-div' ><img className='my-cart-confirm-order-div-img' src={d1}></img></div>
+                        <div className='my-cart-confirm-order-div-img-div' ></div>
                         <div className='my-cart-confirm-order-div-yes-no-div' >
                             <div className='my-cart-confirm-order-div-yes' onClick={() => { if(!orderPlacing) setConfirmOrder(false) }} >Cancel</div>
                             <button className='my-cart-confirm-order-div-no' onClick={() => { placeOrderConfirm(cartItems) }} disabled={orderPlacing}>

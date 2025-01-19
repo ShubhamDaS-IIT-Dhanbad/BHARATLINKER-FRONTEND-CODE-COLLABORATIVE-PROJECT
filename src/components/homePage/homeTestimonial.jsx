@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import "./homeTestimonial.css";
 
-import ti1 from '../../assets/ti1.png';
-import ti2 from '../../assets/ti2.png';
+
+const ti1='';
+const ti2='';
 
 const Testimonial = () => {
   const testimonials = [

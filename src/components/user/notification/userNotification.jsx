@@ -5,7 +5,7 @@ import { FaArrowLeft } from 'react-icons/fa';
 import Cookies from 'js-cookie'
 import './userNotification.css';
 
-import un from '../../../assets/usernotification.png'
+const un='https://res.cloudinary.com/demc9mecm/image/upload/v1737182575/mz1bdy2skwtmouqxfqtf.jpg';
 
 function UserHome() {
     const [userData, setUserData] = useState({ phn: 8250846979 });

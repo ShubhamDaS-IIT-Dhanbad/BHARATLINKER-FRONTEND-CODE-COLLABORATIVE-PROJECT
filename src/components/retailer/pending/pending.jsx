@@ -9,7 +9,9 @@ import { MdOutlineContactSupport } from "react-icons/md";
 import { RiLogoutCircleRLine } from "react-icons/ri";
 import { TailSpin } from 'react-loader-spinner';
 import "./pending.css";
-import i1 from './i1.png';
+
+
+const i1='https://res.cloudinary.com/demc9mecm/image/upload/v1737182575/mz1bdy2skwtmouqxfqtf.jpg'; //i1.png
 import { getShopData } from '../../../appWrite/shop/shop.js';
 
 const RetailerPending = () => {
