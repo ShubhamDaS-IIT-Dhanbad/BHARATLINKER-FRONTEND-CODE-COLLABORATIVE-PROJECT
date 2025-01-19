@@ -1,9 +1,10 @@
 import React, { Suspense, lazy } from "react";
+import { useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Helmet, HelmetProvider } from "react-helmet-async";
+import { Oval } from 'react-loader-spinner';
 import './App.css';
 
-// Lazy load components for performance optimization
 const HomePage = lazy(() => import('./components/homePage/home.jsx'));
 const LoginPage = lazy(() => import('./components/loginPage/login.jsx'));
 const SearchPage = lazy(() => import('./components/searchPage/searchPage.jsx'));
@@ -23,12 +24,33 @@ const RefurbishedBooksUploadUser = lazy(() => import('./components/user/userProd
 const UserUpdateBookModule = lazy(() => import('./components/user/userProductUpdate/userProductUpdate.jsx'));
 const UserNotification = lazy(() => import('./components/user/notification/userNotification.jsx'));
 const UserOrder = lazy(() => import('./components/user/order/order.jsx'));
-
 function App() {
+  const [showFallback, setShowFallback] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setShowFallback(false), 1000); // 1 second delay
+    return () => clearTimeout(timer); // Clean up the timer
+  }, []);
+
   return (
     <HelmetProvider>
       <Router>
-        <Suspense fallback={<div></div>}>
+        <Suspense
+          fallback={
+            showFallback && (
+              <div className="fallback-loading">
+                <Oval
+                  secondaryColor="white"
+                  height="35"
+                  width="35"
+                  color="gray"
+                  ariaLabel="loading"
+                  visible={true}
+                />
+              </div>
+            )
+          }
+        >
           <RoutesWithConditionalHeader />
         </Suspense>
       </Router>
