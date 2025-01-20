@@ -171,7 +171,7 @@ const SearchProductFilterSection = ({ showFilterBy, setShowFilterBy }) => {
             <IoClose size={25} />
           </div>
           <div style={{ color: 'white' }}>FILTER SECTION</div>
-          <div id="productSearch-page-sort-by-header">
+          <div id="productSearch-page-filter-by-header">
 
             <div id="productSearch-page-filterby-options">
               <TfiSave onClick={handleFilterClick} size={20} />
