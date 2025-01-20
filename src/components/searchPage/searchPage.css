@@ -44,3 +44,21 @@
     color: rgb(249, 249, 249);
 
 }
+
+
+
+
+
+
+
+
+
+/* No shop found */
+.search-shop-no-shop-found{
+    display: flex;flex-direction: column;
+    align-items: center;justify-content: center;
+    height: 90vh;
+}
+.search-shop-no-shop-found img{
+    width: 80vw;
+}

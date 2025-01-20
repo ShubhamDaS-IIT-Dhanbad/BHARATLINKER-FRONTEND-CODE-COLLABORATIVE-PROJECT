@@ -40,7 +40,7 @@ const SearchPage = ({ isProductPageLoaded, setProductPageLoaded }) => {
         }, 500);
 
         return () => clearTimeout(delayTimeout);
-    }, [products.length, updated]);
+    }, []);
 
     return (
         <>

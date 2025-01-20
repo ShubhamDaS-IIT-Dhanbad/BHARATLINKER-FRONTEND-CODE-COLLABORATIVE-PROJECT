@@ -25,7 +25,7 @@ const Shop = ({ isShopPageLoaded, setShopPageLoaded }) => {
             executeSearchShop();
         }
         return () => clearTimeout(delayTimeout);
-    }, [shops.length, updated]);
+    }, []);
 
     return (
         <>
