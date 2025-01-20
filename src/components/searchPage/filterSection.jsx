@@ -35,15 +35,21 @@ const SearchProductFilterSection = ({ showFilterBy, setShowFilterBy }) => {
   const [selectedLabel, setSelectedLabel] = useState('category');
 
   const allFilters = {
-    category: ['Electronics', 'Fashion', 'Home', 
-      'Books', 'Modules', 'Electronics', 
-      'Fashion', 'Home', 'Books', 'Modules',
-    'Electronics', 'Fashion', 'Home', 'Books', 'Modules', 'Electronics', 
-  'Electronics', 'Fashion', 'Home', 'Books', 'Modules', 'Electronics', 
-'Electronics', 'Fashion', 'Home', 'Books', 'Modules', 'Electronics', 
-'Electronics', 'Fashion', 'Home', 'Books', 'Modules', 'Electronics', 
-'Electronics', 'Fashion', 'Home', 'Books', 'Modules', 'Electronics', ],
-    brand: ['Samsung', 'Apple', 'Sony', 'Dell', 'HP', 'Samsung', 'Apple', 'Sony', 'Dell', 'HP', 'Samsung', 'Apple', 'Sony', 'Dell', 'HP'],
+    category:[
+      'Appliances', 'Automobiles', 'Bags', 'Beauty', 'Books', 'Electronics', 'Fashion', 
+      'Footwear', 'Furniture', 'Gaming', 'Gadgets', 'Health', 'Home', 'Jewelry', 
+      'Kitchen', 'Laptops', 'Modules', 'Music', 'Office Supplies', 'Outdoors', 
+      'Pet Supplies', 'Smartphones', 'Sports', 'Stationery', 'Toys', 'Watches', 'Grocery'
+    ]
+    
+  ,
+    brand:[
+      'Acer', 'Adidas', 'Apple', 'ASUS', 'Beats', 'Bose', 'Canon', 'Dell', 'HP', 'Huawei', 
+      'JBL', 'Lenovo', 'LG', 'Microsoft', 'Motorola', 'Nike', 'Nikon', 'OnePlus', 'Oppo', 
+      'Panasonic', 'Philips', 'Puma', 'Razer', 'Samsung', 'Sharp', 'Sony', 'Toshiba', 'Under Armour', 
+      'Vivo', 'Xiaomi'
+    ]
+    
   };
 
   const filterActions = {
