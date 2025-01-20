@@ -30,6 +30,13 @@ const SearchPage = ({ isProductPageLoaded, setProductPageLoaded }) => {
         sortByAsc,
         sortByDesc,
     } = useSelector((state) => state.searchproducts);
+      const selectedBrands = useSelector(
+        (state) => state.searchproductsfiltersection.selectedBrands
+      );
+      const selectedCategories = useSelector(
+        (state) => state.searchproductsfiltersection.selectedCategories
+      );
+    
 
     useEffect(() => {
         if (products.length === 0) {
@@ -40,7 +47,7 @@ const SearchPage = ({ isProductPageLoaded, setProductPageLoaded }) => {
         }, 500);
 
         return () => clearTimeout(delayTimeout);
-    }, [updated]);
+    }, [updated,selectedBrands,selectedCategories]);
 
     return (
         <>

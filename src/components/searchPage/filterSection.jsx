@@ -10,11 +10,11 @@ import {
 } from '../../redux/features/searchPage/searchProductFilterSectionSlice';
 
 import './filterSection.css';
+import { resetProducts } from '../../redux/features/searchPage/searchProductSlice.jsx';
 
 const SearchProductFilterSection = ({ showFilterBy, setShowFilterBy }) => {
   const [isApply, setIsApply] = useState(false);
   const dispatch = useDispatch();
-  const { executeSearch } = useExecuteSearch();
 
   const selectedBrands = useSelector(
     (state) => state.searchproductsfiltersection.selectedBrands
@@ -53,15 +53,10 @@ const SearchProductFilterSection = ({ showFilterBy, setShowFilterBy }) => {
 
   };
 
-  const filterActions = {
-    category: setSearchProductsCategories,
-    brand: setSearchProductsBrands,
-  };
-
   const handleFilterClick = () => {
-    setIsApply(true);
     dispatch(setSearchProductsCategories(selectedCategoriesState));
     dispatch(setSearchProductsBrands(selectedBrandsState));
+    dispatch(resetProducts());
   };
 
   const filterItems = useCallback(
@@ -74,6 +69,7 @@ const SearchProductFilterSection = ({ showFilterBy, setShowFilterBy }) => {
   );
 
   const handleItemClick = (item, filterType) => {
+    setIsApply(true);
     if (filterType === 'category') {
       const updatedSelection = [...selectedCategoriesState];
       if (updatedSelection.includes(item)) {
@@ -162,7 +158,7 @@ const SearchProductFilterSection = ({ showFilterBy, setShowFilterBy }) => {
           <div
             className="location-tab-IoIosCloseCircle"
             onClick={() => {
-              if (isApply) { executeSearch(); }
+              if (isApply) { handleFilterClick() }
               setShowFilterBy(false)
             }
             }
@@ -174,12 +170,8 @@ const SearchProductFilterSection = ({ showFilterBy, setShowFilterBy }) => {
           <div id="productSearch-page-filter-by-header">
 
             <div id="productSearch-page-filterby-options">
-              <TfiSave onClick={handleFilterClick} size={20} />
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "10px" }}>
-                <SortOption label="category" />
-                <SortOption label="brand" />
-              </div>
-              <RiResetRightLine size={20} />
+              <SortOption label="category" />
+              <SortOption label="brand" />
             </div>
             {selectedLabel &&
               renderFilter(

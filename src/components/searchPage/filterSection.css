@@ -190,9 +190,9 @@
 
 #productSearch-page-filterby-options {
     display: flex;
-    justify-content: space-between;
+    justify-content:center;
     align-items: center;
-    gap: 10px;
+    gap: 7px;
     margin: 10px 0px 0px 10px;padding: 0px 7px 10px 7px;
 }
 
