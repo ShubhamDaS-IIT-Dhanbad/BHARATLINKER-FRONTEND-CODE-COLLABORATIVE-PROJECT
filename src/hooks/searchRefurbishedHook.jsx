@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
 import useLocationFromCookie from './useLocationFromCookie.jsx';
-import { fetchRefurbishedProducts, loadMoreRefurbishedProducts } from '../redux/features/refurbishedPage/refurbishedProductsSlice.jsx';
+import { fetchRefurbishedProducts, loadMoreRefurbishedProducts, resetRefurbishedProducts } from '../redux/features/refurbishedPage/refurbishedProductsSlice.jsx';
 
 export const useSearchRefurbishedProductsHook = () => {
     const dispatch = useDispatch();
@@ -26,6 +26,7 @@ export const useSearchRefurbishedProductsHook = () => {
     const radius = storedLocation ? storedLocation.radius : 5;
 
     const executeSearchRefurbished = (inputValue) => {
+        if(loading || loadingMoreProducts) return;
         const searchQuery = inputValue || "";
         const params = {
             inputValue: searchQuery,
@@ -37,6 +38,7 @@ export const useSearchRefurbishedProductsHook = () => {
             sortByAsc: sortByAsc || false,
             sortByDesc: sortByDesc || false,
         };
+        if(refurbishedProducts.length!=0) dispatch(resetRefurbishedProducts());
         dispatch(fetchRefurbishedProducts(params));
     };
 

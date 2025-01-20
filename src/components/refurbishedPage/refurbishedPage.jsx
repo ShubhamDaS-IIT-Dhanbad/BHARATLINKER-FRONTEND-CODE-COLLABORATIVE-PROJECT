@@ -35,36 +35,42 @@ const RefurbishedPage = ({ isRefurbishedPageLoaded, setRefurbishedPageLoaded }) 
     }
     const delayTimeout = setTimeout(() => {
       setRefurbishedPageLoaded(true);
-    }, 500);
-
+    }, 800);
     return () => clearTimeout(delayTimeout);
-  }, [refurbishedProducts.length, updated, setRefurbishedPageLoaded]);
+  }, [refurbishedProducts.length, updated]);
 
   return (
-    loading || !isRefurbishedPageLoaded ? (
-      <div className="fallback-loading">
-        <RotatingLines width="60" height="60" color="#808080" strokeWidth="3" />
-      </div>
-    ) : (
-      <>
-        <div id="refurbishedPage-container-top">
-          <RefurbishedNavbar headerTitle={"REFURBISHED PAGE"} />
+    <>
+      {(!isRefurbishedPageLoaded) ? (
+        <div className="fallback-loading">
+          <RotatingLines width="60" height="60" color="#808080" strokeWidth="3" />
         </div>
+      ) : (
+        <>
+          <div id="refurbishedPage-container-top">
+            <RefurbishedNavbar headerTitle={"REFURBISHED PAGE"} />
+          </div>
 
-        <div>
-          <InfiniteScroll
-            dataLength={refurbishedProducts.length}
-            next={onLoadMoreRefurbished}
-            hasMore={hasMoreProducts}
-            loader={loadingMoreProducts && <h4>Loading more products...</h4>}
-          >
-            <RefurbishedProductList
-              products={refurbishedProducts}
-              loading={loading}
-              sortByAsc={sortByAsc}
-              sortByDesc={sortByDesc}
-            />
-          </InfiniteScroll>
+
+          {(loading || !isRefurbishedPageLoaded) ? (
+            <div className="fallback-loading">
+              <RotatingLines width="60" height="60" color="#808080" strokeWidth="3" />
+            </div>
+          ) : (
+            <InfiniteScroll
+              dataLength={refurbishedProducts.length}
+              next={onLoadMoreRefurbished}
+              hasMore={hasMoreProducts}
+              loader={loadingMoreProducts && <h4>Loading more products...</h4>}
+            >
+              <RefurbishedProductList
+                products={refurbishedProducts}
+                loading={loading}
+                sortByAsc={sortByAsc}
+                sortByDesc={sortByDesc}
+              />
+            </InfiniteScroll>)
+          }
 
           {showSortBy && (
             <RefurbishedProductSortBySection
@@ -106,10 +112,11 @@ const RefurbishedPage = ({ isRefurbishedPageLoaded, setRefurbishedPageLoaded }) 
               FILTER BY
             </div>
           </div>
-        </div>
-      </>
-    )
-  );
+
+        </>
+      )
+      }
+    </>);
 };
 
 export default RefurbishedPage;

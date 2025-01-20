@@ -27,6 +27,7 @@ export const fetchProducts = createAsyncThunk(
 
             if (response.products && response.success) {
                 return {
+                    inputValue:inputValue,
                     products: response.products,
                     hasMoreProducts: response.products.length >= productsPerPage,
                 };
@@ -73,6 +74,7 @@ export const loadMoreProducts = createAsyncThunk(
 
 // Initial state
 const initialState = {
+    query:'',
     products: [],
 
     loading: false,
@@ -110,6 +112,7 @@ const productsSlice = createSlice({
             state.error = null;
             state.productsPerPage = 10;
             state.updated=state.updated+1;
+            state.query='';
         },        
         toggleSortOrder: (state, action) => {
             const order = action.payload;
@@ -168,7 +171,8 @@ const productsSlice = createSlice({
                 state.error = null;
             })
             .addCase(fetchProducts.fulfilled, (state, action) => {
-                const { products, hasMoreProducts } = action.payload;
+                const {inputValue, products, hasMoreProducts } = action.payload;
+                state.query=inputValue;
                 state.products = products;
                 state.hasMoreProducts = hasMoreProducts;
                 state.loading = false;

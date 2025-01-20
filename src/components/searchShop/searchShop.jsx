@@ -29,7 +29,7 @@ const Shop = ({ isShopPageLoaded, setShopPageLoaded }) => {
 
     return (
         <>
-            {(loading || !isShopPageLoaded) ? (
+            {(!isShopPageLoaded) ? (
                 <div className="fallback-loading">
                     <RotatingLines width="60" height="60" color="#808080" strokeWidth="3" />
                 </div>
@@ -41,26 +41,31 @@ const Shop = ({ isShopPageLoaded, setShopPageLoaded }) => {
                         />
                     </div>
 
-                    <InfiniteScroll
-                        dataLength={shops.length}
-                        next={onLoadMoreShop}
-                        hasMore={hasMoreShops}
-                        loader={
-                            loadingMoreShops && (
-                                <div id="search-shop-load-more-shop-loader">
-                                    <Oval height={30} width={30} color="white" secondaryColor="gray" ariaLabel="loading" />
+                    {(loading || !isShopPageLoaded) ? (
+                        <div className="fallback-loading">
+                            <RotatingLines width="60" height="60" color="#808080" strokeWidth="3" />
+                        </div>
+                    ) : (
+                        <InfiniteScroll
+                            dataLength={shops.length}
+                            next={onLoadMoreShop}
+                            hasMore={hasMoreShops}
+                            loader={
+                                loadingMoreShops && (
+                                    <div id="search-shop-load-more-shop-loader">
+                                        <Oval height={30} width={30} color="white" secondaryColor="gray" ariaLabel="loading" />
 
-                                </div>
-                            )
-                        }
-                    >
-                        <ShopList
-                            shops={shops}
-                            loading={loading}
-                            loadingMoreShops={loadingMoreShops}
-                            hasMoreShops={hasMoreShops}
-                        />
-                    </InfiniteScroll>
+                                    </div>
+                                )
+                            }
+                        >
+                            <ShopList
+                                shops={shops}
+                                loading={loading}
+                                loadingMoreShops={loadingMoreShops}
+                                hasMoreShops={hasMoreShops}
+                            />
+                        </InfiniteScroll>)}
 
                     <div id="searchShopPage-footer">
                         <div id="searchShopPage-footer-sortby">

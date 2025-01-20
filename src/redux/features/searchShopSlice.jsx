@@ -13,6 +13,7 @@ export const fetchShops = createAsyncThunk(
             // Check if response has shops
             if (response.shops) {
                 return {
+                    inputValue:inputValue,
                     shops: response.shops,
                     hasMoreShops: response.shops.length >= shopsPerPage,
                 };
@@ -54,6 +55,7 @@ export const loadMoreShops = createAsyncThunk(
 
 const initialState = {
     shops: [],
+    query:'',
     updated:0,
     loading: false,
     loadingMoreShops: false,
@@ -77,6 +79,7 @@ const shopsSlice = createSlice({
             state.error = null;
             state.loading= false;
             state.loadingMoreShops= false;
+            state.query='';
         },
     },
     extraReducers: (builder) => {
@@ -86,7 +89,8 @@ const shopsSlice = createSlice({
                 state.error = null;
             })
             .addCase(fetchShops.fulfilled, (state, action) => {
-                const { shops, hasMoreShops } = action.payload;
+                const { shops, hasMoreShops ,inputValue} = action.payload;
+                state.query=inputValue;
                 if (shops.length > 0) {
                     const newShops = shops.filter(
                         (shop) => !state.shops.some(existingShop => existingShop.$id === shop.$id)

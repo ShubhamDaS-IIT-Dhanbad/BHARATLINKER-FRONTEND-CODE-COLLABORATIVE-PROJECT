@@ -49,10 +49,7 @@ class SearchShopService {
     
             // Input value query (only for shopName in this case)
             if (inputTokens.length > 0) {
-                queries.push(Query.or([
-                    Query.contains('shopName', inputTokens),
-                    // You can add more fields to search if necessary
-                ]));
+                queries.push(Query.contains('shopName', inputTokens));
             }
     
             // Filter by selected categories
@@ -102,7 +99,6 @@ class SearchShopService {
             };
     
             const allShops = await fetchShops();
-    
             if (!Array.isArray(allShops)) {
                 throw new TypeError("Expected 'allShops' to be an array.");
             }

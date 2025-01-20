@@ -44,67 +44,72 @@ const SearchPage = ({ isProductPageLoaded, setProductPageLoaded }) => {
 
     return (
         <>
-            {(loading || !isProductPageLoaded) ? (
+            {(!isProductPageLoaded) ? (
                 <div className="fallback-loading">
-                 <RotatingLines width="60" height="60" color="#808080" strokeWidth="3" />
+                    <RotatingLines width="60" height="60" color="#808080" strokeWidth="3" />
                 </div>
             ) : (
-            <>
-                <div id="productSearchPage-container-top">
-                    <SearchBar
-                        headerTitle={"SEARCH PAGE"}
-                        handleSearchSubmit={executeSearch}
-                    />
-                </div>
-
-                <InfiniteScroll
-                    dataLength={products.length}
-                    next={onLoadMore}
-                    hasMore={hasMoreProducts}
-                    loader={loadingMoreProducts && <h4>Loading more products...</h4>}
-                >
-                    <ProductList
-                        products={products}
-                        hasMoreProducts={hasMoreProducts}
-                        loadingMoreProducts={loadingMoreProducts}
-                    />
-                </InfiniteScroll>
-
-                {showSortBy && (
-                    <ProductSortBySection
-                        handleSearch={executeSearch}
-                        showSortBy={showSortBy}
-                        setShowSortBy={setShowSortBy}
-                        sortByAsc={sortByAsc}
-                        sortByDesc={sortByDesc}
-                        products={products}
-                    />
-                )}
-                {showFilterBy && (
-                    <ProductFilterBySection
-                        handleSearch={executeSearch}
-                        showFilterBy={showFilterBy}
-                        setShowFilterBy={setShowFilterBy}
-                    />
-                )}
-
-                <div id="productSearchPage-footer">
-                    <div
-                        id="productSearchPage-footer-sortby"
-                        onClick={() => setShowSortBy(!showSortBy)}
-                    >
-                        <LiaSortSolid size={33} />
-                        SORT BY
+                <>
+                    <div id="productSearchPage-container-top">
+                        <SearchBar
+                            headerTitle={"SEARCH PAGE"}
+                            handleSearchSubmit={executeSearch}
+                        />
                     </div>
-                    <div
-                        id="productSearchPage-footer-filterby"
-                        onClick={() => setShowFilterBy(!showFilterBy)}
-                    >
-                        <MdFilterList size={33} />
-                        FILTER BY
+
+                    {(loading || !isProductPageLoaded) ? (
+                        <div className="fallback-loading">
+                            <RotatingLines width="60" height="60" color="#808080" strokeWidth="3" />
+                        </div>
+                    ) : (
+                        <InfiniteScroll
+                            dataLength={products.length}
+                            next={onLoadMore}
+                            hasMore={hasMoreProducts}
+                            loader={loadingMoreProducts && <h4>Loading more products...</h4>}
+                        >
+                            <ProductList
+                                products={products}
+                                hasMoreProducts={hasMoreProducts}
+                                loadingMoreProducts={loadingMoreProducts}
+                            />
+                        </InfiniteScroll>)}
+
+                    {showSortBy && (
+                        <ProductSortBySection
+                            handleSearch={executeSearch}
+                            showSortBy={showSortBy}
+                            setShowSortBy={setShowSortBy}
+                            sortByAsc={sortByAsc}
+                            sortByDesc={sortByDesc}
+                            products={products}
+                        />
+                    )}
+                    {showFilterBy && (
+                        <ProductFilterBySection
+                            handleSearch={executeSearch}
+                            showFilterBy={showFilterBy}
+                            setShowFilterBy={setShowFilterBy}
+                        />
+                    )}
+
+                    <div id="productSearchPage-footer">
+                        <div
+                            id="productSearchPage-footer-sortby"
+                            onClick={() => setShowSortBy(!showSortBy)}
+                        >
+                            <LiaSortSolid size={33} />
+                            SORT BY
+                        </div>
+                        <div
+                            id="productSearchPage-footer-filterby"
+                            onClick={() => setShowFilterBy(!showFilterBy)}
+                        >
+                            <MdFilterList size={33} />
+                            FILTER BY
+                        </div>
                     </div>
-                </div>
-            </>)}
+                </>)}
         </>
     );
 };

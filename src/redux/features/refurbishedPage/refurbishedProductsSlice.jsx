@@ -31,6 +31,7 @@ export const fetchRefurbishedProducts = createAsyncThunk(
 
       if (response?.products) {
         return {
+          inputValue:inputValue,
           refurbishedProducts: response.products,
           hasMoreProducts: response.products.length >= productsPerPage, // Corrected check
         };
@@ -88,8 +89,9 @@ export const loadMoreRefurbishedProducts = createAsyncThunk(
 const refurbishedProductsSlice = createSlice({
   name: 'refurbishedproducts',
   initialState: {
+    query:'',
     refurbishedProducts: [],
-    loading: true,
+    loading: false,
     currentPage: 1,
     updated:0,
     totalPages: 1,
@@ -119,6 +121,7 @@ const refurbishedProductsSlice = createSlice({
       state.updated=state.updated+1;
       state.error = null;
       state.loadingMoreProducts = false;
+      state.query='';
     },
     setCurrentPage: (state, action) => {
       state.currentPage = action.payload;
@@ -139,9 +142,8 @@ const refurbishedProductsSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchRefurbishedProducts.fulfilled, (state, action) => {
-        const { refurbishedProducts, hasMoreProducts } = action.payload;
-
-        // Update refurbished products and hasMoreProducts
+        const { inputValue,refurbishedProducts, hasMoreProducts } = action.payload;
+        state.query=inputValue;
         if (refurbishedProducts.length > 0) {
           const newProducts = refurbishedProducts.filter(
             (product) =>
@@ -160,7 +162,6 @@ const refurbishedProductsSlice = createSlice({
       })
 
 
-      
       // Load more refurbished products
       .addCase(loadMoreRefurbishedProducts.pending, (state) => {
         state.loadingMoreProducts = true;

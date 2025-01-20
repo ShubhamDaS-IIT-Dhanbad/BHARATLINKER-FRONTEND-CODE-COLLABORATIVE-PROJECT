@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchShops, loadMoreShops } from '../redux/features/searchShopSlice.jsx';
+import { fetchShops,resetShops, loadMoreShops } from '../redux/features/searchShopSlice.jsx';
 import useLocationFromCookie from './useLocationFromCookie.jsx';
 
 export const useSearchShop = () => {
@@ -8,7 +8,7 @@ export const useSearchShop = () => {
     const { getLocationFromCookie } = useLocationFromCookie();
     const storedLocation = getLocationFromCookie();
 
-    const { currentPage, loadingMoreShops, hasMoreShops } = useSelector((state) => state.searchshops);
+    const {shops,loading, currentPage, loadingMoreShops, hasMoreShops } = useSelector((state) => state.searchshops);
     const selectedCategories = useSelector(state => state.searchshopfiltersection.selectedCategories);
 
     const shopsPerPage = 3;
@@ -17,6 +17,7 @@ export const useSearchShop = () => {
     const radius = storedLocation ? storedLocation.radius : 5;
 
     const executeSearchShop = (inputValue) => {
+        if(loading || loadingMoreShops) return;
         const searchQuery = inputValue || "";
         const params = {
             userLat: lat,
@@ -30,6 +31,7 @@ export const useSearchShop = () => {
             sortByAsc: null,
             sortByDesc: null,
         };
+        if(shops.length!=0){dispatch(resetShops())}
         dispatch(fetchShops(params));
     };
 

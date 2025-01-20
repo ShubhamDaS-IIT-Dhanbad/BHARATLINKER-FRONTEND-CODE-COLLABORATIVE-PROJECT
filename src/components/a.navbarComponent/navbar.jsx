@@ -11,10 +11,11 @@ import LocationTab from '../locationTab/locationTab.jsx';
 import { FaArrowLeft } from 'react-icons/fa';
 import './navbar.css';
 
+import { useSelector } from 'react-redux';
 //hooks
 import { useExecuteSearch } from '../../hooks/searchProductHook.jsx';
 import { useSearchShop } from '../../hooks/searchShopHook.jsx';
-
+import { useSearchRefurbishedProductsHook } from '../../hooks/searchRefurbishedHook.jsx'
 
 
 const Navbar = ({ headerTitle }) => {
@@ -22,7 +23,11 @@ const Navbar = ({ headerTitle }) => {
     const location = useLocation();
 
     const { executeSearch } = useExecuteSearch();
+    const { query: searchQuery } = useSelector((state) => state.searchproducts);
     const { executeSearchShop } = useSearchShop();
+    const { query: shopQuery } = useSelector((state) => state.searchshops);
+    const { executeSearchRefurbished } = useSearchRefurbishedProductsHook();
+    const { query: refurbishedQuery } = useSelector((state) => state.refurbishedproducts);
 
     const [userLocation, setUserLocation] = useState(null);
     const [searchInput, setSearchInput] = useState('');
@@ -35,6 +40,20 @@ const Navbar = ({ headerTitle }) => {
 
         setUserLocation(storedLocation);
     }, [locationTabVisible]);
+    
+    useEffect(() => {
+        if (isSearchPage) {
+            setSearchInput(searchQuery);
+            setQueryInParams(searchQuery);
+        } else if (isShopPage) {
+            setSearchInput(shopQuery);
+            setQueryInParams(shopQuery);
+        } else if (isRefurbishedPage) {
+            setSearchInput(refurbishedQuery);
+            setQueryInParams(refurbishedQuery);
+        }
+
+    }, []);
 
     const handleHomePageUserIconClick = () => {
         const userSession = Cookies.get('BharatLinkerUserData');
@@ -53,30 +72,42 @@ const Navbar = ({ headerTitle }) => {
     const handleSearch = (e) => {
         const inputValue = searchInput;
         if (e.key === 'Enter') {
+            setQueryInParams(inputValue);
             if (isHomePage) {
                 executeSearch(inputValue);
+                navigate(`/search?query=${encodeURIComponent(inputValue)}`);
             } else if (isSearchPage) {
-                executeSearchShop(inputValue);
+                executeSearch(inputValue);
             } else if (isShopPage) {
-                executeSearch(inputValue);
-            }else if(isRefurbishedPage){
-                executeSearch(inputValue);
+                executeSearchShop(inputValue);
+            } else if (isRefurbishedPage) {
+                executeSearchRefurbished(inputValue);
             }
         }
     };
 
     const handleSearchIconClick = () => {
         const inputValue = searchInput;
+        setQueryInParams(inputValue);
         if (isHomePage) {
             executeSearch(inputValue);
+            navigate(`/search?query=${encodeURIComponent(inputValue)}`);
         } else if (isSearchPage) {
-            executeSearchShop(inputValue);
+            executeSearch(inputValue);
         } else if (isShopPage) {
-            executeSearch(inputValue);
-        }  else if(isRefurbishedPage){
-            executeSearch(inputValue);
-        } 
+            executeSearchShop(inputValue);
+        } else if (isRefurbishedPage) {
+            executeSearchRefurbished(inputValue);
+        }
     };
+
+    // Helper function to set the query parameter in the URL
+    const setQueryInParams = (inputValue) => {
+        const url = new URL(window.location);
+        url.searchParams.set('query', inputValue);
+        window.history.pushState({}, '', url);
+    };
+
 
     return (
         <>

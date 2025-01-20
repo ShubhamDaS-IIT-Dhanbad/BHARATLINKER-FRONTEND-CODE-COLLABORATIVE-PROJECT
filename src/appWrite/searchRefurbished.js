@@ -97,7 +97,6 @@ class SearchRefurbishedProductService {
                 );
                 return response.documents || [];
             };
-
             const allProducts = await fetchProducts(conf.appwriteRefurbishedModulesCollectionId);
             if (!Array.isArray(allProducts)) {
                 throw new TypeError("Expected 'allProducts' to be an array.");
@@ -171,6 +170,12 @@ class SearchRefurbishedProductService {
             return { success: false, error: error.message };
         }
     }
+
+
+
+
+
+
 
 
     // Method to fetch a single refurbished product by its ID from the Modules collection
