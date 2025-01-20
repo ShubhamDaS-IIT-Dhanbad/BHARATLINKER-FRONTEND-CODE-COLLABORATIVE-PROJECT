@@ -1,7 +1,8 @@
 import React, { useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { IoClose } from 'react-icons/io5';
-
+import { TfiSave } from "react-icons/tfi";
+import { RiResetRightLine } from "react-icons/ri";
 import { useExecuteSearch } from '../../hooks/searchProductHook.jsx';
 import {
   setSearchProductsCategories,
@@ -35,26 +36,30 @@ const SearchProductFilterSection = ({ showFilterBy, setShowFilterBy }) => {
   const [selectedLabel, setSelectedLabel] = useState('category');
 
   const allFilters = {
-    category: [
-      'Appliances', 'Automobiles', 'Bags', 'Beauty', 'Books', 'Electronics', 'Fashion',
-      'Footwear', 'Furniture', 'Gaming', 'Gadgets', 'Health', 'Home', 'Jewelry',
-      'Kitchen', 'Laptops', 'Modules', 'Music', 'Office Supplies', 'Outdoors',
+    category:[
+      'Appliances', 'Automobiles', 'Bags', 'Beauty', 'Books', 'Electronics', 'Fashion', 
+      'Footwear', 'Furniture', 'Gaming', 'Gadgets', 'Health', 'Home', 'Jewelry', 
+      'Kitchen', 'Laptops', 'Modules', 'Music', 'Office Supplies', 'Outdoors', 
       'Pet Supplies', 'Smartphones', 'Sports', 'Stationery', 'Toys', 'Watches', 'Grocery'
     ]
-
-    ,
-    brand: [
-      'Acer', 'Adidas', 'Apple', 'ASUS', 'Beats', 'Bose', 'Canon', 'Dell', 'HP', 'Huawei',
-      'JBL', 'Lenovo', 'LG', 'Microsoft', 'Motorola', 'Nike', 'Nikon', 'OnePlus', 'Oppo',
-      'Panasonic', 'Philips', 'Puma', 'Razer', 'Samsung', 'Sharp', 'Sony', 'Toshiba', 'Under Armour',
+    
+  ,
+    brand:[
+      'Acer', 'Adidas', 'Apple', 'ASUS', 'Beats', 'Bose', 'Canon', 'Dell', 'HP', 'Huawei', 
+      'JBL', 'Lenovo', 'LG', 'Microsoft', 'Motorola', 'Nike', 'Nikon', 'OnePlus', 'Oppo', 
+      'Panasonic', 'Philips', 'Puma', 'Razer', 'Samsung', 'Sharp', 'Sony', 'Toshiba', 'Under Armour', 
       'Vivo', 'Xiaomi'
     ]
-
+    
   };
 
+  const filterActions = {
+    category: setSearchProductsCategories,
+    brand: setSearchProductsBrands,
+  };
 
   const handleFilterClick = () => {
-    if (!isApply) return;
+    setIsApply(true);
     dispatch(setSearchProductsCategories(selectedCategoriesState));
     dispatch(setSearchProductsBrands(selectedBrandsState));
   };
@@ -69,12 +74,11 @@ const SearchProductFilterSection = ({ showFilterBy, setShowFilterBy }) => {
   );
 
   const handleItemClick = (item, filterType) => {
-    setIsApply(true);
     if (filterType === 'category') {
       const updatedSelection = [...selectedCategoriesState];
       if (updatedSelection.includes(item)) {
         const index = updatedSelection.indexOf(item);
-        updatedSelection.splice(index, 1);
+        updatedSelection.splice(index, 1); 
       } else {
         updatedSelection.push(item);
       }
@@ -158,20 +162,24 @@ const SearchProductFilterSection = ({ showFilterBy, setShowFilterBy }) => {
           <div
             className="location-tab-IoIosCloseCircle"
             onClick={() => {
-                if (isApply) executeSearch();
-                  setShowFilterBy(false)
-              }
+              if (isApply) { executeSearch(); }
+              setShowFilterBy(false)
+            }
             }
             aria-label="Close sort options"
           >
-            <IoClose size={25} onClick={() => { handleFilterClick() }} />
+            <IoClose size={25} />
           </div>
           <div style={{ color: 'white' }}>FILTER SECTION</div>
           <div id="productSearch-page-sort-by-header">
-
-            <div id="productSearch-page-sortby-options">
+            
+            <div id="productSearch-page-filterby-options">
+            <TfiSave onClick={handleFilterClick} size={20}/>
+            <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
               <SortOption label="category" />
               <SortOption label="brand" />
+              </div>
+              <RiResetRightLine size={20}/>
             </div>
             {selectedLabel &&
               renderFilter(

@@ -162,7 +162,11 @@
     display: flex;justify-content: center;align-items: center;
 }
 
-
+#productSearch-page-filterby-options{
+    display: flex;
+    justify-content:space-between;align-items: center;
+    gap: 10px;margin: 10px 0px 0px 10px;
+}
 
 
 
