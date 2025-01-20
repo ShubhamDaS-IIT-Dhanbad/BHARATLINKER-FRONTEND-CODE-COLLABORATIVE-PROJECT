@@ -9,24 +9,17 @@ const searchProductsFilterSectionSlice = createSlice({
   name: 'searchproductsfiltersection',
   initialState,
   reducers: {
-    toggleSearchProductsCategory: (state, action) => {
-        const category = action.payload.toLowerCase(); 
-        if (state.selectedCategories.includes(category)) {
-            state.selectedCategories = state.selectedCategories.filter(item => item !== category);
-        } else {
-            state.selectedCategories.push(category);
-        }
+    // Set selected categories
+    setSearchProductsCategories: (state, action) => {
+      state.selectedCategories = action.payload;
     },
-    toggleSearchProductsBrand: (state, action) => {
-      const brand = action.payload;
-      if (state.selectedBrands.includes(brand)) {
-        state.selectedBrands = state.selectedBrands.filter(
-          (item) => item !== brand
-        );
-      } else {
-        state.selectedBrands.push(brand);
-      }
+
+    // Set selected brands
+    setSearchProductsBrands: (state, action) => {
+      state.selectedBrands = action.payload;
     },
+
+    // Reset the filters (clear selected categories and brands)
     resetSearchProductsFilters: (state) => {
       state.selectedBrands = [];
       state.selectedCategories = [];
@@ -35,8 +28,8 @@ const searchProductsFilterSectionSlice = createSlice({
 });
 
 export const {
-  toggleSearchProductsCategory,
-  toggleSearchProductsBrand,
+  setSearchProductsCategories,
+  setSearchProductsBrands,
   resetSearchProductsFilters,
 } = searchProductsFilterSectionSlice.actions;
 

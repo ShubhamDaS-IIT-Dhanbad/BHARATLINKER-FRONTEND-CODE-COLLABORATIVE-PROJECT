@@ -1,6 +1,5 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchProducts } from '../redux/features/searchPage/searchProductSlice';
-import { loadMoreProducts } from '../redux/features/searchPage/searchProductSlice.jsx';
+import { fetchProducts ,loadMoreProducts ,resetProducts} from '../redux/features/searchPage/searchProductSlice';
 import useLocationFromCookie from './useLocationFromCookie.jsx';
 
 export const useExecuteSearch = () => {
@@ -10,14 +9,16 @@ export const useExecuteSearch = () => {
     const storedLocation = getLocationFromCookie();
 
     const {
+        products,
         loading,
         loadingMoreProducts,
         hasMoreProducts,
-        selectedCategories,
-        selectedBrands,
         sortByAsc,
         sortByDesc,
     } = useSelector((state) => state.searchproducts);
+
+    const selectedBrands = useSelector((state) => state.searchproductsfiltersection.selectedBrands);
+    const selectedCategories = useSelector((state) => state.searchproductsfiltersection.selectedCategories);
 
     const productsPerPage = 3;
     const lat = storedLocation ? storedLocation.lat : null;
@@ -39,6 +40,7 @@ export const useExecuteSearch = () => {
             sortByAsc,
             sortByDesc,
         };
+        if(products.length!=0) dispatch(resetProducts());
         dispatch(fetchProducts(params));
     };
     

@@ -3,13 +3,15 @@
 .product-page-filter-section {
     width: 100vw;height: 100vh;
     position: fixed;top: 0;
+    
     background-color: rgba(0, 0, 0, 0.9);
     display: flex;justify-content: flex-end;flex-direction: column;
     align-items: center;gap: 10px;
     z-index: 9999;color: rgb(249, 249, 249);
 }
 .product-page-close-filter-section{
-    color: white;background-color: black;border: 1.7px solid white;
+    color: white;
+    background-color: rgba(0, 0, 0, 0.9);border: 1.7px solid white;
     display: flex;justify-content: center;align-items: center;
     padding: 0px;border-radius: 50%;font-weight: 900;
 }
@@ -27,11 +29,6 @@
 
 
 
-.product-page-filter-options{
-    margin-top: 15px;
-    display: flex;justify-content: center;align-items: center;
-    flex-direction: column;
-}
 .product-page-filter-options-container{
     display: flex; /* Use flexbox for layout */
     flex-direction: column; /* Stack items vertically */
@@ -94,7 +91,7 @@
     font-size: 0.9rem;font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 .product-page-filter-items{
-    width: 100%;
+    width: 100%;min-height: 10vh;
     display: flex;gap: 10px;flex-wrap: wrap;
    margin-top: 1px;
    padding: 0px 0px 2px 0px;
