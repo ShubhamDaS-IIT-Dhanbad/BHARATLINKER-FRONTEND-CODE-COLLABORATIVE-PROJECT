@@ -56,7 +56,7 @@ const SingleProductSearchBar = () => {
                                 : location 
                                     ? location.address.slice(0, 30) 
                                     : 'Location not set'}
-                            <FaCaretDown size={15} />
+                            {/* <FaCaretDown size={15} /> */}
                         </div>
                     </div>
                 </div>

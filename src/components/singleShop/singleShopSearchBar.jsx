@@ -42,14 +42,14 @@ const SingleProductSearchBar = () => {
                         tabIndex={0}
                     />
                     <div className='single-product-search-header-location'>
-                        <p className='single-product-search-location-label'>REFURBISHED INFO</p>
+                        <p className='single-product-search-location-label'>SHOP INFO</p>
                         <div
                             className='single-product-search-location-value'
                             aria-label="Change Location"
                             tabIndex={0}
                         >
                             {loading ? 'Loading location...' : location ? location.address.slice(0,30) : 'Location not set'}
-                           <FaCaretDown size={15}/>
+                           {/* <FaCaretDown size={15}/> */}
                         </div>
                     </div>
                 </div>
