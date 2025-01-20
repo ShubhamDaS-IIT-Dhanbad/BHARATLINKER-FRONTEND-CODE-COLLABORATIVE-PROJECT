@@ -6,16 +6,18 @@ import { RotatingLines } from 'react-loader-spinner';
 import './App.css';
 
 
-const HomePage = lazy(() => import('./components/homePage/home.jsx'));
+import HomePage from './components/homePage/home.jsx';
+import SearchPage from './components/searchPage/searchPage.jsx';
+import SearchShop from './components/searchShop/searchShop.jsx';
+import RefurbishedPage from './components/refurbishedPage/refurbishedPage.jsx';
+
 const LoginPage = lazy(() => import('./components/loginPage/login.jsx'));
-const SearchPage = lazy(() => import('./components/searchPage/searchPage.jsx'));
+
 const SearchSorybySection = lazy(() => import('./components/searchPage/sortbySection.jsx'));
 const SearchFilterSection = lazy(() => import('./components/searchPage/filterSection.jsx'));
 const SingleProduct = lazy(() => import('./components/singleProduct/singleProduct.jsx'));
-const SearchShop = lazy(() => import('./components/searchShop/searchShop.jsx'));
 const ShopProducts = lazy(() => import('./components/shopProducts/shopProducts.jsx'));
 const SingleShopCard = lazy(() => import('./components/singleShop/singleShop.jsx'));
-const RefurbishedPage = lazy(() => import('./components/refurbishedPage/refurbishedPage.jsx'));
 const SingleRefurbishedProductCard = lazy(() => import('./components/singleRefurbishedProduct/singleRefurbishedProduct.jsx'));
 const RetailerRoutes = lazy(() => import('./components/retailer/retailerRoutes.jsx'));
 const User = lazy(() => import('./components/user/userHome.jsx'));
@@ -44,9 +46,9 @@ function App() {
 }
 
 const RoutesWithConditionalHeader = React.memo(() => {
-  const [isShopPageLoaded,setShopPageLoaded] =useState(false);
-  const [isProductPageLoaded, setProductPageLoaded] =useState(false);
-  const [isRefurbishedPageLoaded, setRefurbishedPageLoaded] =useState(false);
+  const [isShopPageLoaded,setShopPageLoaded] =useState(true);
+  const [isProductPageLoaded, setProductPageLoaded] =useState(true);
+  const [isRefurbishedPageLoaded, setRefurbishedPageLoaded] =useState(true);
   return (
     <>
       <Routes>
