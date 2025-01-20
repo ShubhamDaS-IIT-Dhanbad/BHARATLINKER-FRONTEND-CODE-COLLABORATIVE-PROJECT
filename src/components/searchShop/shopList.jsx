@@ -3,7 +3,7 @@ import ShopCard from './shopCard.jsx';
 
 const ShopList = ({ shops, loading,hasMoreShops,loadingMoreShops}) => {
 
-  if (!loading && shops?.length === 0 && !hasMoreShops) {
+  if (!loading && shops?.length === 0) {
     const notfound='https://res.cloudinary.com/demc9mecm/image/upload/v1736953901/ir4hy5fcwevhr8ibeaqq.png';
     return (
       <div className='search-shop-no-shop-found'>

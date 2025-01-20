@@ -4,7 +4,7 @@ import conf from '../conf/conf.js';
 
 import { useDispatch } from 'react-redux';
 import { resetProducts } from '../redux/features/searchPage/searchProductSlice.jsx';
-import { resetShops } from '../redux/features/searchShopSlice.jsx';
+import { resetShops } from '../redux/features/searchShop/searchShopSlice.jsx';
 import { resetRefurbishedProducts } from '../redux/features/refurbishedPage/refurbishedProductsSlice.jsx';
 
 const useLocationFromCookie = () => {

@@ -53,7 +53,8 @@ class SearchShopService {
             }
     
             // Filter by selected categories
-            if (selectedCategories && selectedCategories.length > 0) {
+              // Filter by categories
+              if (selectedCategories.length > 0) {
                 queries.push(Query.contains('category', selectedCategories));
             }
     

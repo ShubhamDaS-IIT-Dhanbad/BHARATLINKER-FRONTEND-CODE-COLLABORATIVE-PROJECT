@@ -32,7 +32,7 @@ export const useExecuteSearch = () => {
         const params = {
             userLat: lat,
             userLong: long,
-            radius,
+            radius:radius ? radius :0,
             inputValue: searchQuery, 
             page: 1,
             productsPerPage,
@@ -51,7 +51,7 @@ export const useExecuteSearch = () => {
         const params = {
             userLat: lat,
             userLong: long,
-            radius,
+            radius:radius ? radius :0,
             inputValue:searchQuery,
             page: currentPage + 1,
             productsPerPage,

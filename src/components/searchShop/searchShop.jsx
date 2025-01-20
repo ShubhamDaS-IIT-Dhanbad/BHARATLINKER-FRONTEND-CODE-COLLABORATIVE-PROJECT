@@ -10,12 +10,16 @@ import { RotatingLines } from 'react-loader-spinner';
 
 import { useSearchShop } from '../../hooks/searchShopHook.jsx';
 
+import ShopFilterBySection from './filterSection.jsx';
+
 import './searchShop.css';
 
 const Shop = ({ isShopPageLoaded, setShopPageLoaded }) => {
     const { shops, updated, loading, loadingMoreShops, hasMoreShops } = useSelector((state) => state.searchshops);
     const { executeSearchShop, onLoadMoreShop } = useSearchShop();
 
+    const [showSortBy, setShowSortBy] = useState(false);
+    const [showFilterBy, setShowFilterBy] = useState(false);
 
     useEffect(() => {
         const delayTimeout = setTimeout(() => {
@@ -67,12 +71,21 @@ const Shop = ({ isShopPageLoaded, setShopPageLoaded }) => {
                             />
                         </InfiniteScroll>)}
 
+
+                   
+                    {showFilterBy && (
+                        <ShopFilterBySection
+                            showFilterBy={showFilterBy}
+                            setShowFilterBy={setShowFilterBy}
+                        />
+                    )}
+
                     <div id="searchShopPage-footer">
-                        <div id="searchShopPage-footer-sortby">
+                        <div id="searchShopPage-footer-sortby" onClick={() => setShowSortBy(!showSortBy)}>
                             <LiaSortSolid size={33} />
                             SORT BY
                         </div>
-                        <div id="searchShopPage-footer-filterby">
+                        <div id="searchShopPage-footer-filterby"  onClick={() => setShowFilterBy(!showFilterBy)}>
                             <MdFilterList size={33} />
                             FILTER BY
                         </div>

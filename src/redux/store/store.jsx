@@ -6,9 +6,8 @@ import searchproducts from '../features/searchPage/searchProductSlice.jsx'
 import searchproductsfiltersection from '../features/searchPage/searchProductFilterSectionSlice.jsx'
 
 //search shops
-import searchshops from '../features/searchShopSlice.jsx'
-import searchshopfiltersection from '../features/searchShopFilterSectionSlice.jsx'
-import searchshopsortbysection from '../features/searchShopSortbySectionSlice.jsx'
+import searchshops from '../features/searchShop/searchShopSlice.jsx'
+import shopfiltersection from '../features/searchShop/shopFilterSection.jsx'
 import singleshops from '../features/singleShopSlice.jsx'
 
 //shop products
@@ -32,8 +31,7 @@ const store=configureStore({
 
         //search shops
         searchshops:searchshops,
-        searchshopfiltersection:searchshopfiltersection,
-        searchshopsortbysection:searchshopsortbysection,
+        shopfiltersection:shopfiltersection,
         singleshops:singleshops,
 
         //shop products
