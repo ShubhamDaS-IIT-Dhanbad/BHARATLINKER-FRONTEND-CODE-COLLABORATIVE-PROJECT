@@ -44,13 +44,10 @@ const Navbar = ({ headerTitle }) => {
     useEffect(() => {
         if (isSearchPage) {
             setSearchInput(searchQuery);
-            setQueryInParams(searchQuery);
         } else if (isShopPage) {
             setSearchInput(shopQuery);
-            setQueryInParams(shopQuery);
         } else if (isRefurbishedPage) {
             setSearchInput(refurbishedQuery);
-            setQueryInParams(refurbishedQuery);
         }
 
     }, []);
@@ -72,7 +69,6 @@ const Navbar = ({ headerTitle }) => {
     const handleSearch = (e) => {
         const inputValue = searchInput;
         if (e.key === 'Enter') {
-            setQueryInParams(inputValue);
             if (isHomePage) {
                 executeSearch(inputValue);
                 navigate(`/search?query=${encodeURIComponent(inputValue)}`);
@@ -88,7 +84,6 @@ const Navbar = ({ headerTitle }) => {
 
     const handleSearchIconClick = () => {
         const inputValue = searchInput;
-        setQueryInParams(inputValue);
         if (isHomePage) {
             executeSearch(inputValue);
             navigate(`/search?query=${encodeURIComponent(inputValue)}`);
@@ -101,12 +96,7 @@ const Navbar = ({ headerTitle }) => {
         }
     };
 
-    // Helper function to set the query parameter in the URL
-    const setQueryInParams = (inputValue) => {
-        const url = new URL(window.location);
-        url.searchParams.set('query', inputValue);
-        window.history.pushState({}, '', url);
-    };
+   
 
 
     return (
