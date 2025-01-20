@@ -1,49 +1,75 @@
-
 /* FILTER OPTION */
 .product-page-filter-section {
-    width: 100vw;height: 100vh;
-    position: fixed;top: 0;
-    
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+
     background-color: rgba(0, 0, 0, 0.9);
-    display: flex;justify-content: flex-end;flex-direction: column;
-    align-items: center;gap: 10px;
-    z-index: 9999;color: rgb(249, 249, 249);
+    display: flex;
+    justify-content: flex-end;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    z-index: 9999;
+    color: rgb(249, 249, 249);
 }
-.product-page-close-filter-section{
+
+.product-page-close-filter-section {
     color: white;
-    background-color: rgba(0, 0, 0, 0.9);border: 1.7px solid white;
-    display: flex;justify-content: center;align-items: center;
-    padding: 0px;border-radius: 50%;font-weight: 900;
+    background-color: rgba(0, 0, 0, 0.9);
+    border: 1.7px solid white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0px;
+    border-radius: 50%;
+    font-weight: 900;
 }
 
 
 
 
 .product-page-selected-category {
-    margin-top: 10px;color: rgba(56, 227, 93, 0.598);
+    color: rgba(56, 227, 93, 0.598);
+    padding: 7px 10px 7px 10px;
+    border: 1.2px solid rgb(30, 255, 34);
+    border-radius: 10px;
 }
-.product-page-unselected-category{
-    margin-top: 10px;
+
+.product-page-unselected-category {
+    padding: 7px 10px 7px 10px;
+    border: 1.2px solid black;
+    border-radius: 10px;
 }
 
 
 
 
-.product-page-filter-options-container{
-    display: flex; /* Use flexbox for layout */
-    flex-direction: column; /* Stack items vertically */
-    max-height: 70vh;min-height: 60vh;
-    width: 100vw; /* Set width to full viewport width */
-    max-width: 100vw; /* Prevent exceeding full viewport width */
-    background-color: aliceblue; /* Background color */
-    border-top-left-radius: 20px; /* Rounded top-left corner */
-    border-top-right-radius: 20px; /* Rounded top-right corner */
-    padding: 7px; /* Padding for spacing */
-    box-sizing: border-box; 
-    overflow:hidden;
-    gap: 10px;color: black;
-    padding-bottom: 10vh;padding-top: 10px;
-    overflow-y:scroll ;
+.product-page-filter-options-container {
+    display: flex;
+    /* Use flexbox for layout */
+    flex-direction: column;
+    min-height: 60vh;
+    width: 100vw;
+    /* Set width to full viewport width */
+    max-width: 100vw;
+    /* Prevent exceeding full viewport width */
+    background-color: aliceblue;
+    /* Background color */
+    border-top-left-radius: 20px;
+    /* Rounded top-left corner */
+    border-top-right-radius: 20px;
+    /* Rounded top-right corner */
+    padding: 7px;
+    /* Padding for spacing */
+    box-sizing: border-box;
+    overflow: hidden;
+    gap: 10px;
+    color: black;
+    padding-bottom: 10vh;
+    padding-top: 10px;
+    overflow-y: scroll;
 }
 
 
@@ -61,8 +87,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color:aliceblue;
-    border-radius: 11px;border: 2px solid rgb(0, 0, 0);
+    background-color: aliceblue;
+    border-radius: 11px;
+    border: 2px solid rgb(0, 0, 0);
     width: 96vw;
     height: 41px;
 }
@@ -82,30 +109,79 @@
 /* Autofill Styles for Chrome, Edge, and Safari */
 .product-page-filter-input:-webkit-autofill {
     background-color: #fff !important;
-    color: #000 !important;font-size: 1rem;
+    color: #000 !important;
+    font-size: 1rem;
     -webkit-box-shadow: 0 0 0px 1000px #fff inset !important;
     box-shadow: 0 0 0px 1000px #fff inset !important;
 }
+
 .product-page-filter-input::placeholder {
     color: #000000 !important;
-    font-size: 0.9rem;font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-}
-.product-page-filter-items{
-    width: 100%;min-height: 10vh;
-    display: flex;gap: 10px;flex-wrap: wrap;
-   margin-top: 1px;
-   padding: 0px 0px 2px 0px;
+    font-size: 0.9rem;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
-.product-page-unselected-category{
-    padding: 7px 10px 7px 10px;
-    border: 1.2px solid black;border-radius: 10px;
+.product-page-filter-items {
+    width: 100%;
+    min-height: 10vh;overflow-y: scroll;
+    gap: 10px;
+    flex-wrap: wrap;background-color: transparent;
+    padding-top: 1px;
+    padding: 0px 0px 2px 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 
-.product-page-no-results{
-    width: 100%;display: flex;
-    justify-content: center;align-items: center;padding: 10px;
-    font-size: 0.9rem;font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 
+.product-page-no-results {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    font-size: 0.9rem;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+
+}
+
+
+
+
+.product-filter-apply-button{
+    height: 55px;
+    position:absolute;bottom: 0;
+    background-color: transparent;width: 100vw;
+    display: flex;justify-content: center;align-items: center;
+}
+
+.product-filter-apply-button:active{
+    height: 55px;background-color: rgb(0, 0, 0);
+    position:absolute;bottom: 0;width: 100vw;
+    display: flex;justify-content: center;align-items: center;
+}
+
+
+
+
+
+
+
+
+
+
+
+.productSearch-filterby-item-selected{
+    width: 89px;height: 50px;padding: 0px 2px 2px 0px;
+    background-color: #000000;border-radius: 20px;color: white;
+    display: flex;justify-content: center;align-items: center;
+    
+}
+.productSearch-filterby-item-unselected{
+    width: 89px;height: 50px;
+    border: 1px solid black;
+    border-radius: 20px;background-color: transparent;
+    display: flex;justify-content: center;align-items: center;
+    
 }

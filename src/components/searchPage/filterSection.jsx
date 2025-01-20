@@ -11,7 +11,7 @@ import {
 import './filterSection.css';
 
 const SearchProductFilterSection = ({ showFilterBy, setShowFilterBy }) => {
-  const [isApply,setIsApply]= useState(false);
+  const [isApply, setIsApply] = useState(false);
   const dispatch = useDispatch();
   const { executeSearch } = useExecuteSearch();
 
@@ -35,8 +35,15 @@ const SearchProductFilterSection = ({ showFilterBy, setShowFilterBy }) => {
   const [selectedLabel, setSelectedLabel] = useState('category');
 
   const allFilters = {
-    category: ['Electronics', 'Fashion', 'Home', 'Books', 'Modules'],
-    brand: ['Samsung', 'Apple', 'Sony', 'Dell', 'HP'],
+    category: ['Electronics', 'Fashion', 'Home', 
+      'Books', 'Modules', 'Electronics', 
+      'Fashion', 'Home', 'Books', 'Modules',
+    'Electronics', 'Fashion', 'Home', 'Books', 'Modules', 'Electronics', 
+  'Electronics', 'Fashion', 'Home', 'Books', 'Modules', 'Electronics', 
+'Electronics', 'Fashion', 'Home', 'Books', 'Modules', 'Electronics', 
+'Electronics', 'Fashion', 'Home', 'Books', 'Modules', 'Electronics', 
+'Electronics', 'Fashion', 'Home', 'Books', 'Modules', 'Electronics', ],
+    brand: ['Samsung', 'Apple', 'Sony', 'Dell', 'HP', 'Samsung', 'Apple', 'Sony', 'Dell', 'HP', 'Samsung', 'Apple', 'Sony', 'Dell', 'HP'],
   };
 
   const filterActions = {
@@ -110,12 +117,7 @@ const SearchProductFilterSection = ({ showFilterBy, setShowFilterBy }) => {
             No {title.toLowerCase()} found
           </p>
         )}
-        <div
-          className="apply-button"
-          onClick={handleFilterClick}
-        >
-          Apply
-        </div>
+
       </div>
     );
   };
@@ -137,8 +139,8 @@ const SearchProductFilterSection = ({ showFilterBy, setShowFilterBy }) => {
       >
         <div
           className={isSelected
-            ? 'productSearch-sortby-item-selected'
-            : 'productSearch-sortby-item-unselected'}
+            ? 'productSearch-filterby-item-selected'
+            : 'productSearch-filterby-item-unselected'}
         >
           {label.charAt(0).toUpperCase() + label.slice(1)}
         </div>
@@ -153,8 +155,9 @@ const SearchProductFilterSection = ({ showFilterBy, setShowFilterBy }) => {
           <div
             className="location-tab-IoIosCloseCircle"
             onClick={() => {
-              if(isApply){executeSearch();}
-              setShowFilterBy(false)}
+              if (isApply) { executeSearch(); }
+              setShowFilterBy(false)
+            }
             }
             aria-label="Close sort options"
           >
@@ -171,7 +174,17 @@ const SearchProductFilterSection = ({ showFilterBy, setShowFilterBy }) => {
                 selectedLabel,
                 selectedLabel.charAt(0).toUpperCase() + selectedLabel.slice(1)
               )}
+
+
+
           </div>
+
+          <div
+              className="product-filter-apply-button"
+              onClick={handleFilterClick}
+            >
+              Apply
+            </div>
         </div>
       </div>
     )
