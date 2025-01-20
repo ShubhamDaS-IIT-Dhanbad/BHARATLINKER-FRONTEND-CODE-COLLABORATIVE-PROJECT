@@ -5,6 +5,7 @@ import { LiaSortSolid } from 'react-icons/lia';
 import { MdFilterList } from 'react-icons/md';
 import ShopList from './shopList.jsx';
 import InfiniteScroll from 'react-infinite-scroll-component';
+
 import { Oval } from "react-loader-spinner";
 import { RotatingLines } from 'react-loader-spinner';
 
@@ -35,7 +36,7 @@ const Shop = ({ isShopPageLoaded, setShopPageLoaded }) => {
         <>
             {(!isShopPageLoaded) ? (
                 <div className="fallback-loading">
-                    <RotatingLines width="60" height="60" color="#808080" strokeWidth="3" />
+                   <Oval height={30} width={30} color="white" secondaryColor="gray" ariaLabel="loading" />
                 </div>
             ) : (
                 <>
@@ -47,7 +48,7 @@ const Shop = ({ isShopPageLoaded, setShopPageLoaded }) => {
 
                     {(loading || !isShopPageLoaded) ? (
                         <div className="fallback-loading">
-                            <RotatingLines width="60" height="60" color="#808080" strokeWidth="3" />
+                           <Oval height={30} width={30} color="white" secondaryColor="gray" ariaLabel="loading" />
                         </div>
                     ) : (
                         <InfiniteScroll
@@ -58,7 +59,6 @@ const Shop = ({ isShopPageLoaded, setShopPageLoaded }) => {
                                 loadingMoreShops && (
                                     <div id="search-shop-load-more-shop-loader">
                                         <Oval height={30} width={30} color="white" secondaryColor="gray" ariaLabel="loading" />
-
                                     </div>
                                 )
                             }

@@ -2,7 +2,7 @@ import React, { Suspense, lazy, useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 
-import { RotatingLines } from 'react-loader-spinner';
+import { RotatingLines,Oval } from 'react-loader-spinner';
 import './App.css';
 
 
@@ -34,8 +34,8 @@ function App() {
       <Router>
         <Suspense fallback={
           <div className="fallback-loading">
-             <RotatingLines width="60" height="60" color="#808080" strokeWidth="3" />
-                          
+             <Oval height={30} width={30} color="white" secondaryColor="gray" ariaLabel="loading" />
+                     
           </div>
         }>
           <RoutesWithConditionalHeader />

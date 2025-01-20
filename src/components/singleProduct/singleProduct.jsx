@@ -1,11 +1,10 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import "./singleProduct.css";
 import searchProductService from "../../appWrite/searchProduct.js";
 import { FaCaretRight } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import SingleProductSearchBar from "./singleProductSearchBar.jsx";
-import { RotatingLines } from "react-loader-spinner";
+import { Oval } from "react-loader-spinner";
 import { fetchShopById } from "../../redux/features/singleShopSlice.jsx";
 import { RiShareForwardLine } from "react-icons/ri";
 import AddToCartTab from "../viewCartTab/viewCart.jsx";
@@ -13,6 +12,8 @@ import { fetchUserCartByPhoneNumber, updateCartByPhoneNumber } from '../../appWr
 import Cookies from 'js-cookie'
 import { FaPlus } from "react-icons/fa";
 import { FaMinus } from "react-icons/fa";
+
+import "../style/singleProduct.css";
 
 import MyCart from '../user/myCart/myCart.jsx';
 const fallbackImage = "http://res.cloudinary.com/dthelgixr/image/upload/v1727870088/hd7kcjuz8jfjajnzmqkp.webp";
@@ -331,7 +332,7 @@ const ProductDetails = () => {
 
             {loading ? (
                 <div className="refurbished-page-loading-container">
-                    <RotatingLines width="60" height="60" color="#007bff" />
+                    <Oval height={30} width={30} color="white" secondaryColor="gray" ariaLabel="loading" />
                 </div>
             ) : (
                 <Fragment>

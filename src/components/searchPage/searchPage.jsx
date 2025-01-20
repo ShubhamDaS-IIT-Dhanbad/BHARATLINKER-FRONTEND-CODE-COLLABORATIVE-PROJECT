@@ -6,7 +6,7 @@ import { MdFilterList } from "react-icons/md";
 import SearchBar from '../a.navbarComponent/navbar.jsx';
 import ProductList from './productList.jsx';
 
-import { RotatingLines } from 'react-loader-spinner';
+import { RotatingLines,Oval } from 'react-loader-spinner';
 
 import InfiniteScroll from 'react-infinite-scroll-component';
 
@@ -53,7 +53,7 @@ const SearchPage = ({ isProductPageLoaded, setProductPageLoaded }) => {
         <>
             {(!isProductPageLoaded) ? (
                 <div className="fallback-loading">
-                    <RotatingLines width="60" height="60" color="#808080" strokeWidth="3" />
+                   <Oval height={30} width={30} color="white" secondaryColor="gray" ariaLabel="loading" />
                 </div>
             ) : (
                 <>
@@ -66,7 +66,7 @@ const SearchPage = ({ isProductPageLoaded, setProductPageLoaded }) => {
 
                     {(loading || !isProductPageLoaded) ? (
                         <div className="fallback-loading">
-                            <RotatingLines width="60" height="60" color="#808080" strokeWidth="3" />
+                            <Oval height={30} width={30} color="white" secondaryColor="gray" ariaLabel="loading" />                                   
                         </div>
                     ) : (
                         <InfiniteScroll

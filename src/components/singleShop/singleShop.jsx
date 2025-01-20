@@ -1,6 +1,5 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import "./singleShop.css";
 import { useDispatch, useSelector } from "react-redux";
 import SingleProductSearchBar from "./singleShopSearchBar.jsx";
 import { RotatingLines } from "react-loader-spinner";
@@ -13,6 +12,7 @@ import { CiPhone } from "react-icons/ci";
 import { CiLocationOn } from "react-icons/ci";
 import { CiMail } from "react-icons/ci";
 
+import "../style/singleShop.css";
 const ProductDetails = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
