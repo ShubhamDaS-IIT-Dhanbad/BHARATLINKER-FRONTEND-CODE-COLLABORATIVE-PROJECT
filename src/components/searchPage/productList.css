@@ -6,7 +6,7 @@
     justify-content: center;
     margin-top: 110px;
     padding-bottom: 77px;
-    min-height: calc(100vh - 120px - 80px);
+    min-height: calc(90vh - 120px - 80px);
     scrollbar-width: none; /* For Firefox */
     -ms-overflow-style: none; /* For IE and Edge */
     gap: 10px;
