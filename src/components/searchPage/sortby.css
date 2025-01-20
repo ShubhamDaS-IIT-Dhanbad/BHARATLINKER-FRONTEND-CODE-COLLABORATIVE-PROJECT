@@ -1,0 +1,54 @@
+
+/* sort by pop up */
+.productSearch-page-sort-by-tab{
+    width: 100vw;height: 100vh;
+    position: fixed;top: 0;
+    background-color: rgba(0, 0, 0, 0.9);
+    display: flex;justify-content: flex-end;flex-direction: column;
+    align-items: center;gap: 10px;
+    z-index: 9999;color: black;
+}
+#productSearch-page-sort-by-header{
+    display: flex;
+    flex-direction: column;
+    max-height: 70vh;
+    width: 100vw;
+    max-width: 100vw;
+    background-color: rgb(236, 241, 246);
+    border-top-left-radius: 20px; /* Rounded top-left corner */
+    border-top-right-radius: 20px; /* Rounded top-right corner */
+    padding: 7px; /* Padding for spacing */
+    box-sizing: border-box; /* Include padding in width calculation */
+    overflow: hidden; /* Hide any overflow content */
+    gap: 10px;
+    padding-bottom: 10vh;
+}
+#productSearch-page-filter-by-options{
+    display: flex;gap: 7px;
+    overflow:scroll;width: 90vw;justify-content: flex-start;
+}
+
+
+
+
+#productSearch-page-sortby-options{
+    display: flex;
+    justify-content:center;align-items: center;
+    gap: 10px;margin: 10px 0px 0px 10px;
+}
+.productSearch-sortby-item-selected{
+    width: 85px;height: 50px;
+    background-color: #000000;border-radius: 20px;color: white;
+    display: flex;justify-content: center;align-items: center;
+    
+}
+.productSearch-sortby-item-unselected{
+    width: 85px;height: 50px;border: 1px solid black;
+    background-color: #ffffff;border-radius: 20px;
+    display: flex;justify-content: center;align-items: center;
+    
+}
+.productSearch-page-loading-container{
+    width: 100vw;height: 100vh;
+    display: flex;justify-content: center;align-items: center;
+}

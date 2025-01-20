@@ -27,6 +27,7 @@ export const useSearchRefurbishedProductsHook = () => {
 
     const executeSearchRefurbished = (inputValue) => {
         if(loading || loadingMoreProducts) return;
+        
         const searchQuery = inputValue || "";
         const params = {
             inputValue: searchQuery,

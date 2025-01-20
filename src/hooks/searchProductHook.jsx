@@ -10,6 +10,7 @@ export const useExecuteSearch = () => {
     const storedLocation = getLocationFromCookie();
 
     const {
+        loading,
         loadingMoreProducts,
         hasMoreProducts,
         selectedCategories,
@@ -24,6 +25,7 @@ export const useExecuteSearch = () => {
     const radius = storedLocation ? storedLocation.radius : 5; 
 
     const executeSearch = (inputValue) => {
+        if(loading || loadingMoreProducts) return;
         const searchQuery = inputValue || "";
         const params = {
             userLat: lat,
