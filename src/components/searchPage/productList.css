@@ -1,19 +1,15 @@
 #product-page-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr); 
-    gap: 0px;
-    justify-content: center;
-    min-height: calc(90vh - 120px - 80px);
-    scrollbar-width: none; /* For Firefox */
-    -ms-overflow-style: none;
+    display: flex;
+    flex-wrap: wrap;gap: 10px;
     width: 100vw;
+    justify-content: center;
     margin-top: 110px;
     padding-bottom: 77px;
+    background-color: rgb(249, 249, 249);
     min-height: calc(100vh - 120px - 80px);
 
-
 }
 
-#product-page-grid::-webkit-scrollbar {
-    display: none; /* For Chrome, Safari, and Edge */
-}
+#product-page-grid::-webkit-scrollbar{
+    width: 0px;height: 0px;
+} 

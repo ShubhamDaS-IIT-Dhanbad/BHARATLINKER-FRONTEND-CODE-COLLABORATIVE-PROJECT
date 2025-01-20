@@ -11,8 +11,10 @@ export const useExecuteSearch = () => {
     const {
         products,
         loading,
+        currentPage,
         loadingMoreProducts,
         hasMoreProducts,
+        productsPerPage,
         sortByAsc,
         sortByDesc,
     } = useSelector((state) => state.searchproducts);
@@ -20,7 +22,6 @@ export const useExecuteSearch = () => {
     const selectedBrands = useSelector((state) => state.searchproductsfiltersection.selectedBrands);
     const selectedCategories = useSelector((state) => state.searchproductsfiltersection.selectedCategories);
 
-    const productsPerPage = 3;
     const lat = storedLocation ? storedLocation.lat : null;
     const long = storedLocation ? storedLocation.lon : null;
     const radius = storedLocation ? storedLocation.radius : 5; 
@@ -44,13 +45,14 @@ export const useExecuteSearch = () => {
         dispatch(fetchProducts(params));
     };
     
-    const onLoadMore = () => {
+    const onLoadMore = (inputValue) => {
         if (!hasMoreProducts || loadingMoreProducts) return;
+        const searchQuery = inputValue || "";
         const params = {
             userLat: lat,
             userLong: long,
             radius,
-            inputValue,
+            inputValue:searchQuery,
             page: currentPage + 1,
             productsPerPage,
             selectedCategories,
