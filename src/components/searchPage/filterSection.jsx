@@ -153,7 +153,6 @@ const SearchProductFilterSection = ({ showFilterBy, setShowFilterBy }) => {
 
   return (
     showFilterBy && (
-      <div className="product-page-filter-section">
         <div className="productSearch-page-sort-by-tab">
           <div
             className="location-tab-IoIosCloseCircle"
@@ -182,7 +181,6 @@ const SearchProductFilterSection = ({ showFilterBy, setShowFilterBy }) => {
           </div>
 
         </div>
-      </div>
     )
   );
 };
