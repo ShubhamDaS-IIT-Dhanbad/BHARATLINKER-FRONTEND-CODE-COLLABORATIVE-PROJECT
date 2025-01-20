@@ -37,7 +37,7 @@ const RefurbishedPage = ({ isRefurbishedPageLoaded, setRefurbishedPageLoaded }) 
       setRefurbishedPageLoaded(true);
     }, 800);
     return () => clearTimeout(delayTimeout);
-  }, []);
+  }, [updated]);
 
   return (
     <>
