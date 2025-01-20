@@ -1,17 +1,12 @@
 #product-page-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr); /* Two equal columns */
-    gap: 0px; /* Space between the grid items */
-    width: 100vw;
+    grid-template-columns: repeat(2, 1fr); 
+    gap: 0px;
     justify-content: center;
-    margin-top: 110px;
-    padding-bottom: 77px;
     min-height: calc(90vh - 120px - 80px);
     scrollbar-width: none; /* For Firefox */
-    -ms-overflow-style: none; /* For IE and Edge */
-    gap: 10px;
+    -ms-overflow-style: none;
     width: 100vw;
-    justify-content: center;
     margin-top: 110px;
     padding-bottom: 77px;
     min-height: calc(100vh - 120px - 80px);
