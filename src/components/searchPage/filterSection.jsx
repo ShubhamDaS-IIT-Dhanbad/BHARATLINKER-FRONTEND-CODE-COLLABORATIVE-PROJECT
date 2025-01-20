@@ -36,21 +36,21 @@ const SearchProductFilterSection = ({ showFilterBy, setShowFilterBy }) => {
   const [selectedLabel, setSelectedLabel] = useState('category');
 
   const allFilters = {
-    category:[
-      'Appliances', 'Automobiles', 'Bags', 'Beauty', 'Books', 'Electronics', 'Fashion', 
-      'Footwear', 'Furniture', 'Gaming', 'Gadgets', 'Health', 'Home', 'Jewelry', 
-      'Kitchen', 'Laptops', 'Modules', 'Music', 'Office Supplies', 'Outdoors', 
+    category: [
+      'Appliances', 'Automobiles', 'Bags', 'Beauty', 'Books', 'Electronics', 'Fashion',
+      'Footwear', 'Furniture', 'Gaming', 'Gadgets', 'Health', 'Home', 'Jewelry',
+      'Kitchen', 'Laptops', 'Modules', 'Music', 'Office Supplies', 'Outdoors',
       'Pet Supplies', 'Smartphones', 'Sports', 'Stationery', 'Toys', 'Watches', 'Grocery'
     ]
-    
-  ,
-    brand:[
-      'Acer', 'Adidas', 'Apple', 'ASUS', 'Beats', 'Bose', 'Canon', 'Dell', 'HP', 'Huawei', 
-      'JBL', 'Lenovo', 'LG', 'Microsoft', 'Motorola', 'Nike', 'Nikon', 'OnePlus', 'Oppo', 
-      'Panasonic', 'Philips', 'Puma', 'Razer', 'Samsung', 'Sharp', 'Sony', 'Toshiba', 'Under Armour', 
+
+    ,
+    brand: [
+      'Acer', 'Adidas', 'Apple', 'ASUS', 'Beats', 'Bose', 'Canon', 'Dell', 'HP', 'Huawei',
+      'JBL', 'Lenovo', 'LG', 'Microsoft', 'Motorola', 'Nike', 'Nikon', 'OnePlus', 'Oppo',
+      'Panasonic', 'Philips', 'Puma', 'Razer', 'Samsung', 'Sharp', 'Sony', 'Toshiba', 'Under Armour',
       'Vivo', 'Xiaomi'
     ]
-    
+
   };
 
   const filterActions = {
@@ -78,7 +78,7 @@ const SearchProductFilterSection = ({ showFilterBy, setShowFilterBy }) => {
       const updatedSelection = [...selectedCategoriesState];
       if (updatedSelection.includes(item)) {
         const index = updatedSelection.indexOf(item);
-        updatedSelection.splice(index, 1); 
+        updatedSelection.splice(index, 1);
       } else {
         updatedSelection.push(item);
       }
@@ -172,14 +172,14 @@ const SearchProductFilterSection = ({ showFilterBy, setShowFilterBy }) => {
           </div>
           <div style={{ color: 'white' }}>FILTER SECTION</div>
           <div id="productSearch-page-sort-by-header">
-            
+
             <div id="productSearch-page-filterby-options">
-            <TfiSave onClick={handleFilterClick} size={20}/>
-            <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",gap:"10px"}}>
-              <SortOption label="category" />
-              <SortOption label="brand" />
+              <TfiSave onClick={handleFilterClick} size={20} />
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", gap: "10px" }}>
+                <SortOption label="category" />
+                <SortOption label="brand" />
               </div>
-              <RiResetRightLine size={20}/>
+              <RiResetRightLine size={20} />
             </div>
             {selectedLabel &&
               renderFilter(
