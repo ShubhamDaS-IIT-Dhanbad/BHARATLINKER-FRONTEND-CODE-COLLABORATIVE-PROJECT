@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import "./homeTestimonial.css";
 
 
-const ti1='';
-const ti2='';
+const ti1='https://res.cloudinary.com/demc9mecm/image/upload/v1737378115/ptnykpibqxqobs3gywoq.png';
+const ti2='https://res.cloudinary.com/demc9mecm/image/upload/v1737378115/d7xgicjpub5ag6udeisd.png';
 
 const Testimonial = () => {
   const testimonials = [

@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './login.css';
 
-const i1='https://res.cloudinary.com/demc9mecm/image/upload/v1737182575/mz1bdy2skwtmouqxfqtf.jpg';//indian flag
-const i2='https://res.cloudinary.com/demc9mecm/image/upload/v1737182575/mz1bdy2skwtmouqxfqtf.jpg';//i1.png
+const i1='https://res.cloudinary.com/demc9mecm/image/upload/v1737378112/vokh5op2d88jerrkksan.png';//indian flag
+const i2='https://res.cloudinary.com/demc9mecm/image/upload/v1737378115/d7xgicjpub5ag6udeisd.png';//i1.png
 
 
 import { ToastContainer, toast } from 'react-toastify';
