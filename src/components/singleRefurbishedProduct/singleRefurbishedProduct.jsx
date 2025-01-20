@@ -89,7 +89,7 @@ const ProductDetails = () => {
       </div>
 
       {loading ? (
-        <div className="refurbished-page-loading-container">
+        <div className="page-loading-container">
           <Oval height={30} width={30} color="white" secondaryColor="gray" ariaLabel="loading" />
         </div>
       ) : (

@@ -2,7 +2,7 @@ import React, { Suspense, lazy, useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 
-import { RotatingLines,Oval } from 'react-loader-spinner';
+import {Oval } from 'react-loader-spinner';
 import './App.css';
 
 
