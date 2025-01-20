@@ -175,7 +175,7 @@ const SearchProductFilterSection = ({ showFilterBy, setShowFilterBy }) => {
             
             <div id="productSearch-page-filterby-options">
             <TfiSave onClick={handleFilterClick} size={20}/>
-            <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+            <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",gap:"10px"}}>
               <SortOption label="category" />
               <SortOption label="brand" />
               </div>
