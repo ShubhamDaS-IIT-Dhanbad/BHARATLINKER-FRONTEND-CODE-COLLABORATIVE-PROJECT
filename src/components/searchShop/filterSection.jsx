@@ -33,12 +33,44 @@ const SearchProductFilterSection = ({ showFilterBy, setShowFilterBy }) => {
   const [selectedLabel, setSelectedLabel] = useState('category');
 
   const allFilters = {
-    category: [
-      'Appliances', 'Automobiles', 'Bags', 'Beauty', 'Books', 'Electronics', 'Fashion',
-      'Footwear', 'Furniture', 'Gaming', 'Gadgets', 'Health', 'Home', 'Jewelry',
-      'Kitchen', 'Laptops', 'Modules', 'Music', 'Office Supplies', 'Outdoors',
-      'Pet Supplies', 'Smartphones', 'Sports', 'Stationery', 'Toys', 'Watches', 'Grocery'
+    category:[
+      "Electronics",
+      "Hardware",
+      "Computer",
+      "Mobile",
+      "Grocery",
+      "Clothing",
+      "Furniture",
+      "Footwear",
+      "Jewelry",
+      "Pharmacy",
+      "Bookstore",
+      "Stationery",
+      "Toy",
+      "Sports",
+      "Automobile",
+      "Pet",
+      "Beauty & Cosmetic",
+      "Home Decor",
+      "Kitchenware",
+      "Gaming",
+      "Music",
+      "Gardening",
+      "Baby Products",
+      "Art & Craft",
+      "Fitness Equipment",
+      "Repair",
+      "Travel Accessories",
+      "Outdoors & Camping",
+      "Office Supplies",
+      "Watches & Accessories",
+      "Gift",
+      "Secondhand Goods",
+      "Bakery",
+      "Butcher",
+      "Fish Market"
     ]
+    
 
     ,
     brand: [
@@ -132,7 +164,7 @@ const SearchProductFilterSection = ({ showFilterBy, setShowFilterBy }) => {
     return (
       <div
         className="productSearch-page-sortby-option-title"
-        onClick={handleClick}
+        // onClick={handleClick}
         role="button"
         tabIndex={0}
         aria-label={`Sort ${label}`}
@@ -167,7 +199,7 @@ const SearchProductFilterSection = ({ showFilterBy, setShowFilterBy }) => {
 
             <div id="productSearch-page-filterby-options">
               <SortOption label="category" />
-              <SortOption label="brand" />
+              {/* <SortOption label="brand" /> */}
             </div>
             {selectedLabel &&
               renderFilter(
