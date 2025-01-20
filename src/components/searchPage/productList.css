@@ -1,143 +1,24 @@
-
 #product-page-grid {
-    display: flex;
-    flex-wrap: wrap;gap: 10px;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Two equal columns */
+    gap: 0px; /* Space between the grid items */
     width: 100vw;
     justify-content: center;
     margin-top: 110px;
     padding-bottom: 77px;
-    background-color: rgb(249, 249, 249);
+    min-height: calc(100vh - 120px - 80px);
+    scrollbar-width: none; /* For Firefox */
+    -ms-overflow-style: none; /* For IE and Edge */
+    gap: 10px;
+    width: 100vw;
+    justify-content: center;
+    margin-top: 110px;
+    padding-bottom: 77px;
     min-height: calc(100vh - 120px - 80px);
 
+
 }
 
-#product-page-grid::-webkit-scrollbar{
-    width: 0px;height: 0px;
-}
-
-
-
-
-
-/* product sort by header */
-#product-sort-by-header {
-    height: 60px;
-    width: 100vw;
-    position: fixed;
-    top: 0;
-    background-color: rgb(249, 249, 249);
-    color: rgb(0, 0, 0);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 19px;
-    font-weight: 900;
-}
-
-#product-sort-by-header-inner-div {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 45px;
-    width: 95vw;
-    border: 1px solid rgb(0, 0, 0);
-    border-radius: 20px;
-}
-
-#product-sort-by-header-inner-div-IoChevronBackCircleOutline {
-    color: rgb(0, 0, 0);
-    position: absolute;
-    right: 5vw;
-    display: none;
-}
-
-
-
-
-#product-page-sortby-options {
-    margin-top: 60px;
-}
-
-
-#sortby-options {
-    margin-top: 77px;
-}
-
-.pincode-item-product-page-card {
-    margin: 3px;
-    font-size: 19px;
-    font-weight: 900;
-    border-bottom: 1px solid black;
-}
-
-.pincode-item-search-page-card {
-    display: flex;
-    font-size: 19px;
-    margin-left: 20px;
-    padding: 10px;
-    font-weight: 900;
-}
-
-.product-page-pagination-controls-next-button-p {
-    border-radius: 5px;
-    background-color: black;
-    color: white;
-    padding: 15px;
-    font-size: 20px;
-}
-
-.product-page-pagination-controls-p {
-    width: 100vw;
-    height: 70px;
-    margin-top: 50px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.search-page-load-more-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 20px;
-}
-
-
-
-
-/* NO PRODUCT FOUND */
-.search-page-no-product-found {
-    width: 100vw;
-    flex-direction: column;
-    min-height: 75vh;
-    align-items: center;
-    display: flex;
-    justify-content: center;
-}
-
-
-
-.selected-brand {
-    color: greenyellow;
-}
-
-.unselected-brand {
-    color: red;
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-.productSearchPage-loading-more-products{
-    width: 100vw;height: 50px;padding-bottom: 50px;
-    display: flex;justify-content: center;align-items: center;
+#product-page-grid::-webkit-scrollbar {
+    display: none; /* For Chrome, Safari, and Edge */
 }

@@ -1,9 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { IoClose } from 'react-icons/io5';
-import { TfiSave } from "react-icons/tfi";
-import { RiResetRightLine } from "react-icons/ri";
-import { useExecuteSearch } from '../../hooks/searchProductHook.jsx';
 import {
   setSearchProductsCategories,
   setSearchProductsBrands,
@@ -177,9 +174,7 @@ const SearchProductFilterSection = ({ showFilterBy, setShowFilterBy }) => {
                 selectedLabel,
                 selectedLabel.charAt(0).toUpperCase() + selectedLabel.slice(1)
               )}
-
           </div>
-
         </div>
     )
   );

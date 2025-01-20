@@ -6,7 +6,7 @@ import './productList.css';
 
 
 const NoProductsFound = () => {
-    const notfound='https://res.cloudinary.com/demc9mecm/image/upload/v1736953901/ir4hy5fcwevhr8ibeaqq.png'
+    const notfound = 'https://res.cloudinary.com/demc9mecm/image/upload/v1736953901/ir4hy5fcwevhr8ibeaqq.png'
     return (
         <div className='search-shop-no-shop-found'>
             <img src={notfound} />
@@ -21,7 +21,7 @@ const ProductList = () => {
 
     return (
         <>
-            <div id="product-page-grid">
+            <div id="product-page-grid" >
                 {products.map((product) => (
                     <SearchPageProductCard
                         key={product.$id}
