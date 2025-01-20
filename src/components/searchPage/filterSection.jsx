@@ -35,30 +35,26 @@ const SearchProductFilterSection = ({ showFilterBy, setShowFilterBy }) => {
   const [selectedLabel, setSelectedLabel] = useState('category');
 
   const allFilters = {
-    category:[
-      'Appliances', 'Automobiles', 'Bags', 'Beauty', 'Books', 'Electronics', 'Fashion', 
-      'Footwear', 'Furniture', 'Gaming', 'Gadgets', 'Health', 'Home', 'Jewelry', 
-      'Kitchen', 'Laptops', 'Modules', 'Music', 'Office Supplies', 'Outdoors', 
+    category: [
+      'Appliances', 'Automobiles', 'Bags', 'Beauty', 'Books', 'Electronics', 'Fashion',
+      'Footwear', 'Furniture', 'Gaming', 'Gadgets', 'Health', 'Home', 'Jewelry',
+      'Kitchen', 'Laptops', 'Modules', 'Music', 'Office Supplies', 'Outdoors',
       'Pet Supplies', 'Smartphones', 'Sports', 'Stationery', 'Toys', 'Watches', 'Grocery'
     ]
-    
-  ,
-    brand:[
-      'Acer', 'Adidas', 'Apple', 'ASUS', 'Beats', 'Bose', 'Canon', 'Dell', 'HP', 'Huawei', 
-      'JBL', 'Lenovo', 'LG', 'Microsoft', 'Motorola', 'Nike', 'Nikon', 'OnePlus', 'Oppo', 
-      'Panasonic', 'Philips', 'Puma', 'Razer', 'Samsung', 'Sharp', 'Sony', 'Toshiba', 'Under Armour', 
+
+    ,
+    brand: [
+      'Acer', 'Adidas', 'Apple', 'ASUS', 'Beats', 'Bose', 'Canon', 'Dell', 'HP', 'Huawei',
+      'JBL', 'Lenovo', 'LG', 'Microsoft', 'Motorola', 'Nike', 'Nikon', 'OnePlus', 'Oppo',
+      'Panasonic', 'Philips', 'Puma', 'Razer', 'Samsung', 'Sharp', 'Sony', 'Toshiba', 'Under Armour',
       'Vivo', 'Xiaomi'
     ]
-    
+
   };
 
-  const filterActions = {
-    category: setSearchProductsCategories,
-    brand: setSearchProductsBrands,
-  };
 
   const handleFilterClick = () => {
-    setIsApply(true);
+    if (!isApply) return;
     dispatch(setSearchProductsCategories(selectedCategoriesState));
     dispatch(setSearchProductsBrands(selectedBrandsState));
   };
@@ -73,24 +69,25 @@ const SearchProductFilterSection = ({ showFilterBy, setShowFilterBy }) => {
   );
 
   const handleItemClick = (item, filterType) => {
+    setIsApply(true);
     if (filterType === 'category') {
       const updatedSelection = [...selectedCategoriesState];
       if (updatedSelection.includes(item)) {
         const index = updatedSelection.indexOf(item);
-        updatedSelection.splice(index, 1); // Remove item if already selected
+        updatedSelection.splice(index, 1);
       } else {
-        updatedSelection.push(item); // Add item if not selected
+        updatedSelection.push(item);
       }
-      setSelectedCategoriesState(updatedSelection); // Update selected categories state
+      setSelectedCategoriesState(updatedSelection);
     } else {
       const updatedSelection = [...selectedBrandsState];
       if (updatedSelection.includes(item)) {
         const index = updatedSelection.indexOf(item);
-        updatedSelection.splice(index, 1); // Remove item if already selected
+        updatedSelection.splice(index, 1);
       } else {
-        updatedSelection.push(item); // Add item if not selected
+        updatedSelection.push(item);
       }
-      setSelectedBrandsState(updatedSelection); // Update selected brands state
+      setSelectedBrandsState(updatedSelection);
     }
   };
 
@@ -161,16 +158,17 @@ const SearchProductFilterSection = ({ showFilterBy, setShowFilterBy }) => {
           <div
             className="location-tab-IoIosCloseCircle"
             onClick={() => {
-              if (isApply) { executeSearch(); }
-              setShowFilterBy(false)
-            }
+                if (isApply) executeSearch();
+                  setShowFilterBy(false)
+              }
             }
             aria-label="Close sort options"
           >
-            <IoClose size={25} />
+            <IoClose size={25} onClick={() => { handleFilterClick() }} />
           </div>
           <div style={{ color: 'white' }}>FILTER SECTION</div>
           <div id="productSearch-page-sort-by-header">
+
             <div id="productSearch-page-sortby-options">
               <SortOption label="category" />
               <SortOption label="brand" />
@@ -181,16 +179,8 @@ const SearchProductFilterSection = ({ showFilterBy, setShowFilterBy }) => {
                 selectedLabel.charAt(0).toUpperCase() + selectedLabel.slice(1)
               )}
 
-
-
           </div>
 
-          <div
-              className="product-filter-apply-button"
-              onClick={handleFilterClick}
-            >
-              Apply
-            </div>
         </div>
       </div>
     )

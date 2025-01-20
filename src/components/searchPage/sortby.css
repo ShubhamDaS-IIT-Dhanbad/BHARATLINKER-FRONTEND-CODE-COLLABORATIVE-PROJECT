@@ -21,7 +21,6 @@
     box-sizing: border-box; /* Include padding in width calculation */
     overflow: hidden; /* Hide any overflow content */
     gap: 10px;
-    padding-bottom: 10vh;
 }
 #productSearch-page-filter-by-options{
     display: flex;gap: 7px;
