@@ -1,120 +1,182 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { IoClose } from 'react-icons/io5';
-import { IoSearch } from 'react-icons/io5';
-
-import { resetRefurbishedProducts } from '../../redux/features/refurbishedPage/refurbishedProductsSlice.jsx';
+import {
+  setRefurbishedProductsCategories,
+  setRefurbishedProductsBrands,
+} from '../../redux/features/refurbishedPage/refurbishedProductFilterSectionSlice.jsx';
 
 import './filterSection.css';
+import { resetRefurbishedProducts } from '../../redux/features/refurbishedPage/refurbishedProductsSlice.jsx';
 
-const RefurbishedProductFilterSection = ({showFilterBy, setShowFilterBy }) => {
+const SearchProductFilterSection = ({ showFilterBy, setShowFilterBy }) => {
+  const [isApply, setIsApply] = useState(false);
   const dispatch = useDispatch();
 
-  const [filters, setFilters] = useState({
-    category: false,
-    brand: false
-  });
+  const selectedBrands = useSelector(
+    (state) => state.refurbishedproductsfiltersection.selectedRefurbishedBrands
+  );
+  const selectedCategories = useSelector(
+    (state) => state.refurbishedproductsfiltersection.selectedRefurbishedCategories
+  );
+
+
+  // State for tracking selected categories and brands
+  const [selectedCategoriesState, setSelectedCategoriesState] = useState(selectedCategories);
+  const [selectedBrandsState, setSelectedBrandsState] = useState(selectedBrands);
 
   const [searchTerms, setSearchTerms] = useState({
     category: '',
-    brand: ''
+    brand: '',
   });
 
-
-
-  const selectedFilters = useSelector((state) => ({
-    categorys: ['Electronics', 'Fashion', 'Home', 'Book', 'Module'],
-    brand: ['Samsung', 'Apple', 'Sony', 'Dell', 'HP'],
-  }));
+  // Set 'category' as the default selected label
+  const [selectedLabel, setSelectedLabel] = useState('category');
 
   const allFilters = {
-    category: ['Electronics', 'Fashion', 'Home', 'Book', 'Module'],
-    brand: ['Samsung', 'Apple', 'Sony', 'Dell', 'HP'],
+    category: [
+      'Appliances', 'Automobiles', 'Bags', 'Beauty', 'Books', 'Electronics', 'Fashion',
+      'Footwear', 'Furniture', 'Gaming', 'Gadgets', 'Health', 'Home', 'Jewelry',
+      'Kitchen', 'Laptops', 'Modules', 'Music', 'Office Supplies', 'Outdoors',
+      'Pet Supplies', 'Smartphones', 'Sports', 'Stationery', 'Toys', 'Watches', 'Grocery'
+    ],
+    brand: [
+      'Acer', 'Adidas', 'Apple', 'ASUS', 'Beats', 'Bose', 'Canon', 'Dell', 'HP', 'Huawei',
+      'JBL', 'Lenovo', 'LG', 'Microsoft', 'Motorola', 'Nike', 'Nikon', 'OnePlus', 'Oppo',
+      'Panasonic', 'Philips', 'Puma', 'Razer', 'Samsung', 'Sharp', 'Sony', 'Toshiba', 'Under Armour',
+      'Vivo', 'Xiaomi'
+    ]
+
   };
 
-  const filterActions = {
-    category: toggleRefurbishedCategory,
-    brand: toggleRefurbishedBrand
-  };
-
-  const handleFilterClick = (filter, value) => {
-    dispatch(filterActions[filter](value));
+  const handleFilterClick = () => {
+    dispatch(setRefurbishedProductsCategories(selectedCategoriesState));
+    dispatch(setRefurbishedProductsBrands(selectedBrandsState));
     dispatch(resetRefurbishedProducts());
   };
 
-  const renderFilter = (filter, title) => {
-    const filteredItems = useMemo(
-      () =>
-        allFilters[filter].filter((item) =>
-          item.toLowerCase().includes(searchTerms[filter].toLowerCase())
-        ),
-      [filter, searchTerms[filter]]
-    );
+  const filterItems = useCallback(
+    (filterType) => {
+      return allFilters[filterType].filter((item) =>
+        item.toLowerCase().includes(searchTerms[filterType].toLowerCase())
+      );
+    },
+    [searchTerms]
+  );
+
+  const handleItemClick = (item, filterType) => {
+    setIsApply(true);
+    if (filterType === 'category') {
+      const updatedSelection = [...selectedCategoriesState];
+      if (updatedSelection.includes(item)) {
+        const index = updatedSelection.indexOf(item);
+        updatedSelection.splice(index, 1);
+      } else {
+        updatedSelection.push(item);
+      }
+      setSelectedCategoriesState(updatedSelection);
+    } else {
+      const updatedSelection = [...selectedBrandsState];
+      if (updatedSelection.includes(item)) {
+        const index = updatedSelection.indexOf(item);
+        updatedSelection.splice(index, 1);
+      } else {
+        updatedSelection.push(item);
+      }
+      setSelectedBrandsState(updatedSelection);
+    }
+  };
+
+  const renderFilter = (filterType, title) => {
+    const filteredItems = filterItems(filterType);
+    const selectedItems =
+      filterType === 'category' ? selectedCategoriesState : selectedBrandsState;
 
     return (
-      <div id="filter-options-refurbished-page" key={filter}>
-        <div id={`filter-${filter}-options`}>
-          <div className="searchRefurbishedPage-footer-filterby-div">
-            <IoSearch size={20} />
-            <input
-              type="text"
-              value={searchTerms[filter]}
-              onChange={(e) =>
-                setSearchTerms((prev) => ({
-                  ...prev,
-                  [filter]: e.target.value,
-                }))
-              }
-              placeholder={`Search ${title}`}
-              className="searchRefurbishedPage-footer-filterby-input"
-            />
-          </div>
-          <div id="refurbished-page-filter-by-options">
-            {filteredItems.map((item, index) => {
-              const isSelected =
-                selectedFilters[`${filter}s`]?.includes(item.toLowerCase()) || false;
-              return (
-                <span
-                  key={`${filter}-${item}-${index}`}
-                  className={`filter-option ${isSelected
-                      ? 'refurbished-page-selected-category'
-                      : 'refurbished-page-unselected-category'
-                    }`}
-                  onClick={() => handleFilterClick(filter, item)}
-                >
-                  {item}
-                </span>
-              );
-            })}
-          </div>
+      <div className="product-page-filter-items" key={filterType}>
+        {filteredItems.length > 0 ? (
+          filteredItems.map((item, index) => {
+            const isSelected = selectedItems.includes(item.toLowerCase());
+
+            return (
+              <div
+                key={`${filterType}-${item}-${index}`}
+                className={`filter-option ${isSelected
+                  ? 'product-page-selected-category'
+                  : 'product-page-unselected-category'
+                  }`}
+                onClick={() => handleItemClick(item.toLowerCase(), filterType)}
+              >
+                {item}
+              </div>
+            );
+          })
+        ) : (
+          <p className="product-page-no-results">
+            No {title.toLowerCase()} found
+          </p>
+        )}
+
+      </div>
+    );
+  };
+
+  const SortOption = ({ label }) => {
+    const isSelected = selectedLabel === label;
+
+    const handleClick = () => {
+      setSelectedLabel((prev) => (prev === label ? null : label));
+    };
+
+    return (
+      <div
+        className="productSearch-page-sortby-option-title"
+        onClick={handleClick}
+        role="button"
+        tabIndex={0}
+        aria-label={`Sort ${label}`}
+      >
+        <div
+          className={isSelected
+            ? 'productSearch-filterby-item-selected'
+            : 'productSearch-filterby-item-unselected'}
+        >
+          {label.charAt(0).toUpperCase() + label.slice(1)}
         </div>
       </div>
     );
   };
 
   return (
-    <div className="refurbished-page-filter-by-tab">
-      {showFilterBy && (
-        <>
-          <div
-            className="location-tab-IoIosCloseCircle"
-            onClick={() => setShowFilterBy(false)}
-            aria-label="Close sort options"
-          >
-            <IoClose size={25} />
-          </div>
-
-          <div style={{ color: "white" }}>FILTER SECTION</div>
-        </>
-      )}
-      {showFilterBy && (
-        <div id="refurbished-page-filter-by-header">
-          {renderFilter('category', 'Category')}
-          {renderFilter('brand', 'Brand')}
+    showFilterBy && (
+      <div className="productSearch-page-sort-by-tab">
+        <div
+          className="location-tab-IoIosCloseCircle"
+          onClick={() => {
+            if (isApply) { handleFilterClick() }
+            setShowFilterBy(false)
+          }
+          }
+          aria-label="Close sort options"
+        >
+          <IoClose size={25} />
         </div>
-      )}
-    </div>
+        <div style={{ color: 'white' }}>FILTER SECTION</div>
+        <div id="productSearch-page-filter-by-header">
+
+          <div id="productSearch-page-filterby-options">
+            <SortOption label="category" />
+            <SortOption label="brand" />
+          </div>
+          {selectedLabel &&
+            renderFilter(
+              selectedLabel,
+              selectedLabel.charAt(0).toUpperCase() + selectedLabel.slice(1)
+            )}
+        </div>
+      </div>
+    )
   );
 };
 
-export default RefurbishedProductFilterSection;
+export default SearchProductFilterSection;

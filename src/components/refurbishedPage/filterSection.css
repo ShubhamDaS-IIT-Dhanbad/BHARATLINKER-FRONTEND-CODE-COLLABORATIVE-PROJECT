@@ -1,47 +1,232 @@
-.searchRefurbishedPage-footer-filterby-div{
-    background-color: rgba(255, 255, 255, 0.941);
-    height: 41px;display: flex;width: 90vw;
-    align-self: center;
-    align-items: center;padding-left: 10px;gap: 10px;
-    border-radius: 10px;font-size: 13px;
-    color: rgb(0, 0, 0);font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-    font-weight: 700;border: 1px solid rgba(0, 0, 0, 0.363);
-}
-.searchRefurbishedPage-footer-filterby-input{
-    outline: none;border: none;
-}
-.searchRefurbishedPage-footer-filterby-input::placeholder{
-    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-    font-size: 15px;
-}
+/* FILTER OPTION */
+.product-page-filter-section {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
 
-
-#filter-options-refurbished-page{
-    margin-top: 15px;
-    display: flex;justify-content: center;align-items: center;
+    background-color: rgba(0, 0, 0, 0.9);
+    display: flex;
+    justify-content: flex-end;
     flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    z-index: 9999;
+    color: rgb(249, 249, 249);
 }
-#refurbished-page-filter-by-header{
-    display: flex; /* Use flexbox for layout */
-    flex-direction: column; /* Stack items vertically */
-    max-height: 70vh;
-    width: 100vw; /* Set width to full viewport width */
-    max-width: 100vw; /* Prevent exceeding full viewport width */
-    background-color: rgb(255, 255, 255); /* Background color */
+
+.product-page-close-filter-section {
+    color: white;
+    background-color: rgba(0, 0, 0, 0.9);
+    border: 1.7px solid white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0px;
+    border-radius: 50%;
+    font-weight: 900;
+}
+
+
+
+
+.product-page-selected-category {
+    color: rgb(255, 255, 255);
+    padding: 7px 10px 7px 10px;
+    border: 1.2px solid rgb(255, 255, 255);
+    border-radius: 10px;
+    background-color: rgb(37, 147, 37);
+}
+
+.product-page-unselected-category {
+    padding: 7px 10px 7px 10px;
+    border: 1.7px solid black;
+    border-radius: 10px;
+}
+
+
+
+
+.product-page-filter-options-container {
+    display: flex;
+    /* Use flexbox for layout */
+    flex-direction: column;
+    min-height: 60vh;
+    width: 100vw;
+    /* Set width to full viewport width */
+    max-width: 100vw;
+    /* Prevent exceeding full viewport width */
+    background-color: aliceblue;
+    /* Background color */
+    border-top-left-radius: 20px;
+    /* Rounded top-left corner */
+    border-top-right-radius: 20px;
+    /* Rounded top-right corner */
+    padding: 7px;
+    /* Padding for spacing */
+    box-sizing: border-box;
+    overflow: hidden;
+    gap: 10px;
+    color: black;
+    padding-bottom: 10vh;
+    padding-top: 10px;
+    overflow-y: scroll;
+}
+
+
+
+
+
+
+
+
+
+
+
+/* Search Input Container */
+.product-page-filter-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: aliceblue;
+    border-radius: 11px;
+    border: 2px solid rgb(0, 0, 0);
+    width: 96vw;
+    height: 41px;
+}
+
+
+/* Search Input */
+.product-page-filter-input {
+    border: none;
+    color: #000000;
+    font-size: 1rem;
+    padding-left: 10px;
+    background-color: aliceblue;
+    flex-grow: 1;
+    outline: none;
+}
+
+/* Autofill Styles for Chrome, Edge, and Safari */
+.product-page-filter-input:-webkit-autofill {
+    background-color: #fff !important;
+    color: #000 !important;
+    font-size: 1rem;
+    -webkit-box-shadow: 0 0 0px 1000px #fff inset !important;
+    box-shadow: 0 0 0px 1000px #fff inset !important;
+}
+
+.product-page-filter-input::placeholder {
+    color: #000000 !important;
+    font-size: 0.9rem;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+#productSearch-page-filter-by-header{
+    display: flex;
+    flex-direction: column;
+    height: 65vh;
+    width: 100vw;
+    max-width: 100vw;
+    background-color: rgb(236, 241, 246);
     border-top-left-radius: 20px; /* Rounded top-left corner */
     border-top-right-radius: 20px; /* Rounded top-right corner */
     padding: 7px; /* Padding for spacing */
     box-sizing: border-box; /* Include padding in width calculation */
     overflow: hidden; /* Hide any overflow content */
     gap: 10px;
-    padding-bottom: 10vh;padding-top: 10px;
-    overflow-y:scroll ;
+
+}
+.product-page-filter-items {
+    width: 100%;
+    overflow-y: scroll;
+    overflow-y: scroll;
+    gap: 10px;
+    flex-wrap: wrap;
+    background-color: transparent;
+    padding-top: 1px;
+    padding: 0px 0px 2px 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 
-.refurbished-page-selected-category {
-    margin-top: 10px;color: rgba(56, 227, 93, 0.598);
+
+.product-page-no-results {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    font-size: 0.9rem;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+
 }
-.refurbished-page-unselected-category{
-    margin-top: 10px;
+
+
+
+
+.product-filter-apply-button {
+    height: 55px;
+    position: absolute;
+    bottom: 0;
+    background-color: transparent;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.product-filter-apply-button:active {
+    height: 55px;
+    background-color: rgb(0, 0, 0);
+    position: absolute;
+    bottom: 0;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#productSearch-page-filterby-options {
+    display: flex;
+    justify-content:center;
+    align-items: center;
+    gap: 7px;
+    margin: 10px 0px 0px 10px;padding: 0px 7px 10px 7px;
+}
+
+
+
+
+
+
+
+
+
+.productSearch-filterby-item-selected {
+    width: 89px;
+    height: 50px;
+    padding: 0px 2px 2px 0px;
+    background-color: #000000;
+    border-radius: 20px;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1.2px solid rgb(255, 255, 255);
+    background-color: rgb(10, 10, 10);
+
+}
+
+.productSearch-filterby-item-unselected {
+    width: 89px;
+    height: 50px;
+    border: 1.7px solid black;
+    border-radius: 20px;
+    background-color: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
 }

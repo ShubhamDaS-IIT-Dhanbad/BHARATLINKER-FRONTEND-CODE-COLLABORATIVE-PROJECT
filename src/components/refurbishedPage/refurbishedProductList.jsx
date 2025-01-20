@@ -1,6 +1,5 @@
 import React, { useMemo } from 'react';
 import RefurbishedProductCard from '../refurbishedProductCard/refurbishedProductCard.jsx';
-import NoProductsFound from './noProductFound.jsx';
 
 const ProductList = ({ products, loading, sortByAsc, sortByDesc }) => {
     const sortedProducts = useMemo(() => {
@@ -9,13 +8,18 @@ const ProductList = ({ products, loading, sortByAsc, sortByDesc }) => {
         } else if (sortByDesc) {
             return [...products].sort((a, b) => b.price - a.price);
         }
-        return products; // Default order
+        return products;
     }, [products, sortByAsc, sortByDesc]);
 
-    if (loading) return <>Loading...</>;
-    if (!loading && sortedProducts.length === 0) {
-        return <NoProductsFound />;
-    }
+   
+  if (!loading && products?.length === 0) {
+    const notfound='https://res.cloudinary.com/demc9mecm/image/upload/v1736953901/ir4hy5fcwevhr8ibeaqq.png';
+    return (
+      <div className='search-shop-no-shop-found'>
+        <img src={notfound} />
+      </div>
+    );
+  }
 
     return (
         <div id="refurbished-product-page-grid">

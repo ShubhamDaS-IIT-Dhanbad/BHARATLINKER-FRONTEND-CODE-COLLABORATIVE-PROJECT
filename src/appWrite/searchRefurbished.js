@@ -17,7 +17,8 @@ class SearchRefurbishedProductService {
     // Method to fetch refurbished products from the Modules collection with various filters
     async getRefurbishedProducts({
         inputValue = '',
-        selectedCategories = [],
+        selectedCategories,
+        selectedBrands,
         minPrice,
         maxPrice,
         isInStock,
@@ -50,6 +51,13 @@ class SearchRefurbishedProductService {
                     Query.contains('productType', selectedCategories),
                     Query.contains('keywords', selectedCategories),
                     Query.contains('category', selectedCategories),
+                ]));
+            }
+            if (selectedBrands.length > 0) {
+                queries.push(Query.or([
+                    Query.contains('productType', selectedBrands),
+                    Query.contains('keywords', selectedBrands),
+                    Query.contains('brand', selectedBrands),
                 ]));
             }
 

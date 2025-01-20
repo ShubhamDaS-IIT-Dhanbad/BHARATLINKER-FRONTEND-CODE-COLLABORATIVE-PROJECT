@@ -19,6 +19,13 @@ export const useSearchRefurbishedProductsHook = () => {
         sortByDesc 
     } = useSelector((state) => state.refurbishedproducts);
 
+      const selectedBrands = useSelector(
+        (state) => state.refurbishedproductsfiltersection.selectedRefurbishedBrands
+      );
+      const selectedCategories = useSelector(
+        (state) => state.refurbishedproductsfiltersection.selectedRefurbishedCategories
+      );
+
  
     const productsPerPage = 3;
     const lat = storedLocation ? storedLocation.lat : null;
@@ -38,6 +45,8 @@ export const useSearchRefurbishedProductsHook = () => {
             productsPerPage: productsPerPage,
             sortByAsc: sortByAsc || false,
             sortByDesc: sortByDesc || false,
+            selectedBrands,
+            selectedCategories
         };
         if(refurbishedProducts.length!=0) dispatch(resetRefurbishedProducts());
         dispatch(fetchRefurbishedProducts(params));
@@ -55,7 +64,9 @@ export const useSearchRefurbishedProductsHook = () => {
             page: currentPage + 1,
             productsPerPage: productsPerPage,
             sortByAsc,
-            sortByDesc
+            sortByDesc,
+            selectedBrands,
+            selectedCategories
         };
         dispatch(loadMoreRefurbishedProducts(params));
     };

@@ -98,7 +98,7 @@ const refurbishedProductsSlice = createSlice({
     hasMoreProducts: true,
     error: null,
     loadingMoreProducts: false,
-    sortByAsc: false, // Added default state for sort order
+    sortByAsc: false, 
     sortByDesc: false,
   },
   reducers: {
