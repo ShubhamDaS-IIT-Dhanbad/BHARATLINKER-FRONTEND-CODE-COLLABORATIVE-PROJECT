@@ -11,6 +11,7 @@ import {
 import './filterSection.css';
 
 const SearchProductFilterSection = ({ showFilterBy, setShowFilterBy }) => {
+  const [isApply,setIsApply]= useState(false);
   const dispatch = useDispatch();
   const { executeSearch } = useExecuteSearch();
 
@@ -44,10 +45,9 @@ const SearchProductFilterSection = ({ showFilterBy, setShowFilterBy }) => {
   };
 
   const handleFilterClick = () => {
-    // Dispatch the selected categories and brands
+    setIsApply(true);
     dispatch(setSearchProductsCategories(selectedCategoriesState));
     dispatch(setSearchProductsBrands(selectedBrandsState));
-    executeSearch();
   };
 
   const filterItems = useCallback(
@@ -152,7 +152,10 @@ const SearchProductFilterSection = ({ showFilterBy, setShowFilterBy }) => {
         <div className="productSearch-page-sort-by-tab">
           <div
             className="location-tab-IoIosCloseCircle"
-            onClick={() => setShowFilterBy(false)}
+            onClick={() => {
+              if(isApply){executeSearch();}
+              setShowFilterBy(false)}
+            }
             aria-label="Close sort options"
           >
             <IoClose size={25} />
