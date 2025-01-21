@@ -159,7 +159,7 @@ function SignUpForm() {
             </div>
             <input
               type="number"
-              placeholder=""
+              placeholder="enter phone number"
               value={phone}
               onChange={handlePhoneChange}
               maxLength="10"
