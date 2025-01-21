@@ -126,7 +126,7 @@ function SignUpForm() {
     }
     
 
-      navigate('/');
+      navigate('/user');
     } catch (error) {
       setOtp(new Array(6).fill(""));
     }

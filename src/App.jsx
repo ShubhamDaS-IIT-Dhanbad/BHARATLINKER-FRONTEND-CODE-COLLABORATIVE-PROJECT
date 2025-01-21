@@ -1,7 +1,7 @@
 import React, { Suspense, lazy, useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { Helmet, HelmetProvider } from "react-helmet-async";
-
+import useUserAuth from './hooks/userAuthHook.jsx';
 import {Oval } from 'react-loader-spinner';
 import './App.css';
 
@@ -10,6 +10,7 @@ import HomePage from './components/homePage/home.jsx';
 import SearchPage from './components/searchPage/searchPage.jsx';
 import SearchShop from './components/searchShop/searchShop.jsx';
 import RefurbishedPage from './components/refurbishedPage/refurbishedPage.jsx';
+
 
 const LoginPage = lazy(() => import('./components/loginPage/login.jsx'));
 
@@ -49,6 +50,8 @@ const RoutesWithConditionalHeader = React.memo(() => {
   const [isShopPageLoaded,setShopPageLoaded] =useState(true);
   const [isProductPageLoaded, setProductPageLoaded] =useState(true);
   const [isRefurbishedPageLoaded, setRefurbishedPageLoaded] =useState(true);
+
+  const {PrivateRoute}=useUserAuth();
   return (
     <>
       <Routes>
@@ -184,85 +187,86 @@ const RoutesWithConditionalHeader = React.memo(() => {
         <Route
           path="/user"
           element={
-            <>
+            <PrivateRoute>
               <Helmet>
                 <title>User Dashboard - Bharat Linker</title>
                 <meta name="description" content="Access your Bharat Linker user dashboard to manage your account, orders, and more." />
               </Helmet>
               <User />
-            </>
+            </PrivateRoute>
           }
         />
         <Route
           path="/user/profile"
           element={
-            <>
+            <PrivateRoute>
               <Helmet>
                 <title>User Profile - Bharat Linker</title>
                 <meta name="description" content="View and update your Bharat Linker user profile." />
               </Helmet>
               <UserProfile />
-            </>
+            </PrivateRoute>
           }
         />
         <Route
           path="/user/refurbished"
           element={
-            <>
+            <PrivateRoute>
               <Helmet>
                 <title>Manage Refurbished Products - Bharat Linker</title>
                 <meta name="description" content="View and manage your refurbished product listings on Bharat Linker." />
               </Helmet>
               <UserProductPageMain />
-            </>
+            </PrivateRoute>
           }
         />
         <Route
           path="/user/upload/:productType"
           element={
-            <>
+            <PrivateRoute>
               <Helmet>
                 <title>Upload Products - Bharat Linker</title>
                 <meta name="description" content="Upload your products for sale on Bharat Linker, including refurbished items." />
               </Helmet>
               <RefurbishedBooksUploadUser />
-            </>
+            </PrivateRoute>
           }
         />
         <Route
           path="/user/refurbished/update/:id"
           element={
-            <>
+            <PrivateRoute>
               <Helmet>
                 <title>Update Product - Bharat Linker</title>
                 <meta name="description" content="Edit and update the details of your refurbished products on Bharat Linker." />
               </Helmet>
               <UserUpdateBookModule />
-            </>
+            </PrivateRoute>
           }
         />
         <Route
           path="/user/notification"
           element={
-            <>
+            <PrivateRoute>
               <Helmet>
                 <title>Notifications - Bharat Linker</title>
                 <meta name="description" content="View all your notifications related to account activity and updates." />
               </Helmet>
               <UserNotification />
-            </>
+            </PrivateRoute>
           }
         />
         <Route
           path="/user/order"
           element={
-            <>
+            <PrivateRoute>
               <Helmet>
                 <title>Orders - Bharat Linker</title>
                 <meta name="description" content="View and manage your orders on Bharat Linker." />
               </Helmet>
               <UserOrder />
-            </>
+            </PrivateRoute>
+
           }
         />
 
