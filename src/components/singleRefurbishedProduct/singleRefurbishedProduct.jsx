@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 import { Oval } from "react-loader-spinner";
 
 import { RiShareForwardLine } from "react-icons/ri";
-import { CiPhone} from "react-icons/ci";
+import { CiPhone } from "react-icons/ci";
 import { PiWhatsappLogoThin } from "react-icons/pi";
 
 import SingleRefurbishedProductSearchBar from "./singleRefurbishedProductSearchBar.jsx";
@@ -81,6 +81,10 @@ const ProductDetails = () => {
       window.location.href = `https://wa.me/${productDetail.phn}`;
     }
   };
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
 
   return (
     <Fragment>
@@ -142,7 +146,7 @@ const ProductDetails = () => {
                       {Math.round(
                         ((productDetail.price - productDetail.discountedPrice) /
                           productDetail.price) *
-                          100
+                        100
                       )}
                       % off
                     </div>
@@ -154,9 +158,8 @@ const ProductDetails = () => {
                 </p>
               </div>
               <div
-                id={`product-details-price-${
-                  true ? "instock" : "instock"
-                }`}
+                id={`product-details-price-${true ? "instock" : "instock"
+                  }`}
               >
                 on sale
               </div>
