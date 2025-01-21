@@ -2,12 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../style/userLogin.css';
 
-const i1='https://res.cloudinary.com/demc9mecm/image/upload/v1737378112/vokh5op2d88jerrkksan.png';//indian flag
-const i2='https://res.cloudinary.com/demc9mecm/image/upload/v1737378115/d7xgicjpub5ag6udeisd.png';//i1.png
+const i1='https://res.cloudinary.com/demc9mecm/image/upload/v1737378112/vokh5op2d88jerrkksan.png';
+const i2='https://res.cloudinary.com/demc9mecm/image/upload/v1737378115/d7xgicjpub5ag6udeisd.png';
 
 
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 import { Client, Account, ID } from 'appwrite';
 import { FaArrowLeft } from "react-icons/fa";
 import { FaCircleExclamation } from "react-icons/fa6";
@@ -98,7 +96,7 @@ function SignUpForm() {
       setIsResendDisabled(true);
       setTimer(30);
     } catch (error) {
-      toast.error(`Failed to send SMS: ${error.message}`);
+      console.error(`Failed to send SMS: ${error.message}`);
     } finally {
       setLoading(false);
     }

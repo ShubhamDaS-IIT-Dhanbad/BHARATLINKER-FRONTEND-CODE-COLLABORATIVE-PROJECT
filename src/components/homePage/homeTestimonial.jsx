@@ -2,10 +2,8 @@ import React, { useState } from "react";
 import "./homeTestimonial.css";
 
 
-const ti1='https://res.cloudinary.com/demc9mecm/image/upload/v1737378115/ptnykpibqxqobs3gywoq.png';
-const ti2='https://res.cloudinary.com/demc9mecm/image/upload/v1737378115/d7xgicjpub5ag6udeisd.png';
 
-const Testimonial = () => {
+const Testimonial = ({ti1}) => {
   const testimonials = [
     {
       title: "BHARAT | LINKER",
@@ -22,7 +20,7 @@ const Testimonial = () => {
       title: "Help Us Grow",
       description:
         "We are constantly working towards improving our platform and services. Your feedback and support are invaluable in helping us expand and refine our offerings to better serve your needs.",
-      image: ti2, // Replace with actual image
+      image: ti1, // Replace with actual image
     },
     {
       title: "Join Us in Our Mission",
@@ -34,13 +32,13 @@ const Testimonial = () => {
       title: "Our Commitment",
       description:
         "BharatLinker is committed to delivering exceptional service and innovative solutions. We are here to support you every step of the way and provide a reliable platform for your digital needs.",
-      image: ti2, // Replace with actual image
+      image: ti1, // Replace with actual image
     },
     {
       title: "Your Feedback Matters",
       description:
         "We value the input of our users. Your feedback helps us shape the future of BharatLinker, allowing us to provide better features and improve the overall experience for everyone.",
-      image: ti2, // Replace with actual image
+      image: ti1, // Replace with actual image
     },
     {
       title: "Building the Future Together",
@@ -52,7 +50,7 @@ const Testimonial = () => {
       title: "Stay Connected",
       description:
         "At BharatLinker, we believe in the power of connection. Stay updated with our latest features and developments by following us and becoming part of our community.",
-      image: "https://via.placeholder.com/100", // Replace with actual image
+      image:ti1, // Replace with actual image
     },
   ];
 

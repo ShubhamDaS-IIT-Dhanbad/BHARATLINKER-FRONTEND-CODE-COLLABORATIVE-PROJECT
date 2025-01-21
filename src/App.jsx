@@ -29,6 +29,7 @@ const UserNotification = lazy(() => import('./components/user/notification/userN
 const UserOrder = lazy(() => import('./components/user/order/order.jsx'));
 
 function App() {
+ 
   return (
     <HelmetProvider>
       <Router>
@@ -38,7 +39,7 @@ function App() {
 
           </div>
         }>
-          <RoutesWithConditionalHeader />
+          <RoutesWithConditionalHeader/>
         </Suspense>
       </Router>
     </HelmetProvider>
@@ -51,8 +52,7 @@ const RoutesWithConditionalHeader = React.memo(() => {
   const [isRefurbishedPageLoaded, setRefurbishedPageLoaded] = useState(true);
 
   const { PrivateRoute } = useUserAuth();
-
-  return (
+return (
     <>
       <Routes>
         <Route

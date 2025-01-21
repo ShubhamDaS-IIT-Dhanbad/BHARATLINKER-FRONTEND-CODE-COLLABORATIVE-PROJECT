@@ -12,7 +12,9 @@ import { MdOutlineAdminPanelSettings } from "react-icons/md";
 
 import Cookie from 'js-cookie';
 
+const ti1='https://res.cloudinary.com/demc9mecm/image/upload/v1737378115/ptnykpibqxqobs3gywoq.png';
 const Home = () => {
+    
     const navigate = useNavigate();
 
     const handleRetailerClick = useCallback(() => {
@@ -41,7 +43,7 @@ const Home = () => {
                 maxWidth: '100vw',
                 marginBottom: '60px'
             }}>
-                <HomeTestimonial />
+                <HomeTestimonial ti1={ti1}/>
                 <HomeFooter />
             </div>
             <div id="home-footer" style={{
