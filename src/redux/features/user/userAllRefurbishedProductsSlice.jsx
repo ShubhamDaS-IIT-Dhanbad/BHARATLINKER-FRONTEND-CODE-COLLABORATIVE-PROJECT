@@ -10,7 +10,7 @@ export const fetchUserRefurbishedProducts = createAsyncThunk(
 
       if (response?.products?.length === 0) {
         return {
-          inputValue:params.query,
+          inputValue:params.inputValue,
           refurbishedProducts: [],
           totalPages: 0,
           productsPerPage: params.productsPerPage,
@@ -19,7 +19,7 @@ export const fetchUserRefurbishedProducts = createAsyncThunk(
 
       if (response.products) {
         return {
-          inputValue:params.query,
+          inputValue:params.inputValue,
           refurbishedProducts: response.products,
           productsPerPage: params.productsPerPage,
           totalPages: Math.ceil(response.products.length / params.productsPerPage),

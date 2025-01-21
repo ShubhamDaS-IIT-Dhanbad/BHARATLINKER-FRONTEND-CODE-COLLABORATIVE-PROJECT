@@ -135,72 +135,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /* COMPLETE*/
 
 .product-page-header-visible{
@@ -209,7 +143,7 @@
     width: 100vw;
     position: fixed;
     top: 0;
-    background-color: #f9f9f9;
+    background-color: #ffffff;
     color: #000000;padding:10px 10px 7px 10px;
     z-index: 1000;
     transition: transform 0.3s ease, opacity 0.3s ease;
@@ -272,34 +206,6 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /* Search Section */
 .product-page-search-section {
     height: 40px;
@@ -316,7 +222,7 @@
     align-items: center;
     border-radius: 11px;border: 1.5px solid rgb(0, 0, 0);
     width: 96vw;
-    background-color: #f9f9f9;
+    background-color: #ffffff;
     height: 41px;
 }
 
@@ -330,7 +236,7 @@
 .product-page-search-input {
     border: none;
     color: #000000;
-    background-color: #f9f9f9;
+    background-color: #ffffff;
     font-size: 1rem;
     padding-left: 10px;
     background-color: transparent;
@@ -348,4 +254,15 @@
 .product-page-search-input::placeholder {
     color: #000000 !important;
     font-size: 0.9rem;font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+
+
+
+#dashboard-header-user-phn {
+    margin-top: -10px;
+    font-weight: 600;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-size: 14px;
+    color: #666; /* Slightly softer color */
 }

@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { FaArrowLeft } from 'react-icons/fa';
-import { BiSearchAlt } from "react-icons/bi";
+
 import { Helmet } from 'react-helmet';
 import Navbar from '../a.navbarComponent/navbar.jsx';
 import InfiniteScroll from 'react-infinite-scroll-component';
@@ -12,23 +11,18 @@ import { Oval } from 'react-loader-spinner';
 import { useExecuteUserSearch } from '../../../hooks/searchUserProductHook.jsx';
 import ProductList from '../../b.productComponent/productList.jsx';
 
+
 import './userProductPageMain.css';
 
 function UserRefurbishedProduct() {
-    const navigate = useNavigate();
     const { executeSearch, onLoadMore } = useExecuteUserSearch();
     const {
         refurbishedProducts,
         loading,
         error,
-        currentPage,
         hasMoreProducts,
         loadingMoreProducts,
     } = useSelector((state) => state.userRefurbishedProducts);
-
-    const userData = useSelector((state) => state.user);
-
-    const [inputValue, setInputValue] = useState('');
 
     useEffect(() => {
         if (refurbishedProducts.length === 0 && !loading) {
@@ -36,19 +30,12 @@ function UserRefurbishedProduct() {
         }
     }, []);
 
-    const handleInputChange = (e) => {
-        setInputValue(e.target.value);
-    };
-
+ 
     const handleSearch = () => {
-        executeSearch(); // Trigger search when search button or enter key is pressed
+        executeSearch(); 
     };
 
-    const handleKeyPress = (e) => {
-        if (e.key === 'Enter') {
-            handleSearch(); // Execute search on Enter key press
-        }
-    };
+  
 
     if (error) {
         return (
@@ -68,7 +55,8 @@ function UserRefurbishedProduct() {
             </Helmet>
             <header>
                 <div className="user-refurbished-product-page-header">
-                <Navbar headerTitle={"YOUR REFURBISHED"} />
+                    <Navbar headerTitle={"YOUR REFURBISHED"} />
+
                 </div>
             </header>
             <main>

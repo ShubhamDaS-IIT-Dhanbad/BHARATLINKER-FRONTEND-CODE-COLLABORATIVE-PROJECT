@@ -17,7 +17,7 @@ export const useExecuteUserSearch = () => {
     );
 
     const executeSearch = (inputValue) => {
-        if (!hasMoreProducts || loadingMoreProducts || !userData?.phoneNumber) return;
+        if (loadingMoreProducts || !userData?.phoneNumber) return;
         const searchQuery = inputValue || '';
         const params = {
             inputValue: searchQuery,
