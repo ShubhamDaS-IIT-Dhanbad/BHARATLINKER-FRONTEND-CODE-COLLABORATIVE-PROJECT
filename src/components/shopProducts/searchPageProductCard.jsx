@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import "../productCards/searchPageProductCard.css";
+import "../style/productCard.css";
 
 function SearchPageProductCard({ id, image, title, price, isInStock }) {
     const navigate = useNavigate();
