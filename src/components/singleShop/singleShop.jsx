@@ -2,7 +2,7 @@ import React, { Fragment, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import SingleProductSearchBar from "./singleShopSearchBar.jsx";
-import { RotatingLines } from "react-loader-spinner";
+import {Oval} from "react-loader-spinner";
 import { fetchShopById } from "../../redux/features/singleShopSlice.jsx";
 import { RiShareForwardLine } from "react-icons/ri";
 import { FaCaretRight } from "react-icons/fa";
@@ -113,8 +113,8 @@ const ProductDetails = () => {
             </div>
             {loading ? (
                 <div className="refurbished-page-loading-container">
-                    <RotatingLines width="60" height="60" color="#007bff" />
-                </div>
+                    <Oval height={30} width={30} color="green" secondaryColor="white" ariaLabel="loading" />
+                                   </div>
             ) : (
                 <div id="shop-details-container">
                     <div id="product-details-img">

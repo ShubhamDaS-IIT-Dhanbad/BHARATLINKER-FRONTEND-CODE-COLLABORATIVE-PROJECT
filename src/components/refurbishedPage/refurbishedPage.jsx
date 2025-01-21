@@ -4,7 +4,6 @@ import { MdFilterList } from 'react-icons/md';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useSelector } from 'react-redux';
 
-import { RotatingLines } from 'react-loader-spinner';
 import { Oval } from "react-loader-spinner";
 
 import RefurbishedNavbar from '../a.navbarComponent/navbar.jsx';
@@ -36,7 +35,7 @@ const RefurbishedPage = ({ isRefurbishedPageLoaded, setRefurbishedPageLoaded }) 
   const selectedCategories = useSelector(
     (state) => state.refurbishedproductsfiltersection.selectedRefurbishedCategories
   );
-  
+
   useEffect(() => {
     if (refurbishedProducts.length === 0) {
       executeSearchRefurbished();
@@ -51,7 +50,7 @@ const RefurbishedPage = ({ isRefurbishedPageLoaded, setRefurbishedPageLoaded }) 
     <>
       {(!isRefurbishedPageLoaded) ? (
         <div className="fallback-loading">
-          <RotatingLines width="60" height="60" color="#808080" strokeWidth="3" />
+          <Oval height={30} width={30} color="green" secondaryColor="white" ariaLabel="loading" />
         </div>
       ) : (
         <>
@@ -62,7 +61,7 @@ const RefurbishedPage = ({ isRefurbishedPageLoaded, setRefurbishedPageLoaded }) 
 
           {(loading || !isRefurbishedPageLoaded) ? (
             <div className="fallback-loading">
-              <Oval height={30} width={30} color="white" secondaryColor="gray" ariaLabel="loading" />
+              <Oval height={30} width={30} color="green" secondaryColor="white" ariaLabel="loading" />
 
             </div>
           ) : (
@@ -72,8 +71,7 @@ const RefurbishedPage = ({ isRefurbishedPageLoaded, setRefurbishedPageLoaded }) 
               hasMore={hasMoreProducts}
               loader={loadingMoreProducts && (
                 <div id="search-shop-load-more-shop-loader">
-                  <Oval height={30} width={30} color="white" secondaryColor="gray" ariaLabel="loading" />
-
+                  <Oval height={30} width={30} color="green" secondaryColor="white" ariaLabel="loading" />
                 </div>
               )}
             >

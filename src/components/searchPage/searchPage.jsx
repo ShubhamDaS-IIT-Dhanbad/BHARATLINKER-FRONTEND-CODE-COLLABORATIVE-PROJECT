@@ -6,7 +6,7 @@ import { MdFilterList } from "react-icons/md";
 import SearchBar from '../a.navbarComponent/navbar.jsx';
 import ProductList from '../b.productComponent/productList.jsx';
 
-import {Oval } from 'react-loader-spinner';
+import { Oval } from 'react-loader-spinner';
 
 import InfiniteScroll from 'react-infinite-scroll-component';
 
@@ -30,13 +30,13 @@ const SearchPage = ({ isProductPageLoaded, setProductPageLoaded }) => {
         sortByAsc,
         sortByDesc,
     } = useSelector((state) => state.searchproducts);
-      const selectedBrands = useSelector(
+    const selectedBrands = useSelector(
         (state) => state.searchproductsfiltersection.selectedBrands
-      );
-      const selectedCategories = useSelector(
+    );
+    const selectedCategories = useSelector(
         (state) => state.searchproductsfiltersection.selectedCategories
-      );
-    
+    );
+
 
     useEffect(() => {
         if (products.length === 0 && !loading) {
@@ -47,13 +47,13 @@ const SearchPage = ({ isProductPageLoaded, setProductPageLoaded }) => {
         }, 500);
 
         return () => clearTimeout(delayTimeout);
-    }, [updated,selectedBrands,selectedCategories]);
+    }, [updated, selectedBrands, selectedCategories]);
 
     return (
         <>
             {(!isProductPageLoaded) ? (
                 <div className="fallback-loading">
-                   <Oval height={30} width={30} color="white" secondaryColor="gray" ariaLabel="loading" />
+                    <Oval height={30} width={30} color="green" secondaryColor="white" ariaLabel="loading" />
                 </div>
             ) : (
                 <>
@@ -66,7 +66,7 @@ const SearchPage = ({ isProductPageLoaded, setProductPageLoaded }) => {
 
                     {(loading || !isProductPageLoaded) ? (
                         <div className="fallback-loading">
-                            <Oval height={30} width={30} color="white" secondaryColor="gray" ariaLabel="loading" />                                   
+                            <Oval height={30} width={30} color="green" secondaryColor="white" ariaLabel="loading" />
                         </div>
                     ) : (
                         <InfiniteScroll
@@ -75,7 +75,7 @@ const SearchPage = ({ isProductPageLoaded, setProductPageLoaded }) => {
                             hasMore={hasMoreProducts}
                             loader={loadingMoreProducts && <h4>Loading more products...</h4>}
                         >
-                            <ProductList/>
+                            <ProductList />
                         </InfiniteScroll>)}
 
                     {showSortBy && (

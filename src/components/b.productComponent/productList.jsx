@@ -15,7 +15,7 @@ const NoProductsFound = () => {
 };
 
 const ProductList = () => {
-    const location = useLocation();  // Get the current route path
+    const location = useLocation(); 
     const navigate = useNavigate();  // Hook to navigate to different routes
     const { products, loading, loadingMoreProducts, hasMoreProducts } = useSelector((state) => state.searchproducts);
     const { refurbishedProducts, loading: refurbishedLoading, error, currentPage, hasMoreProducts: refurbishedHasMoreProducts, loadingMoreProducts: refurbishedLoadingMoreProducts } = useSelector((state) => state.userRefurbishedProducts);
@@ -58,8 +58,8 @@ const ProductList = () => {
 
             {hasMoreState && loadingMoreState && (
                 <div className='productSearchPage-loading-more-products'>
-                    <Oval height={20} width={20} color="white" secondaryColor="gray" ariaLabel="loading" />
-                </div>
+                    <Oval height={30} width={30} color="green" secondaryColor="white" ariaLabel="loading" />
+                                   </div>
             )}
         </>
     );

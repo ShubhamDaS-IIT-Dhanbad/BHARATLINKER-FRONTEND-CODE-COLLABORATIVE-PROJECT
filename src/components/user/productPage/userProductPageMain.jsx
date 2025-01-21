@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect} from 'react';
 import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 
 import { Helmet } from 'react-helmet';
 import Navbar from '../a.navbarComponent/navbar.jsx';

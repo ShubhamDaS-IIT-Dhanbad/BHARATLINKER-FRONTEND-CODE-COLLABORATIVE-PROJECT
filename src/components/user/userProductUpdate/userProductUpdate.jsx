@@ -5,11 +5,12 @@ import { FaArrowLeft } from 'react-icons/fa';
 import Cookies from 'js-cookie';
 import UploadBooksForm from './userProductUpdateForm.jsx';
 
+import Navbar from '../a.navbarComponent/navbar.jsx';
 import './userProductUpdate.css';
 
 const UploadProduct = () => {
     const navigate = useNavigate();
-    const { id: productId} = useParams();
+    const { id: productId } = useParams();
     const [productType, setProductType] = useState('');
 
     const products = useSelector((state) => state.userRefurbishedProducts.refurbishedProducts);
@@ -31,30 +32,11 @@ const UploadProduct = () => {
 
     return (
         <>
-            <div className="user-update-book-module-header">
-                <FaArrowLeft
-                    id="user-update-book-module-header-left-icon"
-                    size={25}
-                    onClick={() => navigate('/user/refurbished')}
-                    aria-label="User Account"
-                    tabIndex={0}
-                />
-                <div className="user-update-book-module-header-inner-div">
-                    <p className="user-update-book-module-header-inner-div-p">
-                        UPDATE {productType ? productType.toUpperCase() : 'PRODUCT'}
-                    </p>
-                    <div
-                        className="user-update-book-module-header-inner-div-phn-div"
-                        onClick={() => navigate('/pincode')}
-                        aria-label="Change Location"
-                        tabIndex={0}
-                    >
-                        {userData?.phoneNumber || 'No Phone Number'}
-                    </div>
-                </div>
-            </div>
+            <header>
+                <Navbar headerTitle={"UPDATE REFURBISHED"} />
+            </header>
 
-            <UploadBooksForm userData={userData} productType={productType}/>
+            <UploadBooksForm userData={userData} productType={productType} />
             <footer>
                 <p className="dashboard-footer-p">© 2025 Bharat Linker</p>
             </footer>

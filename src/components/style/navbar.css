@@ -90,7 +90,7 @@
     justify-content: center;
     align-items: center;border: 0.1rem solid rgb(0, 0, 0);
     border-radius: 11px;
-    background-color: rgb(255, 255, 255);;
+    background-color: #f9f9f9;;
     width: 96vw;height: 45px;
 }
 .home-page-search-input::placeholder{
@@ -108,7 +108,7 @@
 .home-page-search-input {
     border: none;
     color: rgb(0, 0, 0);font-size: 15px;
-    background-color: rgb(255, 255, 255);
+    background-color: #f9f9f9;
     padding-left: 10px;
     flex-grow: 1;font-weight: 600;
     outline: none;background-color: none;
@@ -118,8 +118,8 @@
 .home-page-search-input:-webkit-autofill {
     background-color: #d14848 !important;
     color: #000000 !important;
-    -webkit-box-shadow: 0 0 0px 1000px #fff inset !important;
-    box-shadow: 0 0 0px 1000px #fff inset !important;
+    -webkit-box-shadow: 0 0 0px 1000px #f9f9f9 inset !important;
+    box-shadow: 0 0 0px 1000px #f9f9f9 inset !important;
 }
 
 
@@ -143,7 +143,7 @@
     width: 100vw;
     position: fixed;
     top: 0;
-    background-color: #ffffff;
+    background-color: #f9f9f9;
     color: #000000;padding:10px 10px 7px 10px;
     z-index: 1000;
     transition: transform 0.3s ease, opacity 0.3s ease;
@@ -222,7 +222,7 @@
     align-items: center;
     border-radius: 11px;border: 1.5px solid rgb(0, 0, 0);
     width: 96vw;
-    background-color: #ffffff;
+    background-color: #f9f9f9;
     height: 41px;
 }
 
@@ -236,7 +236,7 @@
 .product-page-search-input {
     border: none;
     color: #000000;
-    background-color: #ffffff;
+    background-color: #f9f9f9;
     font-size: 1rem;
     padding-left: 10px;
     background-color: transparent;
@@ -246,10 +246,10 @@
 
 /* Autofill Styles for Chrome, Edge, and Safari */
 .product-page-search-input:-webkit-autofill {
-    background-color: #fff !important;
+    background-color: #f9f9f9 !important;
     color: #000000 !important;font-size: 1rem;
-    -webkit-box-shadow: 0 0 0px 1000px #fff inset !important;
-    box-shadow: 0 0 0px 1000px #fff inset !important;
+    -webkit-box-shadow: 0 0 0px 1000px #f9f9f9 inset !important;
+    box-shadow: 0 0 0px 1000px #f9f9f9 inset !important;
 }
 .product-page-search-input::placeholder {
     color: #000000 !important;

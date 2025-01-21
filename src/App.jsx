@@ -34,7 +34,7 @@ function App() {
       <Router>
         <Suspense fallback={
           <div className="fallback-loading">
-            <Oval height={30} width={30} color="white" secondaryColor="gray" ariaLabel="loading" />
+            <Oval height={30} width={30} color="green" secondaryColor="white" ariaLabel="loading" />
 
           </div>
         }>

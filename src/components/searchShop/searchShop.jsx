@@ -36,7 +36,7 @@ const Shop = ({ isShopPageLoaded, setShopPageLoaded }) => {
         <>
             {(!isShopPageLoaded) ? (
                 <div className="fallback-loading">
-                   <Oval height={30} width={30} color="white" secondaryColor="gray" ariaLabel="loading" />
+                    <Oval height={30} width={30} color="green" secondaryColor="white" ariaLabel="loading" />
                 </div>
             ) : (
                 <>
@@ -48,7 +48,7 @@ const Shop = ({ isShopPageLoaded, setShopPageLoaded }) => {
 
                     {(loading || !isShopPageLoaded) ? (
                         <div className="fallback-loading">
-                           <Oval height={30} width={30} color="white" secondaryColor="gray" ariaLabel="loading" />
+                            <Oval height={30} width={30} color="green" secondaryColor="white" ariaLabel="loading" />
                         </div>
                     ) : (
                         <InfiniteScroll
@@ -72,7 +72,7 @@ const Shop = ({ isShopPageLoaded, setShopPageLoaded }) => {
                         </InfiniteScroll>)}
 
 
-                   
+
                     {showFilterBy && (
                         <ShopFilterBySection
                             showFilterBy={showFilterBy}
@@ -85,7 +85,7 @@ const Shop = ({ isShopPageLoaded, setShopPageLoaded }) => {
                             <LiaSortSolid size={33} />
                             SORT BY
                         </div>
-                        <div id="searchShopPage-footer-filterby"  onClick={() => setShowFilterBy(!showFilterBy)}>
+                        <div id="searchShopPage-footer-filterby" onClick={() => setShowFilterBy(!showFilterBy)}>
                             <MdFilterList size={33} />
                             FILTER BY
                         </div>

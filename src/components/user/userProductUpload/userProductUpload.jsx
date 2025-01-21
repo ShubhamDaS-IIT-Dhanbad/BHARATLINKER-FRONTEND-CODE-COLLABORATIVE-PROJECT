@@ -5,6 +5,7 @@ import { FaArrowLeft } from 'react-icons/fa';
 import Cookies from 'js-cookie';
 import UploadBooksForm from './userUploadProductForm.jsx';
 
+import Navbar from '../a.navbarComponent/navbar.jsx';
 import './userProductUpload.css';
 
 const UploadProduct = () => {
@@ -21,25 +22,9 @@ const UploadProduct = () => {
 
     return (
         <>
-            <div className='user-upload-books-header'>
-                <FaArrowLeft
-                    id='user-upload-books-header-left-icon'
-                    size={25}
-                    onClick={() => navigate('/user')}
-                    aria-label="User Account"
-                    tabIndex={0}
-                />
-                <div className='user-upload-books-header-inner-div'>
-                    <p className='user-upload-books-header-inner-div-p'>UPLOAD {productType.toUpperCase()}</p>
-                    <div
-                        className={`user-upload-books-header-inner-div-phn-div`}
-                        aria-label="Change Location"
-                        tabIndex={0}
-                    >
-                        {userData?.phoneNumber}
-                    </div>
-                </div>
-            </div>
+            <header>
+                <Navbar headerTitle={"UPLOAD REFURBISHED"} />
+            </header>
             {
                 productType != 'gadget' && <div className='user-upload-book-type'>
                     <div

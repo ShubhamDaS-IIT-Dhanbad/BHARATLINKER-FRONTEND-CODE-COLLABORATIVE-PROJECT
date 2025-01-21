@@ -94,8 +94,8 @@ const ProductDetails = () => {
 
       {loading ? (
         <div className="page-loading-container">
-          <Oval height={30} width={30} color="white" secondaryColor="gray" ariaLabel="loading" />
-        </div>
+           <Oval height={30} width={30} color="green" secondaryColor="white" ariaLabel="loading" />
+                           </div>
       ) : (
         productDetail && (
           <div id="product-details-container">

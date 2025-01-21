@@ -21,7 +21,7 @@ const fallbackImage = "http://res.cloudinary.com/dthelgixr/image/upload/v1727870
 const ProductDetails = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    
+
     const { products } = useSelector((state) => state.searchproducts);
     const { shops } = useSelector((state) => state.searchshops);
     const { singleShops } = useSelector((state) => state.singleshops);
@@ -95,7 +95,7 @@ const ProductDetails = () => {
                 lat: productDetail.lat,
                 long: productDetail.long,
                 count: 1,
-                shopId:productDetail.shop
+                shopId: productDetail.shop
             };
 
             // Update the cart
@@ -134,38 +134,38 @@ const ProductDetails = () => {
 
     const checkProductInCartRefresh = async () => {
         if (!productId) return;
-    
+
         try {
             const userSession = Cookies.get('BharatLinkerUserData');
             if (!userSession) {
                 throw new Error("User session not found in cookies.");
             }
-    
+
             // Parse the user session
             const userData = JSON.parse(userSession);
             const phn = userData?.phoneNumber;
             let cart = await fetchUserCartByPhoneNumber(phn);
-            
+
             // Parse cart if it's a string
             if (typeof cart === 'string') {
                 cart = JSON.parse(cart);
             }
-    
+
             // Remove duplicate products by productId
             const uniqueCart = cart.filter((item, index, self) =>
                 index === self.findIndex((t) => t.id === item.id)
             );
-    
+
             // Update the user's cart in cookies
             userData.cart = uniqueCart;
             document.cookie = `BharatLinkerUserData=${encodeURIComponent(
                 JSON.stringify(userData)
             )}; path=/`;
-    
+
             // Check if the specific product is in the cart
             const productInCart = uniqueCart.find((item) => item.id === productId);
             setCart(uniqueCart);
-    
+
             // Set the product count or default to 0
             if (productInCart) {
                 setCount(Math.max(productInCart.count, 0));
@@ -178,40 +178,40 @@ const ProductDetails = () => {
     };
     const checkProductInCart = async () => {
         if (!productId) return;
-    
+
         try {
             const userSession = Cookies.get('BharatLinkerUserData');
             if (!userSession) {
                 throw new Error("User session not found in cookies.");
             }
-    
+
             // Parse the user session
             const userData = JSON.parse(userSession);
             let cart = userData.cart;
             if (!cart) {
                 throw new Error("No cart found for the user.");
             }
-    
+
             // Parse cart if it's a string
             if (typeof cart === 'string') {
                 cart = JSON.parse(cart);
             }
-    
+
             // Remove duplicate products by productId
             const uniqueCart = cart.filter((item, index, self) =>
                 index === self.findIndex((t) => t.id === item.id)
             );
-    
+
             // Update the user's cart in cookies
             userData.cart = uniqueCart;
             document.cookie = `BharatLinkerUserData=${encodeURIComponent(
                 JSON.stringify(userData)
             )}; path=/`;
-    
+
             // Check if the specific product is in the cart
             const productInCart = uniqueCart.find((item) => item.id === productId);
             setCart(uniqueCart);
-    
+
             // Set the product count or default to 0
             if (productInCart) {
                 setCount(Math.max(productInCart.count, 0));
@@ -222,7 +222,7 @@ const ProductDetails = () => {
             console.error("Error checking product in cart:", error);
         }
     };
-    
+
 
 
     const handleIncrement = () => {
@@ -235,8 +235,8 @@ const ProductDetails = () => {
 
                 const updatedCart = [...cart];
 
-                
-                if(updatedCart[productIndex].count>=3){alert('maximum quantity of product can be 3');return;}
+
+                if (updatedCart[productIndex].count >= 3) { alert('maximum quantity of product can be 3'); return; }
                 updatedCart[productIndex].count += 1;
                 updatedCart[productIndex].price = productDetail.price;
                 updatedCart[productIndex].discountedPrice = productDetail.discountedPrice;
@@ -253,7 +253,7 @@ const ProductDetails = () => {
 
     const handleDecrement = () => {
         try {
-            
+
             const userData = JSON.parse(Cookies.get('BharatLinkerUserData'));
             const cart = userData.cart || [];
             const productIndex = cart.findIndex((item) => item.id === productId);
@@ -290,24 +290,24 @@ const ProductDetails = () => {
 
     const updateCartData = async (updatedCart) => {
         try {
-            if(updatedCart.length==0) setShowMyCart(false);
+            if (updatedCart.length == 0) setShowMyCart(false);
             setCart(updatedCart);
             const userSession = Cookies.get('BharatLinkerUserData');
             if (!userSession) {
                 throw new Error("User session not found in cookies.");
             }
-    
+
             // Parse the user session and update the cart
             const userData = JSON.parse(userSession);
-    
+
             // Update the user's cart immediately
             userData.cart = updatedCart;
             document.cookie = `BharatLinkerUserData=${encodeURIComponent(
                 JSON.stringify(userData)
             )}; path=/`;
-    
+
             const productInCart = updatedCart.find((item) => item.id === productId);
-    
+
             if (productInCart) {
                 setCount(productInCart.count);
                 await updateCartByPhoneNumber(userData?.phoneNumber, updatedCart);
@@ -319,7 +319,7 @@ const ProductDetails = () => {
             console.error("Error updating cart data:", error);
         }
     };
-    
+
 
 
 
@@ -333,7 +333,7 @@ const ProductDetails = () => {
 
             {loading ? (
                 <div className="page-loading-container">
-                    <Oval height={30} width={30} color="white" secondaryColor="gray" ariaLabel="loading" />
+                    <Oval height={30} width={30} color="green" secondaryColor="white" ariaLabel="loading" />
                 </div>
             ) : (
                 <Fragment>
@@ -433,8 +433,8 @@ const ProductDetails = () => {
                         </>
 
                     )}
-                    {!showMyCart && <AddToCartTab cart={cart} setShowMyCart={setShowMyCart} checkProductInCartRefresh={checkProductInCartRefresh}/>}
-                    {showMyCart && <MyCart setShowMyCart={setShowMyCart} updateCartData={updateCartData}/>}
+                    {!showMyCart && <AddToCartTab cart={cart} setShowMyCart={setShowMyCart} checkProductInCartRefresh={checkProductInCartRefresh} />}
+                    {showMyCart && <MyCart setShowMyCart={setShowMyCart} updateCartData={updateCartData} />}
                 </Fragment>
             )}
         </Fragment>

@@ -8,6 +8,7 @@ import { CiBellOn } from "react-icons/ci";
 import { TbDeviceMobileCharging } from "react-icons/tb";
 import { AiOutlineProduct } from "react-icons/ai";
 import { CiBoxList } from "react-icons/ci";
+import { Oval } from 'react-loader-spinner';
 
 import useUserAuth from '../../hooks/userAuthHook.jsx';
 import './userHome.css';
@@ -15,11 +16,14 @@ import './userHome.css';
 function UserHome() {
     const { userData, logout } = useUserAuth();
     const [isLogout, setIsLogout] = useState(false);
+    const [isLoading, setIsLoading] = useState(false); // State to manage the loading spinner
     const navigate = useNavigate();
 
     const handleLogout = async () => {
-        await logout();
-        navigate('/login');
+        setIsLoading(true); // Start loading
+        await logout();     // Perform logout
+        setIsLoading(false); // Stop loading
+        navigate('/login');  // Navigate to login page
     };
 
     return (
@@ -33,7 +37,7 @@ function UserHome() {
                     />
                     <div className='dashboard-header-user'>
                         <p id='dashboard-header-user-location'>Bharat | Linker</p>
-                        <p id='dashboard-header-user-phn'>{userData? userData.phoneNumber : "xxxxx xxxxx"}</p>
+                        <p id='dashboard-header-user-phn'>{userData ? userData.phoneNumber : "xxxxx xxxxx"}</p>
                     </div>
                     <IoHomeOutline
                         size={25}
@@ -59,15 +63,15 @@ function UserHome() {
                         <p className='dashboard-Your-info-p'>Upload Books</p>
                     </article>
                     <article className='dashboard-Your-Refurbished' onClick={() => navigate('/user/upload/gadget')}>
-                        <TbDeviceMobileCharging className='dashboard-Your-information-icons' aria-label="Upload books" />
+                        <TbDeviceMobileCharging className='dashboard-Your-information-icons' aria-label="Upload gadgets" />
                         <p className='dashboard-Your-info-p'>Upload Gadgets</p>
                     </article>
                     <article className='dashboard-Your-Refurbished' onClick={() => navigate('/user/order')}>
-                        <CiBoxList className='dashboard-Your-information-icons' aria-label="Update refurbished items" />
+                        <CiBoxList className='dashboard-Your-information-icons' aria-label="Your orders" />
                         <p className='dashboard-Your-info-p'>Order</p>
                     </article>
                     <article className='dashboard-Your-Refurbished' onClick={() => navigate('/user/notification')}>
-                        <CiBellOn className='dashboard-Your-information-icons' aria-label="Update refurbished items" />
+                        <CiBellOn className='dashboard-Your-information-icons' aria-label="Notifications" />
                         <p className='dashboard-Your-info-p'>Notification</p>
                     </article>
                     <article className='dashboard-Your-Refurbished' onClick={() => setIsLogout(true)}>
@@ -88,7 +92,11 @@ function UserHome() {
                                 No
                             </div>
                             <div className='logout-pop-up-inner-div-yes' onClick={handleLogout}>
-                                Yes
+                                {isLoading ? (
+                                    <Oval height={30} width={30} color="green" secondaryColor="white" ariaLabel="loading" />
+                                ) : (
+                                    "Yes"
+                                )}
                             </div>
                         </div>
                     </div>
