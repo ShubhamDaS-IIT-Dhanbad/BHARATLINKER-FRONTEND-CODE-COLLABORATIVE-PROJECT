@@ -6,10 +6,13 @@ import Cookies from 'js-cookie';
 import { sendOtp, createSession, getShopData } from '../../../appWrite/shop/shop.js';
 import { Oval } from 'react-loader-spinner';
 import { ThreeDots } from 'react-loader-spinner';
-import './login.css';
 
-const i1='https://res.cloudinary.com/demc9mecm/image/upload/v1737182575/mz1bdy2skwtmouqxfqtf.jpg';//indian flag
-const i2='https://res.cloudinary.com/demc9mecm/image/upload/v1737182575/mz1bdy2skwtmouqxfqtf.jpg';//i1.png
+const i1='https://res.cloudinary.com/demc9mecm/image/upload/v1737378112/vokh5op2d88jerrkksan.png';
+const i2='https://res.cloudinary.com/demc9mecm/image/upload/v1737378115/d7xgicjpub5ag6udeisd.png';
+
+import '../../style/shopLogin.css';
+import '../../style/userLogin.css';
+
 
 function LoginForm() {
     const navigate = useNavigate();
