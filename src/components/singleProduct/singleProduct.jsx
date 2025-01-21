@@ -283,6 +283,7 @@ const ProductDetails = () => {
         checkProductInCart();
     }, [showMyCart]);
     useEffect(() => {
+        window.scrollTo(0, 0);
         fetchProductDetails();
     }, []);
 

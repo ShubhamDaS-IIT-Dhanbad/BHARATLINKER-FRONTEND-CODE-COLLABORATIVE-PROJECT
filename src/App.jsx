@@ -15,8 +15,6 @@ import RefurbishedPage from './components/refurbishedPage/refurbishedPage.jsx';
 
 const LoginPage = lazy(() => import('./components/loginPage/login.jsx'));
 
-const SearchSorybySection = lazy(() => import('./components/searchPage/sortbySection.jsx'));
-const SearchFilterSection = lazy(() => import('./components/searchPage/filterSection.jsx'));
 const SingleProduct = lazy(() => import('./components/singleProduct/singleProduct.jsx'));
 const ShopProducts = lazy(() => import('./components/shopProducts/shopProducts.jsx'));
 const SingleShopCard = lazy(() => import('./components/singleShop/singleShop.jsx'));
@@ -96,8 +94,6 @@ const RoutesWithConditionalHeader = React.memo(() => {
             </>
           }
         />
-        <Route path="/search/sortby" element={<SearchSorybySection />} />
-        <Route path="/search/filterby" element={<SearchFilterSection />} />
 
         {/* Single Product */}
         <Route
@@ -155,7 +151,12 @@ const RoutesWithConditionalHeader = React.memo(() => {
             </>
           }
         />
-        <Route path="/refurbished/:refurbishedId" element={<SingleRefurbishedProductCard />} />
+        <Route
+          path="/refurbished/:refurbishedId"
+          element={
+            <SingleRefurbishedProductCard
+            />}
+        />
 
 
 

@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import RefurbishedProductCard from '../refurbishedProductCard/refurbishedProductCard.jsx';
+import RefurbishedProductCard from '../b.productComponent/productCard.jsx';
 
 const ProductList = ({ products, loading, sortByAsc, sortByDesc }) => {
     const sortedProducts = useMemo(() => {
@@ -27,9 +27,9 @@ const ProductList = ({ products, loading, sortByAsc, sortByDesc }) => {
                 <RefurbishedProductCard
                     key={product.$id}
                     id={product.$id}
-                    image={product.images[0]}  
+                    image={product.images}  
                     title={product.title.length > 45 ? `${product.title.substr(0, 45)}...` : product.title}
-                    price={product.price}
+                    discountedPrice={product.discountedPrice}
                     isInStock={product.isInStock}
                 />
             ))}

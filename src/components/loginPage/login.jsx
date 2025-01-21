@@ -85,7 +85,9 @@ function SignUpForm() {
     return () => clearInterval(countdown);
   }, [timer]);
 
-
+  useEffect(() => {
+    window.scrollTo(0, 0);
+}, []);
 
   const sendOTP = async () => {
     setLoading(true);

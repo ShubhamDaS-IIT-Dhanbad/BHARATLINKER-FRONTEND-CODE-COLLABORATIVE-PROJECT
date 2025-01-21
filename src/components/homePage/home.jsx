@@ -1,4 +1,4 @@
-import React, { memo, useCallback } from 'react';
+import React, { memo, useCallback,useEffect } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 import HomePageNavbar from '../a.navbarComponent/navbar.jsx';
@@ -26,6 +26,9 @@ const Home = () => {
             navigate('/retailer/login');
         }
     }, [navigate]);
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
 
     return (
         <>

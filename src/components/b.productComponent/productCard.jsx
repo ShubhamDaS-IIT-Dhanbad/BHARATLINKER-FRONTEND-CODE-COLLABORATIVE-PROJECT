@@ -13,19 +13,15 @@ function SearchPageProductCard({ id, image, title, discountedPrice,  isInStock }
     // Check if the current path is /user/refurbished or /search
     const isRefurbishedPage = location.pathname === '/user/refurbished';
     const isSearchPage = location.pathname === '/search';
-
-    const handleEditClick = () => {
-        navigate(`/user/refurbished/update/${id}`);
-    };
-
-    const handleCardClick = () => {
-        navigate(`/product/${id}`);
-    };
+    const isSearchRefurbished = location.pathname === '/refurbished';
 
     return (
         <div 
             className="search-page-product-card" 
-            onClick={isSearchPage ? handleCardClick : null} // Only add onClick when on /search page
+            onClick={()=>{
+                if(isSearchPage)  {navigate(`/product/${id}`)}
+                if(isSearchRefurbished)  {navigate(`/refurbished/${id}`)}
+            }} 
         >
             <div className="search-page-product-card-top">
                 <img className="search-page-product-card-top-image" src={imageUrl} alt={productName} />
@@ -38,17 +34,23 @@ function SearchPageProductCard({ id, image, title, discountedPrice,  isInStock }
                     </span>
                 </div>
 
-                {isRefurbishedPage ? (
-                    <div onClick={handleEditClick} className="user-product-edit-button">
+                {isRefurbishedPage && (
+                    <div onClick={()=>{navigate(`/user/refurbished/update/${id}`)}} className="user-product-edit-button">
                         Edit
                     </div>
-                ) : (
+                )} 
+                {isSearchPage && (
                     <div className={`search-page-product-card-bottom-stock ${isInStock > 0 ? 'instock' : 'outofstock'}`}>
                         {isInStock > 0 ? (
                             <span>IN STOCK</span>
                         ) : (
                             <span>OUT OF STOCK</span>
                         )}
+                    </div>
+                )}
+                {isSearchRefurbished && (
+                    <div className={`search-page-product-card-bottom-stock ${true > 0 ? 'instock' : 'outofstock'}`}>
+                       ON SALE
                     </div>
                 )}
             </div>

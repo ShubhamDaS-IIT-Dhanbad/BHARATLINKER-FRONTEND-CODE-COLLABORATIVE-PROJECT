@@ -56,6 +56,9 @@ const ProductDetails = () => {
             fetchShopDetails(shopId);
         }
     }, [shopId, shops, singleShops, dispatch]);
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
 
     const handleImageClick = (index) => {
         setSelectedImage(shopDetail?.shopImages[index]);
