@@ -96,7 +96,7 @@
 
 .send-otp-button {
   background-color: transparent;
-  color: rgb(255, 255, 255);border: 1.7px solid black;
+  color: rgb(255, 255, 255);border: 1.7px solid rgb(255, 255, 255);
   padding: 12px 20px;font-weight: 900;
   border-radius: 5px;
   display: flex;justify-content: center;align-items: center;
