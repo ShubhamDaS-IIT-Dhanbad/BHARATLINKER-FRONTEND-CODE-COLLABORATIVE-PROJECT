@@ -11,7 +11,7 @@ import {
     loadMoreUserRefurbishedProducts,
     resetUserRefurbishedProducts,
 } from '../../../redux/features/user/userAllRefurbishedProductsSlice.jsx';
-import ProductList from './productList.jsx';
+import ProductList from '../../b.productComponent/productList.jsx';
 import './userProductPageMain.css';
 import Cookies from 'js-cookie';
 

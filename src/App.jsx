@@ -1,8 +1,9 @@
 import React, { Suspense, lazy, useState } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import useUserAuth from './hooks/userAuthHook.jsx';
-import {Oval } from 'react-loader-spinner';
+import { Oval } from 'react-loader-spinner';
 import './App.css';
 
 
@@ -35,8 +36,8 @@ function App() {
       <Router>
         <Suspense fallback={
           <div className="fallback-loading">
-             <Oval height={30} width={30} color="white" secondaryColor="gray" ariaLabel="loading" />
-                     
+            <Oval height={30} width={30} color="white" secondaryColor="gray" ariaLabel="loading" />
+
           </div>
         }>
           <RoutesWithConditionalHeader />
@@ -47,11 +48,12 @@ function App() {
 }
 
 const RoutesWithConditionalHeader = React.memo(() => {
-  const [isShopPageLoaded,setShopPageLoaded] =useState(true);
-  const [isProductPageLoaded, setProductPageLoaded] =useState(true);
-  const [isRefurbishedPageLoaded, setRefurbishedPageLoaded] =useState(true);
+  const [isShopPageLoaded, setShopPageLoaded] = useState(true);
+  const [isProductPageLoaded, setProductPageLoaded] = useState(true);
+  const [isRefurbishedPageLoaded, setRefurbishedPageLoaded] = useState(true);
 
-  const {PrivateRoute}=useUserAuth();
+  const { PrivateRoute } = useUserAuth();
+
   return (
     <>
       <Routes>
@@ -90,7 +92,7 @@ const RoutesWithConditionalHeader = React.memo(() => {
                 <title>Search Products - Bharat Linker</title>
                 <meta name="description" content="Search and explore a wide range of products on Bharat Linker." />
               </Helmet >
-              <SearchPage isProductPageLoaded={isProductPageLoaded} setProductPageLoaded={setProductPageLoaded}/>
+              <SearchPage isProductPageLoaded={isProductPageLoaded} setProductPageLoaded={setProductPageLoaded} />
             </>
           }
         />
@@ -120,7 +122,7 @@ const RoutesWithConditionalHeader = React.memo(() => {
                 <title>Search Shops - Bharat Linker</title>
                 <meta name="description" content="Search and explore various shops on Bharat Linker." />
               </Helmet>
-              <SearchShop isShopPageLoaded={isShopPageLoaded} setShopPageLoaded={setShopPageLoaded}/>
+              <SearchShop isShopPageLoaded={isShopPageLoaded} setShopPageLoaded={setShopPageLoaded} />
             </>
           }
         />
@@ -186,7 +188,8 @@ const RoutesWithConditionalHeader = React.memo(() => {
 
         <Route
           path="/user"
-          element={
+          element=
+          {
             <PrivateRoute>
               <Helmet>
                 <title>User Dashboard - Bharat Linker</title>
@@ -196,9 +199,11 @@ const RoutesWithConditionalHeader = React.memo(() => {
             </PrivateRoute>
           }
         />
+
         <Route
           path="/user/profile"
-          element={
+          element=
+          {
             <PrivateRoute>
               <Helmet>
                 <title>User Profile - Bharat Linker</title>
@@ -210,7 +215,8 @@ const RoutesWithConditionalHeader = React.memo(() => {
         />
         <Route
           path="/user/refurbished"
-          element={
+          element=
+          {
             <PrivateRoute>
               <Helmet>
                 <title>Manage Refurbished Products - Bharat Linker</title>
@@ -222,7 +228,8 @@ const RoutesWithConditionalHeader = React.memo(() => {
         />
         <Route
           path="/user/upload/:productType"
-          element={
+          element=
+          {
             <PrivateRoute>
               <Helmet>
                 <title>Upload Products - Bharat Linker</title>
@@ -234,7 +241,8 @@ const RoutesWithConditionalHeader = React.memo(() => {
         />
         <Route
           path="/user/refurbished/update/:id"
-          element={
+          element=
+          {
             <PrivateRoute>
               <Helmet>
                 <title>Update Product - Bharat Linker</title>
@@ -246,7 +254,8 @@ const RoutesWithConditionalHeader = React.memo(() => {
         />
         <Route
           path="/user/notification"
-          element={
+          element=
+          {
             <PrivateRoute>
               <Helmet>
                 <title>Notifications - Bharat Linker</title>
@@ -258,7 +267,8 @@ const RoutesWithConditionalHeader = React.memo(() => {
         />
         <Route
           path="/user/order"
-          element={
+          element=
+          {
             <PrivateRoute>
               <Helmet>
                 <title>Orders - Bharat Linker</title>
@@ -266,7 +276,6 @@ const RoutesWithConditionalHeader = React.memo(() => {
               </Helmet>
               <UserOrder />
             </PrivateRoute>
-
           }
         />
 

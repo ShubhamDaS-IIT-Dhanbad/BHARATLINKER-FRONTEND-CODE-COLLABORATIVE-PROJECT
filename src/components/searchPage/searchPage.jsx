@@ -4,7 +4,7 @@ import { useExecuteSearch } from '../../hooks/searchProductHook.jsx';
 import { LiaSortSolid } from "react-icons/lia";
 import { MdFilterList } from "react-icons/md";
 import SearchBar from '../a.navbarComponent/navbar.jsx';
-import ProductList from './productList.jsx';
+import ProductList from '../b.productComponent/productList.jsx';
 
 import { RotatingLines,Oval } from 'react-loader-spinner';
 
@@ -75,11 +75,7 @@ const SearchPage = ({ isProductPageLoaded, setProductPageLoaded }) => {
                             hasMore={hasMoreProducts}
                             loader={loadingMoreProducts && <h4>Loading more products...</h4>}
                         >
-                            <ProductList
-                                products={products}
-                                hasMoreProducts={hasMoreProducts}
-                                loadingMoreProducts={loadingMoreProducts}
-                            />
+                            <ProductList/>
                         </InfiniteScroll>)}
 
                     {showSortBy && (

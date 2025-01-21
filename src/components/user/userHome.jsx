@@ -33,7 +33,7 @@ function UserHome() {
                     />
                     <div className='dashboard-header-user'>
                         <p id='dashboard-header-user-location'>Bharat | Linker</p>
-                        <p id='dashboard-header-user-phn'>{userData?.phoneNumber || ""}</p>
+                        <p id='dashboard-header-user-phn'>{userData?.phoneNumber || "xxxxx xxxxx"}</p>
                     </div>
                     <IoHomeOutline
                         size={25}

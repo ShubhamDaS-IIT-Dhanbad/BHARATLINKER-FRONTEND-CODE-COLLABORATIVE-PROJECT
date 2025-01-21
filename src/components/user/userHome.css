@@ -92,7 +92,7 @@
   
 
 /* Common Styles for Pop-Up Container */
-.logout-pop-up, .user-book-update-pop-up, .user-book-delete-pop-up {
+.logout-pop-up{
     position: fixed;
     top: 0;
     display: flex;
@@ -106,7 +106,7 @@
 }
 
 /* Common Styles for Pop-Up Inner Div */
-.logout-pop-up-inner-div, .user-book-update-pop-up-inner, .user-book-delete-pop-up-inner {
+.logout-pop-up-inner-div {
     background-color: #fff;
     border-radius: 10px;
     width: 85vw;
@@ -114,9 +114,7 @@
 }
 
 /* Common Styles for Pop-Up Statement Text */
-.logout-pop-up-inner-div-logout-statement,
-.user-book-update-pop-up-message,
-.user-book-delete-pop-up-message {
+.logout-pop-up-inner-div-logout-statement{
     display: flex;
     justify-content: center;
     align-items: center;
@@ -126,9 +124,7 @@
 }
 
 /* Common Styles for No and Yes Options */
-.logout-pop-up-inner-div-no-yes,
-.user-book-update-pop-up-options,
-.user-book-delete-pop-up-options {
+.logout-pop-up-inner-div-no-yes{
     display: flex;
     height: 100%;
 }
