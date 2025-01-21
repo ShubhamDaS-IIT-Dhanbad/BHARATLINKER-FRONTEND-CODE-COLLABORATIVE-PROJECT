@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { FaCaretDown } from "react-icons/fa";
 import { FaArrowLeft } from 'react-icons/fa'; 
 import { useNavigate } from 'react-router-dom'; 
 import LocationTab from '../locationTab/locationTab';
@@ -49,7 +48,7 @@ const SingleProductSearchBar = () => {
                             tabIndex={0}
                         >
                             {loading ? 'Loading location...' : location ? location.address.slice(0,30): 'Location not set'}
-                           {/* <FaCaretDown size={15}/> */}
+                          
                         </div>
                     </div>
                 </div>
