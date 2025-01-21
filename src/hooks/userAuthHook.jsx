@@ -7,7 +7,7 @@ import conf from '../conf/conf.js';
 const useUserAuth = () => {
     const [userData, setUserData] = useState(null);
     const navigate = useNavigate();
-    const location = useLocation(); // Get the current location
+    const location = useLocation(); 
 
     // Initialize Appwrite client and account
     const client = new Client()
@@ -33,6 +33,23 @@ const useUserAuth = () => {
         }
     }, [navigate, location.pathname]);
 
+
+    const getUserDataFromCookie = () => {
+        const storedData = Cookies.get('BharatLinkerUserData');
+    
+        if (storedData) {
+            try {
+                return JSON.parse(storedData);
+            } catch (error) {
+                console.error("Error parsing user data from cookie:", error);
+                return {};
+            }
+        }
+    
+        console.log("No user data found in cookie");
+        return {};
+    };
+
     // Logout function
     const logout = async () => {
         try {
@@ -54,7 +71,7 @@ const useUserAuth = () => {
         return children; // Render children if session exists
     };
 
-    return { userData, logout, PrivateRoute };
+    return { userData,getUserDataFromCookie, logout, PrivateRoute };
 };
 
 export default useUserAuth;

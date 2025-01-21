@@ -190,11 +190,11 @@ class UserRefurbishedProduct {
 
 
 
+    
+
 
     async getUserRefurbishedProducts({
         inputValue = '',
-        selectedCategories,
-        selectedBrands,
         minPrice,
         maxPrice,
         isInStock,
@@ -209,17 +209,11 @@ class UserRefurbishedProduct {
         }
     
         try {
-            // Convert inputValue to an array of tokens
             const inputTokens = inputValue.split(' ').filter(token => token.trim() !== '').map(token => token.toLowerCase());
     
             const queries = [];
             queries.push(Query.equal('phn', phn));
-            if (selectedCategories.length > 0) {
-                queries.push(Query.or([
-                    Query.contains('productType', selectedCategories),
-                    Query.contains('keywords', selectedCategories)
-                ]));
-            }
+           
             if (inputValue.length > 0) {
                 queries.push(Query.or([
                     Query.contains('title', inputTokens),

@@ -6,7 +6,7 @@ import { MdFilterList } from "react-icons/md";
 import SearchBar from '../a.navbarComponent/navbar.jsx';
 import ProductList from '../b.productComponent/productList.jsx';
 
-import { RotatingLines,Oval } from 'react-loader-spinner';
+import {Oval } from 'react-loader-spinner';
 
 import InfiniteScroll from 'react-infinite-scroll-component';
 
@@ -39,7 +39,7 @@ const SearchPage = ({ isProductPageLoaded, setProductPageLoaded }) => {
     
 
     useEffect(() => {
-        if (products.length === 0) {
+        if (products.length === 0 && !loading) {
             executeSearch();
         }
         const delayTimeout = setTimeout(() => {

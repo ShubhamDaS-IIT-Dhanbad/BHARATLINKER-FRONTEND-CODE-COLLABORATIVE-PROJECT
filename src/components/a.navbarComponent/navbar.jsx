@@ -9,7 +9,7 @@ import LocationTab from '../locationTab/locationTab.jsx';
 
 
 import { FaArrowLeft } from 'react-icons/fa';
-import './navbar.css';
+import '../style/navbar.css';
 
 import { useSelector } from 'react-redux';
 //hooks
