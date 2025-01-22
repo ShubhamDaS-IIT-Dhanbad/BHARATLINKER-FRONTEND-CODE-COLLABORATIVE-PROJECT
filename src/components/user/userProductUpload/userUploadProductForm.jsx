@@ -368,7 +368,7 @@ const UploadBooksModulesForm = ({ userData, productType }) => {
                 </div>
 
                {!showPopUpLocation && <div
-                    className={`user-refurbished-product-book-module-upload-form-submit ${isUploading ? 'disabled' : ''}`}
+                    className={`user-refurbished-product-upload-form-submit ${isUploading ? 'disabled' : ''}`}
                 >
                   {allFieldEntered ? <div onClick={isUploading ? null : handleSubmit}>UPLOAD</div> : <div onClick={()=>{setAllFieldEntered(true)}}>All fields are required! OK</div>}
                 </div>}
