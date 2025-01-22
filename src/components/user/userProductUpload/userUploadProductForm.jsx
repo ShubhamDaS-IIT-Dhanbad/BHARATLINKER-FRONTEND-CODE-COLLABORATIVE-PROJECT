@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import {useNavigate} from 'react-router-dom';
 import { IoClose } from 'react-icons/io5';
 import { CiImageOn } from 'react-icons/ci';
 import { MdOutlineCategory } from "react-icons/md";
@@ -6,9 +7,12 @@ import { TbBrandAirtable, TbWorldUpload } from "react-icons/tb";
 
 import { Oval } from 'react-loader-spinner';
 import userRefurbishedProduct from '../../../appWrite/UserRefurbishedProductService/userRefurbishedProduct.js';
-import Cookies from 'js-cookie';
+
 
 const UploadBooksModulesForm = ({ userData, productType }) => {
+    const navigate=useNavigate();
+
+    const [showPopUpLocation, setShowPopUpLocation] = useState(false);
     const [popUpState, setPopUpState] = useState({
         classPopUp: false,
         subjectPopUp: false,
@@ -16,11 +20,7 @@ const UploadBooksModulesForm = ({ userData, productType }) => {
         categoryPopUp: false,
         brandPopUp: false,
     });
-    const [selected, setSelected] = useState("");
     const [coordinates, setCoordinates] = useState({ lat: null, long: null });
-    const [fetching, setFetching] = useState(false);
-
-
     const [uploadStatus, setUploadStatus] = useState({
         success: false,
         fail: false,
@@ -52,26 +52,7 @@ const UploadBooksModulesForm = ({ userData, productType }) => {
             [name]: value,
         }));
     };
-    const handleCurrentLocationClick = () => {
-        setFetching(true);
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    const { latitude, longitude } = position.coords;
-                    setCoordinates({ lat: latitude, long: longitude });
-                    console.log("Latitude:", latitude, "Longitude:", longitude);
-                },
-                (error) => {
-                    setSelected("ADDRESS LOCATION");
-                    console.error("Error retrieving location:", error.message);
-                }
-            );
-        } else {
-            console.error("Geolocation is not supported by this browser.");
-            setSelected("ADDRESS LOCATION");
-        }
-        setFetching(false);
-    };
+
     const handleDrop = (index, event) => {
         event.preventDefault();
         handleImageChange(index, event.dataTransfer.files);
@@ -80,11 +61,10 @@ const UploadBooksModulesForm = ({ userData, productType }) => {
 
     useEffect(() => {
         if (userData.phoneNumber) {
-            console.log(userData)
             if (userData.lat && userData.long) {
                 setCoordinates({ lat: userData.lat, long: userData.long });
-            }else{
-                alert("set use location")
+            } else {
+                setShowPopUpLocation(true);
             }
         }
     }, [userData])
@@ -140,6 +120,7 @@ const UploadBooksModulesForm = ({ userData, productType }) => {
 
     const handleSubmit = () => {
         const { lat = coordinates.lat, long = coordinates.long, title, price, discountedPrice, class: selectedClass, language, category, brand } = formData;
+        if (!lat || !long) { setShowPopUpLocation(true); return; }
 
         // Check if required fields are filled based on the product type
         const isModuleOrBookValid = (productType === 'module' || productType === 'book') &&
@@ -385,35 +366,16 @@ const UploadBooksModulesForm = ({ userData, productType }) => {
                         </div>
                     ))}
                 </div>
-                <div id="user-refurbished-product-book-module-upload-location">
-                    <div
-                        className={`user-refurbished-product-book-module-upload-location-p ${selected === "CURRENT LOCATION" ? "selected" : ""
-                            }`}
-                        onClick={() => { setSelected("CURRENT LOCATION"); handleCurrentLocationClick(); }}
-                    >
-                        {fetching ? 'Fetching...' : 'CURRENT LOCATION'}
-                    </div>
-                    <div
-                        className={`user-refurbished-product-book-module-upload-location-p ${selected === "ADDRESS LOCATION" ? "selected" : ""
-                            }`}
-                        onClick={() => setSelected("ADDRESS LOCATION")}
-                    >
-                        ADDRESS LOCATION
-                    </div>
-                </div>
-                <div
+
+               {!showPopUpLocation && <div
                     className={`user-refurbished-product-book-module-upload-form-submit ${isUploading ? 'disabled' : ''}`}
-                    onClick={isUploading ? null : handleSubmit}
                 >
-                    <TbWorldUpload size={35} />
-                </div>
+                  {allFieldEntered ? <div onClick={isUploading ? null : handleSubmit}>UPLOAD</div> : <div onClick={()=>{setAllFieldEntered(true)}}>All fields are required! OK</div>}
+                </div>}
 
 
             </div>
 
-            {!allFieldEntered && (
-                <PopupFail message="All fields are required!" onClose={() => setAllFieldEntered(true)} isSuccess={false} />
-            )}
             {isUploading && (
                 <div className="user-refurbished-product-book-module-upload-form-loader">
                     <Oval height={40} width={40} color="#fff" />
@@ -425,6 +387,17 @@ const UploadBooksModulesForm = ({ userData, productType }) => {
             {uploadStatus.fail && (
                 <PopupFail message={`Failed to upload ${productType}. Please try again!`} onClose={() => setUploadStatus({ success: false, fail: false })} isSuccess={false} />
             )}
+
+            {showPopUpLocation &&
+                <div className='user-upload-location-popup'>
+                    set location in you profile
+                    <div className='user-upload-location-popup-ok' onClick={()=>{ 
+                        setShowPopUpLocation(false);
+                        navigate('/user/profile')}}>
+                        ok
+                    </div>
+                </div>
+            }
 
         </>
     );
