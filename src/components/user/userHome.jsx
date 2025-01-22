@@ -70,10 +70,10 @@ function UserHome() {
                         <CiBoxList className='dashboard-Your-information-icons' aria-label="Your orders" />
                         <p className='dashboard-Your-info-p'>Order</p>
                     </article>
-                    <article className='dashboard-Your-Refurbished' onClick={() => navigate('/user/notification')}>
+                    {/* <article className='dashboard-Your-Refurbished' onClick={() => navigate('/user/notification')}>
                         <CiBellOn className='dashboard-Your-information-icons' aria-label="Notifications" />
                         <p className='dashboard-Your-info-p'>Notification</p>
-                    </article>
+                    </article> */}
                     <article className='dashboard-Your-Refurbished' onClick={() => setIsLogout(true)}>
                         <MdOutlineAdminPanelSettings className='dashboard-Your-information-icons' aria-label="Logout" />
                         <p className='dashboard-Your-info-p'>Logout</p>
