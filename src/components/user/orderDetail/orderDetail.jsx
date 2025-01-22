@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import "./orderDetail.css";
 
+import Navbar from "../a.navbarComponent/navbar.jsx";
 import useUserAuth from "../../../hooks/userAuthHook.jsx";
 import { fetchShopDetailsById } from "../../../redux/features/user/orderSlice.jsx";
 
@@ -28,8 +29,10 @@ const OrderDetails = () => {
             } else {
                 setOrder(foundOrder);
             }
-        }else{navigate("/user/order");}
-    }, []);
+        } else {
+            navigate("/user/order");
+        }
+    }, [orders, id, navigate]);
 
     // Fetch shop details if order is available
     useEffect(() => {
@@ -43,7 +46,7 @@ const OrderDetails = () => {
                 dispatch(fetchShopDetailsById(shopId));
             }
         }
-    }, [order,shopState]);
+    }, [order, shopState, dispatch]);
 
     const getOrderTitle = (state) => {
         switch (state) {
@@ -60,51 +63,88 @@ const OrderDetails = () => {
         }
     };
 
-    if (loading.shop) {
-        return <div className="loading-message">Fetching your order details...</div>;
-    }
+ 
 
     if (!order) {
-        return <div className="redirect-message">Redirecting to orders page...</div>;
+        return <div className="redirect-message"></div>;
     }
 
     return (
-        <div className="order-details-container">
-            <header className="order-header">
-                <h1>{getOrderTitle(order.state)}</h1>
-                <p>
-                    Hello, {userData?.name || "USER"} <br />
-                </p>
+        <>
+            <header>
+                <div className="user-refurbished-product-page-header">
+                    <Navbar
+                        headerTitle={"ORDER DETAIL"}
+                        onBackNavigation={() => navigate(-1)}
+                    />
+                </div>
             </header>
 
-            <div className="order-summary">
-                <div className="order-info">
-                    <p><strong>Order Date:</strong> {new Date(order.$createdAt).toLocaleDateString()}</p>
-                    <p><strong>Order No:</strong> {order.$id}</p>
-                    <p><strong>Payment:</strong> <span className="payment-icon">CASH ON DELIVERY</span></p>
-                    <p><strong>Shipping Address:</strong> {order.address}</p>
-                    <p><strong>Shipping LAT:</strong> {order.lat}</p>
-                    <p><strong>Shipping LONG:</strong> {order.long}</p>
+            <div className="order-details-container">
+                <header className="order-header">
+                    <h1>{getOrderTitle(order.state)}</h1>
+                    <p>
+                        Hello, {userData?.name || "USER"} <br />
+                    </p>
+                    <p>your order is {order.state}</p>
+                </header>
+
+                <div className="order-summary">
+                    <div className="order-info">
+                        <p>
+                            <strong>Order Date:</strong>{" "}
+                            {new Date(order.$createdAt).toLocaleDateString()}
+                        </p>
+                        <p>
+                            <strong>Order No:</strong> {order.$id}
+                        </p>
+                        <p>
+                            <strong>Payment:</strong>{" "}
+                            <span className="payment-icon">CASH ON DELIVERY</span>
+                        </p>
+                        <p>
+                            <strong>Shipping Address:</strong> {order.address}
+                        </p>
+                        <p>
+                            <strong>Shipping LAT:</strong> {order.lat}
+                        </p>
+                        <p>
+                            <strong>Shipping LONG:</strong> {order.long}
+                        </p>
+                    </div>
+
+                    {(order.state === "confirmed" || order.state === "shipped") && (
+                        <div className="order-status-details">
+                            <p>
+                                <strong>Expected Delivery Date:</strong>{" "}
+                                {order.expectedDeliveryDate}
+                            </p>
+                            <p>
+                                <strong>Message:</strong> {order.message}
+                            </p>
+                        </div>
+                    )}
+
+                    {shop && (
+                        <div className="shop-details">
+                            <h3>Shop Details</h3>
+                            <p>
+                                <strong>Shop Name:</strong> {shop?.shopName}
+                            </p>
+                            <p>
+                                <strong>Shop Address:</strong> {shop?.address}
+                            </p>
+                            <p>
+                                <strong>Shop LAT:</strong> {shop?.lat}
+                            </p>
+                            <p>
+                                <strong>Shop LONG:</strong> {shop?.long}
+                            </p>
+                        </div>
+                    )}
                 </div>
-
-                {(order.state === "confirmed" || order.state === "shipped") && (
-                    <div className="order-status-details">
-                        <p><strong>Expected Delivery Date:</strong> {order.expectedDeliveryDate}</p>
-                        <p><strong>Message:</strong> {order.message}</p>
-                    </div>
-                )}
-
-                {shop && (
-                    <div className="shop-details">
-                        <h3>Shop Details</h3>
-                        <p><strong>Shop Name:</strong> {shop?.shopName}</p>
-                        <p><strong>Shop Address:</strong> {shop?.address}</p>
-                        <p><strong>Shop LAT:</strong> {shop?.lat}</p>
-                        <p><strong>Shop LONG:</strong> {shop?.long}</p>
-                    </div>
-                )}
             </div>
-        </div>
+        </>
     );
 };
 
