@@ -14,7 +14,7 @@ function OrderProductCard({order}) {
         switch (status) {
             case 'pending':
                 return <FaExclamationTriangle className="status-icon pending" />;
-            case 'accepted':
+            case 'confirmed':
                 return <RiChatSmileFill className="status-icon accepted" />;
             case 'dispatched':
                 return <FaLuggageCart className="status-icon dispatched" />;
