@@ -9,6 +9,8 @@ import { BsBasket2Fill } from "react-icons/bs";
 import useUserAuth from '../../../hooks/userAuthHook.jsx';
 import './order.css';
 
+import { FaArrowLeft } from 'react-icons/fa';
+
 function Order() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -25,19 +27,22 @@ function Order() {
     return (
         <>
             <div className="user-order-container">
-                <div className="user-order-container-left">
-                    <FaCircleArrowLeft
-                        size={30}
-                        aria-label="User profile"
-                        className="user-order-container-left-icon"
-                        onClick={()=>{navigate('/user')}}
-                    />
+                <FaArrowLeft
+                    id="product-page-user-icon"
+                    size={25}
+                    onClick={() => navigate('/user')}
+                    aria-label="Go to Home"
+                    tabIndex={0}
+                />
+                <div className="product-page-user-location">
+                    <p className="product-page-location-label">ORDER DETAILS</p>
+                    <p id="dashboard-header-user-phn" style={{color:"white"}}>
+                        {userData ? userData.phoneNumber : 'xxxxx xxxxx'}
+                    </p>
                 </div>
-                <div className="user-order-container-basket">
-                    <BsBasket2Fill size={40} />
-                </div>
-                <div className="user-order-container-div">Order Details</div>
             </div>
+            <div className="user-order-container-div">Order Details</div>
+
             <div className="user-orders-container-order">
                 {loading ? (
                     <div className="fallback-loading">
