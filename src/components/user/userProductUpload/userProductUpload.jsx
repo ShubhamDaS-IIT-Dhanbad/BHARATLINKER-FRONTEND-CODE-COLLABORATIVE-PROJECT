@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
-import Cookies from 'js-cookie';
 import UploadBooksForm from './userUploadProductForm.jsx';
 
 import useUserAuth from '../../../hooks/userAuthHook.jsx';

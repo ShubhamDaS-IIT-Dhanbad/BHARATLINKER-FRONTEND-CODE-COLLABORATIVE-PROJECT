@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import { MdOutlineAdminPanelSettings } from "react-icons/md";
 import { HiOutlineUserCircle } from "react-icons/hi2";
 import { FiUploadCloud } from "react-icons/fi";
-import { CiBellOn } from "react-icons/ci";
 import { TbDeviceMobileCharging } from "react-icons/tb";
 import { AiOutlineProduct } from "react-icons/ai";
 import { CiBoxList } from "react-icons/ci";
