@@ -16,7 +16,6 @@ const ti1='https://res.cloudinary.com/demc9mecm/image/upload/v1737378115/ptnykpi
 const Home = () => {
     
     const navigate = useNavigate();
-
     const handleRetailerClick = useCallback(() => {
         const retailerCookie = Cookie.get('BharatLinkerShopData');
         if (retailerCookie) {

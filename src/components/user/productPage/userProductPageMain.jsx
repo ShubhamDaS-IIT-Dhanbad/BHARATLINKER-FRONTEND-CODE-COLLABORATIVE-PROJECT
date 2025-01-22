@@ -55,7 +55,6 @@ function UserRefurbishedProduct() {
             <header>
                 <div className="user-refurbished-product-page-header">
                     <Navbar headerTitle={"YOUR REFURBISHED"} />
-
                 </div>
             </header>
             <main>

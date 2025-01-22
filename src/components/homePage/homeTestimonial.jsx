@@ -1,8 +1,6 @@
 import React, { useState } from "react";
 import "./homeTestimonial.css";
 
-
-
 const Testimonial = ({ti1}) => {
   const testimonials = [
     {

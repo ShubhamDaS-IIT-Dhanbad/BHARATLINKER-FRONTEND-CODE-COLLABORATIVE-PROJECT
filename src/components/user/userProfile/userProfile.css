@@ -7,7 +7,7 @@
 
 
 .user-profile-div{
-    padding: 10px;
+    padding: 10px;padding-top: 77px;
 }
 .user-profile-form {
     max-width: 400px;
@@ -42,6 +42,21 @@
     box-sizing: border-box;
 }
   .user-profile-form-input::placeholder{
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-size: 15px;color: #000000c2;
+  }
+  .user-profile-lat-input {
+    display: flex;flex-grow: 1;
+    padding: 12px;
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-family: 'Arial', sans-serif;
+    font-size: 14px;
+    color: #333;
+    box-sizing: border-box;
+}
+  .user-profile-lat-input::placeholder{
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     font-size: 15px;color: #000000c2;
   }
