@@ -5,7 +5,7 @@ const Testimonial = ({ti1}) => {
   const testimonials = [
     {
       title: "BHARAT | LINKER",
-      description:"We are testing our platform in the Berhampur and Murshidabad regions. As a small team of recent graduates, our resources are limited, but we are passionate about improving and expanding our services based on your feedback.",
+      description:"We are testing our platform in the Dhanbad,Jharkhand regions. As a small team of recent graduates, our resources are limited, but we are passionate about improving and expanding our services based on your feedback.",
       image: ti1,
     },    
     {
