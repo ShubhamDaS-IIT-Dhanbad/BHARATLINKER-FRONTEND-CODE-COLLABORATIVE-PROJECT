@@ -56,8 +56,19 @@ const userOrderSlice = createSlice({
       })
       .addCase(fetchUserOrders.fulfilled, (state, action) => {
         state.loading = false;
-        state.orders = action.payload;
-      })
+    
+        const stateOrder = {
+            dispatched: 1,
+            pending: 2,
+            canceled: 3,
+            delivered: 4,
+        };
+        const sortedOrders = action.payload.sort((a, b) => {
+            return (stateOrder[a.state] || 5) - (stateOrder[b.state] || 5);
+        });
+        state.orders = sortedOrders;
+    })
+    
       .addCase(fetchUserOrders.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload;
