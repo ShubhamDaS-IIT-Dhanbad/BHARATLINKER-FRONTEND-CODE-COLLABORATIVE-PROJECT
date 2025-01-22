@@ -44,7 +44,7 @@ function Order() {
             <div className="user-orders-container-order">
                 {loading ? (
                     <div className="fallback-loading">
-                        <Oval height={30} width={30} color="white" secondaryColor="gray" ariaLabel="loading" />
+                        <Oval height={30} width={30} color="green" secondaryColor="white" ariaLabel="loading" />
                     </div>
                 ) : (
                     <div className="user-orders-list">

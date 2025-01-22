@@ -51,10 +51,68 @@
     color: white;font-weight: 100;height: 30px;
     width: 60px;justify-content: center;align-items:center;
 }
-
-
 .order-product-card-detail-3-state{
-    background-color: rgb(45, 65, 159);display: flex;font-size: 9px;
-    color: white;font-weight: 100;height: 60%;border-radius: 10px;
+    width: 100%;display: flex;align-items: center;
+    height: 30%;
+}
+
+
+
+.order-status-pending {
+    border:1.6px solid green ;
+    display: flex;font-size: 11px;
+    color: rgb(0, 0, 0);font-weight: 600;height: 30px;
     width: 60px;justify-content: center;align-items:center;
+}
+.order-status-accepted {
+    background-color: yellow;display: flex;font-size: 9px;
+    color: white;font-weight: 100;height: 30px;
+    width: 60px;justify-content: center;align-items:center;
+}
+.order-status-canceled {
+    border:1.6px solid rgb(128, 0, 0) ;
+    display: flex;font-size: 10px;
+    color: rgb(0, 0, 0);font-weight: 600;height: 30px;
+    width: 60px;justify-content: center;align-items:center;
+}
+.order-status-delivered {
+    background-color: yellow;display: flex;font-size: 9px;
+    color: white;font-weight: 100;height: 30px;
+    width: 60px;justify-content: center;align-items:center;
+}
+
+
+
+
+.order-product-card-detail-3-state {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Icon styling */
+.status-icon {
+    font-size: 20px;
+}
+
+.status-icon.pending {
+    color: #ff9800; /* Orange */
+}
+
+.status-icon.accepted {
+    color: #4caf50; /* Green */
+}
+
+.status-icon.dispatched {
+    color: #2196f3; /* Blue */
+}
+
+.status-icon.canceled {
+    color: #f44336; /* Red */
+}
+
+/* Text styling */
+.order-status-text {
+    font-weight: bold;
+    font-size: 16px;
 }
