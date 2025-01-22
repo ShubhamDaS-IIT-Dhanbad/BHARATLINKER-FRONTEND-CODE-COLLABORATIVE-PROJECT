@@ -1,11 +1,9 @@
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { FaCircleArrowLeft } from "react-icons/fa6";
 import { Oval } from 'react-loader-spinner';
 import { fetchUserOrders } from '../../../redux/features/user/orderSlice.jsx';
 import OrderProductCard from './orderProductCard.jsx';
-import { BsBasket2Fill } from "react-icons/bs";
 import useUserAuth from '../../../hooks/userAuthHook.jsx';
 import './order.css';
 

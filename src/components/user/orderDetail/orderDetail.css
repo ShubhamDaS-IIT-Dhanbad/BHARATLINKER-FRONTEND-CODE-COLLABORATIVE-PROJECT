@@ -1,0 +1,107 @@
+
+  
+  .order-details-container {
+    max-width: 600px;
+    background: white;
+    border-radius: 8px;
+    padding: 20px;
+  }
+  
+  .order-header {
+    text-align: center;
+  }
+  
+  .logo {
+    width: 50px;
+    margin-bottom: 10px;
+  }
+  
+  .order-header h1 {
+    font-size: 1.5em;
+    margin: 10px 0;
+    color: #333;
+  }
+  
+  .order-header p {
+    color: #777;
+    font-size: 1em;
+  }
+  
+  .order-summary {
+    margin-top: 20px;
+    border-top: 1px solid #ddd;
+    padding-top: 10px;
+  }
+  
+  .order-info p {
+    margin: 5px 0;
+    font-size: 0.9em;
+  }
+  
+  .order-items {
+    margin-top: 20px;
+    border-top: 1px solid #ddd;
+    padding-top: 10px;
+  }
+  
+  .item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 15px;
+  }
+  
+  .item-image {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 5px;
+  }
+  
+  .item h3 {
+    margin: 0;
+    font-size: 1em;
+    color: #333;
+  }
+  
+  .price {
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .order-totals {
+    margin-top: 20px;
+    border-top: 1px solid #ddd;
+    padding-top: 10px;
+  }
+  
+  .totals-row {
+    display: flex;
+    justify-content: space-between;
+    margin: 5px 0;
+  }
+  
+  .discount {
+    color: green;
+  }
+  
+  .total {
+    font-weight: bold;
+  }
+  
+  .order-footer {
+    margin-top: 20px;
+    border-top: 1px solid #ddd;
+    padding-top: 10px;
+    text-align: center;
+  }
+  
+  .order-footer a {
+    color: #0073e6;
+    text-decoration: none;
+  }
+  
+  .order-footer a:hover {
+    text-decoration: underline;
+  }
+  

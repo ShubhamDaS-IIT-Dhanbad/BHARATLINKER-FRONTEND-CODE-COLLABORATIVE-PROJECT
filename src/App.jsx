@@ -27,6 +27,7 @@ const RefurbishedBooksUploadUser = lazy(() => import('./components/user/userProd
 const UserUpdateBookModule = lazy(() => import('./components/user/userProductUpdate/userProductUpdate.jsx'));
 const UserNotification = lazy(() => import('./components/user/notification/userNotification.jsx'));
 const UserOrder = lazy(() => import('./components/user/order/order.jsx'));
+const UserOrderDetail = lazy(() => import('./components/user/orderDetail/orderDetail.jsx'));
 
 function App() {
  
@@ -276,6 +277,19 @@ return (
                 <meta name="description" content="View and manage your orders on Bharat Linker." />
               </Helmet>
               <UserOrder />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/user/order/:id"
+          element=
+          {
+            <PrivateRoute>
+              <Helmet>
+                <title>Orders - Bharat Linker</title>
+                <meta name="description" content="Order detail on Bharat Linker." />
+              </Helmet>
+              <UserOrderDetail />
             </PrivateRoute>
           }
         />

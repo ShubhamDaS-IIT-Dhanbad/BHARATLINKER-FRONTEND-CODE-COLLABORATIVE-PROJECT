@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { FaExclamationTriangle } from "react-icons/fa";
 import { RiChatSmileFill } from "react-icons/ri";
 import { FaLuggageCart } from "react-icons/fa";
@@ -6,25 +7,8 @@ import { FaSadCry } from "react-icons/fa";
 import { GiPartyPopper } from "react-icons/gi";
 import './orderProductCard.css';
 
-function OrderProductCard({ order, onViewDetails, onCancelOrder }) {
-    // Function to return a status-specific class name
-    const getStatusClass = (status) => {
-        switch (status) {
-            case 'pending':
-                return 'order-status-pending';
-            case 'accepted':
-                return 'order-status-accepted';
-            case 'dispatched':
-                return 'order-status-dispatched';
-            case 'canceled':
-                return 'order-status-canceled';
-            case 'delivered':
-                return 'order-status-delivered';
-            default:
-                return '';
-        }
-    };
-
+function OrderProductCard({order}) {
+    const navigate=useNavigate();
     // Function to return the correct icon based on status
     const getStatusIcon = (status) => {
         switch (status) {
@@ -67,18 +51,14 @@ function OrderProductCard({ order, onViewDetails, onCancelOrder }) {
                             <p className="opcdp">₹{order?.discountedPrice * order?.count}</p>
                         </div>
                     </div>
-
                     <div
                         className="order-product-card-detail-2-rm"
-                        onClick={() => onViewDetails(order)}
+                        onClick={()=>{navigate(`/user/order/${order.$id}`)}}
                     >
                         VIEW
                     </div>
                 </div>
                 <div className={`order-product-card-detail-3-state`}>
-                    {/* <div className={`${getStatusClass(order?.state)}`}>
-                        {order?.state?.toUpperCase()}
-                    </div> */}
                     {getStatusIcon(order?.state)}
                 </div>
             </div>
