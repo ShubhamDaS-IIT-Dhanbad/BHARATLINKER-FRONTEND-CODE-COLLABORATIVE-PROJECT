@@ -13,6 +13,7 @@ import { updateUserByPhoneNumber } from '../../../appWrite/userData/userData.js'
 import conf from '../../../conf/conf.js';
 import useUserAuth from '../../../hooks/userAuthHook.jsx';
 
+import useLocationFromCookie from '../../../hooks/useLocationFromCookie.jsx';
 function UserRefurbishedProduct() {
   const navigate = useNavigate();
   const { getUserDataFromCookie } = useUserAuth();
@@ -30,14 +31,13 @@ function UserRefurbishedProduct() {
   const [isUpdating, setIsUpdating] = useState(false);
 
   const [fetchingUserLocation, setFetchingUserLocation] = useState(false);
+  const { location, updateLocation, fetchLocationSuggestions, fetchCurrentLocation } = useLocationFromCookie();
 
   useEffect(() => {
-
     const fetchUserData = () => {
       const data = getUserDataFromCookie();
       setUserData(data);
     };
-
     if (userData) {
       setName(userData?.name ? userData?.name : '');
       setAddress(userData?.address ? userData?.address : '');
@@ -49,6 +49,63 @@ function UserRefurbishedProduct() {
   }, [userData]);
 
 
+
+
+
+
+  const handleLocationClick = () => {
+    if (navigator.geolocation) {
+      setFetchingUserLocation(true);
+      navigator.geolocation.getCurrentPosition(
+        async (position) => {
+          const { latitude, longitude } = position.coords;
+
+          const apiKey = conf.opencageapikey;
+          const apiUrl = `${conf.opencageapiurl}?key=${apiKey}&q=${latitude},${longitude}&pretty=1&no_annotations=1`;
+
+          try {
+            const response = await fetch(apiUrl);
+            const data = await response.json();
+            const address = data.results[0].formatted;
+            setAddress(address);
+            setLat(latitude);
+            setLong(longitude);
+          } catch (error) {
+            console.error('Error fetching address:', error);
+          } finally {
+            setFetchingUserLocation(false);
+          }
+        },
+        (error) => {
+          console.error('Error fetching current location:', error);
+          setFetchingUserLocation(false);
+        }
+      );
+    } else {
+      console.error('Geolocation is not supported by this browser.');
+      setFetchingUserLocation(false);
+    }
+  };
+  const fetchSuggestions = async (query) => {
+    if (!query) { setSuggestions([]); return; }
+    setLoading(true);
+    try {
+      const response = await fetchLocationSuggestions(query);
+      setSuggestions(response);
+    } catch (error) {
+      console.error('Error fetching suggestions:', error);
+      setSuggestions([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+  const handleAddressClick = (suggestion) => {
+    setSearchQuery(suggestion.label);
+    setAddress(suggestion.label);
+    setLat(suggestion.lat);
+    setLong(suggestion.lon);
+    setSuggestions([]);
+  };
   return (
     <div className="user-product-page-body">
       <Helmet>
@@ -86,13 +143,26 @@ function UserRefurbishedProduct() {
             className="user-profile-form-input"
           >{address ? address : "This location [latitude : longitude] will be used to show your refurbished product to other users"}</div>
         </div>
-        <div style={{ display: "flex", width:'98%'}}>
+        <div style={{ display: "flex", width: '98%' }}>
           <div className="user-profile-lat-input">{lat ? lat : "LATITUDE"}</div>
           <div className="user-profile-lat-input">{long ? long : "LONGITUDE"}</div>
         </div>
-        <div className="user-profile-location" onClick={handleLocationClick}>
-          USE CURRENT LOCATION AS HOME LOCATION
-          <MdMyLocation size={20} style={{ cursor: 'pointer' }} aria-label="Get Current Location" />
+
+
+
+
+        <div
+          className="user-location-tab-bottom-div-current-location"
+          onClick={handleLocationClick}
+          aria-label="Use current location"
+        >
+          {fetchingUserLocation ?  <Oval height={20} width={20} color="green" secondaryColor="white" ariaLabel="loading" />
+                                :
+            <>
+              <MdMyLocation size={23} />
+              Use current location
+            </>}
+
         </div>
 
         <div className="location-tab-bottom-div-input-div">
@@ -134,7 +204,7 @@ function UserRefurbishedProduct() {
         </button>
       </div>
 
-      {(isUpdating || fetchingUserLocation) && (
+      {(isUpdating) && (
         <div className="user-book-delete-pop-up">
           <Oval height={40} width={40} color="#4A90E2" />
         </div>
@@ -186,78 +256,6 @@ const updateUserData = () => {
 
 
 
-const handleLocationClick = () => {
-  if (navigator.geolocation) {
-    setFetchingUserLocation(true);
-    navigator.geolocation.getCurrentPosition(
-      async (position) => {
-        const { latitude, longitude } = position.coords;
 
-        const apiKey = conf.opencageapikey;
-        const apiUrl = `${conf.opencageapiurl}?key=${apiKey}&q=${latitude},${longitude}&pretty=1&no_annotations=1`;
 
-        try {
-          const response = await fetch(apiUrl);
-          const data = await response.json();
-          const address = data.results[0].formatted;
-          setAddress(address);
-          setLat(latitude);
-          setLong(longitude);
-        } catch (error) {
-          console.error('Error fetching address:', error);
-        } finally {
-          setFetchingUserLocation(false);
-        }
-      },
-      (error) => {
-        console.error('Error fetching current location:', error);
-        setFetchingUserLocation(false);
-      }
-    );
-  } else {
-    console.error('Geolocation is not supported by this browser.');
-    setFetchingUserLocation(false);
-  }
-};
 
-const fetchSuggestions = async (query) => {
-  if (!query) {
-    setSuggestions([]);
-    return;
-  }
-
-  const apiKey = conf.geoapifyapikey;
-  const apiUrl = `https://api.geoapify.com/v1/geocode/search?text=${query}&apiKey=${apiKey}&lang=en`;
-
-  setLoading(true);
-
-  try {
-    const response = await fetch(apiUrl);
-    const data = await response.json();
-    if (data.features && data.features.length > 0) {
-      const formattedSuggestions = data.features
-        .filter((feature) => feature.properties.country === 'India' && feature.properties.state)
-        .map((feature) => ({
-          label: feature.properties.formatted,
-          lat: feature.geometry.coordinates[1],
-          lon: feature.geometry.coordinates[0],
-        }));
-      setSuggestions(formattedSuggestions);
-    } else {
-      setSuggestions([]);
-    }
-  } catch (error) {
-    console.error('Error fetching suggestions:', error);
-    setSuggestions([]);
-  } finally {
-    setLoading(false);
-  }
-};
-
-const handleAddressClick = (suggestion) => {
-  setSearchQuery(suggestion.label);
-  setSuggestions([]);
-  setAddress(suggestion.label);
-  setLat(suggestion.lat);
-  setLong(suggestion.lon);
-};
