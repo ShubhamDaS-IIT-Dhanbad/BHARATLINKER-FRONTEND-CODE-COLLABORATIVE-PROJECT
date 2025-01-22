@@ -4,10 +4,12 @@ import { Client, Account } from 'appwrite';
 import Cookies from 'js-cookie';
 import conf from '../conf/conf.js';
 
+import { updateUserByPhoneNumber } from '../appWrite/userData/userData.js';
+
 const useUserAuth = () => {
     const [userData, setUserData] = useState(null);
     const navigate = useNavigate();
-    const location = useLocation(); 
+    const location = useLocation();
 
     // Initialize Appwrite client and account
     const client = new Client()
@@ -33,10 +35,9 @@ const useUserAuth = () => {
         }
     }, [navigate, location.pathname]);
 
-
+    // Get user data from cookies
     const getUserDataFromCookie = () => {
         const storedData = Cookies.get('BharatLinkerUserData');
-    
         if (storedData) {
             try {
                 return JSON.parse(storedData);
@@ -45,10 +46,46 @@ const useUserAuth = () => {
                 return {};
             }
         }
-    
         console.log("No user data found in cookie");
         return {};
     };
+
+    // Function to update user data
+    const updateUserData = async (newData) => {
+        if (!userData) {
+            console.error('No user data found to update.');
+            return;
+        }
+    
+        const updatedData = {
+            ...userData,
+            ...newData,
+        };
+    
+        try {
+            // Make the API call to update user data by phone number
+            await updateUserByPhoneNumber({
+                name: updatedData.name,
+                address: updatedData.address,
+                lat: updatedData.lat,
+                long: updatedData.long,
+                phn: updatedData.phoneNumber,
+            });
+    
+            // Update state and cookies after a successful API call
+            setUserData(updatedData);
+            Cookies.set('BharatLinkerUserData', JSON.stringify(updatedData), { expires: 1 });
+    
+            console.log('User data updated successfully:', updatedData);
+        } catch (error) {
+            console.error('Error updating user data:', error.message);
+            alert('Failed to update user data. Please try again.');
+        } finally {
+            // Ensure the updating state is reset
+            setUserData((prevData) => ({ ...prevData, isUpdating: false }));
+        }
+    };
+    
 
     // Logout function
     const logout = async () => {
@@ -71,7 +108,7 @@ const useUserAuth = () => {
         return children; // Render children if session exists
     };
 
-    return { userData,getUserDataFromCookie, logout, PrivateRoute };
+    return { userData, getUserDataFromCookie, updateUserData, logout, PrivateRoute };
 };
 
 export default useUserAuth;

@@ -7,13 +7,12 @@ import { MdMyLocation } from 'react-icons/md';
 import { Oval } from 'react-loader-spinner';
 import { IoSearch } from 'react-icons/io5';
 import './userProfile.css';
-import { updateUserByPhoneNumber } from '../../../appWrite/userData/userData.js';
 import conf from '../../../conf/conf.js';
 import useUserAuth from '../../../hooks/userAuthHook.jsx';
-
 import useLocationFromCookie from '../../../hooks/useLocationFromCookie.jsx';
+
 function UserRefurbishedProduct() {
-  const { getUserDataFromCookie } = useUserAuth();
+  const { updateUserData, getUserDataFromCookie } = useUserAuth();
   const [userData, setUserData] = useState(null);
 
   const [name, setName] = useState('');
@@ -40,40 +39,10 @@ function UserRefurbishedProduct() {
       setAddress(userData?.address ? userData?.address : '');
       setLat(userData?.lat ? userData?.lat : null);
       setLong(userData?.long ? userData?.long : "");
-      console.log(userData)
     } else {
       fetchUserData();
     }
   }, [userData]);
-
-
-
-
-  const updateUserData = () => {
-    if (!name || !address) {
-      alert('Please fill in all required fields.');
-      return;
-    }
-    const updatedData = { name, address, lat, long, phn: userData?.phoneNumber };
-    setIsUpdating(true);
-    updateUserByPhoneNumber(updatedData)
-      .then(() => {
-        Cookies.set('BharatLinkerUserData', JSON.stringify({
-          ...userData,
-          name,
-          address,
-          lat,
-          long,
-        }), { expires: 7 });
-      })
-      .catch((error) => {
-        console.error('Error updating user data:', error.message);
-        alert('Failed to update user data.');
-      })
-      .finally(() => {
-        setIsUpdating(false);
-      });
-  };
 
   const handleLocationClick = () => {
     if (navigator.geolocation) {
@@ -88,8 +57,8 @@ function UserRefurbishedProduct() {
           try {
             const response = await fetch(apiUrl);
             const data = await response.json();
-            const address = data.results[0].formatted;
-            setAddress(address);
+            const fetchedAddress = data.results[0]?.formatted || '';
+            setAddress(fetchedAddress);
             setLat(latitude);
             setLong(longitude);
           } catch (error) {
@@ -105,22 +74,25 @@ function UserRefurbishedProduct() {
       );
     } else {
       console.error('Geolocation is not supported by this browser.');
-      setFetchingUserLocation(false);
     }
   };
+
   const fetchSuggestions = async (query) => {
-    if (!query) { setSuggestions([]); return; }
+    if (!query) {
+      setSuggestions([]);
+      return;
+    }
     setLoading(true);
     try {
       const response = await fetchLocationSuggestions(query);
-      setSuggestions(response);
+      setSuggestions(response || []);
     } catch (error) {
       console.error('Error fetching suggestions:', error);
-      setSuggestions([]);
     } finally {
       setLoading(false);
     }
   };
+
   const handleAddressClick = (suggestion) => {
     setSearchQuery(suggestion.label);
     setAddress(suggestion.label);
@@ -128,6 +100,23 @@ function UserRefurbishedProduct() {
     setLong(suggestion.lon);
     setSuggestions([]);
   };
+
+  const handleUpdateUserData = async () => {
+    if (!name || !address) return;
+    setIsUpdating(true);
+
+    const updatedData = { ...userData, name, address, lat, long };
+
+    try {
+      await updateUserData(updatedData);
+      setUserData(updatedData);
+    } catch (error) {
+      console.error('Error updating user data:', error);
+    } finally {
+      setIsUpdating(false);
+    }
+  };
+
   return (
     <div className="user-product-page-body">
       <Helmet>
@@ -143,16 +132,15 @@ function UserRefurbishedProduct() {
       </Helmet>
 
       <header>
-        <Navbar headerTitle={"USER PROFILE"} />
+        <Navbar headerTitle="USER PROFILE" />
       </header>
 
       <div className="user-profile-div">
-
         <div className="user-profile-field">
           <input
             type="text"
             id="name"
-            value={name ? name : ""}
+            value={name}
             onChange={(e) => setName(e.target.value)}
             placeholder="Enter your name"
             className="user-profile-form-input"
@@ -160,14 +148,11 @@ function UserRefurbishedProduct() {
           />
         </div>
 
-
-
-
-        <div className="user-location-tab-bottom-div-input-div" style={{ marginTop: "20px" }}>
+        <div className="user-location-tab-bottom-div-input-div" style={{ marginTop: '20px' }}>
           <IoSearch onClick={() => fetchSuggestions(searchQuery)} size={20} />
           <input
             className="user-location-tab-bottom-div-input"
-            placeholder="Search kolkata"
+            placeholder="Search location"
             value={searchQuery}
             onKeyDown={(e) => {
               if (e.key === 'Enter') {
@@ -179,8 +164,8 @@ function UserRefurbishedProduct() {
         </div>
 
         {loading && (
-          <div className="location-tab-loader" style={{ margin: "15px 0px 15px 0px" }}>
-            <Oval height={20} width={20} color="green" secondaryColor="white" ariaLabel="loading" />
+          <div className="location-tab-loader" style={{ margin: '15px 0' }}>
+            <Oval height={20} width={20} color="green" ariaLabel="loading" />
           </div>
         )}
         {!loading && suggestions.length > 0 && (
@@ -197,58 +182,50 @@ function UserRefurbishedProduct() {
             ))}
           </div>
         )}
+
         <div className="user-profile-field">
-          <div
-            id="address"
-            className="user-profile-form-input"
-          >{address ? address : "This location [latitude : longitude] will be used to show your refurbished product to other users"}</div>
+          <div id="address" className="user-profile-form-input">
+            {address || 'This location [latitude : longitude] will be used to show your refurbished product to other users'}
+          </div>
         </div>
-        <div style={{ display: "flex", width: '98%' }}>
-          <div className="user-profile-lat-input">{lat ? lat : "LATITUDE"}</div>
-          <div className="user-profile-lat-input">{long ? long : "LONGITUDE"}</div>
+
+        <div style={{ display: 'flex', width: '98%' }}>
+          <div className="user-profile-lat-input">{lat || 'LATITUDE'}</div>
+          <div className="user-profile-lat-input">{long || 'LONGITUDE'}</div>
         </div>
+
         <div
           className="user-location-tab-bottom-div-current-location"
           onClick={handleLocationClick}
           aria-label="Use current location"
-          style={{ marginTop: "10px" }}
+          style={{ marginTop: '10px' }}
         >
-          {fetchingUserLocation ? <Oval height={20} width={20} color="green" secondaryColor="white" ariaLabel="loading" /> :
+          {fetchingUserLocation ? (
+            <Oval height={20} width={20} color="green" ariaLabel="loading" />
+          ) : (
             <>
               <MdMyLocation size={23} />
               Use current location
-            </>}
-
+            </>
+          )}
         </div>
-
-
-
-
-
-
       </div>
+
       <div
         className={`user-profile-form-button ${name && address ? 'active' : 'disabled'}`}
-        onClick={updateUserData}
-        disabled={!name || !address}
+        onClick={handleUpdateUserData}
       >
-        {(isUpdating) ?
-          <Oval height={20} width={20} color="green" secondaryColor="white" ariaLabel="loading" />
-          : "UPDATE USER DATA"}
+        {isUpdating ? (
+          <Oval height={20} width={20} color="green" ariaLabel="loading" />
+        ) : (
+          'UPDATE USER DATA'
+        )}
       </div>
-
     </div>
   );
 }
 
 export default UserRefurbishedProduct;
-
-
-
-
-
-
-
 
 
 

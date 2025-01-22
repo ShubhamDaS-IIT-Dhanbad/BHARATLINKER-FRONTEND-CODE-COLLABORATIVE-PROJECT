@@ -16,7 +16,7 @@ import './userHome.css';
 function UserHome() {
     const { userData, logout } = useUserAuth();
     const [isLogout, setIsLogout] = useState(false);
-    const [isLoading, setIsLoading] = useState(false); // State to manage the loading spinner
+    const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
 
     const handleLogout = async () => {
