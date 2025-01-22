@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Navbar from '../a.navbarComponent/navbar.jsx';
 import { Helmet } from 'react-helmet';
-import Cookies from 'js-cookie';
 import { SlLocationPin } from 'react-icons/sl';
 import { MdMyLocation } from 'react-icons/md';
 import { Oval } from 'react-loader-spinner';
@@ -15,12 +14,13 @@ import { RiRefreshLine } from "react-icons/ri";
 import { TiInfoOutline } from "react-icons/ti";
 
 function UserRefurbishedProduct() {
-  const { fetchUserData, updateUserData, getUserDataFromCookie } = useUserAuth();
-  const [userData, setUserData] = useState(null);
+  const {userData, fetchUserData, updateUserData} = useUserAuth();
+  
   const [name, setName] = useState('');
   const [address, setAddress] = useState('');
   const [lat, setLat] = useState(null);
   const [long, setLong] = useState(null);
+
   const [searchQuery, setSearchQuery] = useState('');
   const [suggestions, setSuggestions] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -33,19 +33,13 @@ function UserRefurbishedProduct() {
   const { fetchLocationSuggestions } = useLocationFromCookie();
   
   useEffect(() => {
-    const fetchUserData = () => {
-      const data = getUserDataFromCookie();
-      setUserData(data);
-    };
-
-    if (userData) {
-      setName(userData?.name ? userData?.name : '');
-      setAddress(userData?.address ? userData?.address : '');
-      setLat(userData?.lat ? userData?.lat : null);
-      setLong(userData?.long ? userData?.long : "");
-    } else {
-      fetchUserData();
+    if(userData){
+      setName(userData.name);
+      setAddress(userData.address);
+      setLat(userData.lat);
+      setLong(userData.long);
     }
+
   }, [userData]);
 
   const handleLocationClick = () => {
@@ -105,15 +99,15 @@ function UserRefurbishedProduct() {
   };
 
   const fetchUserDataFunction = async () => {
-    setIsFetchingData(true);  // Set fetching state to true
+    setIsFetchingData(true);
     const phone = userData.phoneNumber;
     
     try {
-      await fetchUserData(phone); // Wait for the data fetching process to complete
+      await fetchUserData(phone);
     } catch (error) {
       console.error('Error fetching user data:', error);
     } finally {
-      setIsFetchingData(false); // Set fetching state to false after fetching is done
+      setIsFetchingData(false);
     }
   };
 
@@ -121,10 +115,8 @@ function UserRefurbishedProduct() {
     if (!name || !address) return;
     setIsUpdating(true);
     const updatedData = { ...userData, name, address, lat, long };
-
     try {
       await updateUserData(updatedData);
-      setUserData(updatedData);
     } catch (error) {
       console.error('Error updating user data:', error);
     } finally {

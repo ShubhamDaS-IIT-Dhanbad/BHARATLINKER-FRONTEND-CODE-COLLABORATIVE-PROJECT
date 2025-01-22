@@ -52,9 +52,8 @@ const useUserAuth = () => {
         try {
             const userData = await fetchUserByPhoneNumber(phone);
             if (userData) {
-                Cookies.set('BharatLinkerUserData', JSON.stringify(userData), { expires: 1 });
+                Cookies.set('BharatLinkerUserData', JSON.stringify(userData), { expires: 7, path: '' });
                 setUserData(userData);
-                console.log('Fetched and updated user data successfully:', userData);
                 return userData;
             } else {
                 console.error('No user data found for the provided phone number.');
@@ -86,8 +85,8 @@ const useUserAuth = () => {
                 phn: updatedData.phoneNumber,
             });
 
+            Cookies.set('BharatLinkerUserData', JSON.stringify(updatedData), { expires: 7, path: '' });
             setUserData(updatedData);
-            Cookies.set('BharatLinkerUserData', JSON.stringify(updatedData), { expires: 1 });
         } catch (error) {
             console.error('Error updating user data:', error.message);
             alert('Failed to update user data. Please try again.');

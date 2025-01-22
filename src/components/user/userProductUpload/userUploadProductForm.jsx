@@ -16,7 +16,7 @@ const UploadBooksModulesForm = ({ userData, productType }) => {
         categoryPopUp: false,
         brandPopUp: false,
     });
-    const [selected, setSelected] = useState("ADDRESS LOCATION");
+    const [selected, setSelected] = useState("");
     const [coordinates, setCoordinates] = useState({ lat: null, long: null });
     const [fetching, setFetching] = useState(false);
 
@@ -38,7 +38,7 @@ const UploadBooksModulesForm = ({ userData, productType }) => {
         productType,
         brand: '',
         category: '',
-        phn: `+91${userData.phn || ''}`,
+        phn: `+91${userData.phoneNumber || ''}`,
     });
 
     const [images, setImages] = useState([null, null, null]);
@@ -53,7 +53,6 @@ const UploadBooksModulesForm = ({ userData, productType }) => {
         }));
     };
     const handleCurrentLocationClick = () => {
-
         setFetching(true);
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
@@ -80,14 +79,15 @@ const UploadBooksModulesForm = ({ userData, productType }) => {
 
 
     useEffect(() => {
-        const userSession = Cookies.get('BharatLinkerUserData');
-        if (userSession) {
-            const parsedUserData = JSON.parse(userSession);
-            if (parsedUserData.lat && parsedUserData.long) {
-                setCoordinates({ lat: parsedUserData.lat, long: parsedUserData.long });
+        if (userData.phoneNumber) {
+            console.log(userData)
+            if (userData.lat && userData.long) {
+                setCoordinates({ lat: userData.lat, long: userData.long });
+            }else{
+                alert("set use location")
             }
         }
-    }, [])
+    }, [userData])
 
 
 
@@ -162,7 +162,7 @@ const UploadBooksModulesForm = ({ userData, productType }) => {
         // Prepare the final form data
         const finalFormData = {
             ...formData,
-            phn: `+91${userData?.phn || ''}`,
+            phn: `+91${userData?.phoneNumber || ''}`,
             lat: coordinates.lat,
             long: coordinates.long
         };
@@ -200,7 +200,7 @@ const UploadBooksModulesForm = ({ userData, productType }) => {
     };
 
     const renderPopUp = (popUpKey, options, handleSelect) => {
-        const kpopup = popUpKey.slice(0, -5); // Remove the last 5 characters
+        const kpopup = popUpKey.slice(0, -5);
         return (
             popUpState[popUpKey] && (
                 <div className="refurbished-book-module-class-popup">
