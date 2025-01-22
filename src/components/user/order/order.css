@@ -31,6 +31,6 @@
 
 .user-orders-list{
     display: flex;flex-direction: column;
-    padding-top: 20px;align-items: center;
+    padding-top: 47px;align-items: center;
     gap: 15px;
 }

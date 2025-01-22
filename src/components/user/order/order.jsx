@@ -41,8 +41,6 @@ function Order() {
                     </p>
                 </div>
             </div>
-            <div className="user-order-container-div">Order Details</div>
-
             <div className="user-orders-container-order">
                 {loading ? (
                     <div className="fallback-loading">
