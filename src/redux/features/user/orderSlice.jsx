@@ -1,5 +1,15 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { getOrderByUserId, updateOrderState } from '../../../appWrite/order/order.js';
+import searchShopService from '../../../appWrite/searchShop.js';
+
+// Constants
+const stateOrder = {
+  dispatched: 1,
+  accepted: 2,
+  pending: 3,
+  canceled: 4,
+  delivered: 5,
+};
 
 // Async Thunk for fetching user orders
 export const fetchUserOrders = createAsyncThunk(
@@ -8,10 +18,10 @@ export const fetchUserOrders = createAsyncThunk(
     try {
       const orders = await getOrderByUserId(userId);
 
-      // Sort orders by update date (most recent first)
-      const sortedOrders = orders.sort(
-        (a, b) => new Date(b.$updatedAt) - new Date(a.$updatedAt)
-      );
+      // Sort orders by update date and state
+      const sortedOrders = orders
+        .sort((a, b) => new Date(b.$updatedAt) - new Date(a.$updatedAt))
+        .sort((a, b) => (stateOrder[a.state] || 6) - (stateOrder[b.state] || 6));
 
       return sortedOrders;
     } catch (error) {
@@ -35,11 +45,26 @@ export const cancelUserOrder = createAsyncThunk(
   }
 );
 
+// Async Thunk for fetching shop details by ID
+export const fetchShopDetailsById = createAsyncThunk(
+  'userOrders/fetchShopDetailsById',
+  async (shopId, { rejectWithValue }) => {
+    try {
+      const shop = await searchShopService.getShopById(shopId);
+      return shop;
+    } catch (error) {
+      console.error('Error fetching shop:', error);
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  }
+);
+
 // Initial State
 const initialState = {
   orders: [],
-  loading: false,
-  error: null,
+  shop: [],
+  loading: { orders: false, shop: false },
+  error: { orders: null, shop: null },
 };
 
 // Slice
@@ -51,28 +76,16 @@ const userOrderSlice = createSlice({
     // Fetch user orders
     builder
       .addCase(fetchUserOrders.pending, (state) => {
-        state.loading = true;
-        state.error = null;
+        state.loading.orders = true;
+        state.error.orders = null;
       })
       .addCase(fetchUserOrders.fulfilled, (state, action) => {
-        state.loading = false;
-    
-        const stateOrder = {
-            dispatched: 1,
-            accepted:2,
-            pending: 3,
-            canceled: 4,
-            delivered:5,
-        };
-        const sortedOrders = action.payload.sort((a, b) => {
-            return (stateOrder[a.state] || 6) - (stateOrder[b.state] || 6);
-        });
-        state.orders = sortedOrders;
-    })
-    
+        state.loading.orders = false;
+        state.orders = action.payload;
+      })
       .addCase(fetchUserOrders.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.payload;
+        state.loading.orders = false;
+        state.error.orders = action.payload;
       });
 
     // Cancel user order
@@ -85,7 +98,25 @@ const userOrderSlice = createSlice({
         );
       })
       .addCase(cancelUserOrder.rejected, (state, action) => {
-        state.error = action.payload;
+        state.error.orders = action.payload;
+      });
+
+    // Fetch shop by ID
+    builder
+      .addCase(fetchShopDetailsById.pending, (state) => {
+        state.loading.shop = true;
+        state.error.shop = null;
+      })
+      .addCase(fetchShopDetailsById.fulfilled, (state, action) => {
+        state.loading.shop = false;
+        const shopExists = state.shop.find((s) => s.$id === action.payload.$id);
+        if (!shopExists) {
+          state.shop.push(action.payload);
+        }
+      })
+      .addCase(fetchShopDetailsById.rejected, (state, action) => {
+        state.loading.shop = false;
+        state.error.shop = action.payload;
       });
   },
 });

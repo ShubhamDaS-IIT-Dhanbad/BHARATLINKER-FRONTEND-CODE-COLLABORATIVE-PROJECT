@@ -3,8 +3,8 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import "./orderDetail.css";
 
-import useUserAuth from '../../../hooks/userAuthHook.jsx';
-import { fetchShopById } from "../../../redux/features/singleShopSlice.jsx";
+import useUserAuth from "../../../hooks/userAuthHook.jsx";
+import { fetchShopDetailsById } from "../../../redux/features/user/orderSlice.jsx";
 
 const OrderDetails = () => {
     const { id } = useParams();
@@ -12,74 +12,74 @@ const OrderDetails = () => {
 
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const [fetched, setFetched] = useState(true);
 
     const { orders, loading } = useSelector((state) => state.userOrders);
+    const shopState = useSelector((state) => state.userOrders.shop);
 
     const [order, setOrder] = useState(null);
     const [shop, setShop] = useState(null);
 
+    // Fetch order details
     useEffect(() => {
-        if (orders && orders.length > 0 && fetched) {
-            setFetched(false);
+        if (orders.length > 0) {
             const foundOrder = orders.find((order) => order.$id === id);
             if (!foundOrder) {
                 navigate("/user/order");
-                return;
+            } else {
+                setOrder(foundOrder);
             }
-            setOrder(foundOrder);
-        } else {
-            navigate("/user/order");
-        }
+        }else{navigate("/user/order");}
     }, []);
 
+    // Fetch shop details if order is available
     useEffect(() => {
         if (order) {
             const shopId = order.shopId;
+            const existingShop = shopState.find((shop) => shop.$id === shopId);
 
-            dispatch(fetchShopById(shopId))
-                .unwrap()
-                .then((shopData) => setShop(shopData))
-                .catch((err) => console.error("Error fetching shop:", err));
+            if (existingShop) {
+                setShop(existingShop);
+            } else {
+                dispatch(fetchShopDetailsById(shopId));
+            }
         }
-    }, [order]);
+    }, [order,shopState]);
 
-    if (loading) {
-        return <p>Loading...</p>;
+    const getOrderTitle = (state) => {
+        switch (state) {
+            case "pending":
+                return "Your Order Is Pending!";
+            case "confirmed":
+                return "Your Order Confirmed!";
+            case "shipped":
+                return "Your Order is on the Way!";
+            case "delivered":
+                return "Your Order Has Been Delivered!";
+            default:
+                return "Order Details";
+        }
+    };
+
+    if (loading.shop) {
+        return <div className="loading-message">Fetching your order details...</div>;
     }
 
     if (!order) {
-        return <p>Redirecting...</p>;
+        return <div className="redirect-message">Redirecting to orders page...</div>;
     }
-
-    // Dynamically set the header title based on order state
-    const getOrderTitle = (state) => {
-        switch (state) {
-            case 'pending':
-                return 'Your Order Is Pending!';
-            case 'confirmed':
-                return 'Your Order Confirmed!';
-            case 'shipped':
-                return 'Your Order is on the Way!';
-            case 'delivered':
-                return 'Your Order Has Been Delivered!';
-            default:
-                return 'Order Details';
-        }
-    };
 
     return (
         <div className="order-details-container">
             <header className="order-header">
                 <h1>{getOrderTitle(order.state)}</h1>
                 <p>
-                    Hello, {userData?.name ? userData?.name : "USER"} <br />
+                    Hello, {userData?.name || "USER"} <br />
                 </p>
             </header>
 
             <div className="order-summary">
                 <div className="order-info">
-                    <p><strong>Order Date:</strong> {order.$createdAt}</p>
+                    <p><strong>Order Date:</strong> {new Date(order.$createdAt).toLocaleDateString()}</p>
                     <p><strong>Order No:</strong> {order.$id}</p>
                     <p><strong>Payment:</strong> <span className="payment-icon">CASH ON DELIVERY</span></p>
                     <p><strong>Shipping Address:</strong> {order.address}</p>
@@ -87,24 +87,23 @@ const OrderDetails = () => {
                     <p><strong>Shipping LONG:</strong> {order.long}</p>
                 </div>
 
-                {order.state === 'confirmed' || order.state === 'shipped' ? (
+                {(order.state === "confirmed" || order.state === "shipped") && (
                     <div className="order-status-details">
                         <p><strong>Expected Delivery Date:</strong> {order.expectedDeliveryDate}</p>
                         <p><strong>Message:</strong> {order.message}</p>
                     </div>
-                ) : null}
+                )}
 
                 {shop && (
-                    <div>
+                    <div className="shop-details">
                         <h3>Shop Details</h3>
                         <p><strong>Shop Name:</strong> {shop?.shopName}</p>
-                        <p><strong>Shop address:</strong> {shop?.address}</p>
+                        <p><strong>Shop Address:</strong> {shop?.address}</p>
                         <p><strong>Shop LAT:</strong> {shop?.lat}</p>
                         <p><strong>Shop LONG:</strong> {shop?.long}</p>
                     </div>
                 )}
             </div>
-
         </div>
     );
 };
