@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import Navbar from '../a.navbarComponent/navbar.jsx';
 import { Helmet } from 'react-helmet';
 import Cookies from 'js-cookie';
@@ -7,7 +6,6 @@ import { SlLocationPin } from 'react-icons/sl';
 import { MdMyLocation } from 'react-icons/md';
 import { Oval } from 'react-loader-spinner';
 import { IoSearch } from 'react-icons/io5';
-import { RotatingLines } from 'react-loader-spinner';
 import './userProfile.css';
 import { updateUserByPhoneNumber } from '../../../appWrite/userData/userData.js';
 import conf from '../../../conf/conf.js';
@@ -15,7 +13,6 @@ import useUserAuth from '../../../hooks/userAuthHook.jsx';
 
 import useLocationFromCookie from '../../../hooks/useLocationFromCookie.jsx';
 function UserRefurbishedProduct() {
-  const navigate = useNavigate();
   const { getUserDataFromCookie } = useUserAuth();
   const [userData, setUserData] = useState(null);
 
@@ -31,7 +28,7 @@ function UserRefurbishedProduct() {
   const [isUpdating, setIsUpdating] = useState(false);
 
   const [fetchingUserLocation, setFetchingUserLocation] = useState(false);
-  const { location, updateLocation, fetchLocationSuggestions, fetchCurrentLocation } = useLocationFromCookie();
+  const { fetchLocationSuggestions } = useLocationFromCookie();
 
   useEffect(() => {
     const fetchUserData = () => {
@@ -43,6 +40,7 @@ function UserRefurbishedProduct() {
       setAddress(userData?.address ? userData?.address : '');
       setLat(userData?.lat ? userData?.lat : null);
       setLong(userData?.long ? userData?.long : "");
+      console.log(userData)
     } else {
       fetchUserData();
     }
@@ -51,7 +49,31 @@ function UserRefurbishedProduct() {
 
 
 
-
+  const updateUserData = () => {
+    if (!name || !address) {
+      alert('Please fill in all required fields.');
+      return;
+    }
+    const updatedData = { name, address, lat, long, phn: userData?.phoneNumber };
+    setIsUpdating(true);
+    updateUserByPhoneNumber(updatedData)
+      .then(() => {
+        Cookies.set('BharatLinkerUserData', JSON.stringify({
+          ...userData,
+          name,
+          address,
+          lat,
+          long,
+        }), { expires: 7 });
+      })
+      .catch((error) => {
+        console.error('Error updating user data:', error.message);
+        alert('Failed to update user data.');
+      })
+      .finally(() => {
+        setIsUpdating(false);
+      });
+  };
 
   const handleLocationClick = () => {
     if (navigator.geolocation) {
@@ -125,6 +147,7 @@ function UserRefurbishedProduct() {
       </header>
 
       <div className="user-profile-div">
+
         <div className="user-profile-field">
           <input
             type="text"
@@ -137,6 +160,43 @@ function UserRefurbishedProduct() {
           />
         </div>
 
+
+
+
+        <div className="user-location-tab-bottom-div-input-div" style={{ marginTop: "20px" }}>
+          <IoSearch onClick={() => fetchSuggestions(searchQuery)} size={20} />
+          <input
+            className="user-location-tab-bottom-div-input"
+            placeholder="Search kolkata"
+            value={searchQuery}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                fetchSuggestions(searchQuery);
+              }
+            }}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </div>
+
+        {loading && (
+          <div className="location-tab-loader" style={{ margin: "15px 0px 15px 0px" }}>
+            <Oval height={20} width={20} color="green" secondaryColor="white" ariaLabel="loading" />
+          </div>
+        )}
+        {!loading && suggestions.length > 0 && (
+          <div className="user-location-tab-suggestions">
+            {suggestions.map((suggestion, index) => (
+              <div
+                className="user-location-tab-suggestion-info-div"
+                key={index}
+                onClick={() => handleAddressClick(suggestion)}
+              >
+                <SlLocationPin size={17} />
+                <p>{suggestion.label}</p>
+              </div>
+            ))}
+          </div>
+        )}
         <div className="user-profile-field">
           <div
             id="address"
@@ -147,17 +207,13 @@ function UserRefurbishedProduct() {
           <div className="user-profile-lat-input">{lat ? lat : "LATITUDE"}</div>
           <div className="user-profile-lat-input">{long ? long : "LONGITUDE"}</div>
         </div>
-
-
-
-
         <div
           className="user-location-tab-bottom-div-current-location"
           onClick={handleLocationClick}
           aria-label="Use current location"
+          style={{ marginTop: "10px" }}
         >
-          {fetchingUserLocation ?  <Oval height={20} width={20} color="green" secondaryColor="white" ariaLabel="loading" />
-                                :
+          {fetchingUserLocation ? <Oval height={20} width={20} color="green" secondaryColor="white" ariaLabel="loading" /> :
             <>
               <MdMyLocation size={23} />
               Use current location
@@ -165,50 +221,22 @@ function UserRefurbishedProduct() {
 
         </div>
 
-        <div className="location-tab-bottom-div-input-div">
-          <IoSearch onClick={() => fetchSuggestions(searchQuery)} size={20} />
-          <input
-            className="location-tab-bottom-div-input"
-            placeholder="Search your city/village/town"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-        </div>
 
-        {loading && (
-          <div className="location-tab-loader">
-            <RotatingLines width="50" height="50" color="#00BFFF" />
-          </div>
-        )}
-        {!loading && suggestions.length > 0 && (
-          <div className="location-tab-suggestions">
-            {suggestions.map((suggestion, index) => (
-              <div
-                className="location-tab-suggestion-info-div"
-                key={index}
-                onClick={() => handleAddressClick(suggestion)}
-              >
-                <SlLocationPin size={17} />
-                <p>{suggestion.label}</p>
-              </div>
-            ))}
-          </div>
-        )}
 
-        <button
-          className={`user-profile-form-button ${name && address ? 'active' : 'disabled'}`}
-          onClick={updateUserData}
-          disabled={!name || !address}
-        >
-          Submit
-        </button>
+
+
+
+      </div>
+      <div
+        className={`user-profile-form-button ${name && address ? 'active' : 'disabled'}`}
+        onClick={updateUserData}
+        disabled={!name || !address}
+      >
+        {(isUpdating) ?
+          <Oval height={20} width={20} color="green" secondaryColor="white" ariaLabel="loading" />
+          : "UPDATE USER DATA"}
       </div>
 
-      {(isUpdating) && (
-        <div className="user-book-delete-pop-up">
-          <Oval height={40} width={40} color="#4A90E2" />
-        </div>
-      )}
     </div>
   );
 }
@@ -221,38 +249,6 @@ export default UserRefurbishedProduct;
 
 
 
-
-
-
-
-
-
-
-const updateUserData = () => {
-  if (!name || !address) {
-    alert('Please fill in all required fields.');
-    return;
-  }
-  const updatedData = { name, address, lat, long, phn: userData?.phoneNumber };
-  setIsUpdating(true);
-  updateUserByPhoneNumber(updatedData)
-    .then(() => {
-      Cookies.set('BharatLinkerUserData', JSON.stringify({
-        ...userData,
-        name,
-        address,
-        lat,
-        long,
-      }), { expires: 7 });
-    })
-    .catch((error) => {
-      console.error('Error updating user data:', error.message);
-      alert('Failed to update user data.');
-    })
-    .finally(() => {
-      setIsUpdating(false);
-    });
-};
 
 
 

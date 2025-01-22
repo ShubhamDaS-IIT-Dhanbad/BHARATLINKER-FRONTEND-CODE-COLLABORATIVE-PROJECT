@@ -43,3 +43,8 @@ body ::-webkit-scrollbar{
 
 
 
+  input:focus {
+    outline: none;
+    box-shadow: none;
+  }
+  
