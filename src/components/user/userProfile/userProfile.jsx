@@ -10,7 +10,9 @@ import './userProfile.css';
 import conf from '../../../conf/conf.js';
 import useUserAuth from '../../../hooks/userAuthHook.jsx';
 import useLocationFromCookie from '../../../hooks/useLocationFromCookie.jsx';
+
 import { RiRefreshLine } from "react-icons/ri";
+import { TiInfoOutline } from "react-icons/ti";
 
 function UserRefurbishedProduct() {
   const { fetchUserData, updateUserData, getUserDataFromCookie } = useUserAuth();
@@ -24,10 +26,12 @@ function UserRefurbishedProduct() {
   const [loading, setLoading] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
   const [fetchingUserLocation, setFetchingUserLocation] = useState(false);
-  const [isFetchingData, setIsFetchingData] = useState(false); // New state to track data fetching
+  const [isFetchingData, setIsFetchingData] = useState(false);
+
+  const [showi, setShowi] = useState(false);
 
   const { fetchLocationSuggestions } = useLocationFromCookie();
-
+  
   useEffect(() => {
     const fetchUserData = () => {
       const data = getUserDataFromCookie();
@@ -99,6 +103,7 @@ function UserRefurbishedProduct() {
     setLong(suggestion.lon);
     setSuggestions([]);
   };
+
   const fetchUserDataFunction = async () => {
     setIsFetchingData(true);  // Set fetching state to true
     const phone = userData.phoneNumber;
@@ -111,7 +116,6 @@ function UserRefurbishedProduct() {
       setIsFetchingData(false); // Set fetching state to false after fetching is done
     }
   };
-  
 
   const handleUpdateUserData = async () => {
     if (!name || !address) return;
@@ -158,7 +162,6 @@ function UserRefurbishedProduct() {
           />
         </div>
 
-
         <div className="user-location-tab-bottom-div-input-div" style={{ marginTop: '20px' }}>
           <IoSearch onClick={() => fetchSuggestions(searchQuery)} size={20} />
           <input
@@ -198,7 +201,16 @@ function UserRefurbishedProduct() {
           <div id="address" className="user-profile-form-input">
             {address || 'This location [latitude : longitude] will be used to show your refurbished product to other users'}
           </div>
+          <TiInfoOutline size={25} onClick={() => setShowi(!showi)} />
         </div>
+
+        {/* Info box toggle */}
+        {showi && (
+          <div className="info-box">
+            This location will be used to display refurbished products from other users in your area.
+            Your latitude and longitude are stored for accurate location tracking.
+          </div>
+        )}
 
         <div style={{ display: 'flex', width: '98%' }}>
           <div className="user-profile-lat-input">{lat || 'LATITUDE'}</div>
@@ -213,7 +225,6 @@ function UserRefurbishedProduct() {
         >
           {fetchingUserLocation ? (
             <Oval height={20} width={20} color="white" secondaryColor='green' ariaLabel="loading" />
-        
           ) : (
             <>
               <MdMyLocation size={23} />
@@ -238,8 +249,6 @@ function UserRefurbishedProduct() {
 }
 
 export default UserRefurbishedProduct;
-
-
 
 
 

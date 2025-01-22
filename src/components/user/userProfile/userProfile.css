@@ -223,3 +223,16 @@
     transform: rotate(360deg);
   }
 }
+
+
+.info-box {
+  background-color: #100f0f;
+  padding: 15px;color: white;
+  border: 1px solid #ddd;
+  margin: 10px 0px 10px 0px;font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  width: calc(98% - 30px);
+  font-size: 10px;
+  
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.091);
+}
+
