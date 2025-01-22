@@ -302,7 +302,8 @@ const UploadBooksModulesForm = ({ userData, productType }) => {
                         value={formData.description}
                         onChange={handleInputChange}
 placeholder="
-Product Description Title Provide details about the product, such as its condition, features, and any included accessories.Mention any notable issues or refurbishments.Be clear and concise for better understanding.
+(# HEADING) AND (* DETAILS)
+Mention any notable issues or refurbishments.Be clear and concise for better understanding.
 
 Example:-
 #Condition: 
