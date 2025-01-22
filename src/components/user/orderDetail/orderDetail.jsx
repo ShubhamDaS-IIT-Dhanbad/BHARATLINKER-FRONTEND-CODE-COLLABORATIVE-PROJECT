@@ -105,12 +105,6 @@ const OrderDetails = () => {
                 )}
             </div>
 
-            <footer className="order-footer">
-                <p>
-                    We’ll be sending a shipping confirmation email when the items are shipped successfully.
-                </p>
-                <p>Thank you for shopping with us! <br /> <strong>Nike Team</strong></p>
-            </footer>
         </div>
     );
 };
