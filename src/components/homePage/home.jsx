@@ -43,7 +43,7 @@ const Home = () => {
                 marginBottom: '60px'
             }}>
                 <HomeTestimonial ti1={ti1}/>
-                <HomeFooter />
+                {/* <HomeFooter /> */}
             </div>
             <div id="home-footer" style={{
                 width: '100vw',
