@@ -301,21 +301,19 @@ const UploadBooksModulesForm = ({ userData, productType }) => {
                         name="description"
                         value={formData.description}
                         onChange={handleInputChange}
-                        placeholder="
-                                    Product Description Title \n Provide details about the product, such as its condition, features, and any included accessories.
+                        placeholder="Product Description Title Provide details about the product, such as its condition, features, and any included accessories.
                                     Mention any notable issues or refurbishments.
                                     Be clear and concise for better understanding.
 
                                     Example:-
-
-                                    Condition: 
-                                        Refurbished - Like New
-                                    Features: 
-                                        16GB RAM, 512GB SSD, Intel i7 Processor
-                                    Includes:
-                                        Original charger and carrying case
-                                    Issues: 
-                                        Minor scratches on the outer casing
+                                    #Condition: 
+                                        *Refurbished - Like New
+                                    #Features: 
+                                        *16GB RAM, 512GB SSD, Intel i7 Processor
+                                    #Includes:
+                                        *Original charger and carrying case
+                                    #Issues: 
+                                        *Minor scratches on the outer casing
                         "
                         className='user-refurbished-product-book-module-upload-form-textarea'
                         style={{ maxWidth: "90vw", minHeight: "90vh" }}
