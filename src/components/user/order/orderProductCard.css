@@ -110,6 +110,9 @@
 .status-icon.canceled {
     color: #f44336; /* Red */
 }
+.status-icon.delivered{
+    color: #16b710; /* Red */
+}
 
 /* Text styling */
 .order-status-text {

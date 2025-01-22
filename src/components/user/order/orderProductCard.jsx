@@ -3,6 +3,7 @@ import { FaExclamationTriangle } from "react-icons/fa";
 import { RiChatSmileFill } from "react-icons/ri";
 import { FaLuggageCart } from "react-icons/fa";
 import { FaSadCry } from "react-icons/fa";
+import { GiPartyPopper } from "react-icons/gi";
 import './orderProductCard.css';
 
 function OrderProductCard({ order, onViewDetails, onCancelOrder }) {
@@ -17,6 +18,8 @@ function OrderProductCard({ order, onViewDetails, onCancelOrder }) {
                 return 'order-status-dispatched';
             case 'canceled':
                 return 'order-status-canceled';
+            case 'delivered':
+                return 'order-status-delivered';
             default:
                 return '';
         }
@@ -33,6 +36,8 @@ function OrderProductCard({ order, onViewDetails, onCancelOrder }) {
                 return <FaLuggageCart className="status-icon dispatched" />;
             case 'canceled':
                 return <FaSadCry className="status-icon canceled" />;
+            case 'delivered':
+                return <GiPartyPopper className="status-icon delivered" />;
             default:
                 return null;
         }
@@ -62,13 +67,13 @@ function OrderProductCard({ order, onViewDetails, onCancelOrder }) {
                             <p className="opcdp">₹{order?.discountedPrice * order?.count}</p>
                         </div>
                     </div>
-                    {order?.state !== 'canceled' &&
-                        <div
-                            className="order-product-card-detail-2-rm"
-                            onClick={() => onViewDetails(order)}
-                        >
-                            VIEW
-                        </div>}
+
+                    <div
+                        className="order-product-card-detail-2-rm"
+                        onClick={() => onViewDetails(order)}
+                    >
+                        VIEW
+                    </div>
                 </div>
                 <div className={`order-product-card-detail-3-state`}>
                     {/* <div className={`${getStatusClass(order?.state)}`}>

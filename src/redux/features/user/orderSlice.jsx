@@ -59,12 +59,13 @@ const userOrderSlice = createSlice({
     
         const stateOrder = {
             dispatched: 1,
-            pending: 2,
-            canceled: 3,
-            delivered: 4,
+            accepted:2,
+            pending: 3,
+            canceled: 4,
+            delivered:5,
         };
         const sortedOrders = action.payload.sort((a, b) => {
-            return (stateOrder[a.state] || 5) - (stateOrder[b.state] || 5);
+            return (stateOrder[a.state] || 6) - (stateOrder[b.state] || 6);
         });
         state.orders = sortedOrders;
     })
