@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { IoClose } from 'react-icons/io5';
 import { CiImageOn } from 'react-icons/ci';
 import { MdOutlineCategory } from "react-icons/md";
@@ -10,7 +10,7 @@ import userRefurbishedProduct from '../../../appWrite/UserRefurbishedProductServ
 
 
 const UploadBooksModulesForm = ({ userData, productType }) => {
-    const navigate=useNavigate();
+    const navigate = useNavigate();
 
     const [showPopUpLocation, setShowPopUpLocation] = useState(false);
     const [popUpState, setPopUpState] = useState({
@@ -301,9 +301,24 @@ const UploadBooksModulesForm = ({ userData, productType }) => {
                         name="description"
                         value={formData.description}
                         onChange={handleInputChange}
-                        placeholder="Enter a relevant description"
+                        placeholder="
+                                    Product Description Title \n Provide details about the product, such as its condition, features, and any included accessories.
+                                    Mention any notable issues or refurbishments.
+                                    Be clear and concise for better understanding.
+
+                                    Example:-
+
+                                    Condition: 
+                                        Refurbished - Like New
+                                    Features: 
+                                        16GB RAM, 512GB SSD, Intel i7 Processor
+                                    Includes:
+                                        Original charger and carrying case
+                                    Issues: 
+                                        Minor scratches on the outer casing
+                        "
                         className='user-refurbished-product-book-module-upload-form-textarea'
-                        style={{ maxWidth: "90vw", minHeight: "20vh" }}
+                        style={{ maxWidth: "90vw", minHeight: "90vh" }}
                     />
                 </div>
 
@@ -367,10 +382,10 @@ const UploadBooksModulesForm = ({ userData, productType }) => {
                     ))}
                 </div>
 
-               {!showPopUpLocation && <div
+                {!showPopUpLocation && <div
                     className={`user-refurbished-product-upload-form-submit ${isUploading ? 'disabled' : ''}`}
                 >
-                  {allFieldEntered ? <div onClick={isUploading ? null : handleSubmit}>UPLOAD</div> : <div onClick={()=>{setAllFieldEntered(true)}}>All fields are required! OK</div>}
+                    {allFieldEntered ? <div onClick={isUploading ? null : handleSubmit}>UPLOAD</div> : <div onClick={() => { setAllFieldEntered(true) }}>All fields are required! OK</div>}
                 </div>}
 
 
@@ -391,9 +406,10 @@ const UploadBooksModulesForm = ({ userData, productType }) => {
             {showPopUpLocation &&
                 <div className='user-upload-location-popup'>
                     set location in you profile
-                    <div className='user-upload-location-popup-ok' onClick={()=>{ 
+                    <div className='user-upload-location-popup-ok' onClick={() => {
                         setShowPopUpLocation(false);
-                        navigate('/user/profile')}}>
+                        navigate('/user/profile')
+                    }}>
                         ok
                     </div>
                 </div>
