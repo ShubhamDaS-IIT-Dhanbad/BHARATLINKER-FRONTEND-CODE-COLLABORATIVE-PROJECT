@@ -10,23 +10,22 @@ import './userProfile.css';
 import conf from '../../../conf/conf.js';
 import useUserAuth from '../../../hooks/userAuthHook.jsx';
 import useLocationFromCookie from '../../../hooks/useLocationFromCookie.jsx';
+import { RiRefreshLine } from "react-icons/ri";
 
 function UserRefurbishedProduct() {
-  const { updateUserData, getUserDataFromCookie } = useUserAuth();
+  const { fetchUserData, updateUserData, getUserDataFromCookie } = useUserAuth();
   const [userData, setUserData] = useState(null);
-
   const [name, setName] = useState('');
   const [address, setAddress] = useState('');
   const [lat, setLat] = useState(null);
   const [long, setLong] = useState(null);
-
   const [searchQuery, setSearchQuery] = useState('');
   const [suggestions, setSuggestions] = useState([]);
-
   const [loading, setLoading] = useState(false);
   const [isUpdating, setIsUpdating] = useState(false);
-
   const [fetchingUserLocation, setFetchingUserLocation] = useState(false);
+  const [isFetchingData, setIsFetchingData] = useState(false); // New state to track data fetching
+
   const { fetchLocationSuggestions } = useLocationFromCookie();
 
   useEffect(() => {
@@ -34,6 +33,7 @@ function UserRefurbishedProduct() {
       const data = getUserDataFromCookie();
       setUserData(data);
     };
+
     if (userData) {
       setName(userData?.name ? userData?.name : '');
       setAddress(userData?.address ? userData?.address : '');
@@ -50,7 +50,6 @@ function UserRefurbishedProduct() {
       navigator.geolocation.getCurrentPosition(
         async (position) => {
           const { latitude, longitude } = position.coords;
-
           const apiKey = conf.opencageapikey;
           const apiUrl = `${conf.opencageapiurl}?key=${apiKey}&q=${latitude},${longitude}&pretty=1&no_annotations=1`;
 
@@ -100,11 +99,23 @@ function UserRefurbishedProduct() {
     setLong(suggestion.lon);
     setSuggestions([]);
   };
+  const fetchUserDataFunction = async () => {
+    setIsFetchingData(true);  // Set fetching state to true
+    const phone = userData.phoneNumber;
+    
+    try {
+      await fetchUserData(phone); // Wait for the data fetching process to complete
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+    } finally {
+      setIsFetchingData(false); // Set fetching state to false after fetching is done
+    }
+  };
+  
 
   const handleUpdateUserData = async () => {
     if (!name || !address) return;
     setIsUpdating(true);
-
     const updatedData = { ...userData, name, address, lat, long };
 
     try {
@@ -121,14 +132,8 @@ function UserRefurbishedProduct() {
     <div className="user-product-page-body">
       <Helmet>
         <title>Your Refurbished Products | Bharat Linker</title>
-        <meta
-          name="description"
-          content="Browse and search for refurbished products offered by Bharat Linker."
-        />
-        <meta
-          name="keywords"
-          content="refurbished products, buy refurbished, Bharat Linker"
-        />
+        <meta name="description" content="Browse and search for refurbished products offered by Bharat Linker." />
+        <meta name="keywords" content="refurbished products, buy refurbished, Bharat Linker" />
       </Helmet>
 
       <header>
@@ -146,7 +151,13 @@ function UserRefurbishedProduct() {
             className="user-profile-form-input"
             required
           />
+          <RiRefreshLine
+            onClick={()=>{fetchUserDataFunction()}}
+            size={20}
+            className={isFetchingData ? 'rotate-icon' : ''}
+          />
         </div>
+
 
         <div className="user-location-tab-bottom-div-input-div" style={{ marginTop: '20px' }}>
           <IoSearch onClick={() => fetchSuggestions(searchQuery)} size={20} />
@@ -201,7 +212,8 @@ function UserRefurbishedProduct() {
           style={{ marginTop: '10px' }}
         >
           {fetchingUserLocation ? (
-            <Oval height={20} width={20} color="green" ariaLabel="loading" />
+            <Oval height={20} width={20} color="white" secondaryColor='green' ariaLabel="loading" />
+        
           ) : (
             <>
               <MdMyLocation size={23} />
@@ -209,23 +221,26 @@ function UserRefurbishedProduct() {
             </>
           )}
         </div>
-      </div>
 
-      <div
-        className={`user-profile-form-button ${name && address ? 'active' : 'disabled'}`}
-        onClick={handleUpdateUserData}
-      >
-        {isUpdating ? (
-          <Oval height={20} width={20} color="green" ariaLabel="loading" />
-        ) : (
-          'UPDATE USER DATA'
-        )}
+        <div
+          className={`user-profile-form-button ${name && address ? 'active' : 'disabled'}`}
+          onClick={handleUpdateUserData}
+        >
+          {isUpdating ? (
+            <Oval height={20} width={20} color="white" secondaryColor='green' ariaLabel="loading" />
+          ) : (
+            'UPDATE USER DATA'
+          )}
+        </div>
       </div>
     </div>
   );
 }
 
 export default UserRefurbishedProduct;
+
+
+
 
 
 
