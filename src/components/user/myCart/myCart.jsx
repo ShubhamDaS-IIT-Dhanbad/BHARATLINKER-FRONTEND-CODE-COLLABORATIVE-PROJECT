@@ -111,22 +111,6 @@ const MyCartPage = ({ userData }) => {
         }
     }, []);
 
-    const renderedSuggestions = useMemo(() => (
-        suggestions.map((suggestion, index) => (
-            <div
-                key={index}
-                className="user-location-tab-suggestion-info-div"
-                onClick={() => handleAddressClick(suggestion)}
-            >
-                <SlLocationPin size={17} />
-                <p>{suggestion.label}</p>
-            </div>
-        ))
-    ), []);
-
-
-
-
 
     const [orderPlacing, setOrderPlacing] = useState(false);
     const [confirmOrder, setConfirmOrder] = useState(false);
@@ -230,7 +214,16 @@ const MyCartPage = ({ userData }) => {
                             )}
                             {!loading && suggestions.length > 0 && (
                                 <div className="user-location-tab-suggestions">
-                                    {renderedSuggestions}
+                                    {suggestions.map((suggestion, index) => (
+                                        <div
+                                            className="user-location-tab-suggestion-info-div"
+                                            key={index}
+                                            onClick={() => handleAddressClick(suggestion)}
+                                        >
+                                            <SlLocationPin size={17} />
+                                            <p>{suggestion.label}</p>
+                                        </div>
+                                    ))}
                                 </div>
                             )}
                             <div className="user-profile-field">
@@ -271,7 +264,7 @@ const MyCartPage = ({ userData }) => {
                 {!confirmOrder &&
                     <div
                         className="my-cart-count-container"
-                        onClick={() => { 
+                        onClick={() => {
                             if (!address || !lat || !long) {
                                 setShowInfo(true);
                                 setTimeout(() => {
@@ -280,9 +273,10 @@ const MyCartPage = ({ userData }) => {
                                         behavior: "smooth",
                                     });
                                 }, 0);
-                            
+
                                 return;
-                            }setConfirmOrder(true) }}
+                            } setConfirmOrder(true)
+                        }}
                         disabled={orderPlacing || cart.length === 0}
                     >
                         PLACE ORDER
@@ -293,7 +287,7 @@ const MyCartPage = ({ userData }) => {
 
             {confirmOrder &&
                 <div className="productSearch-page-sort-by-tab">
-                    <div className='location-tab-IoIosCloseCircle' onClick={()=>{placeOrderConfirm}}  aria-label="Close sort options">
+                    <div className='location-tab-IoIosCloseCircle' onClick={() => { placeOrderConfirm }} aria-label="Close sort options">
                         <IoClose onClick={() => { setConfirmOrder(false) }} size={25} />
                     </div>
                     <div style={{ color: "white" }}>place order?</div>
