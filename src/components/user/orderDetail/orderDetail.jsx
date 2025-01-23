@@ -1,24 +1,25 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
+import { cancelUserOrder } from "../../../redux/features/user/orderSlice.jsx";
 import "./orderDetail.css";
 
+import { TiInfoOutline } from "react-icons/ti";
 import Navbar from "../a.navbarComponent/navbar.jsx";
 import useUserAuth from "../../../hooks/userAuthHook.jsx";
-import { fetchShopDetailsById } from "../../../redux/features/user/orderSlice.jsx";
+import { Oval } from "react-loader-spinner";
 
 const OrderDetails = () => {
     const { id } = useParams();
     const { userData } = useUserAuth();
-
-    const navigate = useNavigate();
     const dispatch = useDispatch();
+    const navigate = useNavigate();
 
-    const { orders, loading } = useSelector((state) => state.userOrders);
-    const shopState = useSelector((state) => state.userOrders.shop);
-
+    const [showi, setShowi] = useState(true);
     const [order, setOrder] = useState(null);
-    const [shop, setShop] = useState(null);
+    const [isCancelling, setIsCancelling] = useState(false);
+
+    const { orders } = useSelector((state) => state.userOrders);
 
     // Fetch order details
     useEffect(() => {
@@ -33,20 +34,6 @@ const OrderDetails = () => {
             navigate("/user/order");
         }
     }, [orders, id, navigate]);
-
-    // Fetch shop details if order is available
-    useEffect(() => {
-        if (order) {
-            const shopId = order.shopId;
-            const existingShop = shopState.find((shop) => shop.$id === shopId);
-
-            if (existingShop) {
-                setShop(existingShop);
-            } else {
-                dispatch(fetchShopDetailsById(shopId));
-            }
-        }
-    }, [order, shopState, dispatch]);
 
     const getOrderTitle = (state) => {
         switch (state) {
@@ -63,7 +50,18 @@ const OrderDetails = () => {
         }
     };
 
- 
+    const handleCancelOrder = async () => {
+        setIsCancelling(true);
+        const orderId = order.$id;
+        try {
+            await dispatch(cancelUserOrder(orderId));
+            navigate("/user/order");
+        } catch (error) {
+            console.error("Failed to cancel order:", error);
+        } finally {
+            setIsCancelling(false);
+        }
+    };
 
     if (!order) {
         return <div className="redirect-message"></div>;
@@ -90,56 +88,92 @@ const OrderDetails = () => {
                 </header>
 
                 <div className="order-summary">
-                    <div className="order-info">
-                        <p>
-                            <strong>Order Date:</strong>{" "}
-                            {new Date(order.$createdAt).toLocaleDateString()}
-                        </p>
-                        <p>
-                            <strong>Order No:</strong> {order.$id}
-                        </p>
-                        <p>
-                            <strong>Payment:</strong>{" "}
-                            <span className="payment-icon">CASH ON DELIVERY</span>
-                        </p>
-                        <p>
-                            <strong>Shipping Address:</strong> {order.address}
-                        </p>
-                        <p>
-                            <strong>Shipping LAT:</strong> {order.lat}
-                        </p>
-                        <p>
-                            <strong>Shipping LONG:</strong> {order.long}
-                        </p>
+                    <div className="order-product-card">
+                        <div className="order-product-card-img">
+                            <img src={order.image} alt="Product" />
+                        </div>
+                        <div className="order-product-card-detail">
+                            <div className="order-product-card-detail-1">
+                                {order.title}
+                            </div>
+                            <div className="order-product-card-detail-2">
+                                <div style={{ display: "flex", gap: "7px" }}>
+                                    <div className="order-product-card-detail-2-1">
+                                        <p className="order-product-card-detail-2-1-tag">PRICE</p>
+                                        <p className="opcdp">₹{order?.discountedPrice}</p>
+                                    </div>
+                                    <div className="order-product-card-detail-2-1">
+                                        <p className="order-product-card-detail-2-1-tag">QTY</p>
+                                        <p className="opcdp">{order?.count}</p>
+                                    </div>
+                                    <div className="order-product-card-detail-2-1">
+                                        <p className="order-product-card-detail-2-1-tag">SUBTOTAL</p>
+                                        <p className="opcdp">₹{order?.discountedPrice * order?.count}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
-                    {(order.state === "confirmed" || order.state === "shipped") && (
-                        <div className="order-status-details">
-                            <p>
-                                <strong>Expected Delivery Date:</strong>{" "}
-                                {order.expectedDeliveryDate}
-                            </p>
-                            <p>
-                                <strong>Message:</strong> {order.message}
-                            </p>
+                    {(order.state === "pending" || order.state === "confirmed") && (
+                        <div
+                            className="order-detail-cancel"
+                            onClick={isCancelling ? null : handleCancelOrder}
+                        >
+                            {isCancelling  ? (
+                                <Oval
+                                    height={20}
+                                    width={20}
+                                    color="white"
+                                    secondaryColor="#b41818"
+                                    ariaLabel="loading"
+                                />
+                            ) : (
+                                "CANCEL ORDER"
+                            )}
                         </div>
                     )}
 
-                    {shop && (
-                        <div className="shop-details">
-                            <h3>Shop Details</h3>
-                            <p>
-                                <strong>Shop Name:</strong> {shop?.shopName}
-                            </p>
-                            <p>
-                                <strong>Shop Address:</strong> {shop?.address}
-                            </p>
-                            <p>
-                                <strong>Shop LAT:</strong> {shop?.lat}
-                            </p>
-                            <p>
-                                <strong>Shop LONG:</strong> {shop?.long}
-                            </p>
+                    <div className="order-info">
+                        <div className="order-info-c">
+                            <div className="order-info-h">ORDERED DATE</div>
+                            <span>{new Date(order.$createdAt).toLocaleDateString()}</span>
+                        </div>
+                        <div className="order-info-c">
+                            <div className="order-info-h">ORDER ID</div>
+                            <span>{order.$id}</span>
+                        </div>
+                        <div className="order-info-c">
+                            <div className="order-info-h">PAYMENT METHOD</div>{" "}
+                            <span className="payment-icon">CASH ON DELIVERY</span>
+                        </div>
+                        <div className="order-info-c">
+                            <div className="order-info-h">SHIPPING ADDRESS</div>
+                            <span>{order.address}</span>
+                        </div>
+                    </div>
+
+                    {(order.state === "confirmed" || order.state === "shipped") && (
+                        <div className="oscd">
+                            <div className="oscd-info-c">
+                                <div className="oscd-info-h">EXPECTED DELIVERY DATE</div>
+                                <span>{order.expectedDeliveryDate}</span>
+                            </div>
+                            <div className="oscd-info-c">
+                                <div className="oscd-info-h">MESSAGE FROM SHOP</div>
+                                <span> {order.message}</span>
+                            </div>
+                        </div>
+                    )}
+
+                    <div className="order-detail-shop">
+                        <span onClick={() => navigate(`/shop/${order.shopId}`)}>VISIT SHOP</span>
+                        <TiInfoOutline size={20} onClick={() => setShowi(!showi)} />
+                    </div>
+                    {showi && (
+                        <div className="info-box">
+                            For any order-related issues, please contact the shop. Shop details are available on the Shop page.
+                            You can view the shop by clicking VIEW SHOP.
                         </div>
                     )}
                 </div>

@@ -35,6 +35,7 @@ export const fetchUserOrders = createAsyncThunk(
 export const cancelUserOrder = createAsyncThunk(
   'userOrders/cancelUserOrder',
   async (orderId, { rejectWithValue }) => {
+    console.log(orderId)
     try {
       await updateOrderState(orderId, 'canceled');
       return orderId;
