@@ -91,11 +91,17 @@
   justify-content: space-between;
   min-height: 30px;
 }
-
+.oscd-info-c span {
+  display: flex;
+  align-items: center;
+  width: 50%;
+  font-size: 13px;
+  padding-left: 10px;
+}
 .oscd-info-h {
   font-weight: 800;
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-  font-size: 13px;
+  font-size: 12px;
   width: 50%;
   display: flex;
   align-items: center;
@@ -121,6 +127,7 @@ box-shadow: 0 4px 6px rgba(0, 0, 0, 0.091);
 
 .order-detail-shop{
   display: flex;align-items:center;justify-content: space-between;
+  margin-top: 10vh;
 }
 .order-detail-shop span{
   border-bottom: 1px solid rgb(0, 0, 0);

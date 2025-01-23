@@ -120,7 +120,7 @@ const OrderDetails = () => {
                             className="order-detail-cancel"
                             onClick={isCancelling ? null : handleCancelOrder}
                         >
-                            {isCancelling  ? (
+                            {isCancelling ? (
                                 <Oval
                                     height={20}
                                     width={20}
@@ -157,11 +157,21 @@ const OrderDetails = () => {
                         <div className="oscd">
                             <div className="oscd-info-c">
                                 <div className="oscd-info-h">EXPECTED DELIVERY DATE</div>
-                                <span>{order.expectedDeliveryDate}</span>
+                                <span>
+                                    {new Date(order.expectedDeliveryDate).toLocaleDateString()}{" "}
+                                    {new Date(order.expectedDeliveryDate).toLocaleTimeString()}
+                                </span>
                             </div>
                             <div className="oscd-info-c">
+                                <div className="oscd-info-h">EXPECTED DELIVERY TIME</div>
+                                <span>
+                                    {new Date(order.expectedDeliveryDate).toLocaleTimeString()}
+                                </span>
+                            </div>
+                            {console.log(order)}
+                            <div className="oscd-info-c">
                                 <div className="oscd-info-h">MESSAGE FROM SHOP</div>
-                                <span> {order.message}</span>
+                                <span> {order.retailerMessage}</span>
                             </div>
                         </div>
                     )}
