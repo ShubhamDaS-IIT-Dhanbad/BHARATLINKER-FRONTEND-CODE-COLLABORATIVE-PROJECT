@@ -24,12 +24,10 @@ function Order() {
 
     return (
         <>
-              <header>
-                <div className="user-refurbished-product-page-header">
-                    <Navbar
-                        headerTitle={"YOUR ORDERS"}
-                    />
-                </div>
+            <header>
+                <Navbar
+                    headerTitle={"YOUR ORDERS"}
+                />
             </header>
 
             <div className="user-orders-container-order">
@@ -44,7 +42,7 @@ function Order() {
                         </div>
                     ))}
                 </div>)
-            }
+                }
 
             </div>
         </>
