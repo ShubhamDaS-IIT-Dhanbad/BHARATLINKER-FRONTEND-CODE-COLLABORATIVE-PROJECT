@@ -168,7 +168,12 @@ const OrderDetails = () => {
                                     {new Date(order.expectedDeliveryDate).toLocaleTimeString()}
                                 </span>
                             </div>
-                            {console.log(order)}
+                            <div className="oscd-info-c">
+                                <div className="oscd-info-h">DELIVERY BOY PHN</div>
+                                <span>
+                                    {order?.DeliveryBoyPhn}
+                                </span>
+                            </div>
                             <div className="oscd-info-c">
                                 <div className="oscd-info-h">MESSAGE FROM SHOP</div>
                                 <span> {order.retailerMessage}</span>
