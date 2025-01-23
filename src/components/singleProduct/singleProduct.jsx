@@ -114,7 +114,9 @@ const ProductDetails = ({ userData }) => {
 
         const newItem = {
             productId: productDetail.$id,
+            shopId:productDetail.shop,
             title: productDetail.title,
+            price:productDetail.price,
             discountedPrice: productDetail.discountedPrice || productDetail.price,
             quantity: 1,
             image: productDetail.images[0],
@@ -132,6 +134,8 @@ const ProductDetails = ({ userData }) => {
         const updatedItem = {
             productId: productDetail.$id,
             title: productDetail.title,
+            shopId:productDetail.shop,
+            price:productDetail.price,
             discountedPrice: productDetail.discountedPrice || productDetail.price,
             quantity: increment ? cartQuantity + 1 : cartQuantity - 1,
             phoneNumber: userData.phoneNumber,

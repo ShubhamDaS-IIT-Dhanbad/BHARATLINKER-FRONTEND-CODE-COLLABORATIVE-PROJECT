@@ -1,7 +1,9 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { fetchUserCartByPhoneNumber, updateCartByPhoneNumber } from "../../../appWrite/userData/userData.js";
-import { placeOrderProvider } from '../../../appWrite/order/order.js'
+import { placeOrderProvider } from '../../../appWrite/order/order.js';
 
+import debounce from "lodash.debounce";
+import throttle from "lodash.throttle";
 
 // Async Thunk for fetching the user cart data by phone number
 export const fetchUserCart = createAsyncThunk(
@@ -17,12 +19,21 @@ export const fetchUserCart = createAsyncThunk(
     }
 );
 
+// Throttled fetch function to limit frequent requests
+export const throttledFetchUserCart = throttle(async (dispatch, phoneNumber) => {
+    try {
+        await dispatch(fetchUserCart(phoneNumber));
+    } catch (error) {
+        console.error("Throttled fetch error:", error);
+    }
+}, 1000); // 1-second interval
+
 // Async Thunk for updating the cart after changes
 export const updateUserCart = createAsyncThunk(
     "usercart/updateUserCart",
-    async ({phoneNumber,cart}, { rejectWithValue }) => {
+    async ({ phoneNumber, cart }, { rejectWithValue }) => {
         try {
-           const cartData= await updateCartByPhoneNumber({phoneNumber,cart});
+            const cartData = await updateCartByPhoneNumber({ phoneNumber, cart });
             return cartData;
         } catch (error) {
             console.error("Error updating cart:", error);
@@ -31,30 +42,38 @@ export const updateUserCart = createAsyncThunk(
     }
 );
 
+// Debounced version of the cart update dispatch
+const debouncedUpdateUserCart = debounce(async (dispatch, phoneNumber, cart) => {
+    try {
+        await dispatch(updateUserCart({ phoneNumber, cart }));
+    } catch (error) {
+        console.error("Debounced cart update error:", error);
+    }
+}, 500); // 500ms delay
+
 // Async action for updating cart state and syncing with the backend
 export const updateCartStateAsync = (newItem) => async (dispatch, getState) => {
     try {
         dispatch(cartSlice.actions.updateCartStateLocal(newItem));
-    
+
         const state = getState();
-    
         const phoneNumber = newItem.phoneNumber;
-        const cart = state.userCart.cart.length > 0 
-            ? JSON.stringify(state.userCart.cart) 
-            : JSON.stringify([]);
-        await dispatch(updateUserCart({ phoneNumber, cart }));
+        const cart = JSON.stringify(state.userCart.cart);
+
+        // Use debounced dispatch to update the backend
+        debouncedUpdateUserCart(dispatch, phoneNumber, cart);
     } catch (error) {
         console.error("Error in updateCartStateAsync:", error);
     }
-    
 };
+
 // Async Thunk for placing an order
 export const placeOrder = createAsyncThunk(
     "usercart/placeOrder",
-    async ({
-        userId, shopId, productId, count, price, discountedPrice, address,
-        userLat, userLong, name, img
-    }, { rejectWithValue }) => {
+    async (
+        { userId, shopId, productId, count, price, discountedPrice, address, userLat, userLong, name, img },
+        { rejectWithValue }
+    ) => {
         try {
             await placeOrderProvider(
                 userId, shopId, productId, count, price, discountedPrice,
@@ -67,6 +86,7 @@ export const placeOrder = createAsyncThunk(
         }
     }
 );
+
 const cartSlice = createSlice({
     name: "usercart",
     initialState: {
@@ -74,33 +94,26 @@ const cartSlice = createSlice({
         totalQuantity: 0,
         totalPrice: 0,
         cartLoading: false,
-        orderSuccess: false, // Track order success
-        orderLoading: false, // Track order loading state
+        orderSuccess: false,
+        orderLoading: false,
     },
     reducers: {
         updateCartStateLocal: (state, action) => {
             const newItem = action.payload;
             const existingItem = state.cart.find(item => item.productId === newItem.productId);
-        
+
             if (newItem.quantity === 0) {
                 state.cart = state.cart.filter(item => item.productId !== newItem.productId);
             } else if (existingItem) {
                 existingItem.quantity = newItem.quantity;
-                existingItem.discountedPrice = existingItem.discountedPrice;
+                existingItem.discountedPrice = newItem.discountedPrice;
             } else {
-                state.cart.push({
-                    ...newItem
-                });
+                state.cart.push(newItem);
             }
-        
-            // If the cart length is 0, make it an empty array
-            if (state.cart.length === 0) {
-                state.cart = [];
-            }
-        
+
             state.totalQuantity = state.cart.reduce((total, item) => total + item.quantity, 0);
             state.totalPrice = state.cart.reduce((total, item) => total + item.discountedPrice * item.quantity, 0);
-        } 
+        }
     },
     extraReducers: (builder) => {
         builder
@@ -110,7 +123,6 @@ const cartSlice = createSlice({
             .addCase(fetchUserCart.fulfilled, (state, action) => {
                 state.cartLoading = false;
                 state.cart = action.payload;
-
                 state.totalQuantity = state.cart.reduce((total, item) => total + item.quantity, 0);
                 state.totalPrice = state.cart.reduce((total, item) => total + item.discountedPrice * item.quantity, 0);
             })
@@ -118,11 +130,6 @@ const cartSlice = createSlice({
                 state.cartLoading = false;
                 console.error("Failed to fetch user cart:", action.payload);
             })
-
-
-
-
-
             .addCase(updateUserCart.pending, (state) => {
                 state.cartLoading = true;
             })
@@ -133,17 +140,12 @@ const cartSlice = createSlice({
                 state.cartLoading = false;
                 console.error("Failed to update user cart:", action.payload);
             })
-
-
-
-
-            // Handle placing the order
             .addCase(placeOrder.pending, (state) => {
                 state.orderLoading = true;
             })
             .addCase(placeOrder.fulfilled, (state) => {
                 state.orderLoading = false;
-                state.orderSuccess = true; // Set success flag when the order is placed
+                state.orderSuccess = true;
             })
             .addCase(placeOrder.rejected, (state, action) => {
                 state.orderLoading = false;

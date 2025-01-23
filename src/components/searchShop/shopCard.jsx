@@ -15,7 +15,7 @@ function ShopCard({ shop }) {
     };
 
     const handleCardClick = () => {
-        navigate(`/shop/${shop.$id}`, { state: { fromShopCard: true } }); // Set fromShopCard to true
+        navigate(`/shop/${shop.$id}`, { state: { fromShopCard: true } });
     };
       
     return (

@@ -104,11 +104,11 @@ const OrderDetails = () => {
                                     </div>
                                     <div className="order-product-card-detail-2-1">
                                         <p className="order-product-card-detail-2-1-tag">QTY</p>
-                                        <p className="opcdp">{order?.count}</p>
+                                        <p className="opcdp">{order?.quantity}</p>
                                     </div>
                                     <div className="order-product-card-detail-2-1">
                                         <p className="order-product-card-detail-2-1-tag">SUBTOTAL</p>
-                                        <p className="opcdp">₹{order?.discountedPrice * order?.count}</p>
+                                        <p className="opcdp">₹{order?.discountedPrice * order?.quantity}</p>
                                     </div>
                                 </div>
                             </div>

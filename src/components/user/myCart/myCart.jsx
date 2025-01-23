@@ -6,25 +6,29 @@ import { SlLocationPin } from 'react-icons/sl';
 import { TiInfoOutline } from "react-icons/ti";
 import { IoSearch } from "react-icons/io5";
 import { MdMyLocation } from "react-icons/md";
-
+import conf from '../../../conf/conf.js'
 import Navbar from "../a.navbarComponent/navbar.jsx";
 import OrderProductCard from './cartCard.jsx';
 import { updateCartStateAsync, fetchUserCart } from '../../../redux/features/user/cartSlice.jsx';
 import useLocationFromCookie from '../../../hooks/useLocationFromCookie.jsx';
 
+import { placeOrderProvider } from '../../../appWrite/order/order.js'
+
 import '../userProfile/userProfile.css';
 import './myCart.css';
 
-const MyCartPage = ({userData}) => {
+const MyCartPage = ({ userData }) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-   
+
     const { fetchLocationSuggestions } = useLocationFromCookie();
     const { cart, totalQuantity, totalPrice } = useSelector((state) => state.userCart);
 
     const [address, setAddress] = useState('');
     const [lat, setLat] = useState(null);
     const [long, setLong] = useState(null);
+
+
     const [searchQuery, setSearchQuery] = useState('');
     const [suggestions, setSuggestions] = useState([]);
     const [fetchingUserLocation, setFetchingUserLocation] = useState(false);
@@ -40,8 +44,8 @@ const MyCartPage = ({userData}) => {
 
     const handleRemove = useCallback(async (productId) => {
         try {
-            const newItem={
-                productId:productId,
+            const newItem = {
+                productId: productId,
                 quantity: 0,
                 phoneNumber: userData?.phoneNumber,
             }
@@ -118,6 +122,64 @@ const MyCartPage = ({userData}) => {
             </div>
         ))
     ), []);
+
+
+
+
+
+    const [orderPlacing, setOrderPlacing] = useState(false);
+    const [confirmOrder, setConfirmOrder] = useState(false);
+    // Function to handle the order placement
+    const placeOrderConfirm = async () => {
+        if (!address || !lat || !long) {
+            alert("Please provide a valid address, latitude, and longitude.");
+            return;
+        }
+
+        if (cart.length === 0) {
+            alert("Your cart is empty. Please add items to the cart before placing an order.");
+            return;
+        }
+
+        setOrderPlacing(true);
+        try {
+            for (const cartItem of cart) {
+                const { productId, shopId, quantity, discountedPrice, price, title, image } = cartItem;
+                console.log(cartItem)
+                const userId=userData.$id;
+                await placeOrderProvider(
+                    userId,
+                    shopId,
+                    productId,
+                    quantity,
+                    price,
+                    discountedPrice,
+                    address,
+                    lat,
+                    long,
+                    image,
+                    title
+                );
+                const newItem = {
+                    productId: productId,
+                    quantity: 0,
+                    phoneNumber: userData?.phoneNumber,
+                }
+                await dispatch(updateCartStateAsync(newItem));
+            }
+            navigate("/user/order");
+        } catch (error) {
+            console.error("Error placing orders:", error);
+            alert("An error occurred while placing your order. Please try again.");
+        } finally {
+            setOrderPlacing(false);
+        }
+    };
+
+
+
+
+
 
     return (
         <div>
@@ -202,6 +264,13 @@ const MyCartPage = ({userData}) => {
                     </>
                 )}
             </div>
+            <button
+                className="confirm-order-button"
+                onClick={placeOrderConfirm}
+                disabled={orderPlacing || cart.length === 0}
+            >
+                {orderPlacing ? "Placing Order..." : "Confirm Order"}
+            </button>
         </div>
     );
 };
@@ -257,56 +326,5 @@ export default React.memo(MyCartPage);
 
 
 
-// const [orderPlacing, setOrderPlacing] = useState(false);
-// const [confirmOrder, setConfirmOrder] = useState(false);
-// const placeOrder = async () => {
-//     if (!address || !userLat || !userLong) { alert("address is empty latitude and longitude"); return; }
-//     setConfirmOrder(true);
-// };
-// const placeOrderConfirm = async (cartItems) => {
-//     if (!address || !userLat || !userLong) { alert("address is empty latitude and longitude"); return; }
-//     setOrderPlacing(true);
-//     try {
-//         for (const cartItem of cartItems) {
-
-
-//             const userId = userData.$id;
-//             const productId = cartItem.id;
-//             const count = cartItem.count;
-//             const discountedPrice = cartItem.discountedPrice;
-//             const price = cartItem.price;
-//             const shopId = cartItem.shopId;
-//             const name = cartItem.name;
-//             const img = cartItem.image;
-
-
-//             await placeOrderProvider(
-//                 userId, shopId, productId,
-//                 count,
-//                 price,
-//                 discountedPrice,
-//                 address, userLat, userLong, name, img
-//             );
-//         }
-
-
-
-
-//         const userDataCookie = Cookies.get('BharatLinkerUserData');
-//         if (userDataCookie) {
-//             const userData = JSON.parse(decodeURIComponent(userDataCookie));
-//             userData.cart = '';
-//             Cookies.set('BharatLinkerUserData', JSON.stringify(userData), { path: '/' });
-
-//             updateCartData([]);
-//         }
-
-//         setCartItems([]);
-//         navigate('/user/order');
-//     } catch (error) {
-//         console.error("Error placing orders:", error);
-//     }
-//     setOrderPlacing(false);
-// };
 
 

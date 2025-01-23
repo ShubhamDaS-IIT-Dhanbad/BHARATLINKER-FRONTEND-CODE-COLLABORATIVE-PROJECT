@@ -1,6 +1,6 @@
 import conf from '../../conf/conf.js';
 
-import { Client, Databases,ID, Query } from 'appwrite';
+import { Client, Databases, ID, Query } from 'appwrite';
 
 // Initialize the Appwrite client
 const client = new Client()
@@ -8,22 +8,39 @@ const client = new Client()
     .setProject(conf.appwriteShopsProjectId);
 
 const databases = new Databases(client);
+
 const placeOrderProvider = async (
     userId,
     shopId,
     productId,
-    count,
+    quantity,
     price,
     discountedPrice,
     address,
-    userLat,
-    userLong,
-    img,
-    name
+    lat,
+    long,
+    image,
+    title
 ) => {
     try {
+        // Log input parameters
+        console.log(
+            userId,
+            shopId,
+            productId,
+            quantity,
+            price,
+            discountedPrice,
+            address,
+            lat,
+            long,
+            image,
+            title
+        );
+
+        // Validate numeric inputs
         if (
-            typeof count !== 'number' || count <= 0 ||
+            typeof quantity !== 'number' || quantity <= 0 ||
             typeof price !== 'number' || price <= 0 ||
             typeof discountedPrice !== 'number' || discountedPrice < 0
         ) {
@@ -32,11 +49,16 @@ const placeOrderProvider = async (
             );
         }
 
-        // Ensure title is a string and slice it to 50 characters
-        if (typeof img !== 'string') {
+        // Validate title
+        if (typeof title !== 'string') {
             throw new Error('Invalid title: Title must be a string.');
         }
-        const title = img.length > 50 ? img.slice(0, 50) : img;
+        const truncatedTitle = title.length > 50 ? title.slice(0, 50) : title;
+
+        // Validate image
+        if (typeof image !== 'string') {
+            throw new Error('Invalid image: Image must be a string.');
+        }
 
         // Create a document in the Appwrite database
         const response = await databases.createDocument(
@@ -47,14 +69,14 @@ const placeOrderProvider = async (
                 userId,
                 shopId,
                 productId,
-                count,
+                quantity,
                 price,
                 discountedPrice,
                 address,
-                lat: userLat,
-                long: userLong,
-                image:name,
-                title:img  
+                lat,
+                long,
+                image,
+                title: truncatedTitle,
             }
         );
         return response;
@@ -73,7 +95,7 @@ const getOrderByUserId = async (userId) => {
         }
 
         // Construct query to filter by userId
-        
+
         const queries = [Query.equal('userId', userId)];// Appwrite expects query strings in this format
 
         // Fetch documents from the Appwrite database
@@ -93,21 +115,21 @@ const getOrderByUserId = async (userId) => {
 
 
 
-const updateOrderState = async (orderId,state) => {
+const updateOrderState = async (orderId, state) => {
     try {
         if (!orderId) {
             throw new Error('User ID is missing');
         }
-        const documentId=orderId;
+        const documentId = orderId;
         const response = await databases.updateDocument(
             conf.appwriteShopsDatabaseId,
             conf.appwriteOrdersCollectionId,
             documentId,
             {
-            state
+                state
             }
         );
-console.log(response)
+        console.log(response)
         return response.documents;
     } catch (error) {
         console.error('Error fetching orders by orderId:', error.message);
@@ -115,5 +137,5 @@ console.log(response)
     }
 };
 
-export { placeOrderProvider,getOrderByUserId,updateOrderState };
+export { placeOrderProvider, getOrderByUserId, updateOrderState };
 
