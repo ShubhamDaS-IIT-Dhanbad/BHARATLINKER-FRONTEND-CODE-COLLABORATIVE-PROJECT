@@ -31,7 +31,7 @@ function OrderProductCard({ order,functionToWork,productId}) {
     return (
         <div className="order-product-card">
             <div className="order-product-card-img">
-                <img src={order.image} alt="Product" />
+                <img src={order.image} onClick={()=>{navigate(`/product/${productId}`)}} alt="Product" />
             </div>
             <div className="order-product-card-detail">
                 <div className="order-product-card-detail-1">
