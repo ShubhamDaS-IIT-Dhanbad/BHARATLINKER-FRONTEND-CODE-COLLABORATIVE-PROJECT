@@ -132,7 +132,7 @@ const MyCartPage = ({ userData }) => {
     // Function to handle the order placement
     const placeOrderConfirm = async () => {
         if (!address || !lat || !long) {
-            alert("Please provide a valid address, latitude, and longitude.");
+            setShowInfo(true);
             return;
         }
 
@@ -146,7 +146,7 @@ const MyCartPage = ({ userData }) => {
             for (const cartItem of cart) {
                 const { productId, shopId, quantity, discountedPrice, price, title, image } = cartItem;
                 console.log(cartItem)
-                const userId=userData.$id;
+                const userId = userData.$id;
                 await placeOrderProvider(
                     userId,
                     shopId,
@@ -239,6 +239,7 @@ const MyCartPage = ({ userData }) => {
                             </div>
                             {showInfo && (
                                 <div className="info-box">
+                                    Location REQUIRED!
                                     This location will help determine the delivery area. Please ensure your locality is accurately specified.
                                 </div>
                             )}
@@ -264,13 +265,15 @@ const MyCartPage = ({ userData }) => {
                     </>
                 )}
             </div>
-            <button
-                className="confirm-order-button"
-                onClick={placeOrderConfirm}
-                disabled={orderPlacing || cart.length === 0}
-            >
-                {orderPlacing ? "Placing Order..." : "Confirm Order"}
-            </button>
+            <div className='my-cart-count-container-parent'>
+                <div
+                    className="my-cart-count-container"
+                    onClick={placeOrderConfirm}
+                    disabled={orderPlacing || cart.length === 0}
+                >
+                    {orderPlacing ? "Placing Order..." : "Confirm Order"}
+                </div>
+            </div>
         </div>
     );
 };
