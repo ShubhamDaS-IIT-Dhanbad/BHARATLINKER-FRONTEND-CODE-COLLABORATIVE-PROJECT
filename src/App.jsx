@@ -27,6 +27,7 @@ const RefurbishedBooksUploadUser = lazy(() => import('./components/user/userProd
 const UserUpdateBookModule = lazy(() => import('./components/user/userProductUpdate/userProductUpdate.jsx'));
 const UserNotification = lazy(() => import('./components/user/notification/userNotification.jsx'));
 const UserOrder = lazy(() => import('./components/user/order/order.jsx'));
+const UserCart = lazy(() => import('./components/user/myCart/myCart.jsx'));
 const UserOrderDetail = lazy(() => import('./components/user/orderDetail/orderDetail.jsx'));
 
 function App() {
@@ -52,7 +53,8 @@ const RoutesWithConditionalHeader = React.memo(() => {
   const [isProductPageLoaded, setProductPageLoaded] = useState(true);
   const [isRefurbishedPageLoaded, setRefurbishedPageLoaded] = useState(true);
 
-  const { PrivateRoute } = useUserAuth();
+  const { PrivateRoute,getUserDataFromCookie } = useUserAuth();
+  const userData = getUserDataFromCookie();
 return (
     <>
       <Routes>
@@ -65,7 +67,7 @@ return (
                 <meta name="description" content="Welcome to Bharat Linker, your one-stop solution for business management." />
                 <meta name="robots" content="index, follow" />
               </Helmet>
-              <HomePage />
+              <HomePage userData={userData}/>
             </>
           }
         />
@@ -78,7 +80,7 @@ return (
                 <meta name="description" content="Login to access your Bharat Linker account and manage your business efficiently." />
                 <meta name="robots" content="noindex, nofollow" />
               </Helmet>
-              <LoginPage />
+              <LoginPage userData={userData}/>
             </>
           }
         />
@@ -91,7 +93,7 @@ return (
                 <title>Search Products - Bharat Linker</title>
                 <meta name="description" content="Search and explore a wide range of products on Bharat Linker." />
               </Helmet >
-              <SearchPage isProductPageLoaded={isProductPageLoaded} setProductPageLoaded={setProductPageLoaded} />
+              <SearchPage userData={userData} isProductPageLoaded={isProductPageLoaded} setProductPageLoaded={setProductPageLoaded} />
             </>
           }
         />
@@ -105,7 +107,7 @@ return (
                 <title>Product Details - Bharat Linker</title>
                 <meta name="description" content="View detailed information about the selected product on Bharat Linker." />
               </Helmet>
-              <SingleProduct />
+              <SingleProduct userData={userData}/>
             </>
           }
         />
@@ -119,7 +121,7 @@ return (
                 <title>Search Shops - Bharat Linker</title>
                 <meta name="description" content="Search and explore various shops on Bharat Linker." />
               </Helmet>
-              <SearchShop isShopPageLoaded={isShopPageLoaded} setShopPageLoaded={setShopPageLoaded} />
+              <SearchShop userData={userData} isShopPageLoaded={isShopPageLoaded} setShopPageLoaded={setShopPageLoaded} />
             </>
           }
         />
@@ -133,7 +135,7 @@ return (
                 <title>Shop Details - Bharat Linker</title>
                 <meta name="description" content="Discover detailed information about this shop on Bharat Linker." />
               </Helmet>
-              <SingleShopCard />
+              <SingleShopCard userData={userData}/>
             </>
           }
         />
@@ -148,26 +150,15 @@ return (
                 <title>Refurbished Products - Bharat Linker</title>
                 <meta name="description" content="Explore high-quality refurbished products on Bharat Linker." />
               </Helmet>
-              <RefurbishedPage isRefurbishedPageLoaded={isRefurbishedPageLoaded} setRefurbishedPageLoaded={setRefurbishedPageLoaded} />
+              <RefurbishedPage userData={userData} isRefurbishedPageLoaded={isRefurbishedPageLoaded} setRefurbishedPageLoaded={setRefurbishedPageLoaded} />
             </>
           }
         />
         <Route
           path="/refurbished/:refurbishedId"
           element={
-            <SingleRefurbishedProductCard
-            />}
+            <SingleRefurbishedProductCard userData={userData}/>}
         />
-
-
-
-
-
-
-
-
-
-
         {/* Retailer and User Routes */}
         <Route
           path="/*"
@@ -177,7 +168,7 @@ return (
                 <title>Retailer Dashboard - Bharat Linker</title>
                 <meta name="description" content="Access the retailer dashboard to manage your shop, products, and orders on Bharat Linker." />
               </Helmet>
-              <RetailerRoutes />
+              <RetailerRoutes userData={userData}/>
             </>
           }
         />
@@ -197,7 +188,7 @@ return (
                 <title>User Dashboard - Bharat Linker</title>
                 <meta name="description" content="Access your Bharat Linker user dashboard to manage your account, orders, and more." />
               </Helmet>
-              <User />
+              <User userData={userData}/>
             </PrivateRoute>
           }
         />
@@ -211,7 +202,7 @@ return (
                 <title>User Profile - Bharat Linker</title>
                 <meta name="description" content="View and update your Bharat Linker user profile." />
               </Helmet>
-              <UserProfile />
+              <UserProfile userData={userData}/>
             </PrivateRoute>
           }
         />
@@ -224,7 +215,7 @@ return (
                 <title>Manage Refurbished Products - Bharat Linker</title>
                 <meta name="description" content="View and manage your refurbished product listings on Bharat Linker." />
               </Helmet>
-              <UserProductPageMain />
+              <UserProductPageMain userData={userData}/>
             </PrivateRoute>
           }
         />
@@ -237,7 +228,7 @@ return (
                 <title>Upload Products - Bharat Linker</title>
                 <meta name="description" content="Upload your products for sale on Bharat Linker, including refurbished items." />
               </Helmet>
-              <RefurbishedBooksUploadUser />
+              <RefurbishedBooksUploadUser userData={userData}/>
             </PrivateRoute>
           }
         />
@@ -250,7 +241,7 @@ return (
                 <title>Update Product - Bharat Linker</title>
                 <meta name="description" content="Edit and update the details of your refurbished products on Bharat Linker." />
               </Helmet>
-              <UserUpdateBookModule />
+              <UserUpdateBookModule userData={userData}/>
             </PrivateRoute>
           }
         />
@@ -263,7 +254,7 @@ return (
                 <title>Notifications - Bharat Linker</title>
                 <meta name="description" content="View all your notifications related to account activity and updates." />
               </Helmet>
-              <UserNotification />
+              <UserNotification userData={userData}/>
             </PrivateRoute>
           }
         />
@@ -276,7 +267,20 @@ return (
                 <title>Orders - Bharat Linker</title>
                 <meta name="description" content="View and manage your orders on Bharat Linker." />
               </Helmet>
-              <UserOrder />
+              <UserOrder userData={userData}/>
+            </PrivateRoute>
+          }
+        />
+         <Route
+          path="/user/cart"
+          element=
+          {
+            <PrivateRoute>
+              <Helmet>
+                <title>Cart - Bharat Linker</title>
+                <meta name="description" content="View and manage your cart on Bharat Linker." />
+              </Helmet>
+              <UserCart userData={userData}/>
             </PrivateRoute>
           }
         />
@@ -289,7 +293,7 @@ return (
                 <title>Orders - Bharat Linker</title>
                 <meta name="description" content="Order detail on Bharat Linker." />
               </Helmet>
-              <UserOrderDetail />
+              <UserOrderDetail userData={userData}/>
             </PrivateRoute>
           }
         />

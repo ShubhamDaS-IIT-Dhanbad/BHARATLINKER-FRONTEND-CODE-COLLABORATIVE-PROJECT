@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Oval } from "react-loader-spinner";
 import { fetchUserOrders } from "../../../redux/features/user/orderSlice.jsx";
-import OrderProductCard from "./orderProductCard.jsx";
+import OrderProductCard from "../orderProductCard.jsx";
 import useUserAuth from "../../../hooks/userAuthHook.jsx";
 import "./order.css";
 

@@ -12,8 +12,8 @@ import { Oval } from 'react-loader-spinner';
 import useUserAuth from '../../hooks/userAuthHook.jsx';
 import './userHome.css';
 
-function UserHome() {
-    const { userData, logout } = useUserAuth();
+function UserHome({userData}) {
+    const { logout } = useUserAuth();
     const [isLogout, setIsLogout] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();

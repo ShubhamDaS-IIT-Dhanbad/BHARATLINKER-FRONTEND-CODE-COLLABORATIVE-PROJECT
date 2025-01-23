@@ -13,8 +13,8 @@ import useLocationFromCookie from '../../../hooks/useLocationFromCookie.jsx';
 import { RiRefreshLine } from "react-icons/ri";
 import { TiInfoOutline } from "react-icons/ti";
 
-function UserRefurbishedProduct() {
-  const {userData, fetchUserData, updateUserData} = useUserAuth();
+function UserRefurbishedProduct({userData}) {
+  const {fetchUserData, updateUserData} = useUserAuth();
   
   const [name, setName] = useState('');
   const [address, setAddress] = useState('');

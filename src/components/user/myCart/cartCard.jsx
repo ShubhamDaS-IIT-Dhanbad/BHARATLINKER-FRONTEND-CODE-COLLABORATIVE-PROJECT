@@ -5,10 +5,11 @@ import { RiChatSmileFill } from "react-icons/ri";
 import { FaLuggageCart } from "react-icons/fa";
 import { FaSadCry } from "react-icons/fa";
 import { GiPartyPopper } from "react-icons/gi";
-import './orderProductCard.css';
+import './cartCard.css';
 
-function OrderProductCard({order}) {
-    const navigate=useNavigate();
+function OrderProductCard({ order,functionToWork,productId}) {
+    const navigate = useNavigate();
+
     // Function to return the correct icon based on status
     const getStatusIcon = (status) => {
         switch (status) {
@@ -44,19 +45,31 @@ function OrderProductCard({order}) {
                         </div>
                         <div className="order-product-card-detail-2-1">
                             <p className="order-product-card-detail-2-1-tag">QTY</p>
-                            <p className="opcdp">{order?.count}</p>
+                            <p className="opcdp">{order?.quantity}</p>
                         </div>
                         <div className="order-product-card-detail-2-1">
                             <p className="order-product-card-detail-2-1-tag">SUBTOTAL</p>
-                            <p className="opcdp">₹{order?.discountedPrice * order?.count}</p>
+                            <p className="opcdp">₹{order?.discountedPrice * order?.quantity}</p>
                         </div>
                     </div>
-                    <div
-                        className="order-product-card-detail-2-rm"
-                        onClick={()=>{navigate(`/user/order/${order.$id}`)}}
-                    >
-                        VIEW
-                    </div>
+
+                    {window.location.pathname === '/user/order' && (
+                        <div
+                            className="order-product-card-detail-2-rm"
+                            onClick={() => { navigate(`/user/order/${order.$id}`); }}
+                        >
+                            VIEW
+                        </div>
+                    )}
+
+                    {window.location.pathname === '/user/cart' && (
+                        <div
+                             className="order-product-cart-delete-2-rm"
+                             onClick={functionToWork}
+                        >
+                            REMOVE
+                        </div>
+                    )}
                 </div>
                 <div className={`order-product-card-detail-3-state`}>
                     {getStatusIcon(order?.state)}

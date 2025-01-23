@@ -19,6 +19,7 @@ import refurbishedproductsfiltersection from '../features/refurbishedPage/refurb
 
 //user refurbished products
 import userRefurbishedProducts from '../features/user/userAllRefurbishedProductsSlice.jsx'
+import userCart from '../features/user/cartSlice.jsx'
 import userOrders from '../features/user/orderSlice.jsx'
 
 //retailer products
@@ -45,6 +46,7 @@ const store=configureStore({
 
         //user refurbished products
         userRefurbishedProducts:userRefurbishedProducts,
+        userCart:userCart,
         userOrders:userOrders,
 
         //retailer products

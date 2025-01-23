@@ -43,35 +43,7 @@ async function updateUserByPhoneNumber(updatedData) {
     }
 }
 
-async function updateCartByPhoneNumber(phoneNumber, updatedCart) {
-    try {
-        // Ensure phoneNumber is a string
-        const phoneNumberString = String(phoneNumber);
-        const queries = [Query.equal('phoneNumber', phoneNumberString)];
 
-        const result = await databases.listDocuments(
-            conf.appwriteUsersDatabaseId,
-            conf.appwriteUsersCollectionId,
-            queries
-        );
-        if (result.documents.length === 0) {
-            throw new Error(`No document found with phoneNumber: ${phoneNumberString}`);
-        }
-        const documentId = result.documents[0].$id;
-        const cartAsString = JSON.stringify(updatedCart);
-        const updatedUser = await databases.updateDocument(
-            conf.appwriteUsersDatabaseId,
-            conf.appwriteUsersCollectionId,
-            documentId,
-            { cart: cartAsString }
-        );
-        const updatedUserWithCart = { ...updatedUser, cart: JSON.parse(updatedUser.cart) };
-        return updatedUserWithCart;
-    } catch (error) {
-        console.error('Error in updateCartByPhoneNumber:', error);
-        throw error;
-    }
-}
 
 
 
@@ -118,6 +90,17 @@ async function fetchUserByPhoneNumber(phn) {
     }
 }
 
+
+
+
+
+
+
+
+
+
+
+
 async function fetchUserCartByPhoneNumber(phn) {
     try {
         if (!phn) {
@@ -125,19 +108,52 @@ async function fetchUserCartByPhoneNumber(phn) {
         }
         const phoneNumber = typeof phn === 'number' ? phn.toString() : phn;
         const queries = [Query.equal('phoneNumber', phoneNumber)];
+
+        // Fetch the full document (this will still be necessary)
+        const result = await databases.listDocuments(
+            conf.appwriteUsersDatabaseId,
+            conf.appwriteUsersCollectionId,
+            queries
+        );
+
+        if (result.documents.length === 0) {
+            throw new Error(`No document found with phoneNumber: ${phoneNumber}`);
+        }
+
+        // Extract and return only the 'cart' field
+        const userCart = result.documents[0].cart;
+        return userCart;
+    } catch (error) {
+        console.error('Error in fetchUserCartByPhoneNumber:', error);
+        return null;
+    }
+}
+
+
+async function updateCartByPhoneNumber({phoneNumber, cart}) {
+    try {
+        const phoneNumberString = String(phoneNumber);
+        const queries = [Query.equal('phoneNumber', phoneNumberString)];
+
         const result = await databases.listDocuments(
             conf.appwriteUsersDatabaseId,
             conf.appwriteUsersCollectionId,
             queries
         );
         if (result.documents.length === 0) {
-            throw new Error(`No document found with phoneNumber: ${phoneNumber}`);
+            throw new Error(`No document found with phoneNumber: ${phoneNumberString}`);
         }
-        const userCart = result.documents[0].cart;
-        return userCart;
+        const documentId = result.documents[0].$id;
+        const updatedUser = await databases.updateDocument(
+            conf.appwriteUsersDatabaseId,
+            conf.appwriteUsersCollectionId,
+            documentId,
+            { cart: cart}
+        );
+        return updatedUser;
     } catch (error) {
-        console.error('Error in fetchUserCartByPhoneNumber:', error);
-        return null;
+        console.error('Error in updateCartByPhoneNumber:', error);
+        throw error;
     }
 }
 

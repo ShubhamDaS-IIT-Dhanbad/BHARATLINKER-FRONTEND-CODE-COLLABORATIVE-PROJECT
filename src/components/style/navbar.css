@@ -90,7 +90,7 @@
     justify-content: center;
     align-items: center;border: 0.1rem solid rgb(0, 0, 0);
     border-radius: 11px;
-    background-color: #f9f9f9;;
+    background-color: #f9f9f9;
     width: 96vw;height: 45px;
 }
 .home-page-search-input::placeholder{

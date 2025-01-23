@@ -32,7 +32,7 @@ const useUserAuth = () => {
                 navigate('/login');
             }
         }
-    }, [navigate, location.pathname]);
+    }, []);
 
     const getUserDataFromCookie = () => {
         const storedData = Cookies.get('BharatLinkerUserData');

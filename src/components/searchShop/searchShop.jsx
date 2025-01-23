@@ -7,12 +7,9 @@ import ShopList from './shopList.jsx';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 import { Oval } from "react-loader-spinner";
-import { RotatingLines } from 'react-loader-spinner';
-
 import { useSearchShop } from '../../hooks/searchShopHook.jsx';
 
 import ShopFilterBySection from './filterSection.jsx';
-
 import './searchShop.css';
 
 const Shop = ({ isShopPageLoaded, setShopPageLoaded }) => {
