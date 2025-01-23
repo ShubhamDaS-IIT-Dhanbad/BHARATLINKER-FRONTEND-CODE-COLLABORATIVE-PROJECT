@@ -89,7 +89,7 @@ const OrderDetails = () => {
 
                 <div className="order-summary">
                     <div className="order-product-card">
-                        <div className="order-product-card-img">
+                        <div className="order-product-card-img" onClick={()=>{navigate(`/product/${order.productId}`)}}>
                             <img src={order.image} alt="Product" />
                         </div>
                         <div className="order-product-card-detail">
