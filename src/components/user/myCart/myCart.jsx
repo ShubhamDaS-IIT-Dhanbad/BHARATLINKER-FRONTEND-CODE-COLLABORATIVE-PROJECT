@@ -272,10 +272,17 @@ const MyCartPage = ({ userData }) => {
                     <div
                         className="my-cart-count-container"
                         onClick={() => { 
-                        if (!address || !lat || !long) {
-                            setShowInfo(true);
-                            return;
-                        } setConfirmOrder(true) }}
+                            if (!address || !lat || !long) {
+                                setShowInfo(true);
+                                setTimeout(() => {
+                                    window.scrollTo({
+                                        top: document.body.scrollHeight,
+                                        behavior: "smooth",
+                                    });
+                                }, 0);
+                            
+                                return;
+                            }setConfirmOrder(true) }}
                         disabled={orderPlacing || cart.length === 0}
                     >
                         PLACE ORDER
