@@ -7,7 +7,7 @@ import OrderProductCard from "./orderProductCard.jsx";
 import useUserAuth from "../../../hooks/userAuthHook.jsx";
 import "./order.css";
 
-import { FaArrowLeft } from "react-icons/fa";
+import Navbar from "../a.navbarComponent/navbar.jsx";
 
 function Order() {
     const navigate = useNavigate();
@@ -24,21 +24,13 @@ function Order() {
 
     return (
         <>
-            <div className="user-order-container">
-                <FaArrowLeft
-                    id="product-page-user-icon"
-                    size={25}
-                    onClick={() => navigate("/user")}
-                    aria-label="Go to Home"
-                    tabIndex={0}
-                />
-                <div className="product-page-user-location">
-                    <p className="product-page-location-label">ORDER DETAILS</p>
-                    <p id="dashboard-header-user-phn" style={{ color: "white" }}>
-                        {userData ? userData.phoneNumber : "xxxxx xxxxx"}
-                    </p>
+              <header>
+                <div className="user-refurbished-product-page-header">
+                    <Navbar
+                        headerTitle={"YOUR ORDERS"}
+                    />
                 </div>
-            </div>
+            </header>
 
             <div className="user-orders-container-order">
                 {loading.orders ? (
