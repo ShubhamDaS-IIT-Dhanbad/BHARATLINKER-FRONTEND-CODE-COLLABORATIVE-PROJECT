@@ -11,11 +11,12 @@ import Navbar from "../a.navbarComponent/navbar.jsx";
 import OrderProductCard from './cartCard.jsx';
 import { updateCartStateAsync, fetchUserCart } from '../../../redux/features/user/cartSlice.jsx';
 import useLocationFromCookie from '../../../hooks/useLocationFromCookie.jsx';
-
+import { IoClose } from "react-icons/io5";
 import { placeOrderProvider } from '../../../appWrite/order/order.js'
 
 import '../userProfile/userProfile.css';
 import './myCart.css';
+import '../../searchPage/sortby.css'
 
 const MyCartPage = ({ userData }) => {
     const dispatch = useDispatch();
@@ -131,6 +132,7 @@ const MyCartPage = ({ userData }) => {
     const [confirmOrder, setConfirmOrder] = useState(false);
     // Function to handle the order placement
     const placeOrderConfirm = async () => {
+
         if (!address || !lat || !long) {
             setShowInfo(true);
             return;
@@ -266,19 +268,41 @@ const MyCartPage = ({ userData }) => {
                 )}
             </div>
             <div className='my-cart-count-container-parent'>
-                <div
-                    className="my-cart-count-container"
-                    onClick={placeOrderConfirm}
-                    disabled={orderPlacing || cart.length === 0}
-                >
-                    {orderPlacing ? "Placing Order..." : "Confirm Order"}
-                </div>
+                {!confirmOrder &&
+                    <div
+                        className="my-cart-count-container"
+                        onClick={() => { 
+                        if (!address || !lat || !long) {
+                            setShowInfo(true);
+                            return;
+                        } setConfirmOrder(true) }}
+                        disabled={orderPlacing || cart.length === 0}
+                    >
+                        PLACE ORDER
+                    </div>
+                }
             </div>
+            {/* */}
+
+            {confirmOrder &&
+                <div className="productSearch-page-sort-by-tab">
+                    <div className='location-tab-IoIosCloseCircle' onClick={()=>{placeOrderConfirm}}  aria-label="Close sort options">
+                        <IoClose onClick={() => { setConfirmOrder(false) }} size={25} />
+                    </div>
+                    <div style={{ color: "white" }}>place order?</div>
+                    <div id="productSearch-page-sort-by-header">
+                        <div id="productSearch-page-sortby-options">
+                            <div className="order-confirm-no" onClick={() => { setConfirmOrder(false) }}>NO</div>
+                            <div className="order-confirm-yes">YES</div>
+                        </div>
+                    </div>
+                </div>
+            }
         </div>
     );
 };
-
 export default React.memo(MyCartPage);
+
 
 
 
