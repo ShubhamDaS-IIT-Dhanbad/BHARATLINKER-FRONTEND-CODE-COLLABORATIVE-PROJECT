@@ -70,12 +70,10 @@ const OrderDetails = () => {
     return (
         <>
             <header>
-                <div className="user-refurbished-product-page-header">
-                    <Navbar
-                        headerTitle={"ORDER DETAIL"}
-                        onBackNavigation={() => navigate(-1)}
-                    />
-                </div>
+                <Navbar
+                    headerTitle={"ORDER DETAIL"}
+                    onBackNavigation={() => navigate(-1)}
+                />
             </header>
 
             <div className="order-details-container">
@@ -89,7 +87,7 @@ const OrderDetails = () => {
 
                 <div className="order-summary">
                     <div className="order-product-card">
-                        <div className="order-product-card-img" onClick={()=>{navigate(`/product/${order.productId}`)}}>
+                        <div className="order-product-card-img" onClick={() => { navigate(`/product/${order.productId}`) }}>
                             <img src={order.image} alt="Product" />
                         </div>
                         <div className="order-product-card-detail">
