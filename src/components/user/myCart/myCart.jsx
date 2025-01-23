@@ -261,7 +261,7 @@ const MyCartPage = ({ userData }) => {
                 )}
             </div>
             <div className='my-cart-count-container-parent'>
-                {!confirmOrder &&
+                {!confirmOrder && cart.length>0 &&
                     <div
                         className="my-cart-count-container"
                         onClick={() => {
@@ -279,7 +279,7 @@ const MyCartPage = ({ userData }) => {
                         }}
                         disabled={orderPlacing || cart.length === 0}
                     >
-                        PLACE ORDER
+                        {orderPlacing ? <Oval height={20} width={20} color="white" ariaLabel="loading" /> : "PLACE ORDER"}
                     </div>
                 }
             </div>
@@ -287,14 +287,14 @@ const MyCartPage = ({ userData }) => {
 
             {confirmOrder &&
                 <div className="productSearch-page-sort-by-tab">
-                    <div className='location-tab-IoIosCloseCircle' onClick={() => { placeOrderConfirm }} aria-label="Close sort options">
+                    <div className='location-tab-IoIosCloseCircle' aria-label="Close sort options">
                         <IoClose onClick={() => { setConfirmOrder(false) }} size={25} />
                     </div>
                     <div style={{ color: "white" }}>place order?</div>
                     <div id="productSearch-page-sort-by-header">
                         <div id="productSearch-page-sortby-options">
                             <div className="order-confirm-no" onClick={() => { setConfirmOrder(false) }}>NO</div>
-                            <div className="order-confirm-yes">YES</div>
+                            <div className="order-confirm-yes" onClick={() => {setConfirmOrder(false); placeOrderConfirm() }}>YES</div>
                         </div>
                     </div>
                 </div>
