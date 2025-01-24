@@ -66,12 +66,10 @@
 
 #skleton-page-grid{
     display: flex;
-    flex-wrap: wrap;gap: 10px;
+    flex-wrap: wrap;gap: 5px;
     width: 100vw;
     justify-content: center;
-    margin-top: 110px;
-    padding-bottom: 77px;
-    min-height: calc(100vh - 120px - 80px);
+    margin-top: 105px;
 }
 .product-card-skleton {
     color: black;
@@ -79,12 +77,11 @@
     max-width: 200px;
     display: flex;
     flex-direction: column;
-    margin-top: 10px;
     align-items: center;
     z-index: 3;
     overflow: hidden;
     transition: transform 0.3s, box-shadow 0.3s;
-    border-radius: 4px;
+    border-radius: 4px;margin-top: 10px;
 }
 
 .product-card-skleton-bottom {

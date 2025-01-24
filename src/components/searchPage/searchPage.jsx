@@ -46,7 +46,7 @@ const SearchPage = () => {
         }
     }, [updated, selectedBrands, selectedCategories]);
 
-    const skeletons = [1, 2, 3, 4];
+    const skeletons = [1, 2, 3, 4,5,6];
     return (
         <>
             <div id="productSearchPage-container-top">
@@ -58,16 +58,16 @@ const SearchPage = () => {
 
             {loading ? (
                 <div id="skleton-page-grid">
-                {skeletons.map((_, index) => (
-                    <div className="product-card-skleton" key={index}>
-                        <Skeleton height="190px" width="200px" />
-                        <div className="product-card-skleton-bottom">
-                            <Skeleton height={25} />
-                            <Skeleton height={50} />
+                    {skeletons.map((_, index) => (
+                        <div className="product-card-skleton" key={index}>
+                            <Skeleton height="250px" width="200px" />
+                            <div className="product-card-skleton-bottom">
+                                <Skeleton height="30px" />
+                                <Skeleton height={50} />
+                            </div>
                         </div>
-                    </div>
-                ))}
-            </div>
+                    ))}
+                </div>
 
             ) : (
                 <InfiniteScroll
