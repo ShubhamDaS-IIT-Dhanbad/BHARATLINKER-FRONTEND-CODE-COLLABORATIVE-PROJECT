@@ -11,7 +11,6 @@ import ProductList from '../b.productComponent/productList.jsx';
 import ProductSortBySection from './sortbySection.jsx';
 import ProductFilterBySection from './filterSection.jsx';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { Oval } from 'react-loader-spinner';
 
 import { useExecuteSearch } from '../../hooks/searchProductHook';
 import './searchPage.css';
