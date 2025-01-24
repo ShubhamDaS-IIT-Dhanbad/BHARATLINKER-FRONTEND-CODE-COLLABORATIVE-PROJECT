@@ -107,31 +107,32 @@ function SignUpForm() {
 
 
   const verifyOTP = async (otpCode) => {
+    const userLabel='user'
     if (otpCode.length != 6) return;
     setVerifyingOtp(true);
     try {
-      const session = await account.createSession(userId, otpCode);
+      const session = await account.createSession(userId, otpCode, userLabel);
       console.log('OTP verified, session created:', session);
-
+  
       const userData = await fetchUserByPhoneNumber(phone);
-
+  
       if (userData) {
         if (userData.cart) {
-            userData.cart = JSON.parse(userData.cart);
+          userData.cart = JSON.parse(userData.cart);
         }
         Cookies.set('BharatLinkerUserData', JSON.stringify(userData), { expires: 7, path: '' });
         console.log('User data fetched and stored:', userData);
-    } else {
+      } else {
         console.warn('No user data found for the provided phone number');
-    }
-    
-
+      }
+  
       navigate('/user');
     } catch (error) {
-      setOtp(new Array(6).fill(""));
+      setOtp(new Array(6).fill(''));
     }
     setVerifyingOtp(false);
   };
+  
 
   return (
     <div className='user-login-container'>

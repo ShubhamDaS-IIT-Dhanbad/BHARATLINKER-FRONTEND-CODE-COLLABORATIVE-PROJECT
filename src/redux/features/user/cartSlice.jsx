@@ -113,6 +113,12 @@ const cartSlice = createSlice({
 
             state.totalQuantity = state.cart.reduce((total, item) => total + item.quantity, 0);
             state.totalPrice = state.cart.reduce((total, item) => total + item.discountedPrice * item.quantity, 0);
+        },
+        resetCart: (state) => {
+            state.cart = [];
+            state.totalQuantity = 0;
+            state.totalPrice = 0;
+            state.orderSuccess = false;
         }
     },
     extraReducers: (builder) => {
@@ -154,5 +160,5 @@ const cartSlice = createSlice({
     },
 });
 
-export const { updateCartStateLocal } = cartSlice.actions;
+export const { updateCartStateLocal, resetCart } = cartSlice.actions;
 export default cartSlice.reducer;

@@ -17,7 +17,8 @@ import shopproducts from '../features/shopProducts/searchProductSlice.jsx'
 import refurbishedproducts from '../features/refurbishedPage/refurbishedProductsSlice.jsx'
 import refurbishedproductsfiltersection from '../features/refurbishedPage/refurbishedProductFilterSectionSlice.jsx';
 
-//user refurbished products
+//user
+import userdata from '../features/user/userDataSlice.jsx'
 import userRefurbishedProducts from '../features/user/userAllRefurbishedProductsSlice.jsx'
 import userCart from '../features/user/cartSlice.jsx'
 import userOrders from '../features/user/orderSlice.jsx'
@@ -44,7 +45,8 @@ const store=configureStore({
         refurbishedproducts:refurbishedproducts,
         refurbishedproductsfiltersection:refurbishedproductsfiltersection,
 
-        //user refurbished products
+        //user 
+        userdata:userdata,
         userRefurbishedProducts:userRefurbishedProducts,
         userCart:userCart,
         userOrders:userOrders,

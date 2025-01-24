@@ -1,11 +1,9 @@
 import React, { Suspense, lazy, useState } from "react";
-import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route} from "react-router-dom";
 
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import useUserAuth from './hooks/userAuthHook.jsx';
 import { Oval } from 'react-loader-spinner';
-import './App.css';
-
 
 import HomePage from './components/homePage/home.jsx';
 import SearchPage from './components/searchPage/searchPage.jsx';
@@ -38,7 +36,6 @@ function App() {
         <Suspense fallback={
           <div className="fallback-loading">
             <Oval height={30} width={30} color="green" secondaryColor="white" ariaLabel="loading" />
-
           </div>
         }>
           <RoutesWithConditionalHeader/>
@@ -53,7 +50,7 @@ const RoutesWithConditionalHeader = React.memo(() => {
   const [isProductPageLoaded, setProductPageLoaded] = useState(true);
   const [isRefurbishedPageLoaded, setRefurbishedPageLoaded] = useState(true);
 
-  const { PrivateRoute,getUserDataFromCookie } = useUserAuth();
+  const {PrivateRoute,getUserDataFromCookie } = useUserAuth();
   const userData = getUserDataFromCookie();
 return (
     <>
@@ -157,7 +154,13 @@ return (
         <Route
           path="/refurbished/:refurbishedId"
           element={
-            <SingleRefurbishedProductCard userData={userData}/>}
+            <>
+              <Helmet>
+                <title>Refurbished Details - Bharat Linker</title>
+                <meta name="description" content="Search and explore a wide range of products on Bharat Linker." />
+              </Helmet >
+            <SingleRefurbishedProductCard userData={userData}/>
+            </>}
         />
         {/* Retailer and User Routes */}
         <Route

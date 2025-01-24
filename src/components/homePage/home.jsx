@@ -2,7 +2,6 @@ import React, { memo, useCallback,useEffect } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 import HomePageNavbar from '../a.navbarComponent/navbar.jsx';
-import HomeFooter from './homeFooter.jsx';
 import HomeTestimonial from './homeTestimonial.jsx';
 
 import { MdOutlineStore } from "react-icons/md";
@@ -16,6 +15,7 @@ const ti1='https://res.cloudinary.com/demc9mecm/image/upload/v1737378115/ptnykpi
 const Home = () => {
     
     const navigate = useNavigate();
+
     const handleRetailerClick = useCallback(() => {
         const retailerCookie = Cookie.get('BharatLinkerShopData');
         if (retailerCookie) {
@@ -43,7 +43,6 @@ const Home = () => {
                 marginBottom: '60px'
             }}>
                 <HomeTestimonial ti1={ti1}/>
-                {/* <HomeFooter /> */}
             </div>
             <div id="home-footer" style={{
                 width: '100vw',

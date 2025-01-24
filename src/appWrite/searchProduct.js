@@ -97,8 +97,7 @@ class SearchProductService {
                     conf.appwriteProductsDatabaseId,
                     collectionId,
                     categoryQueries
-                );
-              
+                );              
                 return response.documents || [];
             };
 
