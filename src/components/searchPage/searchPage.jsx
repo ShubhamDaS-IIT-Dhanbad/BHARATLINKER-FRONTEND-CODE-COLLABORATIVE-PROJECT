@@ -1,21 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { useExecuteSearch } from '../../hooks/searchProductHook.jsx';
 import { LiaSortSolid } from "react-icons/lia";
 import { MdFilterList } from "react-icons/md";
+
+import Skeleton from 'react-loading-skeleton';
+import 'react-loading-skeleton/dist/skeleton.css';
+
 import SearchBar from '../a.navbarComponent/navbar.jsx';
 import ProductList from '../b.productComponent/productList.jsx';
-
-import { Oval } from 'react-loader-spinner';
-
-import InfiniteScroll from 'react-infinite-scroll-component';
-
 import ProductSortBySection from './sortbySection.jsx';
 import ProductFilterBySection from './filterSection.jsx';
+import InfiniteScroll from 'react-infinite-scroll-component';
+import { Oval } from 'react-loader-spinner';
 
+import { useExecuteSearch } from '../../hooks/searchProductHook';
 import './searchPage.css';
 
-const SearchPage = ({ isProductPageLoaded, setProductPageLoaded }) => {
+const SearchPage = () => {
     const { executeSearch, onLoadMore } = useExecuteSearch();
 
     const [showSortBy, setShowSortBy] = useState(false);
@@ -23,96 +24,97 @@ const SearchPage = ({ isProductPageLoaded, setProductPageLoaded }) => {
 
     const {
         updated,
-        products,
+        products = [],
         loading,
         loadingMoreProducts,
         hasMoreProducts,
         sortByAsc,
         sortByDesc,
     } = useSelector((state) => state.searchproducts);
+
     const selectedBrands = useSelector(
         (state) => state.searchproductsfiltersection.selectedBrands
-    );
+    ) || [];
     const selectedCategories = useSelector(
         (state) => state.searchproductsfiltersection.selectedCategories
-    );
-
+    ) || [];
 
     useEffect(() => {
         if (products.length === 0 && !loading) {
-            executeSearch();
+            const inputValue = "";
+            executeSearch(inputValue);
         }
-        const delayTimeout = setTimeout(() => {
-            setProductPageLoaded(true);
-        }, 500);
-
-        return () => clearTimeout(delayTimeout);
     }, [updated, selectedBrands, selectedCategories]);
 
+    const skeletons = [1, 2, 3, 4];
     return (
         <>
-            {(!isProductPageLoaded) ? (
-                <div className="fallback-loading">
-                    <Oval height={30} width={30} color="green" secondaryColor="white" ariaLabel="loading" />
-                </div>
+            <div id="productSearchPage-container-top">
+                <SearchBar
+                    headerTitle={"SEARCH PAGE"}
+                    handleSearchSubmit={executeSearch}
+                />
+            </div>
+
+            {loading ? (
+                <div id="skleton-page-grid">
+                {skeletons.map((_, index) => (
+                    <div className="product-card-skleton" key={index}>
+                        <Skeleton height="190px" width="200px" />
+                        <div className="product-card-skleton-bottom">
+                            <Skeleton height={25} />
+                            <Skeleton height={50} />
+                        </div>
+                    </div>
+                ))}
+            </div>
+
             ) : (
-                <>
-                    <div id="productSearchPage-container-top">
-                        <SearchBar
-                            headerTitle={"SEARCH PAGE"}
-                            handleSearchSubmit={executeSearch}
-                        />
-                    </div>
+                <InfiniteScroll
+                    dataLength={products.length}
+                    next={onLoadMore}
+                    hasMore={hasMoreProducts}
+                    loader={loadingMoreProducts && <h4>Loading more products...</h4>}
+                >
+                    <ProductList />
+                </InfiniteScroll>
+            )}
 
-                    {(loading || !isProductPageLoaded) ? (
-                        <div className="fallback-loading">
-                            <Oval height={30} width={30} color="green" secondaryColor="white" ariaLabel="loading" />
-                        </div>
-                    ) : (
-                        <InfiniteScroll
-                            dataLength={products.length}
-                            next={onLoadMore}
-                            hasMore={hasMoreProducts}
-                            loader={loadingMoreProducts && <h4>Loading more products...</h4>}
-                        >
-                            <ProductList />
-                        </InfiniteScroll>)}
+            {showSortBy && (
+                <ProductSortBySection
+                    handleSearch={executeSearch}
+                    showSortBy={showSortBy}
+                    setShowSortBy={setShowSortBy}
+                    sortByAsc={sortByAsc}
+                    sortByDesc={sortByDesc}
+                    products={products}
+                />
+            )}
 
-                    {showSortBy && (
-                        <ProductSortBySection
-                            handleSearch={executeSearch}
-                            showSortBy={showSortBy}
-                            setShowSortBy={setShowSortBy}
-                            sortByAsc={sortByAsc}
-                            sortByDesc={sortByDesc}
-                            products={products}
-                        />
-                    )}
-                    {showFilterBy && (
-                        <ProductFilterBySection
-                            handleSearch={executeSearch}
-                            showFilterBy={showFilterBy}
-                            setShowFilterBy={setShowFilterBy}
-                        />
-                    )}
+            {showFilterBy && (
+                <ProductFilterBySection
+                    handleSearch={executeSearch}
+                    showFilterBy={showFilterBy}
+                    setShowFilterBy={setShowFilterBy}
+                />
+            )}
 
-                    <div id="productSearchPage-footer">
-                        <div
-                            id="productSearchPage-footer-sortby"
-                            onClick={() => setShowSortBy(!showSortBy)}
-                        >
-                            <LiaSortSolid size={33} />
-                            SORT BY
-                        </div>
-                        <div
-                            id="productSearchPage-footer-filterby"
-                            onClick={() => setShowFilterBy(!showFilterBy)}
-                        >
-                            <MdFilterList size={33} />
-                            FILTER BY
-                        </div>
-                    </div>
-                </>)}
+            <div id="productSearchPage-footer">
+                <div
+                    id="productSearchPage-footer-sortby"
+                    onClick={() => setShowSortBy(!showSortBy)}
+                >
+                    <LiaSortSolid size={33} />
+                    SORT BY
+                </div>
+                <div
+                    id="productSearchPage-footer-filterby"
+                    onClick={() => setShowFilterBy(!showFilterBy)}
+                >
+                    <MdFilterList size={33} />
+                    FILTER BY
+                </div>
+            </div>
         </>
     );
 };

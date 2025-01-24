@@ -28,11 +28,11 @@ export const useExecuteSearch = () => {
 
     const executeSearch = (inputValue) => {
         if(loading || loadingMoreProducts) return;
-        const searchQuery = inputValue || "";
+        const searchQuery = inputValue ? inputValue : "";
         const params = {
             userLat: lat,
             userLong: long,
-            radius:radius ? radius :0,
+            radius:radius ? radius : 0,
             inputValue: searchQuery, 
             page: 1,
             productsPerPage,

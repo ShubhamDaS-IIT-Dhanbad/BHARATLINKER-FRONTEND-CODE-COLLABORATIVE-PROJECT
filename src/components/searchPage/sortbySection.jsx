@@ -1,20 +1,20 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { toggleSortOrder, sortProductReducer } from '../../redux/features/searchPage/searchProductSlice.jsx';
 import { IoClose } from "react-icons/io5";
-import './sortby.css'
-const productSearchProductSortBySection = ({ showSortBy, setShowSortBy, sortByAsc, sortByDesc }) => {
+import './sortby.css';
+
+const ProductSearchSortBySection = ({ showSortBy, setShowSortBy, sortByAsc, sortByDesc }) => {
     const dispatch = useDispatch();
 
-    // Handle sort order change
-    const handleSortOrderChange = (order) => {
+    // Memoize the sort order change function to avoid unnecessary rerenders
+    const handleSortOrderChange = useCallback((order) => {
         dispatch(toggleSortOrder(order));
         dispatch(sortProductReducer({ sortByAsc, sortByDesc }));
-    };
+    }, [dispatch, sortByAsc, sortByDesc]);
 
     // Sort option component
     const SortOption = ({ order, isSelected, label }) => (
-
         <div
             onClick={() => handleSortOrderChange(order)}
             role="button"
@@ -24,13 +24,16 @@ const productSearchProductSortBySection = ({ showSortBy, setShowSortBy, sortByAs
         >
             {label}
         </div>
-
     );
 
     return (
         showSortBy && (
             <div className="productSearch-page-sort-by-tab">
-                <div className='location-tab-IoIosCloseCircle' onClick={() => setShowSortBy(false)} aria-label="Close sort options">
+                <div
+                    className='location-tab-IoIosCloseCircle'
+                    onClick={() => setShowSortBy(false)}
+                    aria-label="Close sort options"
+                >
                     <IoClose size={25} />
                 </div>
                 <div style={{ color: "white" }}>SORT SECTION</div>
@@ -45,4 +48,4 @@ const productSearchProductSortBySection = ({ showSortBy, setShowSortBy, sortByAs
     );
 };
 
-export default productSearchProductSortBySection;
+export default ProductSearchSortBySection;

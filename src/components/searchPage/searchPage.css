@@ -48,11 +48,6 @@
 
 
 
-
-
-
-
-
 /* No shop found */
 .search-shop-no-shop-found{
     display: flex;flex-direction: column;
@@ -61,4 +56,40 @@
 }
 .search-shop-no-shop-found img{
     width: 80vw;
+}
+
+
+
+
+
+
+
+#skleton-page-grid{
+    display: flex;
+    flex-wrap: wrap;gap: 10px;
+    width: 100vw;
+    justify-content: center;
+    margin-top: 110px;
+    padding-bottom: 77px;
+    min-height: calc(100vh - 120px - 80px);
+}
+.product-card-skleton {
+    color: black;
+    width: 46vw;
+    max-width: 200px;
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+    align-items: center;
+    z-index: 3;
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+    border-radius: 4px;
+}
+
+.product-card-skleton-bottom {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    color: #000000;
 }

@@ -58,12 +58,12 @@ const conf = {
     // SHOP | SERVICES 4+1+4+2
     appwriteShopsProjectId: String(import.meta.env.VITE_APPWRITE_SHOPS_PROJECT_ID),
     appwriteShopsDatabaseId: String(import.meta.env.VITE_APPWRITE_SHOPS_DATABASE_ID),
-    appwriteShopsCollectionId: String(import.meta.env.VITE_APPWRITE_SHOPS_COLLECTION_ID),
-    appwriteShopsImagesBucketId: String(import.meta.env.VITE_APPWRITE_SHOPS_IMAGES_BUCKET_ID),
-
     
+    appwriteShopsProductsCollectionId: String(import.meta.env.VITE_APPWRITE_SHOPS_PRODUCTS_COLLECTION_ID),
+    appwriteShopsCollectionId: String(import.meta.env.VITE_APPWRITE_SHOPS_COLLECTION_ID),
     appwriteOrdersCollectionId: String(import.meta.env.VITE_APPWRITE_ORDERS_COLLECTION_ID),
 
+    appwriteShopsImagesBucketId: String(import.meta.env.VITE_APPWRITE_SHOPS_IMAGES_BUCKET_ID),
     shopCloudinaryCloudName: String(import.meta.env.VITE_CLOUDINARY_SHOPS_CLOUDINARY_CLOUD_NAME),
     shopCloudinaryApiKey: String(import.meta.env.VITE_CLOUDINARY_SHOPS_CLOUDINARY_API_KEY),
     shopCloudinaryApiSecret: String(import.meta.env.VITE_CLOUDINARY_SHOPS_CLOUDINARY_API_SECRET),

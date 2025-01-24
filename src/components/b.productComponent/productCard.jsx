@@ -7,7 +7,7 @@ function SearchPageProductCard({ id, image, title, discountedPrice,  isInStock }
     const location = useLocation(); 
 
     const imageUrl = image[0] || 'http://res.cloudinary.com/dthelgixr/image/upload/v1727870088/hd7kcjuz8jfjajnzmqkp.webp';
-    const productName = title ? (title.length > 45 ? title.substr(0, 45) + '..' : title) : 'Product Name';
+    const productName = title ? (title?.length > 45 ? title?.substr(0, 45) + '..' : title) : 'Product Name';
     const productPrice = discountedPrice || '0';
 
     // Check if the current path is /user/refurbished or /search
@@ -49,7 +49,7 @@ function SearchPageProductCard({ id, image, title, discountedPrice,  isInStock }
                     </div>
                 )}
                 {isSearchRefurbished && (
-                    <div className={`search-page-product-card-bottom-stock ${true > 0 ? 'instock' : 'outofstock'}`}>
+                    <div className={`search-page-product-card-bottom-stock ${true > 0 ? 'instock' : 'instock'}`}>
                        ON SALE
                     </div>
                 )}
