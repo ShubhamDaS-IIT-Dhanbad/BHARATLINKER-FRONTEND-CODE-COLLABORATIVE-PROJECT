@@ -19,10 +19,8 @@ function UserHome({userData}) {
     const navigate = useNavigate();
 
     const handleLogout = async () => {
-        setIsLoading(true); // Start loading
-        await logout();     // Perform logout
-        setIsLoading(false); // Stop loading
-        navigate('/login');  // Navigate to login page
+        setIsLoading(true);
+        await logout();
     };
 
     return (

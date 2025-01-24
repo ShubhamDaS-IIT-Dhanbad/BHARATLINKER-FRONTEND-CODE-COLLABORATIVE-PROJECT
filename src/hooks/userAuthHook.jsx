@@ -29,10 +29,10 @@ const useUserAuth = () => {
                     setUserData(JSON.parse(userSession));
                 } catch (error) {
                     console.error('Error parsing user session:', error);
-                    navigate('/login');
+                    navigate('/');
                 }
             } else {
-                navigate('/login');
+                navigate('/');
             }
         }
     }, [window.location]);
@@ -47,11 +47,11 @@ const useUserAuth = () => {
                 return {};
             }
         }
-        console.log('No user data found in cookie');
         return {};
     };
 
     const fetchUserData = async (phone) => {
+        
         try {
             const userData = await fetchUserByPhoneNumber(phone);
             if (userData) {
@@ -100,16 +100,15 @@ const useUserAuth = () => {
 
     const logout = async () => {
         try {
-            Cookies.remove('BharatLinkerUserData');
-            await account.deleteSession('current');
-            setUserData(null);
-            dispatch(resetCart);
-
+            console.log("Logging out...");
+            document.cookie = "BharatLinkerUserData=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+            dispatch(resetCart());
             navigate('/login');
         } catch (error) {
             console.error('Logout failed:', error);
         }
     };
+    
 
     const PrivateRoute = ({ children }) => {
         const userSession = Cookies.get('BharatLinkerUserData');

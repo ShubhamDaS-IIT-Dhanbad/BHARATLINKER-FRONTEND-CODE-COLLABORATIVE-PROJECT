@@ -28,7 +28,6 @@ const UserOrder = lazy(() => import('./components/user/order/order.jsx'));
 const UserCart = lazy(() => import('./components/user/myCart/myCart.jsx'));
 const UserOrderDetail = lazy(() => import('./components/user/orderDetail/orderDetail.jsx'));
 
-import Send from './components/email.jsx'
 function App() {
 
   return (
@@ -52,8 +51,6 @@ const RoutesWithConditionalHeader = React.memo(() => {
   return (
     <>
       <Routes>
-        <Route path="/m" element={<Send />}
-        />
         <Route
           path="/"
           element={

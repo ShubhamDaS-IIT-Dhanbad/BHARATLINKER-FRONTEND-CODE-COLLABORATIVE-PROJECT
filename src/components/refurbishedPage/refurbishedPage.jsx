@@ -48,7 +48,6 @@ const RefurbishedPage = () => {
             <RefurbishedNavbar headerTitle={"REFURBISHED PAGE"} />
           </div>
 
-
           {(loading) ? (
             <div className="fallback-loading">
               <Oval height={30} width={30} color="green" secondaryColor="white" ariaLabel="loading" />
