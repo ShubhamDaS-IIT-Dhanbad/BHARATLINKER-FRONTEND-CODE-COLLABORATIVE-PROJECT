@@ -97,7 +97,7 @@ const SearchPage = () => {
                     setShowFilterBy={setShowFilterBy}
                 />
             )}
-
+<div>send mail</div>
             <div id="productSearchPage-footer">
                 <div
                     id="productSearchPage-footer-sortby"

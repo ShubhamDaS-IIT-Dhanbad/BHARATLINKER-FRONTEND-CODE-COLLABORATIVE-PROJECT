@@ -1,5 +1,5 @@
 import React, { Suspense, lazy, useState } from "react";
-import { BrowserRouter as Router, Routes, Route} from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import useUserAuth from './hooks/userAuthHook.jsx';
@@ -28,8 +28,9 @@ const UserOrder = lazy(() => import('./components/user/order/order.jsx'));
 const UserCart = lazy(() => import('./components/user/myCart/myCart.jsx'));
 const UserOrderDetail = lazy(() => import('./components/user/orderDetail/orderDetail.jsx'));
 
+import Send from './components/email.jsx'
 function App() {
- 
+
   return (
     <HelmetProvider>
       <Router>
@@ -38,7 +39,7 @@ function App() {
             <Oval height={30} width={30} color="green" secondaryColor="white" ariaLabel="loading" />
           </div>
         }>
-          <RoutesWithConditionalHeader/>
+          <RoutesWithConditionalHeader />
         </Suspense>
       </Router>
     </HelmetProvider>
@@ -46,15 +47,13 @@ function App() {
 }
 
 const RoutesWithConditionalHeader = React.memo(() => {
-  const [isShopPageLoaded, setShopPageLoaded] = useState(true);
-  const [isProductPageLoaded, setProductPageLoaded] = useState(true);
-  const [isRefurbishedPageLoaded, setRefurbishedPageLoaded] = useState(true);
-
-  const {PrivateRoute,getUserDataFromCookie } = useUserAuth();
+  const { PrivateRoute, getUserDataFromCookie } = useUserAuth();
   const userData = getUserDataFromCookie();
-return (
+  return (
     <>
       <Routes>
+        <Route path="/m" element={<Send />}
+        />
         <Route
           path="/"
           element={
@@ -64,7 +63,7 @@ return (
                 <meta name="description" content="Welcome to Bharat Linker, your one-stop solution for business management." />
                 <meta name="robots" content="index, follow" />
               </Helmet>
-              <HomePage userData={userData}/>
+              <HomePage userData={userData} />
             </>
           }
         />
@@ -77,7 +76,7 @@ return (
                 <meta name="description" content="Login to access your Bharat Linker account and manage your business efficiently." />
                 <meta name="robots" content="noindex, nofollow" />
               </Helmet>
-              <LoginPage userData={userData}/>
+              <LoginPage userData={userData} />
             </>
           }
         />
@@ -90,7 +89,7 @@ return (
                 <title>Search Products - Bharat Linker</title>
                 <meta name="description" content="Search and explore a wide range of products on Bharat Linker." />
               </Helmet >
-              <SearchPage userData={userData} isProductPageLoaded={isProductPageLoaded} setProductPageLoaded={setProductPageLoaded} />
+              <SearchPage userData={userData}/>
             </>
           }
         />
@@ -104,7 +103,7 @@ return (
                 <title>Product Details - Bharat Linker</title>
                 <meta name="description" content="View detailed information about the selected product on Bharat Linker." />
               </Helmet>
-              <SingleProduct userData={userData}/>
+              <SingleProduct userData={userData} />
             </>
           }
         />
@@ -118,7 +117,7 @@ return (
                 <title>Search Shops - Bharat Linker</title>
                 <meta name="description" content="Search and explore various shops on Bharat Linker." />
               </Helmet>
-              <SearchShop userData={userData} isShopPageLoaded={isShopPageLoaded} setShopPageLoaded={setShopPageLoaded} />
+              <SearchShop userData={userData} />
             </>
           }
         />
@@ -132,7 +131,7 @@ return (
                 <title>Shop Details - Bharat Linker</title>
                 <meta name="description" content="Discover detailed information about this shop on Bharat Linker." />
               </Helmet>
-              <SingleShopCard userData={userData}/>
+              <SingleShopCard userData={userData} />
             </>
           }
         />
@@ -147,7 +146,7 @@ return (
                 <title>Refurbished Products - Bharat Linker</title>
                 <meta name="description" content="Explore high-quality refurbished products on Bharat Linker." />
               </Helmet>
-              <RefurbishedPage userData={userData} isRefurbishedPageLoaded={isRefurbishedPageLoaded} setRefurbishedPageLoaded={setRefurbishedPageLoaded} />
+              <RefurbishedPage userData={userData}/>
             </>
           }
         />
@@ -159,7 +158,7 @@ return (
                 <title>Refurbished Details - Bharat Linker</title>
                 <meta name="description" content="Search and explore a wide range of products on Bharat Linker." />
               </Helmet >
-            <SingleRefurbishedProductCard userData={userData}/>
+              <SingleRefurbishedProductCard userData={userData} />
             </>}
         />
         {/* Retailer and User Routes */}
@@ -171,7 +170,7 @@ return (
                 <title>Retailer Dashboard - Bharat Linker</title>
                 <meta name="description" content="Access the retailer dashboard to manage your shop, products, and orders on Bharat Linker." />
               </Helmet>
-              <RetailerRoutes userData={userData}/>
+              <RetailerRoutes userData={userData} />
             </>
           }
         />
@@ -191,7 +190,7 @@ return (
                 <title>User Dashboard - Bharat Linker</title>
                 <meta name="description" content="Access your Bharat Linker user dashboard to manage your account, orders, and more." />
               </Helmet>
-              <User userData={userData}/>
+              <User userData={userData} />
             </PrivateRoute>
           }
         />
@@ -205,7 +204,7 @@ return (
                 <title>User Profile - Bharat Linker</title>
                 <meta name="description" content="View and update your Bharat Linker user profile." />
               </Helmet>
-              <UserProfile userData={userData}/>
+              <UserProfile userData={userData} />
             </PrivateRoute>
           }
         />
@@ -218,7 +217,7 @@ return (
                 <title>Manage Refurbished Products - Bharat Linker</title>
                 <meta name="description" content="View and manage your refurbished product listings on Bharat Linker." />
               </Helmet>
-              <UserProductPageMain userData={userData}/>
+              <UserProductPageMain userData={userData} />
             </PrivateRoute>
           }
         />
@@ -231,7 +230,7 @@ return (
                 <title>Upload Products - Bharat Linker</title>
                 <meta name="description" content="Upload your products for sale on Bharat Linker, including refurbished items." />
               </Helmet>
-              <RefurbishedBooksUploadUser userData={userData}/>
+              <RefurbishedBooksUploadUser userData={userData} />
             </PrivateRoute>
           }
         />
@@ -244,7 +243,7 @@ return (
                 <title>Update Product - Bharat Linker</title>
                 <meta name="description" content="Edit and update the details of your refurbished products on Bharat Linker." />
               </Helmet>
-              <UserUpdateBookModule userData={userData}/>
+              <UserUpdateBookModule userData={userData} />
             </PrivateRoute>
           }
         />
@@ -257,7 +256,7 @@ return (
                 <title>Notifications - Bharat Linker</title>
                 <meta name="description" content="View all your notifications related to account activity and updates." />
               </Helmet>
-              <UserNotification userData={userData}/>
+              <UserNotification userData={userData} />
             </PrivateRoute>
           }
         />
@@ -270,11 +269,11 @@ return (
                 <title>Orders - Bharat Linker</title>
                 <meta name="description" content="View and manage your orders on Bharat Linker." />
               </Helmet>
-              <UserOrder userData={userData}/>
+              <UserOrder userData={userData} />
             </PrivateRoute>
           }
         />
-         <Route
+        <Route
           path="/user/cart"
           element=
           {
@@ -283,7 +282,7 @@ return (
                 <title>Cart - Bharat Linker</title>
                 <meta name="description" content="View and manage your cart on Bharat Linker." />
               </Helmet>
-              <UserCart userData={userData}/>
+              <UserCart userData={userData} />
             </PrivateRoute>
           }
         />
@@ -296,7 +295,7 @@ return (
                 <title>Orders - Bharat Linker</title>
                 <meta name="description" content="Order detail on Bharat Linker." />
               </Helmet>
-              <UserOrderDetail userData={userData}/>
+              <UserOrderDetail userData={userData} />
             </PrivateRoute>
           }
         />

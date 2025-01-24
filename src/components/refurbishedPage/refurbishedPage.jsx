@@ -14,7 +14,7 @@ import { useSearchRefurbishedProductsHook } from '../../hooks/searchRefurbishedH
 
 import './refurbishedPage.css';
 
-const RefurbishedPage = ({ isRefurbishedPageLoaded, setRefurbishedPageLoaded }) => {
+const RefurbishedPage = () => {
   const { executeSearchRefurbished, onLoadMoreRefurbished } = useSearchRefurbishedProductsHook();
 
   const [showSortBy, setShowSortBy] = useState(false);
@@ -40,26 +40,16 @@ const RefurbishedPage = ({ isRefurbishedPageLoaded, setRefurbishedPageLoaded }) 
     if (refurbishedProducts.length === 0) {
       executeSearchRefurbished();
     }
-    const delayTimeout = setTimeout(() => {
-      setRefurbishedPageLoaded(true);
-    }, 800);
-    return () => clearTimeout(delayTimeout);
   }, [updated, selectedBrands, selectedCategories]);
 
   return (
     <>
-      {(!isRefurbishedPageLoaded) ? (
-        <div className="fallback-loading">
-          <Oval height={30} width={30} color="green" secondaryColor="white" ariaLabel="loading" />
-        </div>
-      ) : (
-        <>
           <div id="refurbishedPage-container-top">
             <RefurbishedNavbar headerTitle={"REFURBISHED PAGE"} />
           </div>
 
 
-          {(loading || !isRefurbishedPageLoaded) ? (
+          {(loading) ? (
             <div className="fallback-loading">
               <Oval height={30} width={30} color="green" secondaryColor="white" ariaLabel="loading" />
 
@@ -123,9 +113,7 @@ const RefurbishedPage = ({ isRefurbishedPageLoaded, setRefurbishedPageLoaded }) 
             </div>
           </div>
 
-        </>
-      )
-      }
+        
     </>);
 };
 

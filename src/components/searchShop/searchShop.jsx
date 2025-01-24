@@ -28,8 +28,8 @@ const Shop = () => {
         }
     }, [updated]);
 
-    
-    const skeletons = [1, 2, 3, 4,5,6];
+
+    const skeletons = [1, 2, 3, 4, 5, 6];
     return (
 
 
@@ -39,29 +39,28 @@ const Shop = () => {
                     headerTitle={"SEARCH SHOP"}
                 />
             </div>
-
             {(loading) ? (
                 <div id="skleton-page-grid">
                     {skeletons.map((_, index) => (
-                         <div className="shop-card-container" key={index}>
-                         <div className="shop-card-header">
-                           <Skeleton height={180} width="100%" />
-                         </div>
-                   
-                         <div className="shop-card-details">
-                           <Skeleton width="50%" height={20} className="shop-card-name" />
-                           
-                           <div className="shop-card-info">
-                             <div className="shop-card-divider"></div>
-                   
-                             <div className="shop-card-address-toggle">
-                               <Skeleton width="60%" height={20} />
-                             </div>
-                   
-                             <div className="shop-card-divider"></div>
-                           </div>
-                         </div>
-                       </div>
+                        <div className="shop-card-container" key={index}>
+                            <div className="shop-card-header">
+                                <Skeleton height={180} width="100%" />
+                            </div>
+
+                            <div className="shop-card-details">
+                                <Skeleton width="50%" height={20} className="shop-card-name" />
+
+                                <div className="shop-card-info">
+                                    <div className="shop-card-divider"></div>
+
+                                    <div className="shop-card-address-toggle">
+                                        <Skeleton width="60%" height={20} />
+                                    </div>
+
+                                    <div className="shop-card-divider"></div>
+                                </div>
+                            </div>
+                        </div>
                     ))}
                 </div>
             ) : (
