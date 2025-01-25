@@ -24,7 +24,7 @@ const Home = () => {
                 shopData.registrationStatus === 'rejected' ? '/retailer/rejected' : '/retailer';
             navigate(path);
         } else {
-            navigate('/retailer/login');
+            navigate('/secure/login');
         }
     }, [navigate]);
     useEffect(() => {

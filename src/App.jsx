@@ -17,7 +17,6 @@ const SingleProduct = lazy(() => import('./components/singleProduct/singleProduc
 const ShopProducts = lazy(() => import('./components/shopProducts/shopProducts.jsx'));
 const SingleShopCard = lazy(() => import('./components/singleShop/singleShop.jsx'));
 const SingleRefurbishedProductCard = lazy(() => import('./components/singleRefurbishedProduct/singleRefurbishedProduct.jsx'));
-const RetailerRoutes = lazy(() => import('./components/retailer/retailerRoutes.jsx'));
 const User = lazy(() => import('./components/user/userHome.jsx'));
 const UserProfile = lazy(() => import('./components/user/userProfile/userProfile.jsx'));
 const UserProductPageMain = lazy(() => import('./components/user/productPage/userProductPageMain.jsx'));
@@ -28,16 +27,26 @@ const UserOrder = lazy(() => import('./components/user/order/order.jsx'));
 const UserCart = lazy(() => import('./components/user/myCart/myCart.jsx'));
 const UserOrderDetail = lazy(() => import('./components/user/orderDetail/orderDetail.jsx'));
 
-function App() {
 
+const RetailerRoutes = lazy(() => import('./components/retailer/retailerRoutes.jsx'));
+const RetailerLogin = React.lazy(() => import("./components/retailer/login.jsx"));
+const RetailerRegister = React.lazy(() => import("./components/retailer/register.jsx"));
+
+
+
+// Fallback Loader
+const Loading = () => <div className="fallback-loading">
+  <Oval height={30} width={30} color="green" secondaryColor="white" ariaLabel="loading" />
+</div>;
+
+
+function App() {
   return (
     <HelmetProvider>
       <Router>
-        <Suspense fallback={
-          <div className="fallback-loading">
-            <Oval height={30} width={30} color="green" secondaryColor="white" ariaLabel="loading" />
-          </div>
-        }>
+        <Suspense fallback={<div className="fallback-loading">
+  <Oval height={30} width={30} color="green" secondaryColor="white" ariaLabel="loading" />
+</div>}>
           <RoutesWithConditionalHeader />
         </Suspense>
       </Router>
@@ -86,7 +95,7 @@ const RoutesWithConditionalHeader = React.memo(() => {
                 <title>Search Products - Bharat Linker</title>
                 <meta name="description" content="Search and explore a wide range of products on Bharat Linker." />
               </Helmet >
-              <SearchPage userData={userData}/>
+              <SearchPage userData={userData} />
             </>
           }
         />
@@ -143,7 +152,7 @@ const RoutesWithConditionalHeader = React.memo(() => {
                 <title>Refurbished Products - Bharat Linker</title>
                 <meta name="description" content="Explore high-quality refurbished products on Bharat Linker." />
               </Helmet>
-              <RefurbishedPage userData={userData}/>
+              <RefurbishedPage userData={userData} />
             </>
           }
         />
@@ -158,6 +167,55 @@ const RoutesWithConditionalHeader = React.memo(() => {
               <SingleRefurbishedProductCard userData={userData} />
             </>}
         />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <Route
+          path="/secure/login"
+          element={
+            <>
+              <Helmet>
+                <title>Retailer Login - BharatLinker</title>
+                <meta
+                  name="description"
+                  content="Login to your BharatLinker Retailer account and manage your business effectively."
+                />
+              </Helmet>
+              <RetailerLogin />
+            </>
+          }
+        />
+        <Route
+          path="/secure/register"
+          element={
+            <>
+              <Helmet>
+                <title>Register as a Retailer - BharatLinker</title>
+                <meta
+                  name="description"
+                  content="Register as a retailer on BharatLinker to expand your business opportunities."
+                />
+              </Helmet>
+              <RetailerRegister />
+            </>
+          }
+        />
         {/* Retailer and User Routes */}
         <Route
           path="/*"
@@ -167,10 +225,15 @@ const RoutesWithConditionalHeader = React.memo(() => {
                 <title>Retailer Dashboard - Bharat Linker</title>
                 <meta name="description" content="Access the retailer dashboard to manage your shop, products, and orders on Bharat Linker." />
               </Helmet>
-              <RetailerRoutes userData={userData} />
+              <RetailerRoutes />
             </>
           }
         />
+
+
+
+
+
 
 
 

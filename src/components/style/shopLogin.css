@@ -211,6 +211,16 @@
 }
 
 
+
+
+
+
+
+
+
+
+
+
 .otp-inputs{
   display: flex;margin-top: 10px;gap: 5px;
   justify-content: center;align-items: center;
@@ -222,6 +232,26 @@
   justify-content: center;align-items: center;
   text-align: center;border: 1px solid black;
 }
+.otp-input:focus{outline: none;
+  border: none;scale: 1;
+}
+.otp-input-span{
+  width: 4px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 .retailer-login-verify-otp-button{
   border: 2px solid rgb(91, 228, 168);

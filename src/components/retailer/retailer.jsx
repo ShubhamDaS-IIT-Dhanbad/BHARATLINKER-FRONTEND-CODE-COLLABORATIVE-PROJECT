@@ -28,7 +28,7 @@ function UserHome() {
   const handleLogout = async () => {
     try {
         Cookies.remove('BharatLinkerShopData');
-        navigate('/retailer/login');
+        navigate('/secure/login');
         console.log('Logged out successfully!');
     } catch (error) {
       console.error('Logout failed:', error.message);

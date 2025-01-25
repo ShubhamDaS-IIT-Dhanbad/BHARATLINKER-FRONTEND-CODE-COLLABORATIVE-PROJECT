@@ -111,14 +111,22 @@ const cleanupUploadedImages = async (uploadedImages) => {
 
 
 
-const sendOtp = async (phoneNumber) => {
+const sendOtp = async (contactInfo) => {
     try {
-        const token = await account.createPhoneToken(ID.unique(), `+91${phoneNumber}`);
+        let token;
+        if (/^[0-9]{10}$/.test(contactInfo)) {
+            token = await account.createPhoneToken(ID.unique(), `+91${contactInfo}`);
+        } else if (/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(contactInfo)) {
+            token = await account.createEmailToken(ID.unique(), contactInfo);
+        } else {
+            throw new Error("Invalid phone number or email format.");
+        }
         return token.userId;
     } catch (error) {
         throw new Error(`Failed to send OTP: ${error.message}`);
     }
 };
+
 
 const createSession = async (userId, otpCode) => {
     try {
@@ -147,24 +155,40 @@ const logout = async (sessionId) => {
     }
 };
 
-const registerShop = async (shopName, phone) => {
+const registerShop = async (shopName, contactInfo) => {
     try {
-        const response = await databases.listDocuments(
-            conf.appwriteShopsDatabaseId,
-            conf.appwriteShopsCollectionId,
-            [Query.equal('phoneNumber', `+91${phone}`)]
-        );
+        let response;
+
+        if (/^[0-9]{10}$/.test(contactInfo)) {
+            // If it's a phone number
+            response = await databases.listDocuments(
+                conf.appwriteShopsDatabaseId,
+                conf.appwriteShopsCollectionId,
+                [Query.equal('phoneNumber', `+91${contactInfo}`)]
+            );
+        } else if (/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(contactInfo)) {
+            // If it's an email address
+            response = await databases.listDocuments(
+                conf.appwriteShopsDatabaseId,
+                conf.appwriteShopsCollectionId,
+                [Query.equal('email', contactInfo)]
+            );
+        } else {
+            throw new Error("Invalid phone number or email format.");
+        }
 
         if (response.total > 0) {
-            throw new Error(`Shop with phone number ${phone} already exists.`);
+            throw new Error(`Shop with ${contactInfo} already exists.`);
         }
+
         const result = await databases.createDocument(
             conf.appwriteShopsDatabaseId,
             conf.appwriteShopsCollectionId,
             'unique()',
             {
                 shopName: shopName,
-                phoneNumber: `+91${phone}`
+                phoneNumber: /^[0-9]{10}$/.test(contactInfo) ? `+91${contactInfo}` : undefined,
+                email: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(contactInfo) ? contactInfo : undefined
             }
         );
 
@@ -174,17 +198,34 @@ const registerShop = async (shopName, phone) => {
     }
 };
 
-const getShopData = async (phoneNumber) => {
+
+
+
+const getShopData = async (contact) => {
     try {
+        // Check if the contact is a phone number or an email
+        const isPhone = /^\d{10}$/.test(contact);  // Check if it's a phone number
+        const isEmail = /\S+@\S+\.\S+/.test(contact);  // Check if it's a valid email
+
+        if (!isPhone && !isEmail) {
+            throw new Error('Please provide a valid phone number or email.');
+        }
+
+        // Query the database based on the contact type
+        const query = isPhone 
+            ? Query.equal('phoneNumber', contact)  // If phone number, query by phoneNumber
+            : Query.equal('email', contact);  // If email, query by email
+
         const response = await databases.listDocuments(
             conf.appwriteShopsDatabaseId,
             conf.appwriteShopsCollectionId,
-            [Query.equal('phoneNumber', phoneNumber)]
+            [query]
         );
+
         if (response.total > 0) {
             return response.documents[0];
         } else {
-            throw new Error('Shop not found for the given phone number.');
+            throw new Error('Shop not found for the given contact.');
         }
     } catch (error) {
         console.error(`Failed to fetch shop data: ${error.message}`);
