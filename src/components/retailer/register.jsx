@@ -83,7 +83,7 @@ function SignUpForm() {
             {!otpSent ? (
                 <>
                     <div className="retailer-login-top-header">
-                        <FaArrowLeft size={25} onClick={() => navigate('/secure/login')} style={{ position: 'fixed', left: '10px' }} />
+                        <FaArrowLeft size={25} onClick={() => navigate('/')} style={{ position: 'fixed', left: '10px' }} />
                         BHARAT | LINKER
                     </div>
                     <div className="retailer-login-div-parent">

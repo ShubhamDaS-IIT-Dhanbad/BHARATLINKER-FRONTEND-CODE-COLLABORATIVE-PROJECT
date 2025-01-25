@@ -34,19 +34,14 @@ const RetailerRegister = React.lazy(() => import("./components/retailer/register
 
 
 
-// Fallback Loader
-const Loading = () => <div className="fallback-loading">
-  <Oval height={30} width={30} color="green" secondaryColor="white" ariaLabel="loading" />
-</div>;
-
-
 function App() {
   return (
     <HelmetProvider>
       <Router>
-        <Suspense fallback={<div className="fallback-loading">
-  <Oval height={30} width={30} color="green" secondaryColor="white" ariaLabel="loading" />
-</div>}>
+        <Suspense fallback={
+          <div className="fallback-loading">
+            <Oval height={30} width={30} color="green" secondaryColor="white" ariaLabel="loading" />
+          </div>}>
           <RoutesWithConditionalHeader />
         </Suspense>
       </Router>

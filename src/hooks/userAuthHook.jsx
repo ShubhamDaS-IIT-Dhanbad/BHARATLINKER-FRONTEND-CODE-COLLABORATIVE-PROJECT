@@ -35,7 +35,7 @@ const useUserAuth = () => {
                 navigate('/');
             }
         }
-    }, [window.location]);
+    }, []);
 
     const getUserDataFromCookie = () => {
         const storedData = Cookies.get('BharatLinkerUserData');
