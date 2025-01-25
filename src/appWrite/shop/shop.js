@@ -203,18 +203,13 @@ const registerShop = async (shopName, contactInfo) => {
 
 const getShopData = async (contact) => {
     try {
+        const isPhone = /^\d{10}$/.test(contact);
         // Check if the contact is a phone number or an email
-        const isPhone = /^\d{10}$/.test(contact);  // Check if it's a phone number
-        const isEmail = /\S+@\S+\.\S+/.test(contact);  // Check if it's a valid email
-
-        if (!isPhone && !isEmail) {
-            throw new Error('Please provide a valid phone number or email.');
-        }
-
+        const cont = isPhone ? `+91${contact}` : contact;
         // Query the database based on the contact type
         const query = isPhone 
-            ? Query.equal('phoneNumber', contact)  // If phone number, query by phoneNumber
-            : Query.equal('email', contact);  // If email, query by email
+            ? Query.equal('phoneNumber', cont)  // If phone number, query by phoneNumber
+            : Query.equal('email', cont);  // If email, query by email
 
         const response = await databases.listDocuments(
             conf.appwriteShopsDatabaseId,

@@ -8,23 +8,25 @@ import { sendOtp, createSession, getShopData } from '../../appWrite/shop/shop.js
 import { Oval } from 'react-loader-spinner';
 
 import OTPInput from 'react-otp-input';
+import { ErrorPopup } from './popups/popUp.jsx';
 
 import '../style/shopLogin.css';
 import '../style/userLogin.css';
+
+const i2 = 'https://res.cloudinary.com/demc9mecm/image/upload/v1737378115/d7xgicjpub5ag6udeisd.png';
 
 function LoginForm() {
     const navigate = useNavigate();
     const [phoneOrEmail, setPhoneOrEmail] = useState('');
     const [isEmail, setIsEmail] = useState(false);
     const [otpSent, setOtpSent] = useState(false);
-    const [otp, setOtp] = useState(new Array(6).fill(''));
+    const [otp, setOtp] = useState();
     const [timer, setTimer] = useState(30);
     const [isResendDisabled, setIsResendDisabled] = useState(true);
     const [userId, setUserId] = useState(null);
     const [loading, setLoading] = useState(false);
     const [loadingVerification, setLoadingVerification] = useState(false);
-
-    const [loadingPage, setLoadingPage] = useState(true);
+    const [error, setError] = useState(null); // Error handling state
 
     const handlePhoneOrEmailChange = (e) => {
         const value = e.target.value;
@@ -38,38 +40,19 @@ function LoginForm() {
 
     useEffect(() => {
         let countdown;
-        let pageLoadTimeout;
-
         if (timer > 0) {
             countdown = setInterval(() => setTimer((prev) => prev - 1), 1000);
         } else {
             setIsResendDisabled(false);
         }
-
-        // Simulate page load completion after 1 second
-        pageLoadTimeout = setTimeout(() => {
-            setLoadingPage(false);
-
-            // Check shopData after setting loadingPage
-            const shopData = Cookies.get('BharatLinkerShopData');
-            if (shopData) {
-                navigate('/retailer');
-            }
-        }, 1000);
-
-        // Cleanup intervals and timeouts
-        return () => {
-            clearInterval(countdown);
-            clearTimeout(pageLoadTimeout);
-        };
-    }, [timer, navigate]);
+        return () => clearInterval(countdown);
+    }, [timer]);
 
     const sendOTP = async () => {
         setLoading(true);
         try {
-            // Check if the contact is a valid phone number or email
-            const isPhone = /^\d{10}$/.test(phoneOrEmail);  // Check if it's a phone number
-            const isEmail = /\S+@\S+\.\S+/.test(phoneOrEmail);  // Check if it's a valid email
+            const isPhone = /^\d{10}$/.test(phoneOrEmail);
+            const isEmail = /\S+@\S+\.\S+/.test(phoneOrEmail);
 
             if (!isPhone && !isEmail) {
                 alert("Please enter a valid phone number or email.");
@@ -77,15 +60,15 @@ function LoginForm() {
                 return;
             }
 
-            // Send OTP based on type (phone or email)
             const response = isPhone
-                ? await sendOtp(phoneOrEmail)  // Phone number OTP
-                : await sendOtp(phoneOrEmail, true);  // Email OTP (second parameter 'true' for email)
+                ? await sendOtp(phoneOrEmail)
+                : await sendOtp(phoneOrEmail, true);
 
             setUserId(response);
             setOtpSent(true);
             setIsResendDisabled(true);
             setTimer(30);
+            setError(null); // Reset any error when OTP is sent
         } catch (error) {
             console.error(`Failed to send OTP: ${error.message}`);
             alert('Failed to send OTP. Please try again.');
@@ -101,6 +84,7 @@ function LoginForm() {
             const sessionId = await createSession(userId, otpCode);
             const contact = isPhone ? `+91${phoneOrEmail}` : phoneOrEmail;
             const shopData = await getShopData(contact);
+
             shopData.sessionId = sessionId;
             Cookies.set('BharatLinkerShopData', JSON.stringify(shopData), { expires: 7 });
 
@@ -108,18 +92,17 @@ function LoginForm() {
                 navigate('/retailer/pending');
             } else if (shopData.registrationStatus === 'rejected') {
                 navigate('/retailer/rejected');
-            } else {
+            } else if (shopData.registrationStatus === 'approved') {
                 navigate('/retailer');
             }
         } catch (err) {
             console.error(`Failed to verify OTP: ${err.message}`);
-            alert('Invalid OTP. Please try again.');
-            setOtp(new Array(6).fill(''));
+            setError("Shop with this phone/email already exists.");
+            setOtp(new Array(6).fill('')); // Reset OTP input on error
         } finally {
             setLoadingVerification(false);
         }
     };
-
 
     const renderLoginForm = () => (
         <>
@@ -131,11 +114,14 @@ function LoginForm() {
                 <div className="retailer-login-div" style={{ borderColor: 'rgb(3, 223, 193)' }}>Login</div>
                 <div className="retailer-login-register-div" onClick={() => navigate('/secure/register')}>Register</div>
             </div>
+
+            <img className='retailer-login-img' src={i2} alt="Retailer Login" />
             <div className="signup-container-text">
                 <div>WELCOME</div>
                 <div style={{ marginTop: "-7px" }}></div>
                 <div style={{ marginTop: "-7px" }}>OFFER THE BEST TO YOUR COMMUNITY!</div>
             </div>
+
             <p className="retailer-signup-container-p">
                 Add your phone number or email. We'll send you a verification code so we know you're real.
             </p>
@@ -188,7 +174,11 @@ function LoginForm() {
                 }}
                 numInputs={6}
                 renderSeparator={<span className='otp-input-span'> </span>}
-                renderInput={(props) => <input className='otp-input' {...props} />}
+                renderInput={(props) =>
+                    <input
+                        {...props}
+                        className="otp-input"
+                    />}
                 shouldAutoFocus={true}
             />
             {loadingVerification ? (
@@ -207,6 +197,7 @@ function LoginForm() {
                     </button>
                 </>
             )}
+            {error && <ErrorPopup error={error} />}
         </div>
     );
 

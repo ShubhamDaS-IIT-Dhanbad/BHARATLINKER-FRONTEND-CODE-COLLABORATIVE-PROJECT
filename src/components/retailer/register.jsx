@@ -5,7 +5,12 @@ import OTPInput from 'react-otp-input';
 import { FaArrowLeft } from 'react-icons/fa';
 import { FaCircleExclamation } from 'react-icons/fa6';
 import { registerShop, sendOtp, createSession, deleteSession } from '../../appWrite/shop/shop.js';
-import { ErrorPopup, SuccessPopup } from './popups/popUp.jsx';  // Import the popups
+import { ErrorPopup} from './popups/popUp.jsx';
+
+import '../style/shopLogin.css';
+import '../style/userLogin.css';
+
+const i2='https://res.cloudinary.com/demc9mecm/image/upload/v1737378115/d7xgicjpub5ag6udeisd.png';
 
 function SignUpForm() {
     const navigate = useNavigate();
@@ -36,7 +41,7 @@ function SignUpForm() {
 
     const sendOTP = async () => {
         setLoading(true);
-        setError(''); // Reset any previous error
+        setError('');
         try {
             const isPhone = /^\d{10}$/.test(contact);
             const response = isPhone ? await sendOtp(contact) : await sendOtp(contact, true);
@@ -55,7 +60,7 @@ function SignUpForm() {
 
     const verifyOTP = async (otpCode) => {
         setLoadingVerification(true);
-        setError(''); // Reset any previous error
+        setError('');
         try {
             const session = await createSession(userId, otpCode);
             const sessionId = session.$id;
@@ -87,7 +92,7 @@ function SignUpForm() {
                         <div className="retailer-login-div" onClick={() => navigate('/secure/login')}>Login</div>
                         <div className="retailer-login-register-div" style={{ borderColor: "rgb(162, 128, 249)" }}>Register</div>
                     </div>
-
+                    <img className='retailer-login-img' src={i2} />
                     <div className="signup-container-text">
                         <div>OPEN SHOP HERE</div>
                         <div style={{ marginTop: "-7px" }}></div>
