@@ -204,18 +204,26 @@ const registerShop = async (shopName, contactInfo) => {
 const getShopData = async (contact) => {
     try {
         const isPhone = /^\d{10}$/.test(contact);
+        let response;
+        
         // Check if the contact is a phone number or an email
-        const cont = isPhone ? `+91${contact}` : contact;
-        // Query the database based on the contact type
-        const query = isPhone 
-            ? Query.equal('phoneNumber', cont)  // If phone number, query by phoneNumber
-            : Query.equal('email', cont);  // If email, query by email
-
-        const response = await databases.listDocuments(
-            conf.appwriteShopsDatabaseId,
-            conf.appwriteShopsCollectionId,
-            [query]
-        );
+        if (isPhone) {
+            // If it's a phone number
+            response = await databases.listDocuments(
+                conf.appwriteShopsDatabaseId,
+                conf.appwriteShopsCollectionId,
+                [Query.equal('phoneNumber', `+91${contact}`)]
+            );
+        } else if (/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(contact)) {
+            // If it's an email address
+            response = await databases.listDocuments(
+                conf.appwriteShopsDatabaseId,
+                conf.appwriteShopsCollectionId,
+                [Query.equal('email', contact)]
+            );
+        } else {
+            throw new Error("Invalid phone number or email format.");
+        }
 
         if (response.total > 0) {
             return response.documents[0];
@@ -227,7 +235,6 @@ const getShopData = async (contact) => {
         throw error;
     }
 };
-
 
 
 const updateShopData = async (shopId, toDeleteImagesUrls, updatedData, newFiles) => {

@@ -14,8 +14,6 @@ import '../style/shopLogin.css';
 import '../style/userLogin.css';
 import './style/auth.css'
 
-const i2 = 'https://res.cloudinary.com/demc9mecm/image/upload/v1737378115/d7xgicjpub5ag6udeisd.png';
-
 function LoginForm() {
     const navigate = useNavigate();
     const [phoneOrEmail, setPhoneOrEmail] = useState('');
@@ -27,7 +25,7 @@ function LoginForm() {
     const [userId, setUserId] = useState(null);
     const [loading, setLoading] = useState(false);
     const [loadingVerification, setLoadingVerification] = useState(false);
-    const [error, setError] = useState(null); // Error handling state
+    const [error, setError] = useState(null);
 
     const handlePhoneOrEmailChange = (e) => {
         const value = e.target.value;
@@ -81,9 +79,8 @@ function LoginForm() {
     const verifyOTP = async (otpCode) => {
         setLoadingVerification(true);
         try {
-            const isPhone = /^\d{10}$/.test(phoneOrEmail);
             const sessionId = await createSession(userId, otpCode);
-            const contact = isPhone ? `+91${phoneOrEmail}` : phoneOrEmail;
+            const contact =  phoneOrEmail;
             const shopData = await getShopData(contact);
 
             shopData.sessionId = sessionId;

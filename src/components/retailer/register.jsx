@@ -10,8 +10,6 @@ import { ErrorPopup } from './popups/popUp.jsx';
 import '../style/shopLogin.css';
 import '../style/userLogin.css';
 
-const i2 = 'https://res.cloudinary.com/demc9mecm/image/upload/v1737378115/d7xgicjpub5ag6udeisd.png';
-
 function SignUpForm() {
     const navigate = useNavigate();
     const [otp, setOtp] = useState('');
