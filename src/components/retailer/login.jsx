@@ -177,6 +177,7 @@ function LoginForm() {
                 renderSeparator={<span className='otp-input-span'> </span>}
                 renderInput={(props) =>
                     <input
+                        type='number'
                         {...props}
                         className="otp-input"
                     />}
