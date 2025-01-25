@@ -162,7 +162,7 @@ function SignUpForm() {
                         renderSeparator={<span className='otp-input-span'> </span>}
                         renderInput={(props) => (
                             <input
-                                type='text'  // Use text to allow numeric input, type 'number' can cause issues with some browsers
+                                type="number" // Use text to allow numeric input, type 'number' can cause issues with some browsers
                                 inputMode='numeric'  // This ensures the numeric keypad appears on mobile
                                 pattern='\d*'  // Ensures only numbers can be entered
                                 {...props}
