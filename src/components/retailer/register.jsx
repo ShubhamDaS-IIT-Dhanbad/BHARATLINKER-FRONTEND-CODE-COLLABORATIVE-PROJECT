@@ -85,14 +85,14 @@ function SignUpForm() {
             {!otpSent ? (
                 <>
                     <div className="retailer-login-top-header">
-                        <FaArrowLeft size={25} onClick={() => navigate('/')} style={{ position: 'fixed', left: '10px' }} />
+                        <FaArrowLeft size={25} onClick={() => navigate('/secure/login')} style={{ position: 'fixed', left: '10px' }} />
                         BHARAT | LINKER
                     </div>
                     <div className="retailer-login-div-parent">
                         <div className="retailer-login-div" onClick={() => navigate('/secure/login')}>Login</div>
                         <div className="retailer-login-register-div" style={{ borderColor: "rgb(162, 128, 249)" }}>Register</div>
                     </div>
-                    <img className='retailer-login-img' src={i2} />
+                    
                     <div className="signup-container-text">
                         <div>OPEN SHOP HERE</div>
                         <div style={{ marginTop: "-7px" }}></div>

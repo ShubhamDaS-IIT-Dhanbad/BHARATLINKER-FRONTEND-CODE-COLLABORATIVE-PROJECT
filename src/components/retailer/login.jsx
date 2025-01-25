@@ -116,8 +116,7 @@ function LoginForm() {
                 <div className="retailer-login-register-div" onClick={() => navigate('/secure/register')}>Register</div>
             </div>
 
-            <img className='auth-login-img' src={i2} alt="Retailer Login" />
-            <div className="signup-container-text">
+             <div className="signup-container-text">
                 <div>WELCOME</div>
                 <div style={{ marginTop: "-7px" }}></div>
                 <div style={{ marginTop: "-7px" }}>OFFER THE BEST TO YOUR COMMUNITY!</div>
