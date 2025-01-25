@@ -5,12 +5,12 @@ import OTPInput from 'react-otp-input';
 import { FaArrowLeft } from 'react-icons/fa';
 import { FaCircleExclamation } from 'react-icons/fa6';
 import { registerShop, sendOtp, createSession, deleteSession } from '../../appWrite/shop/shop.js';
-import { ErrorPopup} from './popups/popUp.jsx';
+import { ErrorPopup } from './popups/popUp.jsx';
 
 import '../style/shopLogin.css';
 import '../style/userLogin.css';
 
-const i2='https://res.cloudinary.com/demc9mecm/image/upload/v1737378115/d7xgicjpub5ag6udeisd.png';
+const i2 = 'https://res.cloudinary.com/demc9mecm/image/upload/v1737378115/d7xgicjpub5ag6udeisd.png';
 
 function SignUpForm() {
     const navigate = useNavigate();
@@ -160,14 +160,18 @@ function SignUpForm() {
                         }}
                         numInputs={6}
                         renderSeparator={<span className='otp-input-span'> </span>}
-                        renderInput={(props) =>
+                        renderInput={(props) => (
                             <input
-                             type='number'
+                                type='text'  // Use text to allow numeric input, type 'number' can cause issues with some browsers
+                                inputMode='numeric'  // This ensures the numeric keypad appears on mobile
+                                pattern='\d*'  // Ensures only numbers can be entered
                                 {...props}
                                 className="otp-input"
-                            />}
+                            />
+                        )}
                         shouldAutoFocus={true}
                     />
+
                     {loadingVerification ? (
                         <div className="loader-container" style={{ margin: "20px" }}>
                             <Oval height={24} width={24} color="rgb(162, 128, 249)" secondaryColor="gray" ariaLabel="loading" />

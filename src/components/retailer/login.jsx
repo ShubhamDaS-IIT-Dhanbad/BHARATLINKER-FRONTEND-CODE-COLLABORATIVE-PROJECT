@@ -175,14 +175,18 @@ function LoginForm() {
                 }}
                 numInputs={6}
                 renderSeparator={<span className='otp-input-span'> </span>}
-                renderInput={(props) =>
+                renderInput={(props) => (
                     <input
-                        type='number'
+                        type='text'  // Use text to allow numeric input, type 'number' can cause issues with some browsers
+                        inputMode='numeric'  // This ensures the numeric keypad appears on mobile
+                        pattern='\d*'  // Ensures only numbers can be entered
                         {...props}
                         className="otp-input"
-                    />}
+                    />
+                )}
                 shouldAutoFocus={true}
             />
+
             {loadingVerification ? (
                 <div className="loader-container" style={{ margin: "20px" }}>
                     <Oval height={24} width={24} color="rgb(3, 223, 193)" secondaryColor="gray" ariaLabel="loading" />
