@@ -12,6 +12,7 @@ import { ErrorPopup } from './popups/popUp.jsx';
 
 import '../style/shopLogin.css';
 import '../style/userLogin.css';
+import './style/auth.css'
 
 const i2 = 'https://res.cloudinary.com/demc9mecm/image/upload/v1737378115/d7xgicjpub5ag6udeisd.png';
 
@@ -105,7 +106,7 @@ function LoginForm() {
     };
 
     const renderLoginForm = () => (
-        <>
+        <div className="retailer-login">
             <div className="retailer-login-top-header">
                 <FaArrowLeft size={25} onClick={() => navigate('/')} className="retailer-login-back-arrow" />
                 BHARAT | LINKER
@@ -115,7 +116,7 @@ function LoginForm() {
                 <div className="retailer-login-register-div" onClick={() => navigate('/secure/register')}>Register</div>
             </div>
 
-            <img className='retailer-login-img' src={i2} alt="Retailer Login" />
+            <img className='auth-login-img' src={i2} alt="Retailer Login" />
             <div className="signup-container-text">
                 <div>WELCOME</div>
                 <div style={{ marginTop: "-7px" }}></div>
@@ -149,7 +150,7 @@ function LoginForm() {
                 By providing my phone number or email, I hereby agree and accept the{' '}
                 <a href="#terms">Terms of Service</a> and <a href="#privacy">Privacy Policy</a>.
             </p>
-        </>
+        </div>
     );
 
     const renderOtpVerificationForm = () => (
