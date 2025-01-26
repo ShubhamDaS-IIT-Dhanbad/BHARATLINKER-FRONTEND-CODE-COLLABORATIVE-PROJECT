@@ -164,7 +164,7 @@ const registerShop = async (shopName, contactInfo) => {
             response = await databases.listDocuments(
                 conf.appwriteShopsDatabaseId,
                 conf.appwriteShopsCollectionId,
-                [Query.equal('phoneNumber', `+91${contactInfo}`)]
+                [Query.equal('phoneNumber', `${contactInfo}`)]
             );
         } else if (/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(contactInfo)) {
             // If it's an email address
@@ -187,7 +187,7 @@ const registerShop = async (shopName, contactInfo) => {
             'unique()',
             {
                 shopName: shopName,
-                phoneNumber: /^[0-9]{10}$/.test(contactInfo) ? `+91${contactInfo}` : undefined,
+                phoneNumber: /^[0-9]{10}$/.test(contactInfo) ? `${contactInfo}` : undefined,
                 email: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(contactInfo) ? contactInfo : undefined
             }
         );
@@ -212,7 +212,7 @@ const getShopData = async (contact) => {
             response = await databases.listDocuments(
                 conf.appwriteShopsDatabaseId,
                 conf.appwriteShopsCollectionId,
-                [Query.equal('phoneNumber', `+91${contact}`)]
+                [Query.equal('phoneNumber', `${contact}`)]
             );
         } else if (/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(contact)) {
             // If it's an email address

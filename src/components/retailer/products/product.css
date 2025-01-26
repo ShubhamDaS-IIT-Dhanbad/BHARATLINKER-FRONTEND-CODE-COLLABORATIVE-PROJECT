@@ -13,8 +13,8 @@
     width: 100vw;
     z-index: 999;
     
-    background-color: #1A1A2E;
-    color: #ffffff;
+    background-color: #ffffff;
+    color: #000000;
 }
 
 .retailer-product-page-header-upper {
@@ -29,7 +29,7 @@
 
 .retailer-product-page-left-icon {
     margin-left: 4px;
-    color: white;
+    color: rgb(0, 0, 0);
 }
 
 .retailer-product-page-header-inner {
@@ -71,7 +71,7 @@
     align-items: center;
     background-color: transparent;
     border: 1px solid #EB3678;
-    border-radius: 11px;color: white;
+    border-radius: 11px;color: rgb(0, 0, 0);
     width: 96vw;
     height: 41px;
 }
@@ -85,7 +85,7 @@
 /* Search Input */
 .retailer-product-page-search-input {
     border: none;
-    color: #ffffff;
+    color: #000000;
     font-size: 12px;
     padding-left: 10px;
     flex-grow: 1;
@@ -97,7 +97,7 @@
 /* Autofill Styles for Chrome, Edge, and Safari */
 .retailer-product-page-search-input:-webkit-autofill {
     background-color: #fff !important;
-    color: #ffffff !important;
+    color: #000000 !important;
     -webkit-box-shadow: 0 0 0px 1000px #fff inset !important;
     box-shadow: 0 0 0px 1000px #fff inset !important;
 }
@@ -128,8 +128,8 @@
     justify-content: center;
     position:relative;margin-top: 70px;
    
-    background-color: #1A1A2E;
-    color: #ffffff;
+    background-color: #ffffff;
+    color: #000000;
     padding-bottom: 20px;
    
 }

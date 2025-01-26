@@ -157,7 +157,8 @@
     width: 85vw;
     max-width: 85vw;
     padding: 10px;
-    border-radius: 10px; white-space: pre;
+    border-radius: 10px; 
+    white-space: pre-wrap 
 }
 
 .user-refurbished-product-book-module-upload-form-textarea::placeholder {

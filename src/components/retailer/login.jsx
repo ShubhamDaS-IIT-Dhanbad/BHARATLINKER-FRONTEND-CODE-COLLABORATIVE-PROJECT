@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
 import { FaCircleExclamation } from 'react-icons/fa6';
-import Cookies from 'js-cookie';
 
 import { sendOtp, createSession, getShopData } from '../../appWrite/shop/shop.js';
 import { Oval } from 'react-loader-spinner';

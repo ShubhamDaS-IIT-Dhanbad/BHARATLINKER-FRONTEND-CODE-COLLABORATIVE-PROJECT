@@ -14,9 +14,7 @@ import { SlLocationPin } from 'react-icons/sl';
 import { MdMyLocation } from 'react-icons/md';
 import { Oval } from 'react-loader-spinner';
 import { IoSearch } from 'react-icons/io5';
-import { FaRegSave } from "react-icons/fa";
 
-import { FaRegEdit } from "react-icons/fa";
 import { BiMessageSquareEdit } from "react-icons/bi";
 import useLocationFromCookie from '../../../hooks/useLocationFromCookie.jsx';
 
@@ -79,7 +77,6 @@ function shopReducer(state, action) {
 
 
 const ShopManager = ({ retailerData }) => {
-  console.log(retailerData)
   const [state, dispatch] = useReducer(shopReducer, initialState);
 
   const fetchCurrentLocationHook = async () => {
@@ -172,8 +169,8 @@ const ShopManager = ({ retailerData }) => {
     if (file) {
       const updatedImages = [...state.images];
       updatedImages[index] = file;
-      
-    dispatch({ type: 'SET_IMAGES', payload: updatedImages });
+
+      dispatch({ type: 'SET_IMAGES', payload: updatedImages });
     }
   };
 
@@ -225,7 +222,7 @@ const ShopManager = ({ retailerData }) => {
         state.toDeleteImagesUrls,
         state.changedFields,
         newFiles
-      );console.log(retailerDataP,"pppppppp")
+      ); console.log(retailerDataP, "pppppppp")
       Cookies.set('BharatLinkerShopData', JSON.stringify(retailerDataP), { expires: 7, path: '' });
       dispatch({ type: 'SET_CHANGED_FIELDS', payload: {} });
     } catch (error) {
@@ -368,6 +365,21 @@ const ShopManager = ({ retailerData }) => {
                     {key === 'description' ? (
                       <textarea
                         name={key}
+                        placeholder="
+(# HEADING) AND (* DETAILS)
+Mention any notable issues or refurbishments.Be clear and concise for better understanding.
+
+Example:-
+#Condition: 
+    *Refurbished - Like New
+#Features: 
+    *16GB RAM, 512GB SSD
+#Includes:
+    *Original charger and carrying case
+#Issues: 
+    *Minor scratches on the outer casing
+                        "
+                        
                         value={state.formData[key]}
                         onChange={handleInputChange}
                         disabled={!state.isEditing[key]}
@@ -496,50 +508,50 @@ const ShopManager = ({ retailerData }) => {
 
             {/* Image Upload */}
             <div className='retailer-profile-shop-image'>
-  {state.images.map((image, index) => (
-    <div className='retailer-profile-shop-image-divs' key={index}>
-      {image ? (
-        // Display image if it's a URL or a file
-        <>
-          <img
-            src={typeof image === 'string' ? image : URL.createObjectURL(image)}
-            className='retailer-profile-shop-image-divs-img'
-            alt={`Shop Image ${index + 1}`}
-          />
-          <button
-            type="button"
-            className="retailer-profile-shop-image-label"
-            onClick={() => removeImage(index)}
-            disabled={!image}
-          >
-            Remove
-          </button>
-        </>
-      ) : (
-        <>
-          <img
-            src={i1}
-            className='retailer-profile-shop-image-divs-img'
-            alt={`Shop Image ${index + 1}`}
-          />
-          <input
-            className="retailer-profile-shop-image-divs-chose-file"
-            type="file"
-            accept="image/*"
-            id={`file-input-${index}`}
-            onChange={(e) => handleImageChange(index, e.target.files[0])}
-          />
-          <label
-            className="retailer-profile-shop-image-label"
-            htmlFor={`file-input-${index}`}
-          >
-            Choose File
-          </label>
-        </>
-      )}
-    </div>
-  ))}
-</div>
+              {state.images.map((image, index) => (
+                <div className='retailer-profile-shop-image-divs' key={index}>
+                  {image ? (
+                    // Display image if it's a URL or a file
+                    <>
+                      <img
+                        src={typeof image === 'string' ? image : URL.createObjectURL(image)}
+                        className='retailer-profile-shop-image-divs-img'
+                        alt={`Shop Image ${index + 1}`}
+                      />
+                      <button
+                        type="button"
+                        className="retailer-profile-shop-image-label"
+                        onClick={() => removeImage(index)}
+                        disabled={!image}
+                      >
+                        Remove
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <img
+                        src={i1}
+                        className='retailer-profile-shop-image-divs-img'
+                        alt={`Shop Image ${index + 1}`}
+                      />
+                      <input
+                        className="retailer-profile-shop-image-divs-chose-file"
+                        type="file"
+                        accept="image/*"
+                        id={`file-input-${index}`}
+                        onChange={(e) => handleImageChange(index, e.target.files[0])}
+                      />
+                      <label
+                        className="retailer-profile-shop-image-label"
+                        htmlFor={`file-input-${index}`}
+                      >
+                        Choose File
+                      </label>
+                    </>
+                  )}
+                </div>
+              ))}
+            </div>
 
 
 
@@ -567,16 +579,11 @@ const ShopManager = ({ retailerData }) => {
               disabled={state.isUpdating}
               onClick={() => { handleUpdate() }}
             >
-
-
               {state.isUpdating ? (
                 <Oval height={20} width={20} color="white" ariaLabel="loading" />
               ) : (
                 'UPDATE SHOP DATA'
               )}
-              {/* <button type="button" onClick={handleReset} disabled={state.isUpdating}>
-                <RiRefreshLine />
-              </button> */}
             </div>
           </form>
 
