@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { IoHomeOutline } from 'react-icons/io5';
 import { useNavigate } from 'react-router-dom';
 import { MdOutlineAdminPanelSettings } from 'react-icons/md';
@@ -8,7 +8,6 @@ import { CiBellOn } from 'react-icons/ci';
 import { TbDeviceMobileCharging } from 'react-icons/tb';
 import { AiOutlineProduct } from 'react-icons/ai';
 import { Oval } from 'react-loader-spinner';
-import Cookies from 'js-cookie';
 
 import useRetailerAuthHook from '../../hooks/retailerAuthHook';
 
@@ -17,7 +16,6 @@ import '../user/userHome.css';
 
 function UserHome({ retailerData }) {
   const navigate = useNavigate();
-  const { logout } = useRetailerAuthHook();
 
   const [isLogout, setIsLogout] = useState(false);
   const [isLoggingOut, setIsLoggingOut] = useState(false);
@@ -25,8 +23,6 @@ function UserHome({ retailerData }) {
   const handleLogout = async () => {
     setIsLoggingOut(true);
     try {
-        console.log("hi");
-        // Remove cookie by setting its expiry date to the past
         document.cookie = "BharatLinkerShopData=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
     } catch (error) {
         console.error('Error during logout:', error);
@@ -44,7 +40,9 @@ function UserHome({ retailerData }) {
       <p className='dashboard-Your-info-p'>{label}</p>
     </article>
   );
-
+useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <>
       <header>
