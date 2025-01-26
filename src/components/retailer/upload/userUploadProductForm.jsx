@@ -31,7 +31,9 @@ const UploadBooksModulesForm = ({ retailerData }) => {
         navigate('/retailer/dashboard');
       }
     }
+    window.scrollTo(0, 0); // Scrolls to the top
   }, [retailerData, navigate]);
+  
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -46,6 +48,7 @@ const UploadBooksModulesForm = ({ retailerData }) => {
       setImages((prevImages) => {
         const updatedImages = [...prevImages];
         updatedImages[index] = files[0];
+        console.log(files)
         return updatedImages;
       });
     }

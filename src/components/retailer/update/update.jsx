@@ -1,30 +1,12 @@
-import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import React from 'react';
+import { useNavigate} from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
-import Cookies from 'js-cookie';
 import UploadBooksForm from './userProductUpdateForm.jsx';
 
 import './userProductUpdate.css';
 
-const UploadProduct = () => {
+const UploadProduct = ({ retailerData }) => {
     const navigate = useNavigate();
-    const { id: productId } = useParams();
-
-    const products = useSelector((state) => state.userRefurbishedProducts.refurbishedProducts);
-    const [userData, setUserData] = useState(null);
-
-    useEffect(() => {
-        const userSession = Cookies.get('BharatLinkerShopData');
-        if (userSession) {
-            const parsedUserData = JSON.parse(userSession);
-            setUserData(parsedUserData);
-
-            // Find the product with the given ID
-            const product = products.find((product) => product.$id === productId);
-        }
-    }, []);
-
     return (
         <>
             <div className="retailer-update-header">
@@ -39,19 +21,19 @@ const UploadProduct = () => {
                     <p className="retailer-update-header-inner-div-p">
                         UPDATE PRODUCT
                     </p>
-                    {userData?.shopName && (
+                    {retailerData?.shopName && (
                         <div
                             className={`retailer-upload-product-header-shopname`}
                             aria-label="Change Location"
                             tabIndex={0}
                         >
-                            {userData?.shopName?.toUpperCase()}
+                            {retailerData?.shopName?.toUpperCase()}
                         </div>
                     )}
                 </div>
             </div>
 
-            <UploadBooksForm userData={userData} />
+            <UploadBooksForm userData={retailerData} />
 
         </>
     );

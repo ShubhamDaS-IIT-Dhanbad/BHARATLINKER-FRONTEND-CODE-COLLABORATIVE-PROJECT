@@ -303,19 +303,14 @@
 .refurbished-book-module-class-popup-class-option,
 .selected-green {
     min-width: 60px;
-    /* Width of each option */
     border: 1px solid rgba(0, 0, 0, 0.26);
     padding: 0px 9px 0px 9px;
     height: 45px;
     border-radius: 10px;color: #000;
     margin: 0;
-    /* No margin to eliminate gaps */
     display: flex;
-    /* Flexbox for centering */
     align-items: center;
-    /* Center vertically */
     justify-content: center;
-    /* Center horizontally */
     margin-top: none;
 }
 .selected-green {

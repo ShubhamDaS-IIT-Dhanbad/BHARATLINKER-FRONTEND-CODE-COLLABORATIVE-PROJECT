@@ -1,16 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { IoClose } from 'react-icons/io5';
-import { CiImageOn } from 'react-icons/ci';
 import { Oval } from 'react-loader-spinner';
-import { MdOutlineCategory } from "react-icons/md";
-import { TbBrandAirtable } from "react-icons/tb";
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-
-import {updateProduct, deleteProduct} from '../../../appWrite/uploadProduct/upload.js'
-import { resetProducts,deleteProductS } from '../../../redux/features/retailer/product.jsx';
-
+import { updateProduct, deleteProduct } from '../../../appWrite/uploadProduct/upload.js';
+import { resetProducts, deleteProductS } from '../../../redux/features/retailer/product.jsx';
 import Cookies from 'js-cookie';
+
+import '../upload/upload.css';
+
 const UploadBooksModulesForm = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -18,7 +15,6 @@ const UploadBooksModulesForm = () => {
     const [selected, setSelected] = useState("");
     const [coordinates, setCoordinates] = useState({ lat: null, long: null });
     const [fetching, setFetching] = useState(false);
-
 
     const productId = useParams('id');
     const products = useSelector((state) => state.retailerProducts.products);
@@ -38,14 +34,6 @@ const UploadBooksModulesForm = () => {
 
     const [toDeleteImagesUrls, setToDeleteImagesUrls] = useState([]);
 
-    const [popUpState, setPopUpState] = useState({
-        classPopUp: false,
-        subjectPopUp: false,
-        languagePopUp: false,
-        categoryPopUp: false,
-        brandPopUp: false,
-    });
-
     const [formData, setFormData] = useState({
         class: '',
         language: '',
@@ -54,9 +42,7 @@ const UploadBooksModulesForm = () => {
         description: '',
         price: '',
         discountedPrice: '',
-        keywords: '',
-        category: '', // Ensure this is initialized
-        brand: ''
+        keywords: ''
     });
 
     const [images, setImages] = useState([null, null, null]);
@@ -77,7 +63,6 @@ const UploadBooksModulesForm = () => {
         // Check product ID and load product data
         if (productId) {
             const product = products.find((product) => product.$id === productId.id);
-
             if (!product) {
                 navigate('/retailer/products');
             } else {
@@ -87,8 +72,6 @@ const UploadBooksModulesForm = () => {
                     price,
                     discountedPrice,
                     keywords,
-                    category,
-                    brand,
                     images: productImages,
                 } = product;
 
@@ -96,8 +79,6 @@ const UploadBooksModulesForm = () => {
                     title,
                     description,
                     price,
-                    category,
-                    brand,
                     discountedPrice,
                     keywords,
                 });
@@ -111,13 +92,12 @@ const UploadBooksModulesForm = () => {
 
     }, []);
 
-
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData((prevData) => ({ ...prevData, [name]: value }));
     };
-    const handleCurrentLocationClick = () => {
 
+    const handleCurrentLocationClick = () => {
         setFetching(true);
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
@@ -137,19 +117,6 @@ const UploadBooksModulesForm = () => {
         }
         setFetching(false);
     };
-    
-
-    const handleCategorySelect = (selectedCategory) => {
-        setFormData((prevFormData) => ({ ...prevFormData, category: selectedCategory }));
-        setPopUpState((prevState) => ({ ...prevState, categoryPopUp: false }));
-    };
-
-    const handleBrandSelect = (selectedBrand) => {
-        setFormData((prevFormData) => ({ ...prevFormData, brand: selectedBrand }));
-        setPopUpState((prevState) => ({ ...prevState, brandPopUp: false }));
-    };
-
-    const [allFieldEntered, setAllFieldEntered] = useState(true);
 
     const handleUpdate = async () => {
         setIsUpdate(false);
@@ -161,7 +128,7 @@ const UploadBooksModulesForm = () => {
         }
 
         if (!coordinates.lat || !coordinates.long) {
-            alert('Your Address Location is not set or error in retriving location -> go to PROFILE and set LOCATION');  // Popup message
+            alert('Your Address Location is not set or error in retrieving location -> go to PROFILE and set LOCATION');
             return;
         }
 
@@ -237,43 +204,12 @@ const UploadBooksModulesForm = () => {
         </div>
     );
 
-    const renderPopUp = (popUpKey, options, handleSelect) => {
-        const kpopup = popUpKey.slice(0, -5); // Remove the last 5 characters
-        return (
-            popUpState[popUpKey] && (
-                <div className="refurbished-book-module-class-popup">
-                    <div
-                        className="refurbished-book-module-class-popup-close-popup"
-                        onClick={() => setPopUpState(prevState => ({ ...prevState, [popUpKey]: false }))}
-                    >
-                        <IoClose size={25} />
-                    </div>
-                    <div style={{ color: "white" }}>
-                        {`${kpopup.toUpperCase()}`}
-                    </div>
-                    <div className="refurbished-book-module-class-popup-options">
-                        {options.map((item) => (
-                            <div
-                                key={item}
-                                className={`${formData[kpopup] === item ? 'selected-green' : 'refurbished-book-module-class-popup-class-option'}`}
-                                onClick={() => handleSelect(item)}
-                            >
-                                {/^[a-zA-Z]/.test(item)
-                                    ? item.charAt(0).toUpperCase() + item.slice(1)
-                                    : item}
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            )
-        );
-    };
-
     const handleImageChange = (index, file) => {
         if (file) {
             const updatedImages = [...images];
-            updatedImages[index] = file; // Store the file
+            updatedImages[index] = file;
             setImages(updatedImages);
+            console.log(updatedImages, file)
         }
     };
 
@@ -286,22 +222,15 @@ const UploadBooksModulesForm = () => {
         updatedImages[index] = null;
         setImages(updatedImages);
     };
+
     const isValidUrl = (url) => {
         const regex = /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/i;
         return regex.test(url);
     };
 
-
-
     return (
         <>
-
-
-
-
-            <div className="retailer-update-form">
-               
-
+            <div className="retailer-upload-product-form" style={{ marginTop: "77px" }}>
                 <div className='user-refurbished-product-title-description-div'>
                     <textarea
                         type="text"
@@ -309,32 +238,18 @@ const UploadBooksModulesForm = () => {
                         value={formData.title}
                         onChange={handleInputChange}
                         placeholder="Enter book title"
-                        className='retailer-update-form-textarea'
+                        className='retailer-upload-product-form-textarea'
                         style={{ maxWidth: "90vw", minHeight: "10vh" }}
                     />
                     <textarea
                         name="description"
                         value={formData.description}
                         onChange={handleInputChange}
-                        placeholder="
-                        (# HEADING) AND (* DETAILS)
-                        Mention any notable issues or refurbishments.Be clear and concise for better understanding.
-                        
-                        Example:-
-                        #Condition: 
-                            *Refurbished - Like New
-                        #Features: 
-                            *16GB RAM, 512GB SSD
-                        #Includes:
-                            *Original charger and carrying case
-                        #Issues: 
-                            *Minor scratches on the outer casing
-                                                "
-                        className='retailer-update-form-textarea'
+                        placeholder="Enter book description"
+                        className='retailer-upload-product-form-textarea'
                         style={{ maxWidth: "90vw", minHeight: "70vh" }}
                     />
                 </div>
-
 
                 <div className='user-refurbished-product-price-discounted-div'>
                     <textarea
@@ -344,7 +259,7 @@ const UploadBooksModulesForm = () => {
                         onChange={handleInputChange}
                         placeholder="Enter original price"
                         style={{ maxWidth: "90vw", height: "4vh" }}
-                        className='retailer-update-form-textarea'
+                        className='retailer-upload-product-form-textarea'
                     />
                     <textarea
                         type="number"
@@ -353,123 +268,146 @@ const UploadBooksModulesForm = () => {
                         onChange={handleInputChange}
                         placeholder="Enter discounted price"
                         style={{ maxWidth: "90vw", height: "4vh" }}
-                        className='retailer-update-form-textarea'
+                        className='retailer-upload-product-form-textarea'
                     />
                 </div>
 
-                <textarea
-                    type="text"
-                    name="keywords"
-                    value={formData.keywords}
-                    onChange={handleInputChange}
-                    className='retailer-update-form-textarea'
-                    style={{ maxWidth: "90vw", minHeight: "20vh" }}
-                />
+                <div className="product-keywords">
+                    <textarea
+                        type="text"
+                        name="keywords"
+                        value={formData.keywords}
+                        onChange={handleInputChange}
+                        placeholder="Enter product keywords (comma-separated)"
+                        style={{ maxWidth: "90vw", height: "6vh" }}
+                        className="retailer-upload-product-form-textarea"
+                    />
+                </div>
 
-                <div className="retailer-update-form-image-section">
+
+
+                <div className="retailer-upload-form-image-section">
                     {images.map((image, index) => (
-                        <div key={index} className="retailer-update-form-image-container">
-                            {image ? (
-                                <img
-                                    src={typeof image === 'string' ? image : URL.createObjectURL(image)}
-                                    className="retailer-update-form-uploaded-image"
-                                    alt={`Uploaded ${index + 1}`}
-                                    onClick={() => removeImage(index)}
-                                    onLoad={(e) => {
-                                        if (typeof image !== 'string') URL.revokeObjectURL(e.target.src);
-                                    }}
+                        <div key={index} className="product-image-upload">
+                            {!image ? (<>
+
+                                <div className="retailer-upload-form-uploaded-image-container">
+                                    <img
+                                        src="https://res.cloudinary.com/demc9mecm/image/upload/v1737885176/yjev692kuftvpxzbzpcj.jpg"
+
+                                        alt={`Uploaded ${index + 1}`}
+                                        className="retailer-upload-form-uploaded-image"
+                                    />
+                                </div>
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={(e) => handleImageChange(index, e.target.files[0])}
                                 />
+                            </>
                             ) : (
-                                <div
-                                    className="retailer-update-form-image-placeholder"
-                                    onClick={() => document.getElementById(`image-upload-${index}`).click()}
-                                >
-                                    <CiImageOn size={50} />
+                                <div className="retailer-upload-form-uploaded-image-container">
+                                    <img
+                                        className="retailer-upload-form-uploaded-image"
+                                        src={typeof image === 'string' ? image : URL.createObjectURL(image)}
+                                        alt={`Product Image ${index + 1}`}
+                                    />
+                                    <button
+                                        type="button"
+                                        onClick={() => removeImage(index)}
+                                        className="remove-image-button"
+                                    >
+                                        Remove
+                                    </button>
                                 </div>
                             )}
-                            <input
-                                type='file'
-                                id={`image-upload-${index}`}
-                                style={{ display: 'none' }}
-                                onChange={(e) => handleImageChange(index, e.target.files[0])}
-                            />
                         </div>
                     ))}
                 </div>
 
-                <div id="user-refurbished-product-book-module-upload-location">
-                    <div
-                        className={`user-refurbished-product-book-module-upload-location-p ${selected === "CURRENT LOCATION" ? "selected" : ""
-                            }`}
-                        onClick={() => { setSelected("CURRENT LOCATION"); handleCurrentLocationClick(); }}
+
+                <div className="location-section">
+                    <button
+                        type="button"
+                        onClick={handleCurrentLocationClick}
+                        className="location-button"
                     >
-                        {fetching ? 'Fetching...' : 'CURRENT LOCATION'}
-                    </div>
-                    <div
-                        className={`user-refurbished-product-book-module-upload-location-p ${selected === "ADDRESS LOCATION" ? "selected" : ""
-                            }`}
-                        onClick={() => setSelected("ADDRESS LOCATION")}
-                    >
-                        SHOP LOCATION
-                    </div>
+                        {fetching ? (
+                            <Oval height={20} width={20} color="#00BFFF" visible={true} />
+                        ) : (
+                            "Use Current Location"
+                        )}
+                    </button>
+                    <p>{coordinates.lat && coordinates.long ? `Latitude: ${coordinates.lat}, Longitude: ${coordinates.long}` : "Location not set"}</p>
                 </div>
 
+                <div className="form-actions">
+                    {isDelete && (
+                        <ConfirmationPopup
+                            message="Are you sure you want to delete this product?"
+                            onClose={() => setIsDelete(false)}
+                            onConfirm={handleDelete}
+                            isDelete={true}
+                        />
+                    )}
 
+                    {isUpdate && (
+                        <ConfirmationPopup
+                            message="Are you sure you want to update this product?"
+                            onClose={() => setIsUpdate(false)}
+                            onConfirm={handleUpdate}
+                            isDelete={false}
+                        />
+                    )}
 
-                <div id='retailer-product-footer'>
-                    <div id='retailer-product-update' onClick={() => setIsUpdate(true)}>
-                        UPDATE
-                    </div>
-                    <div id='retailer-product-delete' onClick={() => setIsDelete(true)}>
-                        DELETE
-                    </div>
+                    {isUpdateSuccessful && (
+                        <PopupSuccess
+                            message="Product updated successfully!"
+                            onClose={() => setIsUpdateSuccessful(false)}
+                        />
+                    )}
+
+                    {isDeleteSuccessful && (
+                        <PopupSuccess
+                            message="Product deleted successfully!"
+                            onClose={() => setIsDeleteSuccessful(false)}
+                        />
+                    )}
+
+                    {updateFail && (
+                        <PopupFail
+                            message="Failed to update product. Please try again."
+                            onClose={() => setUpdateFail(false)}
+                        />
+                    )}
+
+                    {deleteFail && (
+                        <PopupFail
+                            message="Failed to delete product. Please try again."
+                            onClose={() => setDeleteFail(false)}
+                        />
+                    )}
+
+                    <button
+                        type="button"
+                        onClick={() => setIsUpdate(true)}
+                        className="update-button"
+                    >
+                        {isUpdating ? <Oval height={20} width={20} color="#00BFFF" visible={true} /> : "Update Product"}
+                    </button>
+
+                    <button
+                        type="button"
+                        onClick={() => setIsDelete(true)}
+                        className="delete-button"
+                    >
+                        {isDeleting ? <Oval height={20} width={20} color="#FF0000" visible={true} /> : "Delete Product"}
+                    </button>
                 </div>
-
-
             </div>
-
-            {!allFieldEntered && (
-                <PopupSuccess message="All fields are required!" onClose={() => { setAllFieldEntered(true) }} isSuccess={false} />
-            )}
-            {(loading || isDeleting || isUpdating) && (
-                <div className='user-book-delete-pop-up'>
-                    <Oval
-                        height={40}
-                        width={40}
-                        color="#4A90E2"
-                        secondaryColor="#ddd"
-                        strokeWidth={4}
-                        strokeWidthSecondary={2}
-                    />
-                </div>
-            )}
-
-
-            {isDelete && (
-                <ConfirmationPopup
-                    message="Are you sure you want to delete this product?"
-                    onClose={() => setIsDelete(false)}
-                    onConfirm={handleDelete}
-                    isDelete
-                />
-            )}
-
-            {isUpdate && (
-                <ConfirmationPopup
-                    message="Are you sure you want to update this product?"
-                    onClose={() => setIsUpdate(false)}
-                    onConfirm={handleUpdate}
-                    isDelete={false}
-                />
-            )}
-
-            {isDeleteSuccessful && (<PopupSuccess message="Product deleted successfully!" onClose={() => navigate('/retailer/products')} />)}
-            {isUpdateSuccessful && (<PopupSuccess message="Product updated successfully!" onClose={() => setIsUpdateSuccessful(false)} />)}
-
-            {deleteFail && <PopupFail message="Failed to delete product. Please try again!" onClose={() => setDeleteFail(false)} />}
-            {updateFail && <PopupFail message="Failed to update product. Please try again!" onClose={() => setUpdateFail(false)} />}
         </>
     );
 };
 
 export default UploadBooksModulesForm;
+
