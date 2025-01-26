@@ -8,6 +8,7 @@ import { CiBellOn } from 'react-icons/ci';
 import { TbDeviceMobileCharging } from 'react-icons/tb';
 import { AiOutlineProduct } from 'react-icons/ai';
 import { Oval } from 'react-loader-spinner';
+import Cookies from 'js-cookie';
 
 import useRetailerAuthHook from '../../hooks/retailerAuthHook';
 
@@ -24,14 +25,18 @@ function UserHome({ retailerData }) {
   const handleLogout = async () => {
     setIsLoggingOut(true);
     try {
-      await logout();
+        console.log("hi");
+        // Remove cookie by setting its expiry date to the past
+        document.cookie = "BharatLinkerShopData=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/";
     } catch (error) {
-      console.error('Error during logout:', error);
+        console.error('Error during logout:', error);
     } finally {
-      setIsLoggingOut(false);
-      navigate('/');
+        setIsLoggingOut(false);
+        navigate('/');
     }
-  };
+};
+
+  
 
   const MenuItem = ({ icon: Icon, label, onClick }) => (
     <article className='dashboard-Your-Refurbished' onClick={onClick}>

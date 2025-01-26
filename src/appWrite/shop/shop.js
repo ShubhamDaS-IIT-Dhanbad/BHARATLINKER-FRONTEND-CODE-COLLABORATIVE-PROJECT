@@ -243,7 +243,7 @@ const updateShopData = async (shopId, toDeleteImagesUrls, updatedData, newFiles)
     try {
         // Step 1: Delete specified images if provided
         if (toDeleteImagesUrls.length > 0) {
-            await cleanupUploadedImages([toDeleteImagesUrls]);
+            await cleanupUploadedImages(toDeleteImagesUrls);
         }
 
         // Step 2: Separate valid URLs and new file objects
@@ -258,25 +258,31 @@ const updateShopData = async (shopId, toDeleteImagesUrls, updatedData, newFiles)
         } else {
             allImageUrls = [...validUrls, ...allImageUrls];
         }
-
+        // Step 4: Sort image URLs (optional, based on original code)
         allImageUrls.sort((a, b) => {
             if (!a) return 1;
             if (!b) return -1;
             return 0;
         });
+        console.log(allImageUrls);
 
-        const updatedShopData = {
-            shopImages: allImageUrls,
-            shopName: updatedData?.shopName?.toLowerCase() || '',
-            address: updatedData?.address?.toLowerCase() || '',
-            category: updatedData?.category?.toLowerCase() || '',
-            description: updatedData?.description?.toLowerCase() || '',
-            customerCare: updatedData?.customerCare ? Number(updatedData.customerCare) : null,
-            email: updatedData?.email?.toLowerCase() || '',
-            lat: updatedData?.lat ? parseFloat(updatedData.lat) : null,
-            long: updatedData?.long ? parseFloat(updatedData.long) : null,
-        };
+        // Step 5: Dynamically build the updatedShopData object
+        const updatedShopData = {};
+        if (allImageUrls.length > 0) {
+            updatedShopData.shopImages = allImageUrls;
+        }
 
+        for (const [key, value] of Object.entries(updatedData)) {
+            if (value !== undefined && value !== null) {
+                if (key === 'customerCare') {
+                    updatedShopData.customerCare = Number(value);
+                } else if (key === 'lat' || key === 'long') {
+                    updatedShopData[key] = parseFloat(value);
+                } else {
+                    updatedShopData[key] = value.toLowerCase();
+                }
+            }
+        }
 
         // Step 6: Update the shop document in the database
         const updatedDocument = await databases.updateDocument(

@@ -128,7 +128,7 @@ const Navbar = ({ headerTitle }) => {
                                 onClick={toggleLocationTab}
                             >
                                 {userLocation?.address
-                                    ? userLocation.address.slice(0, 30)
+                                    ? userLocation?.address.slice(0, 30)
                                     : 'SET LOCATION, INDIA'}
                                 <TiArrowSortedDown size={15} />
                             </div>

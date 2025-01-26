@@ -67,7 +67,7 @@ function LoginForm() {
             setOtpSent(true);
             setIsResendDisabled(true);
             setTimer(30);
-            setError(null); // Reset any error when OTP is sent
+            setError(null);
         } catch (error) {
             console.error(`Failed to send OTP: ${error.message}`);
             alert('Failed to send OTP. Please try again.');
@@ -80,12 +80,17 @@ function LoginForm() {
         setLoadingVerification(true);
         try {
             const sessionId = await createSession(userId, otpCode);
-            const contact =  phoneOrEmail;
+            const contact = phoneOrEmail;
             const shopData = await getShopData(contact);
-
+    
             shopData.sessionId = sessionId;
-            Cookies.set('BharatLinkerShopData', JSON.stringify(shopData), { expires: 7 });
-
+    
+            // Setting the cookie using document.cookie
+            const cookieValue = JSON.stringify(shopData);
+            const expires = new Date();
+            expires.setDate(expires.getDate() + 7);
+            document.cookie = `BharatLinkerShopData=${encodeURIComponent(cookieValue)}; expires=${expires.toUTCString()}; path=/`;
+    
             if (shopData.registrationStatus === 'pending') {
                 navigate('/retailer/pending');
             } else if (shopData.registrationStatus === 'rejected') {
@@ -96,11 +101,12 @@ function LoginForm() {
         } catch (err) {
             console.error(`Failed to verify OTP: ${err.message}`);
             setError("Shop with this phone/email already exists.");
-            setOtp(new Array(6).fill('')); // Reset OTP input on error
+            setOtp(new Array(6).fill(''));
         } finally {
             setLoadingVerification(false);
         }
     };
+    
 
     const renderLoginForm = () => (
         <div className="retailer-login">

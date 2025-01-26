@@ -11,13 +11,19 @@ const useRetailerAuthHook = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const client = new Client()
-    .setEndpoint('https://cloud.appwrite.io/v1')
-    .setProject(conf.appwriteUsersProjectId);
-  const account = new Account(client);
+  const client = useCallback(
+    () =>
+      new Client()
+        .setEndpoint('https://cloud.appwrite.io/v1')
+        .setProject(conf.appwriteUsersProjectId),
+    []
+  );
+
+  const account = useCallback(() => new Account(client()), [client]);
 
   const getRetailerDataFromCookie = useCallback(() => {
     const storedData = Cookies.get('BharatLinkerShopData');
+    
     if (storedData) {
       try {
         return JSON.parse(storedData);
@@ -30,21 +36,20 @@ const useRetailerAuthHook = () => {
   }, []);
 
   useEffect(() => {
-    if (location.pathname.startsWith("/retailer")) {
-      const retailerSession = getRetailerDataFromCookie();
+    if (!location.pathname.startsWith('/retailer')) return;
+    const retailerSession = getRetailerDataFromCookie();
 
-      if (retailerSession) {
-        setRetailerData(retailerSession);
-        const { registrationStatus } = retailerSession || {};
+    if (retailerSession) {
+      setRetailerData(retailerSession);
+      const { registrationStatus } = retailerSession || {};
 
-        if (registrationStatus === 'pending') {
-          navigate('/retailer/pending');
-        } else if (registrationStatus === 'rejected') {
-          navigate('/retailer/rejected');
-        }
-      } else {
-        navigate('/');
+      if (registrationStatus === 'pending') {
+        navigate('/retailer/pending');
+      } else if (registrationStatus === 'rejected') {
+        navigate('/retailer/rejected');
       }
+    } else {
+      navigate('/');
     }
   }, []);
 
@@ -57,21 +62,22 @@ const useRetailerAuthHook = () => {
     }
   };
 
-  const PrivateRoute = ({ children }) => {
-    if (!location.pathname.startsWith("/retailer")) {
-      return null; // or return a fallback component if necessary
-    }
-    
-    const retailerSession = getRetailerDataFromCookie();
-    if (!retailerSession) {
-      return <Navigate to="/" replace />;
-    }
-    return children;
-  };
+  const PrivateRoute = useCallback(
+    ({ children }) => {
+      if (!location.pathname.startsWith('/retailer')) {
+        return null;
+      }
+
+      const retailerSession = getRetailerDataFromCookie();
+      if (!retailerSession) {
+        return <Navigate to="/" replace />;
+      }
+      return children;
+    },
+    [location.pathname, getRetailerDataFromCookie]
+  );
 
   return { retailerData, getRetailerDataFromCookie, logout, PrivateRoute };
 };
 
 export default useRetailerAuthHook;
-
-

@@ -59,7 +59,7 @@ const Navbar = ({ retailerData, headerTitle, onBackNavigation }) => {
           <div className="product-page-user-location">
             <p className="product-page-location-label">{headerTitle}</p>
             <p id="dashboard-header-user-phn">
-              {retailerData.phoneNumber ? retailerData.phoneNumber : retailerData.email}
+              {retailerData?.phoneNumber ? retailerData?.phoneNumber : retailerData?.email}
             </p>
           </div>
         </div>

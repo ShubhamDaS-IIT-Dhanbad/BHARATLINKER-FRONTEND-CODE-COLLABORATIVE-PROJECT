@@ -19,7 +19,7 @@ const Home = () => {
     const handleRetailerClick = useCallback(() => {
         const retailerCookie = Cookie.get('BharatLinkerShopData');
         if (retailerCookie) {
-            const shopData = JSON.parse(retailerCookie);
+            const shopData = JSON.parse(retailerCookie);console.log(shopData,"dataaa")
             const path = shopData.registrationStatus === 'pending' ? '/retailer/pending' :
                 shopData.registrationStatus === 'rejected' ? '/retailer/rejected' : '/retailer';
             navigate(path);
