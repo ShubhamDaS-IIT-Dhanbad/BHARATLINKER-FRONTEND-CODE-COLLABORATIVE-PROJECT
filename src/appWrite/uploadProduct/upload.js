@@ -113,40 +113,54 @@ const cleanupUploadedImages = async (uploadedImages) => {
 
 //upload module imp
 const uploadProductWithImages = async (productData, files = []) => {
-    let uploadedImages = [];
+    if (!productData || !files || !Array.isArray(files)) {
+        throw new Error('Invalid arguments: productData and files are required.');
+    }
 
+    let uploadedImages = [];
     try {
+        // Validate required fields
+        const requiredFields = ['title', 'description', 'price', 'discountedPrice', 'lat', 'long', 'shop'];
+        for (const field of requiredFields) {
+            if (!productData[field]) {
+                throw new Error(`Missing required field: ${field}`);
+            }
+        }
+
+        // Upload images to Cloudinary
         uploadedImages = await uploadImagesToCloudinary(files);
         const imageUrls = uploadedImages.map((image) => image.secure_url);
+
+        // Prepare product data
         const newProductData = {
             title: productData.title.toLowerCase(),
             description: productData.description.toLowerCase(),
-            price: Number(productData.price),
-            discountedPrice: Number(productData.discountedPrice),
-            category: productData.category.toLowerCase(),
-            brand: productData.brand.toLowerCase(),
-            lat: productData.lat,
+            price: parseFloat(productData.price),
+            discountedPrice: parseFloat(productData.discountedPrice),
+            lat: parseFloat(productData.lat),
+            long: parseFloat(productData.long),
+            shop: productData.shop,
             isInStock: productData.isInStock ?? true,
-            long: productData.long,
-            shop: productData.shop
+            images: imageUrls,
         };
-        
         const document = await databases.createDocument(
             conf.appwriteProductsDatabaseId,
             conf.appwriteProductsCollectionId,
             ID.unique(),
-            {
-                ...newProductData,
-                images: imageUrls
-            }
+            newProductData
         );
+
         return document;
     } catch (error) {
-        console.error('Error uploading product:', error);
-        await cleanupUploadedImages(uploadedImages);
+        console.error('Error uploading product:', error.message);
+        if (uploadedImages.length > 0) {
+            console.log('Cleaning up uploaded images...');
+            await cleanupUploadedImages(uploadedImages);
+        }
+
         throw error;
     }
-}
+};
 
 
 

@@ -300,23 +300,7 @@ const UploadBooksModulesForm = () => {
 
 
             <div className="retailer-update-form">
-                <>
-                    <div className='user-refurbished-product-category-brand-div' style={{ display: "flex", gap: "5px", marginTop: "90px", marginBottom: "17px" }}>
-                        <div
-                            className={`user-refurbished-product-book-module-upload-form-category ${formData.category ? 'active' : ''}`}
-                            onClick={() => setPopUpState(prevState => ({ ...prevState, categoryPopUp: !prevState.categoryPopUp }))}>
-                            <MdOutlineCategory size={30} />
-                        </div>
-                        <div className={`user-refurbished-product-book-module-upload-form-brand ${formData.brand ? 'active' : ''}`}
-                            onClick={() => setPopUpState(prevState => ({ ...prevState, brandPopUp: !prevState.brandPopUp }))}>
-                            <TbBrandAirtable size={30} />
-                        </div>
-                    </div>
-                </>
-                {renderPopUp('categoryPopUp', ['category', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'], handleCategorySelect)}
-                {renderPopUp('brandPopUp', ['brand', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'], handleBrandSelect)}
-
-
+               
 
                 <div className='user-refurbished-product-title-description-div'>
                     <textarea
@@ -332,9 +316,22 @@ const UploadBooksModulesForm = () => {
                         name="description"
                         value={formData.description}
                         onChange={handleInputChange}
-                        placeholder="Enter description"
+                        placeholder="
+                        (# HEADING) AND (* DETAILS)
+                        Mention any notable issues or refurbishments.Be clear and concise for better understanding.
+                        
+                        Example:-
+                        #Condition: 
+                            *Refurbished - Like New
+                        #Features: 
+                            *16GB RAM, 512GB SSD
+                        #Includes:
+                            *Original charger and carrying case
+                        #Issues: 
+                            *Minor scratches on the outer casing
+                                                "
                         className='retailer-update-form-textarea'
-                        style={{ maxWidth: "90vw", minHeight: "20vh" }}
+                        style={{ maxWidth: "90vw", minHeight: "70vh" }}
                     />
                 </div>
 

@@ -1,7 +1,7 @@
 .retailer-update-header {
     
-    background-color: #1A1A2E;
-    color: white;
+    background-color: #ffffff;
+    color: rgb(0, 0, 0);
     position: fixed;
     top: 0;
     height: 60px;
@@ -15,7 +15,7 @@
 
 .retailer-update-header-left-icon {
     margin-left: 4px;
-    color: #000;
+    color: #000000;
 }
 
 .retailer-update-header-inner-div {
@@ -81,8 +81,8 @@
 
 .user-update-book-module-type-book.active,
 .user-update-book-module-type-module.active {
-    background-color: #000;
-    color: white;
+    background-color: #ffffff;
+    color: rgb(0, 0, 0);
 }
 
 
@@ -104,9 +104,9 @@
     flex-direction: column;
     min-height: 70vh;
     align-items: center;
-    
-    background-color: #1A1A2E;
-    color: #ffffff;
+    margin-top: 77px;
+    background-color: #ffffff;
+    color: #000000;
     gap: 0.3125rem;
     overflow-y: scroll;
 }
@@ -124,9 +124,9 @@
 
 .retailer-update-form-textarea {
     height: 45px;
-    border: 1.8px solid #EB3678;
+    border: 1.8px solid #000000;
     background-color: transparent;
-    display: flex;color: white;
+    display: flex;color: rgb(0, 0, 0);
     align-items: center;
     width: 85vw;
     max-width: 85vw;
@@ -137,7 +137,7 @@
 .retailer-update-form-textarea::placeholder {
     font-size: 13px;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-    font-weight: 300;
+    font-weight: 300;color: #000000;
 }
 
 
@@ -156,12 +156,12 @@
     height: 100px;
     display: flex;background-color: rgb(0, 0, 0);
     justify-content: center;
-    border: 1.8px solid rgb(255, 255, 255);border-radius: 10px;
+    border: 1.8px solid rgb(0, 0, 0);border-radius: 10px;
     align-items: center;
 }
 
 .retailer-update-form-image-placeholder{
-    color: #fffbfb;
+    color: #000000;
 }
 
 
@@ -212,7 +212,7 @@
 #retailer-product-footer {
     display: flex;
     justify-content: space-between;
-    align-items: center;color: white;
+    align-items: center;color: rgb(0, 0, 0);
     border-radius: 5px;gap: 15px;
     margin-top: 10vh;
 }

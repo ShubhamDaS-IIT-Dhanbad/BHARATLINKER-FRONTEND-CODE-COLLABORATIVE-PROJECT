@@ -1,22 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useNavigate} from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
-
-import Cookies from 'js-cookie';
 import UploadBooksForm from './userUploadProductForm.jsx';
 
 import './upload.css';
 
-const UploadProduct = () => {
+const UploadProduct = ({retailerData}) => {
     const navigate = useNavigate();
-    const [userData, setUserData] = useState('');
-
-    useEffect(() => {
-        const userSession = Cookies.get('BharatLinkerShopData');
-        if (userSession) {
-            setUserData(JSON.parse(userSession));
-        }
-    }, []);
 
     return (
         <>
@@ -35,13 +25,13 @@ const UploadProduct = () => {
                         aria-label="Change Location"
                         tabIndex={0}
                     >
-                        {userData?.shopName?.toUpperCase()}
+                        {retailerData?.shopName?.toUpperCase()}
                     </div>
                 </div>
             </div>
            
 
-            <UploadBooksForm userData={userData} />
+            <UploadBooksForm retailerData={retailerData} />
 
         </>
     );
