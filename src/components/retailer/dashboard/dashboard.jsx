@@ -380,7 +380,7 @@ Example:-
     *Minor scratches on the outer casing
                         "
                         
-                        value={state.formData[key]}
+                        value={state.formData['description']}
                         onChange={handleInputChange}
                         disabled={!state.isEditing[key]}
                         className={`retailer-profile-form-textarea ${key === 'description' ? 'description-textarea' : 'category-textarea'}`}
