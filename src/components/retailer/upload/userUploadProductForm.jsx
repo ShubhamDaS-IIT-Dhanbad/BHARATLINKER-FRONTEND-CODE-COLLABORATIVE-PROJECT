@@ -151,7 +151,7 @@ Example:-
 #Issues: 
     *Minor scratches on the outer casing"
             className="retailer-upload-product-form-textarea"
-            style={{ maxWidth: '90vw', minHeight: '70vh' }}
+            style={{ maxWidth: '90vw', minHeight: '90vh' }}
           />
         </div>
 
@@ -182,7 +182,7 @@ Example:-
           value={formData.keywords}
           onChange={handleInputChange}
           className="retailer-upload-product-form-textarea"
-          style={{ maxWidth: '90vw', minHeight: '20vh' }}
+          style={{ maxWidth: '90vw', minHeight: '10vh' }}
         />
 
         <div className="retailer-upload-form-image-section">

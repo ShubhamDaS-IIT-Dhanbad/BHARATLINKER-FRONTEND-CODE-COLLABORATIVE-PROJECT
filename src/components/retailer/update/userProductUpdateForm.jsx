@@ -247,7 +247,7 @@ const UploadBooksModulesForm = () => {
                         onChange={handleInputChange}
                         placeholder="Enter book description"
                         className='retailer-upload-product-form-textarea'
-                        style={{ maxWidth: "90vw", minHeight: "70vh" }}
+                        style={{ maxWidth: "90vw", minHeight: "90vh" }}
                     />
                 </div>
 
@@ -279,7 +279,7 @@ const UploadBooksModulesForm = () => {
                         value={formData.keywords}
                         onChange={handleInputChange}
                         placeholder="Enter product keywords (comma-separated)"
-                        style={{ maxWidth: "90vw", height: "6vh" }}
+                        style={{ maxWidth: "90vw", height: "10vh" }}
                         className="retailer-upload-product-form-textarea"
                     />
                 </div>
