@@ -23,7 +23,7 @@ const UploadBooksModulesForm = ({ retailerData }) => {
   const [allFieldEntered, setAllFieldEntered] = useState(true);
 
   useEffect(() => {
-    if (retailerData) {console.log(retailerData)
+    if (retailerData) {
       if (retailerData.lat && retailerData.long) {
         setCoordinates({ lat: retailerData.lat, long: retailerData.long });
       } else {
@@ -56,8 +56,16 @@ const UploadBooksModulesForm = ({ retailerData }) => {
     handleImageChange(index, event.dataTransfer.files);
   };
 
+  const removeImage = (index) => {
+    setImages((prevImages) => {
+      const updatedImages = [...prevImages];
+      updatedImages[index] = null;
+      return updatedImages;
+    });
+  };
+
   const validateForm = () => {
-    const { title, description, price, discountedPrice, keywords } = formData;console.log(formData,coordinates)
+    const { title, description, price, discountedPrice, keywords } = formData;
     return title && description && price && discountedPrice && keywords && coordinates.lat && coordinates.long;
   };
 
@@ -101,10 +109,10 @@ const UploadBooksModulesForm = ({ retailerData }) => {
   };
 
   const Popup = ({ message, onClose, isSuccess }) => (
-    <div className={`user-refurbished-book-module-${isSuccess ? 'success' : 'fail'}-popup`}>
-      <div className={`user-refurbished-book-module-${isSuccess ? 'success' : 'fail'}-popup-inner`}>
-        <div className={`user-refurbished-book-module-${isSuccess ? 'success' : 'fail'}-popup-message`}>{message}</div>
-        <div className={`user-refurbished-book-module-${isSuccess ? 'success' : 'fail'}-popup-ok`} onClick={onClose}>
+    <div className={`retailer-product-upload-${isSuccess ? 'success' : 'fail'}-popup`}>
+      <div className={`retailer-product-upload-${isSuccess ? 'success' : 'fail'}-popup-inner`}>
+        <div className={`retailer-product-upload-${isSuccess ? 'success' : 'fail'}-popup-message`}>{message}</div>
+        <div className={`retailer-product-upload-${isSuccess ? 'success' : 'fail'}-popup-ok`} onClick={onClose}>
           Ok
         </div>
       </div>
@@ -114,7 +122,6 @@ const UploadBooksModulesForm = ({ retailerData }) => {
   return (
     <>
       <div className="retailer-upload-product-form">
-        
         <div className="user-refurbished-product-title-description-div">
           <textarea
             name="title"
@@ -129,19 +136,19 @@ const UploadBooksModulesForm = ({ retailerData }) => {
             value={formData.description}
             onChange={handleInputChange}
             placeholder="
-(# HEADING) AND (* DETAILS)
-Mention any notable issues or refurbishments.Be clear and concise for better understanding.
-
-Example:-
-#Condition: 
-    *Refurbished - Like New
-#Features: 
-    *16GB RAM, 512GB SSD
-#Includes:
-    *Original charger and carrying case
-#Issues: 
-    *Minor scratches on the outer casing
-                        "
+            (# HEADING) AND (* DETAILS)
+            Mention any notable issues or refurbishments.Be clear and concise for better understanding.
+            
+            Example:-
+            #Condition: 
+                *Refurbished - Like New
+            #Features: 
+                *16GB RAM, 512GB SSD
+            #Includes:
+                *Original charger and carrying case
+            #Issues: 
+                *Minor scratches on the outer casing
+                                    "
             className="retailer-upload-product-form-textarea"
             style={{ maxWidth: '90vw', minHeight: '70vh' }}
           />
@@ -177,27 +184,35 @@ Example:-
           style={{ maxWidth: '90vw', minHeight: '20vh' }}
         />
 
-        <div className="user-refurbished-product-book-module-upload-form-image-section">
+        <div className="retailer-upload-form-image-section">
           {images.map((image, index) => (
             <div
               key={index}
-              className="user-refurbished-product-book-module-upload-form-image-container"
               onDrop={(event) => handleDrop(index, event)}
               onDragOver={(event) => event.preventDefault()}
             >
               {image ? (
-                <img
-                  src={URL.createObjectURL(image)}
-                  onClick={() => handleImageChange(index, [])}
-                  alt={`Uploaded ${index + 1}`}
-                  className="user-refurbished-product-book-module-upload-form-uploaded-image"
-                />
+                <div  className="retailer-upload-form-uploaded-image-container">
+                  <img
+                    src={URL.createObjectURL(image)}
+                    alt={`Uploaded ${index + 1}`}
+                    className="retailer-upload-form-uploaded-image"
+                  />
+                  <button onClick={() => removeImage(index)} className="retailer-remove-image-button">
+                    Remove
+                  </button>
+                </div>
               ) : (
-                <CiImageOn
-                  className="user-refurbished-product-book-module-upload-form-image-placeholder"
+                <div  className="retailer-upload-form-uploaded-image-container">
+                  <img
+                  src="https://res.cloudinary.com/demc9mecm/image/upload/v1737885176/yjev692kuftvpxzbzpcj.jpg"
+
+                    alt={`Uploaded ${index + 1}`}
+                    className="retailer-upload-form-uploaded-image"
+                    
                   onClick={() => document.getElementById(`image-upload-${index}`).click()}
-                  size={60}
-                />
+                  />
+                </div>
               )}
               <input
                 type="file"
@@ -213,13 +228,13 @@ Example:-
           className={`retailer-upload-product-form-submit ${isUploading ? 'disabled' : ''}`}
           onClick={isUploading ? null : handleSubmit}
         >
-          UPLOAD <TbWorldUpload size={35} />
+          UPLOAD PRODUCT
         </div>
       </div>
 
       {!allFieldEntered && <Popup message="All fields are required!" onClose={() => setAllFieldEntered(true)} isSuccess={false} />}
       {isUploading && (
-        <div className="user-refurbished-product-book-module-upload-form-loader">
+        <div className="retailer-upload-form-loader">
           <Oval height={40} width={40} color="#fff" />
         </div>
       )}

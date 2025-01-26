@@ -72,7 +72,6 @@
 
 .retailer-upload-product-form {
     margin-top: 2.5rem;
-    padding-bottom: 7.5rem;
     background-color: #ffffff;
     display: flex;color: rgb(0, 0, 0);
     flex-direction: column;
@@ -92,7 +91,6 @@
     gap: 5px;
     margin: 65px 0px 40px 0px;
 }
-
 .retailer-upload-product-form-textarea {
     height: 45px;
     border: 1.3px solid rgb(0, 0, 0);
@@ -103,7 +101,6 @@
     max-width: 85vw;
     padding: 10px;font-size: 18px;
 }
-
 .retailer-upload-product-form-textarea::placeholder {
     font-size: 16px;
     color: #000000;
@@ -129,7 +126,7 @@
 
 
 /*image*/
-.user-refurbished-product-book-module-upload-form-image-section {
+.retailer-upload-form-image-section {
     display: flex;
     width: 90vw;
     gap: 5px;
@@ -138,36 +135,40 @@
     margin-top:40px;
 }
 
-.user-refurbished-product-book-module-upload-form-image-container {
-    width: 30vw;
-    height: 100px;
-    display: flex;background-color: rgb(255, 255, 255);
-    justify-content: center;
-    border: 1.8px solid rgb(0, 0, 0);border-radius: 10px;
-    align-items: center;
-}
 
-.user-refurbished-product-book-module-upload-form-uploaded-image {
-    width: 30vw;border-radius: 10px;
+.retailer-upload-form-uploaded-image-container {
+    width: 30vw;
+    display: flex;flex-direction: column;
+    gap: 10px;
+}
+.retailer-upload-form-uploaded-image {
+    width: 30vw;border: 1px solid black;
     height: 100px;
 }
-.user-refurbished-product-book-module-upload-form-image-placeholder{
+.retailer-upload-form-image-placeholder{
     color: #000000;
 }
 /*button*/
 .retailer-upload-product-form-submit{
-    margin-top: 20px;display: flex;
-    justify-content: center;align-items: center;
-    gap: 10px;font-size: 25px;
-    border: 1px solid rgb(0, 215, 36);
-    border-radius: 10px;padding: 10px;
-    color: #000000;margin-top: 50px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(37, 147, 37);
+    color: white;
+    padding: 10px;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.386);
+  
+    width: calc(97% - 20px);
+    max-width:600px;
+    height: 30px;margin: 30px 0px 20px 0px;
+    z-index: 1000;
 }
 
 
 
 /*loader*/
-.user-refurbished-product-book-module-upload-form-loader{
+.retailer-upload-form-loader{
     width: 100vw;height: 100vh;
     background-color: #000000e8;position: fixed;top: 0;
     z-index: 100;
@@ -222,8 +223,70 @@
 
 
 
+.retailer-remove-image-button{
+    background-color: #28a745;background-color: transparent;
+    border: none;border: 1.5px solid red;
+}
 
+.retailer-product-upload-success-popup,
+.retailer-product-upload-fail-popup {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
 
+.retailer-product-upload-success-popup-inner,
+.retailer-product-upload-fail-popup-inner {
+  background-color: #ffffff;
+  border-radius: 10px;
+  width: 80%;
+  max-width: 400px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.retailer-product-upload-success-popup-message {
+  color: #4caf50; /* Success color */
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.retailer-product-upload-fail-popup-message {
+  color: #f44336; /* Failure color */
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+
+.retailer-product-upload-success-popup-ok,
+.retailer-product-upload-fail-popup-ok {
+  display: inline-block;
+  background-color: #4caf50;
+  color: #ffffff;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.retailer-product-upload-fail-popup-ok {
+  background-color: #f44336;
+}
+
+.retailer-product-upload-success-popup-ok:hover,
+.retailer-product-upload-fail-popup-ok:hover {
+  opacity: 0.9;
+}
 
 
 
@@ -274,18 +337,18 @@
 
 
 
-  #user-refurbished-product-book-module-upload-location{
+  #retailer-upload-location{
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     display: flex;flex-grow: 1;
   }
 
   
-  .user-refurbished-product-book-module-upload-location-p{
+  .retailer-upload-location-p{
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     display: flex;flex-direction: column;
     padding: 10px;border:2px solid  rgb(0, 0, 0);border-radius: 10px;
     justify-content: center;align-items: center;margin: 10px;font-size: 13px;
   }
-  .user-refurbished-product-book-module-upload-location-p.selected{
+  .retailer-upload-location-p.selected{
     border: 2px solid greenyellow;
   }
