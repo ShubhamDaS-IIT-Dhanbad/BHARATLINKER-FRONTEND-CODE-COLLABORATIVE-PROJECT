@@ -230,7 +230,7 @@ const UploadBooksModulesForm = () => {
 
     return (
         <>
-            <div className="retailer-upload-product-form" style={{ marginTop: "77px" }}>
+            <div className="retailer-upload-product-form" style={{ marginTop: "37px" }}>
                 <div className='user-refurbished-product-title-description-div'>
                     <textarea
                         type="text"
