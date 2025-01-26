@@ -159,9 +159,131 @@
   
     width: calc(97% - 20px);
     max-width:600px;
-    height: 30px;margin: 30px 0px 20px 0px;
+    height: 30px;margin: 0px 0px 20px 0px;
     z-index: 1000;
 }
+
+.retailer-upload-product-form-delete{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(147, 37, 37);
+  color: white;
+  padding: 10px;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.386);
+
+  width: calc(97% - 20px);
+  max-width:600px;
+  height: 30px;margin: 30px 0px 20px 0px;
+  z-index: 1000;
+}
+
+
+
+
+  
+
+/* Common Styles for Pop-Up Container */
+.logout-pop-up{
+  position: fixed;
+  top: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100vw;
+  background-color: #1b1818e5;
+  height: 100vh;
+  
+  z-index: 20000;
+}
+
+/* Common Styles for Pop-Up Inner Div */
+.logout-pop-up-inner-div {
+  background-color: #fff;
+  border-radius: 10px;
+  width: 85vw;
+  height: 130px;
+}
+
+.logout-pop-up-inner-div-pop-up-fail {
+  background-color: #f5f0f0;
+  border-radius: 10px;color: rgb(246, 15, 15);
+  width: 85vw;
+  height: 130px;
+}
+.logout-pop-up-inner-div-pop-up-fail-msg{
+  display: flex;
+  justify-content: center;color: rgb(254, 36, 36);
+  align-items: center;padding: 4px;
+  height: 45%;font-weight: 700;
+  border-bottom: 1px solid rgba(199, 11, 11, 0.075);
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+.logout-pop-up-inner-div-pop-up-success {
+  background-color: #f5f0f0;
+  border-radius: 10px;color: rgb(25, 116, 44);
+  width: 85vw;font-weight: 900;
+  height: 130px;
+}
+.logout-pop-up-inner-div-no-yes{
+  display: flex;gap: 10px;height: 100%;
+}
+.logout-pop-up-inner-div-pop-up-success-msg{
+  display: flex;
+  justify-content: center;color: rgb(45, 142, 74);
+  align-items: center;padding: 4px;
+  height: 45%;font-weight: 700;
+  border-bottom: 1px solid rgba(199, 11, 11, 0.075);
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+/* Common Styles for No and Yes Options */
+.logout-pop-up-inner-div-ok{
+  display: flex;justify-content: center;align-items: center;
+  height: 50%;width: 100%;
+}
+/* Common Styles for Pop-Up Statement Text */
+.logout-pop-up-inner-div-logout-statement{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 45%;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.075);
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+
+
+.logout-pop-up-inner-div-no, .user-book-update-option-no, .user-book-delete-option-no {
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50%;
+  border-right: 1px solid rgba(0, 0, 0, 0.053);
+}
+
+.logout-pop-up-inner-div-yes, .user-book-update-option-yes, .user-book-delete-option-yes {
+  width: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50%;
+}
+
+/* Specific Colors for Action Confirmation */
+.logout-pop-up-inner-div-yes {
+  color: green; /* Logout Confirmation */
+}
+
+.user-book-update-option-yes {
+  color: blue; /* Update Confirmation */
+}
+
+.user-book-delete-option-no {
+  color: red;
+}
+
 
 
 

@@ -313,12 +313,8 @@ const updateProduct = async (productId, toDeleteImagesUrls, updatedData, newFile
             description: updatedData.description.toLowerCase(),
             price: Number(updatedData.price),
             discountedPrice: Number(updatedData.discountedPrice),
-            category: updatedData?.category?.toLowerCase() || '',
-            brand: updatedData?.brand?.toLowerCase() || '',
             keywords: updatedData.keywords,
             images: allImageUrls,
-            lat: updatedData.lat,
-            long: updatedData.long
         };
         const updatedDocument = await databases.updateDocument(
             conf.appwriteProductsDatabaseId,

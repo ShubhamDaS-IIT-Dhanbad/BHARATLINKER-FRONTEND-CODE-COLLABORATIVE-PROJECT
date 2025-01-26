@@ -12,10 +12,6 @@ const UploadBooksModulesForm = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
-    const [selected, setSelected] = useState("");
-    const [coordinates, setCoordinates] = useState({ lat: null, long: null });
-    const [fetching, setFetching] = useState(false);
-
     const productId = useParams('id');
     const products = useSelector((state) => state.retailerProducts.products);
 
@@ -49,16 +45,8 @@ const UploadBooksModulesForm = () => {
 
     useEffect(() => {
         setLoading(true);
-
-        // Retrieve user data from cookies
         const userSession = Cookies.get('BharatLinkerShopData');
 
-        if (userSession) {
-            const parsedUserData = JSON.parse(userSession);
-            if (parsedUserData.lat && parsedUserData.long) {
-                setCoordinates({ lat: parsedUserData.lat, long: parsedUserData.long });
-            }
-        }
 
         // Check product ID and load product data
         if (productId) {
@@ -87,9 +75,7 @@ const UploadBooksModulesForm = () => {
                 setImages(paddedImages);
             }
         }
-
         setLoading(false);
-
     }, []);
 
     const handleInputChange = (e) => {
@@ -97,43 +83,18 @@ const UploadBooksModulesForm = () => {
         setFormData((prevData) => ({ ...prevData, [name]: value }));
     };
 
-    const handleCurrentLocationClick = () => {
-        setFetching(true);
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    const { latitude, longitude } = position.coords;
-                    setCoordinates({ lat: latitude, long: longitude });
-                    console.log("Latitude:", latitude, "Longitude:", longitude);
-                },
-                (error) => {
-                    setSelected("SHOP LOCATION");
-                    console.error("Error retrieving location:", error.message);
-                }
-            );
-        } else {
-            console.error("Geolocation is not supported by this browser.");
-            setSelected("SHOP LOCATION");
-        }
-        setFetching(false);
-    };
 
     const handleUpdate = async () => {
         setIsUpdate(false);
         setIsUpdating(true);
-        const { title, price, discountedPrice } = formData;
-        if (![title, price, discountedPrice].every(Boolean)) {
+        const { title, description, price, discountedPrice } = formData;
+        if (![title, price, discountedPrice, description].every(Boolean)) {
             setAllFieldEntered(false);
             return;
-        }
-
-        if (!coordinates.lat || !coordinates.long) {
-            alert('Your Address Location is not set or error in retrieving location -> go to PROFILE and set LOCATION');
-            return;
-        }
+        } const updatedData = formData;
 
         try {
-            await updateProduct(productId, toDeleteImagesUrls, { ...formData, lat: coordinates.lat, long: coordinates.long }, images);
+            await updateProduct(productId, toDeleteImagesUrls, updatedData, images);
             setIsUpdateSuccessful(true);
             dispatch(resetProducts());
         } catch (error) {
@@ -160,18 +121,20 @@ const UploadBooksModulesForm = () => {
         }
     };
 
-    const ConfirmationPopup = ({ message, onClose, onConfirm, isDelete }) => (
-        <div className={`retailer-module-${isDelete ? 'delete' : 'update'}-popup`}>
-            <div className={`retailer-module-${isDelete ? 'delete' : 'update'}-popup-inner`}>
-                <div className={`retailer-module-${isDelete ? 'delete' : 'update'}-popup-message`}>
+    const ConfirmationPopup = ({ message, onClose, onConfirm }) => (
+        <div className='logout-pop-up'>
+            <div className='logout-pop-up-inner-div'>
+                <div className='logout-pop-up-inner-div-logout-statement'>
                     {message}
                 </div>
-                <div className={`retailer-module-${isDelete ? 'delete' : 'update'}-popup-options`}>
-                    <div className={`retailer-module-${isDelete ? 'delete' : 'update'}-popup-option-no`} onClick={onClose}>
+                <div className='logout-pop-up-inner-div-no-yes'>
+                    <div className='logout-pop-up-inner-div-no' onClick={onClose}>
                         No
                     </div>
-                    <div className={`retailer-module-${isDelete ? 'delete' : 'update'}-popup-option-yes`} onClick={onConfirm}>
+                    <div className='logout-pop-up-inner-div-yes' onClick={onConfirm}>
+
                         Yes
+
                     </div>
                 </div>
             </div>
@@ -179,26 +142,26 @@ const UploadBooksModulesForm = () => {
     );
 
     const PopupSuccess = ({ message, onClose }) => (
-        <div className="retailer-module-success-popup">
-            <div className="retailer-module-success-popup-inner">
-                <div className="retailer-module-success-popup-message">
+        <div className='logout-pop-up'>
+            <div className='logout-pop-up-inner-div-pop-up-success'>
+                <div className='logout-pop-up-inner-div-pop-up-success-msg'>
                     {message}
                 </div>
-                <div className="retailer-module-success-popup-ok" onClick={onClose}>
-                    Ok
+                <div className='logout-pop-up-inner-div-ok' onClick={onClose}>
+                    ok
                 </div>
             </div>
         </div>
     );
 
     const PopupFail = ({ message, onClose }) => (
-        <div className="retailer-module-fail-popup">
-            <div className="retailer-module-fail-popup-inner">
-                <div className="retailer-module-fail-popup-message">
+        <div className='logout-pop-up'>
+            <div className='logout-pop-up-inner-div-pop-up-fail'>
+                <div className='logout-pop-up-inner-div-pop-up-fail-msg'>
                     {message}
                 </div>
-                <div className="retailer-module-fail-popup-ok" onClick={onClose}>
-                    Ok
+                <div className='logout-pop-up-inner-div-ok' onClick={onClose}>
+                    ok
                 </div>
             </div>
         </div>
@@ -276,7 +239,8 @@ const UploadBooksModulesForm = () => {
                     <textarea
                         type="text"
                         name="keywords"
-                        value={formData.keywords}
+                        value={formData.keywords || ""
+                        }
                         onChange={handleInputChange}
                         placeholder="Enter product keywords (comma-separated)"
                         style={{ maxWidth: "90vw", height: "10vh" }}
@@ -298,12 +262,13 @@ const UploadBooksModulesForm = () => {
                                         alt={`Uploaded ${index + 1}`}
                                         className="retailer-upload-form-uploaded-image"
                                     />
+                                    <input
+                                        type="file"
+                                        accept="image/*"
+                                        onChange={(e) => handleImageChange(index, e.target.files[0])}
+                                    />
                                 </div>
-                                <input
-                                    type="file"
-                                    accept="image/*"
-                                    onChange={(e) => handleImageChange(index, e.target.files[0])}
-                                />
+
                             </>
                             ) : (
                                 <div className="retailer-upload-form-uploaded-image-container">
@@ -326,84 +291,69 @@ const UploadBooksModulesForm = () => {
                 </div>
 
 
-                <div className="location-section">
-                    <button
-                        type="button"
-                        onClick={handleCurrentLocationClick}
-                        className="location-button"
-                    >
-                        {fetching ? (
-                            <Oval height={20} width={20} color="#00BFFF" visible={true} />
-                        ) : (
-                            "Use Current Location"
-                        )}
-                    </button>
-                    <p>{coordinates.lat && coordinates.long ? `Latitude: ${coordinates.lat}, Longitude: ${coordinates.long}` : "Location not set"}</p>
+
+
+                <div
+                    className={`retailer-upload-product-form-delete`}
+                    onClick={() => setIsDelete(true)}
+                >
+                    {isDeleting ? <Oval height={20} width={20} color="white" visible={true} /> : "Delete Product"}
                 </div>
-
-                <div className="form-actions">
-                    {isDelete && (
-                        <ConfirmationPopup
-                            message="Are you sure you want to delete this product?"
-                            onClose={() => setIsDelete(false)}
-                            onConfirm={handleDelete}
-                            isDelete={true}
-                        />
-                    )}
-
-                    {isUpdate && (
-                        <ConfirmationPopup
-                            message="Are you sure you want to update this product?"
-                            onClose={() => setIsUpdate(false)}
-                            onConfirm={handleUpdate}
-                            isDelete={false}
-                        />
-                    )}
-
-                    {isUpdateSuccessful && (
-                        <PopupSuccess
-                            message="Product updated successfully!"
-                            onClose={() => setIsUpdateSuccessful(false)}
-                        />
-                    )}
-
-                    {isDeleteSuccessful && (
-                        <PopupSuccess
-                            message="Product deleted successfully!"
-                            onClose={() => setIsDeleteSuccessful(false)}
-                        />
-                    )}
-
-                    {updateFail && (
-                        <PopupFail
-                            message="Failed to update product. Please try again."
-                            onClose={() => setUpdateFail(false)}
-                        />
-                    )}
-
-                    {deleteFail && (
-                        <PopupFail
-                            message="Failed to delete product. Please try again."
-                            onClose={() => setDeleteFail(false)}
-                        />
-                    )}
-
-                    <button
-                        type="button"
-                        onClick={() => setIsUpdate(true)}
-                        className="update-button"
-                    >
-                        {isUpdating ? <Oval height={20} width={20} color="#00BFFF" visible={true} /> : "Update Product"}
-                    </button>
-
-                    <button
-                        type="button"
-                        onClick={() => setIsDelete(true)}
-                        className="delete-button"
-                    >
-                        {isDeleting ? <Oval height={20} width={20} color="#FF0000" visible={true} /> : "Delete Product"}
-                    </button>
+                <div
+                    className={`retailer-upload-product-form-submit`}
+                    onClick={() => setIsUpdate(true)}
+                >
+                    {isUpdating ? <Oval height={20} width={20} color="white" visible={true} /> : "Update Product"}
                 </div>
+            </div>
+
+
+            <div className="form-actions">
+                {isDelete && (
+                    <ConfirmationPopup
+                        message="Are you sure you want to delete this product?"
+                        onClose={() => setIsDelete(false)}
+                        onConfirm={handleDelete}
+                        isDelete={true}
+                    />
+                )}
+
+                {isUpdate && (
+                    <ConfirmationPopup
+                        message="Are you sure you want to update this product?"
+                        onClose={() => setIsUpdate(false)}
+                        onConfirm={handleUpdate}
+                        isDelete={false}
+                    />
+                )}
+
+                {isUpdateSuccessful && (
+                    <PopupSuccess
+                        message="Product updated successfully!"
+                        onClose={() => setIsUpdateSuccessful(false)}
+                    />
+                )}
+
+                {isDeleteSuccessful && (
+                    <PopupSuccess
+                        message="Product deleted successfully!"
+                        onClose={() => setIsDeleteSuccessful(false)}
+                    />
+                )}
+
+                {updateFail && (
+                    <PopupFail
+                        message="Failed to update product. Please try again."
+                        onClose={() => setUpdateFail(false)}
+                    />
+                )}
+
+                {deleteFail && (
+                    <PopupFail
+                        message="Failed to delete product. Please try again."
+                        onClose={() => setDeleteFail(false)}
+                    />
+                )}
             </div>
         </>
     );
