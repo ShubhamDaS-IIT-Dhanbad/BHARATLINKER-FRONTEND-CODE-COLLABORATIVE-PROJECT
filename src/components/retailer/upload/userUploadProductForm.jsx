@@ -138,20 +138,18 @@ const UploadBooksModulesForm = ({ retailerData }) => {
             name="description"
             value={formData.description}
             onChange={handleInputChange}
-            placeholder="
-            (# HEADING) AND (* DETAILS)
-            Mention any notable issues or refurbishments.Be clear and concise for better understanding.
-            
-            Example:-
-            #Condition: 
-                *Refurbished - Like New
-            #Features: 
-                *16GB RAM, 512GB SSD
-            #Includes:
-                *Original charger and carrying case
-            #Issues: 
-                *Minor scratches on the outer casing
-                                    "
+            placeholder="(# HEADING) AND (* DETAILS)
+Mention any notable issues or refurbishments.Be clear and concise for better understanding.
+ 
+Example:-
+#Condition: 
+    *Refurbished - Like New
+#Features: 
+    *16GB RAM, 512GB SSD
+#Includes:
+    *Original charger and carrying case
+#Issues: 
+    *Minor scratches on the outer casing"
             className="retailer-upload-product-form-textarea"
             style={{ maxWidth: '90vw', minHeight: '70vh' }}
           />

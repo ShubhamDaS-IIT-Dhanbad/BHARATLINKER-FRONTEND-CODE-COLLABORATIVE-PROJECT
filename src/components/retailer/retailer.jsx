@@ -9,8 +9,6 @@ import { TbDeviceMobileCharging } from 'react-icons/tb';
 import { AiOutlineProduct } from 'react-icons/ai';
 import { Oval } from 'react-loader-spinner';
 
-import useRetailerAuthHook from '../../hooks/retailerAuthHook';
-
 import './retailer.css';
 import '../user/userHome.css';
 
