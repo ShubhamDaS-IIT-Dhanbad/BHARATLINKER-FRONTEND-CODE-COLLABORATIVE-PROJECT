@@ -102,10 +102,8 @@
     padding: 10px;font-size: 18px;
 }
 .retailer-upload-product-form-textarea::placeholder {
-    font-size: 16px;
     color: #000000;
-    white-space: pre-wrap ;font-family:'Courier New', Courier, monospace;
-    font-weight: 300;
+    white-space: pre-wrap ;
 }
 
 
