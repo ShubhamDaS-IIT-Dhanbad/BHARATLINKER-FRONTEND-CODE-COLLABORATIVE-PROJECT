@@ -1,0 +1,63 @@
+.retailer-update-header {
+
+    background-color: #f9f9f9;
+    color: rgb(0, 0, 0);
+    position: fixed;
+    top: 0;
+    height: 60px;
+    display: flex;
+    flex-grow: 1;
+    align-items: center;
+    padding: 10px;
+    width: 100vw;
+}
+
+.retailer-update-header-left-icon {
+    margin-left: 4px;
+    color: #000000;
+}
+
+.retailer-update-header-inner-div {
+    padding-left: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.retailer-update-header-inner-div-p {
+    font-size: 25px;
+    font-weight: 600;
+    margin: 0;
+}
+.retailer-upload-product-header-shopname{
+    margin-top: -10px;
+}
+.retailer-order-type-buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 3px;padding:0px 10px;
+}
+
+.retailer-order-type-button {
+    border: 1.6px solid rgb(27, 28, 28);
+    font-size: 13px;display: flex;justify-content: center;
+    align-items: center;flex-grow: 1;padding: 5px;
+    font-weight: 600;
+}
+
+.retailer-order-type-button.active {
+    border: 1.6px solid rgb(25, 188, 52);
+    font-size: 13px;flex-grow: 1;
+    font-weight: 600;display: flex;justify-content: center;
+    align-items: center;
+}
+
+
+
+
+
+
+
+.retailer-order-div-container{
+    padding: 10px;
+}

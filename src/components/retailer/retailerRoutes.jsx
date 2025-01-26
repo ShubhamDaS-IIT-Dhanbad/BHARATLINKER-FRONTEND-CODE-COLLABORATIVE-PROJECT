@@ -11,6 +11,7 @@ const RetailerProducts = React.lazy(() => import("./products/userProductPageMain
 const RetailerUpload = React.lazy(() => import("./upload/upload.jsx"));
 const RetailerUpdate = React.lazy(() => import("./update/update.jsx"));
 const RetailerPending = React.lazy(() => import("./pending/pending.jsx"));
+const RetailerOrders = React.lazy(() => import("./order/order.jsx"));
 
 // Private route to protect routes if not authenticated
 const PrivateRoute = ({ children }) => {
@@ -22,7 +23,7 @@ const PrivateRoute = ({ children }) => {
 };
 
 const RetailerRoutes = React.memo(() => {
-  
+
   const getRetailerDataFromCookie = useCallback(() => {
     const storedData = Cookies.get("BharatLinkerShopData");
     if (storedData) {
@@ -138,6 +139,22 @@ const RetailerRoutes = React.memo(() => {
                 />
               </Helmet>
               <RetailerUpload retailerData={retailerData} />
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          path="/retailer/orders"
+          element={
+            <PrivateRoute>
+              <Helmet>
+                <title>Retailer Order - BharatLinker</title>
+                <meta
+                  name="description"
+                  content="orders"
+                />
+              </Helmet>
+              <RetailerOrders retailerData={retailerData} />
             </PrivateRoute>
           }
         />

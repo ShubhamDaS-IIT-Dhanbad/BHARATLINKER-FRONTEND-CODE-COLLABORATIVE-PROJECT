@@ -25,6 +25,7 @@ import userOrders from '../features/user/orderSlice.jsx'
 
 //retailer products
 import retailerProducts from '../features/retailer/product.jsx'
+import retailerorders from '../features/retailer/orderSlice.jsx'
 
 
 const store=configureStore({
@@ -52,7 +53,8 @@ const store=configureStore({
         userOrders:userOrders,
 
         //retailer products
-        retailerProducts:retailerProducts
+        retailerProducts:retailerProducts,
+        retailerorders:retailerorders
     }
 });
 export default store;

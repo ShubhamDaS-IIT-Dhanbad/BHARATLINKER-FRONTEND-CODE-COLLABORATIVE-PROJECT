@@ -20,25 +20,10 @@ const placeOrderProvider = async (
     lat,
     long,
     image,
-    title
+    title,
+    phoneNumber,name
 ) => {
     try {
-        // Log input parameters
-        console.log(
-            userId,
-            shopId,
-            productId,
-            quantity,
-            price,
-            discountedPrice,
-            address,
-            lat,
-            long,
-            image,
-            title
-        );
-
-        // Validate numeric inputs
         if (
             typeof quantity !== 'number' || quantity <= 0 ||
             typeof price !== 'number' || price <= 0 ||
@@ -75,7 +60,7 @@ const placeOrderProvider = async (
                 address,
                 lat,
                 long,
-                image,
+                image,phoneNumber,name,
                 title: truncatedTitle,
             }
         );
@@ -93,25 +78,81 @@ const getOrderByUserId = async (userId) => {
         if (!userId) {
             throw new Error('User ID is missing');
         }
-
-        // Construct query to filter by userId
-
-        const queries = [Query.equal('userId', userId)];// Appwrite expects query strings in this format
-
-        // Fetch documents from the Appwrite database
+        const queries = [Query.equal('userId', userId)];
         const response = await databases.listDocuments(
             conf.appwriteShopsDatabaseId,
             conf.appwriteOrdersCollectionId,
             queries
         );
-
         return response.documents;
     } catch (error) {
         console.error('Error fetching orders by userId:', error.message);
         throw error;
     }
 };
+const getOrderByShopId = async (shopId, state, page , ordersPerPage = 4) => {
+    try {
+        if (!shopId) {
+            throw new Error('Shop ID is missing');
+        }
 
+        // Construct queries
+        const queries = [
+            Query.equal('shopId', shopId), // Filter by shop ID
+            Query.equal('state', state),   // Filter by state
+        ];
+
+        // Handle sorting based on the state
+        if (state === 'pending' || state === 'confirmed' || state === 'dispatched') {
+            queries.push(Query.orderAsc('$createdAt')); // Sort by creation time for these states
+        } else if (state === 'canceled' || state === 'delivered') {
+            queries.push(Query.orderDesc('$updatedAt')); // Sort by update time for these states
+        }
+
+        // Pagination logic
+        const offset = (page - 1) * ordersPerPage;
+        queries.push(Query.limit(ordersPerPage)); // Limit the number of results per page
+        queries.push(Query.offset(offset));      // Set the offset for pagination
+
+        // Fetch documents
+        const response = await databases.listDocuments(
+            conf.appwriteShopsDatabaseId,
+            conf.appwriteOrdersCollectionId,
+            queries
+        );
+        return {
+            documents: response.documents,
+            total: response.total,
+            currentPage: page,
+            totalPages: Math.ceil(response.total / ordersPerPage),
+        };
+    } catch (error) {
+        console.error('Error fetching orders by shopId:', error.message);
+        throw error;
+    }
+};
+
+const updateOrderByShopId = async (orderId, state) => {
+    try {
+        if (!orderId) {
+            throw new Error('User ID is missing');
+        }
+        const documentId = orderId;
+        const response = await databases.updateDocument(
+            conf.appwriteShopsDatabaseId,
+            conf.appwriteOrdersCollectionId,
+            documentId,
+            {
+                state
+            }
+        );
+        console.log(response)
+        return response.documents;
+    } catch (error) {
+        console.error('Error fetching orders by orderId:', error.message);
+        throw error;
+    }
+};
 
 
 
@@ -137,5 +178,5 @@ const updateOrderState = async (orderId, state) => {
     }
 };
 
-export { placeOrderProvider, getOrderByUserId, updateOrderState };
+export { placeOrderProvider, getOrderByUserId,getOrderByShopId,updateOrderByShopId, updateOrderState };
 

@@ -116,8 +116,7 @@ const MyCartPage = ({ userData }) => {
     const [confirmOrder, setConfirmOrder] = useState(false);
     // Function to handle the order placement
     const placeOrderConfirm = async () => {
-
-        if (!address || !lat || !long) {
+        if (!address || !lat || !long || !userData || !userData.phoneNumber) {
             setShowInfo(true);
             return;
         }
@@ -133,6 +132,8 @@ const MyCartPage = ({ userData }) => {
                 const { productId, shopId, quantity, discountedPrice, price, title, image } = cartItem;
                 console.log(cartItem)
                 const userId = userData.$id;
+                const phoneNumber=userData.phoneNumber
+                const name="shubham";
                 await placeOrderProvider(
                     userId,
                     shopId,
@@ -144,7 +145,9 @@ const MyCartPage = ({ userData }) => {
                     lat,
                     long,
                     image,
-                    title
+                    title,
+                    name,
+                    phoneNumber
                 );
                 const newItem = {
                     productId: productId,
@@ -303,51 +306,6 @@ const MyCartPage = ({ userData }) => {
     );
 };
 export default React.memo(MyCartPage);
-
-
-
-
-
-
-
-
-
-
-{/* 
-                        <div className="my-cart-delivery-address-container" style={{ marginBottom: "20vh" }}>
-                            Return Policy
-                            <div className="my-cart-return-policy">
-                                For returns and enquiry about delivery, please contact the shop owner directly. Shop details are available on their page in the "Shop" section.
-                            </div>
-                        </div>
- */}
-
-{/* {
-                !loading && <div className="my-cart-address-selection">
-                    <div className="select-address" onClick={() => { placeOrder() }}>Proceed to Place order <GrCaretNext style={{ marginLeft: "7px" }} /></div>
-                </div>
-            }
-            {confirmOrder &&
-                <div className='my-cart-confirm-order-parent' >
-                    <div className='my-cart-confirm-order-div' >
-                        Confirm Cash On Delivery Order
-                        <div className='my-cart-confirm-order-div-img-div' ></div>
-                        <div className='my-cart-confirm-order-div-yes-no-div' >
-                            <div className='my-cart-confirm-order-div-yes' onClick={() => { if (!orderPlacing) setConfirmOrder(false) }} >Cancel</div>
-                            <button className='my-cart-confirm-order-div-no' onClick={() => { placeOrderConfirm(cartItems) }} disabled={orderPlacing}>
-                                {orderPlacing ? (
-                                    <TailSpin height={25} width={25} />
-                                ) : (
-                                    "Confirm order"
-                                )}
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            } */}
-
-
-
 
 
 

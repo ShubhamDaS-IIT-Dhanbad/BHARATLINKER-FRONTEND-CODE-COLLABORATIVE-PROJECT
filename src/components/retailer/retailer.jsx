@@ -86,6 +86,8 @@ useEffect(() => {
           />
           <MenuItem
             icon={TbDeviceMobileCharging}
+            
+            onClick={() => navigate('/retailer/orders')}
             label="Orders"
           />
           <MenuItem
