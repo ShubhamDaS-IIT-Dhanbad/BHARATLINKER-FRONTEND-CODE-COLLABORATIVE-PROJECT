@@ -354,6 +354,28 @@ const updateShopData = async (shopId, toDeleteImagesUrls, updatedData, newFiles)
 
 
 
+const updateShopOpenedStatus = async (shopId, isOpened) => {
+    try {
+        if (!shopId) {
+            throw new Error('Shop ID is missing');
+        }
+
+        const documentId = shopId; // Using shopId directly for documentId
+        const response = await databases.updateDocument(
+            conf.appwriteShopsDatabaseId,
+            conf.appwriteShopsCollectionId,
+            documentId,
+            {
+                isOpened: isOpened, // Ensure the correct key-value pair
+            }
+        );
+        
+        return response; // Return the updated document or response as needed
+    } catch (error) {
+        console.error('Error updating shop status:', error.message);
+        throw error; // Re-throw the error to propagate it
+    }
+};
 
 
 
@@ -361,6 +383,6 @@ const updateShopData = async (shopId, toDeleteImagesUrls, updatedData, newFiles)
 
 export {
     registerShop, sendOtp, createSession, deleteSession, getShopData, logout,
-     updateShopData,
+     updateShopData,updateShopOpenedStatus
     
 };
