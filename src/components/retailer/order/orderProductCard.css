@@ -312,3 +312,6 @@
 #retailer-order-input-date{
     border: 2px solid black;
 }
+#retailer-order-input-date::placeholder{
+    border: 2px solid black;color: black;
+}

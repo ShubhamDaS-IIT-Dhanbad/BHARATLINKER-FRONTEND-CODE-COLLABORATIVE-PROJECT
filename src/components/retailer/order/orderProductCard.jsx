@@ -217,7 +217,6 @@ function OrderProductCard({ order, functionToWork }) {
                         <input
                             type="datetime-local"
                             placeholder="pick"
-                            
                             id="retailer-order-input-date"
                             style={{border:"2px solid black"}}
                             value={expectedDatetime}
