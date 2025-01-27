@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux"; // useDispatch hook only
 import { FaExclamationTriangle, FaLuggageCart, FaSadCry } from "react-icons/fa";
 import { RiChatSmileFill } from "react-icons/ri";
 import { GiPartyPopper } from "react-icons/gi";
-
+import { Oval } from "react-loader-spinner";
 import {
     updateOrderStateToConfirmed,
     updateOrderStateToDispatched,
@@ -17,11 +17,18 @@ import "./orderProductCard.css";
 
 function OrderProductCard({ order, functionToWork }) {
     const navigate = useNavigate();
-    const dispatch = useDispatch(); // Initialize useDispatch hook
+    const dispatch = useDispatch();
+
     const [showDatetimeInput, setShowDatetimeInput] = useState(false);
     const [expectedDatetime, setExpectedDatetime] = useState("");
     const [showPhoneInput, setShowPhoneInput] = useState(false);
     const [deliveryBoyPhone, setDeliveryBoyPhone] = useState("");
+
+    const [conforming, setConforming] = useState(false);
+    const [dispatching, setDispatching] = useState(false);
+    const [delivering, setDelivering] = useState(false);
+    const [canceling, setCanceling] = useState(false);
+    const [error, setError] = useState("");
 
     const getStatusIcon = (status) => {
         switch (status) {
@@ -40,212 +47,267 @@ function OrderProductCard({ order, functionToWork }) {
         }
     };
 
+
+
+
+
+
+
     const handleConfirm = async () => {
         if (!expectedDatetime) {
-            alert("Please select an expected delivery datetime.");
+            setError("Please select an expected delivery datetime.");
             return;
         }
-        const expectedDeliveryDate = expectedDatetime;
-        const updatedOrderData = await updateOrderStateToConfirmed(order.$id, "confirmed", expectedDeliveryDate);
-
-        dispatch(deleteOrder({ orderId: order.$id, orderStateArrayName: "pending" }));
-        dispatch(updateOrder({ orderId: order.$id, updatedOrderData, orderStateArrayName: "confirmed" }));
-
-        setExpectedDatetime("");
+        setConforming(true);
         setShowDatetimeInput(false);
+        try {
+            const updatedOrderData = await updateOrderStateToConfirmed(order.$id, "confirmed", expectedDatetime);
+
+            dispatch(deleteOrder({ orderId: order.$id, orderStateArrayName: "pending" }));
+            dispatch(updateOrder({ orderId: order.$id, updatedOrderData, orderStateArrayName: "confirmed" }));
+
+            setExpectedDatetime("");
+
+            setError("");
+        } catch (err) {
+            setError("Failed to confirm the order. Please try again.");
+        }
+        setConforming(false);
     };
 
     const handleDispatch = async () => {
         if (!deliveryBoyPhone) {
-            alert("Please enter the delivery boy's phone number.");
+            setError("Please enter the delivery boy's phone number.");
             return;
         }
-        const deliveryBoyPhn = deliveryBoyPhone;
-        const updatedOrderData = await updateOrderStateToDispatched(order.$id, "dispatched", deliveryBoyPhn);
-        dispatch(updateOrder({ orderId: order.$id, updatedOrderData, orderStateArrayName: "confirmed" }));
-        setDeliveryBoyPhone("");
+        setDispatching(true);
         setShowPhoneInput(false);
+        try {
+            const updatedOrderData = await updateOrderStateToDispatched(order.$id, "dispatched", deliveryBoyPhone);
+
+            dispatch(updateOrder({ orderId: order.$id, updatedOrderData, orderStateArrayName: "confirmed" }));
+
+            setDeliveryBoyPhone("");
+            setError(""); // Clear the error after success
+        } catch (err) {
+            setError("Failed to dispatch the order. Please try again.");
+        }
+        setDispatching(false);
     };
+
+
+
+
+
+
+
+
+
+
 
     const handleCancel = async () => {
         const confirmation = window.confirm("Are you sure you want to cancel this order?");
         if (confirmation) {
-            await updateOrderStateToCanceled(order.$id, "canceled");
-            dispatch(deleteOrder({ orderId: order.$id, status: "canceled" })); // Dispatch deleteOrder
-        }
+            setCanceling(true);
+            const updatedOrderData = await updateOrderStateToCanceled(order.$id, "canceled");
+            dispatch(deleteOrder({ orderId: order.$id, orderStateArrayName: order.state }));
+            dispatch(updateOrder({ orderId: order.$id, updatedOrderData, orderStateArrayName: "canceled" }));
+
+        } setCanceling(false);
     };
 
     const handleDeliver = async () => {
         const confirmation = window.confirm("Mark this order as delivered?");
         if (confirmation) {
-            await updateOrderStateToDelivered(order.$id, "delivered");
-            dispatch(updateOrder({ orderId: order.$id, status: "delivered" })); // Dispatch updateOrder
+            setDelivering(true);
+            const updatedOrderData = await updateOrderStateToDelivered(order.$id, "delivered");
+
+            dispatch(deleteOrder({ orderId: order.$id, orderStateArrayName: "confirmed" }));
+            dispatch(updateOrder({ orderId: order.$id, updatedOrderData, orderStateArrayName: "delivered" }));
+
         }
+        setDelivering(false);
     };
 
     return (
-        <div className="order-product-card-parent">
-            <div className="order-product-card">
-                <div className="order-product-card-img">
-                    <img src={order.image} alt="Product" />
-                </div>
-                <div className="order-product-card-detail">
-                    <div className="order-product-card-detail-1">{order.title}</div>
-                    <div className="order-product-card-detail-2">
-                        <div style={{ display: "flex", gap: "7px" }}>
-                            <div className="order-product-card-detail-2-1">
-                                <p className="order-product-card-detail-2-1-tag">PRICE</p>
-                                <p className="opcdp">₹{order?.discountedPrice}</p>
+        <>
+            <div className="order-product-card-parent">
+                <div className="order-product-card">
+                    <div className="order-product-card-img">
+                        <img src={order.image} alt="Product" />
+                    </div>
+                    <div className="order-product-card-detail">
+                        <div className="order-product-card-detail-1">{order.title}</div>
+                        <div className="order-product-card-detail-2">
+                            <div style={{ display: "flex", gap: "7px" }}>
+                                <div className="order-product-card-detail-2-1">
+                                    <p className="order-product-card-detail-2-1-tag">PRICE</p>
+                                    <p className="opcdp">₹{order?.discountedPrice}</p>
+                                </div>
+                                <div className="order-product-card-detail-2-1">
+                                    <p className="order-product-card-detail-2-1-tag">QTY</p>
+                                    <p className="opcdp">{order?.quantity}</p>
+                                </div>
+                                <div className="order-product-card-detail-2-1">
+                                    <p className="order-product-card-detail-2-1-tag">SUBTOTAL</p>
+                                    <p className="opcdp">
+                                        ₹{order?.discountedPrice * order?.quantity}
+                                    </p>
+                                </div>
                             </div>
-                            <div className="order-product-card-detail-2-1">
-                                <p className="order-product-card-detail-2-1-tag">QTY</p>
-                                <p className="opcdp">{order?.quantity}</p>
-                            </div>
-                            <div className="order-product-card-detail-2-1">
-                                <p className="order-product-card-detail-2-1-tag">SUBTOTAL</p>
-                                <p className="opcdp">
-                                    ₹{order?.discountedPrice * order?.quantity}
-                                </p>
-                            </div>
+
+                            {window.location.pathname === "/user/order" && (
+                                <div
+                                    className="order-product-card-detail-2-rm"
+                                    onClick={() => navigate(`/user/order/${order.$id}`)}
+                                >
+                                    VIEW
+                                </div>
+                            )}
+
+                            {window.location.pathname === "/user/cart" && (
+                                <div
+                                    className="order-product-cart-delete-2-rm"
+                                    onClick={() => functionToWork()}
+                                >
+                                    REMOVE
+                                </div>
+                            )}
                         </div>
 
-                        {window.location.pathname === "/user/order" && (
-                            <div
-                                className="order-product-card-detail-2-rm"
-                                onClick={() => navigate(`/user/order/${order.$id}`)}
-                            >
-                                VIEW
-                            </div>
-                        )}
+                        <div className={`order-product-card-detail-3-state`}>
+                            {getStatusIcon(order?.state)}
+                            {order?.state === "pending" && !showDatetimeInput && (
+                                <>
 
-                        {window.location.pathname === "/user/cart" && (
-                            <div
-                                className="order-product-cart-delete-2-rm"
-                                onClick={() => functionToWork()}
-                            >
-                                REMOVE
-                            </div>
-                        )}
-                    </div>
+                                    {conforming ? <Oval height={20} width={20} color="green" secondaryColor="white" ariaLabel="loading" />
+                                        : <div
+                                            className={`order-product-card-detail-3-state-confirmed`}
+                                            onClick={() => setShowDatetimeInput(true)}
+                                        >CONFIRM</div>}
 
-                    <div className={`order-product-card-detail-3-state`}>
-                        {getStatusIcon(order?.state)}
-                        {order?.state === "pending" && !showDatetimeInput &&(
-                            <>
-                                <div
-                                    className={`order-product-card-detail-3-state-confirmed`}
-                                    onClick={() => setShowDatetimeInput(true)}
-                                >
-                                    CONFIRM
-                                </div>
-                                <div
-                                    className={`order-product-card-detail-3-state-cancel`}
-                                    onClick={handleCancel}
-                                >
-                                    CANCEL
-                                </div>
-                            </>
-                        )}
-                        {order?.state === "confirmed" && !showPhoneInput &&(
-                            <>
-                                <div
-                                    className={`order-product-card-detail-3-state-confirmed`}
-                                    onClick={() => setShowPhoneInput(true)}
-                                >
-                                    DISPATCH
-                                </div>
-                                <div
-                                    className={`order-product-card-detail-3-state-cancel`}
-                                    onClick={handleCancel}
-                                >
-                                    CANCEL
-                                </div>
-                            </>
-                        )}
-                        {order?.state === "dispatched" && (
-                            <>
-                                <div
-                                    className={`order-product-card-detail-3-state-dispatch`}
-                                    onClick={handleDeliver}
-                                >
-                                    COMPLETED
-                                </div>
-                                <div
-                                    className={`order-product-card-detail-3-state-cancel`}
-                                    onClick={handleDeliver}
-                                >
-                                    CANCEL
-                                </div>
-                            </>
-                        )}
+                                    {canceling ? <Oval height={20} width={20} color="green" secondaryColor="white" ariaLabel="loading" />
+
+                                        :
+                                        <div
+                                            className={`order-product-card-detail-3-state-cancel`}
+                                            onClick={handleCancel}
+                                        >
+                                            CANCEL
+                                        </div>}
+                                </>
+                            )}
+                            {order?.state === "confirmed" && !showPhoneInput && (
+                                <>
+
+                                    {dispatching ? <Oval height={20} width={20} color="green" secondaryColor="white" ariaLabel="loading" />
+                                        : <div
+                                            className={`order-product-card-detail-3-state-confirmed`}
+                                            onClick={() => setShowPhoneInput(true)}
+                                        >DISPATCH</div>
+                                    }
+                                    {canceling ? <Oval height={20} width={20} color="green" secondaryColor="white" ariaLabel="loading" />
+
+                                        :
+                                        <div
+                                            className={`order-product-card-detail-3-state-cancel`}
+                                            onClick={handleCancel}
+                                        >
+                                            CANCEL
+                                        </div>}
+                                </>
+                            )}
+                            {order?.state === "dispatched" && (
+                                <>{delivering ? <Oval height={20} width={20} color="green" secondaryColor="white" ariaLabel="loading" />
+
+                                    : <div
+                                        className={`order-product-card-detail-3-state-dispatch`}
+                                        onClick={handleDeliver}
+                                    >
+                                        DELIVERED ?
+                                    </div>}
+                                    {canceling ? <Oval height={20} width={20} color="green" secondaryColor="white" ariaLabel="loading" />
+
+                                        :
+                                        <div
+                                            className={`order-product-card-detail-3-state-cancel`}
+                                            onClick={handleCancel}
+                                        >
+                                            CANCEL
+                                        </div>}
+                                </>
+                            )}
+                        </div>
                     </div>
                 </div>
+
+                <div className="order-product-card-address">
+                    <div className="order-product-card-address-div">
+                        <p className="order-product-card-address-p1">ORDER ID
+                        </p>
+                        <p className="order-product-card-address-p2">{order.$id}
+                        </p>
+                    </div>
+
+                    <div className="order-product-card-address-div">
+                        <p className="order-product-card-address-p1">ADDRESS
+                        </p>
+                        <p className="order-product-card-address-p2">{order.address}
+                        </p>
+                    </div>
+                    <div className="order-product-card-address-div">
+                        <p className="order-product-card-address-p1">NAME
+                        </p>
+                        <p className="order-product-card-address-p2">{order.name}
+                        </p>
+                    </div>
+                    <div className="order-product-card-address-div">
+                        <p className="order-product-card-address-p1">PHONE
+                        </p>
+                        <p className="order-product-card-address-p2">{order.phoneNumber}
+                        </p>
+                    </div>
+                </div>
+
+                {showDatetimeInput && (
+                    <div className="retailer-datetime-modal">
+                        <>EXPECTED DELIVERY DATE | TIME</>
+                        <div className="retailer-datetime-modal-content">
+                            <input
+                                type="datetime-local"
+                                placeholder="pick"
+                                id="retailer-order-input-date"
+                                style={{ border: "2px solid black" }}
+                                value={expectedDatetime}
+                                onChange={(e) => setExpectedDatetime(e.target.value)}
+                            />
+                            <div className="retailer-datetime-modal-content-b1" onClick={handleConfirm}>CONFIRM</div>
+                            <div className="retailer-datetime-modal-content-b2" onClick={() => setShowDatetimeInput(false)}>CANCEL</div>
+                        </div>
+                    </div>
+                )}
+
+                {showPhoneInput && (
+                    <div className="retailer-datetime-modal">
+                        <>DELIVERY BOY PHN</>
+                        <div className="retailer-datetime-modal-content">
+                            <input
+                                type="text"
+                                placeholder="Phone Number"
+
+                                id="retailer-order-phn"
+                                value={deliveryBoyPhone}
+                                onChange={(e) => setDeliveryBoyPhone(e.target.value)}
+                            />
+                            <div className="retailer-datetime-modal-content-b1" onClick={handleDispatch}>DISPATCH</div>
+                            <div className="retailer-datetime-modal-content-b2" onClick={() => setShowPhoneInput(false)}>CANCEL</div>
+                        </div>
+                    </div>
+                )}
             </div>
 
-            <div className="order-product-card-address">
-                <div className="order-product-card-address-div">
-                    <p className="order-product-card-address-p1">ORDER ID
-                    </p>
-                    <p className="order-product-card-address-p2">{order.$id}
-                    </p>
-                </div>
 
-                <div className="order-product-card-address-div">
-                    <p className="order-product-card-address-p1">ADDRESS
-                    </p>
-                    <p className="order-product-card-address-p2">{order.address}
-                    </p>
-                </div>
-                <div className="order-product-card-address-div">
-                    <p className="order-product-card-address-p1">NAME
-                    </p>
-                    <p className="order-product-card-address-p2">{order.name}
-                    </p>
-                </div>
-                <div className="order-product-card-address-div">
-                    <p className="order-product-card-address-p1">PHONE
-                    </p>
-                    <p className="order-product-card-address-p2">{order.phoneNumber}
-                    </p>
-                </div>
-            </div>
-
-            {showDatetimeInput && (
-                <div className="retailer-datetime-modal">
-                    <>EXPECTED DELIVERY DATE | TIME</>
-                    <div className="retailer-datetime-modal-content">
-                        <input
-                            type="datetime-local"
-                            placeholder="pick"
-                            id="retailer-order-input-date"
-                            style={{border:"2px solid black"}}
-                            value={expectedDatetime}
-                            onChange={(e) => setExpectedDatetime(e.target.value)}
-                        />
-                        <div className="retailer-datetime-modal-content-b1" onClick={handleConfirm}>CONFIRM</div>
-                        <div className="retailer-datetime-modal-content-b2" onClick={() => setShowDatetimeInput(false)}>CANCEL</div>
-                    </div>
-                </div>
-            )}
-
-            {showPhoneInput && (
-                 <div className="retailer-datetime-modal">
-                     <>DELIVERY BOY PHN</>
-                     <div className="retailer-datetime-modal-content">
-                        <input
-                            type="text"
-                            placeholder="Phone Number"
-                            
-                            id="retailer-order-phn"
-                            value={deliveryBoyPhone}
-                            onChange={(e) => setDeliveryBoyPhone(e.target.value)}
-                        />
-                        <div className="retailer-datetime-modal-content-b1"onClick={handleDispatch}>DISPATCH</div>
-                        <div className="retailer-datetime-modal-content-b2" onClick={() => setShowPhoneInput(false)}>CANCEL</div>
-                    </div>
-                </div>
-            )}
-        </div>
+        </>
     );
 }
 

@@ -252,7 +252,7 @@ const updateOrderStateToConfirmed = async (orderId, state, expectedDeliveryDate)
         }
       );
       console.log("Order delivered:", response);
-      return response.documents;
+      return response;
     } catch (error) {
       console.error('Error delivering order:', error.message);
       throw error;
@@ -273,7 +273,7 @@ const updateOrderStateToConfirmed = async (orderId, state, expectedDeliveryDate)
         }
       );
       console.log("Order delivered:", response);
-      return response.documents;
+      return response;
     } catch (error) {
       console.error('Error delivering order:', error.message);
       throw error;
