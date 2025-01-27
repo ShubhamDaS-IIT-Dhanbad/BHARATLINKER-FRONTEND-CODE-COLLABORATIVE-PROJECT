@@ -130,7 +130,7 @@ function OrderProductCard({ order, functionToWork }) {
 
                     <div className={`order-product-card-detail-3-state`}>
                         {getStatusIcon(order?.state)}
-                        {order?.state === "pending" && (
+                        {order?.state === "pending" && !showDatetimeInput &&(
                             <>
                                 <div
                                     className={`order-product-card-detail-3-state-confirmed`}
@@ -165,13 +165,13 @@ function OrderProductCard({ order, functionToWork }) {
                         {order?.state === "dispatched" && (
                             <>
                                 <div
-                                     className={`order-product-card-detail-3-state-dispatch`}
+                                    className={`order-product-card-detail-3-state-dispatch`}
                                     onClick={handleDeliver}
                                 >
-                                  COMPLETED
+                                    COMPLETED
                                 </div>
                                 <div
-                                   className={`order-product-card-detail-3-state-cancel`}
+                                    className={`order-product-card-detail-3-state-cancel`}
                                     onClick={handleDeliver}
                                 >
                                     CANCEL
@@ -181,24 +181,46 @@ function OrderProductCard({ order, functionToWork }) {
                     </div>
                 </div>
             </div>
+
             <div className="order-product-card-address">
-                <p>Order ID: {order.$id}</p>
-                <p>Address: {order.address}</p>
-                <p>Name: {order.name}</p>
-                <p>Phone: {order.phoneNumber}</p>
+                <div className="order-product-card-address-div">
+                    <p className="order-product-card-address-p1">ORDER ID
+                    </p>
+                    <p className="order-product-card-address-p2">{order.$id}
+                    </p>
+                </div>
+
+                <div className="order-product-card-address-div">
+                    <p className="order-product-card-address-p1">ADDRESS
+                    </p>
+                    <p className="order-product-card-address-p2">{order.address}
+                    </p>
+                </div>
+                <div className="order-product-card-address-div">
+                    <p className="order-product-card-address-p1">NAME
+                    </p>
+                    <p className="order-product-card-address-p2">{order.name}
+                    </p>
+                </div>
+                <div className="order-product-card-address-div">
+                    <p className="order-product-card-address-p1">PHONE
+                    </p>
+                    <p className="order-product-card-address-p2">{order.phoneNumber}
+                    </p>
+                </div>
             </div>
 
             {showDatetimeInput && (
-                <div className="datetime-modal">
-                    <div className="datetime-modal-content">
-                        <h3>Select Expected Delivery Datetime</h3>
+                <div className="retailer-datetime-modal">
+                    <>EXPECTED DELIVERY DATE | TIME</>
+                    <div className="retailer-datetime-modal-content">
                         <input
                             type="datetime-local"
                             value={expectedDatetime}
                             onChange={(e) => setExpectedDatetime(e.target.value)}
                         />
-                        <button onClick={handleConfirm}>Confirm</button>
-                        <button onClick={() => setShowDatetimeInput(false)}>Cancel</button>
+                        <div className="retailer-datetime-modal-content-b1" onClick={handleConfirm}>CONFIRM</div>
+                        <div className="retailer-datetime-modal-content-b2" onClick={() => setShowDatetimeInput(false)}>CANCEL</div>
                     </div>
                 </div>
             )}

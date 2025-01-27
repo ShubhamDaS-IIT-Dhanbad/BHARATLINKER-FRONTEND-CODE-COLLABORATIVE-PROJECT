@@ -50,6 +50,7 @@ export const fetchOrdersByStatus = createAsyncThunk(
   async ({ shopId, status, page }, { rejectWithValue }) => {
     try {
       const { documents, total } = await fetchOrders(shopId, status, page);
+
       return { documents, total, status };
     } catch (error) {
       return rejectWithValue(error.response?.data || 'Failed to fetch orders');
@@ -62,6 +63,7 @@ export const loadMoreOrders = createAsyncThunk(
   async ({ shopId, status, page }, { rejectWithValue }) => {
     try {
       const { documents, total } = await fetchOrders(shopId, status, page);
+      console.log("loadmore",documents,total,page)
       return { documents, total, status, page };
     } catch (error) {
       return rejectWithValue(error.response?.data || 'Failed to load more orders');
@@ -108,11 +110,11 @@ const ordersSlice = createSlice({
         state[`${status}Orders`].error = null;
       })
       .addCase(fetchOrdersByStatus.fulfilled, (state, action) => {
-        const { status, documents, total } = action.payload;
+        const { status, documents} = action.payload;
         state[`${status}Orders`].loading = false;
         state[`${status}Orders`].data = documents;
-        const totalPages = Math.ceil(total / ordersPerPage);
-        if (state[`${status}Orders`].currentPage >= totalPages) {
+
+        if (documents.length < ordersPerPage ) {
           state[`${status}Orders`].hasMore = false;
         }
       })
@@ -123,18 +125,23 @@ const ordersSlice = createSlice({
       })
 
 
+
+
+
+
+
       // Load More Orders
       .addCase(loadMoreOrders.pending, (state, action) => {
         const { status } = action.meta.arg;
         state[`${status}Orders`].loading = true;
       })
       .addCase(loadMoreOrders.fulfilled, (state, action) => {
-        const { status, documents, total, page } = action.payload;
+        const { status, documents, page } = action.payload;
         state[`${status}Orders`].loading = false;
 
         // Filter out any duplicates based on a unique order identifier (e.g., order ID)
         const newOrders = documents.filter(doc =>
-          !state[`${status}Orders`].data.some(existingOrder => existingOrder.id === doc.id)
+          !state[`${status}Orders`].data.some(existingOrder => existingOrder.$id === doc.$id)
         );
 
         state[`${status}Orders`].data = [
@@ -143,8 +150,7 @@ const ordersSlice = createSlice({
         ];
         state[`${status}Orders`].currentPage = page;
 
-        const totalPages = Math.ceil(total / ordersPerPage);
-        if (page >= totalPages) {
+        if (documents.length < ordersPerPage ) {
           state[`${status}Orders`].hasMore = false;
         }
       })

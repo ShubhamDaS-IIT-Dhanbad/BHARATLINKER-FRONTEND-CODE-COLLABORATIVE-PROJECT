@@ -4,11 +4,11 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import { FaArrowLeft } from 'react-icons/fa';
 import "./order.css";
 import { fetchOrdersByStatus, loadMoreOrders } from "../../../redux/features/retailer/orderSlice";
-
+import { Oval } from "react-loader-spinner";
 import OrderProductCard from "./orderProductCard";
 import { useNavigate } from "react-router-dom";
 function Order({ retailerData }) {
-  const navigate=useNavigate();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const {
     pendingOrders,
@@ -48,6 +48,7 @@ function Order({ retailerData }) {
 
   return (
     <>
+
       <div className="retailer-update-header">
         <FaArrowLeft
           id="retailer-update-header-left-icon"
@@ -71,7 +72,8 @@ function Order({ retailerData }) {
           )}
         </div>
       </div>
-      <div className="retailer-order-type-buttons" style={{ marginTop: "87px" }}>
+
+      <div className="retailer-order-type-buttons" >
         {["pending", "confirmed", "delivered", "canceled"].map((type) => (
           <div
             key={type}
@@ -85,35 +87,25 @@ function Order({ retailerData }) {
       </div>
 
 
-      
-
-
-
-
-      <div className="retailer-order-div-container">
-        <InfiniteScroll
-          dataLength={selectedOrders.data.length}
-          next={fetchNextPage}
-          hasMore={selectedOrders.hasMore}
-          loader={
-            <div id="search-shop-load-more-shop-loader">
-              loading
-            </div>
-          }
-          className="user-orders-container-order"
-        >
-          {selectedOrders.loading && selectedOrders.currentPage === 1 ? (
-            <>loading
-            </>
-          ) : selectedOrders.data.length === 0 ? (
-            <p>No orders found.</p>
-          ) : (
+      <InfiniteScroll
+        dataLength={selectedOrders.data.length}
+        next={fetchNextPage}
+        hasMore={selectedOrders.hasMore}
+        loader={
+          <div className="retailer-order-loading">
+            <Oval height={30} width={30} color="green" secondaryColor="white" ariaLabel="loading" />
+          </div>
+        }
+      >
+        <div className="retailer-order-div-container">
+          {
             selectedOrders.data.map((order) => (
               <OrderProductCard order={order} key={order.$id} />
             ))
-          )}
-        </InfiniteScroll>
-      </div>
+          }
+        </div>
+      </InfiniteScroll>
+
 
 
 
