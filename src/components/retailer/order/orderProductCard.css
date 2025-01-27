@@ -287,7 +287,7 @@
 }
 .retailer-datetime-modal-content input{
     border: none;padding: 3px;
-    color: white;
+    color: rgb(0, 0, 0);font-weight: 800;
 }
 .retailer-datetime-modal-content-b1{
     display: flex;
