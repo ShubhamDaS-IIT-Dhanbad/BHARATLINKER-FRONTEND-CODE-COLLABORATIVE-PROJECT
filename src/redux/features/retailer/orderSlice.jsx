@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { getOrderByShopId } from '../../../appWrite/order/order.js';
 
-const ordersPerPage = 4;
+const ordersPerPage = 10;
 
 const initialState = {
   pendingOrders: {

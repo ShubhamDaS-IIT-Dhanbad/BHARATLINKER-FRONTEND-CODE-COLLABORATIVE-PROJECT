@@ -91,7 +91,7 @@ const getOrderByUserId = async (userId) => {
         throw error;
     }
 };
-const getOrderByShopId = async (shopId, state, page, ordersPerPage = 4) => {
+const getOrderByShopId = async (shopId, state, page, ordersPerPage = 10) => {
     try {
         if (!shopId) {
             throw new Error('Shop ID is missing');
