@@ -90,10 +90,10 @@ useEffect(() => {
             onClick={() => navigate('/retailer/orders')}
             label="Orders"
           />
-          <MenuItem
+          {/* <MenuItem
             icon={CiBellOn}
             label="Notification"
-          />
+          /> */}
           <MenuItem
             icon={MdOutlineAdminPanelSettings}
             label="Logout"
