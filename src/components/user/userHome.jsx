@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState ,useEffect} from 'react';
 import { IoHomeOutline } from 'react-icons/io5';
 import { useNavigate } from 'react-router-dom';
 import { MdOutlineAdminPanelSettings } from "react-icons/md";
@@ -13,6 +13,10 @@ import useUserAuth from '../../hooks/userAuthHook.jsx';
 import './userHome.css';
 
 function UserHome({userData}) {
+    
+    useEffect(()=>{
+        window.scrollTo(0,0);
+    },[])
     const { logout } = useUserAuth();
     const [isLogout, setIsLogout] = useState(false);
     const [isLoading, setIsLoading] = useState(false);

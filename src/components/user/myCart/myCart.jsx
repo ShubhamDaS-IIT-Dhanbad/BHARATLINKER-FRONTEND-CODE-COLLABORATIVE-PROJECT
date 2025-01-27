@@ -41,7 +41,7 @@ const MyCartPage = ({ userData }) => {
     useEffect(() => {
         if (cart?.length === 0 && userData) {
             dispatch(fetchUserCart(userData.phoneNumber));
-        }
+        }window.screenTop(0,0);
     }, []);
 
     const handleRemove = useCallback(async (productId) => {

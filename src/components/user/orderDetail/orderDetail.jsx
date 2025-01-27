@@ -34,7 +34,9 @@ const OrderDetails = () => {
             navigate("/user/order");
         }
     }, [orders, id, navigate]);
-
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, [])
     const getOrderTitle = (state) => {
         switch (state) {
             case "pending":

@@ -13,9 +13,9 @@ import useLocationFromCookie from '../../../hooks/useLocationFromCookie.jsx';
 import { RiRefreshLine } from "react-icons/ri";
 import { TiInfoOutline } from "react-icons/ti";
 
-function UserRefurbishedProduct({userData}) {
-  const {fetchUserData, updateUserData} = useUserAuth();
-  
+function UserRefurbishedProduct({ userData }) {
+  const { fetchUserData, updateUserData } = useUserAuth();
+
   const [name, setName] = useState('');
   const [address, setAddress] = useState('');
   const [lat, setLat] = useState(null);
@@ -31,15 +31,15 @@ function UserRefurbishedProduct({userData}) {
   const [showi, setShowi] = useState(false);
 
   const { fetchLocationSuggestions } = useLocationFromCookie();
-  
+
   useEffect(() => {
-    if(userData){
+    if (userData) {
       setName(userData.name);
       setAddress(userData.address);
       setLat(userData.lat);
       setLong(userData.long);
     }
-
+    window.scrollTo(0, 0);
   }, [userData]);
 
   const handleLocationClick = () => {
@@ -101,7 +101,7 @@ function UserRefurbishedProduct({userData}) {
   const fetchUserDataFunction = async () => {
     setIsFetchingData(true);
     const phone = userData.phoneNumber;
-    
+
     try {
       await fetchUserData(phone);
     } catch (error) {
@@ -148,7 +148,7 @@ function UserRefurbishedProduct({userData}) {
             required
           />
           <RiRefreshLine
-            onClick={()=>{fetchUserDataFunction()}}
+            onClick={() => { fetchUserDataFunction() }}
             size={20}
             className={isFetchingData ? 'rotate-icon' : ''}
           />

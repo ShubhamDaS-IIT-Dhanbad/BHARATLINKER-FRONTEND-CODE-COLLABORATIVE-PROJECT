@@ -26,8 +26,8 @@ const SingleProductSearchBar = () => {
             }
             setLoading(false);
         };
-
         fetchLocation();
+        window.scrollTo(0,0);
     }, []);
 
     // Handle the back navigation

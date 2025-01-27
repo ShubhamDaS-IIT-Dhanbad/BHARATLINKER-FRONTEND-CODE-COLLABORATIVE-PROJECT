@@ -21,7 +21,9 @@ function Order() {
             dispatch(fetchUserOrders(userData.$id));
         }
     }, [userData]);
-
+    useEffect(()=>{
+        window.scrollTo(0,0);
+    },[])
     return (
         <>
             <header>
