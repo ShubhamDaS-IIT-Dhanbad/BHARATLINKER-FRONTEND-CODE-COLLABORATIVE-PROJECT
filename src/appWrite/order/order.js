@@ -21,7 +21,8 @@ const placeOrderProvider = async (
     long,
     image,
     title,
-    phoneNumber,name
+    name,
+    phoneNumber
 ) => {
     try {
         if (
@@ -60,7 +61,7 @@ const placeOrderProvider = async (
                 address,
                 lat,
                 long,
-                image,phoneNumber,name,
+                image, phoneNumber, name,
                 title: truncatedTitle,
             }
         );
@@ -90,7 +91,7 @@ const getOrderByUserId = async (userId) => {
         throw error;
     }
 };
-const getOrderByShopId = async (shopId, state, page , ordersPerPage = 4) => {
+const getOrderByShopId = async (shopId, state, page, ordersPerPage = 4) => {
     try {
         if (!shopId) {
             throw new Error('Shop ID is missing');
@@ -178,5 +179,108 @@ const updateOrderState = async (orderId, state) => {
     }
 };
 
-export { placeOrderProvider, getOrderByUserId,getOrderByShopId,updateOrderByShopId, updateOrderState };
+const updateOrderStateToConfirmed = async (orderId, state, expectedDeliveryDate) => {
+    try {
+      if (!orderId) {
+        throw new Error('Order ID is missing');
+      }
+      if (!expectedDeliveryDate) {
+        throw new Error('Expected delivery date is missing');
+      }
+      const documentId = orderId;
+      const response = await databases.updateDocument(
+        conf.appwriteShopsDatabaseId,
+        conf.appwriteOrdersCollectionId,
+        documentId,
+        {
+          state,
+          expectedDeliveryDate,
+        }
+      );
+      console.log("Order confirmed with expected delivery date:", response);
+      return response;
+    } catch (error) {
+      console.error('Error confirming order:', error.message);
+      throw error;
+    }
+  };
+  
+  const updateOrderStateToDispatched = async (orderId, state, deliveryBoyPhn) => {
+    try {
+      if (!orderId || !deliveryBoyPhn) {
+        throw new Error('Order ID or delivery boy phone is missing');
+      }
+  
+      // Ensure deliveryBoyPhn is a number
+      const deliveryBoyPhoneNumber = Number(deliveryBoyPhn);
+  
+      if (isNaN(deliveryBoyPhoneNumber)) {
+        throw new Error('Delivery boy phone number must be a valid number');
+      }
+  
+      const documentId = orderId;
+      const response = await databases.updateDocument(
+        conf.appwriteShopsDatabaseId,
+        conf.appwriteOrdersCollectionId,
+        documentId,
+        {
+          state,
+          deliveryBoyPhn: deliveryBoyPhoneNumber, // Now it's a number
+        }
+      );
+      console.log("Order dispatched:", response);
+      return response;
+    } catch (error) {
+      console.error('Error dispatching order:', error.message);
+      throw error;
+    }
+  };
+  
+  
+  const updateOrderStateToDelivered = async (orderId, state) => {
+    try {
+      if (!orderId) {
+        throw new Error('Order ID is missing');
+      }
+      const documentId = orderId;
+      const response = await databases.updateDocument(
+        conf.appwriteShopsDatabaseId,
+        conf.appwriteOrdersCollectionId,
+        documentId,
+        {
+          state,
+        }
+      );
+      console.log("Order delivered:", response);
+      return response.documents;
+    } catch (error) {
+      console.error('Error delivering order:', error.message);
+      throw error;
+    }
+  };
+  const updateOrderStateToCanceled = async (orderId, state) => {
+    try {
+      if (!orderId) {
+        throw new Error('Order ID is missing');
+      }
+      const documentId = orderId;
+      const response = await databases.updateDocument(
+        conf.appwriteShopsDatabaseId,
+        conf.appwriteOrdersCollectionId,
+        documentId,
+        {
+          state,
+        }
+      );
+      console.log("Order delivered:", response);
+      return response.documents;
+    } catch (error) {
+      console.error('Error delivering order:', error.message);
+      throw error;
+    }
+  };
+  
+
+export {updateOrderStateToConfirmed,updateOrderStateToDispatched,updateOrderStateToCanceled
+    ,updateOrderStateToDelivered, placeOrderProvider, getOrderByUserId, getOrderByShopId, updateOrderByShopId, updateOrderState };
 

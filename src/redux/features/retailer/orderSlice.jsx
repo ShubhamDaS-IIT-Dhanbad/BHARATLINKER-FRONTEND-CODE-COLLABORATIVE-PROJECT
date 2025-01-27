@@ -34,9 +34,12 @@ const initialState = {
   },
 };
 
-// Generic fetch function
 const fetchOrders = async (shopId, status, page) => {
-  const response = await getOrderByShopId(shopId, status, page);
+  let statuses = [status];
+  if (status === 'confirmed') {
+    statuses = ['confirmed', 'dispatched'];
+  }
+  const response = await getOrderByShopId(shopId, statuses, page);
   const totalDocument = response.total;
   return { documents: response.documents, total: totalDocument };
 };
@@ -69,10 +72,36 @@ export const loadMoreOrders = createAsyncThunk(
 const ordersSlice = createSlice({
   name: 'retailerorders',
   initialState,
-  reducers: {},
+  reducers: {
+    //orderStateArrayName this is the namr of the initialState 
+    deleteOrder: (state, action) => {
+      const { orderId, orderStateArrayName } = action.payload;
+      // Find the state slice corresponding to the orderStateArrayName and filter out the order with the given orderId
+      state[`${orderStateArrayName}Orders`].data = state[`${orderStateArrayName}Orders`].data.filter(
+        (order) => order.$id !== orderId
+      ); console.log(state[`${orderStateArrayName}Orders`].data, "shubham")
+    },
+    updateOrder: (state, action) => {
+      const { orderId, updatedOrderData, orderStateArrayName } = action.payload;
+      const orderIndex = state[`${orderStateArrayName}Orders`].data.findIndex(
+        (order) => order.$id === orderId
+      );
+
+      // If the order is found, update it with the new data
+      if (orderIndex !== -1) {
+        state[`${orderStateArrayName}Orders`].data[orderIndex] = {
+          ...state[`${orderStateArrayName}Orders`].data[orderIndex],
+          ...updatedOrderData,
+        };
+      } else {
+        // If the order is not found, add the new order to the list
+        state[`${orderStateArrayName}Orders`].data.push(updatedOrderData);
+      }
+    }
+
+  },
   extraReducers: (builder) => {
     builder
-      // Fetch Orders
       .addCase(fetchOrdersByStatus.pending, (state, action) => {
         const { status } = action.meta.arg;
         state[`${status}Orders`].loading = true;
@@ -93,6 +122,7 @@ const ordersSlice = createSlice({
         state[`${status}Orders`].error = action.payload;
       })
 
+
       // Load More Orders
       .addCase(loadMoreOrders.pending, (state, action) => {
         const { status } = action.meta.arg;
@@ -101,16 +131,24 @@ const ordersSlice = createSlice({
       .addCase(loadMoreOrders.fulfilled, (state, action) => {
         const { status, documents, total, page } = action.payload;
         state[`${status}Orders`].loading = false;
+
+        // Filter out any duplicates based on a unique order identifier (e.g., order ID)
+        const newOrders = documents.filter(doc =>
+          !state[`${status}Orders`].data.some(existingOrder => existingOrder.id === doc.id)
+        );
+
         state[`${status}Orders`].data = [
           ...state[`${status}Orders`].data,
-          ...documents,
+          ...newOrders,
         ];
         state[`${status}Orders`].currentPage = page;
+
         const totalPages = Math.ceil(total / ordersPerPage);
         if (page >= totalPages) {
           state[`${status}Orders`].hasMore = false;
         }
       })
+
       .addCase(loadMoreOrders.rejected, (state, action) => {
         const { status } = action.meta.arg;
         state[`${status}Orders`].loading = false;
@@ -118,5 +156,7 @@ const ordersSlice = createSlice({
       });
   },
 });
+
+export const { deleteOrder, updateOrder } = ordersSlice.actions;
 
 export default ordersSlice.reducer;

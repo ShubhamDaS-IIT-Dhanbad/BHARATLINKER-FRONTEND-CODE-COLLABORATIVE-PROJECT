@@ -1,6 +1,14 @@
+.order-product-card-parent{
+    width: 95vw;display: flex;background-color: red;
+    flex-direction: column;
+}
+.order-product-card-address{
+    background-color: #16b710;
+    height: 100px;
+}
 .order-product-card{
     width: 95vw;display: flex;
-    height: 190px;background-color: #f9f9f9;
+    height: 140px;background-color: white;
 }
 
 .order-product-card-img{
