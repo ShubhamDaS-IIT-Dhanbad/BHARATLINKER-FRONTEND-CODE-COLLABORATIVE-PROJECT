@@ -4,6 +4,14 @@
     height: 140px;
     background-color: white;
 }
+.order-product-card-parent {
+    width: 95vw;
+    display: flex;background-color: #efefef;
+    flex-direction: column;
+    padding-bottom: 15px;
+}
+
+
 
 .order-product-card-img {
     height: 140px;
@@ -243,12 +251,7 @@
 
 
 
-.order-product-card-parent {
-    width: 95vw;
-    display: flex;
-    flex-direction: column;
-    padding-bottom: 15px;
-}
+
 
 .order-product-card-address {
     display: flex;
@@ -283,7 +286,7 @@
     display: flex;gap: 9px;
 }
 .retailer-datetime-modal-content input{
-    border: none;background-color: #161717;padding: 3px;
+    border: none;padding: 3px;
     color: white;
 }
 .retailer-datetime-modal-content-b1{

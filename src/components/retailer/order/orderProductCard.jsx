@@ -216,6 +216,7 @@ function OrderProductCard({ order, functionToWork }) {
                     <div className="retailer-datetime-modal-content">
                         <input
                             type="datetime-local"
+                            placeholder="pick"
                             value={expectedDatetime}
                             onChange={(e) => setExpectedDatetime(e.target.value)}
                         />
@@ -235,6 +236,7 @@ function OrderProductCard({ order, functionToWork }) {
                             value={deliveryBoyPhone}
                             onChange={(e) => setDeliveryBoyPhone(e.target.value)}
                         />
+                        <div>Pick date time</div>
                         <button onClick={handleDispatch}>Dispatch</button>
                         <button onClick={() => setShowPhoneInput(false)}>Cancel</button>
                     </div>
