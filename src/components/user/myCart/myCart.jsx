@@ -12,7 +12,8 @@ import OrderProductCard from './cartCard.jsx';
 import { updateCartStateAsync, fetchUserCart } from '../../../redux/features/user/cartSlice.jsx';
 import useLocationFromCookie from '../../../hooks/useLocationFromCookie.jsx';
 import { IoClose } from "react-icons/io5";
-import { placeOrderProvider } from '../../../appWrite/order/order.js'
+import { placeOrderProvider } from '../../../appWrite/order/order.js';
+import handleSendEmail from '../../../appWrite/services/emailServiceToShop.js';
 
 import '../userProfile/userProfile.css';
 import './myCart.css';
@@ -129,12 +130,14 @@ const MyCartPage = ({ userData }) => {
         setOrderPlacing(true);
         try {
             for (const cartItem of cart) {
-                const { productId, shopId, quantity, discountedPrice, price, title, image } = cartItem;
-                console.log(cartItem)
+                const { productId, shopId, quantity, discountedPrice, price, title, image, shopEmail } = cartItem;
+                console.log(cartItem);
                 const userId = userData.$id;
-                const phoneNumber=userData.phoneNumber
-                const name="shubham";
-                await placeOrderProvider(
+                const phoneNumber = userData.phoneNumber;
+                const name = "shubham";
+        
+                // Place the order
+                const order = await placeOrderProvider(
                     userId,
                     shopId,
                     productId,
@@ -147,15 +150,26 @@ const MyCartPage = ({ userData }) => {
                     image,
                     title,
                     name,
-                    phoneNumber
+                    phoneNumber,
+                    shopEmail
                 );
+        
+                // Send email asynchronously (non-blocking)
+                const to = shopEmail;
+                const type = 1;
+                const orderId = order.$id;
+                handleSendEmail(to, type, orderId, title, address, quantity, price, discountedPrice, phoneNumber, image)
+                    .catch((err) => console.error("Error sending email:", err));
+        
+                // Update cart state
                 const newItem = {
                     productId: productId,
                     quantity: 0,
                     phoneNumber: userData?.phoneNumber,
-                }
-                await dispatch(updateCartStateAsync(newItem));
+                };
+                dispatch(updateCartStateAsync(newItem));
             }
+            // Navigate to order page
             navigate("/user/order");
         } catch (error) {
             console.error("Error placing orders:", error);
@@ -163,6 +177,7 @@ const MyCartPage = ({ userData }) => {
         } finally {
             setOrderPlacing(false);
         }
+        
     };
 
 
@@ -264,7 +279,7 @@ const MyCartPage = ({ userData }) => {
                 )}
             </div>
             <div className='my-cart-count-container-parent'>
-                {!confirmOrder && cart.length>0 &&
+                {!confirmOrder && cart.length > 0 &&
                     <div
                         className="my-cart-count-container"
                         onClick={() => {
@@ -297,7 +312,7 @@ const MyCartPage = ({ userData }) => {
                     <div id="productSearch-page-sort-by-header">
                         <div id="productSearch-page-sortby-options">
                             <div className="order-confirm-no" onClick={() => { setConfirmOrder(false) }}>NO</div>
-                            <div className="order-confirm-yes" onClick={() => {setConfirmOrder(false); placeOrderConfirm() }}>YES</div>
+                            <div className="order-confirm-yes" onClick={() => { setConfirmOrder(false); placeOrderConfirm() }}>YES</div>
                         </div>
                     </div>
                 </div>

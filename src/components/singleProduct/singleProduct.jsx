@@ -107,11 +107,11 @@ const ProductDetails = ({ userData }) => {
     };
 
     const handleAddToCart = async () => {
-        if (!userData?.phoneNumber) {
+        if (!userData?.phoneNumber ) {
             navigate("/login");
             return;
         }
-
+        if(!shopDetail){alert("SHOP DOES NOT EXIST");return;}
         const newItem = {
             productId: productDetail.$id,
             shopId:productDetail.shop,
@@ -121,6 +121,7 @@ const ProductDetails = ({ userData }) => {
             quantity: 1,
             image: productDetail.images[0],
             phoneNumber: userData.phoneNumber,
+            shopEmail:shopDetail.email
         };
         await dispatch(updateCartStateAsync(newItem));
     };

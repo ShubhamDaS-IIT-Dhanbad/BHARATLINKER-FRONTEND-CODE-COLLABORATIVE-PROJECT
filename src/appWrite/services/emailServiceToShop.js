@@ -1,4 +1,4 @@
-import conf from '../conf/conf.js';
+import conf from '../../conf/conf.js';
 import { Client, Functions } from 'appwrite';
 
 const client = new Client()
@@ -7,34 +7,24 @@ const client = new Client()
 
 const functions = new Functions(client);
 
-const handleSendEmail = async (to, subject, text) => {
-  // States for handling status and sending flag
-  const [sending, setSending] = useState(false);
-  const [status, setStatus] = useState('');
-
-  setSending(true);
-  setStatus('');
-
-  // Creating a stringified email body with dynamic input
+const handleSendEmail = async (to, type,orderId,title,address,quantity,price,discountedPrice,phoneNumber,image) => {
   const emailBody = JSON.stringify({
     to: to,
-    subject: subject,
-    text: text,
-  });
-
+    type,
+    orderId,title,address,quantity,price,discountedPrice,phoneNumber,image
+  });console.log(emailBody,"body")
   try {
     const result = await functions.createExecution(
-      '678f6501000fad7c34c5', // functionId
-      emailBody, // sending the stringified body
-      false // async (optional)
+      '678f6501000fad7c34c5',
+      emailBody, 
+      false,
+      "/sendmail"
     );
-    console.log('Execution result:', result); // Log the result for debugging
-    setStatus('Email sent successfully!');
+    console.log('Execution result:', result);
   } catch (error) {
-    console.error('Error sending email:', error); // Log the error for debugging
-    setStatus('Failed to send email: ' + error.message);
+    console.error('Error sending email:', error);
   } finally {
-    setSending(false);
+    console.log("email")
   }
 };
 

@@ -22,7 +22,8 @@ const placeOrderProvider = async (
     image,
     title,
     name,
-    phoneNumber
+    phoneNumber,
+    shopEmail
 ) => {
     try {
         if (
@@ -63,6 +64,7 @@ const placeOrderProvider = async (
                 long,
                 image, phoneNumber, name,
                 title: truncatedTitle,
+                shopEmail
             }
         );
         return response;

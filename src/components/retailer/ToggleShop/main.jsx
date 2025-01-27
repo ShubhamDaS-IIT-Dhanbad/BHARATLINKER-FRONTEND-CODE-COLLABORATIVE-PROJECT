@@ -12,7 +12,6 @@ const ToggleSwitch = ({ retailerData }) => {
 
       // Update the status in the backend (Appwrite)
       const updated=await updateShopOpenedStatus(retailerData.$id, !isOn);
-      console.log(updated);
       Cookies.set('BharatLinkerShopData', JSON.stringify({ ...retailerData, ...updated }));
 
     } catch (error) {
