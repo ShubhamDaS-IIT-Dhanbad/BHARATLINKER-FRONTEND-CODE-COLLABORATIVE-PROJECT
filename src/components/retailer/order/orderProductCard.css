@@ -309,3 +309,6 @@
     background-color: #d43434;
     color: white;
 }
+#retailer-order-input-date{
+    border: 2px solid black;
+}

@@ -217,6 +217,9 @@ function OrderProductCard({ order, functionToWork }) {
                         <input
                             type="datetime-local"
                             placeholder="pick"
+                            
+                            id="retailer-order-input-date"
+                            style={{border:"2px solid black"}}
                             value={expectedDatetime}
                             onChange={(e) => setExpectedDatetime(e.target.value)}
                         />
@@ -233,6 +236,8 @@ function OrderProductCard({ order, functionToWork }) {
                         <input
                             type="text"
                             placeholder="Phone Number"
+                            id="retailer-order-input-date"
+                            style={{border:"2px solid black"}}
                             value={deliveryBoyPhone}
                             onChange={(e) => setDeliveryBoyPhone(e.target.value)}
                         />
