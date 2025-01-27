@@ -63,7 +63,6 @@ export const loadMoreOrders = createAsyncThunk(
   async ({ shopId, status, page }, { rejectWithValue }) => {
     try {
       const { documents, total } = await fetchOrders(shopId, status, page);
-      console.log("loadmore",documents,total,page)
       return { documents, total, status, page };
     } catch (error) {
       return rejectWithValue(error.response?.data || 'Failed to load more orders');
@@ -81,7 +80,7 @@ const ordersSlice = createSlice({
       // Find the state slice corresponding to the orderStateArrayName and filter out the order with the given orderId
       state[`${orderStateArrayName}Orders`].data = state[`${orderStateArrayName}Orders`].data.filter(
         (order) => order.$id !== orderId
-      ); console.log(state[`${orderStateArrayName}Orders`].data, "shubham")
+      );
     },
     updateOrder: (state, action) => {
       const { orderId, updatedOrderData, orderStateArrayName } = action.payload;

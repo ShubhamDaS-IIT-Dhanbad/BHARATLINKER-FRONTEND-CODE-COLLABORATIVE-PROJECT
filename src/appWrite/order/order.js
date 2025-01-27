@@ -147,7 +147,6 @@ const updateOrderByShopId = async (orderId, state) => {
                 state
             }
         );
-        console.log(response)
         return response.documents;
     } catch (error) {
         console.error('Error fetching orders by orderId:', error.message);
@@ -171,7 +170,6 @@ const updateOrderState = async (orderId, state) => {
                 state
             }
         );
-        console.log(response)
         return response.documents;
     } catch (error) {
         console.error('Error fetching orders by orderId:', error.message);
@@ -197,7 +195,6 @@ const updateOrderStateToConfirmed = async (orderId, state, expectedDeliveryDate)
           expectedDeliveryDate,
         }
       );
-      console.log("Order confirmed with expected delivery date:", response);
       return response;
     } catch (error) {
       console.error('Error confirming order:', error.message);
@@ -228,7 +225,6 @@ const updateOrderStateToConfirmed = async (orderId, state, expectedDeliveryDate)
           deliveryBoyPhn: deliveryBoyPhoneNumber, // Now it's a number
         }
       );
-      console.log("Order dispatched:", response);
       return response;
     } catch (error) {
       console.error('Error dispatching order:', error.message);
@@ -251,7 +247,6 @@ const updateOrderStateToConfirmed = async (orderId, state, expectedDeliveryDate)
           state,
         }
       );
-      console.log("Order delivered:", response);
       return response;
     } catch (error) {
       console.error('Error delivering order:', error.message);
@@ -272,7 +267,6 @@ const updateOrderStateToConfirmed = async (orderId, state, expectedDeliveryDate)
           state,
         }
       );
-      console.log("Order delivered:", response);
       return response;
     } catch (error) {
       console.error('Error delivering order:', error.message);
