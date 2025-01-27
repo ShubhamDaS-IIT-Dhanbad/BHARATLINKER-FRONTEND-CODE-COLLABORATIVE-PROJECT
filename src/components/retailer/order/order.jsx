@@ -98,13 +98,18 @@ function Order({ retailerData }) {
         }
       >
         <div className="retailer-order-div-container">
-          {
+          {selectedOrders.data.length === 0 ? (
+            <div className="retailer-order-empty">
+              EMPTY
+            </div>
+          ) : (
             selectedOrders.data.map((order) => (
               <OrderProductCard order={order} key={order.$id} />
             ))
-          }
+          )}
         </div>
       </InfiniteScroll>
+
 
 
 
