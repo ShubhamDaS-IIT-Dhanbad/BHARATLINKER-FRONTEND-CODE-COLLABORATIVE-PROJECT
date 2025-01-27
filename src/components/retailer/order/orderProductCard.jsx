@@ -146,10 +146,10 @@ function OrderProductCard({ order, functionToWork }) {
                                 </div>
                             </>
                         )}
-                        {order?.state === "confirmed" && (
+                        {order?.state === "confirmed" && !showPhoneInput &&(
                             <>
                                 <div
-                                    className={`order-product-card-detail-3-state-dispatch`}
+                                    className={`order-product-card-detail-3-state-confirmed`}
                                     onClick={() => setShowPhoneInput(true)}
                                 >
                                     DISPATCH
@@ -229,20 +229,19 @@ function OrderProductCard({ order, functionToWork }) {
             )}
 
             {showPhoneInput && (
-                <div className="phone-modal">
-                    <div className="phone-modal-content">
-                        <h3>Enter Delivery Boy's Phone Number</h3>
+                 <div className="retailer-datetime-modal">
+                     <>DELIVERY BOY PHN</>
+                     <div className="retailer-datetime-modal-content">
                         <input
                             type="text"
                             placeholder="Phone Number"
-                            id="retailer-order-input-date"
-                            style={{border:"2px solid black"}}
+                            
+                            id="retailer-order-phn"
                             value={deliveryBoyPhone}
                             onChange={(e) => setDeliveryBoyPhone(e.target.value)}
                         />
-                        <div>Pick date time</div>
-                        <button onClick={handleDispatch}>Dispatch</button>
-                        <button onClick={() => setShowPhoneInput(false)}>Cancel</button>
+                        <div className="retailer-datetime-modal-content-b1"onClick={handleDispatch}>DISPATCH</div>
+                        <div className="retailer-datetime-modal-content-b2" onClick={() => setShowPhoneInput(false)}>CANCEL</div>
                     </div>
                 </div>
             )}
