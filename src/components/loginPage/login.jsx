@@ -1,17 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../style/userLogin.css';
-
-const i1='https://res.cloudinary.com/demc9mecm/image/upload/v1737378112/vokh5op2d88jerrkksan.png';
-const i2='https://res.cloudinary.com/demc9mecm/image/upload/v1737378115/d7xgicjpub5ag6udeisd.png';
-
-
 import { Client, Account, ID } from 'appwrite';
-import { FaArrowLeft } from "react-icons/fa";
+import { FaArrowLeft} from "react-icons/fa";
+
 import { FaCircleExclamation } from "react-icons/fa6";
 import Cookies from 'js-cookie';
 import { fetchUserByPhoneNumber } from '../../appWrite/userData/userData.js';
 import { TailSpin } from 'react-loader-spinner';
+
+const i1 = 'https://res.cloudinary.com/demc9mecm/image/upload/v1737378112/vokh5op2d88jerrkksan.png';
+const i2 = 'https://res.cloudinary.com/demc9mecm/image/upload/v1737378115/d7xgicjpub5ag6udeisd.png';
 
 function SignUpForm() {
   const navigate = useNavigate();
@@ -31,16 +30,13 @@ function SignUpForm() {
 
   const account = new Account(client);
 
-  const handlePhoneChange = (e) => {
-    setPhone(e.target.value);
-  };
+  const handlePhoneChange = (e) => setPhone(e.target.value);
 
-  const handleOTPChange = async (element, index) => {
+  const handleOTPChange = (element, index) => {
     if (isNaN(element.value)) return;
 
     const newOtp = otp.map((d, idx) => (idx === index ? element.value : d));
     setOtp(newOtp);
-    account.deleteSession('current');
 
     if (element.value === "" && index > 0) {
       document.getElementById(`otp-input-${index - 1}`).focus();
@@ -49,20 +45,15 @@ function SignUpForm() {
     }
 
     const otpCode = newOtp.join('');
-    if (otpCode.length === 6) {
-      verifyOTP(otpCode);
-    }
+    if (otpCode.length === 6) verifyOTP(otpCode);
   };
 
   const handleKeyDown = (event, index) => {
     if (event.key === 'Backspace') {
       event.preventDefault();
       const newOtp = [...otp];
-      if (newOtp[index] === "") {
-        if (index > 0) {
-          document.getElementById(`otp-input-${index - 1}`).value = '';
-          document.getElementById(`otp-input-${index - 1}`).focus();
-        }
+      if (newOtp[index] === "" && index > 0) {
+        document.getElementById(`otp-input-${index - 1}`).focus();
       } else {
         newOtp[index] = "";
         setOtp(newOtp);
@@ -73,19 +64,16 @@ function SignUpForm() {
   useEffect(() => {
     let countdown;
     if (timer > 0) {
-      countdown = setInterval(() => {
-        setTimer((prevTimer) => prevTimer - 1);
-      }, 1000);
+      countdown = setInterval(() => setTimer((prev) => prev - 1), 1000);
     } else {
       setIsResendDisabled(false);
     }
-
     return () => clearInterval(countdown);
   }, [timer]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
-}, []);
+  }, []);
 
   const sendOTP = async () => {
     setLoading(true);
@@ -102,37 +90,36 @@ function SignUpForm() {
     }
   };
 
-
-
-
-
   const verifyOTP = async (otpCode) => {
-    const userLabel='user'
-    if (otpCode.length != 6) return;
+    if (otpCode.length !== 6 || !/^[0-9]+$/.test(otpCode)) return;
     setVerifyingOtp(true);
+
     try {
-      const session = await account.createSession(userId, otpCode, userLabel);
+      const session = await account.createSession(userId, otpCode);
       console.log('OTP verified, session created:', session);
-  
-      const userData = await fetchUserByPhoneNumber(phone);
-  
-      if (userData) {
-        if (userData.cart) {
-          userData.cart = JSON.parse(userData.cart);
+
+      try {
+        const userData = await fetchUserByPhoneNumber(phone);
+        if (userData) {
+          userData.cart = userData.cart ? JSON.parse(userData.cart) : [];
+          userData.userId=session.userId;
+          Cookies.set('BharatLinkerUserData', JSON.stringify(userData), { expires: 7, path: '' });
+          console.log('User data fetched and stored:', userData);
+        } else {
+          console.warn('No user data found for the provided phone number');
         }
-        Cookies.set('BharatLinkerUserData', JSON.stringify(userData), { expires: 7, path: '' });
-        console.log('User data fetched and stored:', userData);
-      } else {
-        console.warn('No user data found for the provided phone number');
+      } catch (fetchError) {
+        console.error('Error fetching user data:', fetchError);
       }
-  
+
       navigate('/user');
     } catch (error) {
+      console.error('Error during OTP verification:', error);
       setOtp(new Array(6).fill(''));
+    } finally {
+      setVerifyingOtp(false);
     }
-    setVerifyingOtp(false);
   };
-  
 
   return (
     <div className='user-login-container'>
@@ -143,11 +130,11 @@ function SignUpForm() {
             Bharat | Linker
           </div>
 
-          <img className='retailer-login-img' src={i2} />
+          <img className='retailer-login-img' src={i2} alt="Signup" />
           <div className="signup-container-text">
             <div>Sign up to keep</div>
             <div style={{ marginTop: "-7px" }}>discovering the best your</div>
-            <div style={{ marginTop: "-7px" }}> locality has to offer!</div>
+            <div style={{ marginTop: "-7px" }}>locality has to offer!</div>
           </div>
           <div className="signup-container-p">
             Add your phone number. We'll send you a verification code so we know you're real.
@@ -159,15 +146,15 @@ function SignUpForm() {
               <span style={{ color: "black" }}>+91</span>
             </div>
             <input
-              type="number"
-              placeholder="enter phone number"
+              type="tel"
+              placeholder="Enter phone number"
               value={phone}
               onChange={handlePhoneChange}
               maxLength="10"
             />
           </div>
 
-          <button className="send-otp-button" onClick={sendOTP}>
+          <button className="send-otp-button" onClick={sendOTP} disabled={loading || !phone}>
             {loading ? <TailSpin height={20} width={20} color="#ffffff" /> : "SEND OTP"}
           </button>
 
@@ -192,7 +179,7 @@ function SignUpForm() {
             {otp.map((data, index) => (
               <input
                 className="otp-input"
-                type="number"
+                type="text"
                 maxLength="1"
                 key={index}
                 value={data}
@@ -205,13 +192,13 @@ function SignUpForm() {
           </div>
           {verifyingOtp && <div style={{ marginTop: "30px" }}><TailSpin height={20} width={20} color="#ffffff" /></div>}
           <p className="resend-text">Didn't receive the code?</p>
-          <div
+          <button
             className={`resend-btn ${isResendDisabled ? 'disabled' : ''}`}
             onClick={!isResendDisabled ? sendOTP : null}
             disabled={isResendDisabled}
           >
             Resend new code {isResendDisabled && `in (${timer}s)`}
-          </div>
+          </button>
         </div>
       )}
     </div>
