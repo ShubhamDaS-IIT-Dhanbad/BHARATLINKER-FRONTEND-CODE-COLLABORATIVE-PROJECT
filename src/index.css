@@ -9,9 +9,9 @@ body ::-webkit-scrollbar{
   align-items: center;
   height:100vh;width: 100vw;
   z-index:9999999999;
-  background-color: #ffffff;
-}
+  background-color: #f9f9f9;
 
+} 
 
 
 

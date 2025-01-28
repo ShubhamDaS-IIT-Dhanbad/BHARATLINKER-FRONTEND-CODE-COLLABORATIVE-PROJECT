@@ -10,7 +10,7 @@ import SearchPage from './components/searchPage/searchPage.jsx';
 import SearchShop from './components/searchShop/searchShop.jsx';
 import RefurbishedPage from './components/refurbishedPage/refurbishedPage.jsx';
 
-
+import i1 from './assets/bl.png';
 const LoginPage = lazy(() => import('./components/loginPage/login.jsx'));
 
 const SingleProduct = lazy(() => import('./components/singleProduct/singleProduct.jsx'));
@@ -26,7 +26,6 @@ const UserNotification = lazy(() => import('./components/user/notification/userN
 const UserOrder = lazy(() => import('./components/user/order/order.jsx'));
 const UserCart = lazy(() => import('./components/user/myCart/myCart.jsx'));
 const UserOrderDetail = lazy(() => import('./components/user/orderDetail/orderDetail.jsx'));
-
 
 const RetailerRoutes = lazy(() => import('./components/retailer/retailerRoutes.jsx'));
 const RetailerLogin = React.lazy(() => import("./components/retailer/login.jsx"));
