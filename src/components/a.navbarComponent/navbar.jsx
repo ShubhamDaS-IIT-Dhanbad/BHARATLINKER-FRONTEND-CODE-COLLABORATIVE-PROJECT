@@ -125,12 +125,12 @@ const Navbar = ({ headerTitle }) => {
                             </p>
                             <div
                                 className={isHomePage ? "home-page-location-value" : "product-page-location-value"}
-                                onClick={toggleLocationTab}
+                                
                             >
                                 {userLocation?.address
                                     ? userLocation?.address.slice(0, 30)
                                     : 'SET LOCATION, INDIA'}
-                                <TiArrowSortedDown size={15} />
+                                <TiArrowSortedDown size={15} onClick={toggleLocationTab}/>
                             </div>
                         </div>
                     </div>
