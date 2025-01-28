@@ -1,0 +1,36 @@
+.home-location-not-present{
+    width: 100vw;height: 100vh;position: fixed;
+    top: 0;z-index: 110;
+    overflow: hidden;background-color: rgba(0, 0, 0, 0.781);
+    display: flex;justify-content: center;
+}
+.home-location-not-present-d1{
+    height: 100px;width: calc(100vw - 20px);
+    background-color: rgb(254, 250, 250);
+    margin-top: 20px;border-radius: 20px;
+    display:flex;flex-direction: column;
+}
+.home-location-not-present-message{
+    display: flex;justify-content: center;align-items: center;
+    height: 50px;
+}
+.home-location-not-present-options{
+    height: 50px;border-top: 0.4px solid rgba(216, 27, 96, 0.274);
+    display: flex;justify-content:space-evenly;align-items: center;
+}
+.home-location-not-present-use-loc-btn{
+    display: flex;width: 50%;
+    justify-content: center;align-items: center;
+    font-size: 11px;font-weight: 900;color: rgb(255, 255, 255);
+    background-color: rgb(37, 147, 37);
+    border-bottom-left-radius: 20px;
+    border-right: 0.4px solid rgba(216, 27, 96, 0.283);height: 100%;
+}
+.home-location-not-present-use-manual-btn{
+    display: flex;width: 50%;
+    justify-content: center;align-items: center;
+    font-size: 11px;height: 100%;color: rgb(255, 255, 255);
+    background-color: rgb(0, 0, 0);font-weight: 900;
+    border-bottom-right-radius: 20px;
+}
+

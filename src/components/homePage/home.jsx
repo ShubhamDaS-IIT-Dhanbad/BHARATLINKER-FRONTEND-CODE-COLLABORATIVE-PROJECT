@@ -1,4 +1,4 @@
-import React, { memo, useCallback,useEffect } from 'react';
+import React, { memo, useCallback, useEffect, useState } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 import HomePageNavbar from '../a.navbarComponent/navbar.jsx';
@@ -11,14 +11,15 @@ import { MdOutlineAdminPanelSettings } from "react-icons/md";
 
 import Cookie from 'js-cookie';
 
-const ti1='https://res.cloudinary.com/demc9mecm/image/upload/v1737378115/ptnykpibqxqobs3gywoq.png';
+import './home.css'
+const ti1 = 'https://res.cloudinary.com/demc9mecm/image/upload/v1737378115/ptnykpibqxqobs3gywoq.png';
+
 const Home = () => {
-    
     const navigate = useNavigate();
     const handleRetailerClick = useCallback(() => {
         const retailerCookie = Cookie.get('BharatLinkerShopData');
         if (retailerCookie) {
-            const shopData = JSON.parse(retailerCookie);console.log(shopData,"dataaa")
+            const shopData = JSON.parse(retailerCookie); console.log(shopData, "dataaa")
             const path = shopData.registrationStatus === 'pending' ? '/retailer/pending' :
                 shopData.registrationStatus === 'rejected' ? '/retailer/rejected' : '/retailer';
             navigate(path);
@@ -33,16 +34,16 @@ const Home = () => {
 
     return (
         <>
-            <HomePageNavbar headerTitle={"Bharat | Linker"}/>
+            <HomePageNavbar headerTitle={"Bharat | Linker"} />
             <div id="home-div" style={{
                 display: 'flex',
                 flexDirection: 'column',
-                backgroundColor: 'rgb(255, 255, 255)',
+                backgroundColor: '#f9f9f9',
                 marginTop: '99px',
                 maxWidth: '100vw',
                 marginBottom: '60px'
             }}>
-                <HomeTestimonial ti1={ti1}/>
+                <HomeTestimonial ti1={ti1} />
             </div>
             <div id="home-footer" style={{
                 width: '100vw',
@@ -50,16 +51,17 @@ const Home = () => {
                 alignItems: 'center',
                 justifyContent: 'space-evenly',
                 height: '60px',
-                backgroundColor: 'rgb(255, 255, 255)',
+                backgroundColor: '#f9f9f9',
                 position: 'fixed',
                 bottom: '0',
-                zIndex: '1000'
+                zIndex: '100'
             }}>
                 <FooterButton icon={<RiSunCloudyLine size={37} />} label="Home" onClick={() => navigate('/')} />
                 <FooterButton icon={<TbCategoryPlus size={37} />} label="Products" onClick={() => navigate('/search')} />
                 <FooterButton icon={<MdOutlineStore size={37} />} label="Shop" onClick={() => navigate('/shop')} />
                 <FooterButton icon={<MdOutlineAdminPanelSettings size={37} />} label="Retailer" onClick={handleRetailerClick} />
             </div>
+            
         </>
     );
 };

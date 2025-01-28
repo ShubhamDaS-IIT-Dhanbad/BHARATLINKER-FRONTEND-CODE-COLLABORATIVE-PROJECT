@@ -13,14 +13,21 @@ import '../style/navbar.css';
 
 import { useSelector } from 'react-redux';
 //hooks
+
+import useLocationFromCookie from '../../hooks/useLocationFromCookie.jsx';
 import { useExecuteSearch } from '../../hooks/searchProductHook.jsx';
 import { useSearchShop } from '../../hooks/searchShopHook.jsx';
 import { useSearchRefurbishedProductsHook } from '../../hooks/searchRefurbishedHook.jsx'
 
 
 const Navbar = ({ headerTitle }) => {
+
+    const { location: userLocation } = useLocationFromCookie();
+
     const navigate = useNavigate();
     const location = useLocation();
+
+    const [isLocationHas, setIsLocationHas] = useState(true);
 
     const { executeSearch } = useExecuteSearch();
     const { query: searchQuery } = useSelector((state) => state.searchproducts);
@@ -29,18 +36,15 @@ const Navbar = ({ headerTitle }) => {
     const { executeSearchRefurbished } = useSearchRefurbishedProductsHook();
     const { query: refurbishedQuery } = useSelector((state) => state.refurbishedproducts);
 
-    const [userLocation, setUserLocation] = useState(null);
     const [searchInput, setSearchInput] = useState('');
     const [locationTabVisible, setLocationTabVisible] = useState(false);
 
     useEffect(() => {
-        const storedLocation = Cookies.get('BharatLinkerUserLocation')
-            ? JSON.parse(Cookies.get('BharatLinkerUserLocation'))
-            : { lat: 0, lon: 0, address: '', radius: 5 };
+        if (!userLocation || !userLocation.address || !userLocation.lat || !userLocation.lon) {
+            setIsLocationHas(false);
+        } else { setIsLocationHas(true); }
+    }, []);
 
-        setUserLocation(storedLocation);
-    }, [locationTabVisible]);
-    
     useEffect(() => {
         if (isSearchPage) {
             setSearchInput(searchQuery);
@@ -96,7 +100,7 @@ const Navbar = ({ headerTitle }) => {
         }
     };
 
-   
+
 
 
     return (
@@ -164,6 +168,17 @@ const Navbar = ({ headerTitle }) => {
             {locationTabVisible && (
                 <LocationTab setLocationTab={setLocationTabVisible} />
             )}
+            {!isLocationHas &&
+                <div className="home-location-not-present">
+                    <div className="home-location-not-present-d1">
+                        <div className="home-location-not-present-message">User Your Location is not set</div>
+                        <div className="home-location-not-present-options" onClick={()=>{setLocationTabVisible(true); setIsLocationHas(true)}}>
+                            <div className="home-location-not-present-use-loc-btn">USE CURRENT LOCATION</div>
+                            <div className="home-location-not-present-use-manual-btn">SEARCH MANUALLY</div>
+                        </div>
+                    </div>
+                </div>
+            }
         </>
     );
 };
