@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { LiaSortSolid } from "react-icons/lia";
 import { MdFilterList } from "react-icons/md";
-
+import { Oval } from 'react-loader-spinner';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 
@@ -45,7 +45,7 @@ const SearchPage = () => {
         }
     }, [updated, selectedBrands, selectedCategories]);
 
-    const skeletons = [1, 2, 3, 4,5,6];
+    const skeletons = [1, 2, 3, 4, 5, 6];
     return (
         <>
             <div id="productSearchPage-container-top">
@@ -56,16 +56,20 @@ const SearchPage = () => {
             </div>
 
             {loading ? (
-                <div id="skleton-page-grid">
-                    {skeletons.map((_, index) => (
-                        <div className="product-card-skleton" key={index}>
-                            <Skeleton height="250px" width="200px" />
-                            <div className="product-card-skleton-bottom">
-                                <Skeleton height="30px" />
-                                <Skeleton height={50} />
-                            </div>
-                        </div>
-                    ))}
+                // <div id="skleton-page-grid">
+                //     {skeletons.map((_, index) => (
+                //         <div className="product-card-skleton" key={index}>
+                //             <Skeleton height="250px" width="200px" />
+                //             <div className="product-card-skleton-bottom">
+                //                 <Skeleton height="30px" />
+                //                 <Skeleton height={50} />
+                //             </div>
+                //         </div>
+                //     ))}
+                // </div>
+                <div className="fallback-loading">
+                    <Oval height={30} width={30} color="green" secondaryColor="white" ariaLabel="loading" />
+
                 </div>
 
             ) : (
