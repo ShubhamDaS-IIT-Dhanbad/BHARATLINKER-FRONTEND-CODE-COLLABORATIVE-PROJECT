@@ -84,7 +84,7 @@ const ProductDetails = () => {
             navigator.geolocation.getCurrentPosition(
                 (position) => {
                     const { latitude: userLat, longitude: userLon } = position.coords;
-                    const googleMapsDirectionsUrl = `https://www.google.com/maps/dir/?api=1&origin=${userLat},${userLon}&destination=${shopDetail?.lat},${shopDetail?.lang}&travelmode=driving`;
+                    const googleMapsDirectionsUrl = `https://www.google.com/maps/dir/?api=1&origin=${userLat},${userLon}&destination=${shopDetail?.lat},${shopDetail?.long}&travelmode=driving`;
                     window.open(googleMapsDirectionsUrl, "_blank");
                 },
                 (error) => {

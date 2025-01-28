@@ -53,14 +53,12 @@ const Navbar = ({ headerTitle }) => {
         } else if (isRefurbishedPage) {
             setSearchInput(refurbishedQuery);
         }
-
     }, []);
 
     const handleHomePageUserIconClick = () => {
         const userSession = Cookies.get('BharatLinkerUserData');
         navigate(userSession ? '/user' : '/login');
     };
-
     const toggleLocationTab = () => {
         setLocationTabVisible((prev) => !prev);
     };
@@ -99,8 +97,6 @@ const Navbar = ({ headerTitle }) => {
             executeSearchRefurbished(inputValue);
         }
     };
-
-
 
 
     return (
