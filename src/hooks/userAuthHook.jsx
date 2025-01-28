@@ -1,9 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Navigate, useNavigate, useLocation } from 'react-router-dom';
 import {useDispatch} from 'react-redux';
-import { Client, Account } from 'appwrite';
 import Cookies from 'js-cookie';
-import conf from '../conf/conf.js';
 
 import { fetchUserByPhoneNumber } from '../appWrite/userData/userData.js';
 import { updateUserByPhoneNumber } from '../appWrite/userData/userData.js';
@@ -15,11 +13,6 @@ const useUserAuth = () => {
     const [userData, setUserData] = useState(null);
     const navigate = useNavigate();
     const location = useLocation();
-
-    const client = new Client()
-        .setEndpoint('https://cloud.appwrite.io/v1')
-        .setProject(conf.appwriteUsersProjectId);
-    const account = new Account(client);
 
     useEffect(() => {
         if (location.pathname.startsWith('/user')) {

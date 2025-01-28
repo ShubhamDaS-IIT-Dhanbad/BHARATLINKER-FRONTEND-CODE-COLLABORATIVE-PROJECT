@@ -7,7 +7,6 @@ export const useExecuteSearch = () => {
     const { getLocationFromCookie } = useLocationFromCookie();
 
     const storedLocation = getLocationFromCookie();
-
     const {
         products,
         loading,
@@ -33,11 +32,14 @@ export const useExecuteSearch = () => {
             userLat: lat,
             userLong: long,
             radius:radius ? radius : 0,
+
             inputValue: searchQuery, 
-            page: 1,
             productsPerPage,
+            page: 1,
+            
             selectedCategories,
             selectedBrands,
+
             sortByAsc,
             sortByDesc,
         };
@@ -52,11 +54,14 @@ export const useExecuteSearch = () => {
             userLat: lat,
             userLong: long,
             radius:radius ? radius :0,
+
             inputValue:searchQuery,
-            page: currentPage + 1,
             productsPerPage,
+            page: currentPage + 1,
+           
             selectedCategories,
             selectedBrands,
+
             sortByAsc,
             sortByDesc,
         };

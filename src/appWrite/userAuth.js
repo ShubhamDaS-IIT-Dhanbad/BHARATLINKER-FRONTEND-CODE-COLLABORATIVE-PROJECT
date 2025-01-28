@@ -183,7 +183,7 @@ class UserAuthService {
      * @param {Object} sessionData - The data to be stored.
      */
     _storeUserSession(sessionData) {
-        Cookies.set('BharatLinkerUser', JSON.stringify(sessionData), { expires: 7 });
+        Cookies.set('BharatLinkerUserData', JSON.stringify(sessionData), { expires: 7 });
         console.log("User session stored in cookies");
     }
 
@@ -192,7 +192,7 @@ class UserAuthService {
      * @private
      */
     _clearSessionData() {
-        Cookies.remove('BharatLinkerUser');
+        Cookies.remove('BharatLinkerUserData');
         console.log("User session cookie cleared");
     }
 }

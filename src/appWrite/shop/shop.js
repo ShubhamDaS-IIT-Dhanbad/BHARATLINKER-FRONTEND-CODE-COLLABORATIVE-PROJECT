@@ -206,7 +206,6 @@ const getShopData = async (contact) => {
         const isPhone = /^\d{10}$/.test(contact);
         let response;
         
-        // Check if the contact is a phone number or an email
         if (isPhone) {
             // If it's a phone number
             response = await databases.listDocuments(

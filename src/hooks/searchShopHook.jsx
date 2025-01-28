@@ -9,12 +9,7 @@ export const useSearchShop = () => {
     const storedLocation = getLocationFromCookie();
 
     const { shops, loading, currentPage, loadingMoreShops, hasMoreShops } = useSelector((state) => state.searchshops);
-    const selectedCategories = useSelector(
-        (state) => state.shopfiltersection.selectedCategories
-    );
-    const selectedBrands = useSelector(
-        (state) => state.shopfiltersection.selectedBrands
-    );
+    const selectedCategories = useSelector((state) => state.shopfiltersection.selectedCategories);
 
     const shopsPerPage = 3;
     const lat = storedLocation ? storedLocation.lat : null;
@@ -27,14 +22,13 @@ export const useSearchShop = () => {
         const params = {
             userLat: lat,
             userLong: long,
-            radius,
+            radius:radius ? radius : 0,
+
             inputValue: searchQuery,
             page: 1,
             shopsPerPage: shopsPerPage,
+
             selectedCategories,
-            selectedBrands: [],
-            sortByAsc: null,
-            sortByDesc: null,
         };
         if (shops.length != 0) { dispatch(resetShops()) }
         dispatch(fetchShops(params));
@@ -48,13 +42,12 @@ export const useSearchShop = () => {
             userLat: lat,
             userLong: long,
             radius: radius ? radius : 0,
+
             inputValue: searchQuery,
             page: currentPage + 1,
             shopsPerPage: shopsPerPage,
-            selectedCategories,
-            selectedBrands: [],
-            sortByAsc: null,
-            sortByDesc: null,
+
+            selectedCategories
         };
         dispatch(loadMoreShops(params));
     };

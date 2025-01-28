@@ -11,21 +11,20 @@ export const useExecuteUserSearch = () => {
     const { getUserDataFromCookie } = useUserAuth();
 
     const userData = getUserDataFromCookie();
-
-    const { refurbishedProducts, loading, error, currentPage, hasMoreProducts, loadingMoreProducts } = useSelector(
-        (state) => state.userRefurbishedProducts
-    );
+    const { refurbishedProducts, currentPage, hasMoreProducts, loadingMoreProducts } = useSelector((state) => state.userRefurbishedProducts);
 
     const executeSearch = (inputValue) => {
         if (loadingMoreProducts || !userData?.phoneNumber) return;
         const searchQuery = inputValue || '';
         const params = {
+            phn: `+91${userData?.phoneNumber}`,
+
             inputValue: searchQuery,
             page: 1,
             productsPerPage: 8,
+
             sortByAsc: false,
             sortByDesc: false,
-            phn: `+91${userData?.phoneNumber}`,
         };
 
         if (refurbishedProducts.length !== 0) dispatch(resetUserRefurbishedProducts());
@@ -36,12 +35,14 @@ export const useExecuteUserSearch = () => {
         if (!hasMoreProducts || loadingMoreProducts || !userData?.phoneNumber) return;
         const searchQuery = inputValue || '';
         const params = {
+            phn: `+91${userData?.phoneNumber}`,
+
             inputValue: searchQuery,
             page: currentPage + 1,
             productsPerPage: 8,
+            
             sortByAsc: false,
             sortByDesc: false,
-            phn: `+91${userData?.phoneNumber}`,
         };
         dispatch(loadMoreUserRefurbishedProducts(params));
     };

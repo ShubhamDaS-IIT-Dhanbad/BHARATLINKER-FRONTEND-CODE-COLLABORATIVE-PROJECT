@@ -1,7 +1,7 @@
 import React from 'react';
 import { Oval } from 'react-loader-spinner';
 import { useSelector } from 'react-redux';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation} from 'react-router-dom';
 import SearchPageProductCard from './productCard.jsx';
 import '../style/productList.css';
 

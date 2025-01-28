@@ -5,26 +5,20 @@ import { fetchRefurbishedProducts, loadMoreRefurbishedProducts, resetRefurbished
 export const useSearchRefurbishedProductsHook = () => {
     const dispatch = useDispatch();
     const { getLocationFromCookie } = useLocationFromCookie();
-    const storedLocation = getLocationFromCookie();
 
-    // Redux state
+    const storedLocation = getLocationFromCookie();
     const { 
         refurbishedProducts, 
         currentPage, 
         hasMoreProducts, 
         loading, 
         loadingMoreProducts, 
-        error, 
         sortByAsc, 
         sortByDesc 
     } = useSelector((state) => state.refurbishedproducts);
 
-      const selectedBrands = useSelector(
-        (state) => state.refurbishedproductsfiltersection.selectedRefurbishedBrands
-      );
-      const selectedCategories = useSelector(
-        (state) => state.refurbishedproductsfiltersection.selectedRefurbishedCategories
-      );
+      const selectedBrands = useSelector((state) => state.refurbishedproductsfiltersection.selectedRefurbishedBrands);
+      const selectedCategories = useSelector((state) => state.refurbishedproductsfiltersection.selectedRefurbishedCategories);
 
  
     const productsPerPage = 3;
@@ -37,16 +31,19 @@ export const useSearchRefurbishedProductsHook = () => {
         
         const searchQuery = inputValue || "";
         const params = {
-            inputValue: searchQuery,
-            userLat: lat,
+          userLat: lat,
             userLong: long,
             radius:radius ? radius :0,
+
+            inputValue: searchQuery,
             page: 1,
             productsPerPage: productsPerPage,
-            sortByAsc: sortByAsc || false,
-            sortByDesc: sortByDesc || false,
+
             selectedBrands,
-            selectedCategories
+            selectedCategories,
+
+            sortByAsc: sortByAsc || false,
+            sortByDesc: sortByDesc || false
         };
         if(refurbishedProducts.length!=0) dispatch(resetRefurbishedProducts());
         dispatch(fetchRefurbishedProducts(params));
@@ -57,16 +54,19 @@ export const useSearchRefurbishedProductsHook = () => {
 
         const searchQuery = inputValue || "";
         const params = {
-            inputValue: searchQuery,
-            userLat: lat,
+          userLat: lat,
             userLong: long,
             radius:radius ? radius :0,
+
+            inputValue: searchQuery,
             page: currentPage + 1,
             productsPerPage: productsPerPage,
-            sortByAsc,
-            sortByDesc,
+
             selectedBrands,
-            selectedCategories
+            selectedCategories,
+
+            sortByAsc,
+            sortByDesc
         };
         dispatch(loadMoreRefurbishedProducts(params));
     };
