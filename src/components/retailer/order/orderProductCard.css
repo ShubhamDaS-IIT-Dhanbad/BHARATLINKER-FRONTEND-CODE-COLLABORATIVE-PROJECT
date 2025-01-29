@@ -296,8 +296,8 @@
     display: flex;gap: 9px;
 }
 .retailer-datetime-modal-content input{
-    border: none;padding: 3px;
-    color: rgb(0, 0, 0);font-weight: 800;
+    border: none;padding: 3px;outline: none;
+    color: rgb(0, 0, 0);font-weight: 400;
 }
 .retailer-datetime-modal-content-b1{
     display: flex;

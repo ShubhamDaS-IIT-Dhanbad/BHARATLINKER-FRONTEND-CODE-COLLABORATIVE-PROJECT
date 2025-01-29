@@ -362,8 +362,6 @@ function OrderProductCard({ order}) {
                         <div className="retailer-datetime-modal-content">
                             <input
                                 type="text"
-                                placeholder="Phone Number"
-
                                 id="retailer-order-phn"
                                 value={deliveryBoyPhone}
                                 onChange={(e) => setDeliveryBoyPhone(e.target.value)}
