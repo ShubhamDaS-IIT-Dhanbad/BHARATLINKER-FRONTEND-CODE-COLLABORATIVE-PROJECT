@@ -112,6 +112,7 @@ const UploadBooksModulesForm = ({ retailerData }) => {
 
   return (
     <div className="retailer-upload-product-container">
+      
       <div className="retailer-upload-product-form-section">
         <label className="retailer-upload-product-input-label">Product Title*</label>
         <input

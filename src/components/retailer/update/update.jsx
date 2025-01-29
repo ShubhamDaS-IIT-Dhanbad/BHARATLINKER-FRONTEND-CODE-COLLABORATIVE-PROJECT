@@ -1,35 +1,35 @@
 import React from 'react';
-import { useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
-import UploadBooksForm from './userProductUpdateForm.jsx';
+import UploadBooksForm from './updateForm.jsx';
 
-import './userProductUpdate.css';
+import './update.css';
 
 const UploadProduct = ({ retailerData }) => {
     const navigate = useNavigate();
     return (
         <>
-            <div className="retailer-update-header">
+            <div className='retailer-product-upload-header-container'>
                 <FaArrowLeft
-                    id="retailer-update-header-left-icon"
+                    className='retailer-product-upload-header-back-btn'
                     size={25}
                     onClick={() => navigate('/retailer/products')}
-                    aria-label="User Account"
+                    aria-label="Back to Retailer Dashboard"
                     tabIndex={0}
                 />
-                <div className="retailer-update-header-inner-div">
-                    <p className="retailer-update-header-inner-div-p">
-                        UPDATE PRODUCT
-                    </p>
-                    {retailerData?.shopName && (
-                        <div
-                            className={`retailer-upload-product-header-shopname`}
-                            aria-label="Change Location"
-                            tabIndex={0}
-                        >
-                            {retailerData?.shopName?.toUpperCase()}
-                        </div>
-                    )}
+                <div className='retailer-product-upload-header-content'>
+                    <h1 className='retailer-product-upload-header-main-title'>
+                        Update Product Data
+                        <span className='retailer-product-upload-header-title-decoration'></span>
+                    </h1>
+                    <div
+                        className='retailer-product-upload-header-shop-badge'
+                        aria-label="Current Shop"
+                        tabIndex={0}
+                    >
+                        <span className='retailer-product-upload-header-shop-icon'>🏪</span>
+                        {retailerData?.shopName}
+                    </div>
                 </div>
             </div>
 
