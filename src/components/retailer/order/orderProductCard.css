@@ -185,11 +185,11 @@
 .order-product-card-detail-3-state-delivered {
     display: flex;
     align-items: center;
-    padding: 4px 5px 4px 5px;
+    padding: 4px 4.5px 4px 4.5px;
     gap: 10px;
     font-size: 13px;
     font-weight: 700;
-    color: rgb(33, 150, 243);border: 1.3px solid rgb(33, 150, 243);
+    color: rgb(33, 150, 243);border: 1.2px solid rgb(33, 150, 243);
 }
 
 /* Icon styling */
