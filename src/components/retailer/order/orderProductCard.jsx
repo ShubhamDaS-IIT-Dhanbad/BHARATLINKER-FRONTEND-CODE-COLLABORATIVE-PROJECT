@@ -280,7 +280,7 @@ function OrderProductCard({ order, functionToWork }) {
                         </p>
                         <div className="order-product-card-address-p2">
                             {order.phoneNumber}
-                            <FaPhoneSquareAlt color="black" size={25} onClick={()=>{onClickPhn(order.phoneNumber)}}/>
+                            <FaPhoneSquareAlt color="rgb(32, 178, 9)" size={25} onClick={()=>{onClickPhn(order.phoneNumber)}}/>
                         </div>
 
                     </div>
