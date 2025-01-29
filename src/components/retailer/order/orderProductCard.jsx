@@ -130,6 +130,16 @@ function OrderProductCard({ order, functionToWork }) {
         setDelivering(false);
     };
 
+
+
+
+    const onClickPhn = (phoneNumber) => {
+        if (phoneNumber) {
+            window.location.href = `tel:${phoneNumber}`;
+        } else {
+            alert("Please enter a valid phone number.");
+        }
+    };
     return (
         <>
             <div className="order-product-card-parent">
@@ -270,7 +280,7 @@ function OrderProductCard({ order, functionToWork }) {
                         </p>
                         <div className="order-product-card-address-p2">
                             {order.phoneNumber}
-                            <FaPhoneSquareAlt color="black" size={25} />
+                            <FaPhoneSquareAlt color="black" size={25} onClick={()=>{onClickPhn(order.phoneNumber)}}/>
                         </div>
 
                     </div>
