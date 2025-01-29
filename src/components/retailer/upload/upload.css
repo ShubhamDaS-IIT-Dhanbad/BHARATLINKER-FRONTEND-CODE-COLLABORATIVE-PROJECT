@@ -56,414 +56,243 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-.retailer-upload-product-form {
-    margin-top: 2.5rem;
-    background-color: #ffffff;
-    display: flex;color: rgb(0, 0, 0);
-    flex-direction: column;
-    min-height: 70vh;
-    align-items: center;
-    gap: 0.3125rem;
-    overflow-y: scroll;
+.upload-product-container {
+  max-width: 100%;
+  padding: 1rem;
+  background-color: #ffffff;
+  min-height: 100vh;margin-top: 77px;
 }
 
-
-
-/* Title, Description */
-.user-refurbished-product-title-description-div,
-.user-refurbished-product-price-discounted-div {
-    display: flex;
-    flex-direction: column;
-    gap: 5px;
-    margin: 65px 0px 40px 0px;
-}
-.retailer-upload-product-form-textarea {
-    height: 45px;
-    border: 1.3px solid rgb(0, 0, 0);
-    background-color: transparent;
-    display: flex;color: rgb(0, 0, 0);
-    align-items: center;
-    width: 85vw;
-    max-width: 85vw;
-    padding: 10px;font-size: 18px;
-}
-.retailer-upload-product-form-textarea::placeholder {
-    color: #000000;
-    white-space: pre-wrap ;
+.upload-product-header {
+  font-size: 1.5rem;
+  color: #2d3436;
+  margin-bottom: 1.5rem;
+  text-align: center;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*image*/
-.retailer-upload-form-image-section {
-    display: flex;
-    width: 90vw;
-    gap: 5px;
-    justify-content: space-between;
-    align-items: center;
-    margin-top:40px;
-}
-
-
-.retailer-upload-form-uploaded-image-container {
-    width: 30vw;
-    display: flex;flex-direction: column;
-    gap: 10px;
-}
-.retailer-upload-form-uploaded-image {
-    width: 30vw;border: 1px solid black;
-    height: 100px;
-}
-.retailer-upload-form-image-placeholder{
-    color: #000000;
-}
-/*button*/
-.retailer-upload-product-form-submit{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: rgb(37, 147, 37);
-    color: white;
-    padding: 10px;
-    border-radius: 12px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.386);
-  
-    width: calc(97% - 20px);
-    max-width:600px;
-    height: 30px;margin: 0px 0px 20px 0px;
-    z-index: 1000;
-}
-
-.retailer-upload-product-form-delete{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: rgb(147, 37, 37);
-  color: white;
-  padding: 10px;
+.form-section {
+  margin-bottom: 0.2rem;
+  background: rgb(255, 255, 255);
+  padding: 0.75rem;
   border-radius: 12px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.386);
+}
 
-  width: calc(97% - 20px);
-  max-width:600px;
-  height: 30px;margin: 30px 0px 20px 0px;
-  z-index: 1000;
+.input-label {
+  display: block;
+  font-weight: 500;
+  color: #4a4a4a;
+  margin-bottom: 0.1rem;
+  font-size: 0.9rem;
+}
+
+.text-input {
+  width: calc(100% - 1.5rem);
+  padding: 0.8rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+.text-input:focus {
+  outline: none;
+  border-color: #6c5ce7;
+}
+
+.description-textarea {
+  width: calc(100% - 1.5rem);
+  padding: 0.8rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  min-height: 50vh;
+  resize: vertical;
+  font-family: inherit;
+  font-size: 1rem;
+}
+
+.formatting-hint {
+  font-size: 0.8rem;
+  color: #666;
+  margin-top: 0.5rem;
 }
 
 
 
 
-  
 
-/* Common Styles for Pop-Up Container */
-.logout-pop-up{
-  position: fixed;
-  top: 0;
+
+.price-section {
+  background: white;
+  padding: 1rem;
+  border-radius: 12px;
+}
+
+.price-input-wrapper {
+  display: grid;
+  gap: 1rem;
+}
+
+.price-input-group {
+  width: 100%;
+}
+
+.price-input {
+  width: calc(100% - 1.6rem);
+  padding: 0.8rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+.image-section {
+  background: white;
+  padding: 1rem;
+  border-radius: 12px;
+}
+
+.image-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.8rem;
+  margin-top: 0.5rem;
+}
+
+.image-upload-card {
+  aspect-ratio: 1/1;
+  background: #f8f9fa;
+  border: 2px dashed #e0e0e0;
+  border-radius: 8px;
   display: flex;
-  justify-content: center;
   align-items: center;
-  width: 100vw;
-  background-color: #1b1818e5;
-  height: 100vh;
-  
-  z-index: 20000;
-}
-
-/* Common Styles for Pop-Up Inner Div */
-.logout-pop-up-inner-div {
-  background-color: #fff;
-  border-radius: 10px;
-  width: 85vw;
-  height: 130px;
-}
-
-.logout-pop-up-inner-div-pop-up-fail {
-  background-color: #f5f0f0;
-  border-radius: 10px;color: rgb(246, 15, 15);
-  width: 85vw;
-  height: 130px;
-}
-.logout-pop-up-inner-div-pop-up-fail-msg{
-  display: flex;
-  justify-content: center;color: rgb(254, 36, 36);
-  align-items: center;padding: 4px;
-  height: 45%;font-weight: 700;
-  border-bottom: 1px solid rgba(199, 11, 11, 0.075);
-  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-}
-.logout-pop-up-inner-div-pop-up-success {
-  background-color: #f5f0f0;
-  border-radius: 10px;color: rgb(25, 116, 44);
-  width: 85vw;font-weight: 900;
-  height: 130px;
-}
-.logout-pop-up-inner-div-no-yes{
-  display: flex;gap: 10px;height: 100%;
-}
-.logout-pop-up-inner-div-pop-up-success-msg{
-  display: flex;
-  justify-content: center;color: rgb(45, 142, 74);
-  align-items: center;padding: 4px;
-  height: 45%;font-weight: 700;
-  border-bottom: 1px solid rgba(199, 11, 11, 0.075);
-  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-}
-/* Common Styles for No and Yes Options */
-.logout-pop-up-inner-div-ok{
-  display: flex;justify-content: center;align-items: center;
-  height: 50%;width: 100%;
-}
-/* Common Styles for Pop-Up Statement Text */
-.logout-pop-up-inner-div-logout-statement{
-  display: flex;
   justify-content: center;
-  align-items: center;
-  height: 45%;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.075);
-  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  position: relative;
+  overflow: hidden;
 }
 
-
-
-.logout-pop-up-inner-div-no, .user-book-update-option-no, .user-book-delete-option-no {
-  width: 50%;
+.image-upload-box {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   align-items: center;
-  height: 50%;
-  border-right: 1px solid rgba(0, 0, 0, 0.053);
-}
-
-.logout-pop-up-inner-div-yes, .user-book-update-option-yes, .user-book-delete-option-yes {
-  width: 50%;
-  display: flex;
   justify-content: center;
-  align-items: center;
-  height: 50%;
-}
-
-/* Specific Colors for Action Confirmation */
-.logout-pop-up-inner-div-yes {
-  color: green; /* Logout Confirmation */
-}
-
-.user-book-update-option-yes {
-  color: blue; /* Update Confirmation */
-}
-
-.user-book-delete-option-no {
-  color: red;
-}
-
-
-
-
-/*loader*/
-.retailer-upload-form-loader{
-    width: 100vw;height: 100vh;
-    background-color: #000000e8;position: fixed;top: 0;
-    z-index: 100;
-    display: flex;justify-content: center;align-items: center;
-}
-
-/*pop ups*/
-
-
-.refurbished-book-module-class-popup {
-    width: 100vw;
-    height: 100vh;
-    position: fixed;
-    top: 0;
-    background-color: rgba(0, 0, 0, 0.838);
-    display: flex;
-    justify-content: flex-end;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-    z-index: 9999;
-}
-
-.refurbished-book-module-class-popup-close-popup {
-    color: rgb(0, 0, 0);background-color: white;
-    padding: 5px;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-}
-
-
-.refurbished-book-module-class-popup-options {
-    background-color: rgb(255, 255, 255);
-    width: 100vw;
-    /* Full width */
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-    /* Rounded corners */
-    max-height: 75vh;
-    overflow-y: scroll;gap: 5px;
-    display: flex;flex-wrap: wrap;justify-content: center;align-items: center;
-    padding: 20px 0px 10vh 0px;
-    /* Enables scrolling */
-
-}
-
-
-
-
-
-
-.retailer-remove-image-button{
-    background-color: #28a745;background-color: transparent;
-    border: none;border: 1.5px solid red;
-}
-
-.retailer-product-upload-success-popup,
-.retailer-product-upload-fail-popup {
-  position: fixed;
-  top: 0;
-  left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
 }
 
-.retailer-product-upload-success-popup-inner,
-.retailer-product-upload-fail-popup-inner {
-  background-color: #ffffff;
-  border-radius: 10px;
-  width: 80%;
-  max-width: 400px;
-  padding: 20px;
+.upload-icon {
+  font-size: 2rem;
+  color: #a0a0a0;
+  margin-bottom: 0.5rem;
+}
+
+.upload-text {
+  font-size: 0.8rem;
+  color: #666;
   text-align: center;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  padding: 0 0.5rem;
 }
 
-.retailer-product-upload-success-popup-message {
-  color: #4caf50; /* Success color */
-  font-size: 18px;
-  font-weight: bold;
-  margin-bottom: 20px;
+.image-preview-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
 }
 
-.retailer-product-upload-fail-popup-message {
-  color: #f44336; /* Failure color */
-  font-size: 18px;
+.preview-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 6px;
+}
+
+.remove-image-button {
+  position: absolute;
+  top: 0.3rem;
+  right: 0.3rem;
+  background: rgba(0,0,0,0.6);
+  color: white;
+  border: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.1rem;
+}
+
+.form-actions {
+  margin-top: 1.5rem;
+  padding: 1rem;
+}
+
+.submit-button {
+  width: 100%;
+  padding: 1rem;
+  background: #6c5ce7;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
   font-weight: 600;
-  margin-bottom: 20px;
+  transition: opacity 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
 }
 
-.retailer-product-upload-success-popup-ok,
-.retailer-product-upload-fail-popup-ok {
-  display: inline-block;
-  background-color: #4caf50;
-  color: #ffffff;
-  padding: 10px 20px;
-  border-radius: 5px;
-  cursor: pointer;
-  text-transform: uppercase;
-  font-weight: bold;
+.submit-button.uploading {
+  opacity: 0.7;
+  cursor: not-allowed;
 }
 
-.retailer-product-upload-fail-popup-ok {
-  background-color: #f44336;
+.error-message {
+  color: #e74c3c;
+  font-size: 0.9rem;
+  margin-top: 1rem;
+  text-align: center;
 }
 
-.retailer-product-upload-success-popup-ok:hover,
-.retailer-product-upload-fail-popup-ok:hover {
-  opacity: 0.9;
+.success-message {
+  color: #27ae60;
+  font-size: 0.9rem;
+  margin-top: 1rem;
+  text-align: center;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-.refurbished-book-module-class-popup-class-option,
-.selected-green {
-    min-width: 60px;
-    border: 1px solid rgba(0, 0, 0, 0.26);
-    padding: 0px 9px 0px 9px;
-    height: 45px;
-    border-radius: 10px;color: #000;
-    margin: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: none;
-}
-.selected-green {
-    border: 1.9px solid #28a745;
+@media (max-width: 480px) {
+  .upload-product-container {
+    padding: 0.5rem;
   }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  #retailer-upload-location{
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-    display: flex;flex-grow: 1;
+  .upload-product-header {
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
   }
 
-  
-  .retailer-upload-location-p{
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-    display: flex;flex-direction: column;
-    padding: 10px;border:2px solid  rgb(0, 0, 0);border-radius: 10px;
-    justify-content: center;align-items: center;margin: 10px;font-size: 13px;
+  .form-section {
+    padding: 0.8rem;
+    margin-bottom: 0.1rem;
   }
-  .retailer-upload-location-p.selected{
-    border: 2px solid greenyellow;
+
+  .text-input,
+  .description-textarea,
+  .price-input {
+    padding: 0.7rem;
+    font-size: 0.95rem;
   }
+
+  .image-grid {
+    gap: 0.5rem;
+  }
+
+  .submit-button {
+    padding: 0.9rem;
+    font-size: 0.95rem;
+  }
+}
+
+
+
+
+
