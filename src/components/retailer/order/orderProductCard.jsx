@@ -280,7 +280,7 @@ function OrderProductCard({ order, functionToWork }) {
                         </p>
                         <div className="order-product-card-address-p2">
                             {order.phoneNumber}
-                            <FaPhoneSquareAlt color="rgb(32, 178, 9)" size={25} onClick={()=>{onClickPhn(order.phoneNumber)}}/>
+                            <FaPhoneSquareAlt color="rgb(32, 178, 9)" size={25} onClick={() => { onClickPhn(order.phoneNumber) }} />
                         </div>
 
                     </div>
@@ -296,7 +296,7 @@ function OrderProductCard({ order, functionToWork }) {
 
                     {order.expectedDeliveryDate &&
                         <div className="order-product-card-address-div">
-                            <p className="order-product-card-address-p1" style={{fontSize:"12px"}}>EXP DELIVERY DATE
+                            <p className="order-product-card-address-p1" style={{ fontSize: "12px" }}>EXP DELIVERY DATE
                             </p>
                             <p className="order-product-card-address-p2">
                                 {new Date(order.expectedDeliveryDate).toLocaleDateString()}{" "}
@@ -305,7 +305,7 @@ function OrderProductCard({ order, functionToWork }) {
                     }
                     {order.expectedDeliveryDate &&
                         <div className="order-product-card-address-div">
-                            <p className="order-product-card-address-p1" style={{fontSize:"12px"}}>EXP DELIVERY TIME
+                            <p className="order-product-card-address-p1" style={{ fontSize: "12px" }}>EXP DELIVERY TIME
                             </p>
                             <p className="order-product-card-address-p2">
                                 {new Date(order.expectedDeliveryDate).toLocaleTimeString()}
@@ -314,11 +314,12 @@ function OrderProductCard({ order, functionToWork }) {
                     }
                     {order.deliveryBoyPhn &&
                         <div className="order-product-card-address-div">
-                            <p className="order-product-card-address-p1" style={{fontSize:"12px"}}> DELIVERY BOY
+                            <p className="order-product-card-address-p1" style={{ fontSize: "12px" }}> DELIVERY BOY
                             </p>
-                            <p className="order-product-card-address-p2">
+                            <div className="order-product-card-address-p2">
                                 {order.deliveryBoyPhn}
-                            </p>
+                                <FaPhoneSquareAlt color="rgb(32, 178, 9)" size={25} onClick={() => { onClickPhn(order.deliveryBoyPhn) }} />
+                            </div>
                         </div>
                     }
 
