@@ -1,9 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { LiaSortSolid } from "react-icons/lia";
 import { MdFilterList } from "react-icons/md";
 import { Oval } from 'react-loader-spinner';
-import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 
 import SearchBar from '../a.navbarComponent/navbar.jsx';
@@ -20,6 +19,7 @@ const SearchPage = () => {
 
     const [showSortBy, setShowSortBy] = useState(false);
     const [showFilterBy, setShowFilterBy] = useState(false);
+    const [initialized, setInitialized] = useState(false);
 
     const {
         updated,
@@ -31,19 +31,18 @@ const SearchPage = () => {
         sortByDesc,
     } = useSelector((state) => state.searchproducts);
 
-    const selectedBrands = useSelector(
-        (state) => state.searchproductsfiltersection.selectedBrands
-    ) || [];
-    const selectedCategories = useSelector(
-        (state) => state.searchproductsfiltersection.selectedCategories
-    ) || [];
+    // Memoized function to avoid unnecessary re-creation
+    const handleInitialSearch = useCallback(() => {
+        if (!initialized && products.length === 0 && !loading) {
+            executeSearch("");
+            setInitialized(true);
+        }
+    }, [initialized, products.length, loading, executeSearch]);
 
     useEffect(() => {
-        if (products.length === 0 && !loading) {
-            const inputValue = "";
-            executeSearch(inputValue);
-        }
-    }, [updated, selectedBrands, selectedCategories]);
+        handleInitialSearch();
+    }, [handleInitialSearch]);
+
     return (
         <>
             <div id="productSearchPage-container-top">
@@ -56,9 +55,7 @@ const SearchPage = () => {
             {loading ? (
                 <div className="fallback-loading">
                     <Oval height={30} width={30} color="green" secondaryColor="white" ariaLabel="loading" />
-
                 </div>
-
             ) : (
                 <InfiniteScroll
                     dataLength={products.length}
@@ -88,6 +85,7 @@ const SearchPage = () => {
                     setShowFilterBy={setShowFilterBy}
                 />
             )}
+            
             <div id="productSearchPage-footer">
                 <div
                     id="productSearchPage-footer-sortby"
