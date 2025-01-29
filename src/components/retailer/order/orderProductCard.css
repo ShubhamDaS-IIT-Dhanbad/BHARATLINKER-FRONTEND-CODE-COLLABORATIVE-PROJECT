@@ -87,7 +87,7 @@
     color: white;
     font-weight: 700;
     height: 30px;
-    width: 60px;border-radius: 10px;
+    width: 60px;border-radius: 2px;
     justify-content: center;
     align-items: center;
 }
