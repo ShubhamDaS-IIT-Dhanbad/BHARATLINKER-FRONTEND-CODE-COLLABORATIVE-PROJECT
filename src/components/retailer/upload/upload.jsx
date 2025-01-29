@@ -10,33 +10,30 @@ const UploadProduct = ({ retailerData }) => {
 
     return (
         <>
-            <div className='retailer-upload-header'>
+            <div className='retailer-product-upload-header-container'>
                 <FaArrowLeft
-                    className='retailer-upload-back-icon'
+                    className='retailer-product-upload-header-back-btn'
                     size={25}
                     onClick={() => navigate('/retailer')}
                     aria-label="Back to Retailer Dashboard"
                     tabIndex={0}
                 />
-                <div className='retailer-upload-header-content'>
-                    <h1 className='retailer-upload-title'>
+                <div className='retailer-product-upload-header-content'>
+                    <h1 className='retailer-product-upload-header-main-title'>
                         Upload New Product
-                        <span className='retailer-upload-title-underline'></span>
+                        <span className='retailer-product-upload-header-title-decoration'></span>
                     </h1>
                     <div
-                        className='retailer-upload-shopname'
+                        className='retailer-product-upload-header-shop-badge'
                         aria-label="Current Shop"
                         tabIndex={0}
                     >
-                        <span className='retailer-upload-shopname-icon'>🏪</span>
+                        <span className='retailer-product-upload-header-shop-icon'>🏪</span>
                         {retailerData?.shopName}
                     </div>
                 </div>
             </div>
-
-
             <UploadBooksForm retailerData={retailerData} />
-
         </>
     );
 };
