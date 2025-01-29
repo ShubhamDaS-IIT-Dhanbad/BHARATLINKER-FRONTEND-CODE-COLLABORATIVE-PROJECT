@@ -81,26 +81,23 @@
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
-.order-product-card-detail-2-rm,
-.order-product-cart-delete-2-rm {
+.order-product-card-detail-2-rm{
     display: flex;
-    font-size: 9px;
+    font-size: 12px;
     color: white;
-    font-weight: 100;
+    font-weight: 700;
     height: 30px;
-    width: 60px;
+    width: 60px;border-radius: 10px;
     justify-content: center;
     align-items: center;
 }
 
 .order-product-card-detail-2-rm {
-
-    background-color: rgb(45, 65, 159);
+    background-color: rgb(135, 129, 255);
 }
 
-.order-product-cart-delete-2-rm {
-    background-color: rgb(197, 51, 85);
-}
+
+
 
 .order-product-card-detail-3-state {
     width: 100%;

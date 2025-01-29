@@ -16,7 +16,7 @@ import {
 import { updateOrder, deleteOrder } from "../../../redux/features/retailer/orderSlice.jsx";
 import "./orderProductCard.css";
 
-function OrderProductCard({ order, functionToWork }) {
+function OrderProductCard({ order}) {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
@@ -168,23 +168,15 @@ function OrderProductCard({ order, functionToWork }) {
                                 </div>
                             </div>
 
-                            {window.location.pathname === "/user/order" && (
+                            {window.location.pathname === "/retailer/orders" && (
                                 <div
                                     className="order-product-card-detail-2-rm"
                                     onClick={() => navigate(`/user/order/${order.$id}`)}
                                 >
-                                    VIEW
+                                    DETAIL
                                 </div>
                             )}
 
-                            {window.location.pathname === "/user/cart" && (
-                                <div
-                                    className="order-product-cart-delete-2-rm"
-                                    onClick={() => functionToWork()}
-                                >
-                                    REMOVE
-                                </div>
-                            )}
                         </div>
 
                         <div className={`order-product-card-detail-3-state`}>
