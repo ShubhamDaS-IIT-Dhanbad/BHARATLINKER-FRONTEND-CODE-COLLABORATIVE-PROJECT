@@ -31,7 +31,6 @@
 }
 
 .retailer-upload-back-icon {
-  cursor: pointer;
   transition: all 0.3s ease;
   background: rgba(255,255,255,0.1);
   padding: 8px;
@@ -80,7 +79,6 @@
   font-size: 1.1rem;
   opacity: 0.9;
   transition: opacity 0.3s ease;
-  cursor: pointer;
   width: fit-content;
   padding: 4px 12px;
   border-radius: 20px;
