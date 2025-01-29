@@ -93,7 +93,7 @@
 }
 
 .retailer-order-product-card-detail-2 {
-    background-color: rgb(53, 52, 52);
+    border: 1.3px solid black;color: black;
 }
 
 
@@ -157,8 +157,8 @@
     gap: 10px;
     font-size: 13px;
     font-weight: 700;
-    background-color: #ff3f6c;
-    color: white;
+    /* background-color: #e56281; */
+    color: #e56281;border: 1.3px solid #e56281;
 }
 
 .order-product-card-detail-3-state-confirmed {
@@ -168,8 +168,8 @@
     gap: 10px;
     font-size: 13px;
     font-weight: 700;
-    background-color: #4caf50;
-    color: white;
+    /* background-color: #68b36b; */
+    color: #68b36b;border: 1.3px solid #68b36b;
 }
 
 .order-product-card-detail-3-state-dispatch {
@@ -179,7 +179,7 @@
     gap: 10px;
     font-size: 13px;
     font-weight: 700;
-    background-color: #4caf50;
+    background-color: #68c16a;
     color: white;
 }
 .order-product-card-detail-3-state-delivered {
@@ -189,8 +189,8 @@
     gap: 10px;
     font-size: 13px;
     font-weight: 700;
-    background-color: rgb(33, 150, 243);
-    color: white;
+    /* background-color: rgb(33, 150, 243); */
+    color: rgb(33, 150, 243);border: 1.3px solid rgb(33, 150, 243);
 }
 
 /* Icon styling */
