@@ -268,10 +268,9 @@ function OrderProductCard({ order, functionToWork }) {
                     <div className="order-product-card-address-div">
                         <p className="order-product-card-address-p1">PHONE
                         </p>
-
                         <div className="order-product-card-address-p2">
                             {order.phoneNumber}
-                            <FaPhoneSquareAlt color="black" size={25}/>
+                            <FaPhoneSquareAlt color="black" size={25} />
                         </div>
 
                     </div>
@@ -283,6 +282,35 @@ function OrderProductCard({ order, functionToWork }) {
                         <p className="order-product-card-address-p2">{order.address}
                         </p>
                     </div>
+
+
+                    {order.expectedDeliveryDate &&
+                        <div className="order-product-card-address-div">
+                            <p className="order-product-card-address-p1" style={{fontSize:"12px"}}>EXP DELIVERY DATE
+                            </p>
+                            <p className="order-product-card-address-p2">
+                                {new Date(order.expectedDeliveryDate).toLocaleDateString()}{" "}
+                            </p>
+                        </div>
+                    }
+                    {order.expectedDeliveryDate &&
+                        <div className="order-product-card-address-div">
+                            <p className="order-product-card-address-p1" style={{fontSize:"12px"}}>EXP DELIVERY TIME
+                            </p>
+                            <p className="order-product-card-address-p2">
+                                {new Date(order.expectedDeliveryDate).toLocaleTimeString()}
+                            </p>
+                        </div>
+                    }
+                    {order.deliveryBoyPhn &&
+                        <div className="order-product-card-address-div">
+                            <p className="order-product-card-address-p1" style={{fontSize:"12px"}}> DELIVERY BOY
+                            </p>
+                            <p className="order-product-card-address-p2">
+                                {order.deliveryBoyPhn}
+                            </p>
+                        </div>
+                    }
 
                 </div>
 

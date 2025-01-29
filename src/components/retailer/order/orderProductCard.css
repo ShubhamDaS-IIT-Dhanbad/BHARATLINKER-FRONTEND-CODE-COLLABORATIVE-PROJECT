@@ -267,13 +267,13 @@
 }
 
 .order-product-card-address-p1 {
-    width: 30%;
+    width: 40%;
     font-size: 15px;
     font-weight: 600;
 }
 
 .order-product-card-address-p2 {
-    width: 70%;display: flex;
+    width: 60%;display: flex;
     gap: 3px;align-items: center;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
