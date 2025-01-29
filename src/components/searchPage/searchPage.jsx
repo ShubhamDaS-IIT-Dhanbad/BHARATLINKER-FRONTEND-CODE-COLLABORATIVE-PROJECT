@@ -19,7 +19,6 @@ const SearchPage = () => {
 
     const [showSortBy, setShowSortBy] = useState(false);
     const [showFilterBy, setShowFilterBy] = useState(false);
-    const [initialized, setInitialized] = useState(false);
 
     const {
         updated,
@@ -33,15 +32,13 @@ const SearchPage = () => {
 
     // Memoized function to avoid unnecessary re-creation
     const handleInitialSearch = useCallback(() => {
-        if (!initialized && products.length === 0 && !loading) {
-            executeSearch("");
-            setInitialized(true);
+        if (products.length === 0 && !loading) {
+            executeSearch();
         }
-    }, [initialized, products.length, loading, executeSearch]);
-
+    }, [products.length,updated]);
     useEffect(() => {
         handleInitialSearch();
-    }, [handleInitialSearch]);
+    }, [products.length,updated]);
 
     return (
         <>
