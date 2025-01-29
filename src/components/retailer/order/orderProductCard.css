@@ -2,12 +2,12 @@
     width: 95vw;
     display: flex;
     height: 140px;
-    background-color: white;
+    background-color: #ffffff;
 }
 .order-product-card-parent {
     width: 95vw;
-    display: flex;background-color: #efefef;
-    flex-direction: column;
+    display: flex;background-color: #3c3c3c;
+    flex-direction: column;color: white;
     padding-bottom: 15px;
 }
 
@@ -256,7 +256,7 @@
 .order-product-card-address {
     display: flex;
     flex-direction: column;
-    gap: 3px;
+    gap: 3px;padding: 9px;
 }
 
 .order-product-card-address-div {

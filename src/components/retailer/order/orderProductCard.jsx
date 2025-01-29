@@ -132,6 +132,7 @@ function OrderProductCard({ order, functionToWork }) {
     return (
         <>
             <div className="order-product-card-parent">
+                
                 <div className="order-product-card">
                     <div className="order-product-card-img">
                         <img src={order.image} alt="Product" />
@@ -241,6 +242,15 @@ function OrderProductCard({ order, functionToWork }) {
                     </div>
                 </div>
 
+
+
+
+
+
+
+
+
+
                 <div className="order-product-card-address">
                     <div className="order-product-card-address-div">
                         <p className="order-product-card-address-p1">ORDER ID
@@ -268,6 +278,14 @@ function OrderProductCard({ order, functionToWork }) {
                         </p>
                     </div>
                 </div>
+
+
+
+
+
+
+
+
 
                 {showDatetimeInput && (
                     <div className="retailer-datetime-modal">
