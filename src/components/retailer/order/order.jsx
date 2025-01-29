@@ -52,7 +52,9 @@ function Order({ retailerData }) {
       if (canceledOrders.data.length === 0) fetchInitialOrders("canceled");
     }
   }, [retailerData]);
-
+  useEffect(()=>{
+    window.scrollTo(0,0);
+  },[selectedOrderType])
   return (
     <>
       {/* Header */}
