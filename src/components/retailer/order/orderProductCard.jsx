@@ -233,7 +233,7 @@ function OrderProductCard({ order, functionToWork }) {
                                 <>{delivering ? <Oval height={20} width={20} color="green" secondaryColor="white" ariaLabel="loading" />
 
                                     : <div
-                                        className={`order-product-card-detail-3-state-dispatch`}
+                                        className={`order-product-card-detail-3-state-delivered`}
                                         onClick={handleDeliver}
                                     >
                                         DELIVERED ?
