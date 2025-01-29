@@ -285,9 +285,8 @@ function OrderProductCard({ order}) {
                     <div className="order-product-card-address-div">
                         <p className="order-product-card-address-p1">PHONE
                         </p>
-                        <div className="order-product-card-address-p2">
+                        <div className="order-product-card-address-p2" onClick={() => { onClickPhn(order.phoneNumber) }}>
                             {order.phoneNumber}
-                            <FaPhoneSquareAlt color="rgb(32, 178, 9)" size={25} onClick={() => { onClickPhn(order.phoneNumber) }} />
                         </div>
 
                     </div>
@@ -323,9 +322,8 @@ function OrderProductCard({ order}) {
                         <div className="order-product-card-address-div">
                             <p className="order-product-card-address-p1" style={{ fontSize: "12px" }}> DELIVERY BOY
                             </p>
-                            <div className="order-product-card-address-p2">
+                            <div className="order-product-card-address-p2" onClick={() => { onClickPhn(order.deliveryBoyPhn) }} >
                                 {order.deliveryBoyPhn}
-                                <FaPhoneSquareAlt color="rgb(32, 178, 9)" size={25} onClick={() => { onClickPhn(order.deliveryBoyPhn) }} />
                             </div>
                         </div>
                     }
