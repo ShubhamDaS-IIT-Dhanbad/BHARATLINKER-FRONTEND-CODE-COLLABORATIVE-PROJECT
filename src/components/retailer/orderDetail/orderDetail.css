@@ -1,34 +1,84 @@
+
+.retailer-update-header {
+    background-color: #ffffff;
+    color: #000;
+    position: fixed;
+    top: 0;
+    height: 60px;
+    display: flex;
+    flex-grow: 1;
+    align-items: center;
+    padding: 10px;
+    width: 100vw;
+}
+
+/* Left Icon */
+.retailer-update-header-left-icon {
+    margin-left: 4px;
+    color: #000;
+}
+
+/* Inner div containing title and shop name */
+.retailer-update-header-inner-div {
+    padding-left: 10px;
+    display: flex;
+    flex-direction: column;
+}
+
+.retailer-update-header-inner-div-p {
+    font-size: 25px;
+    font-weight: 600;
+    margin: 0;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 /* Base Styles */
 .retailer-order-detail-order-details-container {
-  margin: 20px auto;
+  margin: 67px auto;
   padding: 20px;
   background: #ffffff;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
   border-radius: 4px;
   font-family: 'Arial', sans-serif;
 }
 
-.retaile-order-detail-header {
+.retailer-order-detail-header {
   border-bottom: 2px solid #2874f0;
   padding-bottom: 15px;
   margin-bottom: 25px;
 }
 
-.retaile-order-detail-header h2 {
+.retailer-order-detail-header h2 {
   color: #2874f0;
   font-size: 24px;
   margin-bottom: 8px;
   font-weight: 600;
 }
 
-.retaile-order-detail-status {
+.retailer-order-detail-status {
   color: #666;
   font-size: 14px;
   margin: 0;
 }
 
 /* Product Card */
-.retaile-order-detail-product-card {
+.retailer-order-detail-product-card {
   display: flex;
   gap: 25px;
   padding: 20px;
@@ -39,47 +89,45 @@
   transition: box-shadow 0.3s ease;
 }
 
-.retaile-order-detail-product-card:hover {
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-}
 
 .retailer-order-detail-order-product-card-img {
-  width: 150px;
-  height: 150px;
-  flex-shrink: 0;
-  cursor: pointer;
-  border: 1px solid #f0f0f0;
-  border-radius: 4px;
-  overflow: hidden;
+  height: 277px;
+  display: flex;
+  justify-content: center;
 }
 
 .retailer-order-detail-order-product-card-img img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  mix-blend-mode: multiply;
+  height: 240px;
+  display: flex;
+  max-width: 100vw;
+  overflow: hidden;
 }
 
-.retaile-order-detail-title {
+
+
+
+.retailer-order-detail-title {
   font-size: 18px;
   color: #212121;
   margin: 0 0 15px 0;
   font-weight: 600;
 }
 
-.retaile-order-detail-meta {
+.retailer-order-detail-meta {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 20px;
 }
-
-.retaile-order-detail-meta-item {
+.retailer-order-detail-order-meta{
+  display: flex;
+}
+.retailer-order-detail-meta-item {
   background: #f7f7f7;
   padding: 12px;
-  border-radius: 4px;
+  border-radius: 4px;margin-bottom: 5vh;
 }
 
-.retaile-order-detail-meta-label {
+.retailer-order-detail-meta-label {
   display: block;
   color: #878787;
   font-size: 12px;
@@ -87,14 +135,14 @@
   text-transform: uppercase;
 }
 
-.retaile-order-detail-meta-value {
+.retailer-order-detail-meta-value {
   font-size: 16px;
   color: #212121;
   font-weight: 600;
 }
 
 /* Cancel Button */
-.retaile-order-detail-cancel-button {
+.retailer-order-detail-cancel-button {
   background: #ff3f6c;
   color: #fff;
   border: none;
@@ -106,17 +154,17 @@
   transition: background 0.3s ease;
 }
 
-.retaile-order-detail-cancel-button:hover:not(.disabled) {
+.retailer-order-detail-cancel-button:hover:not(.disabled) {
   background: #e6395c;
 }
 
-.retaile-order-detail-cancel-button.disabled {
+.retailer-order-detail-cancel-button.disabled {
   background: #ccc;
   cursor: not-allowed;
 }
 
 /* Info Sections */
-.retaile-order-detail-info-section, .retaile-order-detail-delivery-info {
+.retailer-order-detail-info-section, .retailer-order-detail-delivery-info {
   border: 1px solid #e0e0e0;
   border-radius: 4px;
   padding: 20px;
@@ -124,19 +172,19 @@
   background: #fff;
 }
 
-.retaile-order-detail-info-group {
+.retailer-order-detail-info-group {
   margin-bottom: 15px;
   padding-bottom: 15px;
   border-bottom: 1px solid #f0f0f0;
 }
 
-.retaile-order-detail-info-group:last-child {
+.retailer-order-detail-info-group:last-child {
   border-bottom: none;
   margin-bottom: 0;
   padding-bottom: 0;
 }
 
-.retaile-order-detail-info-title {
+.retailer-order-detail-info-title {
   color: #878787;
   font-size: 13px;
   margin: 0 0 8px 0;
@@ -144,14 +192,14 @@
 }
 
 /* Shop Info */
-.retaile-order-detail-shop-info-toggle {
+.retailer-order-detail-shop-info-toggle {
   text-align: center;
   margin: 25px 0;
   cursor: pointer;
   color: #2874f0;
 }
 
-.retaile-order-detail-shop-info-message {
+.retailer-order-detail-shop-info-message {
   background: #f5faff;
   border: 1px solid #2874f0;
   border-radius: 4px;
@@ -159,7 +207,7 @@
   margin: 20px 0;
 }
 
-.retaile-order-detail-view-shop-button {
+.retailer-order-detail-view-shop-button {
   background: #2874f0;
   color: #fff;
   border: none;
@@ -171,34 +219,34 @@
   transition: background 0.3s ease;
 }
 
-.retaile-order-detail-view-shop-button:hover {
+.retailer-order-detail-view-shop-button:hover {
   background: #1a5bbf;
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  .retaile-order-detail-product-card {
+  .retailer-order-detail-product-card {
       flex-direction: column;
   }
 
-  .retaile-order-detail-product-card-img {
+  .retailer-order-detail-product-card-img {
       width: 100%;
       height: auto;
       aspect-ratio: 1/1;
   }
 
-  .retaile-order-detail-meta {
+  .retailer-order-detail-meta {
       grid-template-columns: 1fr;
   }
   
-  .retaile-order-detail-details-container {
+  .retailer-order-detail-details-container {
       margin: 10px;
       padding: 15px;
   }
 }
 
 /* Flipkart-like Loader */
-.retaile-order-detail-oval-loader {
+.retailer-order-detail-oval-loader {
   display: flex;
   justify-content: center;
   padding: 20px 0;

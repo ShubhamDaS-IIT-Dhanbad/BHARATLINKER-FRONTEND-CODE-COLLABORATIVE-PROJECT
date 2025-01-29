@@ -48,20 +48,6 @@ const OrderDetails = ({ retailerData }) => {
         window.scrollTo(0, 0);
     }, []);
 
-    const getOrderTitle = (state) => {
-        switch (state) {
-            case "pending":
-                return "Order Is Pending!";
-            case "confirmed":
-                return "Order Confirmed!";
-            case "shipped":
-                return "Order is on the Way!";
-            case "delivered":
-                return "Order Has Been Delivered!";
-            default:
-                return "Order Details";
-        }
-    };
 
     const handleCancelOrder = async () => {
         if (isCancelling) return;
@@ -83,7 +69,13 @@ const OrderDetails = ({ retailerData }) => {
             </div>
         );
     }
-
+    const onClickPhn = (phoneNumber) => {
+        if (phoneNumber) {
+            window.location.href = `tel:${phoneNumber}`;
+        } else {
+            alert("Please enter a valid phone number.");
+        }
+    };
     return (
         <>
             <header className="retailer-update-header">
@@ -105,15 +97,13 @@ const OrderDetails = ({ retailerData }) => {
                     )}
                 </div>
             </header>
-            <main className="retaile-order-detail-order-content">
-                <div className="retailer-order-detail-order-details-container">
-                    <section className="retaile-order-detail-order-header">
-                        <h2>{getOrderTitle(order.state)}</h2>
-                        <p className="retaile-order-detail-order-status">Current status: {order.state}</p>
-                    </section>
 
-                    <section className="retaile-order-detail-order-summary">
-                        <div className="retaile-order-detail-order-product-card">
+
+
+            <main className="retailer-order-detail-order-content">
+                <div className="retailer-order-detail-order-details-container">
+                    <section className="retailer-order-detail-order-summary">
+                        <div className="retailer-order-detail-order-product-card">
                             <div
                                 className="retailer-order-detail-order-product-card-img"
                                 onClick={() => navigate(`/product/${order.productId}`)}
@@ -126,20 +116,20 @@ const OrderDetails = ({ retailerData }) => {
                                     loading="lazy"
                                 />
                             </div>
-                            <div className="retaile-order-detail-order-product-card-details">
-                                <h3 className="retaile-order-detail-product-title">{order.title}</h3>
-                                <div className="retaile-order-detail-order-meta">
-                                    <div className="retaile-order-detail-meta-item">
-                                        <span className="retaile-order-detail-meta-label">PRICE</span>
-                                        <span className="retaile-order-detail-meta-value">₹{order.discountedPrice}</span>
+                            <div className="retailer-order-detail-order-product-card-details">
+                                <h3 className="retailer-order-detail-product-title">{order.title}</h3>
+                                <div className="retailer-order-detail-order-meta">
+                                    <div className="retailer-order-detail-meta-item">
+                                        <span className="retailer-order-detail-meta-label">PRICE</span>
+                                        <span className="retailer-order-detail-meta-value">₹{order.discountedPrice}</span>
                                     </div>
-                                    <div className="retaile-order-detail-meta-item">
-                                        <span className="retaile-order-detail-meta-label">QTY</span>
-                                        <span className="retaile-order-detail-meta-value">{order.quantity}</span>
+                                    <div className="retailer-order-detail-meta-item">
+                                        <span className="retailer-order-detail-meta-label">QTY</span>
+                                        <span className="retailer-order-detail-meta-value">{order.quantity}</span>
                                     </div>
-                                    <div className="retaile-order-detail-meta-item">
-                                        <span className="retaile-order-detail-meta-label">SUBTOTAL</span>
-                                        <span className="retaile-order-detail-meta-value">
+                                    <div className="retailer-order-detail-meta-item">
+                                        <span className="retailer-order-detail-meta-label">SUBTOTAL</span>
+                                        <span className="retailer-order-detail-meta-value">
                                             ₹{(order.discountedPrice * order.quantity).toLocaleString()}
                                         </span>
                                     </div>
@@ -149,7 +139,7 @@ const OrderDetails = ({ retailerData }) => {
 
                         {(order.state === "pending" || order.state === "confirmed") && (
                             <button
-                                className={`retaile-order-detail-cancel-button ${isCancelling ? 'disabled' : ''}`}
+                                className={`retailer-order-detail-cancel-button ${isCancelling ? 'disabled' : ''}`}
                                 onClick={handleCancelOrder}
                                 disabled={isCancelling}
                             >
@@ -166,66 +156,78 @@ const OrderDetails = ({ retailerData }) => {
                             </button>
                         )}
 
-                        <div className="retaile-order-detail-order-info-section">
-                            <div className="retaile-order-detail-info-group">
-                                <h4 className="retaile-order-detail-info-title">ORDER DATE</h4>
-                                <p>{new Date(order.$createdAt).toLocaleDateString()}</p>
-                            </div>
-                            <div className="retaile-order-detail-info-group">
-                                <h4 className="retaile-order-detail-info-title">ORDER ID</h4>
+                        <div className="retailer-order-detail-order-info-section">
+
+                            <div className="retailer-order-detail-info-group">
+                                <h4 className="retailer-order-detail-info-title">ORDER ID</h4>
                                 <p>{order.$id}</p>
                             </div>
-                            <div className="retaile-order-detail-info-group">
-                                <h4 className="retaile-order-detail-info-title">PAYMENT METHOD</h4>
-                                <p>{order.paymentMethod || "Cash on Delivery"}</p>
+                            <div className="retailer-order-detail-info-group">
+                                <h4 className="retailer-order-detail-info-title">NAME
+                                </h4>
+                                <p>{order.name}
+                                </p>
                             </div>
-                            <div className="retaile-order-detail-info-group">
-                                <h4 className="retaile-order-detail-info-title">SHIPPING ADDRESS</h4>
+                            <div className="retailer-order-detail-info-group">
+                                <h4 className="retailer-order-detail-info-title">PHONE
+                                </h4>
+                                <div onClick={() => { onClickPhn(order.phoneNumber) }}>
+                                    {order.phoneNumber}
+                                </div>
+
+                            </div>
+                            <div className="retailer-order-detail-info-group">
+                                <h4 className="retailer-order-detail-info-title">SHIPPING ADDRESS</h4>
                                 <p>{order.address}</p>
                             </div>
-                        </div>
-
-                        {(order.state === "confirmed" || order.state === "shipped") && (
-                            <div className="retaile-order-detail-delivery-info">
-                                <div className="retaile-order-detail-info-group">
-                                    <h4 className="retaile-order-detail-info-title">EXPECTED DELIVERY</h4>
-                                    <p>
-                                        {new Date(order.expectedDeliveryDate).toLocaleDateString()} at {' '}
+                            <div className="retailer-order-detail-info-group">
+                                <h4 className="retailer-order-detail-info-title">PAYMENT METHOD</h4>
+                                <p>{order.paymentMethod || "Cash on Delivery"}</p>
+                            </div>
+                            <div className="retailer-order-detail-info-group">
+                                <h4 className="retailer-order-detail-info-title">ORDER DATE</h4>
+                                <p>{new Date(order.$createdAt).toLocaleDateString()}</p>
+                            </div>
+                            {order.expectedDeliveryDate &&
+                                <div className="retailer-order-detail-info-group">
+                                    <h4 className="retailer-order-detail-info-title">EXPECTED DELIVERY DATE
+                                    </h4>
+                                    <p >
+                                        {new Date(order.expectedDeliveryDate).toLocaleDateString()}{" "}
+                                    </p>
+                                </div>
+                            }
+                            {order.expectedDeliveryDate &&
+                                <div className="retailer-order-detail-info-group">
+                                    <h4 className="retailer-order-detail-info-title">EXPECTED DELIVERY TIME
+                                    </h4>
+                                    <p >
                                         {new Date(order.expectedDeliveryDate).toLocaleTimeString()}
                                     </p>
                                 </div>
-                                {order.deliveryBoyContact && (
-                                    <div className="retaile-order-detail-info-group">
-                                        <h4 className="retaile-order-detail-info-title">DELIVERY CONTACT</h4>
-                                        <p>{order.deliveryBoyContact}</p>
+                            }
+                            {order.deliveryBoyPhn &&
+                                <div className="retailer-order-detail-info-group">
+                                    <h4 className="retailer-order-detail-info-title"> DELIVERY BOY PHONE NUMBER
+                                    </h4>
+                                    <div onClick={() => { onClickPhn(order.deliveryBoyPhn) }} >
+                                        {order.deliveryBoyPhn}
                                     </div>
-                                )}
-                                {order.customerMessage && (
-                                    <div className="retaile-order-detail-info-group">
-                                        <h4 className="retaile-order-detail-info-title">CUSTOMER MESSAGE</h4>
-                                        <p>{order.customerMessage}</p>
-                                    </div>
-                                )}
-                            </div>
-                        )}
-
-                        <div className="retaile-order-detail-shop-info-toggle">
-                            <TiInfoOutline
-                                size={20}
-                                onClick={() => setShowInfo(!showInfo)}
-                                aria-label="Toggle shop information"
-                                role="button"
-                            />
+                                </div>
+                            }
                         </div>
 
-                        {showInfo && (
-                            <div className="retaile-order-detail-shop-info-message">
+
+
+
+                        {true && (
+                            <div className="retailer-order-detail-shop-info-message">
                                 <p>
                                     For any order-related issues, please contact the shop directly.
                                     Shop details are available on the Shop page.
                                 </p>
                                 <button
-                                    className="retaile-order-detail-view-shop-button"
+                                    className="retailer-order-detail-view-shop-button"
                                     onClick={() => navigate(`/shop/${retailerData.$id}`)}
                                 >
                                     VIEW SHOP

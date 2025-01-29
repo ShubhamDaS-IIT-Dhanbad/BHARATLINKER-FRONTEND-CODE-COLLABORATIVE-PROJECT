@@ -103,7 +103,7 @@ function Order({ retailerData }) {
         }
       >
         <div className="retailer-order-div-container">
-          {selectedOrders.data.length === 0 ? (
+          {selectedOrders.data.length === 0? (
             <div className="retailer-order-empty">
               <img className="retailer-order-empty-img" src={e1} alt="No Orders" />
             </div>

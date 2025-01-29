@@ -133,7 +133,7 @@
 }
 
 .order-status-canceled {
-    border: 1.6px solid rgb(128, 0, 0);
+    border: 1.6px solid #ff3f6c;
     display: flex;
     font-size: 10px;
     color: rgb(0, 0, 0);
@@ -157,7 +157,7 @@
     gap: 10px;
     font-size: 13px;
     font-weight: 700;
-    background-color: #d43434;
+    background-color: #ff3f6c;
     color: white;
 }
 
@@ -214,7 +214,7 @@
 }
 
 .status-icon.canceled {
-    color: #f44336;
+    color: #ff3f6c;
     /* Red */
 }
 
@@ -316,7 +316,7 @@
     gap: 10px;
     font-size: 13px;
     font-weight: 700;
-    background-color: #d43434;
+    background-color: #ff3f6c;
     color: white;
 }
 #retailer-order-input-date{
