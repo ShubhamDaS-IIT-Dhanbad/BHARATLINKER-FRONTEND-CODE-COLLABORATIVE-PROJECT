@@ -8,7 +8,7 @@ import { RotatingLines } from 'react-loader-spinner';
 import { Oval } from 'react-loader-spinner';
 
 import { useExecuteUserSearch } from '../../../hooks/searchUserProductHook.jsx';
-import ProductList from '../../b.productComponent/productList.jsx';
+import ProductList from '../../productList.jsx';
 
 
 import './userProductPageMain.css';
