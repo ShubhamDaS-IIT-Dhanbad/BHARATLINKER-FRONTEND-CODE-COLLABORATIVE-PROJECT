@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import { FaExclamationTriangle, FaLuggageCart, FaSadCry } from "react-icons/fa";
 import { RiChatSmileFill } from "react-icons/ri";
 import { GiPartyPopper } from "react-icons/gi";
+import { FaPhoneSquareAlt } from "react-icons/fa";
 import { Oval } from "react-loader-spinner";
 import {
     updateOrderStateToConfirmed,
@@ -132,7 +133,7 @@ function OrderProductCard({ order, functionToWork }) {
     return (
         <>
             <div className="order-product-card-parent">
-                
+
                 <div className="order-product-card">
                     <div className="order-product-card-img">
                         <img src={order.image} alt="Product" />
@@ -258,13 +259,6 @@ function OrderProductCard({ order, functionToWork }) {
                         <p className="order-product-card-address-p2">{order.$id}
                         </p>
                     </div>
-
-                    <div className="order-product-card-address-div">
-                        <p className="order-product-card-address-p1">ADDRESS
-                        </p>
-                        <p className="order-product-card-address-p2">{order.address}
-                        </p>
-                    </div>
                     <div className="order-product-card-address-div">
                         <p className="order-product-card-address-p1">NAME
                         </p>
@@ -274,9 +268,22 @@ function OrderProductCard({ order, functionToWork }) {
                     <div className="order-product-card-address-div">
                         <p className="order-product-card-address-p1">PHONE
                         </p>
-                        <p className="order-product-card-address-p2">{order.phoneNumber}
+
+                        <div className="order-product-card-address-p2">
+                            {order.phoneNumber}
+                            <FaPhoneSquareAlt color="black" size={25}/>
+                        </div>
+
+                    </div>
+
+
+                    <div className="order-product-card-address-div">
+                        <p className="order-product-card-address-p1">ADDRESS
+                        </p>
+                        <p className="order-product-card-address-p2">{order.address}
                         </p>
                     </div>
+
                 </div>
 
 

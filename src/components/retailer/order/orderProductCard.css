@@ -6,8 +6,8 @@
 }
 .order-product-card-parent {
     width: 95vw;
-    display: flex;background-color: #3c3c3c;
-    flex-direction: column;color: white;
+    display: flex;
+    flex-direction: column;color: rgb(0, 0, 0);
     padding-bottom: 15px;
 }
 
@@ -255,8 +255,9 @@
 
 .order-product-card-address {
     display: flex;
-    flex-direction: column;
-    gap: 3px;padding: 9px;
+    flex-direction: column;background-color: white;
+    border: 1px solid rgba(0, 0, 0, 0.491);
+    gap: 3px;padding: 9px;color: rgb(0, 0, 0);
 }
 
 .order-product-card-address-div {
@@ -272,11 +273,13 @@
 }
 
 .order-product-card-address-p2 {
-    width: 70%;
+    width: 70%;display: flex;
+    gap: 3px;align-items: center;
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
-
-
+.order-product-card-address-p2-call{
+    padding: 3px;
+}
 .retailer-datetime-modal {
     margin-top: 10px;font-weight: 600;
     color: #398c37;margin-bottom: 20px;
