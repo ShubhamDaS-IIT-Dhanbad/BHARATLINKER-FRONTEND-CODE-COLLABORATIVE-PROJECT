@@ -167,16 +167,6 @@ function OrderProductCard({ order}) {
                                     </p>
                                 </div>
                             </div>
-
-                            {window.location.pathname === "/retailer/orders" && (
-                                <div
-                                    className="order-product-card-detail-2-rm"
-                                    onClick={() => navigate(`/user/order/${order.$id}`)}
-                                >
-                                    DETAIL
-                                </div>
-                            )}
-
                         </div>
 
                         <div className={`order-product-card-detail-3-state`}>
@@ -199,6 +189,15 @@ function OrderProductCard({ order}) {
                                         >
                                             CANCEL
                                         </div>}
+
+                                        {window.location.pathname === "/retailer/orders" && (
+                                <div
+                                    className="order-product-card-detail-2-rm"
+                                    onClick={() => navigate(`/user/order/${order.$id}`)}
+                                >
+                                    DETAIL
+                                </div>
+                            )}
                                 </>
                             )}
                             {order?.state === "confirmed" && !showPhoneInput && (
@@ -219,6 +218,14 @@ function OrderProductCard({ order}) {
                                         >
                                             CANCEL
                                         </div>}
+                                        {window.location.pathname === "/retailer/orders" && (
+                                <div
+                                    className="order-product-card-detail-2-rm"
+                                    onClick={() => navigate(`/user/order/${order.$id}`)}
+                                >
+                                    DETAIL
+                                </div>
+                            )}
                                 </>
                             )}
                             {order?.state === "dispatched" && (
@@ -239,6 +246,14 @@ function OrderProductCard({ order}) {
                                         >
                                             CANCEL
                                         </div>}
+                                        {window.location.pathname === "/retailer/orders" && (
+                                <div
+                                    className="order-product-card-detail-2-rm"
+                                    onClick={() => navigate(`/user/order/${order.$id}`)}
+                                >
+                                    DETAIL
+                                </div>
+                            )}
                                 </>
                             )}
                         </div>

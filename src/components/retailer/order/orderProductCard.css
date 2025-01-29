@@ -147,7 +147,7 @@
 .order-product-card-detail-3-state {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 5px;
 }
 
 .order-product-card-detail-3-state-cancel {
@@ -185,10 +185,10 @@
 .order-product-card-detail-3-state-delivered {
     display: flex;
     align-items: center;
-    padding: 4px 5px 4px 5px;
+    padding: 3px 2px 3px 2px;
     gap: 10px;
     font-size: 13px;
-    font-weight: 700;
+    font-weight: 600;
     background-color: rgb(33, 150, 243);
     color: white;
 }
