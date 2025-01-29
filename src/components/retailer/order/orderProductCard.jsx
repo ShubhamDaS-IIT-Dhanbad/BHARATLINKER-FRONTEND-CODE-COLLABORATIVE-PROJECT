@@ -4,7 +4,6 @@ import { useDispatch } from "react-redux";
 import { FaExclamationTriangle, FaLuggageCart, FaSadCry } from "react-icons/fa";
 import { RiChatSmileFill } from "react-icons/ri";
 import { GiPartyPopper } from "react-icons/gi";
-import { FaPhoneSquareAlt } from "react-icons/fa";
 import { Oval } from "react-loader-spinner";
 import {
     updateOrderStateToConfirmed,
@@ -193,7 +192,7 @@ function OrderProductCard({ order}) {
                                         {window.location.pathname === "/retailer/orders" && (
                                 <div
                                     className="retailer-order-product-card-detail-2"
-                                    onClick={() => navigate(`/user/order/${order.$id}`)}
+                                    onClick={() => navigate(`/retailer/order/${order.$id}`)}
                                 >
                                     DETAIL
                                 </div>
@@ -221,7 +220,7 @@ function OrderProductCard({ order}) {
                                         {window.location.pathname === "/retailer/orders" && (
                                 <div
                                     className="retailer-order-product-card-detail-2"
-                                    onClick={() => navigate(`/user/order/${order.$id}`)}
+                                    onClick={() => navigate(`/retailer/order/${order.$id}`)}
                                 >
                                     DETAIL
                                 </div>
@@ -249,7 +248,7 @@ function OrderProductCard({ order}) {
                                         {window.location.pathname === "/retailer/orders" && (
                                 <div
                                     className="retailer-order-product-card-detail-2"
-                                    onClick={() => navigate(`/user/order/${order.$id}`)}
+                                    onClick={() => navigate(`/retailer/order/${order.$id}`)}
                                 >
                                     DETAIL
                                 </div>
