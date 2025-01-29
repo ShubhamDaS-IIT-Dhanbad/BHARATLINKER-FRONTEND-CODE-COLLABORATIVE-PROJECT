@@ -1,43 +1,118 @@
-.retailer-upload-product-header {
-    background-color: #ffffff;
-    color: rgb(0, 0, 0);
-    position: fixed;
-    top: 0;
-    height: 60px;
-    display: flex;
-    flex-grow: 1;
-    align-items: center;
-    padding: 10px;
-    gap: 10px;
-    width: 100vw;
+.retailer-upload-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem;
+  background: linear-gradient(135deg, #6c5ce7 0%, #48dbfb 100%);
+  color: white;
+  box-shadow: 0 8px 24px rgba(108, 92, 231, 0.15);
+  position: fixed;top: 0;width: 100vw;
+  overflow: hidden;
 }
 
-.user-upload-books-header-left-icon {
-    margin-left: 4px;
-    color: #000000;
+.retailer-upload-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -50%;
+  width: 200%;
+  height: 100%;
+  background: linear-gradient(45deg, 
+      rgba(255,255,255,0.1) 25%,
+      transparent 25%,
+      transparent 50%,
+      rgba(255,255,255,0.1) 50%,
+      rgba(255,255,255,0.1) 75%,
+      transparent 75%,
+      transparent);
+  background-size: 40px 40px;
+  opacity: 0.1;
+  pointer-events: none;
 }
 
-.user-upload-books-header-inner-div {
-    padding-left: 10px;
-    display: flex;
-    flex-direction: column;
+.retailer-upload-back-icon {
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: rgba(255,255,255,0.1);
+  padding: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
 }
 
-.user-upload-books-header-inner-div-p {
-    font-size: 25px;
-    font-weight: 600;
-    margin: 0;
-}
-.retailer-upload-product-header-shopname {
-    display: flex;
-    align-items: center;
-    gap: 5px; color: #000000;
-    font-size: 16px;
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-    font-weight: 900;
-    margin-top: -7px;
+.retailer-upload-back-icon:hover {
+  transform: translateX(-3px);
+  background: rgba(255,255,255,0.2);
 }
 
+.retailer-upload-header-content {
+  flex-grow: 1;
+}
+
+.retailer-upload-title {
+  font-size: 1.8rem;
+  margin: 0;
+  position: relative;
+  display: inline-block;
+  font-weight: 700;
+  text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.retailer-upload-title-underline {
+  position: absolute;
+  bottom: -5px;
+  left: 0;
+  width: 60%;
+  height: 3px;
+  background: #ff7675;
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+.retailer-upload-title:hover .retailer-upload-title-underline {
+  width: 100%;
+}
+
+.retailer-upload-shopname {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-top: 0.5rem;
+  font-size: 1.1rem;
+  opacity: 0.9;
+  transition: opacity 0.3s ease;
+  cursor: pointer;
+  width: fit-content;
+  padding: 4px 12px;
+  border-radius: 20px;
+  background: rgba(255,255,255,0.1);
+}
+
+.retailer-upload-shopname:hover {
+  opacity: 1;
+  background: rgba(255,255,255,0.2);
+}
+
+.retailer-upload-shopname-icon {
+  font-size: 0.9em;
+  filter: drop-shadow(0 2px 2px rgba(0,0,0,0.1));
+}
+
+@media (max-width: 768px) {
+  .retailer-upload-header {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 1rem;
+      padding: 1.2rem;
+  }
+  
+  .retailer-upload-title {
+      font-size: 1.5rem;
+  }
+  
+  .retailer-upload-shopname {
+      font-size: 1rem;
+  }
+}
 
 
 
@@ -50,34 +125,27 @@
 
 
 
-
-
-
-
-
-
-.upload-product-container {
+.retailer-upload-product-container {
   max-width: 100%;
-  padding: 1rem;
   background-color: #ffffff;
-  min-height: 100vh;margin-top: 77px;
+  min-height: 100vh;margin-top: 11rem;
 }
 
-.upload-product-header {
+.retailer-upload-product-header {
   font-size: 1.5rem;
   color: #2d3436;
   margin-bottom: 1.5rem;
   text-align: center;
 }
 
-.form-section {
+.retailer-upload-product-form-section {
   margin-bottom: 0.2rem;
   background: rgb(255, 255, 255);
   padding: 0.75rem;
   border-radius: 12px;
 }
 
-.input-label {
+.retailer-upload-product-input-label {
   display: block;
   font-weight: 500;
   color: #4a4a4a;
@@ -85,7 +153,7 @@
   font-size: 0.9rem;
 }
 
-.text-input {
+.retailer-upload-product-text-input {
   width: calc(100% - 1.5rem);
   padding: 0.8rem;
   border: 1px solid #e0e0e0;
@@ -94,12 +162,12 @@
   transition: border-color 0.3s ease;
 }
 
-.text-input:focus {
+.retailer-upload-product-text-input:focus {
   outline: none;
   border-color: #6c5ce7;
 }
 
-.description-textarea {
+.retailer-upload-product-description-textarea {
   width: calc(100% - 1.5rem);
   padding: 0.8rem;
   border: 1px solid #e0e0e0;
@@ -110,33 +178,28 @@
   font-size: 1rem;
 }
 
-.formatting-hint {
+.retailer-upload-product-formatting-hint {
   font-size: 0.8rem;
   color: #666;
   margin-top: 0.5rem;
 }
 
-
-
-
-
-
-.price-section {
+.retailer-upload-product-price-section {
   background: white;
   padding: 1rem;
   border-radius: 12px;
 }
 
-.price-input-wrapper {
+.retailer-upload-product-price-input-wrapper {
   display: grid;
   gap: 1rem;
 }
 
-.price-input-group {
+.retailer-upload-product-price-input-group {
   width: 100%;
 }
 
-.price-input {
+.retailer-upload-product-price-input {
   width: calc(100% - 1.6rem);
   padding: 0.8rem;
   border: 1px solid #e0e0e0;
@@ -144,20 +207,20 @@
   font-size: 1rem;
 }
 
-.image-section {
+.retailer-upload-product-image-section {
   background: white;
   padding: 1rem;
   border-radius: 12px;
 }
 
-.image-grid {
+.retailer-upload-product-image-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 0.8rem;
   margin-top: 0.5rem;
 }
 
-.image-upload-card {
+.retailer-upload-product-image-upload-card {
   aspect-ratio: 1/1;
   background: #f8f9fa;
   border: 2px dashed #e0e0e0;
@@ -169,7 +232,7 @@
   overflow: hidden;
 }
 
-.image-upload-box {
+.retailer-upload-product-image-upload-box {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -178,33 +241,33 @@
   height: 100%;
 }
 
-.upload-icon {
+.retailer-upload-product-upload-icon {
   font-size: 2rem;
   color: #a0a0a0;
   margin-bottom: 0.5rem;
 }
 
-.upload-text {
+.retailer-upload-product-upload-text {
   font-size: 0.8rem;
   color: #666;
   text-align: center;
   padding: 0 0.5rem;
 }
 
-.image-preview-wrapper {
+.retailer-upload-product-image-preview-wrapper {
   position: relative;
   width: 100%;
   height: 100%;
 }
 
-.preview-image {
+.retailer-upload-product-preview-image {
   width: 100%;
   height: 100%;
   object-fit: cover;
   border-radius: 6px;
 }
 
-.remove-image-button {
+.retailer-upload-product-remove-image-button {
   position: absolute;
   top: 0.3rem;
   right: 0.3rem;
@@ -220,15 +283,14 @@
   font-size: 1.1rem;
 }
 
-.form-actions {
+.retailer-upload-product-form-actions {
   margin-top: 1.5rem;
   padding: 1rem;
 }
 
-.submit-button {
+.retailer-upload-product-submit-button {
   width: 100%;
   padding: 1rem;
-  
   background: #6c5ce7;
   color: white;
   border: none;
@@ -242,19 +304,19 @@
   gap: 0.5rem;
 }
 
-.submit-button.uploading {
+.retailer-upload-product-submit-button.uploading {
   opacity: 0.7;
   cursor: not-allowed;
 }
 
-.error-message {
+.retailer-upload-product-error-message {
   color: #e74c3c;
   font-size: 0.9rem;
   margin-top: 1rem;
   text-align: center;
 }
 
-.success-message {
+.retailer-upload-product-success-message {
   color: #27ae60;
   font-size: 0.9rem;
   margin-top: 1rem;
@@ -262,38 +324,33 @@
 }
 
 @media (max-width: 480px) {
-  .upload-product-container {
+  .retailer-upload-product-container {
     padding: 0.5rem;
   }
 
-  .upload-product-header {
+  .retailer-upload-product-header {
     font-size: 1.3rem;
     margin-bottom: 1rem;
   }
 
-  .form-section {
+  .retailer-upload-product-form-section {
     padding: 0.8rem;
     margin-bottom: 0.1rem;
   }
 
-  .text-input,
-  .description-textarea,
-  .price-input {
+  .retailer-upload-product-text-input,
+  .retailer-upload-product-description-textarea,
+  .retailer-upload-product-price-input {
     padding: 0.7rem;
     font-size: 0.95rem;
   }
 
-  .image-grid {
+  .retailer-upload-product-image-grid {
     gap: 0.5rem;
   }
 
-  .submit-button {
+  .retailer-upload-product-submit-button {
     padding: 0.9rem;
     font-size: 0.95rem;
   }
 }
-
-
-
-
-

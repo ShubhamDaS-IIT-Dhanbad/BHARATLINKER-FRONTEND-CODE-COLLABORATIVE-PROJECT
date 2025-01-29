@@ -111,101 +111,101 @@ const UploadBooksModulesForm = ({ retailerData }) => {
   };
 
   return (
-    <div className="upload-product-container">
-      <div className="form-section">
-        <label className="input-label">Product Title*</label>
+    <div className="retailer-upload-product-container">
+      <div className="retailer-upload-product-form-section">
+        <label className="retailer-upload-product-input-label">Product Title*</label>
         <input
           name="title"
           value={formData.title}
           onChange={handleInputChange}
           placeholder="Enter product title"
-          className="text-input"
+          className="retailer-upload-product-text-input"
         />
       </div>
 
-      <div className="form-section">
-        <label className="input-label">Description*</label>
+      <div className="retailer-upload-product-form-section">
+        <label className="retailer-upload-product-input-label">Description*</label>
         <textarea
           name="description"
           value={formData.description}
           onChange={handleInputChange}
           placeholder="Provide detailed description..."
-          className="description-textarea"
+          className="retailer-upload-product-description-textarea"
           rows={4}
         />
-        <div className="formatting-hint">
+        <div className="retailer-upload-product-formatting-hint">
           Use # for headings and * for bullet points
         </div>
       </div>
 
-      <div className="price-section">
-        <div className="price-input-wrapper">
+      <div className="retailer-upload-product-price-section">
+        <div className="retailer-upload-product-price-input-wrapper">
 
-          <div className="price-input-group">
-            <label className="input-label">Original Price ($)*</label>
+          <div className="retailer-upload-product-price-input-group">
+            <label className="retailer-upload-product-input-label">Original Price ($)*</label>
             <input
               type="number"
               name="price"
               value={formData.price}
               onChange={handleInputChange}
-              className="price-input"
+              className="retailer-upload-product-price-input"
               min="0"
             />
           </div>
 
-          <div className="price-input-group">
-            <label className="input-label">Discounted Price ($)*</label>
+          <div className="retailer-upload-product-price-input-group">
+            <label className="retailer-upload-product-input-label">Discounted Price ($)*</label>
             <input
               type="number"
               name="discountedPrice"
               value={formData.discountedPrice}
               onChange={handleInputChange}
-              className="price-input"
+              className="retailer-upload-product-price-input"
               min="0"
             />
           </div>
         </div>
       </div>
 
-      <div className="form-section">
-        <label className="input-label">Keywords*</label>
+      <div className="retailer-upload-product-form-section">
+        <label className="retailer-upload-product-input-label">Keywords*</label>
         <input
           name="keywords"
           value={formData.keywords}
           onChange={handleInputChange}
           placeholder="fiction, science, bestseller..."
-          className="text-input"
+          className="retailer-upload-product-text-input"
         />
       </div>
 
-      <div className="image-section">
-        <label className="input-label">Upload Images (3 required)*</label>
-        <div className="image-grid">
+      <div className="retailer-upload-product-image-section">
+        <label className="retailer-upload-product-input-label">Upload Images (3 required)*</label>
+        <div className="retailer-upload-product-image-grid">
           {images.map((image, index) => (
             <div
               key={index}
-              className="image-upload-card"
+              className="retailer-upload-product-image-upload-card"
               onDrop={(e) => handleDrop(index, e)}
               onDragOver={(e) => e.preventDefault()}
             >
               {image ? (
-                <div className="image-preview-wrapper">
+                <div className="retailer-upload-product-image-preview-wrapper">
                   <img
                     src={URL.createObjectURL(image)}
                     alt={`Preview ${index + 1}`}
-                    className="preview-image"
+                    className="retailer-upload-product-preview-image"
                   />
                   <button
-                    className="remove-image-button"
+                    className="retailer-upload-product-remove-image-button"
                     onClick={() => removeImage(index)}
                   >
                     ×
                   </button>
                 </div>
               ) : (
-                <label className="image-upload-box">
-                  <CiImageOn className="upload-icon" />
-                  <span className="upload-text">Tap to upload</span>
+                <label className="retailer-upload-product-image-upload-box">
+                  <CiImageOn className="retailer-upload-product-upload-icon" />
+                  <span className="retailer-upload-product-upload-text">Tap to upload</span>
                   <input
                     type="file"
                     hidden
@@ -219,23 +219,23 @@ const UploadBooksModulesForm = ({ retailerData }) => {
         </div>
       </div>
 
-      <div className="form-actions">
+      <div className="retailer-upload-product-form-actions">
         {!allFieldEntered && (
-          <div className="error-message">Please fill all required fields</div>
+          <div className="retailer-upload-product-error-message">Please fill all required fields</div>
         )}
         {uploadStatus.success && (
-          <div className="success-message">
+          <div className="retailer-upload-product-success-message">
             Product uploaded successfully!
           </div>
         )}
 
         {uploadStatus.fail && (
-          <div className="error-message">
+          <div className="retailer-upload-product-error-message">
             Upload failed. Please check your connection and try again.
           </div>
         )}
         <button
-          className={`submit-button ${isUploading ? 'uploading' : ''}`}
+          className={`retailer-upload-product-submit-button ${isUploading ? 'uploading' : ''}`}
           onClick={handleSubmit}
           disabled={isUploading}
         >
@@ -247,6 +247,7 @@ const UploadBooksModulesForm = ({ retailerData }) => {
         </button>
       </div>
     </div>
+
   );
 };
 
