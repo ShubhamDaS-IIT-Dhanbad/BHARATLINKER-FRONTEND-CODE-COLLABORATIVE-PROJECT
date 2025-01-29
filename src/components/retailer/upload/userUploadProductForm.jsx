@@ -234,19 +234,6 @@ const UploadBooksModulesForm = ({ retailerData }) => {
         {!allFieldEntered && (
           <div className="error-message">Please fill all required fields</div>
         )}
-        <button
-          className={`submit-button ${isUploading ? 'uploading' : ''}`}
-          onClick={handleSubmit}
-          disabled={isUploading}
-        >
-          {isUploading ? (
-            <Oval color="#fff" height={24} width={24} />
-          ) : (
-            'Publish Product'
-          )}
-        </button>
-
-
         {uploadStatus.success && (
           <div className="success-message">
             Product uploaded successfully!
@@ -258,6 +245,17 @@ const UploadBooksModulesForm = ({ retailerData }) => {
             Upload failed. Please check your connection and try again.
           </div>
         )}
+        <button
+          className={`submit-button ${isUploading ? 'uploading' : ''}`}
+          onClick={handleSubmit}
+          disabled={isUploading}
+        >
+          {isUploading ? (
+            <Oval color="#fff" height={24} width={24} />
+          ) : (
+            'Publish Product'
+          )}
+        </button>
       </div>
     </div>
   );
