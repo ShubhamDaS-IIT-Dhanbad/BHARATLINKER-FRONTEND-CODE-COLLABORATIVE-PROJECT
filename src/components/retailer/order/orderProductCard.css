@@ -81,7 +81,7 @@
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
 
-.order-product-card-detail-2-rm{
+.retailer-order-product-card-detail-2{
     display: flex;
     font-size: 12px;
     color: white;
@@ -92,7 +92,7 @@
     align-items: center;
 }
 
-.order-product-card-detail-2-rm {
+.retailer-order-product-card-detail-2 {
     background-color: rgb(53, 52, 52);
 }
 

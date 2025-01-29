@@ -192,7 +192,7 @@ function OrderProductCard({ order}) {
 
                                         {window.location.pathname === "/retailer/orders" && (
                                 <div
-                                    className="order-product-card-detail-2-rm"
+                                    className="retailer-order-product-card-detail-2"
                                     onClick={() => navigate(`/user/order/${order.$id}`)}
                                 >
                                     DETAIL
@@ -220,7 +220,7 @@ function OrderProductCard({ order}) {
                                         </div>}
                                         {window.location.pathname === "/retailer/orders" && (
                                 <div
-                                    className="order-product-card-detail-2-rm"
+                                    className="retailer-order-product-card-detail-2"
                                     onClick={() => navigate(`/user/order/${order.$id}`)}
                                 >
                                     DETAIL
@@ -248,7 +248,7 @@ function OrderProductCard({ order}) {
                                         </div>}
                                         {window.location.pathname === "/retailer/orders" && (
                                 <div
-                                    className="order-product-card-detail-2-rm"
+                                    className="retailer-order-product-card-detail-2"
                                     onClick={() => navigate(`/user/order/${order.$id}`)}
                                 >
                                     DETAIL
