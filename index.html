@@ -8,69 +8,118 @@
   <meta name="theme-color" content="#000000" />
 
   <!-- Title -->
-  <title>Bharat Linker - Simplify Business Management</title>
+  <title>Bharat Linker - Simplify Business Management for SMEs</title>
 
   <!-- Description -->
   <meta name="description"
-    content="Bharat Linker helps small and medium businesses streamline operations, manage inventory, and grow efficiently with cutting-edge tools." />
+    content="Bharat Linker helps small and medium businesses streamline operations, manage inventory, and grow efficiently with cutting-edge tools. Start optimizing your business today!" />
 
   <!-- Keywords -->
   <meta name="keywords"
-    content="Bharat Linker, business management, inventory management, small business, tools for SMEs" />
+    content="Bharat Linker, business management, inventory management, small business, tools for SMEs, business growth, operations management" />
 
   <!-- Author -->
   <meta name="author" content="Bharat Linker Team" />
 
+  <!-- Canonical URL -->
+  <link rel="canonical" href="https://bharatlinker.com" />
+
   <!-- Open Graph / Facebook -->
-  <meta property="og:title" content="Bharat Linker - Simplify Business Management" />
+  <meta property="og:title" content="Bharat Linker - Simplify Business Management for SMEs" />
   <meta property="og:description"
     content="Streamline your business operations and grow efficiently with Bharat Linker, the ultimate tool for small and medium enterprises." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://bharatlinker.com" />
   <meta property="og:image" content="https://bharatlinker.com/og-image.jpg" />
+  <meta property="og:image:alt" content="Bharat Linker - Simplify Business Management" />
+  <meta property="og:site_name" content="Bharat Linker" />
 
   <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Bharat Linker - Simplify Business Management" />
+  <meta name="twitter:title" content="Bharat Linker - Simplify Business Management for SMEs" />
   <meta name="twitter:description"
     content="Streamline your business operations and grow efficiently with Bharat Linker, the ultimate tool for SMEs." />
   <meta name="twitter:image" content="https://bharatlinker.com/og-image.jpg" />
+  <meta name="twitter:image:alt" content="Bharat Linker - Simplify Business Management" />
+  <meta name="twitter:site" content="@bharatlinker" />
+  <meta name="twitter:creator" content="@bharatlinker" />
 
   <!-- Favicon -->
   <link rel="icon" href="/favicon.ico" />
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+  <link rel="manifest" href="/site.webmanifest" />
+
+  <!-- Preconnect for External Resources -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
   <!-- Font -->
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
 
+  <!-- Preload Critical Assets -->
+  <link rel="preload" as="image" href="./src/assets/bl.svg" />
+
   <!-- Stylesheet -->
   <style>
+    /* Critical CSS for above-the-fold content */
     #root-loader-img-div {
       width: 100vw;
-      z-index: -9999999999;
-      position: fixed;
-      top: 0;
-      height: 90vh;
+      height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
+      background-color: #ffffff;
     }
 
     #root-loader-img {
       width: 60vw;
-      z-index: -9999999999;
-      position: fixed;
-      align-self: center;
+      max-width: 300px;
+      height: auto;
+    }
+
+    /* Ensure no layout shift */
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
     }
   </style>
 </head>
 
 <body>
-
-
+  <!-- Root Element for React -->
   <div id="root">
-    <div id="root-loader-img-div"> <img id="root-loader-img" src="./src/assets/bl.svg" alt="Bharat Linker Logo" /></div>
+    <!-- Loading Spinner -->
+    <div id="root-loader-img-div">
+      <img id="root-loader-img" src="./src/assets/bl.svg" alt="Bharat Linker Logo" loading="eager" />
+    </div>
   </div>
+
+  <!-- Scripts -->
   <script type="module" src="./src/main.jsx"></script>
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Bharat Linker",
+      "url": "https://bharatlinker.com",
+      "logo": "https://bharatlinker.com/logo.png",
+      "description": "Bharat Linker helps small and medium businesses streamline operations, manage inventory, and grow efficiently with cutting-edge tools.",
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "email": "support@bharatlinker.com",
+        "contactType": "customer service"
+      },
+      "sameAs": [
+        "https://twitter.com/bharatlinker",
+        "https://facebook.com/bharatlinker",
+        "https://linkedin.com/company/bharatlinker"
+      ]
+    }
+  </script>
 </body>
 
 </html>
