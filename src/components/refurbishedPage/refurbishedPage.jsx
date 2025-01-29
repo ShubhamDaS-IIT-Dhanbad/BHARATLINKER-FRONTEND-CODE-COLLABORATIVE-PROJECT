@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 
 import { Oval } from "react-loader-spinner";
 
-import RefurbishedNavbar from '../a.navbarComponent/navbar.jsx';
+import RefurbishedNavbar from '../navbar.jsx';
 import RefurbishedProductList from './refurbishedProductList';
 import RefurbishedProductSortBySection from './sortBySection';
 import RefurbishedProductFilterBySection from './filterSection';

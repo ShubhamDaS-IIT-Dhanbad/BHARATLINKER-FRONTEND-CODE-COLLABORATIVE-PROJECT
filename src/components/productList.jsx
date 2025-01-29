@@ -3,7 +3,7 @@ import { Oval } from 'react-loader-spinner';
 import { useSelector } from 'react-redux';
 import { useLocation} from 'react-router-dom';
 import SearchPageProductCard from './productCard.jsx';
-import '../style/productList.css';
+import './style/productList.css';
 
 const NoProductsFound = () => {
     const notfound = 'https://res.cloudinary.com/demc9mecm/image/upload/v1736953901/ir4hy5fcwevhr8ibeaqq.png';

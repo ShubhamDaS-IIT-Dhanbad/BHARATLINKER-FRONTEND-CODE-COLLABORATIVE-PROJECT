@@ -7,7 +7,7 @@ import { FiUploadCloud } from 'react-icons/fi';
 import { TbDeviceMobileCharging } from 'react-icons/tb';
 import { AiOutlineProduct } from 'react-icons/ai';
 import { Oval } from 'react-loader-spinner';
-import ToggleIsOpenShop from './ToggleShop/main.jsx'
+import ToggleIsOpenShop from './ToggleShop/main.jsx';
 import './retailer.css';
 import '../user/userHome.css';
 
@@ -24,12 +24,12 @@ function UserHome({ retailerData }) {
     } catch (error) {
       console.error('Error during logout:', error);
     } finally {
-      setIsLoggingOut(false);
-      navigate('/');
+      setTimeout(() => {
+        setIsLoggingOut(false);
+        navigate('/');
+      }, 1000);
     }
   };
-
-
 
   const MenuItem = ({ icon: Icon, label, onClick }) => (
     <article className='dashboard-Your-Refurbished' onClick={onClick}>
@@ -37,6 +37,7 @@ function UserHome({ retailerData }) {
       <p className='dashboard-Your-info-p'>{label}</p>
     </article>
   );
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -85,25 +86,19 @@ function UserHome({ retailerData }) {
           />
           <MenuItem
             icon={TbDeviceMobileCharging}
-
             onClick={() => navigate('/retailer/orders')}
             label="Orders"
           />
-          {/* <MenuItem
-            icon={CiBellOn}
-            label="Notification"
-          /> */}
           <MenuItem
             icon={MdOutlineAdminPanelSettings}
             label="Logout"
             onClick={() => setIsLogout(true)}
           />
 
-
-
-         <div className='retailer-home-toggle-isopen'> <ToggleIsOpenShop retailerData={retailerData}/></div>
+          <div className='retailer-home-toggle-isopen'>
+            <ToggleIsOpenShop retailerData={retailerData} />
+          </div>
         </section>
-
       </main>
 
       {isLogout && (

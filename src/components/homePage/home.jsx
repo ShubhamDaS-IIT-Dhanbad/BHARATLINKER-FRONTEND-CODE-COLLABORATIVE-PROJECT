@@ -1,7 +1,7 @@
 import React, { memo, useCallback, useEffect, useState } from 'react';
 
 import { useNavigate } from 'react-router-dom';
-import HomePageNavbar from '../a.navbarComponent/navbar.jsx';
+import HomePageNavbar from '../navbar.jsx';
 import HomeTestimonial from './homeTestimonial.jsx';
 
 import { MdOutlineStore } from "react-icons/md";

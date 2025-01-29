@@ -5,8 +5,8 @@ import { MdFilterList } from "react-icons/md";
 import { Oval } from 'react-loader-spinner';
 import 'react-loading-skeleton/dist/skeleton.css';
 
-import SearchBar from '../a.navbarComponent/navbar.jsx';
-import ProductList from '../b.productComponent/productList.jsx';
+import SearchBar from '../navbar.jsx';
+import ProductList from '../productList.jsx';
 import ProductSortBySection from './sortbySection.jsx';
 import ProductFilterBySection from './filterSection.jsx';
 import InfiniteScroll from 'react-infinite-scroll-component';

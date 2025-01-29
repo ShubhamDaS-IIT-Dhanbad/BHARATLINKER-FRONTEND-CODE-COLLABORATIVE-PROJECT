@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import SearchBar from '../a.navbarComponent/navbar.jsx';
+import SearchBar from '../navbar.jsx';
 import { LiaSortSolid } from 'react-icons/lia';
 import { MdFilterList } from 'react-icons/md';
 import ShopList from './shopList.jsx';

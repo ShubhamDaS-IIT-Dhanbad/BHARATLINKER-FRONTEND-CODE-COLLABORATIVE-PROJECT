@@ -5,15 +5,18 @@ import { TbCategory2 } from 'react-icons/tb';
 import { BiSearchAlt } from 'react-icons/bi';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Cookies from 'js-cookie';
-import LocationTab from '../locationTab/locationTab.jsx';
-import { FaArrowLeft } from 'react-icons/fa';
-import '../style/navbar.css';
-import { useSelector } from 'react-redux';
-import useLocationFromCookie from '../../hooks/useLocationFromCookie.jsx';
-import { useExecuteSearch } from '../../hooks/searchProductHook.jsx';
-import { useSearchShop } from '../../hooks/searchShopHook.jsx';
-import { useSearchRefurbishedProductsHook } from '../../hooks/searchRefurbishedHook.jsx';
 
+import { FaArrowLeft } from 'react-icons/fa';
+import { useSelector } from 'react-redux';
+
+import LocationTab from './locationTab/locationTab.jsx';
+
+import useLocationFromCookie from '../hooks/useLocationFromCookie.jsx';
+import { useExecuteSearch } from '../hooks/searchProductHook.jsx';
+import { useSearchShop } from '../hooks/searchShopHook.jsx';
+import { useSearchRefurbishedProductsHook } from '../hooks/searchRefurbishedHook.jsx';
+
+import './style/navbar.css';
 const Navbar = ({ headerTitle }) => {
     const { getLocationFromCookie } = useLocationFromCookie();
     const navigate = useNavigate();

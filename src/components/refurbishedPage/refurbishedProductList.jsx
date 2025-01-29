@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import RefurbishedProductCard from '../b.productComponent/productCard.jsx';
+import RefurbishedProductCard from '../productCard.jsx';
 
 const ProductList = ({ products, loading, sortByAsc, sortByDesc }) => {
     const sortedProducts = useMemo(() => {

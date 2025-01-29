@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux"; // useDispatch hook only
+import { useDispatch } from "react-redux";
 import { FaExclamationTriangle, FaLuggageCart, FaSadCry } from "react-icons/fa";
 import { RiChatSmileFill } from "react-icons/ri";
 import { GiPartyPopper } from "react-icons/gi";

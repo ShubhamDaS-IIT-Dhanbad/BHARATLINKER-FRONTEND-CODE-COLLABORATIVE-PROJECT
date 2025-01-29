@@ -2,11 +2,14 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { FaArrowLeft } from 'react-icons/fa';
-import "./order.css";
-import { fetchOrdersByStatus, loadMoreOrders } from "../../../redux/features/retailer/orderSlice";
 import { Oval } from "react-loader-spinner";
-import OrderProductCard from "./orderProductCard";
 import { useNavigate } from "react-router-dom";
+import { fetchOrdersByStatus, loadMoreOrders } from "../../../redux/features/retailer/orderSlice";
+import OrderProductCard from "./orderProductCard";
+import e1 from './e1.png';
+
+import "./order.css";
+
 function Order({ retailerData }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -27,6 +30,7 @@ function Order({ retailerData }) {
   };
 
   const selectedOrders = orderStates[selectedOrderType];
+
   const fetchInitialOrders = (status) => {
     const shopId = retailerData?.$id;
     if (!shopId) return;
@@ -39,22 +43,25 @@ function Order({ retailerData }) {
     const nextPage = selectedOrders.currentPage + 1;
     dispatch(loadMoreOrders({ shopId, status: selectedOrderType, page: nextPage }));
   };
+
   useEffect(() => {
-    if (retailerData?.$id && pendingOrders.data.length == 0) fetchInitialOrders("pending");
-    if (retailerData?.$id && confirmedOrders.data.length == 0) fetchInitialOrders("confirmed");
-    if (retailerData?.$id && deliveredOrders.data.length == 0) fetchInitialOrders("delivered");
-    if (retailerData?.$id && canceledOrders.data.length == 0) fetchInitialOrders("canceled");
-  }, []);
+    if (retailerData?.$id) {
+      if (pendingOrders.data.length === 0) fetchInitialOrders("pending");
+      if (confirmedOrders.data.length === 0) fetchInitialOrders("confirmed");
+      if (deliveredOrders.data.length === 0) fetchInitialOrders("delivered");
+      if (canceledOrders.data.length === 0) fetchInitialOrders("canceled");
+    }
+  }, [retailerData]);
 
   return (
     <>
-
+      {/* Header */}
       <div className="retailer-update-header">
         <FaArrowLeft
           id="retailer-update-header-left-icon"
           size={25}
           onClick={() => navigate('/retailer')}
-          aria-label="User Account"
+          aria-label="Back to retailer home"
           tabIndex={0}
         />
         <div className="retailer-update-header-inner-div">
@@ -62,23 +69,19 @@ function Order({ retailerData }) {
             ORDER DETAILS
           </p>
           {retailerData?.shopName && (
-            <div
-              className={`retailer-upload-product-header-shopname`}
-              aria-label="Change Location"
-              tabIndex={0}
-            >
+            <div className="retailer-upload-product-header-shopname" aria-label="Change Location" tabIndex={0}>
               {retailerData?.shopName?.toUpperCase()}
             </div>
           )}
         </div>
       </div>
 
-      <div className="retailer-order-type-buttons" >
+      {/* Order Type Buttons */}
+      <div className="retailer-order-type-buttons">
         {["pending", "confirmed", "delivered", "canceled"].map((type) => (
           <div
             key={type}
-            className={`retailer-order-type-button ${selectedOrderType === type ? "active" : ""
-              }`}
+            className={`retailer-order-type-button ${selectedOrderType === type ? "active" : ""}`}
             onClick={() => setSelectedOrderType(type)}
           >
             {type.toUpperCase()}
@@ -86,7 +89,7 @@ function Order({ retailerData }) {
         ))}
       </div>
 
-
+      {/* Infinite Scroll for Orders */}
       <InfiniteScroll
         dataLength={selectedOrders.data.length}
         next={fetchNextPage}
@@ -100,7 +103,7 @@ function Order({ retailerData }) {
         <div className="retailer-order-div-container">
           {selectedOrders.data.length === 0 ? (
             <div className="retailer-order-empty">
-              EMPTY
+              <img className="retailer-order-empty-img" src={e1} alt="No Orders" />
             </div>
           ) : (
             selectedOrders.data.map((order) => (
@@ -109,12 +112,8 @@ function Order({ retailerData }) {
           )}
         </div>
       </InfiniteScroll>
-
-
-
-
-
     </>
   );
 }
+
 export default Order;
