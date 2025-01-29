@@ -110,17 +110,6 @@ const UploadBooksModulesForm = ({ retailerData }) => {
     setImages([null, null, null]);
   };
 
-  const Popup = ({ message, onClose, isSuccess }) => (
-    <div className={`retailer-product-upload-${isSuccess ? 'success' : 'fail'}-popup`}>
-      <div className={`retailer-product-upload-${isSuccess ? 'success' : 'fail'}-popup-inner`}>
-        <div className={`retailer-product-upload-${isSuccess ? 'success' : 'fail'}-popup-message`}>{message}</div>
-        <div className={`retailer-product-upload-${isSuccess ? 'success' : 'fail'}-popup-ok`} onClick={onClose}>
-          Ok
-        </div>
-      </div>
-    </div>
-  );
-
   return (
     <div className="upload-product-container">
       <div className="form-section">
