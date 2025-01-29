@@ -4,9 +4,9 @@ import { fetchRefurbishedProducts, loadMoreRefurbishedProducts, resetRefurbished
 
 export const useSearchRefurbishedProductsHook = () => {
     const dispatch = useDispatch();
-    const { getLocationFromCookie } = useLocationFromCookie();
+    const {location } = useLocationFromCookie();
 
-    const storedLocation = getLocationFromCookie();
+    const storedLocation = location;
     const { 
         refurbishedProducts, 
         currentPage, 

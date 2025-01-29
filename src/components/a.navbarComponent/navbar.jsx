@@ -6,29 +6,25 @@ import { BiSearchAlt } from 'react-icons/bi';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Cookies from 'js-cookie';
 import LocationTab from '../locationTab/locationTab.jsx';
-
-
 import { FaArrowLeft } from 'react-icons/fa';
 import '../style/navbar.css';
-
 import { useSelector } from 'react-redux';
-//hooks
-
 import useLocationFromCookie from '../../hooks/useLocationFromCookie.jsx';
 import { useExecuteSearch } from '../../hooks/searchProductHook.jsx';
 import { useSearchShop } from '../../hooks/searchShopHook.jsx';
-import { useSearchRefurbishedProductsHook } from '../../hooks/searchRefurbishedHook.jsx'
-
+import { useSearchRefurbishedProductsHook } from '../../hooks/searchRefurbishedHook.jsx';
 
 const Navbar = ({ headerTitle }) => {
-
-    const { location: userLocation } = useLocationFromCookie();
-
+    const { getLocationFromCookie } = useLocationFromCookie();
     const navigate = useNavigate();
     const location = useLocation();
-
-    const [isLocationHas, setIsLocationHas] = useState(true);
-
+    
+    const userLocation=getLocationFromCookie();
+    
+    const [isLocationHas, setIsLocationHas] = useState(!!(userLocation?.address && userLocation?.lat && userLocation?.lon));
+    const [searchInput, setSearchInput] = useState('');
+    const [locationTabVisible, setLocationTabVisible] = useState(false);
+    
     const { executeSearch } = useExecuteSearch();
     const { query: searchQuery } = useSelector((state) => state.searchproducts);
     const { executeSearchShop } = useSearchShop();
@@ -36,15 +32,11 @@ const Navbar = ({ headerTitle }) => {
     const { executeSearchRefurbished } = useSearchRefurbishedProductsHook();
     const { query: refurbishedQuery } = useSelector((state) => state.refurbishedproducts);
 
-    const [searchInput, setSearchInput] = useState('');
-    const [locationTabVisible, setLocationTabVisible] = useState(false);
-
-    useEffect(() => {
-        if (!userLocation || !userLocation.address || !userLocation.lat || !userLocation.lon) {
-            setIsLocationHas(false);
-        } else { setIsLocationHas(true); }
-    }, []);
-
+    const isHomePage = location.pathname === '/';
+    const isSearchPage = location.pathname === '/search';
+    const isShopPage = location.pathname === '/shop';
+    const isRefurbishedPage = location.pathname === '/refurbished';
+    
     useEffect(() => {
         if (isSearchPage) {
             setSearchInput(searchQuery);
@@ -53,103 +45,53 @@ const Navbar = ({ headerTitle }) => {
         } else if (isRefurbishedPage) {
             setSearchInput(refurbishedQuery);
         }
-    }, []);
+    }, [isSearchPage, isShopPage, isRefurbishedPage, searchQuery, shopQuery, refurbishedQuery]);
 
     const handleHomePageUserIconClick = () => {
         const userSession = Cookies.get('BharatLinkerUserData');
         navigate(userSession ? '/user' : '/login');
     };
-    const toggleLocationTab = () => {
-        setLocationTabVisible((prev) => !prev);
-    };
-
-    const isHomePage = location.pathname === '/';
-    const isSearchPage = location.pathname === '/search';
-    const isShopPage = location.pathname === '/shop';
-    const isRefurbishedPage = location.pathname === '/refurbished';
-
+    
+    const toggleLocationTab = () => setLocationTabVisible((prev) => !prev);
+    
     const handleSearch = (e) => {
-        const inputValue = searchInput;
-        if (e.key === 'Enter') {
+        if (e.key === 'Enter' || e.type === 'click') {
             if (isHomePage) {
-                executeSearch(inputValue);
-                navigate(`/search?query=${encodeURIComponent(inputValue)}`);
+                executeSearch(searchInput);
+                navigate(`/search?query=${encodeURIComponent(searchInput)}`);
             } else if (isSearchPage) {
-                executeSearch(inputValue);
+                executeSearch(searchInput);
             } else if (isShopPage) {
-                executeSearchShop(inputValue);
+                executeSearchShop(searchInput);
             } else if (isRefurbishedPage) {
-                executeSearchRefurbished(inputValue);
+                executeSearchRefurbished(searchInput);
             }
         }
     };
-
-    const handleSearchIconClick = () => {
-        const inputValue = searchInput;
-        if (isHomePage) {
-            executeSearch(inputValue);
-            navigate(`/search?query=${encodeURIComponent(inputValue)}`);
-        } else if (isSearchPage) {
-            executeSearch(inputValue);
-        } else if (isShopPage) {
-            executeSearchShop(inputValue);
-        } else if (isRefurbishedPage) {
-            executeSearchRefurbished(inputValue);
-        }
-    };
-
-
+    
     return (
         <>
             <div className={isHomePage ? "home-page-header-visible" : "product-page-header-visible"}>
                 <div className={isHomePage ? "home-page-header-container" : "product-page-header-container"}>
                     <div className={isHomePage ? "home-page-header-user-section" : "product-page-header-user-section"}>
                         {isHomePage ? (
-                            <HiOutlineUserCircle
-                                id="home-page-user-icon"
-                                size={40}
-                                onClick={handleHomePageUserIconClick}
-                            />
+                            <HiOutlineUserCircle size={40} id="home-page-user-icon" onClick={handleHomePageUserIconClick} />
                         ) : (
-                            <FaArrowLeft
-                                id='product-page-user-icon'
-                                size={25}
-                                onClick={() => navigate('/')}
-                                aria-label="Go to Home"
-                                tabIndex={0}
-                            />)
-                        }
+                            <FaArrowLeft size={25} id='product-page-user-icon' onClick={() => navigate('/')} aria-label="Go to Home" tabIndex={0} />
+                        )}
                         <div className={isHomePage ? "home-page-user-location" : "product-page-user-location"}>
-                            <p className={isHomePage ? "home-page-location-label" : "product-page-location-label"}>
-                                {headerTitle}
-                            </p>
-                            <div
-                                className={isHomePage ? "home-page-location-value" : "product-page-location-value"}
-                                
-                            >
-                                {userLocation?.address
-                                    ? userLocation?.address.slice(0, 30)
-                                    : 'SET LOCATION, INDIA'}
-                                <TiArrowSortedDown size={15} onClick={toggleLocationTab}/>
+                            <p className={isHomePage ? "home-page-location-label" : "product-page-location-label"}>{headerTitle}</p>
+                            <div className={isHomePage ? "home-page-location-value" : "product-page-location-value"}>
+                                {userLocation?.address ? userLocation.address.slice(0, 30) : 'SET LOCATION, INDIA'}
+                                <TiArrowSortedDown size={15} onClick={toggleLocationTab} />
                             </div>
                         </div>
                     </div>
-
-                    {isHomePage && (
-                        <TbCategory2
-                            size={30}
-                            className="home-page-category-icon"
-                            onClick={() => navigate('/refurbished')}
-                        />
-                    )}
+                    {isHomePage && <TbCategory2 size={30} className="home-page-category-icon" onClick={() => navigate('/refurbished')} />}
                 </div>
-
                 <div className={isHomePage ? "home-page-search-section" : "product-page-search-section"}>
                     <div className={isHomePage ? "home-page-search-input-container" : "product-page-search-input-container"}>
-                        <BiSearchAlt
-                            className={isHomePage ? "home-page-search-icon" : "product-page-search-icon"}
-                            onClick={handleSearchIconClick}
-                        />
+                        <BiSearchAlt className={isHomePage ? "home-page-search-icon" : "product-page-search-icon"} onClick={handleSearch} />
                         <input
                             className={isHomePage ? "home-page-search-input" : "product-page-search-input"}
                             placeholder="Search"
@@ -160,21 +102,18 @@ const Navbar = ({ headerTitle }) => {
                     </div>
                 </div>
             </div>
-
-            {locationTabVisible && (
-                <LocationTab setLocationTab={setLocationTabVisible} />
-            )}
-            {!isLocationHas &&
+            {locationTabVisible && <LocationTab setLocationTab={setLocationTabVisible} />}
+            {!isLocationHas && (
                 <div className="home-location-not-present">
                     <div className="home-location-not-present-d1">
                         <div className="home-location-not-present-message">User Your Location is not set</div>
-                        <div className="home-location-not-present-options" onClick={()=>{setLocationTabVisible(true); setIsLocationHas(true)}}>
+                        <div className="home-location-not-present-options" onClick={() => { setLocationTabVisible(true); setIsLocationHas(true); }}>
                             <div className="home-location-not-present-use-loc-btn">USE CURRENT LOCATION</div>
                             <div className="home-location-not-present-use-manual-btn">SEARCH MANUALLY</div>
                         </div>
                     </div>
                 </div>
-            }
+            )}
         </>
     );
 };

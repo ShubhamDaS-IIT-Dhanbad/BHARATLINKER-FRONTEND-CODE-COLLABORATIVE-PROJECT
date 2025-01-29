@@ -1,100 +1,190 @@
-import { useState } from 'react';
+import { useState, useRef, useCallback } from 'react';
 import Cookies from 'js-cookie';
 import conf from '../conf/conf.js';
-
 import { useDispatch } from 'react-redux';
+import { batch } from 'react-redux';
+
 import { resetProducts } from '../redux/features/searchPage/searchProductSlice.jsx';
 import { resetShops } from '../redux/features/searchShop/searchShopSlice.jsx';
 import { resetRefurbishedProducts } from '../redux/features/refurbishedPage/refurbishedProductsSlice.jsx';
 
-const useLocationFromCookie = () => {
-    const dispatch = useDispatch();
-    const [debounceTimer, setDebounceTimer] = useState(null);
+// Constants for cookie configuration
+const LOCATION_COOKIE_NAME = 'BharatLinkerUserLocation';
+const COOKIE_EXPIRY_DAYS = 7;
+const DEFAULT_RADIUS_KM = 5;
+const DEBOUNCE_TIMEOUT_MS = 150;
 
-    const getLocationFromCookie = () => {
-        const storedLocation = Cookies.get('BharatLinkerUserLocation')
-            ? JSON.parse(Cookies.get('BharatLinkerUserLocation'))
-            : { lat: 0, lon: 0, address: '', radius: 5 };
-        return storedLocation;
-    };
-
-    const [location, setLocation] = useState(getLocationFromCookie);
-
-    const updateLocation = (newLocation) => {
-        setLocation((prevLocation) => {
-            const updatedLocation = { ...prevLocation, ...newLocation };
-            Cookies.set('BharatLinkerUserLocation', JSON.stringify(updatedLocation), { expires: 1 });
-            return updatedLocation;
-        });
-        if (debounceTimer) {clearTimeout(debounceTimer);}
-        const newDebounceTimer = setTimeout(() => {
-            dispatch(resetProducts());
-            dispatch(resetShops());
-            dispatch(resetRefurbishedProducts());
-        }, 100);
-        setDebounceTimer(newDebounceTimer);
-    };
-
-    const fetchLocationSuggestions = async (query) => {
-        if (!query) return [];
-        const apiKey = conf.geoapifyapikey;
-        const apiUrl = `https://api.geoapify.com/v1/geocode/search?text=${query}&apiKey=${apiKey}&lang=en`;
-        try {
-            const response = await fetch(apiUrl);
-            const data = await response.json();
-            if (data.features && data.features.length > 0) {
-                return data.features
-                    .filter((feature) => feature.properties.country === 'India' && feature.properties.state)
-                    .map((feature) => ({
-                        label: feature.properties.formatted,
-                        lat: feature.geometry.coordinates[1],
-                        lon: feature.geometry.coordinates[0],
-                        country: feature.properties.country,
-                        state: feature.properties.state,
-                    }));
-            } else {
-                return [];
-            }
-        } catch (error) {
-            console.error('Error fetching suggestions:', error);
-            return [];
-        }
-    };
-
-    const fetchCurrentLocation = async () => {
-        if (navigator.geolocation) {
-            try {
-                const position = await new Promise((resolve, reject) => {
-                    navigator.geolocation.getCurrentPosition(resolve, reject);
-                });
-                const { latitude, longitude } = position.coords;
-                const apiUrl = `${conf.opencageapiurl}?key=${conf.opencageapikey}&q=${latitude},${longitude}&pretty=1&no_annotations=1`;
-                const response = await fetch(apiUrl);
-                const data = await response.json();
-                if (data.results && data.results.length > 0) {
-                    const address = data.results[0].formatted;
-                    updateLocation({
-                        lat: latitude,
-                        lon: longitude,
-                        address: address,
-                        radius: 5,
-                    });
-                }
-            } catch (error) {
-                console.error('Error fetching current location:', error);
-            }
-        } else {
-            console.error('Geolocation is not supported by this browser.');
-        }
-    };
-
-    return {
-        location,
-        getLocationFromCookie,
-        updateLocation,
-        fetchLocationSuggestions,
-        fetchCurrentLocation
-    };
+// API configuration
+const GEOCODING_API = {
+  GEOAPIFY: {
+    URL: 'https://api.geoapify.com/v1/geocode/search',
+    KEY: conf.geoapifyapikey,
+  },
+  OPENCAGE: {
+    URL: conf.opencageapiurl,
+    KEY: conf.opencageapikey,
+  },
 };
-
-export default useLocationFromCookie;
+const useLocationManager = () => {
+    const dispatch = useDispatch();
+    const debounceTimerRef = useRef(null);
+    const abortControllerRef = useRef(new AbortController());
+  
+    const [location, setLocation] = useState(() => {
+      try {
+        const cookieData = Cookies.get(LOCATION_COOKIE_NAME);
+        return cookieData
+          ? JSON.parse(cookieData)
+          : { lat: 0, lon: 0, address: '', radius: DEFAULT_RADIUS_KM };
+      } catch (error) {
+        console.error('Error parsing location cookie:', error);
+        return { lat: 0, lon: 0, address: '', radius: DEFAULT_RADIUS_KM };
+      }
+    });
+  
+    const getLocationFromCookie = useCallback(() => {
+      try {
+        const cookieData = Cookies.get(LOCATION_COOKIE_NAME);
+        return cookieData
+          ? JSON.parse(cookieData)
+          : { lat: 0, lon: 0, address: '', radius: DEFAULT_RADIUS_KM };
+      } catch (error) {
+        console.error('Error parsing location cookie:', error);
+        return { lat: 0, lon: 0, address: '', radius: DEFAULT_RADIUS_KM };
+      }
+    }, []);
+  
+    const persistLocation = useCallback((newLocation) => {
+      Cookies.set(LOCATION_COOKIE_NAME, JSON.stringify(newLocation), {
+        expires: COOKIE_EXPIRY_DAYS,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict',
+      });
+    }, []);
+  
+    const resetStores = useCallback(() => {
+      batch(() => {
+        dispatch(resetProducts());
+        dispatch(resetShops());
+        dispatch(resetRefurbishedProducts());
+      });
+    }, [dispatch]);
+  
+    const debouncedResetStores = useCallback(() => {
+      if (debounceTimerRef.current) {
+        clearTimeout(debounceTimerRef.current);
+      }
+      debounceTimerRef.current = setTimeout(() => {
+        resetStores();
+        debounceTimerRef.current = null;
+      }, DEBOUNCE_TIMEOUT_MS);
+    }, [resetStores]);
+  
+    const updateLocation = useCallback(
+      (newLocation) => {
+        setLocation((prev) => {
+          const updated = { ...prev, ...newLocation };
+          persistLocation(updated);
+          return updated;
+        });
+        debouncedResetStores();
+      },
+      [persistLocation, debouncedResetStores]
+    );
+  
+    const fetchLocationSuggestions = useCallback(async (query) => {
+      if (!query?.trim()) return [];
+  
+      try {
+        abortControllerRef.current.abort();
+        abortControllerRef.current = new AbortController();
+  
+        const url = new URL(GEOCODING_API.GEOAPIFY.URL);
+        url.search = new URLSearchParams({
+          text: query,
+          apiKey: GEOCODING_API.GEOAPIFY.KEY,
+          lang: 'en',
+          filter: 'countrycode:in',
+        }).toString();
+  
+        const response = await fetch(url, {
+          signal: abortControllerRef.current.signal,
+        });
+  
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+  
+        const { features } = await response.json();
+  
+        return (features || [])
+          .filter(({ properties }) => properties?.country === 'India' && properties?.state)
+          .map(({ properties, geometry }) => ({
+            label: properties.formatted,
+            lat: geometry.coordinates[1],
+            lon: geometry.coordinates[0],
+            country: properties.country,
+            state: properties.state,
+            city: properties.city,
+          }));
+      } catch (error) {
+        if (error.name !== 'AbortError') {
+          console.error('Geocoding API error:', error);
+        }
+        return [];
+      }
+    }, []);
+  
+    const fetchCurrentLocation = useCallback(async () => {
+      if (!('geolocation' in navigator)) {
+        console.error('Geolocation is not supported');
+        return;
+      }
+  
+      try {
+        const position = await new Promise((resolve, reject) => {
+          navigator.geolocation.getCurrentPosition(resolve, reject, {
+            enableHighAccuracy: true,
+            timeout: 10000,
+            maximumAge: 0,
+          });
+        });
+  
+        const { latitude: lat, longitude: lon } = position.coords;
+        const url = new URL(GEOCODING_API.OPENCAGE.URL);
+        url.search = new URLSearchParams({
+          key: GEOCODING_API.OPENCAGE.KEY,
+          q: `${lat},${lon}`,
+          pretty: 1,
+          no_annotations: 1,
+          limit: 1,
+        }).toString();
+  
+        const response = await fetch(url);
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+  
+        const data = await response.json();
+        const [result] = data.results || [];
+  
+        if (result) {
+          updateLocation({
+            lat,
+            lon,
+            address: result.formatted,
+            radius: DEFAULT_RADIUS_KM,
+          });
+        }
+      } catch (error) {
+        console.error('Geolocation error:', error);
+        throw new Error('Unable to retrieve your location');
+      }
+    }, [updateLocation]);
+  
+    return {
+      location,
+      getLocationFromCookie,
+      updateLocation,
+      fetchLocationSuggestions,
+      fetchCurrentLocation,
+    };
+  };
+  
+  export default useLocationManager;
