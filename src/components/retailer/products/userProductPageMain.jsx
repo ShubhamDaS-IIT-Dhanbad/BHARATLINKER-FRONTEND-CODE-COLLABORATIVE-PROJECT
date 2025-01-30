@@ -78,7 +78,7 @@ const retailerProduct = () => {
 
     // Handle loading more products
     const handleLoadMore = () => {
-        if (!hasMoreProducts || loadingMoreProducts || !userData?.shop) return;
+        if (!hasMoreProducts || loadingMoreProducts || !userData?.$id) return;
 
         const params = {
             inputValue,
@@ -130,7 +130,7 @@ const retailerProduct = () => {
                                     aria-label="Change Location"
                                     tabIndex={0}
                                 >
-                                    {userData?.shopName?.toUpperCase()}
+                                    {userData?.shopName}
                                 </div>
                             )}
                         </div>
@@ -171,14 +171,13 @@ const retailerProduct = () => {
                         dataLength={products?.length}
                         next={handleLoadMore}
                         hasMore={hasMoreProducts}
+                        loader={
+                            <div className="fallback-loading">
+                                <Oval height={30} width={30} color="green" secondaryColor="white" ariaLabel="loading" />
+                            </div>}
                     >
                         <ProductList products={products} loading={loading} />
                     </InfiniteScroll>
-                )}
-                {loadingMoreProducts && (
-                    <div className="fallback-loading">
-                        <Oval height={30} width={30} color="green" secondaryColor="white" ariaLabel="loading" />
-                    </div>
                 )}
             </main>
         </div>

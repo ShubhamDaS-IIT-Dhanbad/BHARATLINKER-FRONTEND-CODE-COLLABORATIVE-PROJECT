@@ -231,10 +231,11 @@ const getRetailerProducts = async ({
                 collectionId,
                 categoryQueries
             );
-            return response.documents || [];
+            return response || [];
         };
 
-        const allProducts = await fetchProducts(conf.appwriteProductsCollectionId);
+         const res= await fetchProducts(conf.appwriteProductsCollectionId);
+         const allProducts=res.documents;
         if (!Array.isArray(allProducts)) {
             throw new TypeError("Expected 'allProducts' to be an array.");
         }
@@ -242,6 +243,7 @@ const getRetailerProducts = async ({
         // Skip scoring when inputValue is empty
         if (inputValue.length === 0) {
             return {
+                total:res.total,
                 success: true,
                 products: allProducts
             };
@@ -277,6 +279,7 @@ const getRetailerProducts = async ({
         }
 
         return {
+            total:res.total,
             success: true,
             products: filteredProducts
         };

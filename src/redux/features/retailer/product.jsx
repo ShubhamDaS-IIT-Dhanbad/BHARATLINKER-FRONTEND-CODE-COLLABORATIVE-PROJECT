@@ -17,7 +17,6 @@ export const fetchProducts = createAsyncThunk(
                 selectedBrands,
                 selectedCategories
             });
-
             if (response?.products?.length === 0) {
                 return {
                     products: [],
@@ -165,6 +164,12 @@ const retailerProductsSlice = createSlice({
         },
         
     },
+
+
+
+
+
+
     extraReducers: (builder) => {
         builder
             .addCase(fetchProducts.pending, (state) => {
@@ -182,6 +187,12 @@ const retailerProductsSlice = createSlice({
                 state.error = action.payload || 'Something went wrong';
                 state.hasMoreProducts = false;
             })
+
+
+
+
+
+
             .addCase(loadMoreProducts.pending, (state) => {
                 state.loadingMoreProducts = true;
                 state.error = null;
