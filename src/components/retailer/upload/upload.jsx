@@ -1,12 +1,24 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FaArrowLeft } from 'react-icons/fa';
+import { useSelector } from 'react-redux';
 import UploadBooksForm from './userUploadProductForm.jsx';
-
 import './upload.css';
 
 const UploadProduct = ({ retailerData }) => {
     const navigate = useNavigate();
+    const { total } = useSelector((state) => state.retailerProducts);
+
+    useEffect(() => {
+        if (total >= retailerData.productCount) {
+            alert('You have reached the maximum number of products allowed in your shop.');
+            navigate('/retailer');
+        }
+        
+    }, [total, retailerData, navigate]);
+    if (retailerData && total >= retailerData.productCount) {
+        return null;
+    }
 
     return (
         <>

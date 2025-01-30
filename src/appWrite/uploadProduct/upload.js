@@ -116,6 +116,12 @@ const uploadProductWithImages = async (productData, files = []) => {
     if (!productData || !files || !Array.isArray(files)) {
         throw new Error('Invalid arguments: productData and files are required.');
     }
+    const shopId=productData.shop;
+    const countTotalProduct=await getRetailerTotalProducts({shopId});
+    if(countTotalProduct.totalProducts>productData.total){
+        console.log("maximum product exceed");
+        throw new Error('maximum product exceed');
+    }
 
     let uploadedImages = [];
     try {
@@ -166,7 +172,24 @@ const uploadProductWithImages = async (productData, files = []) => {
 
 
 
+const getRetailerTotalProducts = async ({ shopId }) => {
+    if (!shopId) {
+        return { success: false, error: 'Shop ID is required to fetch product count.' };
+    }
 
+    try {
+        const response = await databases.listDocuments(
+            conf.appwriteProductsDatabaseId,
+            conf.appwriteProductsCollectionId,
+            [Query.equal('shop', shopId)],
+            0
+        );
+        console.log(response);
+        return { success: true, totalProducts: response.total };
+    } catch (error) {
+        return { success: false, error: error.message };
+    }
+};
 const getRetailerProducts = async ({
     shopId,
     inputValue = '',
@@ -184,7 +207,7 @@ const getRetailerProducts = async ({
     if (!shopId) {
         return { success: false, error: 'Phone number is required to fetch products.' };
     }
-
+   
     try {
         const inputTokens = inputValue.split(' ').filter(token => token.trim() !== '').map(token => token.toLowerCase());
 
@@ -289,6 +312,7 @@ const getRetailerProducts = async ({
         return { success: false, error: error.message || 'Unknown error' };
     }
 }
+
 
 
 

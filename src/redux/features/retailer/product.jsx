@@ -26,6 +26,7 @@ export const fetchProducts = createAsyncThunk(
 
             if (response.products && response.success) {
                 return {
+                    total:response.total,
                     products: response.products,
                     hasMoreProducts: response.products.length >= productsPerPage,
                 };
@@ -84,6 +85,7 @@ const initialState = {
     hasMoreProducts: true,
     error: null,
     productsPerPage: 10,
+    total:0
 };
 
 // Slice
@@ -177,7 +179,8 @@ const retailerProductsSlice = createSlice({
                 state.error = null;
             })
             .addCase(fetchProducts.fulfilled, (state, action) => {
-                const { products, hasMoreProducts } = action.payload;
+                const { products, hasMoreProducts ,total} = action.payload;
+                state.total=16;
                 state.products = products;
                 state.hasMoreProducts = hasMoreProducts;
                 state.loading = false;

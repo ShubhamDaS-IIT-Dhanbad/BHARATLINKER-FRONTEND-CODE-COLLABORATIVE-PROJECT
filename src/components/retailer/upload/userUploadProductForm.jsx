@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 
 const UploadBooksModulesForm = ({ retailerData }) => {
   const navigate = useNavigate();
+
   const [coordinates, setCoordinates] = useState({ lat: null, long: null });
   const [uploadStatus, setUploadStatus] = useState({ success: false, fail: false });
   const [formData, setFormData] = useState({
@@ -81,6 +82,7 @@ const UploadBooksModulesForm = ({ retailerData }) => {
     const finalFormData = {
       ...formData,
       shop: retailerData?.$id,
+      total:retailerData?.productCount,
       lat: coordinates.lat,
       long: coordinates.long,
     };
