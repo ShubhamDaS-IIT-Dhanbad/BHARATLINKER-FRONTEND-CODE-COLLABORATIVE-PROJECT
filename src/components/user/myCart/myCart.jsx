@@ -219,7 +219,7 @@ const MyCartPage = ({ userData }) => {
                         <section className="delivery-section">
                             <div className="address-search">
                                 <div className="search-input-group">
-                                    <IoSearch size={25} className="search-icon" />
+                                    <IoSearch style={{padding:"7px"}} size={25} className="user-cart-search-icon" />
                                     <input
                                         type="text"
                                         placeholder="Enter delivery address"
