@@ -15,6 +15,7 @@ const UploadBooksModulesForm = () => {
     const products = useSelector((state) => state.retailerProducts.products);
     const product = products.find((p) => p.$id === productId);
 
+    const [isInStockState, setIsInStockState]=useState(true);
     const [status, setStatus] = useState({ loading: true, error: null, success: null });
     const [isUpdating, setIsUpdating] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);
@@ -27,6 +28,7 @@ const UploadBooksModulesForm = () => {
         price: '',
         discountedPrice: '',
         keywords: ''
+
     };
 
     const [formData, setFormData] = useState(initialFormState);
@@ -40,13 +42,15 @@ const UploadBooksModulesForm = () => {
                     return;
                 }
 
-                const { title, description, price, discountedPrice, keywords, images: productImages } = product;
-                setFormData({ 
-                    title, 
-                    description, 
-                    price, 
-                    discountedPrice, 
-                    keywords: Array.isArray(keywords) ? keywords.join(', ') : keywords 
+                const { title, description, price, discountedPrice, keywords, images: productImages,isInStock } = product;
+                setIsInStockState(isInStock);
+                setFormData({
+                    title,
+                    description,
+                    price,
+                    discountedPrice,
+                    keywords: Array.isArray(keywords) ? keywords.join(', ') : keywords,
+                    isInStock
                 });
                 setImages([...productImages, ...Array(3).fill(null)].slice(0, 3));
             } catch (error) {
@@ -96,11 +100,11 @@ const UploadBooksModulesForm = () => {
         setImages(prev => {
             const newImages = [...prev];
             const currentImage = newImages[index];
-            
+
             if (typeof currentImage === 'string' && !currentImage.startsWith('data:')) {
                 setImagesToDelete(prevUrls => [...prevUrls, currentImage]);
             }
-            
+
             newImages[index] = null;
             return newImages;
         });
@@ -116,17 +120,17 @@ const UploadBooksModulesForm = () => {
         const requiredFields = ['title', 'description', 'price', 'discountedPrice'];
         const isValid = requiredFields.every(field => formData[field]?.trim());
         const hasAtLeastOneImage = images.some(img => img !== null);
-        
+
         if (!isValid) {
             setStatus(prev => ({ ...prev, error: 'Please fill all required fields' }));
             return false;
         }
-        
+
         if (!hasAtLeastOneImage) {
             setStatus(prev => ({ ...prev, error: 'At least one image is required' }));
             return false;
         }
-        
+
         return true;
     };
 
@@ -135,15 +139,15 @@ const UploadBooksModulesForm = () => {
         if (!confirmUpdate) return;
 
         setIsUpdating(true);
-        try { 
-            const validImages = images.filter(img => 
+        try {
+            const validImages = images.filter(img =>
                 typeof img === 'string' && img.startsWith('https://res.cloudinary.com/')
             );
             const filesToUpload = newImagesFiles.filter(file => file !== null);
             const updatedData = await updateProduct(
                 productId,
                 imagesToDelete,
-                { ...formData,images: validImages },
+                { ...formData, images: validImages ,isInStock:isInStockState},
                 filesToUpload
             );
 
@@ -165,7 +169,7 @@ const UploadBooksModulesForm = () => {
 
         setIsDeleting(true);
         try {
-            const imagesToDelete=product.images;
+            const imagesToDelete = product.images;
             await deleteProduct(productId, imagesToDelete);
             dispatch(deleteProductSlice(productId));
             setStatus({ loading: false, success: 'Product deleted successfully!', error: null });
@@ -173,7 +177,7 @@ const UploadBooksModulesForm = () => {
         } catch (error) {
             setStatus({ loading: false, error: 'Deletion failed. Please try again.', success: null });
         }
-        
+
         setIsDeleting(false);
     };
 
@@ -192,7 +196,7 @@ const UploadBooksModulesForm = () => {
                     {status.error}
                 </div>
             )}
-            
+
             {status.success && (
                 <div className="retailer-update-product-success">
                     {status.success}
@@ -259,6 +263,23 @@ const UploadBooksModulesForm = () => {
                         placeholder="e.g., fiction, bestseller, romance"
                     />
                 </label>
+                <div className="retailer-update-product-instock-container">
+                    <label className="retailer-update-product-label">
+                        IN STOCK
+                       {isInStockState ? <div className="retailer-update-product-instock-container-stock"></div> : <div className="retailer-update-product-instock-container-sel" onClick={
+                        ()=>{
+                            setIsInStockState(true);
+                        }}></div>} 
+                    </label>
+                    <label className="retailer-update-product-label">
+                        OUT OF STOCK
+                        
+                       {isInStockState ? <div className="retailer-update-product-instock-container-sel"  onClick={
+                        ()=>{
+                            setIsInStockState(false);
+                        }}></div> : <div className="retailer-update-product-instock-container-stock"></div>} 
+                    </label>
+                </div>
             </div>
 
             <div className="retailer-upload-product-image-section">
