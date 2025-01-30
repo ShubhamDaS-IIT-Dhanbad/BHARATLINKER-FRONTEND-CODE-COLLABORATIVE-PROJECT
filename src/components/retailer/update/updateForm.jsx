@@ -3,8 +3,8 @@ import { Oval } from 'react-loader-spinner';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { updateProduct, deleteProduct } from '../../../appWrite/uploadProduct/upload.js';
-
-import {deleteProductSlice,updateProductSlice } from '../../../redux/features/retailer/product.jsx';
+import { CiImageOn } from 'react-icons/ci';
+import { deleteProductSlice, updateProductSlice } from '../../../redux/features/retailer/product.jsx';
 import Cookies from 'js-cookie';
 
 
@@ -12,14 +12,14 @@ const UploadBooksModulesForm = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { id: productId } = useParams();
-    
+
     const products = useSelector((state) => state.retailerProducts.products);
     const product = products.find((p) => p.$id === productId);
 
     const [status, setStatus] = useState({ loading: true, error: null, success: null });
     const [operation, setOperation] = useState(null);
     const [imagesToDelete, setImagesToDelete] = useState([]);
-    
+
     const initialFormState = {
         title: '',
         description: '',
@@ -40,7 +40,7 @@ const UploadBooksModulesForm = () => {
                 }
 
                 const { title, description, price, discountedPrice, keywords, images: productImages } = product;
-                
+
                 setFormData({ title, description, price, discountedPrice, keywords });
                 setImages([...productImages, ...Array(3).fill(null)].slice(0, 3));
             } catch (error) {
@@ -60,7 +60,7 @@ const UploadBooksModulesForm = () => {
 
     const handleImageChange = useCallback((index, file) => {
         if (!file) return;
-        
+
         setImages(prev => {
             const newImages = [...prev];
             newImages[index] = file;
@@ -91,12 +91,12 @@ const UploadBooksModulesForm = () => {
         // }
 
         setStatus(prev => ({ ...prev, loading: true }));
-        
+
         try {
-            const updatedData=await updateProduct(productId, imagesToDelete, formData, images);
-            console.log(updatedData,"dataaaaaa");
-            
-            dispatch(updateProductSlice({productId,updatedData}));
+            const updatedData = await updateProduct(productId, imagesToDelete, formData, images);
+            console.log(updatedData, "dataaaaaa");
+
+            dispatch(updateProductSlice({ productId, updatedData }));
             dispatch({ type: 'products/updateProduct', payload: { id: productId, ...formData } });
             setStatus({ loading: false, success: 'Product updated successfully!', error: null });
         } catch (error) {
@@ -106,7 +106,7 @@ const UploadBooksModulesForm = () => {
 
     const handleProductDelete = async () => {
         setStatus(prev => ({ ...prev, loading: true }));
-        
+
         try {
             await deleteProduct(productId, imagesToDelete);
             dispatch(deleteProductSlice(productId));
@@ -117,37 +117,7 @@ const UploadBooksModulesForm = () => {
         }
     };
 
-    const ImageUploadField = ({ image, index }) => (
-        <div className="image-upload-field">
-            {image ? (
-                <div className="image-preview">
-                    <img 
-                        src={typeof image === 'string' ? image : URL.createObjectURL(image)}
-                        alt={`Preview ${index + 1}`}
-                    />
-                    <button 
-                        type="button" 
-                        className="remove-image"
-                        onClick={() => removeImage(index)}
-                    >
-                        ×
-                    </button>
-                </div>
-            ) : (
-                <label className="upload-label">
-                    <input
-                        type="file"
-                        accept="image/*"
-                        onChange={(e) => handleImageChange(index, e.target.files[0])}
-                    />
-                    <div className="upload-placeholder">
-                        <span>+</span>
-                        <p>Upload Image</p>
-                    </div>
-                </label>
-            )}
-        </div>
-    );
+
 
     if (status.loading) {
         return (
@@ -169,7 +139,7 @@ const UploadBooksModulesForm = () => {
                         value={formData.title}
                         onChange={handleInputChange}
                         className="retailer-update-product-input"
-                        
+
                     />
                 </label>
 
@@ -216,13 +186,45 @@ const UploadBooksModulesForm = () => {
                 </label>
             </div>
 
-                
 
-            <div className="retailer-update-product-image-upload">
-                <h3>Product Images</h3>
-                <div className="retailer-update-product-image-grid">
+
+            <div className="retailer-upload-product-image-section">
+                <label className="retailer-upload-product-input-label">Upload Images (min 1 required)*</label>
+                <div className="retailer-upload-product-image-grid">
                     {images.map((image, index) => (
-                        <ImageUploadField key={index} image={image} index={index} />
+                        <div
+                            key={index}
+                            className="retailer-upload-product-image-upload-card"
+                            onDrop={(e) => handleDrop(index, e)}
+                            onDragOver={(e) => e.preventDefault()}
+                        >
+                            {image ? (
+                                <div className="retailer-upload-product-image-preview-wrapper">
+                                    <img
+                                        src={image}
+                                        alt={`Preview ${index + 1}`}
+                                        className="retailer-upload-product-preview-image"
+                                    />
+                                    <button
+                                        className="retailer-upload-product-remove-image-button"
+                                        onClick={() => removeImage(index)}
+                                    >
+                                        ×
+                                    </button>
+                                </div>
+                            ) : (
+                                <label className="retailer-upload-product-image-upload-box">
+                                    <CiImageOn className="retailer-upload-product-upload-icon" />
+                                    <span className="retailer-upload-product-upload-text">Tap to upload</span>
+                                    <input
+                                        type="file"
+                                        hidden
+                                        onChange={(e) => handleImageChange(index, e.target.files)}
+                                        accept="image/*"
+                                    />
+                                </label>
+                            )}
+                        </div>
                     ))}
                 </div>
             </div>
@@ -231,7 +233,7 @@ const UploadBooksModulesForm = () => {
                 <button
                     type="button"
                     className="retailer-update-product-delete-btn"
-                    onClick={() =>{ setOperation('delete')}}
+                    onClick={() => { setOperation('delete') }}
                     disabled={status.loading}
                 >
                     {status.loading && operation === 'delete' ? (
@@ -242,14 +244,14 @@ const UploadBooksModulesForm = () => {
                 <button
                     type="button"
                     className="retailer-update-product-update-btn"
-                    onClick={() =>{handleProductUpdate(); setOperation('update')}}
+                    onClick={() => { handleProductUpdate(); setOperation('update') }}
                     disabled={status.loading}
                 >
                     {status.loading && operation === 'update' ? (
                         <Oval color="#FFF" height={20} width={20} />
                     ) : 'Update Product'}
                 </button>
-            </div>  
+            </div>
         </div>
     );
 };
