@@ -42,26 +42,35 @@ const conf = {
 
 
 
-    // PRODUCT 4+4
-    appwriteProductsProjectId: String(import.meta.env.VITE_APPWRITE_PRODUCTS_PROJECT_ID),
-    appwriteProductsDatabaseId: String(import.meta.env.VITE_APPWRITE_PRODUCTS_DATABASE_ID),
-    appwriteProductsCollectionId: String(import.meta.env.VITE_APPWRITE_PRODUCTS_COLLECTION_ID),
-    appwriteProductsImagesBucketId: String(import.meta.env.VITE_APPWRITE_PRODUCTS_IMAGES_BUCKET_ID),
 
-    productCloudinaryCloudName: String(import.meta.env.VITE_CLOUDINARY_PRODUCTS_CLOUDINARY_CLOUD_NAME),
-    productCloudinaryApiKey: String(import.meta.env.VITE_CLOUDINARY_PRODUCTS_CLOUDINARY_API_KEY),
-    productCloudinaryApiSecret: String(import.meta.env.VITE_CLOUDINARY_PRODUCTS_CLOUDINARY_API_SECRET),
-    productCloudinaryApiUrl: String(import.meta.env.VITE_CLOUDINARY_PRODUCTS_CLOUDINARY_URL),
 
 
 
     // SHOP | SERVICES 4+1+4+2
     appwriteShopsProjectId: String(import.meta.env.VITE_APPWRITE_SHOPS_PROJECT_ID),
     appwriteShopsDatabaseId: String(import.meta.env.VITE_APPWRITE_SHOPS_DATABASE_ID),
-    
+
     appwriteShopsProductsCollectionId: String(import.meta.env.VITE_APPWRITE_SHOPS_PRODUCTS_COLLECTION_ID),
     appwriteShopsCollectionId: String(import.meta.env.VITE_APPWRITE_SHOPS_COLLECTION_ID),
     appwriteOrdersCollectionId: String(import.meta.env.VITE_APPWRITE_ORDERS_COLLECTION_ID),
+
+    // SHOP PRODUCT 4+4
+    // appwriteProductsProjectId: String(import.meta.env.VITE_APPWRITE_PRODUCTS_PROJECT_ID),
+    // appwriteProductsDatabaseId: String(import.meta.env.VITE_APPWRITE_PRODUCTS_DATABASE_ID),
+    // appwriteProductsCollectionId: String(import.meta.env.VITE_APPWRITE_PRODUCTS_COLLECTION_ID),
+    // appwriteProductsImagesBucketId: String(import.meta.env.VITE_APPWRITE_PRODUCTS_IMAGES_BUCKET_ID),
+
+    // productCloudinaryCloudName: String(import.meta.env.VITE_CLOUDINARY_PRODUCTS_CLOUDINARY_CLOUD_NAME),
+    // productCloudinaryApiKey: String(import.meta.env.VITE_CLOUDINARY_PRODUCTS_CLOUDINARY_API_KEY),
+    // productCloudinaryApiSecret: String(import.meta.env.VITE_CLOUDINARY_PRODUCTS_CLOUDINARY_API_SECRET),
+    // productCloudinaryApiUrl: String(import.meta.env.VITE_CLOUDINARY_PRODUCTS_CLOUDINARY_URL),
+
+    // SHOP PRODUCT 4+4
+    appwriteProductsProjectId: String(import.meta.env.VITE_APPWRITE_SHOPS_PROJECT_ID),
+    appwriteProductsDatabaseId: String(import.meta.env.VITE_APPWRITE_SHOPS_DATABASE_ID),
+    appwriteProductsCollectionId: String(import.meta.env.VITE_APPWRITE_SHOPS_PRODUCTS_COLLECTION_ID),
+
+
 
     appwriteShopsImagesBucketId: String(import.meta.env.VITE_APPWRITE_SHOPS_IMAGES_BUCKET_ID),
     shopCloudinaryCloudName: String(import.meta.env.VITE_CLOUDINARY_SHOPS_CLOUDINARY_CLOUD_NAME),
@@ -73,7 +82,7 @@ const conf = {
 
 
     emailSender: String(import.meta.env.VITE_EMAIL_SENDER),
-    emailPassword:String(import.meta.env.VITE_EMAIL_PASSWORD),
+    emailPassword: String(import.meta.env.VITE_EMAIL_PASSWORD),
 }
 
 export default conf;
