@@ -7,7 +7,6 @@ import { CiImageOn } from 'react-icons/ci';
 import { deleteProductSlice, updateProductSlice } from '../../../redux/features/retailer/product.jsx';
 import Cookies from 'js-cookie';
 
-
 const UploadBooksModulesForm = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
@@ -17,8 +16,9 @@ const UploadBooksModulesForm = () => {
     const product = products.find((p) => p.$id === productId);
 
     const [status, setStatus] = useState({ loading: true, error: null, success: null });
-    const [operation, setOperation] = useState(null);
+    const [isUpdating, setIsUpdating] = useState(false);
     const [imagesToDelete, setImagesToDelete] = useState([]);
+    const [newImagesFiles, setNewImagesFiles] = useState(Array(3).fill(null));
 
     const initialFormState = {
         title: '',
@@ -40,8 +40,13 @@ const UploadBooksModulesForm = () => {
                 }
 
                 const { title, description, price, discountedPrice, keywords, images: productImages } = product;
-
-                setFormData({ title, description, price, discountedPrice, keywords });
+                setFormData({ 
+                    title, 
+                    description, 
+                    price, 
+                    discountedPrice, 
+                    keywords: Array.isArray(keywords) ? keywords.join(', ') : keywords 
+                });
                 setImages([...productImages, ...Array(3).fill(null)].slice(0, 3));
             } catch (error) {
                 setStatus(prev => ({ ...prev, error: 'Failed to load product data' }));
@@ -50,7 +55,9 @@ const UploadBooksModulesForm = () => {
             }
         };
 
-        Cookies.get('BharatLinkerShopData') && loadProductData();
+        if (Cookies.get('BharatLinkerShopData')) {
+            loadProductData();
+        }
     }, [product, navigate]);
 
     const handleInputChange = (e) => {
@@ -61,52 +68,102 @@ const UploadBooksModulesForm = () => {
     const handleImageChange = useCallback((index, file) => {
         if (!file) return;
 
-        setImages(prev => {
-            const newImages = [...prev];
-            newImages[index] = file;
-            return newImages;
+        const reader = new FileReader();
+        reader.onload = () => {
+            setImages(prev => {
+                const newImages = [...prev];
+                newImages[index] = reader.result;
+                return newImages;
+            });
+        };
+        reader.readAsDataURL(file);
+
+        setNewImagesFiles(prev => {
+            const newFiles = [...prev];
+            newFiles[index] = file;
+            return newFiles;
         });
     }, []);
+
+    const handleDrop = useCallback((index, e) => {
+        e.preventDefault();
+        const file = e.dataTransfer.files[0];
+        if (file) handleImageChange(index, file);
+    }, [handleImageChange]);
 
     const removeImage = useCallback((index) => {
         setImages(prev => {
             const newImages = [...prev];
-            if (typeof newImages[index] === 'string') {
-                setImagesToDelete(prevUrls => [...prevUrls, newImages[index]]);
+            const currentImage = newImages[index];
+            
+            if (typeof currentImage === 'string' && !currentImage.startsWith('data:')) {
+                setImagesToDelete(prevUrls => [...prevUrls, currentImage]);
             }
+            
             newImages[index] = null;
             return newImages;
+        });
+
+        setNewImagesFiles(prev => {
+            const newFiles = [...prev];
+            newFiles[index] = null;
+            return newFiles;
         });
     }, []);
 
     const validateForm = () => {
         const requiredFields = ['title', 'description', 'price', 'discountedPrice'];
-        return requiredFields.every(field => formData[field]?.trim());
+        const isValid = requiredFields.every(field => formData[field]?.trim());
+        const hasAtLeastOneImage = images.some(img => img !== null);
+        
+        if (!isValid) {
+            setStatus(prev => ({ ...prev, error: 'Please fill all required fields' }));
+            return false;
+        }
+        
+        if (!hasAtLeastOneImage) {
+            setStatus(prev => ({ ...prev, error: 'At least one image is required' }));
+            return false;
+        }
+        
+        return true;
     };
 
     const handleProductUpdate = async () => {
-        // if (!validateForm()) {
-        //     setStatus({ error: 'Please fill all required fields', success: null });
-        //     return;
-        // }
+        // if (!validateForm()) return;
+        
+        const confirmUpdate = window.confirm('Are you sure you want to update this product?');
+        if (!confirmUpdate) return;
 
-        setStatus(prev => ({ ...prev, loading: true }));
-
+        setIsUpdating(true);
         try {
-            const updatedData = await updateProduct(productId, imagesToDelete, formData, images);
-            console.log(updatedData, "dataaaaaa");
+            const filesToUpload = newImagesFiles.filter(file => file !== null);
+            const keywordsArray = formData.keywords.split(',').map(k => k.trim()).filter(k => k);
+            
+            const updatedData = await updateProduct(
+                productId,
+                imagesToDelete,
+                { ...formData, keywords: keywordsArray },
+                filesToUpload
+            );
 
             dispatch(updateProductSlice({ productId, updatedData }));
-            dispatch({ type: 'products/updateProduct', payload: { id: productId, ...formData } });
-            setStatus({ loading: false, success: 'Product updated successfully!', error: null });
+            setStatus({ loading: false, error: null, success: 'Product updated successfully!' });
+            setTimeout(() => setStatus(prev => ({ ...prev, success: null })), 2000);
         } catch (error) {
             setStatus({ loading: false, error: 'Update failed. Please try again.', success: null });
+        } finally {
+            setIsUpdating(false);
+            setImagesToDelete([]);
+            setNewImagesFiles(Array(3).fill(null));
         }
     };
 
     const handleProductDelete = async () => {
-        setStatus(prev => ({ ...prev, loading: true }));
+        const confirmDelete = window.confirm('Are you sure you want to permanently delete this product?');
+        if (!confirmDelete) return;
 
+        setStatus(prev => ({ ...prev, loading: true }));
         try {
             await deleteProduct(productId, imagesToDelete);
             dispatch(deleteProductSlice(productId));
@@ -116,8 +173,6 @@ const UploadBooksModulesForm = () => {
             setStatus({ loading: false, error: 'Deletion failed. Please try again.', success: null });
         }
     };
-
-
 
     if (status.loading) {
         return (
@@ -129,6 +184,17 @@ const UploadBooksModulesForm = () => {
 
     return (
         <div className="retailer-update-product-container">
+            {status.error && (
+                <div className="retailer-update-product-error">
+                    {status.error}
+                </div>
+            )}
+            
+            {status.success && (
+                <div className="retailer-update-product-success">
+                    {status.success}
+                </div>
+            )}
 
             <div className="retailer-update-product-section">
                 <label className="retailer-update-product-label">
@@ -139,7 +205,7 @@ const UploadBooksModulesForm = () => {
                         value={formData.title}
                         onChange={handleInputChange}
                         className="retailer-update-product-input"
-
+                        required
                     />
                 </label>
 
@@ -151,8 +217,10 @@ const UploadBooksModulesForm = () => {
                         onChange={handleInputChange}
                         className="retailer-update-product-textarea"
                         rows="6"
+                        required
                     />
                 </label>
+
                 <label className="retailer-update-product-label">
                     Original Price (₹)
                     <input
@@ -161,6 +229,7 @@ const UploadBooksModulesForm = () => {
                         value={formData.price}
                         onChange={handleInputChange}
                         className="retailer-update-product-input"
+                        required
                     />
                 </label>
 
@@ -172,8 +241,10 @@ const UploadBooksModulesForm = () => {
                         value={formData.discountedPrice}
                         onChange={handleInputChange}
                         className="retailer-update-product-input"
+                        required
                     />
                 </label>
+
                 <label className="retailer-update-product-label">
                     Keywords (comma separated)
                     <input
@@ -182,14 +253,15 @@ const UploadBooksModulesForm = () => {
                         value={formData.keywords}
                         onChange={handleInputChange}
                         className="retailer-update-product-input"
+                        placeholder="e.g., fiction, bestseller, romance"
                     />
                 </label>
             </div>
 
-
-
             <div className="retailer-upload-product-image-section">
-                <label className="retailer-upload-product-input-label">Upload Images (min 1 required)*</label>
+                <label className="retailer-upload-product-input-label">
+                    Product Images (minimum 1 required)
+                </label>
                 <div className="retailer-upload-product-image-grid">
                     {images.map((image, index) => (
                         <div
@@ -208,6 +280,7 @@ const UploadBooksModulesForm = () => {
                                     <button
                                         className="retailer-upload-product-remove-image-button"
                                         onClick={() => removeImage(index)}
+                                        aria-label="Remove image"
                                     >
                                         ×
                                     </button>
@@ -215,11 +288,10 @@ const UploadBooksModulesForm = () => {
                             ) : (
                                 <label className="retailer-upload-product-image-upload-box">
                                     <CiImageOn className="retailer-upload-product-upload-icon" />
-                                    <span className="retailer-upload-product-upload-text">Tap to upload</span>
                                     <input
                                         type="file"
                                         hidden
-                                        onChange={(e) => handleImageChange(index, e.target.files)}
+                                        onChange={(e) => handleImageChange(index, e.target.files[0])}
                                         accept="image/*"
                                     />
                                 </label>
@@ -232,27 +304,31 @@ const UploadBooksModulesForm = () => {
             <div className="retailer-update-product-actions">
                 <button
                     type="button"
-                    className="retailer-update-product-delete-btn"
-                    onClick={() => { setOperation('delete') }}
-                    disabled={status.loading}
+                    className={`retailer-update-product-delete-button ${isUpdating ? 'disabled' : ''}`}
+                    onClick={handleProductDelete}
+                    disabled={status.loading || isUpdating}
                 >
-                    {status.loading && operation === 'delete' ? (
+                    {status.loading ? (
                         <Oval color="#FFF" height={20} width={20} />
-                    ) : 'Delete Product'}
+                    ) : (
+                        'Delete Product'
+                    )}
                 </button>
 
                 <button
-                    type="button"
-                    className="retailer-update-product-update-btn"
-                    onClick={() => { handleProductUpdate(); setOperation('update') }}
-                    disabled={status.loading}
+                    className={`retailer-upload-product-submit-button ${isUpdating ? 'uploading' : ''}`}
+                    onClick={handleProductUpdate}
+                    disabled={isUpdating}
                 >
-                    {status.loading && operation === 'update' ? (
-                        <Oval color="#FFF" height={20} width={20} />
-                    ) : 'Update Product'}
+                    {isUpdating ? (
+                        <Oval color="#fff" height={24} width={24} />
+                    ) : (
+                        'Update Product'
+                    )}
                 </button>
             </div>
         </div>
     );
 };
+
 export default UploadBooksModulesForm;
