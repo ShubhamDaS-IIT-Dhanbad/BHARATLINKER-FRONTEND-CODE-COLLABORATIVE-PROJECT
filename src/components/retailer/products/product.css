@@ -34,8 +34,8 @@
 
 .retailer-product-page-header-inner {
     padding-left: 10px;
-    display: flex;
-    flex-direction: column;
+    display: flex;background-color: #EB3678;
+    flex-direction: column;gap: 0px;
 }
 
 .retailer-product-page-header-text {

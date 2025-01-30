@@ -5,7 +5,7 @@ import { FaArrowLeft } from 'react-icons/fa';
 import { BiSearchAlt } from "react-icons/bi";
 import { Helmet } from 'react-helmet';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { RotatingLines } from 'react-loader-spinner';
+import { Oval } from 'react-loader-spinner';
 
 import {
     fetchProducts,
@@ -110,6 +110,8 @@ const retailerProduct = () => {
                 <meta name="description" content="Browse and search for refurbished products offered by Bharat Linker." />
                 <meta name="keywords" content="refurbished products, buy refurbished, Bharat Linker" />
             </Helmet>
+
+
             <header>
                 <div className="retailer-product-page-header">
                     <div className="retailer-product-page-header-upper">
@@ -124,7 +126,7 @@ const retailerProduct = () => {
                             <h1 className="retailer-product-page-header-text">ALL PRODUCTS</h1>
                             {userData?.shopName && (
                                 <div
-                                    className={`retailer-upload-product-header-shopname`}
+                                    className={`retailer-product-header-shopname`}
                                     aria-label="Change Location"
                                     tabIndex={0}
                                 >
@@ -153,10 +155,16 @@ const retailerProduct = () => {
                     </div>
                 </div>
             </header>
+
+
+
+
+
+
             <main>
                 {loading ? (
-                    <div className="refurbished-page-loading-container">
-                        <RotatingLines width="60" height="60" color="#007bff" />
+                    <div className="fallback-loading">
+                        <Oval height={30} width={30} color="green" secondaryColor="white" ariaLabel="loading" />
                     </div>
                 ) : (
                     <InfiniteScroll
@@ -168,8 +176,8 @@ const retailerProduct = () => {
                     </InfiniteScroll>
                 )}
                 {loadingMoreProducts && (
-                    <div className="retailer-product-page-loading-more">
-                        <RotatingLines width="40" height="40" color="#007bff" />
+                    <div className="fallback-loading">
+                        <Oval height={30} width={30} color="green" secondaryColor="white" ariaLabel="loading" />
                     </div>
                 )}
             </main>
