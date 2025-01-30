@@ -319,7 +319,7 @@ const updateProduct = async (productId, toDeleteImagesUrls, updatedData, newFile
         const updatedDocument = await databases.updateDocument(
             conf.appwriteProductsDatabaseId,
             conf.appwriteProductsCollectionId,
-            productId.id,
+            productId,
             updatedProductData
         );
 
@@ -330,6 +330,11 @@ const updateProduct = async (productId, toDeleteImagesUrls, updatedData, newFile
         throw error;
     }
 }
+
+
+
+
+
 
 /*imp*/
 const deleteProduct = async (productId, imagesToDelete) => {

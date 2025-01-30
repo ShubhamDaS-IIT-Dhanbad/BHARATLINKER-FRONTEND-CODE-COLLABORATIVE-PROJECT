@@ -152,13 +152,18 @@ const retailerProductsSlice = createSlice({
             state.selectedCategories = [];
             state.selectedBrands = [];
         },
-        deleteProductS: (state, action) => {
+        deleteProductSlice: (state, action) => {
             const productId = action.payload;
             state.products = state.products.filter((product) => product.$id !== productId.id);
         },
-        updateProduct: (state, action) => {
-            // You can implement update logic here if needed
+        updateProductSlice: (state, action) => {
+            const { productId, updatedData } = action.payload;
+            
+            state.products = state.products.map((product) =>
+                product.$id === productId ? { ...product, ...updatedData } : product
+            );
         },
+        
     },
     extraReducers: (builder) => {
         builder
@@ -228,8 +233,8 @@ export const {
     resetSortFilters,
     resetFilters,
     toggleCategory,
-    deleteProductS,
-    updateProduct,
+    deleteProductSlice,
+    updateProductSlice,
 } = retailerProductsSlice.actions;
 
 export default retailerProductsSlice.reducer;

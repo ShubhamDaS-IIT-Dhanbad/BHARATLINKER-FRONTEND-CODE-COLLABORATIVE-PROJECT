@@ -97,10 +97,9 @@
   
   @media (max-width: 768px) {
     .retailer-product-upload-header-container {
-        flex-direction: column;
         align-items: flex-start;
-        gap: 1.2rem;
-        padding: 1.5rem;
+        gap: 10px;
+        padding: 15px;
     }
     
     .retailer-product-upload-header-main-title {
@@ -126,8 +125,8 @@
 
   /* Form Container */
 .retailer-update-product-container {
-    margin: 13rem auto;
-    padding: 10px;
+    margin: 7rem auto;
+    padding:1.5rem 10px;
     background: linear-gradient(145deg, #ffffff 0%, #f8f9fa 100%);
     border-radius: 15px;
     animation: fadeIn 0.3s ease-in;
@@ -187,7 +186,7 @@
   }
   
   .retailer-update-product-textarea{
-    min-height: 50vh;resize: vertical;
+    min-height: 60vh;resize: vertical;
 
   }
   .retailer-update-product-input:focus, .retailer-update-product-textarea:focus {

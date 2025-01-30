@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { updateProduct, deleteProduct } from '../../../appWrite/uploadProduct/upload.js';
 
-import {deleteProductS } from '../../../redux/features/retailer/product.jsx';
+import {deleteProductSlice,updateProductSlice } from '../../../redux/features/retailer/product.jsx';
 import Cookies from 'js-cookie';
 
 
@@ -85,18 +85,20 @@ const UploadBooksModulesForm = () => {
     };
 
     const handleProductUpdate = async () => {
-        if (!validateForm()) {
-            setStatus({ error: 'Please fill all required fields', success: null });
-            return;
-        }
+        // if (!validateForm()) {
+        //     setStatus({ error: 'Please fill all required fields', success: null });
+        //     return;
+        // }
 
         setStatus(prev => ({ ...prev, loading: true }));
         
         try {
-            await updateProduct(productId, imagesToDelete, formData, images);
+            const updatedData=await updateProduct(productId, imagesToDelete, formData, images);
+            console.log(updatedData,"dataaaaaa");
+            
+            dispatch(updateProductSlice({productId,updatedData}));
             dispatch({ type: 'products/updateProduct', payload: { id: productId, ...formData } });
             setStatus({ loading: false, success: 'Product updated successfully!', error: null });
-            setTimeout(() => navigate('/retailer/products'), 2000);
         } catch (error) {
             setStatus({ loading: false, error: 'Update failed. Please try again.', success: null });
         }
@@ -107,7 +109,7 @@ const UploadBooksModulesForm = () => {
         
         try {
             await deleteProduct(productId, imagesToDelete);
-            dispatch(deleteProductS(productId));
+            dispatch(deleteProductSlice(productId));
             setStatus({ loading: false, success: 'Product deleted successfully!', error: null });
             setTimeout(() => navigate('/retailer/products'), 1500);
         } catch (error) {
@@ -229,7 +231,7 @@ const UploadBooksModulesForm = () => {
                 <button
                     type="button"
                     className="retailer-update-product-delete-btn"
-                    onClick={() => setOperation('delete')}
+                    onClick={() =>{ setOperation('delete')}}
                     disabled={status.loading}
                 >
                     {status.loading && operation === 'delete' ? (
@@ -240,7 +242,7 @@ const UploadBooksModulesForm = () => {
                 <button
                     type="button"
                     className="retailer-update-product-update-btn"
-                    onClick={() => setOperation('update')}
+                    onClick={() =>{handleProductUpdate(); setOperation('update')}}
                     disabled={status.loading}
                 >
                     {status.loading && operation === 'update' ? (
