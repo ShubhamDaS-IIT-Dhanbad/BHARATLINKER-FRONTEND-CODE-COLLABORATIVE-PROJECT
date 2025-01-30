@@ -76,23 +76,49 @@ const placeOrderProvider = async (
 
 
 
-const getOrderByUserId = async (userId) => {
-    try {
-        if (!userId) {
-            throw new Error('User ID is missing');
-        }
-        const queries = [Query.equal('userId', userId)];
-        const response = await databases.listDocuments(
-            conf.appwriteShopsDatabaseId,
-            conf.appwriteOrdersCollectionId,
-            queries
-        );
-        return response.documents;
-    } catch (error) {
-        console.error('Error fetching orders by userId:', error.message);
-        throw error;
+const getOrderByUserId = async (userId, state, page, ordersPerPage = 10) => {
+  try {
+    if (!userId) {
+        throw new Error('Shop ID is missing');
     }
+
+    // Construct queries
+    const queries = [
+        Query.equal('userId',userId), // Filter by shop ID
+        Query.equal('state', state),   // Filter by state
+    ];
+
+    // Handle sorting based on the state
+    if (state === 'pending' || state === 'confirmed' || state === 'dispatched') {
+        queries.push(Query.orderAsc('$createdAt')); // Sort by creation time for these states
+    } else if (state === 'canceled' || state === 'delivered') {
+        queries.push(Query.orderDesc('$updatedAt')); // Sort by update time for these states
+    }
+
+    // Pagination logic
+    const offset = (page - 1) * ordersPerPage;
+    queries.push(Query.limit(ordersPerPage)); // Limit the number of results per page
+    queries.push(Query.offset(offset));      // Set the offset for pagination
+
+    // Fetch documents
+    const response = await databases.listDocuments(
+        conf.appwriteShopsDatabaseId,
+        conf.appwriteOrdersCollectionId,
+        queries
+    );
+    return {
+        documents: response.documents,
+        total: response.total,
+        currentPage: page,
+        totalPages: Math.ceil(response.total / ordersPerPage),
+    };
+} catch (error) {
+    console.error('Error fetching orders by userId:', error.message);
+    throw error;
+}
 };
+
+
 const getOrderByShopId = async (shopId, state, page, ordersPerPage = 10) => {
     try {
         if (!shopId) {
@@ -278,5 +304,8 @@ const updateOrderStateToConfirmed = async (orderId, state, expectedDeliveryDate)
   
 
 export {updateOrderStateToConfirmed,updateOrderStateToDispatched,updateOrderStateToCanceled
-    ,updateOrderStateToDelivered, placeOrderProvider, getOrderByUserId, getOrderByShopId, updateOrderByShopId, updateOrderState };
+    ,updateOrderStateToDelivered, placeOrderProvider, 
+    
+  getOrderByUserId,
+  getOrderByShopId, updateOrderByShopId, updateOrderState };
 

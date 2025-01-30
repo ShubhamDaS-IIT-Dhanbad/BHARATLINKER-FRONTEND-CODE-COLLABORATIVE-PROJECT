@@ -7,7 +7,7 @@ import { CiImageOn } from 'react-icons/ci';
 import { deleteProductSlice, updateProductSlice } from '../../../redux/features/retailer/product.jsx';
 import Cookies from 'js-cookie';
 
-const UploadBooksModulesForm = () => {
+const UploadBooksModulesForm = ({retailerData}) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { id: productId } = useParams();
@@ -144,10 +144,11 @@ const UploadBooksModulesForm = () => {
                 typeof img === 'string' && img.startsWith('https://res.cloudinary.com/')
             );
             const filesToUpload = newImagesFiles.filter(file => file !== null);
+           console.log(retailerData)
             const updatedData = await updateProduct(
                 productId,
                 imagesToDelete,
-                { ...formData, images: validImages ,isInStock:isInStockState},
+                { ...formData, images: validImages ,isInStock:isInStockState,lat:retailerData?.lat,long:retailerData?.long},
                 filesToUpload
             );
 

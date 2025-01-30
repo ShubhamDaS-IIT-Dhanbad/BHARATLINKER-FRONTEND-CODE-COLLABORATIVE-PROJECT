@@ -1,125 +1,118 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { getOrderByUserId, updateOrderState } from '../../../appWrite/order/order.js';
-import searchShopService from '../../../appWrite/searchShop.js';
 
-// Constants
-const stateOrder = {
-  dispatched: 1,
-  accepted: 2,
-  pending: 3,
-  canceled: 4,
-  delivered: 5,
-};
+const ordersPerPage = 10;
 
-// Async Thunk for fetching user orders
-export const fetchUserOrders = createAsyncThunk(
-  'userOrders/fetchUserOrders',
-  async (userId, { rejectWithValue }) => {
-    try {
-      const orders = await getOrderByUserId(userId);
-
-      // Sort orders by update date and state
-      const sortedOrders = orders
-        .sort((a, b) => new Date(b.$updatedAt) - new Date(a.$updatedAt))
-        .sort((a, b) => (stateOrder[a.state] || 6) - (stateOrder[b.state] || 6));
-
-      return sortedOrders;
-    } catch (error) {
-      console.error('Error fetching user orders:', error);
-      return rejectWithValue(error.response?.data || error.message);
-    }
-  }
-);
-
-// Async Thunk for updating the order state (e.g., canceling an order)
-export const cancelUserOrder = createAsyncThunk(
-  'userOrders/cancelUserOrder',
-  async (orderId, { rejectWithValue }) => {
-    console.log(orderId)
-    try {
-      await updateOrderState(orderId, 'canceled');
-      return orderId;
-    } catch (error) {
-      console.error('Error canceling order:', error);
-      return rejectWithValue(error.response?.data || error.message);
-    }
-  }
-);
-
-// Async Thunk for fetching shop details by ID
-export const fetchShopDetailsById = createAsyncThunk(
-  'userOrders/fetchShopDetailsById',
-  async (shopId, { rejectWithValue }) => {
-    try {
-      const shop = await searchShopService.getShopById(shopId);
-      return shop;
-    } catch (error) {
-      console.error('Error fetching shop:', error);
-      return rejectWithValue(error.response?.data || error.message);
-    }
-  }
-);
-
-// Initial State
 const initialState = {
-  orders: [],
-  shop: [],
-  loading: { orders: false, shop: false },
-  error: { orders: null, shop: null },
+  pendingOrders: { data: [], loading: false, error: null, hasMore: true, currentPage: 1 },
+  confirmedOrders: { data: [], loading: false, error: null, hasMore: true, currentPage: 1 },
+  deliveredOrders: { data: [], loading: false, error: null, hasMore: true, currentPage: 1 },
+  canceledOrders: { data: [], loading: false, error: null, hasMore: true, currentPage: 1 },
 };
 
-// Slice
-const userOrderSlice = createSlice({
-  name: 'userOrders',
+// Fetch orders based on status and page
+const fetchOrders = async (userId, status, page) => {
+  let statuses = [status];
+  if (status === 'confirmed') statuses = ['confirmed', 'dispatched'];
+  
+  const response = await getOrderByUserId(userId, statuses, page);
+  return { documents: response.documents, total: response.total };
+};
+
+// Fetch orders by status
+export const fetchOrdersByStatus = createAsyncThunk(
+  'retailerorders/fetchOrdersByStatus',
+  async ({ userId, status, page }, { rejectWithValue }) => {
+    try {
+      const { documents, total } = await fetchOrders(userId, status, page);
+      return { documents, total, status };
+    } catch (error) {
+      return rejectWithValue(error.response?.data || 'Failed to fetch orders');
+    }
+  }
+);
+
+// Load more orders
+export const loadMoreOrders = createAsyncThunk(
+  'retailerorders/loadMoreOrders',
+  async ({ userId, status, page }, { rejectWithValue }) => {
+    try {
+      const { documents, total } = await fetchOrders(userId, status, page);
+      return { documents, total, status, page };
+    } catch (error) {
+      return rejectWithValue(error.response?.data || 'Failed to load more orders');
+    }
+  }
+);
+
+// Orders Slice
+const ordersSlice = createSlice({
+  name: 'userorders',
   initialState,
-  reducers: {},
+  reducers: {
+    deleteOrder: (state, action) => {
+      const { orderId, orderStateArrayName } = action.payload;
+      state[`${orderStateArrayName}Orders`].data = state[`${orderStateArrayName}Orders`].data.filter(
+        (order) => order.$id !== orderId
+      );
+    },
+    updateOrder: (state, action) => {
+      const { orderId, updatedOrderData, orderStateArrayName } = action.payload;
+      const orderIndex = state[`${orderStateArrayName}Orders`].data.findIndex(
+        (order) => order.$id === orderId
+      );
+
+      if (orderIndex !== -1) {
+        state[`${orderStateArrayName}Orders`].data[orderIndex] = {
+          ...state[`${orderStateArrayName}Orders`].data[orderIndex],
+          ...updatedOrderData,
+        };
+      } else {
+        state[`${orderStateArrayName}Orders`].data.push(updatedOrderData);
+      }
+    },
+  },
   extraReducers: (builder) => {
-    // Fetch user orders
     builder
-      .addCase(fetchUserOrders.pending, (state) => {
-        state.loading.orders = true;
-        state.error.orders = null;
+      .addCase(fetchOrdersByStatus.pending, (state, action) => {
+        const { status } = action.meta.arg;
+        state[`${status}Orders`].loading = true;
+        state[`${status}Orders`].error = null;
       })
-      .addCase(fetchUserOrders.fulfilled, (state, action) => {
-        state.loading.orders = false;
-        state.orders = action.payload;
+      .addCase(fetchOrdersByStatus.fulfilled, (state, action) => {
+        const { status, documents } = action.payload;
+        state[`${status}Orders`].loading = false;
+        state[`${status}Orders`].data = documents;
+        state[`${status}Orders`].hasMore = documents.length >= ordersPerPage;
       })
-      .addCase(fetchUserOrders.rejected, (state, action) => {
-        state.loading.orders = false;
-        state.error.orders = action.payload;
-      });
+      .addCase(fetchOrdersByStatus.rejected, (state, action) => {
+        const { status } = action.meta.arg;
+        state[`${status}Orders`].loading = false;
+        state[`${status}Orders`].error = action.payload;
+      })
 
-    // Cancel user order
-    builder
-      .addCase(cancelUserOrder.fulfilled, (state, action) => {
-        state.orders = state.orders.map((order) =>
-          order.$id === action.payload
-            ? { ...order, state: 'canceled', $updatedAt: new Date().toISOString() }
-            : order
+      // Load More Orders
+      .addCase(loadMoreOrders.pending, (state, action) => {
+        const { status } = action.meta.arg;
+        state[`${status}Orders`].error = null;
+      })
+      .addCase(loadMoreOrders.fulfilled, (state, action) => {
+        const { status, documents, page } = action.payload;
+        const existingOrders = state[`${status}Orders`].data;
+        const newOrders = documents.filter(
+          (doc) => !existingOrders.some((order) => order.$id === doc.$id)
         );
-      })
-      .addCase(cancelUserOrder.rejected, (state, action) => {
-        state.error.orders = action.payload;
-      });
 
-    // Fetch shop by ID
-    builder
-      .addCase(fetchShopDetailsById.pending, (state) => {
-        state.loading.shop = true;
-        state.error.shop = null;
+        state[`${status}Orders`].data = [...existingOrders, ...newOrders];
+        state[`${status}Orders`].currentPage = page;
+        state[`${status}Orders`].hasMore = documents.length >= ordersPerPage;
       })
-      .addCase(fetchShopDetailsById.fulfilled, (state, action) => {
-        state.loading.shop = false;
-        const shopExists = state.shop.find((s) => s.$id === action.payload.$id);
-        if (!shopExists) {
-          state.shop.push(action.payload);
-        }
-      })
-      .addCase(fetchShopDetailsById.rejected, (state, action) => {
-        state.loading.shop = false;
-        state.error.shop = action.payload;
+      .addCase(loadMoreOrders.rejected, (state, action) => {
+        const { status } = action.meta.arg;
+        state[`${status}Orders`].error = action.payload;
       });
   },
 });
 
-export default userOrderSlice.reducer;
+export const { deleteOrder, updateOrder } = ordersSlice.actions;
+export default ordersSlice.reducer;

@@ -33,7 +33,7 @@ const UploadProduct = ({ retailerData }) => {
                 </div>
             </div>
 
-            <UploadBooksForm userData={retailerData} />
+            <UploadBooksForm retailerData={retailerData} />
 
         </>
     );

@@ -341,7 +341,9 @@ const updateProduct = async (productId, toDeleteImagesUrls, updatedData, newFile
             discountedPrice: Number(updatedData.discountedPrice),
             keywords: updatedData.keywords,
             images: allImageUrls,
-            isInStock:updatedData.isInStock
+            isInStock:updatedData.isInStock,
+            lat:updatedData.lat,
+            long:updatedData.long
         };
         const updatedDocument = await databases.updateDocument(
             conf.appwriteProductsDatabaseId,

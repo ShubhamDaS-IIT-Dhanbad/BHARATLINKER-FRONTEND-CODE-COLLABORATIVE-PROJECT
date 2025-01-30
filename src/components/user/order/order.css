@@ -1,35 +1,91 @@
-.user-order-container{
-    background-color: rgb(49, 63, 160);
-    width: 100vw;height:47px;max-height: 300px;
-   color: white;padding: 10px;color: white;
-    display: flex;align-items: center;
-    position: fixed;top: 0;
-}
-.user-order-container-left{
-   width:calc(100% - 20px);position: fixed;top: 0px;
-   padding: 10px;
-}
-.user-order-container-left-icon{
-    color: rgb(238, 239, 243);
- }
-.user-order-container-div{
-    font-weight: 600;font-size: 19px;
-    letter-spacing: 1.1px;font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-
-}
-.user-order-container-basket{
-    background-color: rgb(67, 91, 223);
-    display: flex;justify-content: center;align-items: center;
-    border-radius: 50%;padding: 20px;color: white;
-}
-.user-orders-container-order{
-    margin-top: 30px;
+/* Container for the entire header */
+.retailer-update-header {
+    background-color: #ffffff;
+    color: #000;
+    position: fixed;
+    top: 0;
+    height: 60px;
+    display: flex;
+    flex-grow: 1;
+    align-items: center;
+    padding: 10px;
+    width: 100vw;
 }
 
+/* Left Icon */
+.retailer-update-header-left-icon {
+    margin-left: 4px;
+    color: #000;
+}
 
+/* Inner div containing title and shop name */
+.retailer-update-header-inner-div {
+    padding-left: 10px;
+    display: flex;
+    flex-direction: column;
+}
 
-.user-orders-list{
-    display: flex;flex-direction: column;
-    padding-top: 47px;align-items: center;
-    gap: 15px;
+.retailer-update-header-inner-div-p {
+    font-size: 25px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.retailer-upload-product-header-shopname {
+    margin-top: -10px;
+}
+
+/* Buttons for order types */
+.retailer-order-type-buttons {
+    display: flex;background-color: #ffffff;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 77px;
+    gap: 5px;
+    width: 100vw;
+    padding: 0 0 5px 0;
+}
+
+.retailer-order-type-button {
+    border: 1.2px solid rgb(27, 28, 28);
+    font-size: 13px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 6px;
+    font-weight: 600;
+    border-radius: 7px;
+}
+
+.retailer-order-type-button.active {
+    border: 1.3px solid rgb(135, 129, 255);
+    background-color: rgb(135, 129, 255);
+    color: white;
+}
+
+/* Orders container */
+.retailer-order-div-container {
+    padding: 10px;
+    margin-top: 110px;
+}
+
+/* Loader for infinite scroll */
+.retailer-order-loading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 20px;
+}
+
+/* Empty state container */
+.retailer-order-empty {
+    height: 50vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.retailer-order-empty-img {
+    width: 50vw;
 }

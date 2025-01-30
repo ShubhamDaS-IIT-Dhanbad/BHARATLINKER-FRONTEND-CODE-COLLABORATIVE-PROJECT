@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { cancelUserOrder } from "../../../redux/features/user/orderSlice.jsx";
+import { updateOrderStateToCanceled } from "../../../appWrite/order/order.js";
+import { deleteOrder, updateOrder } from "../../../redux/features/user/orderSlice.jsx"; // Ensure correct imports
 import "./orderDetail.css";
 
 import { TiInfoOutline } from "react-icons/ti";
@@ -19,12 +20,25 @@ const OrderDetails = () => {
     const [order, setOrder] = useState(null);
     const [isCancelling, setIsCancelling] = useState(false);
 
-    const { orders } = useSelector((state) => state.userOrders);
+     const {
+        pendingOrders,
+        confirmedOrders,
+        deliveredOrders,
+        canceledOrders,
+      } = useSelector((state) => state.userorders);
+
+    const orders = [
+        ...pendingOrders.data,
+        ...confirmedOrders.data,
+        ...deliveredOrders.data,
+        ...canceledOrders.data,
+    ];
 
     // Fetch order details
     useEffect(() => {
-        if (orders.length > 0) {
-            const foundOrder = orders.find((order) => order.$id === id);
+        
+        if (orders?.length > 0) {
+            const foundOrder = orders?.find((order) => order.$id === id);
             if (!foundOrder) {
                 navigate("/user/order");
             } else {
@@ -34,9 +48,11 @@ const OrderDetails = () => {
             navigate("/user/order");
         }
     }, [orders, id, navigate]);
+
     useEffect(() => {
         window.scrollTo(0, 0);
-    }, [])
+    }, []);
+
     const getOrderTitle = (state) => {
         switch (state) {
             case "pending":
@@ -52,15 +68,13 @@ const OrderDetails = () => {
         }
     };
 
-    const handleCancelOrder = async () => {
-        setIsCancelling(true);
-        const orderId = order.$id;
-        try {
-            await dispatch(cancelUserOrder(orderId));
-            navigate("/user/order");
-        } catch (error) {
-            console.error("Failed to cancel order:", error);
-        } finally {
+    const handleCancel = async () => {
+        const confirmation = window.confirm("Are you sure you want to cancel this order?");
+        if (confirmation) {
+            setIsCancelling(true);
+            const updatedOrderData = await updateOrderStateToCanceled(order.$id, "canceled");
+            dispatch(deleteOrder({ orderId: order.$id, orderStateArrayName: order.state }));
+            dispatch(updateOrder({ orderId: order.$id, updatedOrderData, orderStateArrayName: "canceled" }));
             setIsCancelling(false);
         }
     };
@@ -72,30 +86,23 @@ const OrderDetails = () => {
     return (
         <>
             <header>
-                <Navbar
-                    headerTitle={"ORDER DETAIL"}
-                    onBackNavigation={() => navigate(-1)}
-                />
+                <Navbar headerTitle={"ORDER DETAIL"} onBackNavigation={() => navigate(-1)} />
             </header>
 
             <div className="order-details-container">
                 <header className="order-header">
                     <h1>{getOrderTitle(order.state)}</h1>
-                    <p>
-                        Hello, {userData?.name || "USER"} <br />
-                    </p>
-                    <p>your order is {order.state}</p>
+                    <p>Hello, {userData?.name || "USER"} <br /></p>
+                    <p>Your order is {order.state}</p>
                 </header>
 
                 <div className="order-summary">
                     <div className="order-product-card">
-                        <div className="order-product-card-img" onClick={() => { navigate(`/product/${order.productId}`) }}>
+                        <div className="order-product-card-img" onClick={() => navigate(`/product/${order.productId}`)}>
                             <img src={order.image} alt="Product" />
                         </div>
                         <div className="order-product-card-detail">
-                            <div className="order-product-card-detail-1">
-                                {order.title}
-                            </div>
+                            <div className="order-product-card-detail-1">{order.title}</div>
                             <div className="order-product-card-detail-2">
                                 <div style={{ display: "flex", gap: "7px" }}>
                                     <div className="order-product-card-detail-2-1">
@@ -116,18 +123,9 @@ const OrderDetails = () => {
                     </div>
 
                     {(order.state === "pending" || order.state === "confirmed") && (
-                        <div
-                            className="order-detail-cancel"
-                            onClick={isCancelling ? null : handleCancelOrder}
-                        >
+                        <div className="order-detail-cancel" onClick={isCancelling ? null : handleCancel}>
                             {isCancelling ? (
-                                <Oval
-                                    height={20}
-                                    width={20}
-                                    color="white"
-                                    secondaryColor="#b41818"
-                                    ariaLabel="loading"
-                                />
+                                <Oval height={20} width={20} color="white" secondaryColor="#b41818" ariaLabel="loading" />
                             ) : (
                                 "CANCEL ORDER"
                             )}
@@ -144,7 +142,7 @@ const OrderDetails = () => {
                             <span>{order.$id}</span>
                         </div>
                         <div className="order-info-c">
-                            <div className="order-info-h">PAYMENT METHOD</div>{" "}
+                            <div className="order-info-h">PAYMENT METHOD</div>
                             <span className="payment-icon">CASH ON DELIVERY</span>
                         </div>
                         <div className="order-info-c">
@@ -157,26 +155,15 @@ const OrderDetails = () => {
                         <div className="oscd">
                             <div className="oscd-info-c">
                                 <div className="oscd-info-h">EXPECTED DELIVERY DATE</div>
-                                <span>
-                                    {new Date(order.expectedDeliveryDate).toLocaleDateString()}{" "}
-                                    {new Date(order.expectedDeliveryDate).toLocaleTimeString()}
-                                </span>
-                            </div>
-                            <div className="oscd-info-c">
-                                <div className="oscd-info-h">EXPECTED DELIVERY TIME</div>
-                                <span>
-                                    {new Date(order.expectedDeliveryDate).toLocaleTimeString()}
-                                </span>
+                                <span>{new Date(order.expectedDeliveryDate).toLocaleDateString()}</span>
                             </div>
                             <div className="oscd-info-c">
                                 <div className="oscd-info-h">DELIVERY BOY PHN</div>
-                                <span>
-                                    {order?.DeliveryBoyPhn}
-                                </span>
+                                <span>{order?.DeliveryBoyPhn}</span>
                             </div>
                             <div className="oscd-info-c">
                                 <div className="oscd-info-h">MESSAGE FROM SHOP</div>
-                                <span> {order.retailerMessage}</span>
+                                <span>{order.retailerMessage}</span>
                             </div>
                         </div>
                     )}
@@ -188,7 +175,6 @@ const OrderDetails = () => {
                     {showi && (
                         <div className="info-box">
                             For any order-related issues, please contact the shop. Shop details are available on the Shop page.
-                            You can view the shop by clicking VIEW SHOP.
                         </div>
                     )}
                 </div>
