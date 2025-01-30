@@ -58,19 +58,23 @@ const ordersSlice = createSlice({
     },
     updateOrder: (state, action) => {
       const { orderId, updatedOrderData, orderStateArrayName } = action.payload;
-      const orderIndex = state[`${orderStateArrayName}Orders`].data.findIndex(
-        (order) => order.$id === orderId
-      );
-
+      const orderArray = state[`${orderStateArrayName}Orders`].data;
+    
+      const orderIndex = orderArray.findIndex((order) => order.$id === orderId);
+    
       if (orderIndex !== -1) {
-        state[`${orderStateArrayName}Orders`].data[orderIndex] = {
-          ...state[`${orderStateArrayName}Orders`].data[orderIndex],
-          ...updatedOrderData,
-        };
+        orderArray[orderIndex] = { ...orderArray[orderIndex], ...updatedOrderData };
       } else {
-        state[`${orderStateArrayName}Orders`].data.push(updatedOrderData);
+        orderArray.push(updatedOrderData);
       }
-    },
+      orderArray.sort((a, b) => {
+        if (a.$id === orderId) return -1;
+        if (b.$id === orderId) return 1;
+        return new Date(b.updatedAt) - new Date(a.updatedAt);
+      });
+    }
+    
+    
   },
   extraReducers: (builder) => {
     builder

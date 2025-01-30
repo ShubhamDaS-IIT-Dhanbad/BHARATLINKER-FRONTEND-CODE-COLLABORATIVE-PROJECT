@@ -88,17 +88,11 @@ const getOrderByUserId = async (userId, state, page, ordersPerPage = 10) => {
         Query.equal('state', state),   // Filter by state
     ];
 
-    // Handle sorting based on the state
-    if (state === 'pending' || state === 'confirmed' || state === 'dispatched') {
-        queries.push(Query.orderAsc('$createdAt')); // Sort by creation time for these states
-    } else if (state === 'canceled' || state === 'delivered') {
-        queries.push(Query.orderDesc('$updatedAt')); // Sort by update time for these states
-    }
-
+    queries.push(Query.orderDesc('$updatedAt')); 
     // Pagination logic
     const offset = (page - 1) * ordersPerPage;
-    queries.push(Query.limit(ordersPerPage)); // Limit the number of results per page
-    queries.push(Query.offset(offset));      // Set the offset for pagination
+    queries.push(Query.limit(ordersPerPage));
+    queries.push(Query.offset(offset));
 
     // Fetch documents
     const response = await databases.listDocuments(

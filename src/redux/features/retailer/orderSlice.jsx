@@ -74,31 +74,26 @@ const ordersSlice = createSlice({
   name: 'retailerorders',
   initialState,
   reducers: {
-    //orderStateArrayName this is the namr of the initialState 
     deleteOrder: (state, action) => {
       const { orderId, orderStateArrayName } = action.payload;
-      // Find the state slice corresponding to the orderStateArrayName and filter out the order with the given orderId
       state[`${orderStateArrayName}Orders`].data = state[`${orderStateArrayName}Orders`].data.filter(
         (order) => order.$id !== orderId
       );
     },
     updateOrder: (state, action) => {
       const { orderId, updatedOrderData, orderStateArrayName } = action.payload;
-      const orderIndex = state[`${orderStateArrayName}Orders`].data.findIndex(
-        (order) => order.$id === orderId
-      );
-
-      // If the order is found, update it with the new data
+      const orderArray = state[`${orderStateArrayName}Orders`].data;
+    
+      const orderIndex = orderArray.findIndex((order) => order.$id === orderId);
+    
       if (orderIndex !== -1) {
-        state[`${orderStateArrayName}Orders`].data[orderIndex] = {
-          ...state[`${orderStateArrayName}Orders`].data[orderIndex],
-          ...updatedOrderData,
-        };
+        orderArray[orderIndex] = { ...orderArray[orderIndex], ...updatedOrderData };
       } else {
-        // If the order is not found, add the new order to the list
-        state[`${orderStateArrayName}Orders`].data.push(updatedOrderData);
+        orderArray.push(updatedOrderData);
       }
+      orderArray.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
     }
+    
 
   },
   extraReducers: (builder) => {
