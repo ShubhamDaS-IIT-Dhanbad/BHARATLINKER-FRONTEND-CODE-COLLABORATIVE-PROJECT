@@ -215,7 +215,7 @@ const MyCartPage = ({ userData }) => {
                             ))}
                         </section>
 
-                        <section className="delivery-section">
+                        {/* <section className="delivery-section">
                             <div className="address-search">
                                 <div className="search-input-group">
                                     <IoSearch className="search-icon" />
@@ -302,7 +302,7 @@ const MyCartPage = ({ userData }) => {
                                     </div>
                                 )}
                             </div>
-                        </section>
+                        </section> */}
                     </>
                 )}
             </main>
