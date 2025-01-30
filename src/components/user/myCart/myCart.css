@@ -86,7 +86,6 @@
 }
 
 .search-input-group input {
-  flex: 1;
   border: none;
   padding: 0.5rem;
   font-size: 1rem;
@@ -252,4 +251,12 @@
   font-weight: 500;
   transition: background 0.3s ease;
   text-transform: uppercase;
+}
+
+
+
+
+.user-cart-address-display{
+  display: flex;gap: 10px;
+  align-items: center;
 }

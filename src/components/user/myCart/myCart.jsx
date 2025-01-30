@@ -283,14 +283,15 @@ const MyCartPage = ({ userData }) => {
                                 </button>
                             </div>
 
-                            <div className="address-confirmation">
-                                <div className="address-display">
+                            {/* <div className="address-confirmation">
+                                <div className="user-cart-address-display">
                                     <span>{deliveryAddress.text || 'No address selected'}</span>
                                     <TiInfoOutline
                                         onClick={() => setUiState(prev => ({
                                             ...prev,
                                             showAddressInfo: !prev.showAddressInfo
                                         }))}
+                                        size={25}
                                     />
                                 </div>
 
@@ -302,7 +303,12 @@ const MyCartPage = ({ userData }) => {
                                         </p>
                                     </div>
                                 )}
-                            </div>
+                            </div> */}
+
+
+
+
+
                         </section>
                     </>
                 )}
