@@ -136,7 +136,7 @@ const uploadProductWithImages = async (productData, files = []) => {
         // Upload images to Cloudinary
         uploadedImages = await uploadImagesToCloudinary(files);
         const imageUrls = uploadedImages.map((image) => image.secure_url);
-
+console.log("P")
         // Prepare product data
         const newProductData = {
             title: productData.title.toLowerCase(),

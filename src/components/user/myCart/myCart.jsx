@@ -1,332 +1,378 @@
-import React, { useState, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from "react-redux";
 import { Oval } from "react-loader-spinner";
 import { SlLocationPin } from 'react-icons/sl';
 import { TiInfoOutline } from "react-icons/ti";
-import { IoSearch } from "react-icons/io5";
+import { IoSearch, IoClose } from "react-icons/io5";
 import { MdMyLocation } from "react-icons/md";
-import conf from '../../../conf/conf.js'
+import PropTypes from 'prop-types';
+
+// Project components and utilities
 import Navbar from "../a.navbarComponent/navbar.jsx";
 import OrderProductCard from './cartCard.jsx';
 import { updateCartStateAsync, fetchUserCart } from '../../../redux/features/user/cartSlice.jsx';
 import useLocationFromCookie from '../../../hooks/useLocationFromCookie.jsx';
-import { IoClose } from "react-icons/io5";
 import { placeOrderProvider } from '../../../appWrite/order/order.js';
 import handleSendEmail from '../../../appWrite/services/emailServiceToShop.js';
+import conf from '../../../conf/conf.js';
 
+// Styles
 import '../userProfile/userProfile.css';
 import './myCart.css';
-import '../../searchPage/sortby.css'
+import '../../searchPage/sortby.css';
 
 const MyCartPage = ({ userData }) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-
     const { fetchLocationSuggestions } = useLocationFromCookie();
     const { cart, totalQuantity, totalPrice } = useSelector((state) => state.userCart);
 
-    const [address, setAddress] = useState('');
-    const [lat, setLat] = useState(null);
-    const [long, setLong] = useState(null);
+    // State management
+    const [deliveryAddress, setDeliveryAddress] = useState({
+        text: '',
+        coordinates: { lat: null, lng: null }
+    });
+    const [searchState, setSearchState] = useState({
+        query: '',
+        suggestions: [],
+        isLoading: false
+    });
+    const [uiState, setUiState] = useState({
+        isFetchingLocation: false,
+        showAddressInfo: false,
+        isPlacingOrder: false,
+        showConfirmation: false
+    });
 
-
-    const [searchQuery, setSearchQuery] = useState('');
-    const [suggestions, setSuggestions] = useState([]);
-    const [fetchingUserLocation, setFetchingUserLocation] = useState(false);
-    const [loading, setLoading] = useState(false);
-    const [showInfo, setShowInfo] = useState(false);
-
-    // Fetch the user's cart on initial render if empty
+    // Cart initialization
     useEffect(() => {
-        if (cart?.length === 0 && userData) {
+        if (cart?.length === 0 && userData?.phoneNumber) {
             dispatch(fetchUserCart(userData.phoneNumber));
         }
-        window.scrollTo(0,0);
-    }, []);
+        window.scrollTo(0, 0);
+    }, [dispatch, userData?.phoneNumber]);
 
-    const handleRemove = useCallback(async (productId) => {
+    // Cart item removal handler
+    const handleRemoveItem = useCallback(async (productId) => {
         try {
-            const newItem = {
-                productId: productId,
+            const updatePayload = {
+                productId,
                 quantity: 0,
-                phoneNumber: userData?.phoneNumber,
-            }
-            await dispatch(updateCartStateAsync(newItem));
+                phoneNumber: userData?.phoneNumber
+            };
+            await dispatch(updateCartStateAsync(updatePayload));
         } catch (error) {
-            console.error("Error updating cart:", error);
+            console.error("Cart update failed:", error);
         }
-    }, []);
+    }, [dispatch, userData?.phoneNumber]);
 
-    const handleLocationClick = useCallback(() => {
-        if (navigator.geolocation) {
-            setFetchingUserLocation(true);
-            navigator.geolocation.getCurrentPosition(
-                async (position) => {
-                    const { latitude, longitude } = position.coords;
-                    const apiKey = conf.opencageapikey;
-                    const apiUrl = `${conf.opencageapiurl}?key=${apiKey}&q=${latitude},${longitude}&pretty=1&no_annotations=1`;
-
-                    try {
-                        const response = await fetch(apiUrl);
-                        const data = await response.json();
-                        setAddress(data.results[0]?.formatted || 'Unknown Address');
-                        setLat(latitude);
-                        setLong(longitude);
-                    } catch (error) {
-                        console.error('Error fetching address:', error);
-                    } finally {
-                        setFetchingUserLocation(false);
-                    }
-                },
-                (error) => {
-                    console.error('Error fetching current location:', error);
-                    setFetchingUserLocation(false);
-                }
-            );
-        } else {
-            console.error('Geolocation is not supported by this browser.');
-        }
-    }, []);
-
-    const handleAddressClick = useCallback((suggestion) => {
-        setSearchQuery(suggestion.label);
-        setAddress(suggestion.label);
-        setLat(suggestion.lat);
-        setLong(suggestion.lon);
-        setSuggestions([]);
-    }, []);
-
-    const fetchSuggestions = useCallback(async (query) => {
-        if (!query) {
-            setSuggestions([]);
+    // Location handling
+    const handleGeolocation = useCallback(async () => {
+        if (!navigator.geolocation) {
+            console.error('Geolocation is not supported');
             return;
         }
-        setLoading(true);
+
+        setUiState(prev => ({ ...prev, isFetchingLocation: true }));
+
         try {
-            const response = await fetchLocationSuggestions(query);
-            setSuggestions(response || []);
+            const position = await new Promise((resolve, reject) => {
+                navigator.geolocation.getCurrentPosition(resolve, reject);
+            });
+
+            const { latitude, longitude } = position.coords;
+            const response = await fetch(
+                `${conf.opencageapiurl}?key=${conf.opencageapikey}&q=${latitude},${longitude}&pretty=1&no_annotations=1`
+            );
+            const data = await response.json();
+
+            setDeliveryAddress({
+                text: data.results[0]?.formatted || 'Current Location',
+                coordinates: { lat: latitude, lng: longitude }
+            });
         } catch (error) {
-            console.error('Error fetching suggestions:', error);
+            console.error('Location retrieval failed:', error);
         } finally {
-            setLoading(false);
+            setUiState(prev => ({ ...prev, isFetchingLocation: false }));
         }
     }, []);
 
+    // Address suggestions
+    const fetchAddressSuggestions = useCallback(async (query) => {
+        if (!query.trim()) {
+            setSearchState(prev => ({ ...prev, suggestions: [] }));
+            return;
+        }
 
-    const [orderPlacing, setOrderPlacing] = useState(false);
-    const [confirmOrder, setConfirmOrder] = useState(false);
-    // Function to handle the order placement
-    const placeOrderConfirm = async () => {
-        if (!address || !lat || !long || !userData || !userData.phoneNumber) {
-            setShowInfo(true);
+        setSearchState(prev => ({ ...prev, isLoading: true }));
+
+        try {
+            const results = await fetchLocationSuggestions(query);
+            setSearchState(prev => ({ ...prev, suggestions: results || [] }));
+        } catch (error) {
+            console.error('Address suggestion error:', error);
+        } finally {
+            setSearchState(prev => ({ ...prev, isLoading: false }));
+        }
+    }, [fetchLocationSuggestions]);
+
+    // Order processing
+    const processOrder = useCallback(async () => {
+        if (!deliveryAddress.text || !deliveryAddress.coordinates.lat || !userData?.phoneNumber) {
+            setUiState(prev => ({ ...prev, showAddressInfo: true }));
             return;
         }
 
         if (cart.length === 0) {
-            alert("Your cart is empty. Please add items to the cart before placing an order.");
+            alert("Please add items to your cart before ordering.");
             return;
         }
 
-        setOrderPlacing(true);
+        setUiState(prev => ({ ...prev, isPlacingOrder: true }));
+
         try {
-            for (const cartItem of cart) {
-                const { productId, shopId, quantity, discountedPrice, price, title, image, shopEmail } = cartItem;
-                console.log(cartItem);
-                const userId = userData.$id;
-                const phoneNumber = userData.phoneNumber;
-                const name = "shubham";
-        
-                // Place the order
+            await Promise.all(cart.map(async (item) => {
+                const { productId, shopId, quantity, discountedPrice, price, title, image, shopEmail } = item;
+
                 const order = await placeOrderProvider(
-                    userId,
+                    userData.$id,
                     shopId,
                     productId,
                     quantity,
                     price,
                     discountedPrice,
-                    address,
-                    lat,
-                    long,
+                    deliveryAddress.text,
+                    deliveryAddress.coordinates.lat,
+                    deliveryAddress.coordinates.lng,
                     image,
                     title,
-                    name,
-                    phoneNumber,
+                    userData.name,
+                    userData.phoneNumber,
                     shopEmail
                 );
-        
-                // Send email asynchronously (non-blocking)
-                const to = shopEmail;
-                const type = 1;
-                const orderId = order.$id;
-                handleSendEmail(to, type, orderId, title, address, quantity, price, discountedPrice, phoneNumber, image)
-                    .catch((err) => console.error("Error sending email:", err));
-        
-                // Update cart state
-                const newItem = {
-                    productId: productId,
+
+                await handleSendEmail(
+                    shopEmail,
+                    1,
+                    order.$id,
+                    title,
+                    deliveryAddress.text,
+                    quantity,
+                    price,
+                    discountedPrice,
+                    userData.phoneNumber,
+                    image
+                ).catch(console.error);
+
+                dispatch(updateCartStateAsync({
+                    productId,
                     quantity: 0,
-                    phoneNumber: userData?.phoneNumber,
-                };
-                dispatch(updateCartStateAsync(newItem));
-            }
-            // Navigate to order page
+                    phoneNumber: userData.phoneNumber
+                }));
+            }));
+
             navigate("/user/order");
         } catch (error) {
-            console.error("Error placing orders:", error);
-            alert("An error occurred while placing your order. Please try again.");
+            console.error("Order processing failed:", error);
+            alert("Order placement failed. Please try again.");
         } finally {
-            setOrderPlacing(false);
+            setUiState(prev => ({ ...prev, isPlacingOrder: false, showConfirmation: false }));
         }
-        
-    };
-
-
-
-
-
+    }, [cart, deliveryAddress, userData, dispatch, navigate]);
 
     return (
-        <div>
-            <header>
-                <div className="user-refurbished-product-page-header">
-                    <Navbar headerTitle="MY CART" onBackNavigation={() => navigate(-1)} />
-                </div>
+        <div className="cart-container">
+            <header className="cart-header">
+                <Navbar
+                    headerTitle="MY CART"
+                    onBackNavigation={() => navigate(-1)}
+                />
             </header>
-            <div className="my-cart-container">
+
+            <main className="cart-content">
                 {cart?.length === 0 ? (
-                    <div className="empty-cart-container">
+                    <div className="empty-cart">
+                        <div className="empty-cart-illustration" />
                         <h2>Your Cart is Empty</h2>
-                        <p>Looks like you haven't added anything to your cart yet.</p>
-                        <button onClick={() => navigate('/shop')} className="shop-now-button">
-                            Shop Now
+                        <p>Discover our products and find something you'll love</p>
+                        <button
+                            onClick={() => navigate('/shop')}
+                            className="cta-button primary"
+                        >
+                            Explore Products
                         </button>
                     </div>
                 ) : (
                     <>
-                        <div className="my-cart-items-container">
-                            {cart?.map((item) => (
-                                <div key={item.productId} className="my-cart-item">
-                                    <OrderProductCard
-                                        order={item}
-                                        functionToWork={() => handleRemove(item.productId)}
-                                        productId={item.productId}
+                        <section className="cart-items-section">
+                            {cart.map(item => (
+                                <OrderProductCard
+                                    key={item.productId}
+                                    order={item}
+                                    onRemove={() => handleRemoveItem(item.productId)}
+                                />
+                            ))}
+                        </section>
+
+                        <section className="delivery-section">
+                            <div className="address-search">
+                                <div className="search-input-group">
+                                    <IoSearch className="search-icon" />
+                                    <input
+                                        type="text"
+                                        placeholder="Enter delivery address"
+                                        value={searchState.query}
+                                        onChange={(e) => setSearchState(prev => ({
+                                            ...prev,
+                                            query: e.target.value
+                                        }))}
+                                        onKeyDown={(e) => e.key === 'Enter' && fetchAddressSuggestions(searchState.query)}
                                     />
                                 </div>
-                            ))}
-                        </div>
-                        <div className="user-profile-div">
-                            <div className="user-location-tab-bottom-div-input-div">
-                                <IoSearch onClick={() => fetchSuggestions(searchQuery)} size={20} />
-                                <input
-                                    className="user-location-tab-bottom-div-input"
-                                    placeholder="Search location"
-                                    value={searchQuery}
-                                    onKeyDown={(e) => e.key === 'Enter' && fetchSuggestions(searchQuery)}
-                                    onChange={(e) => setSearchQuery(e.target.value)}
-                                />
-                            </div>
-                            {loading && (
-                                <div className="location-tab-loader">
-                                    <Oval height={20} width={20} color="green" ariaLabel="loading" />
-                                </div>
-                            )}
-                            {!loading && suggestions.length > 0 && (
-                                <div className="user-location-tab-suggestions">
-                                    {suggestions.map((suggestion, index) => (
-                                        <div
-                                            className="user-location-tab-suggestion-info-div"
-                                            key={index}
-                                            onClick={() => handleAddressClick(suggestion)}
-                                        >
-                                            <SlLocationPin size={17} />
-                                            <p>{suggestion.label}</p>
-                                        </div>
-                                    ))}
-                                </div>
-                            )}
-                            <div className="user-profile-field">
-                                <div id="address" className="user-profile-form-input">
-                                    {address || 'Delivery address'}
-                                </div>
-                                <TiInfoOutline size={30} onClick={() => setShowInfo(!showInfo)} />
-                            </div>
-                            {showInfo && (
-                                <div className="info-box">
-                                    Location REQUIRED!
-                                    This location will help determine the delivery area. Please ensure your locality is accurately specified.
-                                </div>
-                            )}
-                            <div style={{ display: 'flex', width: '98%' }}>
-                                <div className="user-profile-lat-input">{lat || 'LATITUDE'}</div>
-                                <div className="user-profile-lat-input">{long || 'LONGITUDE'}</div>
-                            </div>
-                            <div
-                                className="user-location-tab-bottom-div-current-location"
-                                onClick={handleLocationClick}
-                                aria-label="Use current location"
-                            >
-                                {fetchingUserLocation ? (
-                                    <Oval height={20} width={20} color="white" ariaLabel="loading" />
-                                ) : (
-                                    <>
-                                        <MdMyLocation size={23} />
-                                        Use current location
-                                    </>
+
+                                {searchState.isLoading && (
+                                    <div className="loading-indicator">
+                                        <Oval width={20} height={20} color="#2d5a27" />
+                                    </div>
+                                )}
+
+                                {searchState.suggestions.length > 0 && (
+                                    <ul className="address-suggestions">
+                                        {searchState.suggestions.map((suggestion, index) => (
+                                            <li
+                                                key={index}
+                                                onClick={() => {
+                                                    setDeliveryAddress({
+                                                        text: suggestion.label,
+                                                        coordinates: {
+                                                            lat: suggestion.lat,
+                                                            lng: suggestion.lon
+                                                        }
+                                                    });
+                                                    setSearchState(prev => ({
+                                                        ...prev,
+                                                        query: suggestion.label,
+                                                        suggestions: []
+                                                    }));
+                                                }}
+                                            >
+                                                <SlLocationPin />
+                                                <span>{suggestion.label}</span>
+                                            </li>
+                                        ))}
+                                    </ul>
                                 )}
                             </div>
-                        </div>
+
+                            <div className="current-location-group">
+                                <button
+                                    className="geo-location-button"
+                                    onClick={handleGeolocation}
+                                    disabled={uiState.isFetchingLocation}
+                                >
+                                    {uiState.isFetchingLocation ? (
+                                        <Oval width={20} height={20} color="#fff" />
+                                    ) : (
+                                        <>
+                                            <MdMyLocation />
+                                            Use Current Location
+                                        </>
+                                    )}
+                                </button>
+                            </div>
+
+                            <div className="address-confirmation">
+                                <div className="address-display">
+                                    <span>{deliveryAddress.text || 'No address selected'}</span>
+                                    <TiInfoOutline
+                                        onClick={() => setUiState(prev => ({
+                                            ...prev,
+                                            showAddressInfo: !prev.showAddressInfo
+                                        }))}
+                                    />
+                                </div>
+
+                                {uiState.showAddressInfo && (
+                                    <div className="address-info-banner">
+                                        <p>
+                                            Accurate location information ensures timely delivery.
+                                            Please verify your delivery address.
+                                        </p>
+                                    </div>
+                                )}
+                            </div>
+                        </section>
                     </>
                 )}
-            </div>
-            <div className='my-cart-count-container-parent'>
-                {!confirmOrder && cart.length > 0 &&
-                    <div
-                        className="my-cart-count-container"
-                        onClick={() => {
-                            if (!address || !lat || !long) {
-                                setShowInfo(true);
-                                setTimeout(() => {
-                                    window.scrollTo({
-                                        top: document.body.scrollHeight,
-                                        behavior: "smooth",
-                                    });
-                                }, 0);
+            </main>
 
-                                return;
-                            } setConfirmOrder(true)
-                        }}
-                        disabled={orderPlacing || cart.length === 0}
+            {cart?.length > 0 && (
+                <footer className="cart-footer">
+                    <button
+                        className="cta-button checkout-button"
+                        onClick={() => setUiState(prev => ({
+                            ...prev,
+                            showConfirmation: true
+                        }))}
+                        disabled={uiState.isPlacingOrder}
                     >
-                        {orderPlacing ? <Oval height={20} width={20} color="white" ariaLabel="loading" /> : "PLACE ORDER"}
-                    </div>
-                }
-            </div>
-            {/* */}
+                        {uiState.isPlacingOrder ? (
+                            <Oval width={24} height={24} color="#fff" />
+                        ) : (
+                            `Proceed to Checkout (${totalQuantity} items)`
+                        )}
+                    </button>
+                </footer>
+            )}
 
-            {confirmOrder &&
-                <div className="productSearch-page-sort-by-tab">
-                    <div className='location-tab-IoIosCloseCircle' aria-label="Close sort options">
-                        <IoClose onClick={() => { setConfirmOrder(false) }} size={25} />
-                    </div>
-                    <div style={{ color: "white" }}>place order?</div>
-                    <div id="productSearch-page-sort-by-header">
-                        <div id="productSearch-page-sortby-options">
-                            <div className="order-confirm-no" onClick={() => { setConfirmOrder(false) }}>NO</div>
-                            <div className="order-confirm-yes" onClick={() => { setConfirmOrder(false); placeOrderConfirm() }}>YES</div>
+            {uiState.showConfirmation && (
+                <div className="confirmation-modal">
+                    <div className="modal-content">
+                        <button
+                            className="close-button"
+                            onClick={() => setUiState(prev => ({
+                                ...prev,
+                                showConfirmation: false
+                            }))}
+                        >
+                            <IoClose />
+                        </button>
+
+                        <h3>Confirm Order</h3>
+                        <p>Total Amount: ₹{totalPrice.toFixed(2)}</p>
+                        <p>Delivery to: {deliveryAddress.text}</p>
+
+                        <div className="confirmation-actions">
+                            <button
+                                className="cta-button secondary"
+                                onClick={() => setUiState(prev => ({
+                                    ...prev,
+                                    showConfirmation: false
+                                }))}
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                className="cta-button primary"
+                                onClick={processOrder}
+                            >
+                                Confirm Order
+                            </button>
                         </div>
                     </div>
                 </div>
-            }
+            )}
         </div>
     );
 };
+
+MyCartPage.propTypes = {
+    userData: PropTypes.shape({
+        $id: PropTypes.string.isRequired,
+        phoneNumber: PropTypes.string.isRequired,
+        name: PropTypes.string
+    }).isRequired
+};
+
 export default React.memo(MyCartPage);
-
-
-
-
-
-
-
-

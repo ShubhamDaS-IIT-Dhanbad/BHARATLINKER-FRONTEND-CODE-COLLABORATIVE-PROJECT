@@ -45,7 +45,7 @@ const Navbar = ({ headerTitle, onBackNavigation }) => {
   };
 
   return (
-    <div className="product-page-header-visible">
+    <div className="product-page-header-visible" style={{backgroundColor:"white"}}>
       <div className="product-page-header-container">
         <div className="product-page-header-user-section">
           <FaArrowLeft
