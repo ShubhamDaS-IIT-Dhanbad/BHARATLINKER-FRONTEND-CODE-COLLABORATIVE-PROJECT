@@ -154,7 +154,7 @@ const retailerProductsSlice = createSlice({
         },
         deleteProductSlice: (state, action) => {
             const productId = action.payload;
-            state.products = state.products.filter((product) => product.$id !== productId.id);
+            state.products = state.products.filter((product) => product.$id !== productId);
         },
         updateProductSlice: (state, action) => {
             const { productId, updatedData } = action.payload;

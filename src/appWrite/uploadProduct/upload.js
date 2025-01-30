@@ -347,7 +347,7 @@ const deleteProduct = async (productId, imagesToDelete) => {
         const response = await databases.deleteDocument(
             conf.appwriteProductsDatabaseId,
             conf.appwriteProductsCollectionId,
-            productId.id
+            productId
         );
         console.log('Product deleted successfully:', response);
         return { status: "success" };

@@ -17,6 +17,7 @@ const UploadBooksModulesForm = () => {
 
     const [status, setStatus] = useState({ loading: true, error: null, success: null });
     const [isUpdating, setIsUpdating] = useState(false);
+    const [isDeleting, setIsDeleting] = useState(false);
     const [imagesToDelete, setImagesToDelete] = useState([]);
     const [newImagesFiles, setNewImagesFiles] = useState(Array(3).fill(null));
 
@@ -162,15 +163,18 @@ const UploadBooksModulesForm = () => {
         const confirmDelete = window.confirm('Are you sure you want to permanently delete this product?');
         if (!confirmDelete) return;
 
-        setStatus(prev => ({ ...prev, loading: true }));
+        setIsDeleting(true);
         try {
+            const imagesToDelete=product.images;
             await deleteProduct(productId, imagesToDelete);
             dispatch(deleteProductSlice(productId));
             setStatus({ loading: false, success: 'Product deleted successfully!', error: null });
-            setTimeout(() => navigate('/retailer/products'), 1500);
+            setTimeout(() => navigate('/retailer/products'), 500);
         } catch (error) {
             setStatus({ loading: false, error: 'Deletion failed. Please try again.', success: null });
         }
+        
+        setIsDeleting(false);
     };
 
     if (status.loading) {
@@ -307,7 +311,7 @@ const UploadBooksModulesForm = () => {
                     onClick={handleProductDelete}
                     disabled={status.loading || isUpdating}
                 >
-                    {status.loading ? (
+                    {isDeleting ? (
                         <Oval color="#FFF" height={20} width={20} />
                     ) : (
                         'Delete Product'
