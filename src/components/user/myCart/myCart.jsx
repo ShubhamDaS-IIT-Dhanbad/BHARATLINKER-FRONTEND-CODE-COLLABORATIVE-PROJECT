@@ -15,6 +15,7 @@ import { updateCartStateAsync, fetchUserCart } from '../../../redux/features/use
 import useLocationFromCookie from '../../../hooks/useLocationFromCookie.jsx';
 import { placeOrderProvider } from '../../../appWrite/order/order.js';
 import handleSendEmail from '../../../appWrite/services/emailServiceToShop.js';
+import {fetchShopStatus} from '../../../appWrite/shop/shop.js';
 import conf from '../../../conf/conf.js';
 
 // Styles
@@ -29,8 +30,10 @@ const MyCartPage = ({ userData }) => {
     const { cart, totalQuantity, totalPrice } = useSelector((state) => state.userCart);
 
     // State management
+    const [shopStatus, setShopStatus] = useState({});
     const [deliveryAddress, setDeliveryAddress] = useState({
         text: '',
+        local: '',
         coordinates: { lat: null, lng: null }
     });
     const [searchState, setSearchState] = useState({
@@ -52,6 +55,30 @@ const MyCartPage = ({ userData }) => {
         }
         window.scrollTo(0, 0);
     }, [dispatch, userData?.phoneNumber]);
+
+    // Shop status check
+    useEffect(() => {
+        const checkShopStatus = async () => {
+            const statusMap = {};
+            for (const item of cart) {
+                if (!statusMap[item.shopId]) {
+                    try {
+                        const response = await fetchShopStatus(item.shopId);
+                        console.log(response)
+                        statusMap[item.shopId] = response;
+                    } catch (error) {
+                        console.error('Error fetching shop status:', error);
+                        statusMap[item.shopId] = false;
+                    }
+                }
+            }
+            setShopStatus(statusMap);
+        };
+
+        if (cart.length > 0) {
+            checkShopStatus();
+        }
+    }, [cart]);
 
     // Cart item removal handler
     const handleRemoveItem = useCallback(async (productId) => {
@@ -87,10 +114,11 @@ const MyCartPage = ({ userData }) => {
             );
             const data = await response.json();
 
-            setDeliveryAddress({
+            setDeliveryAddress(prev => ({
+                ...prev,
                 text: data.results[0]?.formatted || 'Current Location',
                 coordinates: { lat: latitude, lng: longitude }
-            });
+            }));
         } catch (error) {
             console.error('Location retrieval failed:', error);
         } finally {
@@ -119,8 +147,16 @@ const MyCartPage = ({ userData }) => {
 
     // Order processing
     const processOrder = useCallback(async () => {
-        if (!deliveryAddress.text || !deliveryAddress.coordinates.lat || !userData?.phoneNumber) {
+        if (!deliveryAddress.text || !deliveryAddress.local || !deliveryAddress.coordinates.lat) {
             setUiState(prev => ({ ...prev, showAddressInfo: true }));
+            return;
+        }
+
+        // Check for closed shops
+        const closedShops = cart.filter(item => !shopStatus[item.shopId]);
+        if (closedShops.length > 0) {
+            alert(`Cannot place order: The following shops are closed - 
+                ${[...new Set(closedShops.map(item => item.shopName))].join(', ')}`);
             return;
         }
 
@@ -133,6 +169,8 @@ const MyCartPage = ({ userData }) => {
 
         try {
             await Promise.all(cart.map(async (item) => {
+                if (!shopStatus[item.shopId]) return;
+
                 const { productId, shopId, quantity, discountedPrice, price, title, image, shopEmail } = item;
 
                 const order = await placeOrderProvider(
@@ -142,7 +180,7 @@ const MyCartPage = ({ userData }) => {
                     quantity,
                     price,
                     discountedPrice,
-                    deliveryAddress.text,
+                    `${deliveryAddress.text} - ${deliveryAddress.local}`,
                     deliveryAddress.coordinates.lat,
                     deliveryAddress.coordinates.lng,
                     image,
@@ -157,7 +195,7 @@ const MyCartPage = ({ userData }) => {
                     1,
                     order.$id,
                     title,
-                    deliveryAddress.text,
+                    `${deliveryAddress.text} - ${deliveryAddress.local}`,
                     quantity,
                     price,
                     discountedPrice,
@@ -179,46 +217,47 @@ const MyCartPage = ({ userData }) => {
         } finally {
             setUiState(prev => ({ ...prev, isPlacingOrder: false, showConfirmation: false }));
         }
-    }, [cart, deliveryAddress, userData, dispatch, navigate]);
+    }, [cart, deliveryAddress, userData, dispatch, navigate, shopStatus]);
 
     return (
-        <div className="cart-container">
-            <header className="cart-header">
+        <div className="user-cart-container">
+            <header className="user-cart-header">
                 <Navbar
                     headerTitle="MY CART"
                     onBackNavigation={() => navigate(-1)}
                 />
             </header>
 
-            <main className="cart-content">
+            <main className="user-cart-content">
                 {cart?.length === 0 ? (
-                    <div className="empty-cart">
-                        <div className="empty-cart-illustration" />
+                    <div className="user-cart-empty">
+                        <div className="user-cart-empty-illustration" />
                         <h2>Your Cart is Empty</h2>
                         <p>Discover our products and find something you'll love</p>
                         <button
                             onClick={() => navigate('/shop')}
-                            className="cta-button primary"
+                            className="user-cart-cta-button primary"
                         >
                             Explore Products
                         </button>
                     </div>
                 ) : (
                     <>
-                        <section className="cart-items-section">
+                        <section className="user-cart-items-section">
                             {cart.map(item => (
                                 <OrderProductCard
                                     key={item.productId}
                                     productId={item.productId}
                                     order={item}
                                     onRemove={() => handleRemoveItem(item.productId)}
+                                    isShopOpen={shopStatus[item.shopId] || false}
                                 />
                             ))}
                         </section>
 
-                        <section className="delivery-section">
-                            <div className="address-search">
-                                <div className="search-input-group">
+                        <section className="user-cart-delivery-section">
+                            <div className="user-cart-address-search">
+                                <div className="user-cart-search-input-group">
                                     <IoSearch style={{padding:"7px"}} size={25} className="user-cart-search-icon" />
                                     <input
                                         type="text"
@@ -232,25 +271,26 @@ const MyCartPage = ({ userData }) => {
                                     />
                                 </div>
 
-                                {searchState.isLoading  && (
-                                    <div className="loading-indicator">
+                                {searchState.isLoading && (
+                                    <div className="user-cart-loading-indicator">
                                         <Oval width={20} height={20} color="#2d5a27" />
                                     </div>
                                 )}
 
                                 {searchState.suggestions.length > 0 && (
-                                    <ul className="address-suggestions">
+                                    <ul className="user-cart-address-suggestions">
                                         {searchState.suggestions.map((suggestion, index) => (
                                             <li
                                                 key={index}
                                                 onClick={() => {
-                                                    setDeliveryAddress({
+                                                    setDeliveryAddress(prev => ({
+                                                        ...prev,
                                                         text: suggestion.label,
                                                         coordinates: {
                                                             lat: suggestion.lat,
                                                             lng: suggestion.lon
                                                         }
-                                                    });
+                                                    }));
                                                     setSearchState(prev => ({
                                                         ...prev,
                                                         query: suggestion.label,
@@ -266,9 +306,9 @@ const MyCartPage = ({ userData }) => {
                                 )}
                             </div>
 
-                            <div className="current-location-group">
+                            <div className="user-cart-current-location-group">
                                 <button
-                                    className="geo-location-button"
+                                    className="user-cart-geo-location-button"
                                     onClick={handleGeolocation}
                                     disabled={uiState.isFetchingLocation}
                                 >
@@ -283,41 +323,33 @@ const MyCartPage = ({ userData }) => {
                                 </button>
                             </div>
 
-                            {/* <div className="address-confirmation">
-                                <div className="user-cart-address-display">
-                                    <span>{deliveryAddress.text || 'No address selected'}</span>
-                                    <TiInfoOutline
-                                        onClick={() => setUiState(prev => ({
-                                            ...prev,
-                                            showAddressInfo: !prev.showAddressInfo
-                                        }))}
-                                        size={25}
-                                    />
-                                </div>
-
+                            <div className="user-cart-local-address-input">
+                                <textarea
+                                    className="user-cart-address-textarea"
+                                    placeholder="Enter local address details (floor, apartment, landmarks)"
+                                    value={deliveryAddress.local}
+                                    onChange={(e) => setDeliveryAddress(prev => ({
+                                        ...prev,
+                                        local: e.target.value
+                                    }))}
+                                    required
+                                />
                                 {uiState.showAddressInfo && (
-                                    <div className="address-info-banner">
-                                        <p>
-                                            Accurate location information ensures timely delivery.
-                                            Please verify your delivery address.
-                                        </p>
+                                    <div className="user-cart-address-error">
+                                        <TiInfoOutline />
+                                        <span>Both address fields are required for delivery</span>
                                     </div>
                                 )}
-                            </div> */}
-
-
-
-
-
+                            </div>
                         </section>
                     </>
                 )}
             </main>
 
             {cart?.length > 0 && (
-                <footer className="cart-footer">
+                <footer className="user-cart-footer">
                     <button
-                        className="cta-button checkout-button"
+                        className="user-cart-cta-button user-cart-checkout-button"
                         onClick={() => setUiState(prev => ({
                             ...prev,
                             showConfirmation: true
@@ -334,10 +366,10 @@ const MyCartPage = ({ userData }) => {
             )}
 
             {uiState.showConfirmation && (
-                <div className="confirmation-modal">
-                    <div className="modal-content">
+                <div className="user-cart-confirmation-modal">
+                    <div className="user-cart-modal-content">
                         <button
-                            className="close-button"
+                            className="user-cart-close-button"
                             onClick={() => setUiState(prev => ({
                                 ...prev,
                                 showConfirmation: false
@@ -349,10 +381,11 @@ const MyCartPage = ({ userData }) => {
                         <h3>Confirm Order</h3>
                         <p>Total Amount: ₹{totalPrice.toFixed(2)}</p>
                         <p>Delivery to: {deliveryAddress.text}</p>
+                        <p>Local Details: {deliveryAddress.local}</p>
 
-                        <div className="confirmation-actions">
+                        <div className="user-cart-confirmation-actions">
                             <button
-                                className="cta-button secondary"
+                                className="user-cart-cta-button secondary"
                                 onClick={() => setUiState(prev => ({
                                     ...prev,
                                     showConfirmation: false
@@ -361,7 +394,7 @@ const MyCartPage = ({ userData }) => {
                                 Cancel
                             </button>
                             <button
-                                className="cta-button primary"
+                                className="user-cart-cta-button primary"
                                 onClick={processOrder}
                             >
                                 Confirm Order

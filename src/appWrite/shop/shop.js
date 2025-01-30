@@ -376,12 +376,30 @@ const updateShopOpenedStatus = async (shopId, isOpened) => {
     }
 };
 
+const fetchShopStatus = async (shopId) => {
+    try {
+        if (!shopId) {
+            throw new Error('Shop ID is missing');
+        }
+        const documentId = shopId;
+        const {isOpened} = await databases.getDocument(
+            conf.appwriteShopsDatabaseId,
+            conf.appwriteShopsCollectionId,
+            documentId
+        );
+        return isOpened;
+    } catch (error) {
+        console.error('Error fetching shop status:', error.message);
+        throw error;
+    }
+};
+
 
 
 
 
 export {
     registerShop, sendOtp, createSession, deleteSession, getShopData, logout,
-     updateShopData,updateShopOpenedStatus
+     updateShopData,updateShopOpenedStatus,fetchShopStatus
     
 };
