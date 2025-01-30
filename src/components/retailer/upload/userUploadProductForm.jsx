@@ -48,7 +48,6 @@ const UploadBooksModulesForm = ({ retailerData }) => {
       setImages((prevImages) => {
         const updatedImages = [...prevImages];
         updatedImages[index] = files[0];
-        console.log(files)
         return updatedImages;
       });
     }

@@ -184,7 +184,6 @@ const getRetailerTotalProducts = async ({ shopId }) => {
             [Query.equal('shop', shopId)],
             0
         );
-        console.log(response);
         return { success: true, totalProducts: response.total };
     } catch (error) {
         return { success: false, error: error.message };
