@@ -1,10 +1,8 @@
 .retailer-product-upload-header-container {
   display: flex;
   align-items: center;
-  padding: 1rem;
   background: linear-gradient(135deg, #6c5ce7 0%, #48dbfb 100%);
-  color: white;
-  position: relative;
+  color: white;z-index: 100;
   overflow: hidden;
   box-shadow: 0 10px 30px rgba(99, 102, 241, 0.2);
   border: 1px solid rgba(255,255,255,0.15);
@@ -99,10 +97,9 @@
 
 @media (max-width: 768px) {
   .retailer-product-upload-header-container {
-      flex-direction: column;
       align-items: flex-start;
-      gap: 1.2rem;
-      padding: 1.5rem;
+      gap: 10px;
+      padding: 15px;
   }
   
   .retailer-product-upload-header-main-title {
@@ -146,10 +143,20 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
 .retailer-upload-product-container {
   max-width: 100%;
   background-color: #ffffff;
-  min-height: 100vh;margin-top: 13rem;
+  min-height: 100vh;margin-top: 8rem;
 }
 
 .retailer-upload-product-header {
