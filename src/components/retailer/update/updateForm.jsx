@@ -29,7 +29,7 @@ const UploadBooksModulesForm = () => {
     };
 
     const [formData, setFormData] = useState(initialFormState);
-    const [images, setImages] = useState(Array(3).fill(null));
+    const [images, setImages] = useState();
 
     useEffect(() => {
         const loadProductData = async () => {
@@ -130,20 +130,19 @@ const UploadBooksModulesForm = () => {
     };
 
     const handleProductUpdate = async () => {
-        // if (!validateForm()) return;
-        
         const confirmUpdate = window.confirm('Are you sure you want to update this product?');
         if (!confirmUpdate) return;
 
         setIsUpdating(true);
-        try {
+        try { 
+            const validImages = images.filter(img => 
+                typeof img === 'string' && img.startsWith('https://res.cloudinary.com/')
+            );
             const filesToUpload = newImagesFiles.filter(file => file !== null);
-            const keywordsArray = formData.keywords.split(',').map(k => k.trim()).filter(k => k);
-            
             const updatedData = await updateProduct(
                 productId,
                 imagesToDelete,
-                { ...formData, keywords: keywordsArray },
+                { ...formData,images: validImages },
                 filesToUpload
             );
 
