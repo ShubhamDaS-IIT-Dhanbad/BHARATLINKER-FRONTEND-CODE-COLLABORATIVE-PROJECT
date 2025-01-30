@@ -20,12 +20,12 @@ const OrderDetails = () => {
     const [order, setOrder] = useState(null);
     const [isCancelling, setIsCancelling] = useState(false);
 
-     const {
+    const {
         pendingOrders,
         confirmedOrders,
         deliveredOrders,
         canceledOrders,
-      } = useSelector((state) => state.userorders);
+    } = useSelector((state) => state.userorders);
 
     const orders = [
         ...pendingOrders.data,
@@ -36,7 +36,7 @@ const OrderDetails = () => {
 
     // Fetch order details
     useEffect(() => {
-        
+
         if (orders?.length > 0) {
             const foundOrder = orders?.find((order) => order.$id === id);
             if (!foundOrder) {
@@ -151,19 +151,23 @@ const OrderDetails = () => {
                         </div>
                     </div>
 
-                    {(order.state === "confirmed" || order.state === "shipped") && (
-                        <div className="oscd">
-                            <div className="oscd-info-c">
-                                <div className="oscd-info-h">EXPECTED DELIVERY DATE</div>
-                                <span>{new Date(order.expectedDeliveryDate).toLocaleDateString()}</span>
+                    {order.expectedDeliveryDate && (
+                        <>
+                            <div className="order-product-card-address-div">
+                                <p className="order-product-card-address-p1">EXP DELIVERY DATE</p>
+                                <p className="order-product-card-address-p2">{new Date(order.expectedDeliveryDate).toLocaleDateString()}</p>
                             </div>
-                            <div className="oscd-info-c">
-                                <div className="oscd-info-h">DELIVERY BOY PHN</div>
-                                <span>{order?.DeliveryBoyPhn}</span>
+                            <div className="order-product-card-address-div">
+                                <p className="order-product-card-address-p1">EXP DELIVERY TIME</p>
+                                <p className="order-product-card-address-p2">{new Date(order.expectedDeliveryDate).toLocaleTimeString()}</p>
                             </div>
-                            <div className="oscd-info-c">
-                                <div className="oscd-info-h">MESSAGE FROM SHOP</div>
-                                <span>{order.retailerMessage}</span>
+                        </>
+                    )}
+                    {order.deliveryBoyPhn && (
+                        <div className="order-product-card-address-div">
+                            <p className="order-product-card-address-p1">DELIVERY BOY</p>
+                            <div className="order-product-card-address-p2" onClick={() => onClickPhn(order.deliveryBoyPhn)}>
+                                {order.deliveryBoyPhn}
                             </div>
                         </div>
                     )}
