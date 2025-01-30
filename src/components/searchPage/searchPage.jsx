@@ -29,16 +29,14 @@ const SearchPage = () => {
         sortByAsc,
         sortByDesc,
     } = useSelector((state) => state.searchproducts);
-
-    // Memoized function to avoid unnecessary re-creation
     const handleInitialSearch = useCallback(() => {
         if (products.length === 0 && !loading) {
             executeSearch();
         }
-    }, [products.length,updated]);
+    }, [products.length, updated]);
     useEffect(() => {
         handleInitialSearch();
-    }, [products.length,updated]);
+    }, [products.length, updated]);
 
     return (
         <>
@@ -58,7 +56,9 @@ const SearchPage = () => {
                     dataLength={products.length}
                     next={onLoadMore}
                     hasMore={hasMoreProducts}
-                    loader={loadingMoreProducts && <h4>Loading more products...</h4>}
+                    loader={loadingMoreProducts && <div className="fallback-loading">
+                        <Oval height={30} width={30} color="green" secondaryColor="white" ariaLabel="loading" />
+                    </div>}
                 >
                     <ProductList />
                 </InfiniteScroll>
@@ -82,7 +82,7 @@ const SearchPage = () => {
                     setShowFilterBy={setShowFilterBy}
                 />
             )}
-            
+
             <div id="productSearchPage-footer">
                 <div
                     id="productSearchPage-footer-sortby"

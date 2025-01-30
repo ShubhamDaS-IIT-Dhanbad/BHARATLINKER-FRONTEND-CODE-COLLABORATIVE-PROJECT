@@ -1,7 +1,7 @@
 import React from 'react';
 import { Oval } from 'react-loader-spinner';
 import { useSelector } from 'react-redux';
-import { useLocation} from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import SearchPageProductCard from './productCard.jsx';
 import './style/productList.css';
 
@@ -15,7 +15,7 @@ const NoProductsFound = () => {
 };
 
 const ProductList = () => {
-    const location = useLocation(); 
+    const location = useLocation();
     const { products, loading, loadingMoreProducts, hasMoreProducts } = useSelector((state) => state.searchproducts);
     const { refurbishedProducts, loading: refurbishedLoading, error, currentPage, hasMoreProducts: refurbishedHasMoreProducts, loadingMoreProducts: refurbishedLoadingMoreProducts } = useSelector((state) => state.userRefurbishedProducts);
 
@@ -30,7 +30,7 @@ const ProductList = () => {
         return <NoProductsFound />;
     }
 
-   
+
     return (
         <>
             <div id="product-page-grid">
@@ -49,7 +49,7 @@ const ProductList = () => {
             </div>
 
             {hasMoreState && loadingMoreState && (
-                <div className='productSearchPage-loading-more-products'>
+                <div className="fallback-loading">
                     <Oval height={30} width={30} color="green" secondaryColor="white" ariaLabel="loading" />
                 </div>
             )}
