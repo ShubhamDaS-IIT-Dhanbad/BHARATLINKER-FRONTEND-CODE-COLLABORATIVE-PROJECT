@@ -3,10 +3,11 @@ import { useNavigate } from 'react-router-dom';
 import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
-import { FiMapPin, } from "react-icons/fi";
+import { FiMapPin } from "react-icons/fi";
 import debounce from "lodash.debounce";
 import './map.css';
 import { FaAngleLeft } from "react-icons/fa6";
+
 const createCustomIcon = (color = "#4CAF50") =>
   L.divIcon({
     className: "custom-marker",
@@ -87,16 +88,13 @@ const LocationMap = () => {
     return null;
   };
 
-
   return (
     <>
-
+      <div className="map-back-bar">
+        <FaAngleLeft size={23} onClick={() => { navigate(-1) }} className="map-back-bar-icon" />
+        Location Information
+      </div>
       <div className="map-wrapper">
-
-        <div className="map-back-bar">
-          <FaAngleLeft size={23} onClick={() => { navigate(-1) }} className="map-back-bar-icon" />
-          Location Information
-        </div>
 
 
         <MapContainer
@@ -104,6 +102,7 @@ const LocationMap = () => {
           center={position}
           zoom={10}
           style={{ height: "100%", width: "100%" }}
+          zoomControl={false} // Disable zoom controls
         >
           <TileLayer
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -122,8 +121,6 @@ const LocationMap = () => {
 
         </MapContainer>
 
-
-
         <div className="map-address-container">
           <div className="map-address-content">
             <div className="map-info">
@@ -134,13 +131,7 @@ const LocationMap = () => {
             </div>
           </div>
         </div>
-
-
       </div>
-
-
-
-
     </>
   );
 };
