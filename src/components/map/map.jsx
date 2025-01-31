@@ -7,13 +7,13 @@ import { FiMapPin, } from "react-icons/fi";
 import debounce from "lodash.debounce";
 import './map.css';
 import { FaAngleLeft } from "react-icons/fa6";
-const createCustomIcon = (color = "#3B82F6") =>
+const createCustomIcon = (color = "#4CAF50") =>
   L.divIcon({
     className: "custom-marker",
     html: `
-    <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" style="fill:${color};height:42px;width:42px;">
+    <svg viewBox="0 0 52 52" xmlns="http://www.w3.org/2000/svg" style="fill:${color};height:42px;width:42px;">
       <path d="M16 0c-5.523 0-10 4.477-10 10 0 10 10 22 10 22s10-12 10-22c0-5.523-4.477-10-10-10zm0 16c-3.314 0-6-2.686-6-6s2.686-6 6-6 6 2.686 6 6-2.686 6-6 6z" 
-            stroke="black" stroke-width="1"/>
+            stroke="black" stroke-width="0.5"/>
     </svg>
   `,
     iconSize: [30, 30],
@@ -111,7 +111,7 @@ const LocationMap = () => {
 
           <MapClickHandler />
 
-          <Marker position={position} icon={createCustomIcon("white")} draggable={true}>
+          <Marker position={position} icon={createCustomIcon("#4CAF50")} draggable={true}>
             <Popup className="custom-popup">
               <div className="popup-content">
                 <FiMapPin className="popup-icon" />
