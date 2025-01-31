@@ -216,3 +216,53 @@
     font-size: 1rem;
     color: #333;
 }
+
+
+
+
+
+/* Radius Control Container */
+.radius-control-container {
+    margin-top: 20px;
+}
+
+.radius-control-container label {
+    font-size: 1rem;
+    color: #333;
+    font-weight: 500;
+    margin-bottom: 10px;
+    display: block;
+}
+
+.radius-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.radius-btn {
+    padding: 10px 16px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    color: #333;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.radius-btn:hover {
+    background-color: #f1f1f1;
+    border-color: #ccc;
+}
+
+.radius-btn.selected {
+    background-color: #007BFF;
+    border-color: #007BFF;
+    color: #fff;
+}
+
+.radius-btn.selected:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+}
