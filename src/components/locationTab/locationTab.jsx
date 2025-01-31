@@ -7,17 +7,18 @@ import { ThreeDots } from 'react-loader-spinner';
 import { IoIosCloseCircleOutline } from "react-icons/io";
 import { CiSquareMinus, CiSquarePlus } from "react-icons/ci";
 import useLocationFromCookie from '../../hooks/useLocationFromCookie.jsx';
+
+import { FaAngleLeft } from "react-icons/fa6";
 import './locationTab.css';
 
 function LocationTab({ setLocationTab }) {
     const [loading, setLoading] = useState(false);
-
     const [fetchingUserLocation, setFetchingUserLocation] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
     const [radius, setRadius] = useState(5);
     const [suggestions, setSuggestions] = useState([]);
 
-    const {location, updateLocation, fetchLocationSuggestions, fetchCurrentLocation } = useLocationFromCookie();
+    const { location, updateLocation, fetchLocationSuggestions, fetchCurrentLocation } = useLocationFromCookie();
 
     useEffect(() => {
         if (location) {
@@ -83,84 +84,77 @@ function LocationTab({ setLocationTab }) {
     };
 
     return (
-        <div className="location-tab">
-            <div className="location-tab-IoIosCloseCircle" onClick={() => setLocationTab(false)} aria-label="Close location tab">
-                <IoClose size={25} />
+        <div className="location-tab-overlay">
+
+
+            <div className="map-back-bar">
+                <FaAngleLeft size={23} onClick={() => setLocationTab(false)} className="map-back-bar-icon" />
+                Select Your Location
             </div>
-            <p className="location-tab-bottom-div-p">LOCATION TAB</p>
-            <div className="location-tab-bottom-div">
-                <div className="location-tab-bottom-top-div">
-                    <div className="location-tab-bottom-div-input-div">
-                        <IoSearch onClick={handleSearch} size={20} />
-                        <form
-                            onSubmit={(e) => {
-                                e.preventDefault();
-                                handleSearch();
-                            }}
-                        >
+            <div className="location-tab-container">
+                    <div className="search-container">
+                        <div className="search-input-container">
+                            <IoSearch className="search-icon" size={20} />
                             <input
-                                className="location-tab-bottom-div-input"
+                                className="search-input"
                                 placeholder="Search your city / pincode"
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                                 onKeyDown={handleKeyDownSearch}
                                 aria-label="Search for location"
                             />
-                        </form>
-
-                        <IoIosCloseCircleOutline size={30} onClick={() => setSearchQuery('')} />
+                            {searchQuery && (
+                                <IoIosCloseCircleOutline
+                                    className="clear-icon"
+                                    size={20}
+                                    onClick={() => setSearchQuery('')}
+                                />
+                            )}
+                        </div>
+                        <button className="current-location-button" onClick={handleUseCurrentLocation} aria-label="Use current location">
+                            <MdMyLocation size={20} />
+                            Use Current Location
+                        </button>
                     </div>
-                    <div
-                        className="location-tab-bottom-div-current-location"
-                        onClick={handleUseCurrentLocation}
-                        aria-label="Use current location"
-                    >
-                        <MdMyLocation size={23} />
-                        Use current location
-                    </div>
-                </div>
 
-                <div className="location-tab-radius-options-container">
-                    <div className="location-tab-radius-options">
-                        <CiSquareMinus size={40} onClick={() => handleRadiusChange('decrease')} />
-                        <div className="location-tab-radius-input">
+                    <div className="radius-control-container">
+                        <label>Set Searching Radius (km):</label>
+                        <div className="radius-control">
+                            <button className="radius-button" onClick={() => handleRadiusChange('decrease')}>
+                                <CiSquareMinus size={25} />
+                            </button>
                             <input
                                 type="number"
-                                placeholder={radius}
+                                className="radius-input"
+                                value={radius}
                                 min="1"
                                 max="300"
                                 onChange={handleManualRadiusChange}
                                 aria-label="Set radius manually"
-                            />km
+                            />
+                            <button className="radius-button" onClick={() => handleRadiusChange('increase')}>
+                                <CiSquarePlus size={25} />
+                            </button>
                         </div>
-                        <CiSquarePlus size={40} onClick={() => handleRadiusChange('increase')} />
                     </div>
-                </div>
 
-                {(loading || fetchingUserLocation) && (
-                    <div className="location-tab-loader">
-                        <ThreeDots size={20} color="green" />
-                    </div>
-                )}
+                    {(loading || fetchingUserLocation) && (
+                        <div className="loader-container">
+                            <ThreeDots size={40} color="#007BFF" />
+                        </div>
+                    )}
 
-                {!loading && !fetchingUserLocation && suggestions.length > 0 && (
-                    <div className="location-tab-suggestions">
-                        {suggestions.map((suggestion, index) => (
-                            <div className="location-tab-suggestion-info-div" key={index}>
-                                <SlLocationPin size={17} />
-                                <div className="location-tab-location-info-inner-div">
-                                    <p
-                                        className="location-tab-location-info-inner-div-2"
-                                        onClick={() => handleAddressClick(suggestion)}
-                                        aria-label={`Select ${suggestion.label}`}
-                                    >
-                                        {suggestion.label}
-                                    </p>
+                    {!loading && !fetchingUserLocation && suggestions.length > 0 && (
+                        <div className="suggestions-container">
+                            {suggestions.map((suggestion, index) => (
+                                <div className="suggestion-item" key={index} onClick={() => handleAddressClick(suggestion)}>
+                                    <SlLocationPin size={20} />
+                                    <span className="suggestion-text">{suggestion.label}</span>
                                 </div>
-                            </div>
-                        ))}
-                    </div>
-                )}
+                            ))}
+                        </div>
+                    )}
+             
             </div>
         </div>
     );

@@ -22,7 +22,7 @@ const createCustomIcon = (color = "#4CAF50") =>
     iconAnchor: [11, 12],
   });
 
-const LocationMap = ({ setLat, setLong, setAddress }) => {
+const LocationMap = ({ setLat, setLong, setAddress, setShowMap }) => {
   const navigate = useNavigate();
   const [position, setPosition] = useState([23.8100428, 86.4425328]);
   const [loading, setLoading] = useState(true);
@@ -94,13 +94,13 @@ const LocationMap = ({ setLat, setLong, setAddress }) => {
     setLat(position[0]);
     setLong(position[1]);
     setAddress(address);
-    navigate(-1);
+    setShowMap(false);
   };
 
   return (
     <>
       <div className="map-back-bar">
-        <FaAngleLeft size={23} onClick={() => navigate(-1)} className="map-back-bar-icon" />
+        <FaAngleLeft size={23} onClick={() =>setShowMap(false)} className="map-back-bar-icon" />
         Location Information
       </div>
       <div className="map-wrapper">
@@ -109,7 +109,7 @@ const LocationMap = ({ setLat, setLong, setAddress }) => {
           center={position}
           zoom={10}
           style={{ height: "100%", width: "100%" }}
-          zoomControl={false} // Disable zoom controls
+          zoomControl={false}
         >
           <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
@@ -129,7 +129,7 @@ const LocationMap = ({ setLat, setLong, setAddress }) => {
           <div className="map-address-content">
             <div >
               {loading ? (
-               <div className="map-address-oval"> <Oval height={20} width={20} color="green" secondaryColor="white" ariaLabel="loading" /></div>
+                <div className="map-address-oval"> <Oval height={20} width={20} color="green" secondaryColor="white" ariaLabel="loading" /></div>
               ) : (
                 <p className="map-address-text">{address}</p>
               )}
