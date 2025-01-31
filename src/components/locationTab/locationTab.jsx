@@ -72,9 +72,7 @@ function LocationTab({ setLocationTab }) {
         setAddress('');
         setShowMap(true);
         setFetchingUserLocation(false);
-        console.log(position)
     };
-
     const predefinedRadiusOptions = [1, 2, 4, 5, 7, 9, 13, 15, 20, 30, 50, 100, 200];
 
     return (
