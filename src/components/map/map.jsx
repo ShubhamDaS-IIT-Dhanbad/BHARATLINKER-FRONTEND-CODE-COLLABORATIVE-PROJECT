@@ -107,55 +107,57 @@ const LocationMap = () => {
   };
 
   return (
-    <MapWrapper>
-      <MapContainer
-        ref={mapRef}
-        center={position}
-        zoom={13}
-        style={{ height: "100%", width: "100%" }}
-        zoomControl={false}
-      >
-        <TileLayer
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        />
-        
-        {/* Map click handler */}
-        <MapClickHandler />
+    <div className="map-container">
+      <MapWrapper>
+        <MapContainer
+          ref={mapRef}
+          center={position}
+          zoom={13}
+          style={{ height: "100%", width: "100%" }}
+          zoomControl={false}
+        >
+          <TileLayer
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          />
 
-        <Marker position={position} icon={createCustomIcon("#25CCF7")} draggable={true}>
-          <Popup>
-            <div>
-              <FiMapPin className="inline-block mr-2" />
-              <span className="font-semibold text-blue-600">
-                Lat: {position[0]?.toFixed(4)}, Lng: {position[1]?.toFixed(4)}
-              </span>
-            </div>
-          </Popup>
-        </Marker>
+          {/* Map click handler */}
+          <MapClickHandler />
 
-        <ZoomControl position="bottomright" />
-        <div className="mp-div">{address}</div>
-      </MapContainer>
+          <Marker position={position} icon={createCustomIcon("#25CCF7")} draggable={true}>
+            <Popup>
+              <div>
+                <FiMapPin className="inline-block mr-2" />
+                <span className="font-semibold text-blue-600">
+                  Lat: {position[0]?.toFixed(4)}, Lng: {position[1]?.toFixed(4)}
+                </span>
+              </div>
+            </Popup>
+          </Marker>
 
-      <div className="absolute bottom-4 left-4 bg-white p-2 rounded-md shadow-md">
-        <strong>Lat:</strong> {position[0]?.toFixed(4)} | <strong>Lng:</strong> {position[1]?.toFixed(4)}
-      </div>
+          <ZoomControl position="bottomright" />
+          <div className="mp-div">{address}</div>
+        </MapContainer>
 
-      {/* Display fetched address */}
-      {address && (
-        <div className="absolute bottom-14 left-4 bg-white p-2 rounded-md shadow-md max-w-md">
-          <strong>Address:</strong> {address}
+        <div className="absolute bottom-4 left-4 bg-white p-2 rounded-md shadow-md">
+          <strong>Lat:</strong> {position[0]?.toFixed(4)} | <strong>Lng:</strong> {position[1]?.toFixed(4)}
         </div>
-      )}
 
-      {/* Loading Overlay */}
-      {loading && (
-        <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center text-white">
-          <div className="animate-pulse">Locating you...</div>
-        </div>
-      )}
-    </MapWrapper>
+        {/* Display fetched address */}
+        {address && (
+          <div className="absolute bottom-14 left-4 bg-white p-2 rounded-md shadow-md max-w-md">
+            <strong>Address:</strong> {address}
+          </div>
+        )}
+
+        {/* Loading Overlay */}
+        {loading && (
+          <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center text-white">
+            <div className="animate-pulse">Locating you...</div>
+          </div>
+        )}
+      </MapWrapper>
+    </div>
   );
 };
 
