@@ -82,7 +82,6 @@ const LocationMap = ({ latMap, addressMap, longMap, setLat, setLong, setAddress,
         setSearchQuery(address);
 
         updateLocation({
-            radius: 1000,
             lat: position[0],
             lon: position[1],
             address: address,
