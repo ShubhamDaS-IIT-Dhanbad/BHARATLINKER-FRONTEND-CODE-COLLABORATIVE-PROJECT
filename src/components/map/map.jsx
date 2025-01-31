@@ -1,11 +1,12 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import { MapContainer, TileLayer, Marker, Popup, useMapEvents, ZoomControl } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, ZoomControl, useMapEvents } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { FiMapPin } from "react-icons/fi";
 import styled from "@emotion/styled";
 import debounce from "lodash.debounce";
 import './map.css'
+
 // Styled map container
 const MapWrapper = styled.div`
   height: 100vh;
@@ -29,23 +30,6 @@ const createCustomIcon = (color = "#FF4757") =>
     iconAnchor: [21, 42],
   });
 
-// Function to track map movement
-const MapEventsHandler = ({ setPosition, mapRef }) => {
-  useMapEvents({
-    moveend: () => {
-      const map = mapRef.current;
-      if (map) {
-        const center = map.getCenter();
-        setPosition([center.lat, center.lng]);
-      }
-    },
-    click: (e) => {
-      setPosition([e.latlng.lat, e.latlng.lng]);
-    },
-  });
-  return null;
-};
-
 const LocationMap = () => {
   const [position, setPosition] = useState([23.8100428, 86.4425328]); // Default position
   const [loading, setLoading] = useState(true);
@@ -57,13 +41,11 @@ const LocationMap = () => {
     abortControllerRef.current.abort();
     abortControllerRef.current = new AbortController();
     try {
-
       const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`;
       const response = await fetch(url);
       if (!response.ok) throw new Error("Network response was not ok");
       const data = await response.json();
       setAddress(data.display_name);
-
     } catch (error) {
       if (error.name !== "AbortError") {
         console.error("Error fetching address:", error);
@@ -112,6 +94,18 @@ const LocationMap = () => {
     getCurrentLocation();
   }, [getCurrentLocation]);
 
+  // Handle click event to update position
+  const MapClickHandler = () => {
+    const map = useMapEvents({
+      click(event) {
+        const { lat, lng } = event.latlng;
+        setPosition([lat, lng]);
+        debouncedGetAddress(lat, lng); // Fetch address for clicked position
+      }
+    });
+    return null; // This component is only used for the map events
+  };
+
   return (
     <MapWrapper>
       <MapContainer
@@ -125,8 +119,9 @@ const LocationMap = () => {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         />
-
-        <MapEventsHandler setPosition={setPosition} mapRef={mapRef} />
+        
+        {/* Map click handler */}
+        <MapClickHandler />
 
         <Marker position={position} icon={createCustomIcon("#25CCF7")} draggable={true}>
           <Popup>
@@ -141,15 +136,7 @@ const LocationMap = () => {
 
         <ZoomControl position="bottomright" />
         <div className="mp-div">{address}</div>
-
       </MapContainer>
-
-
-
-    
-
-
-
 
       <div className="absolute bottom-4 left-4 bg-white p-2 rounded-md shadow-md">
         <strong>Lat:</strong> {position[0]?.toFixed(4)} | <strong>Lng:</strong> {position[1]?.toFixed(4)}
