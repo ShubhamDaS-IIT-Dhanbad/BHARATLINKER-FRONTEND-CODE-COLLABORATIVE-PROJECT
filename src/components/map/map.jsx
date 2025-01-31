@@ -1,17 +1,18 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMapEvents, ZoomControl } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { FiMapPin } from "react-icons/fi";
 import styled from "@emotion/styled";
-
+import debounce from "lodash.debounce";
+import './map.css'
 // Styled map container
 const MapWrapper = styled.div`
   height: 100vh;
   width: 100%;
   border-radius: 20px;
   overflow: hidden;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
   position: relative;
 `;
 
@@ -28,22 +29,18 @@ const createCustomIcon = (color = "#FF4757") =>
     iconAnchor: [21, 42],
   });
 
-// Component to handle clicks and drags
-const MapInteractionHandler = ({ setPosition, mapRef }) => {
+// Function to track map movement
+const MapEventsHandler = ({ setPosition, mapRef }) => {
   useMapEvents({
-    click: (e) => {
-      const { lat, lng } = e.latlng;
-      setPosition([lat, lng]); // Set marker position on click
-      if (mapRef.current) {
-        mapRef.current.flyTo([lat, lng], 13, { animate: true }); // Smooth movement
-      }
-    },
-    dragend: () => {
+    moveend: () => {
       const map = mapRef.current;
       if (map) {
         const center = map.getCenter();
-        setPosition([center.lat, center.lng]); // Update marker position after sliding
+        setPosition([center.lat, center.lng]);
       }
+    },
+    click: (e) => {
+      setPosition([e.latlng.lat, e.latlng.lng]);
     },
   });
   return null;
@@ -52,18 +49,44 @@ const MapInteractionHandler = ({ setPosition, mapRef }) => {
 const LocationMap = () => {
   const [position, setPosition] = useState([23.8100428, 86.4425328]); // Default position
   const [loading, setLoading] = useState(true);
+  const [address, setAddress] = useState("");
   const mapRef = useRef();
+  const abortControllerRef = useRef(new AbortController());
+
+  const getAddressFromLatLng = useCallback(async (lat, lon) => {
+    abortControllerRef.current.abort();
+    abortControllerRef.current = new AbortController();
+    try {
+
+      const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`;
+      const response = await fetch(url);
+      if (!response.ok) throw new Error("Network response was not ok");
+      const data = await response.json();
+      setAddress(data.display_name);
+
+    } catch (error) {
+      if (error.name !== "AbortError") {
+        console.error("Error fetching address:", error);
+      }
+    }
+  }, []);
+
+  // Debounced function to fetch address
+  const debouncedGetAddress = useRef(
+    debounce((lat, lon) => getAddressFromLatLng(lat, lon), 1000) // 1-second debounce
+  ).current;
 
   // Function to get user's current location
-  const getCurrentLocation = () => {
+  const getCurrentLocation = useCallback(() => {
     setLoading(true);
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (location) => {
           const { latitude, longitude } = location.coords;
           setPosition([latitude, longitude]);
+          debouncedGetAddress(latitude, longitude); // Fetch address for current location
           if (mapRef.current) {
-            mapRef.current.flyTo([latitude, longitude], 13, { animate: true }); // Smooth movement
+            mapRef.current.flyTo([latitude, longitude], 13, { animate: true });
           }
           setLoading(false);
         },
@@ -72,12 +95,22 @@ const LocationMap = () => {
           setLoading(false);
         }
       );
+    } else {
+      setLoading(false);
     }
-  };
+  }, [debouncedGetAddress]);
 
+  // Fetch address when position changes
+  useEffect(() => {
+    if (position) {
+      debouncedGetAddress(position[0], position[1]);
+    }
+  }, [position, debouncedGetAddress]);
+
+  // Get current location on component mount
   useEffect(() => {
     getCurrentLocation();
-  }, []);
+  }, [getCurrentLocation]);
 
   return (
     <MapWrapper>
@@ -88,34 +121,46 @@ const LocationMap = () => {
         style={{ height: "100%", width: "100%" }}
         zoomControl={false}
       >
-        {/* OpenStreetMap Standard Tile Layer */}
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         />
 
-        {/* Detect map clicks & sliding */}
-        <MapInteractionHandler setPosition={setPosition} mapRef={mapRef} />
+        <MapEventsHandler setPosition={setPosition} mapRef={mapRef} />
 
-        {/* Marker at the selected position */}
-        <Marker position={position} icon={createCustomIcon("#25CCF7")} draggable={false}>
+        <Marker position={position} icon={createCustomIcon("#25CCF7")} draggable={true}>
           <Popup>
             <div>
               <FiMapPin className="inline-block mr-2" />
               <span className="font-semibold text-blue-600">
-                Lat: {position[0]}, Lng: {position[1]}
+                Lat: {position[0]?.toFixed(4)}, Lng: {position[1]?.toFixed(4)}
               </span>
             </div>
           </Popup>
         </Marker>
 
         <ZoomControl position="bottomright" />
+        <div className="mp-div">{address}</div>
+
       </MapContainer>
 
-      {/* Display latitude & longitude */}
+
+
+    
+
+
+
+
       <div className="absolute bottom-4 left-4 bg-white p-2 rounded-md shadow-md">
-        <strong>Lat:</strong> {position[0]} | <strong>Lng:</strong> {position[1]}
+        <strong>Lat:</strong> {position[0]?.toFixed(4)} | <strong>Lng:</strong> {position[1]?.toFixed(4)}
       </div>
+
+      {/* Display fetched address */}
+      {address && (
+        <div className="absolute bottom-14 left-4 bg-white p-2 rounded-md shadow-md max-w-md">
+          <strong>Address:</strong> {address}
+        </div>
+      )}
 
       {/* Loading Overlay */}
       {loading && (

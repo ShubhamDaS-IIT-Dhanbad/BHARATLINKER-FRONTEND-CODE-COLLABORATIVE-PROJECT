@@ -1,0 +1,7 @@
+.mp-div{
+    width: 90vw;
+    height: 60px;
+    background-color: pink;
+    position: fixed;bottom: 10px;
+    z-index: 999999;
+}
