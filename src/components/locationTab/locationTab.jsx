@@ -13,6 +13,7 @@ import './locationTab.css';
 
 
 function LocationTab({ setLocationTab }) {
+
     const [loading, setLoading] = useState(false);
     const [fetchingUserLocation, setFetchingUserLocation] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
@@ -20,11 +21,16 @@ function LocationTab({ setLocationTab }) {
 
     const [latMap, setLat] = useState('');
     const [longMap, setLong] = useState('');
+    const [radius, setRadius] = useState('');
     const [addressMap, setAddress] = useState('');
 
     const [showMap, setShowMap] = useState(false);
-
-    const { updateLocation, fetchLocationSuggestions } = useLocationFromCookie();
+    const { location, updateLocation, fetchLocationSuggestions } = useLocationFromCookie();
+    useEffect(() => {
+        if (location) {
+            setRadius(location.radius || '');
+        }
+    }, [location]);
 
     const handleSearch = useCallback(async () => {
         if (!searchQuery.trim()) return;
@@ -65,6 +71,9 @@ function LocationTab({ setLocationTab }) {
         setFetchingUserLocation(false);
     };
 
+
+    const predefinedRadiusOptions = [1, 2, 4, 5, 7, 9, 13, 15, 20, 30, 50, 100, 200];
+
     return (
         <>
             {showMap ? (
@@ -103,10 +112,10 @@ function LocationTab({ setLocationTab }) {
                             )}
                         </div>
 
-                        {loading  && 
-                        <div style={{ display: "flex", justifyContent: "center", alignItems: "center",padding:"20px" }}>
-                            <Oval height={20} width={20} color="green" ariaLabel="loading" />
-                        </div>}
+                        {loading &&
+                            <div style={{ display: "flex", justifyContent: "center", alignItems: "center", padding: "20px" }}>
+                                <Oval height={20} width={20} color="green" ariaLabel="loading" />
+                            </div>}
 
                         {suggestions.length > 0 && (
                             <div className="suggestions-list">
@@ -150,8 +159,28 @@ function LocationTab({ setLocationTab }) {
                                     )}
                                 </button>
                             </div>
-                        </div>}
-                </div>)}
+                        </div>
+                    }
+
+
+                    <div className="radius-control-container">
+                        <div className="radius-options">
+                            {predefinedRadiusOptions.map((option) => (
+                                <div
+                                    key={option}
+                                    className={`radius-btn ${radius === option ? 'selected' : ''}`}
+                                    onClick={() => {
+                                        updateLocation({ radius: Number(option) });
+                                        setRadius(option);
+                                    }}
+                                >
+                                    {option} km
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            )}
         </>
     );
 }
