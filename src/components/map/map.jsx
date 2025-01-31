@@ -22,7 +22,7 @@ const createCustomIcon = (color = "#4CAF50") =>
         iconAnchor: [11, 12],
     });
 
-const LocationMap = ({ latMap, addressMap, longMap, setLat, setLong, setAddress, setShowMap, setSearchQuery }) => {
+const LocationMap = ({ latMap,longMap, addressMap,setShowMap,setLocationTab }) => {
     const { updateLocation } = useLocationFromCookie();
     const [position, setPosition] = useState([latMap, longMap]);
     const [loading, setLoading] = useState(false);
@@ -76,11 +76,6 @@ const LocationMap = ({ latMap, addressMap, longMap, setLat, setLong, setAddress,
     };
 
     const handleConfirm = () => {
-        setLat(position[0]);
-        setLong(position[1]);
-        setAddress(address);
-        setSearchQuery(address);
-
         updateLocation({
             radius:5,
             lat: position[0],
@@ -94,6 +89,7 @@ const LocationMap = ({ latMap, addressMap, longMap, setLat, setLong, setAddress,
 
         setTimeout(() => {
             setLoadingConfirm(false);
+            setLocationTab(false);
             setShowMap(false);
         }, 1000);
     };
@@ -135,9 +131,9 @@ const LocationMap = ({ latMap, addressMap, longMap, setLat, setLong, setAddress,
                             <p className="map-address-text">{address}</p>
                         )}
                         <div className="map-confirm-btn" onClick={handleConfirm}>
-                            {loadingConfirm ? (
-                                <div className="map-address-oval">
-                                    <Oval height={20} width={20} color="green" secondaryColor="white" ariaLabel="loading" />
+                            {loadingConfirm? (
+                                <div style={{display:"flex",justifyContent:"center",alignItems:"center"}}>
+                                    <Oval height={20} width={20} color="white"  ariaLabel="loading" />
                                 </div>) : (
                                 "Confirm & Continue"
                             )}
