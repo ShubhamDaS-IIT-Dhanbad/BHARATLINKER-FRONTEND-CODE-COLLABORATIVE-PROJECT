@@ -2,36 +2,75 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import { MapContainer, TileLayer, Marker, Popup, ZoomControl, useMapEvents } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
-import { FiMapPin } from "react-icons/fi";
+import { FiMapPin, FiSearch, FiNavigation } from "react-icons/fi";
 import styled from "@emotion/styled";
 import debounce from "lodash.debounce";
-import './map.css'
+import './map.css';
+import { CiLocationOn } from "react-icons/ci";
 
-// Styled map container
 const MapWrapper = styled.div`
-  height: 100vh;
+  height: 65vh;
   width: 100%;
-  border-radius: 20px;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
   overflow: hidden;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   position: relative;
+  margin-top: 1rem;
 `;
 
-// Custom SVG marker
-const createCustomIcon = (color = "#FF4757") =>
+const SearchContainer = styled.div`
+  position: relative;
+  max-width: 600px;
+  margin: 0 auto;
+  margin-bottom: 1.5rem;
+`;
+
+const SearchInput = styled.input`
+  width: 100%;
+  padding: 12px 48px;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+
+  &:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+  }
+`;
+
+const AddressContainer = styled.div`
+  margin-top: 1.5rem;
+  padding: 16px;
+  background-color: #f8fafc;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+  font-size: 14px;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+`;
+
+const createCustomIcon = (color = "#3B82F6") =>
   L.divIcon({
     className: "custom-marker",
     html: `
     <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" style="fill:${color};height:42px;width:42px;">
-      <path d="M16 0c-5.523 0-10 4.477-10 10 0 10 10 22 10 22s10-12 10-22c0-5.523-4.477-10-10-10zm0 16c-3.314 0-6-2.686-6-6s2.686-6 6-6 6 2.686 6 6-2.686 6-6 6z"/>
+      <path d="M16 0c-5.523 0-10 4.477-10 10 0 10 10 22 10 22s10-12 10-22c0-5.523-4.477-10-10-10zm0 16c-3.314 0-6-2.686-6-6s2.686-6 6-6 6 2.686 6 6-2.686 6-6 6z" 
+            stroke="black" stroke-width="1"/>
     </svg>
   `,
-    iconSize: [42, 42],
-    iconAnchor: [21, 42],
+    iconSize: [30, 30],
+    iconAnchor: [11, 12],
   });
 
+
 const LocationMap = () => {
-  const [position, setPosition] = useState([23.8100428, 86.4425328]); // Default position
+  const [position, setPosition] = useState([23.8100428, 86.4425328]);
   const [loading, setLoading] = useState(true);
   const [address, setAddress] = useState("");
   const mapRef = useRef();
@@ -100,14 +139,69 @@ const LocationMap = () => {
       click(event) {
         const { lat, lng } = event.latlng;
         setPosition([lat, lng]);
-        debouncedGetAddress(lat, lng); // Fetch address for clicked position
+        debouncedGetAddress(lat, lng);
       }
     });
-    return null; // This component is only used for the map events
+    return null;
+  };
+
+
+
+
+  const [searchQuery, setSearchQuery] = useState("");
+  const [suggestions, setSuggestions] = useState([]);
+
+  const handleSearchChange = async (e) => {
+    const query = e.target.value;
+    setSearchQuery(query);
+    if (query.length > 2) {
+      const results = await fetchLocationSuggestions(query);
+      setSuggestions(results);
+    }
+  };
+
+  const handleSuggestionClick = (suggestion) => {
+    const [lat, lon] = [parseFloat(suggestion.lat), parseFloat(suggestion.lon)];
+    setPosition([lat, lon]);
+    setSearchQuery(suggestion.display_name);
+    setSuggestions([]);
+    mapRef.current.flyTo([lat, lon], 13, { animate: true });
   };
 
   return (
-    <div className="map-container">
+    <div className="max-w-4xl mx-auto px-4 py-8">
+      <SearchContainer>
+        <div className="relative">
+          <FiSearch className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+          <SearchInput
+            type="text"
+            placeholder="Search for location..."
+            value={searchQuery}
+            onChange={handleSearchChange}
+          />
+          <button
+            onClick={getCurrentLocation}
+            className="absolute right-3 top-1/2 -translate-y-1/2 p-1 hover:bg-gray-100 rounded-full"
+          >
+            <FiNavigation className="text-gray-600" />
+          </button>
+        </div>
+        
+        {suggestions.length > 0 && (
+          <div className="absolute z-10 w-full mt-1 bg-white rounded-md shadow-lg">
+            {suggestions.map((suggestion, index) => (
+              <div
+                key={index}
+                onClick={() => handleSuggestionClick(suggestion)}
+                className="px-4 py-2 hover:bg-gray-50 cursor-pointer text-sm text-gray-700"
+              >
+                {suggestion.display_name}
+              </div>
+            ))}
+          </div>
+        )}
+      </SearchContainer>
+
       <MapWrapper>
         <MapContainer
           ref={mapRef}
@@ -121,42 +215,32 @@ const LocationMap = () => {
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           />
 
-          {/* Map click handler */}
           <MapClickHandler />
 
-          <Marker position={position} icon={createCustomIcon("#25CCF7")} draggable={true}>
-            <Popup>
-              <div>
-                <FiMapPin className="inline-block mr-2" />
-                <span className="font-semibold text-blue-600">
-                  Lat: {position[0]?.toFixed(4)}, Lng: {position[1]?.toFixed(4)}
+          <Marker position={position} icon={createCustomIcon("white")} draggable={true}>
+            <Popup className="custom-popup">
+              <div className="flex items-center gap-2">
+                <FiMapPin className="text-blue-500" />
+                <span className="text-sm font-medium">
+                  Selected Location
                 </span>
               </div>
             </Popup>
           </Marker>
 
           <ZoomControl position="bottomright" />
-          <div className="mp-div">{address}</div>
         </MapContainer>
-
-        <div className="absolute bottom-4 left-4 bg-white p-2 rounded-md shadow-md">
-          <strong>Lat:</strong> {position[0]?.toFixed(4)} | <strong>Lng:</strong> {position[1]?.toFixed(4)}
-        </div>
-
-        {/* Display fetched address */}
-        {address && (
-          <div className="absolute bottom-14 left-4 bg-white p-2 rounded-md shadow-md max-w-md">
-            <strong>Address:</strong> {address}
-          </div>
-        )}
-
-        {/* Loading Overlay */}
-        {loading && (
-          <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center text-white">
-            <div className="animate-pulse">Locating you...</div>
-          </div>
-        )}
       </MapWrapper>
+
+      <AddressContainer>
+        <FiMapPin className="flex-shrink-0 text-blue-500" />
+        <div>
+          <p className="font-medium text-gray-900">{address}</p>
+          <p className="text-sm mt-1">
+            Latitude: {position[0]?.toFixed(4)}, Longitude: {position[1]?.toFixed(4)}
+          </p>
+        </div>
+      </AddressContainer>
     </div>
   );
 };
