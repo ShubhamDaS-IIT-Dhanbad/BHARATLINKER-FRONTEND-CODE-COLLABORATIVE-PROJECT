@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
-import {useNavigate} from 'react-router-dom';
-import { MapContainer, TileLayer, Marker, Popup,useMapEvents } from "react-leaflet";
+import { useNavigate } from 'react-router-dom';
+import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { FiMapPin, } from "react-icons/fi";
@@ -22,7 +22,7 @@ const createCustomIcon = (color = "#3B82F6") =>
 
 const LocationMap = () => {
   const navigate = useNavigate();
-  
+
   const [position, setPosition] = useState([23.8100428, 86.4425328]);
   const [loading, setLoading] = useState(true);
   const [address, setAddress] = useState("");
@@ -94,13 +94,15 @@ const LocationMap = () => {
       <div className="map-wrapper">
 
         <div className="map-back-bar">
-          <FaAngleLeft size={23} onClick={()=>{navigate(-1)}} className="map-back-bar-icon"/>
+          <FaAngleLeft size={23} onClick={() => { navigate(-1) }} className="map-back-bar-icon" />
           Location Information
         </div>
+
+
         <MapContainer
           ref={mapRef}
           center={position}
-          zoom={50}
+          zoom={10}
           style={{ height: "100%", width: "100%" }}
         >
           <TileLayer
@@ -123,14 +125,16 @@ const LocationMap = () => {
 
 
         <div className="map-address-container">
-          <FiMapPin className="map-address-icon" />
-          <div>
-            <p className="map-address-text">{address}</p>
-            <p className="map-coordinates">
-              Latitude: {position[0]?.toFixed(4)}, Longitude: {position[1]?.toFixed(4)}
-            </p>
+          <div className="map-address-content">
+            <div className="map-info">
+              <p className="map-address-text">{address}</p>
+            </div>
+            <div className="map-confirm-btn">
+              Confirm & Continue
+            </div>
           </div>
         </div>
+
 
       </div>
 

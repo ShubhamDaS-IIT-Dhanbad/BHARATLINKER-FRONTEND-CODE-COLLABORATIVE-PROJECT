@@ -46,14 +46,55 @@
 
 
 .map-address-container {
-    display: flex;
-    align-items: center;
-    position: absolute;
-    background-color: red;
-    bottom: 0;border-radius: 10px;
+    display: flex;align-items: center;
+    position: fixed;justify-content: center;
+    bottom: 0;
+    background-color: rgba(255, 255, 255, 0.21);
+    width: 100vw;
     z-index: 99999;
 }
-
+  
+  .map-address-content {
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+    border-radius: 8px;
+    padding: 12px;
+    border-radius: 10px;
+    width: calc(95vw - 24px);margin-bottom: 10px;
+  }
+  
+  .map-address-text {
+    font-size: 11px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+  }
+  
+  .map-coordinates {
+    font-size: 13px;
+    color: #777;
+  }
+  
+  .map-confirm-btn {
+    background-color: #4CAF50;
+    color: white;
+    font-size: 1rem;
+    font-weight: bold;
+    padding: 10px;
+    text-align: center;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+  }
+  
+  .map-confirm-btn:hover {
+    background-color: #45a049;
+  }
+  
+  .map-confirm-btn:active {
+    background-color: #3e8e41;
+  }
+  
 .map-address-icon {
     color: #1e7ac9;
     margin-right: 10px;
