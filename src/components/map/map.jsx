@@ -28,12 +28,15 @@ const createCustomIcon = (color = "#FF4757") =>
     iconAnchor: [21, 42],
   });
 
-// Component to track map movement
-const MapEventHandler = ({ setPosition }) => {
+// Function to track sliding movement
+const MapSlideHandler = ({ setPosition, mapRef }) => {
   useMapEvents({
-    moveend: (e) => {
-      const { lat, lng } = e.target.getCenter();
-      setPosition([lat, lng]); // Update state with new marker position
+    dragend: () => {
+      const map = mapRef.current;
+      if (map) {
+        const center = map.getCenter();
+        setPosition([center.lat, center.lng]); // Update marker position after sliding
+      }
     },
   });
   return null;
@@ -52,6 +55,9 @@ const LocationMap = () => {
         (location) => {
           const { latitude, longitude } = location.coords;
           setPosition([latitude, longitude]);
+          if (mapRef.current) {
+            mapRef.current.flyTo([latitude, longitude], 13, { animate: true }); // Smooth movement
+          }
           setLoading(false);
         },
         (error) => {
@@ -81,11 +87,11 @@ const LocationMap = () => {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         />
 
-        {/* Update position when the user moves the map */}
-        <MapEventHandler setPosition={setPosition} />
+        {/* Detect sliding and update marker */}
+        <MapSlideHandler setPosition={setPosition} mapRef={mapRef} />
 
-        {/* Draggable Marker */}
-        <Marker position={position} icon={createCustomIcon("#25CCF7")} draggable={true}>
+        {/* Static Marker at the center of the screen */}
+        <Marker position={position} icon={createCustomIcon("#25CCF7")} draggable={false}>
           <Popup>
             <div>
               <FiMapPin className="inline-block mr-2" />
