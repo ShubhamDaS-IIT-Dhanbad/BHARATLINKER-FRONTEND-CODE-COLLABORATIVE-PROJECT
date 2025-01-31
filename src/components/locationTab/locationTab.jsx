@@ -44,20 +44,6 @@ function LocationTab({ setLocationTab }) {
         }
     };
 
-    const saveAndContinue = () => {
-        console.log(latMap,longMap,addressMap
-        )
-        setSearchQuery(addressMap);
-        updateLocation({
-            radius,
-            lat: latMap,
-            lon: longMap,
-            address: addressMap,
-            country: '',
-            state: '',
-        });
-        setShowMap(false);
-    };
 
     const handleAddressClick = (suggestion) => {
         
@@ -89,7 +75,6 @@ function LocationTab({ setLocationTab }) {
                 setLong={setLong}
                 setAddress={setAddress}
                 setShowMap={setShowMap} 
-                saveAndContinue={saveAndContinue}
                 setSearchQuery={setSearchQuery}
             />
             

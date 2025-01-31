@@ -7,6 +7,7 @@ import debounce from "lodash.debounce";
 import "./map.css";
 import { FaAngleLeft } from "react-icons/fa6";
 import { Oval } from "react-loader-spinner";
+import useLocationFromCookie from '../../hooks/useLocationFromCookie.jsx';
 
 const createCustomIcon = (color = "#4CAF50") =>
     L.divIcon({
@@ -21,9 +22,11 @@ const createCustomIcon = (color = "#4CAF50") =>
         iconAnchor: [11, 12],
     });
 
-const LocationMap = ({ latMap, saveAndContinue, addressMap, longMap, setLat, setLong, setAddress, setShowMap,setSearchQuery }) => {
+const LocationMap = ({ latMap, addressMap, longMap, setLat, setLong, setAddress, setShowMap, setSearchQuery }) => {
+    const { updateLocation } = useLocationFromCookie();
     const [position, setPosition] = useState([latMap, longMap]);
     const [loading, setLoading] = useState(false);
+    const [loadingConfirm, setLoadingConfirm] = useState(false); // New state for button loader
     const [address, setAddressState] = useState(addressMap);
     const mapRef = useRef(null);
     const abortControllerRef = useRef(new AbortController());
@@ -58,25 +61,6 @@ const LocationMap = ({ latMap, saveAndContinue, addressMap, longMap, setLat, set
         };
     }, [debouncedGetAddress]);
 
-    const getCurrentLocation = useCallback(() => {
-        if (!navigator.geolocation) return;
-
-        setLoading(true);
-        navigator.geolocation.getCurrentPosition(
-            ({ coords: { latitude, longitude } }) => {
-                setPosition([latitude, longitude]);
-                debouncedGetAddress(latitude, longitude);
-                if (mapRef.current) {
-                    mapRef.current.setView([latitude, longitude], 13, { animate: true });
-                }
-            },
-            (error) => {
-                console.error("Error getting location: ", error);
-                setLoading(false);
-            }
-        );
-    }, [debouncedGetAddress]);
-
     const MapClickHandler = () => {
         useMapEvents({
             click(event) {
@@ -93,7 +77,22 @@ const LocationMap = ({ latMap, saveAndContinue, addressMap, longMap, setLat, set
         setLong(position[1]);
         setAddress(address);
         setSearchQuery(address);
-        saveAndContinue();
+    
+        updateLocation({
+            radius: 1000, // Example radius value
+            lat: position[0],
+            lon: position[1],
+            address: address,
+            country: '',
+            state: '',
+        });
+    
+        setLoadingConfirm(true); // Start loading spinner
+    
+        setTimeout(() => {
+            setLoadingConfirm(false);
+            setShowMap(false);
+        }, 1000); // Hide map after 1 second
     };
 
     return (
@@ -133,7 +132,11 @@ const LocationMap = ({ latMap, saveAndContinue, addressMap, longMap, setLat, set
                             <p className="map-address-text">{address}</p>
                         )}
                         <div className="map-confirm-btn" onClick={handleConfirm}>
-                            Confirm & Continue
+                            {loadingConfirm ? (
+                                <Oval height={20} width={20} color="white" secondaryColor="green" ariaLabel="loading" />
+                            ) : (
+                                "Confirm & Continue"
+                            )}
                         </div>
                     </div>
                 </div>
