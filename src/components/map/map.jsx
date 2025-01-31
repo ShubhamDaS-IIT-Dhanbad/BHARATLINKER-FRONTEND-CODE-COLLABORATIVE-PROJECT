@@ -4,7 +4,7 @@ import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { FiMapPin } from "react-icons/fi";
 import debounce from "lodash.debounce";
-import './map.css';
+import "./map.css";
 import { FaAngleLeft } from "react-icons/fa6";
 import { Oval } from "react-loader-spinner";
 
@@ -21,21 +21,24 @@ const createCustomIcon = (color = "#4CAF50") =>
         iconAnchor: [11, 12],
     });
 
-const LocationMap = ({ latMap, saveAndContinue, addressMap, longMap, setLat, setLong, setAddress, setShowMap }) => {
+const LocationMap = ({ latMap, saveAndContinue, addressMap, longMap, setLat, setLong, setAddress, setShowMap,setSearchQuery }) => {
     const [position, setPosition] = useState([latMap, longMap]);
     const [loading, setLoading] = useState(false);
     const [address, setAddressState] = useState(addressMap);
-    const mapRef = useRef();
+    const mapRef = useRef(null);
     const abortControllerRef = useRef(new AbortController());
 
-    const getAddressFromLatLng = useCallback(async (lat, lon) => {
+    const getAddressFromLatLng = async (lat, lon) => {
         abortControllerRef.current.abort();
         abortControllerRef.current = new AbortController();
+        setLoading(true);
+
         try {
-            setLoading(true);
-            const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`;
-            const response = await fetch(url);
-            if (!response.ok) throw new Error("Network response was not ok");
+            const response = await fetch(
+                `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`,
+                { signal: abortControllerRef.current.signal }
+            );
+            if (!response.ok) throw new Error("Network error");
             const data = await response.json();
             setAddressState(data.display_name);
         } catch (error) {
@@ -45,32 +48,33 @@ const LocationMap = ({ latMap, saveAndContinue, addressMap, longMap, setLat, set
         } finally {
             setLoading(false);
         }
-    }, []);
+    };
 
-    const debouncedGetAddress = useRef(
-        debounce((lat, lon) => getAddressFromLatLng(lat, lon), 1000)
-    ).current;
+    const debouncedGetAddress = useRef(debounce(getAddressFromLatLng, 1000)).current;
+
+    useEffect(() => {
+        return () => {
+            debouncedGetAddress.cancel();
+        };
+    }, [debouncedGetAddress]);
 
     const getCurrentLocation = useCallback(() => {
+        if (!navigator.geolocation) return;
+
         setLoading(true);
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                (location) => {
-                    const { latitude, longitude } = location.coords;
-                    setPosition([latitude, longitude]);
-                    debouncedGetAddress(latitude, longitude);
-                    if (mapRef.current) {
-                        mapRef.current.flyTo([latitude, longitude], 13, { animate: true });
-                    }
-                },
-                (error) => {
-                    console.error("Error getting location: ", error);
-                    setLoading(false);
+        navigator.geolocation.getCurrentPosition(
+            ({ coords: { latitude, longitude } }) => {
+                setPosition([latitude, longitude]);
+                debouncedGetAddress(latitude, longitude);
+                if (mapRef.current) {
+                    mapRef.current.setView([latitude, longitude], 13, { animate: true });
                 }
-            );
-        } else {
-            setLoading(false);
-        }
+            },
+            (error) => {
+                console.error("Error getting location: ", error);
+                setLoading(false);
+            }
+        );
     }, [debouncedGetAddress]);
 
     const MapClickHandler = () => {
@@ -88,26 +92,24 @@ const LocationMap = ({ latMap, saveAndContinue, addressMap, longMap, setLat, set
         setLat(position[0]);
         setLong(position[1]);
         setAddress(address);
-        console.log(address);
-        // saveAndContinue();
+        setSearchQuery(address);
+        saveAndContinue();
     };
 
     return (
         <div className="map-parent-container">
-            
             <div className="map-back-bar">
                 <FaAngleLeft size={23} onClick={() => setShowMap(false)} className="map-back-bar-icon" />
                 Location Information
             </div>
 
-
             <div className="map-wrapper">
                 <MapContainer
-                    ref={mapRef}
                     center={position}
                     zoom={10}
                     style={{ height: "100%", width: "100%" }}
                     zoomControl={false}
+                    whenCreated={(map) => (mapRef.current = map)}
                 >
                     <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
                     <MapClickHandler />
@@ -123,15 +125,13 @@ const LocationMap = ({ latMap, saveAndContinue, addressMap, longMap, setLat, set
 
                 <div className="map-address-container">
                     <div className="map-address-content">
-                        <div>
-                            {loading ? (
-                                <div className="map-address-oval">
-                                    <Oval height={20} width={20} color="green" secondaryColor="white" ariaLabel="loading" />
-                                </div>
-                            ) : (
-                                <p className="map-address-text">{address}</p>
-                            )}
-                        </div>
+                        {loading ? (
+                            <div className="map-address-oval">
+                                <Oval height={20} width={20} color="green" secondaryColor="white" ariaLabel="loading" />
+                            </div>
+                        ) : (
+                            <p className="map-address-text">{address}</p>
+                        )}
                         <div className="map-confirm-btn" onClick={handleConfirm}>
                             Confirm & Continue
                         </div>

@@ -34,7 +34,9 @@ const Home = () => {
 
     return (
         <>
-            <HomePageNavbar headerTitle={"Bharat | Linker"} />
+            <div id="productSearchPage-container-top">
+                <HomePageNavbar headerTitle={"Bharat | Linker"} />
+            </div>
             <div id="home-div" style={{
                 display: 'flex',
                 flexDirection: 'column',
@@ -61,7 +63,7 @@ const Home = () => {
                 <FooterButton icon={<MdOutlineStore size={37} />} label="Shop" onClick={() => navigate('/shop')} />
                 <FooterButton icon={<MdOutlineAdminPanelSettings size={37} />} label="Retailer" onClick={handleRetailerClick} />
             </div>
-            
+
         </>
     );
 };

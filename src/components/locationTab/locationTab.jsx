@@ -45,14 +45,8 @@ function LocationTab({ setLocationTab }) {
     };
 
     const saveAndContinue = () => {
-        console.log({
-            radius,
-            lat: latMap,
-            lon: longMap,
-            address: addressMap,
-            country: '',
-            state: '',
-        })
+        console.log(latMap,longMap,addressMap
+        )
         setSearchQuery(addressMap);
         updateLocation({
             radius,
@@ -66,6 +60,7 @@ function LocationTab({ setLocationTab }) {
     };
 
     const handleAddressClick = (suggestion) => {
+        
         setSearchQuery(suggestion.label);
         setSuggestions([]);
         setLat(suggestion.lat);
@@ -87,15 +82,17 @@ function LocationTab({ setLocationTab }) {
         <>
             {showMap ? (
                 <Map
-                    latMap={latMap}
-                    saveAndContinue={saveAndContinue}
-                    addressMap={addressMap}
-                    longMap={longMap}
-                    setLat={setLat}
-                    setLong={setLong}
-                    setAddress={setAddress}
-                    setShowMap={setShowMap}
-                />
+                latMap={latMap}
+                longMap={longMap}
+                addressMap={addressMap}
+                setLat={setLat}
+                setLong={setLong}
+                setAddress={setAddress}
+                setShowMap={setShowMap} 
+                saveAndContinue={saveAndContinue}
+                setSearchQuery={setSearchQuery}
+            />
+            
             ) : (
                 <div className="location-tab-overlay">
                     <div className="map-back-bar">

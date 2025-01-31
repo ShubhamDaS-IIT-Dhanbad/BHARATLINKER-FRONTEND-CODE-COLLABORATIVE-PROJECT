@@ -10,6 +10,35 @@
     margin-top: 20px;border-radius: 20px;
     display:flex;flex-direction: column;
 }
+
+
+
+
+
+
+
+
+#productSearchPage-container-top {
+    width: 100%;
+    position: fixed;
+    top: 0;
+    display: flex;background-color: transparent;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+#productSearchPage-container-top ::-webkit-scrollbar{
+    width: 0px;height: 0px;
+}
+
+
+
+
+
+
+
+
+
 .home-location-not-present-message{
     display: flex;justify-content: center;align-items: center;
     height: 50px;
