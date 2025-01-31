@@ -7,6 +7,7 @@ import { FiMapPin } from "react-icons/fi";
 import debounce from "lodash.debounce";
 import './map.css';
 import { FaAngleLeft } from "react-icons/fa6";
+import { Oval } from "react-loader-spinner";
 
 const createCustomIcon = (color = "#4CAF50") =>
   L.divIcon({
@@ -21,12 +22,11 @@ const createCustomIcon = (color = "#4CAF50") =>
     iconAnchor: [11, 12],
   });
 
-const LocationMap = () => {
+const LocationMap = ({ setLat, setLong, setAddress }) => {
   const navigate = useNavigate();
-
   const [position, setPosition] = useState([23.8100428, 86.4425328]);
   const [loading, setLoading] = useState(true);
-  const [address, setAddress] = useState("");
+  const [address, setAddressState] = useState("");
   const mapRef = useRef();
   const abortControllerRef = useRef(new AbortController());
 
@@ -34,15 +34,18 @@ const LocationMap = () => {
     abortControllerRef.current.abort();
     abortControllerRef.current = new AbortController();
     try {
+      setLoading(true);
       const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`;
       const response = await fetch(url);
       if (!response.ok) throw new Error("Network response was not ok");
       const data = await response.json();
-      setAddress(data.display_name);
+      setAddressState(data.display_name);
     } catch (error) {
       if (error.name !== "AbortError") {
         console.error("Error fetching address:", error);
       }
+    } finally {
+      setLoading(false);
     }
   }, []);
 
@@ -61,7 +64,6 @@ const LocationMap = () => {
           if (mapRef.current) {
             mapRef.current.flyTo([latitude, longitude], 13, { animate: true });
           }
-          setLoading(false);
         },
         (error) => {
           console.error("Error getting location: ", error);
@@ -78,7 +80,7 @@ const LocationMap = () => {
   }, [getCurrentLocation]);
 
   const MapClickHandler = () => {
-    const map = useMapEvents({
+    useMapEvents({
       click(event) {
         const { lat, lng } = event.latlng;
         setPosition([lat, lng]);
@@ -88,15 +90,20 @@ const LocationMap = () => {
     return null;
   };
 
+  const handleConfirm = () => {
+    setLat(position[0]);
+    setLong(position[1]);
+    setAddress(address);
+    navigate(-1);
+  };
+
   return (
     <>
       <div className="map-back-bar">
-        <FaAngleLeft size={23} onClick={() => { navigate(-1) }} className="map-back-bar-icon" />
+        <FaAngleLeft size={23} onClick={() => navigate(-1)} className="map-back-bar-icon" />
         Location Information
       </div>
       <div className="map-wrapper">
-
-
         <MapContainer
           ref={mapRef}
           center={position}
@@ -104,9 +111,7 @@ const LocationMap = () => {
           style={{ height: "100%", width: "100%" }}
           zoomControl={false} // Disable zoom controls
         >
-          <TileLayer
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          />
+          <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
 
           <MapClickHandler />
 
@@ -118,15 +123,18 @@ const LocationMap = () => {
               </div>
             </Popup>
           </Marker>
-
         </MapContainer>
 
         <div className="map-address-container">
           <div className="map-address-content">
-            <div className="map-info">
-              <p className="map-address-text">{address}</p>
+            <div >
+              {loading ? (
+               <div className="map-address-oval"> <Oval height={20} width={20} color="green" secondaryColor="white" ariaLabel="loading" /></div>
+              ) : (
+                <p className="map-address-text">{address}</p>
+              )}
             </div>
-            <div className="map-confirm-btn">
+            <div className="map-confirm-btn" onClick={handleConfirm}>
               Confirm & Continue
             </div>
           </div>

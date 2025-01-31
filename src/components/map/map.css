@@ -100,13 +100,11 @@
     margin-right: 10px;
 }
 
-.map-address-text {
-    font-weight: bold;
-    color: #333;
-}
-
 .map-coordinates {
     font-size: 12px;
     color: #666;
     margin-top: 5px;
+}
+.map-address-oval{padding-bottom: 10px;
+  display: flex;justify-content: center;align-items: center;
 }
