@@ -28,9 +28,16 @@ const createCustomIcon = (color = "#FF4757") =>
     iconAnchor: [21, 42],
   });
 
-// Function to track sliding movement
-const MapSlideHandler = ({ setPosition, mapRef }) => {
+// Component to handle clicks and drags
+const MapInteractionHandler = ({ setPosition, mapRef }) => {
   useMapEvents({
+    click: (e) => {
+      const { lat, lng } = e.latlng;
+      setPosition([lat, lng]); // Set marker position on click
+      if (mapRef.current) {
+        mapRef.current.flyTo([lat, lng], 13, { animate: true }); // Smooth movement
+      }
+    },
     dragend: () => {
       const map = mapRef.current;
       if (map) {
@@ -87,10 +94,10 @@ const LocationMap = () => {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         />
 
-        {/* Detect sliding and update marker */}
-        <MapSlideHandler setPosition={setPosition} mapRef={mapRef} />
+        {/* Detect map clicks & sliding */}
+        <MapInteractionHandler setPosition={setPosition} mapRef={mapRef} />
 
-        {/* Static Marker at the center of the screen */}
+        {/* Marker at the selected position */}
         <Marker position={position} icon={createCustomIcon("#25CCF7")} draggable={false}>
           <Popup>
             <div>
