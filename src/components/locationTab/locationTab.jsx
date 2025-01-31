@@ -21,7 +21,7 @@ function LocationTab({ setLocationTab }) {
     const [radius, setRadius] = useState('');
     const [suggestions, setSuggestions] = useState([]);
 
-    const { location, updateLocation, fetchLocationSuggestions, fetchCurrentLocation } = useLocationFromCookie();
+    const { location, updateLocation, fetchLocationSuggestions } = useLocationFromCookie();
 
     useEffect(() => {
         if (location) {
@@ -46,20 +46,33 @@ function LocationTab({ setLocationTab }) {
 
 
     const handleAddressClick = (suggestion) => {
-        
+
         setSearchQuery(suggestion.label);
         setSuggestions([]);
         setLat(suggestion.lat);
         setLong(suggestion.lon);
         setAddress(suggestion.label);
-        setShowMap(true); 
+        setShowMap(true);
     };
 
     const handleUseCurrentLocation = async () => {
         setFetchingUserLocation(true);
-        const response=await fetchCurrentLocation();
+
+        const position = await new Promise((resolve, reject) => {
+            navigator.geolocation.getCurrentPosition(resolve, reject, {
+                enableHighAccuracy: true,
+                timeout: 10000,
+                maximumAge: 0,
+            });
+        });
+
+        const { latitude, longitude } = position.coords;
+        setLat(latitude);
+        setLong(longitude);
+        setAddress('');
+        setShowMap(true);
         setFetchingUserLocation(false);
-        console.log(response,location)
+        console.log(position)
     };
 
     const predefinedRadiusOptions = [1, 2, 4, 5, 7, 9, 13, 15, 20, 30, 50, 100, 200];
@@ -68,16 +81,16 @@ function LocationTab({ setLocationTab }) {
         <>
             {showMap ? (
                 <Map
-                latMap={latMap}
-                longMap={longMap}
-                addressMap={addressMap}
-                setLat={setLat}
-                setLong={setLong}
-                setAddress={setAddress}
-                setShowMap={setShowMap} 
-                setSearchQuery={setSearchQuery}
-            />
-            
+                    latMap={latMap}
+                    longMap={longMap}
+                    addressMap={addressMap}
+                    setLat={setLat}
+                    setLong={setLong}
+                    setAddress={setAddress}
+                    setShowMap={setShowMap}
+                    setSearchQuery={setSearchQuery}
+                />
+
             ) : (
                 <div className="location-tab-overlay">
                     <div className="map-back-bar">

@@ -26,7 +26,7 @@ const LocationMap = ({ latMap, addressMap, longMap, setLat, setLong, setAddress,
     const { updateLocation } = useLocationFromCookie();
     const [position, setPosition] = useState([latMap, longMap]);
     const [loading, setLoading] = useState(false);
-    const [loadingConfirm, setLoadingConfirm] = useState(false); // New state for button loader
+    const [loadingConfirm, setLoadingConfirm] = useState(false);
     const [address, setAddressState] = useState(addressMap);
     const mapRef = useRef(null);
     const abortControllerRef = useRef(new AbortController());
@@ -56,6 +56,9 @@ const LocationMap = ({ latMap, addressMap, longMap, setLat, setLong, setAddress,
     const debouncedGetAddress = useRef(debounce(getAddressFromLatLng, 1000)).current;
 
     useEffect(() => {
+        if(address.length==0 && !loading && !loadingConfirm){
+            getAddressFromLatLng(latMap,longMap);
+        }
         return () => {
             debouncedGetAddress.cancel();
         };
@@ -77,22 +80,22 @@ const LocationMap = ({ latMap, addressMap, longMap, setLat, setLong, setAddress,
         setLong(position[1]);
         setAddress(address);
         setSearchQuery(address);
-    
+
         updateLocation({
-            radius: 1000, // Example radius value
+            radius: 1000,
             lat: position[0],
             lon: position[1],
             address: address,
             country: '',
             state: '',
         });
-    
-        setLoadingConfirm(true); // Start loading spinner
-    
+
+        setLoadingConfirm(true);
+
         setTimeout(() => {
             setLoadingConfirm(false);
             setShowMap(false);
-        }, 1000); // Hide map after 1 second
+        }, 1000);
     };
 
     return (
@@ -133,8 +136,9 @@ const LocationMap = ({ latMap, addressMap, longMap, setLat, setLong, setAddress,
                         )}
                         <div className="map-confirm-btn" onClick={handleConfirm}>
                             {loadingConfirm ? (
-                                <Oval height={20} width={20} color="white" secondaryColor="green" ariaLabel="loading" />
-                            ) : (
+                                <div className="map-address-oval">
+                                    <Oval height={20} width={20} color="green" secondaryColor="white" ariaLabel="loading" />
+                                </div>) : (
                                 "Confirm & Continue"
                             )}
                         </div>

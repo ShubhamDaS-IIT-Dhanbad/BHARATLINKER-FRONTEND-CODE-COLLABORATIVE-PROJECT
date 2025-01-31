@@ -185,12 +185,13 @@ const useLocationManager = () => {
     }
   }, [updateLocation]);
 
+
   return {
     location,
     getLocationFromCookie,
     updateLocation,
     fetchLocationSuggestions,
-    fetchCurrentLocation,
+    fetchCurrentLocation
   };
 };
 
