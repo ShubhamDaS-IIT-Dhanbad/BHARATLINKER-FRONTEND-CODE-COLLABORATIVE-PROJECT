@@ -6,9 +6,15 @@ import { ThreeDots } from 'react-loader-spinner';
 import { IoIosCloseCircleOutline } from "react-icons/io";
 import { FaAngleLeft } from "react-icons/fa6";
 import useLocationFromCookie from '../../hooks/useLocationFromCookie.jsx';
+import Map from '../map/map.jsx';
 import './locationTab.css';
 
 function LocationTab({ setLocationTab }) {
+    const [showMap, setShowMap] = useState(false);
+    const [latMap, setLat] = useState('');
+    const [longMap, setLong] = useState('');
+    const [addressMap, setAddress] = useState('');
+
     const [loading, setLoading] = useState(false);
     const [fetchingUserLocation, setFetchingUserLocation] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
@@ -38,95 +44,128 @@ function LocationTab({ setLocationTab }) {
         }
     };
 
+    const saveAndContinue = () => {
+        console.log({
+            radius,
+            lat: latMap,
+            lon: longMap,
+            address: addressMap,
+            country: '',
+            state: '',
+        })
+        setSearchQuery(addressMap);
+        updateLocation({
+            radius,
+            lat: latMap,
+            lon: longMap,
+            address: addressMap,
+            country: '',
+            state: '',
+        });
+        setShowMap(false);
+    };
+
     const handleAddressClick = (suggestion) => {
         setSearchQuery(suggestion.label);
         setSuggestions([]);
-        updateLocation({
-            radius,
-            lat: suggestion.lat,
-            lon: suggestion.lon,
-            address: suggestion.label,
-            country: suggestion.country,
-            state: suggestion.state,
-        });
-        setLocationTab(false);
+        setLat(suggestion.lat);
+        setLong(suggestion.lon);
+        setAddress(suggestion.label);
+        setShowMap(true); 
     };
 
     const handleUseCurrentLocation = async () => {
         setFetchingUserLocation(true);
-        await fetchCurrentLocation();
+        const response=await fetchCurrentLocation();
         setFetchingUserLocation(false);
+        console.log(response,location)
     };
 
-    const predefinedRadiusOptions = [1, 2, 4, 5, 7, 9, 13, 15, 20,30,50,100,200];
+    const predefinedRadiusOptions = [1, 2, 4, 5, 7, 9, 13, 15, 20, 30, 50, 100, 200];
 
     return (
-        <div className="location-tab-overlay">
-            <div className="map-back-bar">
-                <FaAngleLeft size={23} onClick={() => setLocationTab(false)} className="map-back-bar-icon" />
-                Select Your Location
-            </div>
-            <div className="location-tab-container">
-                <div className="search-container">
-                    <div className="search-input-container">
-                        <IoSearch className="search-icon" size={20} />
-                        <input
-                            className="search-input"
-                            placeholder="Search your city / pincode"
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                            onKeyDown={handleKeyDownSearch}
-                            aria-label="Search for location"
-                        />
-                        {searchQuery && (
-                            <IoIosCloseCircleOutline
-                                className="clear-icon"
-                                size={20}
-                                onClick={() => setSearchQuery('')}
-                            />
+        <>
+            {showMap ? (
+                <Map
+                    latMap={latMap}
+                    saveAndContinue={saveAndContinue}
+                    addressMap={addressMap}
+                    longMap={longMap}
+                    setLat={setLat}
+                    setLong={setLong}
+                    setAddress={setAddress}
+                    setShowMap={setShowMap}
+                />
+            ) : (
+                <div className="location-tab-overlay">
+                    <div className="map-back-bar">
+                        <FaAngleLeft size={23} onClick={() => setLocationTab(false)} className="map-back-bar-icon" />
+                        Select Your Location
+                    </div>
+                    <div className="location-tab-container">
+                        <div className="search-container">
+                            <div className="search-input-container">
+                                <IoSearch className="search-icon" size={20} />
+                                <input
+                                    className="search-input"
+                                    placeholder="Search your city / pincode"
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                    onKeyDown={handleKeyDownSearch}
+                                    aria-label="Search for location"
+                                />
+                                {searchQuery && (
+                                    <IoIosCloseCircleOutline
+                                        className="clear-icon"
+                                        size={20}
+                                        onClick={() => setSearchQuery('')}
+                                    />
+                                )}
+                            </div>
+                            <button className="current-location-button" onClick={handleUseCurrentLocation} aria-label="Use current location">
+                                <MdMyLocation size={20} />
+                                Use Current Location
+                            </button>
+                        </div>
+
+                        <div className="radius-control-container">
+                            <label>Set Searching Radius (km):</label>
+                            <div className="radius-options">
+                                {predefinedRadiusOptions.map((option) => (
+                                    <button
+                                        key={option}
+                                        className={`radius-btn ${radius === option ? 'selected' : ''}`}
+                                        onClick={() => {
+                                            updateLocation({ radius: Number(option) });
+                                            setRadius(option);
+                                        }}
+                                    >
+                                        {option} km
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        {(loading || fetchingUserLocation) && (
+                            <div className="loader-container">
+                                <ThreeDots size={40} color="#007BFF" />
+                            </div>
+                        )}
+
+                        {!loading && !fetchingUserLocation && suggestions.length > 0 && (
+                            <div className="suggestions-container">
+                                {suggestions.map((suggestion, index) => (
+                                    <div className="suggestion-item" key={index} onClick={() => handleAddressClick(suggestion)}>
+                                        <SlLocationPin size={20} />
+                                        <span className="suggestion-text">{suggestion.label}</span>
+                                    </div>
+                                ))}
+                            </div>
                         )}
                     </div>
-                    <button className="current-location-button" onClick={handleUseCurrentLocation} aria-label="Use current location">
-                        <MdMyLocation size={20} />
-                        Use Current Location
-                    </button>
                 </div>
-
-                <div className="radius-control-container">
-                    <label>Set Searching Radius (km):</label>
-                    <div className="radius-options">
-                        {predefinedRadiusOptions.map((option) => (
-                            <button
-                                key={option}
-                                className={`radius-btn ${radius === option ? 'selected' : ''}`}
-                                onClick={() =>{ updateLocation({
-                                    radius:Number(option)
-                                }); setRadius(option)}}
-                            >
-                                {option} km
-                            </button>
-                        ))}
-                    </div>
-                </div>
-
-                {(loading || fetchingUserLocation) && (
-                    <div className="loader-container">
-                        <ThreeDots size={40} color="#007BFF" />
-                    </div>
-                )}
-
-                {!loading && !fetchingUserLocation && suggestions.length > 0 && (
-                    <div className="suggestions-container">
-                        {suggestions.map((suggestion, index) => (
-                            <div className="suggestion-item" key={index} onClick={() => handleAddressClick(suggestion)}>
-                                <SlLocationPin size={20} />
-                                <span className="suggestion-text">{suggestion.label}</span>
-                            </div>
-                        ))}
-                    </div>
-                )}
-            </div>
-        </div>
+            )}
+        </>
     );
 }
 
