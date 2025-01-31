@@ -72,7 +72,7 @@ function LocationTab({ setLocationTab }) {
     };
 
 
-    const predefinedRadiusOptions = [1, 2, 4, 5, 7, 9, 13, 15, 20, 30, 50, 100, 200];
+    const predefinedRadiusOptions = [1, 2, 3, 5, 7, 9,11, 13, 17, 19, 23, 29, 97, 203];
 
     return (
         <>
