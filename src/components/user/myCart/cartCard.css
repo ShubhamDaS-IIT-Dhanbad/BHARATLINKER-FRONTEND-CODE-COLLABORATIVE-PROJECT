@@ -14,7 +14,7 @@
     justify-content: center;align-items: center;
     border-radius: 4px;
     overflow: hidden;
-    cursor: pointer;
+    
 }
 
 .user-cart-cart-order-product-card-img img {
@@ -69,7 +69,7 @@
     color: #dc3545;border: 1.2px solid #dc3545;
     font-size: 0.9rem;
     font-weight: 500;
-    cursor: pointer;
+    
     transition: color 0.2s ease;
     margin-top: auto;
     padding: 0.25rem 0.5rem;

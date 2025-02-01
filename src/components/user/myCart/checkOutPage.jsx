@@ -8,8 +8,7 @@ import { removeFromUserCart } from '../../../redux/features/user/cartSlice.jsx';
 import './checkOutPage.css';
 
 function CheckOutPage({ userData, items, deliveryAddress, setDeliveryAddress, setShowCheckOutPage, setShowAddressDetail }) {
-  const dispatch = useDispatch(); // Initialize dispatch
-
+  const dispatch = useDispatch();
   const totalPrice = items.reduce((acc, item) => acc + item.discountedPrice * item.quantity, 0);
   const totalSaved = items.reduce((acc, item) => acc + (item.price - item.discountedPrice) * item.quantity, 0);
 
@@ -35,6 +34,9 @@ function CheckOutPage({ userData, items, deliveryAddress, setDeliveryAddress, se
           long: deliveryAddress.long,
           name: userData.name,
           phoneNumber: userData.phoneNumber,
+          houseNo:deliveryAddress.buildingNo,
+          building:deliveryAddress.houseNo,
+          landMark:deliveryAddress.landmark
         });
         dispatch(removeFromUserCart({ productId: item.productId, cartId: item.$id }));
         handleSendEmail({
