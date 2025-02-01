@@ -29,21 +29,8 @@
     font-weight: 700;
     white-space: nowrap; /* Prevents text from wrapping */
     overflow: hidden;
-    text-overflow: ellipsis; /* Ensures long text is truncated with "..." */
+    text-overflow: ellipsis; 
 }
-
-
-
-#dashboard-header-ham {
-    cursor: pointer; /* Adds a pointer cursor to the profile icon */
-}
-
-.dashboard-header-parent-refurbished {
-    cursor: pointer; /* Adds a pointer cursor to the home icon */
-}
-
-
-
 
 .dashboard-Your-information{
     display: flex;flex-direction: column;
