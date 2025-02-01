@@ -8,20 +8,17 @@ import { RiShareForwardLine } from "react-icons/ri";
 import SingleProductSearchBar from "./singleProductSearchBar.jsx";
 import AddToCartTab from "../viewCartTab/viewCart.jsx";
 
-import useUserAuth from "../../hooks/userAuthHook.jsx";
 import searchProductService from "../../appWrite/searchProduct.js";
 import { fetchShopById } from "../../redux/features/singleShopSlice.jsx";
-import { fetchUserCart, updateCartStateAsync } from "../../redux/features/user/cartSlice.jsx";
+import { addToUserCart,fetchUserCart, updateCartStateAsync, removeFromUserCart } from "../../redux/features/user/cartSlice.jsx";
 
 import "../style/singleProduct.css";
 
 const fallbackImage = "http://res.cloudinary.com/dthelgixr/image/upload/v1727870088/hd7kcjuz8jfjajnzmqkp.webp";
-
 const ProductDetails = ({ userData }) => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const { productId } = useParams();
-
 
     const { products } = useSelector((state) => state.searchproducts);
     const { shops } = useSelector((state) => state.searchshops);
@@ -34,8 +31,8 @@ const ProductDetails = ({ userData }) => {
     const [selectedImage, setSelectedImage] = useState(fallbackImage);
     const [descriptionSections, setDescriptionSections] = useState([]);
 
-    const cartItem = useMemo(() => cart.find((item) => item.productId === productId), [cart, productId]);
-    const cartQuantity = cartItem ? cartItem.quantity : 0;
+    const cartItem = useMemo(() => cart.find((item) => item?.productId === productId), [cart, productId]);
+    const cartQuantity = cartItem ? cartItem?.quantity : 0;
 
     const parseDescription = (description) => {
         if (!description) return [];
@@ -76,15 +73,12 @@ const ProductDetails = ({ userData }) => {
                 setLoading(false);
             }
         };
-
         fetchDetails();
-        if (cart.length === 0 && userData?.phoneNumber) {
-            dispatch(fetchUserCart(userData.phoneNumber));
-        }
     }, []);
     useEffect(() => {
-        if (cart.length === 0 && userData?.phoneNumber) {
-            dispatch(fetchUserCart(userData.phoneNumber));
+        if (cart.length === 0 && userData?.$id) {
+            const userId=userData?.$id;
+            dispatch(fetchUserCart(userId));
         }
     }, []);
 
@@ -106,42 +100,50 @@ const ProductDetails = ({ userData }) => {
         }
     };
 
+
     const handleAddToCart = async () => {
-        if (!userData?.phoneNumber ) {
-            navigate("/login");
-            return;
-        }
-        if(!shopDetail){alert("SHOP DOES NOT EXIST");return;}
-        const newItem = {
+        if (!userData?.phoneNumber) {navigate("/login");return;}
+        if (!shopDetail) {alert("SHOP DOES NOT EXIST");return;}
+        const cartItem = {
+            userId:userData.$id,
             productId: productDetail.$id,
-            shopId:productDetail.shop,
+            shopId: productDetail.shop,
             title: productDetail.title,
-            price:productDetail.price,
+            price: productDetail.price,
             discountedPrice: productDetail.discountedPrice || productDetail.price,
             quantity: 1,
             image: productDetail.images[0],
             phoneNumber: userData.phoneNumber,
-            shopEmail:shopDetail.email
+            shopEmail: shopDetail.email,
+            customerName:userData.name
         };
-        await dispatch(updateCartStateAsync(newItem));
+        await dispatch(addToUserCart(cartItem));
     };
 
     const handleUpdateCart = async (increment = true) => {
-        if (!userData?.phoneNumber) {
-            navigate("/login");
-            return;
+        if (!userData?.phoneNumber) {navigate("/login");return;}
+        const  cartId=cartItem.$id;
+        if (increment) {
+            const updatedCart = {
+                productId: productDetail.$id,
+                quantity: cartQuantity + 1,
+                customerPhoneNumber: userData.phoneNumber,
+                customerName:userData.name
+            };
+            await dispatch(updateCartStateAsync(cartId,updatedCart));
+        } else {
+            if (cartQuantity > 1) {
+                const updatedCart = {
+                    productId: productDetail.$id,
+                    quantity: cartQuantity - 1,
+                    customerPhoneNumber: userData.phoneNumber,
+                    customerName:userData.name
+                };
+                await dispatch(updateCartStateAsync(cartId,updatedCart));
+            } else {
+                await dispatch(removeFromUserCart({productId: productDetail.$id,cartId}));
+            }
         }
-
-        const updatedItem = {
-            productId: productDetail.$id,
-            title: productDetail.title,
-            shopId:productDetail.shop,
-            price:productDetail.price,
-            discountedPrice: productDetail.discountedPrice || productDetail.price,
-            quantity: increment ? cartQuantity + 1 : cartQuantity - 1,
-            phoneNumber: userData.phoneNumber,
-        };
-        await dispatch(updateCartStateAsync(updatedItem));
     };
 
     return (

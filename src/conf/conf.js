@@ -16,12 +16,32 @@ const conf = {
     measurementId: String(import.meta.env.VITE_FIREBASE_MEASURMENT_ID),
 
 
-
+    
+    //BL USERS
+    appwriteBlUsersProjectId: String(import.meta.env.VITE_APPWRITE_BL_USER_PROJECT_ID),
+    appwriteBlUsersDatabaseId: String(import.meta.env.VITE_APPWRITE_BL_USER_DATABASE_ID),
+    appwriteBlUsersCollectionId: String(import.meta.env.VITE_APPWRITE_BL_USER_COLLECTION_ID),
+    appwriteBlProductsCollectionId: String(import.meta.env.VITE_APPWRITE_BL_USER_PRODUCT_COLLECTION_ID),
+    appwriteBlCartCollectionId: String(import.meta.env.VITE_APPWRITE_BL_USER_CART_COLLECTION_ID),
     // USERS 4
     appwriteUsersProjectId: String(import.meta.env.VITE_APPWRITE_USERS_PROJECT_ID),
     appwriteUsersDatabaseId: String(import.meta.env.VITE_APPWRITE_USERS_DATABASE_ID),
     appwriteUsersCollectionId: String(import.meta.env.VITE_APPWRITE_USERS_COLLECTION_ID),
     appwriteUsersImagesBucketId: String(import.meta.env.VITE_APPWRITE_USERS_IMAGES_BUCKET_ID),
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     // REFURBISHED PRODUCTS 2
     appwriteRefurbishProductProjectId: String(import.meta.env.VITE_APPWRITE_REFURBISHED_PRODUCTS_PROJECT_ID),

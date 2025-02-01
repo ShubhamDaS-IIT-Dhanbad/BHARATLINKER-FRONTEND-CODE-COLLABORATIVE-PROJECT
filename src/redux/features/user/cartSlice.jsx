@@ -1,24 +1,22 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { fetchUserCartByPhoneNumber, updateCartByPhoneNumber } from "../../../appWrite/userData/userData.js";
 import { placeOrderProvider } from '../../../appWrite/order/order.js';
-
+import { addToCart, getCartItems, removeFromCart, updateCartQuantity } from '../../../appWrite/cart/cart.js';
 import debounce from "lodash.debounce";
 import throttle from "lodash.throttle";
 
 // Async Thunk for fetching the user cart data by phone number
 export const fetchUserCart = createAsyncThunk(
     "usercart/fetchUserCart",
-    async (phoneNumber, { rejectWithValue }) => {
+    async (userId, { rejectWithValue }) => {
         try {
-            const cart = await fetchUserCartByPhoneNumber(phoneNumber);
-            return JSON.parse(cart);
+            const response = await getCartItems(userId);
+            return response;
         } catch (error) {
-            console.error("Error fetching cart data:", error);
+            console.error("Error fetching user cart:", error);
             return rejectWithValue(error.response?.data || error.message);
         }
     }
 );
-
 // Throttled fetch function to limit frequent requests
 export const throttledFetchUserCart = throttle(async (dispatch, phoneNumber) => {
     try {
@@ -28,44 +26,78 @@ export const throttledFetchUserCart = throttle(async (dispatch, phoneNumber) => 
     }
 }, 1000); // 1-second interval
 
-// Async Thunk for updating the cart after changes
-export const updateUserCart = createAsyncThunk(
-    "usercart/updateUserCart",
-    async ({ phoneNumber, cart }, { rejectWithValue }) => {
+
+
+
+
+
+
+
+// Async Thunk for adding an item to the cart
+export const addToUserCart = createAsyncThunk(
+    "usercart/addToUserCart",
+    async (cartItem, { rejectWithValue, dispatch }) => {
+        console.log(cartItem, "item")
         try {
-            const cartData = await updateCartByPhoneNumber({ phoneNumber, cart });
-            return cartData;
+            const updatedCart = {
+                userId: cartItem.userId,
+                productId: cartItem.productId,
+                shopId: cartItem.shopId,
+                price: cartItem.price,
+                discountedPrice: cartItem.discountedPrice || cartItem.price,
+                quantity: 1,
+            }
+            dispatch(updateCartStateLocal({ productId: cartItem.productId, updatedCart }));
+            const response = await addToCart(cartItem);
+            return response;
         } catch (error) {
-            console.error("Error updating cart:", error);
+            console.error("Error adding to cart:", error);
+            return rejectWithValue(error.response?.data || error.message);
+        }
+    }
+);
+// Async Thunk for removing an item from the cart
+export const removeFromUserCart = createAsyncThunk(
+    "usercart/removeFromUserCart",
+    async ({ cartId, productId }, { rejectWithValue, dispatch }) => {
+        try {
+            const updatedCart = { quantity: 0 }
+            dispatch(updateCartStateLocal({ productId, updatedCart }));
+            await removeFromCart(cartId);
+            return productId;
+        } catch (error) {
+            console.error("Error removing from cart:", error);
             return rejectWithValue(error.response?.data || error.message);
         }
     }
 );
 
-// Debounced version of the cart update dispatch
-const debouncedUpdateUserCart = debounce(async (dispatch, phoneNumber, cart) => {
-    try {
-        await dispatch(updateUserCart({ phoneNumber, cart }));
-    } catch (error) {
-        console.error("Debounced cart update error:", error);
+
+
+
+// Async Thunk for updating the cart after changes
+export const updateUserCart = createAsyncThunk(
+    "usercart/updateUserCart",
+    async ({ cartId, updatedCart }, { rejectWithValue, dispatch }) => {
+        try {
+            dispatch(updateCartStateLocal({ productId: updatedCart.productId, updatedCart }));
+            await updateCartQuantity(cartId, updatedCart);
+            return { cartId, updatedCart };
+        } catch (error) {
+            console.error("Error updating user cart:", error);
+            return rejectWithValue(error.response?.data || error.message);
+        }
     }
-}, 500); // 500ms delay
-
-// Async action for updating cart state and syncing with the backend
-export const updateCartStateAsync = (newItem) => async (dispatch, getState) => {
-    try {
-        dispatch(cartSlice.actions.updateCartStateLocal(newItem));
-
-        const state = getState();
-        const phoneNumber = newItem.phoneNumber;
-        const cart = JSON.stringify(state.userCart.cart);
-
-        // Use debounced dispatch to update the backend
-        debouncedUpdateUserCart(dispatch, phoneNumber, cart);
-    } catch (error) {
-        console.error("Error in updateCartStateAsync:", error);
-    }
+);
+const debouncedUpdateUserCart = debounce(async (dispatch, cartId, updatedCart) => {
+    await dispatch(updateUserCart({ cartId, updatedCart }));
+}, 50);
+export const updateCartStateAsync = (cartId, updatedCart) => async (dispatch, getState) => {
+    debouncedUpdateUserCart(dispatch, cartId, updatedCart);
 };
+
+
+
 
 // Async Thunk for placing an order
 export const placeOrder = createAsyncThunk(
@@ -99,21 +131,23 @@ const cartSlice = createSlice({
     },
     reducers: {
         updateCartStateLocal: (state, action) => {
-            const newItem = action.payload;
-            const existingItem = state.cart.find(item => item.productId === newItem.productId);
+            const { productId, updatedCart } = action.payload;
+            console.log("here")
+            const existingItemIndex = state.cart.findIndex(item => item.productId === productId);
 
-            if (newItem.quantity === 0) {
-                state.cart = state.cart.filter(item => item.productId !== newItem.productId);
-            } else if (existingItem) {
-                existingItem.quantity = newItem.quantity;
-                existingItem.discountedPrice = newItem.discountedPrice;
+            if (updatedCart.quantity === 0) {
+                state.cart = state.cart.filter(item => item.productId !== productId);
+            } else if (existingItemIndex !== -1) {
+                state.cart = state.cart.map(item =>
+                    item.productId === productId ? { ...item, ...updatedCart } : item
+                );
             } else {
-                state.cart.push(newItem);
+                state.cart = [...state.cart, updatedCart];
             }
-
             state.totalQuantity = state.cart.reduce((total, item) => total + item.quantity, 0);
-            state.totalPrice = state.cart.reduce((total, item) => total + item.discountedPrice * item.quantity, 0);
         },
+        
+        
         resetCart: (state) => {
             state.cart = [];
             state.totalQuantity = 0;
@@ -136,8 +170,14 @@ const cartSlice = createSlice({
                 state.cartLoading = false;
                 console.error("Failed to fetch user cart:", action.payload);
             })
-            .addCase(updateUserCart.pending, (state) => {
-                state.cartLoading = true;
+
+            .addCase(addToUserCart.fulfilled, (state, action) => {
+                const existingItemIndex = state.cart.findIndex(item => item.productId === action.payload.productId);
+                if (existingItemIndex !== -1) {
+                    state.cart[existingItemIndex] =action.payload;
+                } else {
+                    state.cart.push(updatedCart);
+                }
             })
             .addCase(updateUserCart.fulfilled, (state) => {
                 state.cartLoading = false;
@@ -146,6 +186,9 @@ const cartSlice = createSlice({
                 state.cartLoading = false;
                 console.error("Failed to update user cart:", action.payload);
             })
+
+
+
             .addCase(placeOrder.pending, (state) => {
                 state.orderLoading = true;
             })

@@ -24,7 +24,7 @@ const AddToCartTab = ({ totalQuantity,totalPrice}) => {
           <span className="item-count">
             {totalQuantity} item{totalQuantity > 1 ? 's' : ''}
           </span>
-          <span className="total-price">₹ {totalPrice}</span>
+          <span className="total-price">₹</span>
         </div>
       </div>
 
