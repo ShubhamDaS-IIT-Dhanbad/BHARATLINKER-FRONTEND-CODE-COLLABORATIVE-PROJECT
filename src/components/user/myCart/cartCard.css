@@ -17,7 +17,7 @@
     overflow: hidden;
     background: #f8f8f8;
     position: relative;
-    cursor: pointer;
+    
 }
 
 .user-cart-cart-order-product-card-img img {
@@ -87,7 +87,7 @@
     font-size: 13px;
     font-weight: 500;
     width: 100%;
-    cursor: pointer;
+    
     transition: all 0.2s ease;
     display: flex;
     align-items: center;
