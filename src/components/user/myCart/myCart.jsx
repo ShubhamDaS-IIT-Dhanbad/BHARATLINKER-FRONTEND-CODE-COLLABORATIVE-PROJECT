@@ -100,10 +100,10 @@ const MyCartPage = ({ userData }) => {
 
     return (
         <>
-                <Navbar
-                    headerTitle="MY CART"
-                    onBackNavigation={() => navigate(-1)}
-                />
+            <Navbar
+                headerTitle="MY CART"
+                onBackNavigation={() => navigate(-1)}
+            />
             <div className="user-cart-container">
                 <main className="user-cart-content">
                     {cart?.length === 0 ? (
@@ -137,7 +137,7 @@ const MyCartPage = ({ userData }) => {
                                 })}
                             </section>
 
-                            <section className="user-cart-summary-section">
+                            {/* <section className="user-cart-summary-section">
                                 <div className="cart-summary-card">
                                     <h3>Order Summary</h3>
                                     <div className="summary-row">
@@ -153,7 +153,7 @@ const MyCartPage = ({ userData }) => {
 
                                     </button>
                                 </div>
-                            </section>
+                            </section> */}
 
                             <div className="cart-check-out-container">
 

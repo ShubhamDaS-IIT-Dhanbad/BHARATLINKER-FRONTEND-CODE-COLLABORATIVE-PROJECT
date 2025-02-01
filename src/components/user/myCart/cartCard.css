@@ -1,30 +1,24 @@
+/* OrderProductCard.css */
 .user-cart-cart-order-product-card {
-    border-radius: 8px;
-    padding: 1px;
-    margin-bottom: 12px;display: flex;
-    padding-left: 20px;
-    position: relative;
-    transition: all 0.2s cubic-bezier(0.4,0,0.2,1);
     display: flex;
-    gap: 15px;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    transition: box-shadow 0.3s ease;
 }
 
 .user-cart-cart-order-product-card-img {
-    height: 160px;
-    width: 160px;
-    margin-bottom: 12px;
+    height: 110px;
+    flex-shrink: 0;display: flex;
+    justify-content: center;align-items: center;
     border-radius: 4px;
     overflow: hidden;
-    background: #f8f8f8;
-    position: relative;
-    
+    cursor: pointer;
 }
 
 .user-cart-cart-order-product-card-img img {
-    width: 100%;
     height: 100%;
-    object-fit: contain;
-    mix-blend-mode: multiply;
     transition: transform 0.3s ease;
 }
 
@@ -33,174 +27,74 @@
 }
 
 .user-cart-cart-order-product-card-detail {
+    flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 8px;
+    gap: 0.75rem;
 }
 
 .user-cart-cart-order-product-card-detail-1 {
-    font-size: 14px;
-    font-weight: 500;
-    color: #212121;
-    line-height: 1.4;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    min-height: 40px;
+    font-size: 15px;
+    font-weight: 400;
+    color: #2d2d2d;
+    margin-bottom: 0.5rem;
 }
 
 .user-cart-cart-order-product-card-detail-2 {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 8px;
-    margin-top: 8px;
+    gap: 5px;
 }
 
 .user-cart-cart-order-product-card-detail-2-1 {
-    flex: 1;
-    text-align: center;
-    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
 }
 
 .user-cart-cart-order-product-card-detail-2-1-tag {
-    font-size: 12px;
-    color: #878787;
-    margin-bottom: 4px;
-    font-weight: 400;
+    font-size: 0.85rem;
+    color: #666;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
 .user-cart-cart-opcdp {
-    font-size: 14px;
+    font-size: 1rem;
     font-weight: 500;
-    color: #212121;
+    color: #333;
 }
 
 .user-cart-cart-order-product-cart-delete-2-rm {
-    background: #ff6161;
-    color: white;
-    border: none;
-    padding: 8px 16px;
-    border-radius: 4px;
-    font-size: 13px;
+    align-self: flex-start;
+    color: #dc3545;border: 1.2px solid #dc3545;
+    font-size: 0.9rem;
     font-weight: 500;
-    width: 100%;
-    
-    transition: all 0.2s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    margin-top: 12px;
+    cursor: pointer;
+    transition: color 0.2s ease;
+    margin-top: auto;
+    padding: 0.25rem 0.5rem;
 }
 
 .user-cart-cart-order-product-cart-delete-2-rm:hover {
-    background: #e53935;
+    color: #bb2d3b;
+    background-color: #fff5f5;
 }
 
-.user-cart-cart-order-product-card-detail-3-state {
-    position: absolute;
-    top: 12px;
-    right: 12px;
-    background: rgba(255,255,255,0.9);
-    padding: 4px;
-    border-radius: 50%;
-}
-
-.user-cart-cart-status-icon {
-    font-size: 18px;
-    vertical-align: middle;
-}
-
-.user-cart-cart-status-icon.pending { color: #ff9f00; }
-.user-cart-cart-status-icon.accepted { color: #00b852; }
-.user-cart-cart-status-icon.dispatched { color: #2874f0; }
-.user-cart-cart-status-icon.canceled { color: #ff6161; }
-.user-cart-cart-status-icon.delivered { color: #00b852; }
-
-/* Price Ribbon */
-.user-cart-cart-price-ribbon {
-    position: absolute;
-    top: 8px;
-    left: -6px;
-    background: #2874f0;
-    color: white;
-    padding: 4px 8px;
-    font-size: 12px;
-    border-radius: 2px 4px 4px 2px;
-    box-shadow: 1px 1px 4px rgba(0,0,0,0.1);
-}
-
-.user-cart-cart-price-ribbon::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    bottom: -6px;
-    border-left: 6px solid #1a5bb5;
-    border-right: 0 solid transparent;
-    border-bottom: 6px solid transparent;
-}
-
-@media (min-width: 480px) {
+/* Responsive Design */
+@media (max-width: 768px) {
     .user-cart-cart-order-product-card {
-        display: flex;
-        gap: 16px;
-        padding: 16px;
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem;
     }
-    
+
     .user-cart-cart-order-product-card-img {
-        width: 120px;
-        height: 120px;
-        margin-bottom: 0;
+        width: 100%;
+        height: 200px;
     }
+
     
-    .user-cart-cart-order-product-card-detail {
-        flex: 1;
-        justify-content: space-between;
-    }
-    
-    .user-cart-cart-order-product-cart-delete-2-rm {
-        width: auto;
-        max-width: 140px;
-        margin-top: 0;
-    }
-    
-    .user-cart-cart-order-product-card-detail-1 {
-        font-size: 15px;
-        -webkit-line-clamp: 2;
-    }
 }
-
-/* Flipkart-like Mobile Optimization */
-@media (max-width: 360px) {
-    .user-cart-cart-order-product-card {
-        padding: 10px;
-    }
-    
-    .user-cart-cart-order-product-card-img {
-        height: 140px;
-    }
-    
-    .user-cart-cart-order-product-card-detail-1 {
-        font-size: 13px;
-    }
-    
-    .user-cart-cart-opcdp {
-        font-size: 13px;
-    }
-    
-    .user-cart-cart-order-product-cart-delete-2-rm {
-        font-size: 12px;
-        padding: 8px 12px;
-    }
-}
-
-
-
-
-
 
 
 

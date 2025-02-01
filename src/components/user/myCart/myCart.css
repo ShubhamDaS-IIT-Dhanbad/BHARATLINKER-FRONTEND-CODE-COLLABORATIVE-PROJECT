@@ -16,12 +16,24 @@
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
 /* User Cart Container */
 .user-cart-container {
   font-family: 'Roboto', sans-serif;
   background-color: #ffffff;
   min-height: 100vh;
-  padding-bottom: 20vh;
+  padding-bottom: 20vh;margin-top: 70px;
 }
 
 /* Header Section */
