@@ -6,6 +6,7 @@ function OrderProductCard({ order,  onRemove, productId ,isRemove=false}) {
     const navigate = useNavigate();
     return (
         <div className="user-cart-cart-order-product-card">
+            
             <div className="user-cart-cart-order-product-card-img">
                 <img 
                     src={order.productImage} 
@@ -13,6 +14,7 @@ function OrderProductCard({ order,  onRemove, productId ,isRemove=false}) {
                     alt="Product" 
                 />
             </div>
+
             <div className="user-cart-cart-order-product-card-detail">
                 <div className="user-cart-cart-order-product-card-detail-1">
                     {order.title}
