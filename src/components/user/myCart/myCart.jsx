@@ -125,7 +125,6 @@ const MyCartPage = ({ userData }) => {
                         <section className="user-cart-items-section">
                             {cart.map(item => {
                                 const isOutOfStock = item.stock < item.quantity;
-                                console.log(item)
                                 return (
                                     <OrderProductCard
                                         key={item.productId}

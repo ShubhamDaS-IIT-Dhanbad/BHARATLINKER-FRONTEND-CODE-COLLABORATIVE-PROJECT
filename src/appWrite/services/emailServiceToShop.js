@@ -12,7 +12,7 @@ const handleSendEmail = async ({to, type,orderId,title,address,quantity,price,di
     to: to,
     type,
     orderId,title,address,quantity,price,discountedPrice,phoneNumber,image
-  });console.log(emailBody,"body")
+  });
   try {
     const result = await functions.createExecution(
       '678f6501000fad7c34c5',
@@ -20,7 +20,6 @@ const handleSendEmail = async ({to, type,orderId,title,address,quantity,price,di
       false,
       "/sendmail"
     );
-    console.log('Execution result:', result);
   } catch (error) {
     console.error('Error sending email:', error);
   } finally {
