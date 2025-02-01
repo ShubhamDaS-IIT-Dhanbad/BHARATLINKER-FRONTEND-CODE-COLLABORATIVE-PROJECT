@@ -112,7 +112,7 @@ const ProductDetails = ({ userData }) => {
             price: productDetail.price,
             discountedPrice: productDetail.discountedPrice || productDetail.price,
             quantity: 1,
-            image: productDetail.images[0],
+            productImage: productDetail.images[0],
             phoneNumber: userData.phoneNumber,
             shopEmail: shopDetail.email,
             customerName:userData.name
@@ -127,7 +127,6 @@ const ProductDetails = ({ userData }) => {
             const updatedCart = {
                 productId: productDetail.$id,
                 quantity: cartQuantity + 1,
-                customerPhoneNumber: userData.phoneNumber,
                 customerName:userData.name
             };
             await dispatch(updateCartStateAsync(cartId,updatedCart));
@@ -136,7 +135,6 @@ const ProductDetails = ({ userData }) => {
                 const updatedCart = {
                     productId: productDetail.$id,
                     quantity: cartQuantity - 1,
-                    customerPhoneNumber: userData.phoneNumber,
                     customerName:userData.name
                 };
                 await dispatch(updateCartStateAsync(cartId,updatedCart));

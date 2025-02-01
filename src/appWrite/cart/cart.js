@@ -44,7 +44,8 @@ async function addToCart(cartItem) {
         price: Number(cartItem.price),
         discountedPrice: Number(cartItem.discountedPrice),
         quantity: Number(cartItem.quantity),
-        productImage: cartItem.image,
+        productImage: cartItem.productImage,
+        shopEmail:cartItem.shopEmail,
         customerName: cartItem.customerName,
         customerPhoneNumber: Number(cartItem.phoneNumber),
       }
@@ -64,7 +65,6 @@ async function updateCartQuantity(cartId, updatedCart) {
       {
         quantity: Number(updatedCart.quantity),
         customerName: updatedCart.customerName,
-        customerPhoneNumber: Number(updatedCart.customerPhoneNumber),
       }
     );
     return response;

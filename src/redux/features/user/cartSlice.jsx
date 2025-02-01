@@ -42,6 +42,7 @@ export const addToUserCart = createAsyncThunk(
                 userId: cartItem.userId,
                 productId: cartItem.productId,
                 shopId: cartItem.shopId,
+                productImage:cartItem.productImage,
                 price: cartItem.price,
                 discountedPrice: cartItem.discountedPrice || cartItem.price,
                 quantity: 1,

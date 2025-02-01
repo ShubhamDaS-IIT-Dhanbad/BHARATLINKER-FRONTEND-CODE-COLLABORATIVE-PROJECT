@@ -2,7 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './cartCard.css';
 
-function OrderProductCard({ order, functionToWork, productId ,isRemove=false}) {
+function OrderProductCard({ order,  onRemove, productId ,isRemove=false}) {
     const navigate = useNavigate();
     return (
         <div className="user-cart-cart-order-product-card">
@@ -34,7 +34,7 @@ function OrderProductCard({ order, functionToWork, productId ,isRemove=false}) {
                 {isRemove && (
                     <div
                         className="user-cart-cart-order-product-cart-delete-2-rm"
-                        onClick={functionToWork}
+                        onClick={ onRemove}
                     >
                         REMOVE
                     </div>

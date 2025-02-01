@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 // Project components and utilities
 import Navbar from "../a.navbarComponent/navbar.jsx";
 import OrderProductCard from './cartCard.jsx';
-import { updateCartStateAsync, fetchUserCart } from '../../../redux/features/user/cartSlice.jsx';
+import { updateCartStateAsync, removeFromUserCart , fetchUserCart } from '../../../redux/features/user/cartSlice.jsx';
 import { fetchShopStatus } from '../../../appWrite/shop/shop.js';
 
 import DeliveryAddress from './deliveryAddress.jsx';
@@ -59,14 +59,9 @@ const MyCartPage = ({ userData }) => {
         if (cart.length > 0) { checkShopStatus(); }
     }, [cart]);
 
-    const handleRemoveItem = useCallback(async (productId) => {
+    const handleRemoveItem = useCallback(async (cartId,productId) => {
         try {
-            const updatePayload = {
-                productId,
-                quantity: 0,
-                phoneNumber: userData?.phoneNumber
-            };
-            await dispatch(updateCartStateAsync(updatePayload));
+            await dispatch(removeFromUserCart({productId,cartId}));
         } catch (error) {
             console.error("Cart update failed:", error);
         }
@@ -130,13 +125,14 @@ const MyCartPage = ({ userData }) => {
                         <section className="user-cart-items-section">
                             {cart.map(item => {
                                 const isOutOfStock = item.stock < item.quantity;
+                                console.log(item)
                                 return (
                                     <OrderProductCard
                                         key={item.productId}
                                         productId={item.productId}
                                         order={item}
                                         isRemove={true}
-                                        onRemove={() => handleRemoveItem(item.productId)}
+                                        onRemove={() => handleRemoveItem(item.$id,item.productId)}
                                         isShopOpen={shopStatus[item.shopId] || false}
                                         isOutOfStock={isOutOfStock}
                                     />

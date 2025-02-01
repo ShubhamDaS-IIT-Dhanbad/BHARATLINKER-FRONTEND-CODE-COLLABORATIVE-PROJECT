@@ -1,24 +1,25 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux'; // Import useDispatch
 import { FaAngleLeft } from "react-icons/fa6";
 import OrderProductCard from './cartCard.jsx';
 import { placeOrderProvider } from '../../../appWrite/order/order.js';
 import handleSendEmail from '../../../appWrite/services/emailServiceToShop.js';
+import { removeFromUserCart } from '../../../redux/features/user/cartSlice.jsx';
 import './checkOutPage.css';
 
 function CheckOutPage({ userData, items, deliveryAddress, setDeliveryAddress, setShowCheckOutPage, setShowAddressDetail }) {
+  const dispatch = useDispatch(); // Initialize dispatch
+
   const totalPrice = items.reduce((acc, item) => acc + item.discountedPrice * item.quantity, 0);
   const totalSaved = items.reduce((acc, item) => acc + (item.price - item.discountedPrice) * item.quantity, 0);
-  
+
   const [placingOrder, setPlacingOrder] = useState(false);
 
   // Function to handle order placing
   async function placeOrder() {
     setPlacingOrder(true);
-
     try {
-      // Use a for...of loop to handle each item asynchronously
       for (const item of items) {
-        // Place order in the backend for each item
         const order = await placeOrderProvider({
           userId: userData.$id,
           shopId: item.shopId,
@@ -27,7 +28,7 @@ function CheckOutPage({ userData, items, deliveryAddress, setDeliveryAddress, se
           price: Number(item.price),
           discountedPrice: Number(item.discountedPrice),
           shopEmail: item.shopEmail,
-          image: item.image,
+          image: item.productImage,
           title: item.title,
           address: deliveryAddress.address,
           lat: deliveryAddress.lat,
@@ -35,11 +36,10 @@ function CheckOutPage({ userData, items, deliveryAddress, setDeliveryAddress, se
           name: userData.name,
           phoneNumber: userData.phoneNumber,
         });
-
-        // Send email asynchronously for each item (don't wait for email sending to complete)
+        dispatch(removeFromUserCart({ productId: item.productId, cartId: item.$id }));
         handleSendEmail({
           to: item.shopEmail,
-          type: 'orderPlaced', // Assuming 'orderPlaced' is the correct type here
+          type: 'orderPlaced',
           orderId: order.$id,
           image: item.image,
           title: item.title,
@@ -48,12 +48,8 @@ function CheckOutPage({ userData, items, deliveryAddress, setDeliveryAddress, se
           quantity: Number(item.quantity),
           price: Number(item.price),
           discountedPrice: Number(item.discountedPrice),
-        }).catch(err => {
-          console.error("Error sending email for item: ", item.title, err);
-        });
+        }).catch(err => console.error("Error sending email for item:", item.title, err));
       }
-
-      // After placing the order, show success and hide the checkout page
       alert('Order Placed Successfully!');
       setShowCheckOutPage(false);
       setShowAddressDetail(false);
@@ -65,9 +61,9 @@ function CheckOutPage({ userData, items, deliveryAddress, setDeliveryAddress, se
     }
   }
 
+
   return (
     <>
-      {/* Header */}
       <header>
         <div className="saved-location-header">
           <FaAngleLeft
@@ -87,11 +83,7 @@ function CheckOutPage({ userData, items, deliveryAddress, setDeliveryAddress, se
           <div className="cart-items-section">
             <div className="cart-items-container">
               {items.map((item) => (
-                <OrderProductCard
-                  key={item.productId}
-                  productId={item.productId}
-                  order={item}
-                />
+                <OrderProductCard key={item.productId} productId={item.productId} order={item} />
               ))}
             </div>
           </div>
@@ -118,11 +110,7 @@ function CheckOutPage({ userData, items, deliveryAddress, setDeliveryAddress, se
                   <span>{totalPrice.toFixed(2)}</span>
                 </div>
               </div>
-              <button
-                className="proceed-to-payment-btn"
-                onClick={placeOrder}
-                disabled={placingOrder}
-              >
+              <button className="proceed-to-payment-btn" onClick={placeOrder} disabled={placingOrder}>
                 {placingOrder ? "Placing Order..." : "Place Order"}
               </button>
             </div>
