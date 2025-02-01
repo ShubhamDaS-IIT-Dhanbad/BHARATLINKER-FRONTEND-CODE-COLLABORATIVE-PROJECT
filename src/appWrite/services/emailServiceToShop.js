@@ -7,7 +7,7 @@ const client = new Client()
 
 const functions = new Functions(client);
 
-const handleSendEmail = async (to, type,orderId,title,address,quantity,price,discountedPrice,phoneNumber,image) => {
+const handleSendEmail = async ({to, type,orderId,title,address,quantity,price,discountedPrice,phoneNumber,image}) => {
   const emailBody = JSON.stringify({
     to: to,
     type,

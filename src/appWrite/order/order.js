@@ -10,7 +10,7 @@ const client = new Client()
 const databases = new Databases(client);
 
 const placeOrderProvider = async (
-    userId,
+    {userId,
     shopId,
     productId,
     quantity,
@@ -23,7 +23,7 @@ const placeOrderProvider = async (
     title,
     name,
     phoneNumber,
-    shopEmail
+    shopEmail}
 ) => {
     try {
         if (

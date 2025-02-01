@@ -1,0 +1,91 @@
+/* CSS */
+.delivery-address-container {
+  font-family: Arial, sans-serif;
+  color: #333;
+  max-height: 80vh;overflow-y: scroll;
+}
+
+
+
+
+
+
+.saved-location {
+  padding: 5px 15px;
+}
+
+.saved-location-title {
+  font-size: 16px;
+  color: #666;font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  margin-bottom: 5px;font-weight: 500;
+}
+
+.saved-location-content {
+  display: flex;padding: 17px;
+  gap: 10px;border-radius: 10px;color: white;
+  align-items: center;background-color: #5a2ec2;
+}
+.saved-location-content-address{
+  display: flex;flex-direction: column;
+  gap: 5px;font-weight: 600;
+  font-size: 11px;
+}
+.change-button {
+  background: transparent;
+  color: #5a2ec2;
+  border: none;
+  font-weight: bold;
+}
+
+.address-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding: 10px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+label {
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.label-options {
+  display: flex;
+  gap: 10px;
+}
+
+.label-btn {
+  padding: 10px 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  background: #fff;
+}
+
+.label-btn.active {
+  background:#5a2ec2;
+  color: #fff;
+}
+.save-address-submit-btn {
+  padding: 12px;
+  width: 96vw;
+  background: #5a2ec2;
+  color: #fff;height: 50px;
+  border: none;font-weight: 800;
+  border-radius: 5px;margin-bottom: 10px;
+}
+.save-address-submit-btn-container {
+  display: flex;justify-content: center;align-items: center;
+  position: fixed;bottom: 0;width: 100vw;
+
+}

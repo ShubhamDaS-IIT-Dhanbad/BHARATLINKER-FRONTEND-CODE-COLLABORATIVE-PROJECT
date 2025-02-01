@@ -1,0 +1,199 @@
+/* Base Styles */
+.checkout-page {
+    font-family: 'Arial', sans-serif;
+    min-height: 100vh;
+    padding: 20px;
+  }
+  
+
+  
+  .header-content {
+    display: flex;
+    align-items: center;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .back-icon {
+    font-size: 24px;
+    cursor: pointer;
+    margin-right: 15px;
+  }
+  /* Shipping Address Card */
+.shipping-address-card {
+    background-color: #f9f9f9;
+    padding: 20px;
+    border-radius: 8px;
+    margin: 20px 0;
+  }
+  
+  .shipping-address-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+    color: #333;font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-weight: bold;
+  }
+  
+  .address-details {
+    display: grid;
+    border: 1px solid #2874f0;
+    grid-template-columns: 1fr;padding: 10px;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .address-details p {
+    font-size: 1rem;
+    color: #555;
+    line-height: 1.5;
+  }
+  
+  .address-details strong {
+    font-weight: 500;font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+  }
+  
+ 
+  
+  .checkout-header h2 {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0;
+  }
+  
+  /* Main Content */
+  .checkout-main {
+    gap: 20px;
+    max-width: 1200px;
+    margin: 20px auto;
+  }
+  
+  .cart-items-section {
+    flex: 2;
+    padding: 20px;
+    border-radius: 8px;
+  }
+  
+  .order-summary-section {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  /* Cart Items */
+  .cart-items-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  /* Order Summary Card */
+  .order-summary-card {
+    padding: 20px;
+    border-radius: 8px;
+  }
+  
+  .order-summary-card h3 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 15px;
+  }
+  
+  .price-details {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .price-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    color: #555;
+  }
+  
+  .discount {
+    color: #388e3c;
+  }
+  
+  .free-shipping {
+    color: #388e3c;
+  }
+  
+  .total-price-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 16px;
+    font-weight: 600;
+    padding-top: 10px;
+    border-top: 1px solid #e0e0e0;
+    margin-top: 10px;
+  }
+  
+  .proceed-to-payment-btn {
+    width: 100%;
+    background-color: #fb641b;
+    color: white;
+    border: none;
+    padding: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .proceed-to-payment-btn:hover {
+    background-color: #e65a17;
+  }
+  
+  /* Shipping Address Card */
+  .shipping-address-card {
+    padding: 20px;
+    border-radius: 8px;
+  }
+  
+  .shipping-address-card h3 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 15px;
+  }
+  
+  .address-details {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 15px;
+  }
+  
+  .change-address-btn {
+    width: 100%;
+    color: #2874f0;
+    border: 1px solid #2874f0;
+    padding: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .change-address-btn:hover {
+    background-color: #f0f8ff;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .checkout-main {
+      flex-direction: column;
+    }
+  
+    .cart-items-section {
+      order: 2;
+    }
+  
+    .order-summary-section {
+      order: 1;
+    }
+  }

@@ -1,3 +1,21 @@
+.saved-location-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 13px 13px 10px 13px;position: fixed;top: 0;
+  border-bottom: 1px solid #eeeeeef3;width: 100vw;
+  z-index: 100;background-color:#f9f9f9;
+}
+
+.saved-location-header h2 {
+  font-size: 19px;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  color: #2d3436;
+  margin: 0;
+}
+
+
+
 /* User Cart Container */
 .user-cart-container {
   font-family: 'Roboto', sans-serif;
@@ -237,3 +255,39 @@
   background-color: #cccccc;
   cursor: not-allowed;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
