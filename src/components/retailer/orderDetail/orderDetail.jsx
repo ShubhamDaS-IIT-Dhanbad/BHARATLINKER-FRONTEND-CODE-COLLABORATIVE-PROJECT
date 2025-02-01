@@ -188,6 +188,24 @@ const OrderDetails = ({ retailerData }) => {
                                 <h4 className="retailer-order-detail-info-title">ORDER DATE</h4>
                                 <p>{new Date(order.$createdAt).toLocaleDateString()}</p>
                             </div>
+                            {order.building &&
+                                <div className="retailer-order-detail-info-group">
+                                    <div className="retailer-order-detail-info-title">BUILDING NO.</div>
+                                    <p>{order.building}</p>
+                                </div>
+                            }
+                            {order.houseNo &&
+                                <div className="retailer-order-detail-info-group">
+                                    <div className="retailer-order-detail-info-title">HOUSE NO.</div>
+                                    <p>{order.houseNo}</p>
+                                </div>
+                            }
+                            {order.landMark &&
+                                <div className="retailer-order-detail-info-group">
+                                    <div className="retailer-order-detail-info-title">LANDMARK</div>
+                                    <p>{order.landMark}</p>
+                                </div>
+                            }
                             {order.expectedDeliveryDate &&
                                 <div className="retailer-order-detail-info-group">
                                     <h4 className="retailer-order-detail-info-title">EXPECTED DELIVERY DATE

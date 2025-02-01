@@ -131,7 +131,7 @@ const OrderDetails = () => {
                             )}
                         </div>
                     )}
-
+                    {console.log(order, "shubham")}
                     <div className="order-info">
                         <div className="order-info-c">
                             <div className="order-info-h">ORDERED DATE</div>
@@ -149,6 +149,21 @@ const OrderDetails = () => {
                             <div className="order-info-h">SHIPPING ADDRESS</div>
                             <span>{order.address}</span>
                         </div>
+                        {order.building &&
+                            <div className="order-info-c">
+                                <div className="order-info-h">BUILDING NO.</div>
+                                <span>{order.building}</span>
+                            </div>}
+                        {order.houseNo &&
+                            <div className="order-info-c">
+                                <div className="order-info-h">HOUSE NO.</div>
+                                <span>{order.houseNo}</span>
+                            </div>}
+                        {order.landMark &&
+                            <div className="order-info-c">
+                                <div className="order-info-h">LANDMARK</div>
+                                <span>{order.landMark}</span>
+                            </div>}
                     </div>
 
                     {order.expectedDeliveryDate && (
