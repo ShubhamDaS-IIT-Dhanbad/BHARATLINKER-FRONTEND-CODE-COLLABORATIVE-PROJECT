@@ -37,7 +37,7 @@
   
   .logo {
     font-size: 14px;
-    color: #4CAF50;
+    color: rgb(12, 131, 31);
     font-weight: 500;
   }
   
@@ -72,7 +72,7 @@
   }
   
   .location-icon {
-    color: #1e8121;;padding-top: 5px;
+    color: rgb(12, 131, 31);;padding-top: 5px;
   }
   .location-text{
     width: 90%;
@@ -80,7 +80,7 @@
   .location-text h3 {
     margin: 0;font-weight: 600;
     font-size: 14px;padding: 0;
-    color: #1e8121;
+    color: rgb(12, 131, 31);
   }
   .location-text p {
     margin: 4px 0 0;
@@ -91,7 +91,7 @@
   
   .enable-button {
     border: 1.4px solid rgba(0, 0, 0, 0.237);
-    color: #1e8121;;background-color: #ffffff;
+    color: rgb(12, 131, 31);;background-color: #ffffff;
     padding: 6px 17px;
     border-radius: 3px;
     font-weight: 800;
@@ -153,7 +153,7 @@
   
   .search-input-container input:focus {
     outline: none;
-    border-color: #4CAF50;
+    border-color: rgb(12, 131, 31);
     box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.1);
   }
   
@@ -201,7 +201,7 @@
   }
   
   .suggestion-item svg {
-    color: #4CAF50;
+    color: rgb(12, 131, 31);
   }
   
   /* Loading States */
@@ -271,7 +271,7 @@
     display: flex;
     font-size: 13px;
     border: 1.1px solid #ffffff7c;
-    background-color: #4CAF50;
+    background-color: rgb(12, 131, 31);
     color: #ffffff;
     border-radius: 5px;
     transition: all 0.3s ease;

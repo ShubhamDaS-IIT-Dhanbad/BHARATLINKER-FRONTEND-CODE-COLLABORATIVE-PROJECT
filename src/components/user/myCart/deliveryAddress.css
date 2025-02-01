@@ -23,7 +23,7 @@
 .saved-location-content {
   display: flex;padding: 17px;
   gap: 10px;border-radius: 10px;color: white;
-  align-items: center;background-color: #4CAF50;
+  align-items: center;background-color: rgb(12, 131, 31);
   margin-top: 20px;
 }
 .saved-location-content-address{
@@ -33,7 +33,7 @@
 }
 .change-button {
   background: transparent;
-  color: #4CAF50;;
+  color: rgb(12, 131, 31);;
   border: none;
   font-weight: bold;
 }
@@ -74,13 +74,13 @@ input {
 }
 
 .label-btn.active {
-  background: #4CAF50;;
+  background: rgb(12, 131, 31);;
   color: #fff;
 }
 .save-address-submit-btn {
   padding: 12px;
   width: 96vw;
-  background: #4CAF50;;
+  background: rgb(12, 131, 31);;
   color: #fff;height: 50px;
   border: none;font-weight: 800;
   border-radius: 5px;margin-bottom: 10px;

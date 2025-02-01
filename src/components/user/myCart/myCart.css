@@ -299,7 +299,7 @@
   z-index: 1001;background-color: white;
 }
 .cart-check-out-container-button{
-  background-color: #4CAF50;
+  background-color: rgb(12, 131, 31);
   color: white;
   width: calc(96vw - 20px);
   display: flex;padding:15px 10px;
