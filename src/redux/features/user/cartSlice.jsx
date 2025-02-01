@@ -37,7 +37,6 @@ export const throttledFetchUserCart = throttle(async (dispatch, phoneNumber) => 
 export const addToUserCart = createAsyncThunk(
     "usercart/addToUserCart",
     async (cartItem, { rejectWithValue, dispatch }) => {
-        console.log(cartItem, "item")
         try {
             const updatedCart = {
                 userId: cartItem.userId,
@@ -132,9 +131,8 @@ const cartSlice = createSlice({
     reducers: {
         updateCartStateLocal: (state, action) => {
             const { productId, updatedCart } = action.payload;
-            console.log("here")
             const existingItemIndex = state.cart.findIndex(item => item.productId === productId);
-
+        
             if (updatedCart.quantity === 0) {
                 state.cart = state.cart.filter(item => item.productId !== productId);
             } else if (existingItemIndex !== -1) {
@@ -144,9 +142,10 @@ const cartSlice = createSlice({
             } else {
                 state.cart = [...state.cart, updatedCart];
             }
-            state.totalQuantity = state.cart.reduce((total, item) => total + item.quantity, 0);
-        },
         
+            state.totalQuantity = state.cart.reduce((total, item) => total + item.quantity, 0);
+            state.totalPrice = state.cart.reduce((total, item) => total + item.quantity * item.price, 0);
+        },
         
         resetCart: (state) => {
             state.cart = [];

@@ -2,8 +2,7 @@ import React from 'react';
 import './viewCart.css';
 import { FaCaretRight } from "react-icons/fa";
 import { useNavigate } from 'react-router-dom';
-import { LuRefreshCw } from "react-icons/lu";
-
+import { FaCartShopping } from "react-icons/fa6";
 const AddToCartTab = ({ totalQuantity,totalPrice}) => {
   const navigate = useNavigate();
 
@@ -17,14 +16,14 @@ const AddToCartTab = ({ totalQuantity,totalPrice}) => {
     <div className="add-to-cart-tab">
       <div className="cart-info">
         <div className="cart-icon">
-          <LuRefreshCw size={25} className="shopping-cart" />
+          <FaCartShopping size={19} className="shopping-cart" />
         </div>
         
         <div className="cart-details">
           <span className="item-count">
             {totalQuantity} item{totalQuantity > 1 ? 's' : ''}
           </span>
-          <span className="total-price">₹</span>
+          <span className="total-price">₹ {totalPrice}</span>
         </div>
       </div>
 
@@ -32,7 +31,7 @@ const AddToCartTab = ({ totalQuantity,totalPrice}) => {
         onClick={handleViewCart}
         className={`view-cart-button ${totalQuantity > 0 ? '' : 'disabled'}`}
       >
-        View Cart <FaCaretRight size={25} />
+        View Cart <FaCaretRight size={20} />
       </div>
     </div>
   );

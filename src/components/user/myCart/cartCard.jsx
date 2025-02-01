@@ -8,7 +8,7 @@ function OrderProductCard({ order, functionToWork, productId ,isRemove=false}) {
         <div className="user-cart-cart-order-product-card">
             <div className="user-cart-cart-order-product-card-img">
                 <img 
-                    src={order.image} 
+                    src={order.productImage} 
                     onClick={() => { navigate(`/product/${productId}`); }} 
                     alt="Product" 
                 />

@@ -89,20 +89,16 @@
     color: white;
     font-size: 1rem;
     font-weight: bold;
-    padding: 10px;
-    text-align: center;
+    padding: 10px;display: flex;
+    text-align: center;justify-content: center;
     border-radius: 5px;
     transition: background-color 0.3s;
   }
-  
-  .map-confirm-btn:hover {
-    background-color: #45a049;
-  }
-  
-  .map-confirm-btn:active {
-    background-color: #3e8e41;
-  }
-  
+  .disabled {
+    pointer-events: none;
+    opacity: 0.75;
+}
+
 .map-address-icon {
     color: #1e7ac9;
     margin-right: 10px;

@@ -88,7 +88,7 @@ const MyCartPage = ({ userData }) => {
             setShowAddressDetail={setShowAddressDetail}
         />
     );
-    if (showCheckOutPage ) {
+    if (showCheckOutPage) {
         const availableItems = cart.filter(item => shopStatus[item.shopId]);
         return (
             <CheckOutPage
@@ -156,13 +156,23 @@ const MyCartPage = ({ userData }) => {
                                     <span>₹{totalPrice.toFixed(2)}</span>
                                 </div>
                                 <button
-                                    className="checkout-button"
-                                    onClick={() => setShowLocationTab(true)}
                                 >
-                                    Proceed to Checkout
+
                                 </button>
                             </div>
                         </section>
+
+                        <div className="cart-check-out-container">
+
+                            <div
+                                className="cart-check-out-container-button"
+                                onClick={() => setShowLocationTab(true)}
+                            >
+                                Proceed to Checkout
+
+                            </div>
+                        </div>
+
                     </>
                 )}
             </main>

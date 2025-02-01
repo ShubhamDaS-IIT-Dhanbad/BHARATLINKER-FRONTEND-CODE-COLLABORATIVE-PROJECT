@@ -32,7 +32,6 @@ async function getCartItems(userId, page = 1, limit = 10) {
 // Function to add a product to the cart
 async function addToCart(cartItem) {
   try {
-    console.log(cartItem);
     const response = await databases.createDocument(
       conf.appwriteBlUsersDatabaseId,
       conf.appwriteBlCartCollectionId,
@@ -81,7 +80,6 @@ async function removeFromCart(cartId) {
       conf.appwriteBlCartCollectionId,
       cartId
     );
-    console.log("Item removed from cart successfully.");
     return true;
   } catch (error) {
     console.error("Error removing item from cart:", error);

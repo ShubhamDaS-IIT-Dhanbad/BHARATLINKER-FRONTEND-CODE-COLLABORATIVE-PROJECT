@@ -11,7 +11,7 @@ import useLocationFromCookie from "../../hooks/useLocationFromCookie.jsx";
 import "./map.css";
 
 // Constants for better readability
-const DEFAULT_ZOOM = 60;
+const DEFAULT_ZOOM = 15;
 const TILE_LAYER_URL = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
 const NOMINATIM_API_URL = "https://nominatim.openstreetmap.org/reverse?format=json";
 const DEBOUNCE_DELAY = 1000;
@@ -41,7 +41,7 @@ const LocationMap = ({
 }) => {
     const { updateLocation } = useLocationFromCookie();
     const [position, setPosition] = useState([latMap, longMap]);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(true);
     const [loadingConfirm, setLoadingConfirm] = useState(false);
     const [address, setAddress] = useState(addressMap);
     const mapRef = useRef(null);
@@ -85,10 +85,10 @@ const LocationMap = ({
         return () => debouncedGetAddress.cancel();
     }, [debouncedGetAddress]);
 
-    // Map click handler
     const MapClickHandler = () => {
         useMapEvents({
             click(event) {
+                setLoading(true); // Move it here
                 const { lat, lng } = event.latlng;
                 setPosition([lat, lng]);
                 debouncedGetAddress(lat, lng);
@@ -96,7 +96,7 @@ const LocationMap = ({
         });
         return null;
     };
-
+    
     // Confirm location handler
     const handleConfirm = useCallback(() => {
         setLoadingConfirm(true);
@@ -173,7 +173,9 @@ const LocationMap = ({
                         ) : (
                             <p className="map-address-text">{address}</p>
                         )}
-                        <div className="map-confirm-btn" onClick={handleConfirm}>
+                        <div className={`map-confirm-btn ${loading ? "disabled" : ""}`}
+                            onClick={!loading ? handleConfirm : undefined}
+                        >
                             {loadingConfirm ? (
                                 <Oval height={20} width={20} color="white" ariaLabel="loading" />
                             ) : (
