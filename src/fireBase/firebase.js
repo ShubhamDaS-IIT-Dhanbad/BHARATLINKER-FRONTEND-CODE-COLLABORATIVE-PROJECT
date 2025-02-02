@@ -1,14 +1,14 @@
 // src/firebase/firebase.js
 import { initializeApp } from 'firebase/app';
-import { getAuth, GoogleAuthProvider } from 'firebase/auth';
+import { PhoneAuthProvider } from 'firebase/auth';
 import { getDatabase } from 'firebase/database';
 
 import conf from '../conf/conf.js';
+import { getAuth } from 'firebase/auth';
 
-// Your Firebase configuration object
 const firebaseConfig = {
   apiKey: conf.firebaseApikey,
-  authDomain:conf.firebaseAuthDomain,
+  authDomain: conf.firebaseAuthDomain,
   databaseURL: conf.firebaseDatabaseURL,
   projectId: conf.firebaseProjectId,
   storageBucket: conf.firebaseStorageBucket,
@@ -17,14 +17,8 @@ const firebaseConfig = {
   measurementId: conf.firebaseMeasurementId
 };
 
-// Initialize Firebase app
+
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
-const database = getDatabase(app);
-
-// Initialize Google Auth Provider
-const provider = new GoogleAuthProvider(); // Google Auth provider
-
-// Export the initialized instances and provider
-export { app, auth, database, provider };
+export { auth };
