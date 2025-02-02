@@ -1,27 +1,20 @@
-// src/firebase/firebase.js
-import { initializeApp } from 'firebase/app';
-import { getAuth, PhoneAuthProvider } from 'firebase/auth';
-import { getDatabase } from 'firebase/database';
-import conf from '../conf/conf.js';
+// Import the functions you need from the SDKs you need
+import { initializeApp, getApps, getApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
 
-// Firebase configuration
 const firebaseConfig = {
-  apiKey: conf.firebaseApikey,
-  authDomain: conf.firebaseAuthDomain,
-  databaseURL: conf.firebaseDatabaseURL,
-  projectId: conf.firebaseProjectId,
-  storageBucket: conf.firebaseStorageBucket,
-  messagingSenderId: conf.firebaseMessagingSenderId,
-  appId: conf.firebaseAppId,
-  measurementId: conf.firebaseMeasurementId
+  apiKey: "AIzaSyC5hFxxgiJ5M2WDA2EMKQab-BQDiyQ77Uw",
+  authDomain: "bharat-linker.firebaseapp.com",
+  projectId: "bharat-linker",
+  storageBucket: "bharat-linker.firebasestorage.app",
+  messagingSenderId: "1000044979704",
+  appId: "1:1000044979704:web:506d4ca6156eea1113e20d",
+  measurementId: "G-YTCLD8FG2J"
 };
 
 // Initialize Firebase
-const app = initializeApp(firebaseConfig);
-
-// Get the Auth and Database instances
+const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApp();
 const auth = getAuth(app);
-const database = getDatabase(app);
+auth.useDeviceLanguage();
 
-// Export the instances for use in other parts of the app
-export { auth, PhoneAuthProvider, database };
+export { auth };
