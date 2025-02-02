@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
+import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/compat/auth';
 import { auth } from './fireBase/firebase.js';
 
 function Sms() {
@@ -9,10 +9,9 @@ function Sms() {
   const [otp, setOtp] = useState('');
   const [error, setError] = useState('');
   const recaptchaVerifier = useRef(null);
-console.log("p")
-  // Initialize reCAPTCHA AFTER auth is confirmed ready
+
+  console.log(auth,"p")
   useEffect(() => {
-    console.log("k")
     if (!auth) {
       setError('Firebase auth not initialized');
       return;
