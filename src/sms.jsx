@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
-import { auth } from './firebase/firebase'; // Verify path matches your structure
+import { auth } from './fireBase/firebase.js';
 
 function Sms() {
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -9,9 +9,10 @@ function Sms() {
   const [otp, setOtp] = useState('');
   const [error, setError] = useState('');
   const recaptchaVerifier = useRef(null);
-
+console.log("p")
   // Initialize reCAPTCHA AFTER auth is confirmed ready
   useEffect(() => {
+    console.log("k")
     if (!auth) {
       setError('Firebase auth not initialized');
       return;
@@ -21,7 +22,7 @@ function Sms() {
       recaptchaVerifier.current = new RecaptchaVerifier(
         'recaptcha-container',
         { size: 'invisible' },
-        auth // <-- Pass initialized auth instance
+        auth 
       );
     } catch (err) {
       console.error('reCAPTCHA Error:', err);
