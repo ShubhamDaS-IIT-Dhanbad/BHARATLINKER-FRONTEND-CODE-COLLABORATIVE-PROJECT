@@ -1,136 +1,95 @@
 import React, { useState, useEffect } from 'react';
-import { auth } from './fireBase/firebase.js';
-import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
+import { getAuth, RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
+import { initializeApp } from "firebase/app";
+import firebaseConfig from "./fireBase/firebase.js";
 
-const SendOTP = () => {
+const PhoneNumberAuth = () => {
   const [phoneNumber, setPhoneNumber] = useState('');
-  const [otpSent, setOtpSent] = useState(false);
+  const [verificationCode, setVerificationCode] = useState('');
   const [confirmationResult, setConfirmationResult] = useState(null);
-  const [error, setError] = useState('');
 
-  // Initialize reCAPTCHA verifier on component mount
+  // Initialize Firebase and reCAPTCHA
   useEffect(() => {
-    const initializeRecaptcha = () => {
-      try {
-        // Ensure auth is properly initialized
-        if (!auth) {
-          throw new Error('Firebase auth is not initialized');
-        }
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
 
-        // Initialize reCAPTCHA verifier
-        window.recaptchaVerifier = new RecaptchaVerifier(
-          'recaptcha-container',
-          {
-            size: 'invisible', // Use 'normal' for visible reCAPTCHA
-            callback: () => {
-              // reCAPTCHA solved, allow OTP sending
-              console.log('reCAPTCHA solved');
-            },
-          },
-          auth
-        );
-      } catch (err) {
-        console.error('Error initializing reCAPTCHA:', err);
-        setError('Failed to initialize reCAPTCHA. Please refresh the page.');
+    auth.settings.appVerificationDisabledForTesting = true; // Disable for testing (only in development)
+
+    // Setup reCAPTCHA
+    window.recaptchaVerifier = new RecaptchaVerifier('recaptcha-container', {
+      size: 'invisible', // You can change this to 'normal' for visible reCAPTCHA
+      callback: (response) => {
+        // reCAPTCHA solved, allow signInWithPhoneNumber.
+        handlePhoneNumberSubmit();
       }
-    };
+    }, auth);
 
-    initializeRecaptcha();
-
-    // Cleanup reCAPTCHA on component unmount
-    return () => {
-      if (window.recaptchaVerifier) {
-        window.recaptchaVerifier.clear();
-      }
-    };
+    // Render reCAPTCHA after initialization
+    window.recaptchaVerifier.render().then(() => {
+      console.log('reCAPTCHA rendered successfully');
+    }).catch((error) => {
+      console.error('Error rendering reCAPTCHA:', error);
+    });
   }, []);
 
-  // Function to send OTP
-  const handleSendOTP = async () => {
-    try {
-      if (!window.recaptchaVerifier) {
-        throw new Error('reCAPTCHA verifier not initialized');
-      }
+  // Handle phone number submit
+  const handlePhoneNumberSubmit = () => {
+    const appVerifier = window.recaptchaVerifier;
 
-      // Format phone number (ensure it includes a country code)
-      const formattedPhoneNumber = `+${phoneNumber.replace(/\D/g, '')}`;
+    const auth = getAuth();
+    signInWithPhoneNumber(auth, phoneNumber, appVerifier)
+      .then((confirmationResult) => {
+        setConfirmationResult(confirmationResult);
+        alert('SMS sent!');
+      })
+      .catch((error) => {
+        alert(error.message);
+      });
+  };
 
-      // Send OTP
-      const confirmation = await signInWithPhoneNumber(
-        auth,
-        formattedPhoneNumber,
-        window.recaptchaVerifier
-      );
-
-      // Save confirmation result for OTP verification
-      setConfirmationResult(confirmation);
-      setOtpSent(true);
-      setError('');
-      alert('OTP sent successfully!');
-    } catch (err) {
-      console.error('Error sending OTP:', err);
-      setError('Failed to send OTP. Please try again.');
+  // Handle verification code submit
+  const handleCodeSubmit = () => {
+    if (confirmationResult) {
+      confirmationResult.confirm(verificationCode)
+        .then((result) => {
+          const user = result.user;
+          alert('User signed in successfully');
+        })
+        .catch((error) => {
+          alert('Error: ' + error.message);
+        });
     }
   };
 
   return (
-    <div style={styles.container}>
-      <h2>Send OTP</h2>
-      {!otpSent ? (
-        <>
-          <input
-            type="text"
-            placeholder="Enter phone number (e.g., +1234567890)"
-            value={phoneNumber}
-            onChange={(e) => setPhoneNumber(e.target.value)}
-            style={styles.input}
-          />
-          <button onClick={handleSendOTP} style={styles.button}>
-            Send OTP
-          </button>
-        </>
-      ) : (
-        <p>OTP has been sent to {phoneNumber}. Proceed to verify.</p>
-      )}
+    <div>
+      <h2>Phone Number Authentication</h2>
 
-      {/* Hidden reCAPTCHA container */}
-      <div id="recaptcha-container"></div>
+      <div>
+        <label>Phone Number:</label>
+        <input
+          type="text"
+          value={phoneNumber}
+          onChange={(e) => setPhoneNumber(e.target.value)}
+          placeholder="+1 123 456 7890"
+        />
+        <button onClick={handlePhoneNumberSubmit}>Send SMS</button>
+      </div>
 
-      {/* Display error message */}
-      {error && <p style={styles.error}>{error}</p>}
+      <div>
+        <label>Verification Code:</label>
+        <input
+          type="text"
+          value={verificationCode}
+          onChange={(e) => setVerificationCode(e.target.value)}
+          placeholder="Enter the code"
+        />
+        <button onClick={handleCodeSubmit}>Verify Code</button>
+      </div>
+
+      <div id="recaptcha-container"></div> {/* Container for reCAPTCHA */}
     </div>
   );
 };
 
-// Basic styles
-const styles = {
-  container: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: '20px',
-    fontFamily: 'Arial, sans-serif',
-  },
-  input: {
-    padding: '10px',
-    margin: '10px 0',
-    width: '300px',
-    borderRadius: '5px',
-    border: '1px solid #ccc',
-  },
-  button: {
-    padding: '10px 20px',
-    backgroundColor: '#007bff',
-    color: '#fff',
-    border: 'none',
-    borderRadius: '5px',
-    cursor: 'pointer',
-  },
-  error: {
-    color: 'red',
-    marginTop: '10px',
-  },
-};
-
-export default SendOTP;
+export default PhoneNumberAuth;
