@@ -1,79 +1,113 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
-import { auth } from './fireBase/firebase.js';
+import { auth } from './firebase/firebase'; // Verify path matches your structure
 
 function Sms() {
-    const [phoneNumber, setPhoneNumber] = useState('');
-    const [otpSent, setOtpSent] = useState(false);
-    const [verificationId, setVerificationId] = useState('');
-    const [otp, setOtp] = useState('');
-    const [recaptchaVerifier,setRecaptchaVerifier]=useState();
+  const [phoneNumber, setPhoneNumber] = useState('');
+  const [otpSent, setOtpSent] = useState(false);
+  const [verificationId, setVerificationId] = useState(null);
+  const [otp, setOtp] = useState('');
+  const [error, setError] = useState('');
+  const recaptchaVerifier = useRef(null);
 
-    useEffect(() => {
-        const recaptchaVerifier = new RecaptchaVerifier(
-            'recaptcha-container',
-            {
-                size: 'invisible',
-            },
-            auth
-        );
-        setRecaptchaVerifier(recaptchaVerifier);
-        return () => {
-            recaptchaVerifier.clear();
-        };
-    }, []);
+  // Initialize reCAPTCHA AFTER auth is confirmed ready
+  useEffect(() => {
+    if (!auth) {
+      setError('Firebase auth not initialized');
+      return;
+    }
 
+    try {
+      recaptchaVerifier.current = new RecaptchaVerifier(
+        'recaptcha-container',
+        { size: 'invisible' },
+        auth // <-- Pass initialized auth instance
+      );
+    } catch (err) {
+      console.error('reCAPTCHA Error:', err);
+      setError('Failed to initialize reCAPTCHA. Refresh the page.');
+    }
 
-
-
-
-
-    const handlePhoneSubmit = async () => {
-        try {
-            const confirmationResult = await signInWithPhoneNumber(auth, phoneNumber, recaptchaVerifier);
-            setVerificationId(confirmationResult);
-            setOtpSent(true);
-        } catch (error) {
-            console.error('Error sending OTP:', error);
-        }
+    return () => {
+      if (recaptchaVerifier.current) {
+        recaptchaVerifier.current.clear();
+      }
     };
+  }, []);
 
-    const handleOtpSubmit = async () => {
-        try {
-            const credential = firebase.auth.PhoneAuthProvider.credential(verificationId, otp);
-            await auth.signInWithCredential(credential);
-            console.log('Phone number verified successfully');
-        } catch (error) {
-            console.error('Error verifying OTP:', error);
-        }
-    };
+  const handleSendOTP = async () => {
+    try {
+      setError('');
 
-    return (
+      // Validate phone number format
+      if (!phoneNumber.startsWith('+')) {
+        throw new Error('Phone number must include country code (e.g., +1...)');
+      }
+
+      // Verify reCAPTCHA is ready
+      if (!recaptchaVerifier.current) {
+        throw new Error('reCAPTCHA not initialized');
+      }
+
+      // Send OTP
+      const confirmation = await signInWithPhoneNumber(
+        auth, // <-- Use initialized auth
+        phoneNumber,
+        recaptchaVerifier.current
+      );
+
+      setVerificationId(confirmation);
+      setOtpSent(true);
+    } catch (err) {
+      console.error('OTP Send Error:', err);
+      setError(err.message || 'Failed to send OTP');
+    }
+  };
+
+  const handleVerifyOTP = async () => {
+    try {
+      setError('');
+
+      if (!verificationId || !otp) {
+        throw new Error('Missing verification ID or OTP');
+      }
+
+      await verificationId.confirm(otp);
+      alert('Phone number verified!');
+    } catch (err) {
+      console.error('OTP Verify Error:', err);
+      setError(err.message || 'Failed to verify OTP');
+    }
+  };
+
+  return (
+    <div>
+      <h2>Phone Login</h2>
+      {!otpSent ? (
         <div>
-            {!otpSent ? (
-                <div>
-                    <input
-                        type="tel"
-                        placeholder="Enter phone number"
-                        value={phoneNumber}
-                        onChange={(e) => setPhoneNumber(e.target.value)}
-                    />
-                    <button onClick={handlePhoneSubmit}>Send OTP</button>
-                    <div id="recaptcha-container"></div>
-                </div>
-            ) : (
-                <div>
-                    <input
-                        type="text"
-                        placeholder="Enter OTP"
-                        value={otp}
-                        onChange={(e) => setOtp(e.target.value)}
-                    />
-                    <button onClick={handleOtpSubmit}>Verify OTP</button>
-                </div>
-            )}
+          <input
+            type="tel"
+            placeholder="+1234567890"
+            value={phoneNumber}
+            onChange={(e) => setPhoneNumber(e.target.value)}
+          />
+          <button onClick={handleSendOTP}>Send OTP</button>
+          <div id="recaptcha-container"></div>
         </div>
-    );
+      ) : (
+        <div>
+          <input
+            type="text"
+            placeholder="Enter OTP"
+            value={otp}
+            onChange={(e) => setOtp(e.target.value)}
+          />
+          <button onClick={handleVerifyOTP}>Verify OTP</button>
+        </div>
+      )}
+      {error && <p style={{ color: 'red' }}>{error}</p>}
+    </div>
+  );
 }
 
 export default Sms;
