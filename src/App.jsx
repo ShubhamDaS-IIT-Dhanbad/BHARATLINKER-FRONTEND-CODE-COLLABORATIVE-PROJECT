@@ -31,7 +31,6 @@ const RetailerRoutes = lazy(() => import('./components/retailer/retailerRoutes.j
 const RetailerLogin = React.lazy(() => import("./components/retailer/login.jsx"));
 const RetailerRegister = React.lazy(() => import("./components/retailer/register.jsx"));
 
-import Sms from './sms.jsx';
 
 function App() {
   return (
@@ -54,19 +53,6 @@ const RoutesWithConditionalHeader = React.memo(() => {
   return (
     <>
       <Routes>
-      <Route
-          path="/sms"
-          element={
-            <>
-              <Helmet>
-                <title>Bharat Linker</title>
-                <meta name="description" content="Welcome to Bharat Linker, your one-stop solution for business management." />
-                <meta name="robots" content="index, follow" />
-              </Helmet>
-              <Sms />
-            </>
-          }
-        />
         <Route
           path="/"
           element={
