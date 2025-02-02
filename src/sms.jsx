@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { auth } from './firebase/firebase.js'; // Adjust the path to your firebase.js file
+import { auth } from './fireBase/firebase.js';
 import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
 
 const SendOTP = () => {
