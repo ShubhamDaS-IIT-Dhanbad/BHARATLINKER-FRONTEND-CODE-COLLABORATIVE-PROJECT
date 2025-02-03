@@ -31,8 +31,6 @@ const RetailerRoutes = lazy(() => import('./components/retailer/retailerRoutes.j
 const RetailerLogin = React.lazy(() => import("./components/retailer/login.jsx"));
 const RetailerRegister = React.lazy(() => import("./components/retailer/register.jsx"));
 
-import Gog from './google.jsx';
-
 function App() {
   return (
     <HelmetProvider>
@@ -67,19 +65,7 @@ const RoutesWithConditionalHeader = React.memo(() => {
             </>
           }
         />
-        <Route
-          path="/email"
-          element={
-            <>
-              <Helmet>
-                <title>Bharat Linker</title>
-                <meta name="description" content="Welcome to Bharat Linker, your one-stop solution for business management." />
-                <meta name="robots" content="index, follow" />
-              </Helmet>
-              <Gog userData={userData} />
-            </>
-          }
-        />
+        
         <Route
           path="/login"
           element={
