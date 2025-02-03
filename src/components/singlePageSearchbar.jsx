@@ -3,7 +3,7 @@ import { FaCaretDown, FaArrowLeft } from "react-icons/fa";
 import { useNavigate } from 'react-router-dom'; 
 import LocationTab from './locationTab/locationTab.jsx';
 import useLocationFromCookie from '../hooks/useLocationFromCookie.jsx';
-import './style/singlePageSearchBar.css';
+import './style/singlePageSearchbar.css';
 
 const SinglePageSearchBar = ({ heading }) => {
     const navigate = useNavigate();
