@@ -1,7 +1,6 @@
 import conf from '../conf/conf.js';
 import { Client, Databases, Storage, Query } from 'appwrite';
 import { getBoundsOfDistance } from 'geolib';
-
 class SearchProductService {
     client = new Client();
     databases;
@@ -15,174 +14,100 @@ class SearchProductService {
         this.databases = new Databases(this.client);
         this.bucket = new Storage(this.client);
     }
-
-
-
-
-
     async getProducts({
         inputValue,
-
-        selectedCategories,
-        selectedBrands,
-
         userLat,
         userLong,
         radius,
-
         page,
         productsPerPage = 4,
-
         sortByAsc,
-        sortByDesc,
-        shopId
+        sortByDesc
     }) {
         try {
-            const inputTokens = inputValue
-                .split(' ')
-                .filter(token => token.trim() !== '')
-                .map(token => token.toLowerCase());
-
+            const inputTokens = inputValue.trim().toLowerCase(); // Single string
+    
             const queries = [];
+            // Add search query if inputValue is provided
             if (inputValue.length > 0) {
-                queries.push(Query.or([
-                    Query.contains('title', inputTokens),
-                    Query.contains('description', inputTokens),
-                    Query.contains('keywords', inputTokens),
-                ]));
+                queries.push(Query.search("keywords", inputTokens));
             }
-
-            // Filter by categories
-            if (selectedCategories.length > 0) {
-                queries.push(Query.contains('category', selectedCategories));
-            }
-            // Filter by categories
-            if (selectedBrands.length > 0) {
-                queries.push(Query.contains('brand', selectedBrands));
-            }
-
-
-            // Geolocation filtering using bounding box
+    
+            // Add sorting queries
+            if (sortByAsc) queries.push(Query.orderAsc("discountedPrice"));
+            if (sortByDesc) queries.push(Query.orderDesc("discountedPrice"));
+    
+            // Add geolocation queries if the location and radius are provided
             if (userLat !== undefined && userLong !== undefined && radius !== undefined) {
-                const boundingBox = getBoundsOfDistance(
-                    { latitude: userLat, longitude: userLong },
-                    radius * 1000 // Convert radius from km to meters
+                const center = { latitude: userLat, longitude: userLong };
+                const bounds = getBoundsOfDistance(center, radius * 1000);
+    
+                queries.push(
+                    Query.greaterThanEqual("lat", bounds[0].latitude),
+                    Query.lessThanEqual("lat", bounds[1].latitude),
+                    Query.greaterThanEqual("long", bounds[0].longitude),
+                    Query.lessThanEqual("long", bounds[1].longitude)
                 );
-
-                const latMin = boundingBox[0].latitude;
-                const latMax = boundingBox[1].latitude;
-                const lonMin = boundingBox[0].longitude;
-                const lonMax = boundingBox[1].longitude;
-
-                queries.push(Query.greaterThanEqual('lat', latMin));
-                queries.push(Query.lessThanEqual('lat', latMax));
-                queries.push(Query.greaterThanEqual('long', lonMin));
-                queries.push(Query.lessThanEqual('long', lonMax));
             }
-
-            // Fetch products with optional price filtering and pagination
-            const fetchProducts = async (collectionId) => {
-                const categoryQueries = [...queries];
-                if (shopId!==undefined) {
-                    categoryQueries.push(Query.equal('shop', shopId));
-                }
-
-
-
-                // Pagination applied here using limit and offset
-                const offset = (page - 1) * productsPerPage;
-                categoryQueries.push(Query.limit(productsPerPage));
-                categoryQueries.push(Query.offset(offset));
-                const response = await this.databases.listDocuments(
-                    conf.appwriteProductsDatabaseId,
-                    collectionId,
-                    categoryQueries
-                );              
-                return response.documents || [];
-            };
-
-            const allProducts = await fetchProducts(conf.appwriteProductsCollectionId);
-
-            if (!Array.isArray(allProducts)) {
-                throw new TypeError("Expected 'allProducts' to be an array.");
-            }
-            // If no input value, return the products directly
-            if (inputValue.length === 0) {
-                return { success: true, products: allProducts };
-            }
-
-            // Perform scoring using the provided score card
-            const scoredProducts = allProducts.map(product => {
-                let score = 0;
-                let distance = null;
-
-                // Always calculate the score based on input tokens
-                inputTokens.forEach(token => {
-                    if (product.title.toLowerCase().includes(token)) score += 3;
-                    if (product.description.toLowerCase().includes(token)) score += 2;
-                    if (product.title.toLowerCase().startsWith(token)) score += 5;
-                    if (product.description.toLowerCase().startsWith(token)) score += 4;
-                });
-
-                // Only calculate the distance if the radius, userLat, and userLong are provided
-                if (radius && userLat && userLong) {
-                    // Haversine formula for distance
-                    const toRadians = (deg) => (deg * Math.PI) / 180;
-                    const dLat = toRadians(product.latitude - userLat);
-                    const dLon = toRadians(product.longitude - userLong);
-                    const lat1 = toRadians(userLat);
-                    const lat2 = toRadians(product.latitude);
-
-                    const a = Math.sin(dLat / 2) ** 2 +
-                        Math.sin(dLon / 2) ** 2 * Math.cos(lat1) * Math.cos(lat2);
-                    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-                    const R = 6371;
-                    distance = R * c;
-
-                    // Only include products within the radius
-                    if (distance > radius) {
-                        return null;
-                    }
-                }
-
-                // Return the product with score and distance (if applicable)
-                return { ...product, score, distance };
-            }).filter(product => product !== null);
-
-            // After calculating scores and distance, sort by score
+    
+            // Add pagination queries
+            const offset = (page - 1) * productsPerPage;
+            queries.push(Query.limit(productsPerPage), Query.offset(offset));
+    
+            // Specify fields to fetch using Query.select
+            queries.push(Query.select(["$id","title", "description", "price", "discountedPrice","isInStock","images","shops.registrationStatus",
+                "shops.shopName","shops.$id","shops.isOpened"
+            ]));
+    
+            // Fetch products from the database
+            const { documents: allProducts = [] } = await this.databases.listDocuments(
+                conf.appwriteProductsDatabaseId,
+                conf.appwriteProductsCollectionId,
+                queries
+            );
+    
+            if (!Array.isArray(allProducts)) throw new TypeError("Expected 'allProducts' to be an array.");
+            if (inputValue.length === 0) return { success: true, products: allProducts };
+    
+            // Process and score products based on input search terms
+            const scoredProducts = allProducts
+                .map(product => {
+                    const titleLower = product.title.toLowerCase();
+                    const descLower = product.description.toLowerCase();
+    
+                    let score = 0;
+    
+                    if (titleLower.includes(inputTokens)) score += 3;
+                    if (descLower.includes(inputTokens)) score += 2;
+                    if (titleLower.startsWith(inputTokens)) score += 5;
+                    if (descLower.startsWith(inputTokens)) score += 4;
+    
+                    return { ...product, score };
+                }).filter((product) => product !== null);
+    
             scoredProducts.sort((a, b) => b.score - a.score);
-            // Additional price sorting (optional)
-            if (sortByAsc) {
-                scoredProducts.sort((a, b) => a.price - b.price);
-            }
-            if (sortByDesc) {
-                scoredProducts.sort((a, b) => b.price - a.price);
-            }
-
-            // Pagination logic
-            const startIndex = (page - 1) * productsPerPage;
-            const paginatedProducts = scoredProducts.slice(startIndex, startIndex + productsPerPage);
-
+    
             return {
                 success: true,
-                products: paginatedProducts
+                products: scoredProducts
             };
-
         } catch (error) {
-            console.error('Appwrite service :: getRefurbishedProducts', error);
+            console.error("Appwrite service :: getProducts", error);
             return { success: false, error: error.message };
         }
     }
-
-
-
     // Method to fetch a product by ID
     async getProductById(productId) {
         try {
-            const product = await this.databases.getDocument(
+            const queries = [];
+            queries.push(Query.equal("$id",productId));
+            queries.push(Query.select(["$id","title", "description", "price", "discountedPrice","isInStock","images","shops.registrationStatus",
+                "shops.shopName","shops.$id","shops.isOpened"
+            ]));
+            const { documents: product = [] } = await this.databases.listDocuments(
                 conf.appwriteProductsDatabaseId,
                 conf.appwriteProductsCollectionId,
-                productId
+                queries
             );
             return product;
         } catch (error) {
@@ -190,6 +115,7 @@ class SearchProductService {
             return false;
         }
     }
+    
 }
 
 const searchProductService = new SearchProductService();

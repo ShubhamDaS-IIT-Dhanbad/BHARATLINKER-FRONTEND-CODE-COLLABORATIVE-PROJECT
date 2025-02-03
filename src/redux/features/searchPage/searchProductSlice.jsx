@@ -17,7 +17,7 @@ export const fetchProducts = createAsyncThunk(
                 selectedBrands,
                 selectedCategories
             });
-
+            
             if (response?.products?.length === 0) {
                 return {
                     products: [],
