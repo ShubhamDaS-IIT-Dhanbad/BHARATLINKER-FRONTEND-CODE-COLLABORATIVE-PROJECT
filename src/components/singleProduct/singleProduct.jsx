@@ -151,24 +151,21 @@ const ProductDetails = ({ userData }) => {
                 <Fragment>
                     <div id="product-details-container">
                         <div id="product-details-img">
-                            <img src={selectedImage} alt="Selected Product" id="product-details-img-selected" />
+                            <LazyLoadImage
+                                src={selectedImage}
+                                alt={`Prouct Image`}
+                                effect="opacity"
+                                id="product-details-img-selected"
+                            />
                         </div>
+
                         <div id="product-details-thumbnails">
                             {productDetail?.images?.map((image, index) => (
                                 <div
                                     key={index}
                                     onClick={() => handleImageClick(index)}
                                     className={selectedImage === image ? "product-detail-image-select" : "product-detail-image-unselect"}
-                                >
-                                    <LazyLoadImage
-                                        src={image} 
-                                        alt={`Product Thumbnail ${index + 1}`}
-                                        effect="opacity" 
-                                        className="product-thumbnail-image"
-                                        height="80px"
-                                        width="80px"
-                                    />
-                                </div>
+                                />
                             ))}
                         </div>
                         <div id="product-details-info">

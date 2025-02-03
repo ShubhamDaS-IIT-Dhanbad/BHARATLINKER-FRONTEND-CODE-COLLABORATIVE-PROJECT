@@ -101,9 +101,10 @@ const ProductDetails = () => {
         productDetail && (
           <div id="product-details-container">
             <div id="product-details-img">
-              <img
+              <LazyLoadImage
                 src={selectedImage}
-                alt="Selected Product"
+                alt={`Product Thumbnail`}
+                effect="fadeIn"
                 id="product-details-img-selected"
               />
             </div>
@@ -118,16 +119,8 @@ const ProductDetails = () => {
                       ? "product-detail-image-select"
                       : "product-detail-image-unselect"
                   }
-                >
-                  <LazyLoadImage
-                    src={image}  // Image URL
-                    alt={`Product Thumbnail ${index + 1}`}
-                    effect="blur"  // Optional blur effect while loading
-                    className="product-thumbnail-image"
-                    height="80px"
-                    width="80px"
-                  />
-                </div>
+                />
+
               ))}
             </div>
 

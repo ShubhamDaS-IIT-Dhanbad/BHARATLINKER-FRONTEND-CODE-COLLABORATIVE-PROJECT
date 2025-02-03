@@ -119,29 +119,20 @@ const ProductDetails = () => {
             ) : (
                 <div id="shop-details-container">
                     <div id="product-details-img">
-                        <img
+                        <LazyLoadImage
                             src={selectedImage}
-                            alt="Selected Product"
+                            alt={`Shop Thumbnail`}
+                            effect="fadeIn"
                             id="product-details-img-selected"
                         />
                     </div>
-
                     <div id="product-details-thumbnails">
                         {shopDetail?.shopImages?.map((image, index) => (
                             <div
                                 key={index}
                                 onClick={() => handleImageClick(index)}
                                 className={selectedImage === image ? "product-detail-image-select" : "product-detail-image-unselect"}
-                            >
-                                <LazyLoadImage
-                                    src={image}  // Image URL
-                                    alt={`Shop Thumbnail ${index + 1}`}
-                                    effect="blur"  // Blur effect while loading
-                                    className="product-thumbnail-image"
-                                    height="80px"
-                                    width="80px"
-                                />
-                            </div>
+                            />
                         ))}
                     </div>
                     <div id="product-details-info">
