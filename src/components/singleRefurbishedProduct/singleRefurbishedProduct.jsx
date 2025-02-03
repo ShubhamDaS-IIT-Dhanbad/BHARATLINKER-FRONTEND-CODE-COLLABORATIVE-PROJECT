@@ -7,7 +7,8 @@ import { Oval } from "react-loader-spinner";
 import { RiShareForwardLine } from "react-icons/ri";
 import { CiPhone } from "react-icons/ci";
 import { PiWhatsappLogoThin } from "react-icons/pi";
-
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import "react-lazy-load-image-component/src/effects/blur.css";
 import SingleRefurbishedProductSearchBar from "../singlePageSearchbar.jsx";
 import "../style/singleProduct.css";
 
@@ -89,13 +90,13 @@ const ProductDetails = () => {
   return (
     <Fragment>
       <div id="product-details-search-container-top">
-        <SingleRefurbishedProductSearchBar heading={"REFURBISHED INFO"}/>
+        <SingleRefurbishedProductSearchBar heading={"REFURBISHED INFO"} />
       </div>
 
       {loading ? (
         <div className="page-loading-container">
-           <Oval height={30} width={30} color="green" secondaryColor="white" ariaLabel="loading" />
-                           </div>
+          <Oval height={30} width={30} color="green" secondaryColor="white" ariaLabel="loading" />
+        </div>
       ) : (
         productDetail && (
           <div id="product-details-container">
@@ -106,6 +107,7 @@ const ProductDetails = () => {
                 id="product-details-img-selected"
               />
             </div>
+
             <div id="product-details-thumbnails">
               {productDetail?.images?.map((image, index) => (
                 <div
@@ -117,6 +119,14 @@ const ProductDetails = () => {
                       : "product-detail-image-unselect"
                   }
                 >
+                  <LazyLoadImage
+                    src={image}  // Image URL
+                    alt={`Product Thumbnail ${index + 1}`}
+                    effect="blur"  // Optional blur effect while loading
+                    className="product-thumbnail-image"
+                    height="80px"
+                    width="80px"
+                  />
                 </div>
               ))}
             </div>

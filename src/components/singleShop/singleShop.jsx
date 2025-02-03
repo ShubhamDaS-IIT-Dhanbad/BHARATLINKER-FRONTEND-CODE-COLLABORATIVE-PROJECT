@@ -2,7 +2,7 @@ import React, { Fragment, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import SingleProductSearchBar from "../singlePageSearchbar.jsx";
-import {Oval} from "react-loader-spinner";
+import { Oval } from "react-loader-spinner";
 import { fetchShopById } from "../../redux/features/singleShopSlice.jsx";
 import { RiShareForwardLine } from "react-icons/ri";
 import { FaCaretRight } from "react-icons/fa";
@@ -11,7 +11,8 @@ import { FaDoorOpen } from "react-icons/fa6";
 import { CiPhone } from "react-icons/ci";
 import { CiLocationOn } from "react-icons/ci";
 import { CiMail } from "react-icons/ci";
-
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import "react-lazy-load-image-component/src/effects/blur.css";
 import "../style/singleShop.css";
 const ProductDetails = () => {
     const navigate = useNavigate();
@@ -109,24 +110,38 @@ const ProductDetails = () => {
     return (
         <Fragment>
             <div id="product-details-search-container-top">
-                <SingleProductSearchBar heading={"SHOP INFO"}/>
+                <SingleProductSearchBar heading={"SHOP INFO"} />
             </div>
             {loading ? (
                 <div className="refurbished-page-loading-container">
                     <Oval height={30} width={30} color="green" secondaryColor="white" ariaLabel="loading" />
-                                   </div>
+                </div>
             ) : (
                 <div id="shop-details-container">
                     <div id="product-details-img">
-                        <img src={selectedImage} alt="Selected Product" id="product-details-img-selected" />
+                        <img
+                            src={selectedImage}
+                            alt="Selected Product"
+                            id="product-details-img-selected"
+                        />
                     </div>
+
                     <div id="product-details-thumbnails">
                         {shopDetail?.shopImages?.map((image, index) => (
                             <div
                                 key={index}
                                 onClick={() => handleImageClick(index)}
                                 className={selectedImage === image ? "product-detail-image-select" : "product-detail-image-unselect"}
-                            ></div>
+                            >
+                                <LazyLoadImage
+                                    src={image}  // Image URL
+                                    alt={`Shop Thumbnail ${index + 1}`}
+                                    effect="blur"  // Blur effect while loading
+                                    className="product-thumbnail-image"
+                                    height="80px"
+                                    width="80px"
+                                />
+                            </div>
                         ))}
                     </div>
                     <div id="product-details-info">

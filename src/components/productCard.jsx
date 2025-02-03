@@ -1,12 +1,14 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import "./style/productCard.css";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import "react-lazy-load-image-component/src/effects/blur.css";
 
 const DEFAULT_IMAGE_URL = 'http://res.cloudinary.com/dthelgixr/image/upload/v1727870088/hd7kcjuz8jfjajnzmqkp.webp';
 
 function SearchPageProductCard({ id, image, title, discountedPrice, isInStock }) {
     const navigate = useNavigate();
-    const location = useLocation(); 
+    const location = useLocation();
 
     // Improved image handling with optional chaining
     const imageUrl = image?.[0] || DEFAULT_IMAGE_URL;
@@ -27,14 +29,15 @@ function SearchPageProductCard({ id, image, title, discountedPrice, isInStock })
     return (
         <div className="search-page-product-card" onClick={handleCardClick}>
             <div className="search-page-product-card-top">
-                <img 
-                    className="search-page-product-card-top-image" 
-                    src={imageUrl} 
-                    alt={productName}
-                    loading="lazy"
+                <LazyLoadImage
+                    className="search-page-product-card-top-image"
+                    src={imageUrl}  // Image URL
+                    alt={productName}  // Alt text for accessibility
+                    effect="blur"  // Optional blur effect while loading
+                    loading="lazy"  // Native lazy loading
                 />
             </div>
-            
+
             <div className='search-page-product-card-bottom'>
                 <div className="search-page-product-card-shop-price">
                     <span className='search-page-product-card-shop-name'>{productName}</span>
@@ -44,7 +47,7 @@ function SearchPageProductCard({ id, image, title, discountedPrice, isInStock })
                 </div>
 
                 {isRefurbishedPage && (
-                    <div 
+                    <div
                         className="user-product-edit-button"
                         onClick={(e) => {
                             e.stopPropagation(); // Prevent event bubbling

@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { IoIosArrowUp, IoIosArrowDown } from "react-icons/io";
 import "./shopCard.css";
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import "react-lazy-load-image-component/src/effects/blur.css";
 
 function ShopCard({ shop }) {
     const navigate = useNavigate();
@@ -17,11 +19,17 @@ function ShopCard({ shop }) {
     const handleCardClick = () => {
         navigate(`/shop/${shop.$id}`, { state: { fromShopCard: true } });
     };
-      
+
     return (
         <div className="shop-card-container">
             <div className="shop-card-header" onClick={handleCardClick}>
-                <img className="shop-card-image" src={shopImageUrl} alt={shopDisplayName} />
+                <LazyLoadImage
+                    className="shop-card-image"
+                    src={shopImageUrl}  // Image URL
+                    alt={shopDisplayName}  // Alt text for accessibility
+                    effect="blur"  // Optional blur effect while loading
+                    loading="lazy"  // Native lazy loading
+                />
             </div>
 
             <div className='shop-card-details'>
