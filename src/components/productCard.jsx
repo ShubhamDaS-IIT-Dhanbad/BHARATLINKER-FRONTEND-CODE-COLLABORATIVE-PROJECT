@@ -33,7 +33,7 @@ function SearchPageProductCard({ id, image, title, discountedPrice, isInStock })
                     className="search-page-product-card-top-image"
                     src={imageUrl}  // Image URL
                     alt={productName}  // Alt text for accessibility
-                    effect="blur"  // Optional blur effect while loading
+                    effect="zoomIn"  // Optional blur effect while loading
                     loading="lazy"  // Native lazy loading
                 />
             </div>
