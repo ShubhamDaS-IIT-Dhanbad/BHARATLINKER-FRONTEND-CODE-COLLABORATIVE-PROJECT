@@ -1,9 +1,9 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import SingleProductSearchBar from "../singlePageSearchbar.jsx";
+import SingleProductSearchBar from "./singlePageSearchbar.jsx";
 import { Oval } from "react-loader-spinner";
-import { fetchShopById } from "../../redux/features/singleShopSlice.jsx";
+import { fetchShopById } from "../redux/features/singleShopSlice.jsx";
 import { RiShareForwardLine } from "react-icons/ri";
 import { FaCaretRight } from "react-icons/fa";
 import { FaDoorClosed } from "react-icons/fa6";
@@ -13,7 +13,7 @@ import { CiLocationOn } from "react-icons/ci";
 import { CiMail } from "react-icons/ci";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
-import "../style/singleShop.css";
+import "./style/singleShop.css";
 const ProductDetails = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();

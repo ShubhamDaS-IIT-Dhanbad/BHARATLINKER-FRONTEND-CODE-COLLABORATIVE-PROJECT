@@ -5,16 +5,16 @@ import { Oval } from "react-loader-spinner";
 import { FaCaretRight, FaPlus, FaMinus } from "react-icons/fa";
 import { RiShareForwardLine } from "react-icons/ri";
 
-import SingleProductSearchBar from "../singlePageSearchbar.jsx";
-import AddToCartTab from "../viewCartTab/viewCart.jsx";
+import SingleProductSearchBar from "./singlePageSearchbar.jsx";
+import AddToCartTab from "./viewCartTab/viewCart.jsx";
 
-import searchProductService from "../../appWrite/searchProduct.js";
-import { addToUserCart, fetchUserCart, updateCartStateAsync, removeFromUserCart } from "../../redux/features/user/cartSlice.jsx";
+import searchProductService from "../appWrite/searchProduct.js";
+import { addToUserCart, fetchUserCart, updateCartStateAsync, removeFromUserCart } from "../redux/features/user/cartSlice.jsx";
 
 import { LazyLoadImage } from "react-lazy-load-image-component";
 
 import "react-lazy-load-image-component/src/effects/blur.css";
-import "../style/singleProduct.css";
+import "./style/singleProduct.css";
 
 const fallbackImage = "http://res.cloudinary.com/dthelgixr/image/upload/v1727870088/hd7kcjuz8jfjajnzmqkp.webp";
 const ProductDetails = ({ userData }) => {

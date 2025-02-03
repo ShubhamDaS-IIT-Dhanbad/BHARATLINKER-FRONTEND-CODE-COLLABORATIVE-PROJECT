@@ -29,6 +29,7 @@ const SearchPage = () => {
         sortByAsc,
         sortByDesc,
     } = useSelector((state) => state.searchproducts);
+
     const handleInitialSearch = useCallback(() => {
         if (products.length === 0 && !loading) {
             executeSearch();
@@ -37,7 +38,6 @@ const SearchPage = () => {
     useEffect(() => {
         handleInitialSearch();
     }, [products.length, updated]);
-
     return (
         <>
             <div id="productSearchPage-container-top">

@@ -9,8 +9,8 @@ import { CiPhone } from "react-icons/ci";
 import { PiWhatsappLogoThin } from "react-icons/pi";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
-import SingleRefurbishedProductSearchBar from "../singlePageSearchbar.jsx";
-import "../style/singleProduct.css";
+import SingleRefurbishedProductSearchBar from "./singlePageSearchbar.jsx";
+import "./style/singleProduct.css";
 
 const fallbackImage =
   "http://res.cloudinary.com/dthelgixr/image/upload/v1727870088/hd7kcjuz8jfjajnzmqkp.webp";

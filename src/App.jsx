@@ -12,10 +12,11 @@ import RefurbishedPage from './components/refurbishedPage/refurbishedPage.jsx';
 
 const LoginPage = lazy(() => import('./components/loginPage/login.jsx'));
 
-const SingleProduct = lazy(() => import('./components/singleProduct/singleProduct.jsx'));
+const SingleProduct = lazy(() => import('./components/singleProduct.jsx'));
+const SingleShopCard = lazy(() => import('./components/singleShop.jsx'));
+const SingleRefurbishedProductCard = lazy(() => import('./components/singleRefurbishedProduct.jsx'));
+
 const ShopProducts = lazy(() => import('./components/shopProducts/shopProducts.jsx'));
-const SingleShopCard = lazy(() => import('./components/singleShop/singleShop.jsx'));
-const SingleRefurbishedProductCard = lazy(() => import('./components/singleRefurbishedProduct/singleRefurbishedProduct.jsx'));
 const User = lazy(() => import('./components/user/userHome.jsx'));
 const UserProfile = lazy(() => import('./components/user/userProfile/userProfile.jsx'));
 const UserProductPageMain = lazy(() => import('./components/user/productPage/userProductPageMain.jsx'));
