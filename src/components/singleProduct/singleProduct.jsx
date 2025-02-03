@@ -5,11 +5,10 @@ import { Oval } from "react-loader-spinner";
 import { FaCaretRight, FaPlus, FaMinus } from "react-icons/fa";
 import { RiShareForwardLine } from "react-icons/ri";
 
-import SingleProductSearchBar from "./singleProductSearchBar.jsx";
+import SingleProductSearchBar from "../singlePageSearchbar.jsx";
 import AddToCartTab from "../viewCartTab/viewCart.jsx";
 
 import searchProductService from "../../appWrite/searchProduct.js";
-import { fetchShopById } from "../../redux/features/singleShopSlice.jsx";
 import { addToUserCart,fetchUserCart, updateCartStateAsync, removeFromUserCart } from "../../redux/features/user/cartSlice.jsx";
 
 import "../style/singleProduct.css";
@@ -21,13 +20,10 @@ const ProductDetails = ({ userData }) => {
     const { productId } = useParams();
 
     const { products } = useSelector((state) => state.searchproducts);
-    const { shops } = useSelector((state) => state.searchshops);
-    const { singleShops } = useSelector((state) => state.singleshops);
     const { cart, totalQuantity, totalPrice } = useSelector((state) => state.userCart);
 
     const [loading, setLoading] = useState(true);
     const [productDetail, setProductDetails] = useState(null);
-    const [shopDetail, setShopDetail] = useState(null);
     const [selectedImage, setSelectedImage] = useState(fallbackImage);
     const [descriptionSections, setDescriptionSections] = useState([]);
 
@@ -52,17 +48,10 @@ const ProductDetails = ({ userData }) => {
                 const product =
                     products.find((product) => product.$id === productId) ||
                     (await searchProductService.getProductById(productId));
-
                 if (product) {
                     setProductDetails(product);
-                    setSelectedImage(product.images[0] || fallbackImage);
+                    setSelectedImage(product?.images.length>0 ? product?.images[0] || fallbackImage : fallbackImage);
                     setDescriptionSections(parseDescription(product.description));
-
-                    const shop =
-                        [...shops, ...singleShops].find((shop) => shop.$id === product.shop) ||
-                        (await dispatch(fetchShopById(product.shop))).payload;
-
-                    if (shop) setShopDetail(shop);
                 } else {
                     navigate("/404");
                 }
@@ -75,6 +64,7 @@ const ProductDetails = ({ userData }) => {
         };
         fetchDetails();
     }, []);
+
     useEffect(() => {
         if (cart.length === 0 && userData?.$id) {
             const userId=userData?.$id;
@@ -83,7 +73,7 @@ const ProductDetails = ({ userData }) => {
     }, []);
 
     const handleImageClick = (index) => setSelectedImage(productDetail?.images[index]);
-    const handleShopClick = () => shopDetail && navigate(`/shop/${shopDetail.$id}`);
+    const handleShopClick = () => productDetail.shops.$id && navigate(`/shop/${productDetail.shops.$id}`);
     const handleShare = async () => {
         if (navigator.share) {
             try {
@@ -103,18 +93,18 @@ const ProductDetails = ({ userData }) => {
 
     const handleAddToCart = async () => {
         if (!userData?.phoneNumber) {navigate("/login");return;}
-        if (!shopDetail) {alert("SHOP DOES NOT EXIST");return;}
+        if (!productDetail.shops.$id) {alert("SHOP DOES NOT EXIST");return;}
         const cartItem = {
             userId:userData.$id,
             productId: productDetail.$id,
-            shopId: productDetail.shop,
+            shopId: productDetail.shopId,
             title: productDetail.title,
             price: productDetail.price,
             discountedPrice: productDetail.discountedPrice || productDetail.price,
             quantity: 1,
-            productImage: productDetail.images[0],
+            productImage: productDetail?.images[0],
             phoneNumber: userData.phoneNumber,
-            shopEmail: shopDetail.email,
+            shopEmail: productDetail.shops.email,
             customerName:userData.name
         };
         await dispatch(addToUserCart(cartItem));
@@ -147,7 +137,7 @@ const ProductDetails = ({ userData }) => {
     return (
         <Fragment>
             <div id="product-details-search-container-top">
-                <SingleProductSearchBar />
+                <SingleProductSearchBar heading={"PRODUCT INFO"}/>
             </div>
 
             {loading ? (
@@ -181,7 +171,7 @@ const ProductDetails = ({ userData }) => {
                         </div>
                         <div id="product-details-shop">
                             Shop:{" "}
-                            <span onClick={handleShopClick}>{shopDetail ? shopDetail?.shopName?.toUpperCase() : "Loading..."}</span>
+                            <span onClick={handleShopClick}>{productDetail?.shops?.shopName ? productDetail.shops?.shopName?.toUpperCase() : "Loading..."}</span>
                         </div>
                         <div id="product-details-price-button">
                             <div id="searchProductDetails-price-button-inner">

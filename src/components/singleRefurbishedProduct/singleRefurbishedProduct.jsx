@@ -8,7 +8,7 @@ import { RiShareForwardLine } from "react-icons/ri";
 import { CiPhone } from "react-icons/ci";
 import { PiWhatsappLogoThin } from "react-icons/pi";
 
-import SingleRefurbishedProductSearchBar from "./singleRefurbishedProductSearchBar.jsx";
+import SingleRefurbishedProductSearchBar from "../singlePageSearchbar.jsx";
 import "../style/singleProduct.css";
 
 const fallbackImage =
@@ -89,7 +89,7 @@ const ProductDetails = () => {
   return (
     <Fragment>
       <div id="product-details-search-container-top">
-        <SingleRefurbishedProductSearchBar />
+        <SingleRefurbishedProductSearchBar heading={"REFURBISHED INFO"}/>
       </div>
 
       {loading ? (

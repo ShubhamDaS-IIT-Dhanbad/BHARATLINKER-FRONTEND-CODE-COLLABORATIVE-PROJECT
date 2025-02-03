@@ -1,7 +1,7 @@
 import React, { Fragment, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import SingleProductSearchBar from "./singleShopSearchBar.jsx";
+import SingleProductSearchBar from "../singlePageSearchbar.jsx";
 import {Oval} from "react-loader-spinner";
 import { fetchShopById } from "../../redux/features/singleShopSlice.jsx";
 import { RiShareForwardLine } from "react-icons/ri";
@@ -109,7 +109,7 @@ const ProductDetails = () => {
     return (
         <Fragment>
             <div id="product-details-search-container-top">
-                <SingleProductSearchBar />
+                <SingleProductSearchBar heading={"SHOP INFO"}/>
             </div>
             {loading ? (
                 <div className="refurbished-page-loading-container">

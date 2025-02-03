@@ -1,4 +1,4 @@
-import React, { Suspense, lazy, useState } from "react";
+import React, { Suspense, lazy, useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import { Helmet, HelmetProvider } from "react-helmet-async";
@@ -10,7 +10,6 @@ import SearchPage from './components/searchPage/searchPage.jsx';
 import SearchShop from './components/searchShop/searchShop.jsx';
 import RefurbishedPage from './components/refurbishedPage/refurbishedPage.jsx';
 
-import i1 from './assets/bl.png';
 const LoginPage = lazy(() => import('./components/loginPage/login.jsx'));
 
 const SingleProduct = lazy(() => import('./components/singleProduct/singleProduct.jsx'));
@@ -47,8 +46,11 @@ function App() {
 }
 
 const RoutesWithConditionalHeader = React.memo(() => {
+  const [userData,setUserData]=useState("");
+  useEffect(()=>{
+    if(!userData){setUserData(getUserDataFromCookie());}
+  },[userData])
   const { PrivateRoute, getUserDataFromCookie } = useUserAuth();
-  const userData = getUserDataFromCookie();
   return (
     <>
       <Routes>

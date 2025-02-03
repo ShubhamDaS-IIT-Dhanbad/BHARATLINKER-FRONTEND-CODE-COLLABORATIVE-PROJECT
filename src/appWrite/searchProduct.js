@@ -55,8 +55,8 @@ class SearchProductService {
             queries.push(Query.limit(productsPerPage), Query.offset(offset));
     
             // Specify fields to fetch using Query.select
-            queries.push(Query.select(["$id","title", "description", "price", "discountedPrice","isInStock","images","shops.registrationStatus",
-                "shops.shopName","shops.$id","shops.isOpened"
+            queries.push(Query.select(["$id","shopId","title", "description", "price", "discountedPrice","isInStock","images","shops.registrationStatus",
+                "shops.shopName","shops.$id","shops.isOpened","shops.email"
             ]));
     
             // Fetch products from the database
@@ -101,15 +101,15 @@ class SearchProductService {
         try {
             const queries = [];
             queries.push(Query.equal("$id",productId));
-            queries.push(Query.select(["$id","title", "description", "price", "discountedPrice","isInStock","images","shops.registrationStatus",
-                "shops.shopName","shops.$id","shops.isOpened"
+            queries.push(Query.select(["$id","shopId","title", "description", "price", "discountedPrice","isInStock","images","shops.registrationStatus",
+                "shops.shopName","shops.isOpened","shops.email"
             ]));
             const { documents: product = [] } = await this.databases.listDocuments(
                 conf.appwriteProductsDatabaseId,
                 conf.appwriteProductsCollectionId,
                 queries
             );
-            return product;
+            return product[0];
         } catch (error) {
             console.log('Appwrite service :: getProductById', error);
             return false;
