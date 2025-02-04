@@ -10,7 +10,7 @@ import SearchPage from './components/searchPage/searchPage.jsx';
 import SearchShop from './components/searchShop/searchShop.jsx';
 import RefurbishedPage from './components/refurbishedPage/refurbishedPage.jsx';
 
-const LoginPage = lazy(() => import('./components/loginPage/login.jsx'));
+const LoginPage = lazy(() => import('./components/user/login.jsx'));
 
 const SingleProduct = lazy(() => import('./components/singleProduct.jsx'));
 const SingleShopCard = lazy(() => import('./components/singleShop.jsx'));

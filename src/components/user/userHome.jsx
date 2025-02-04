@@ -10,7 +10,7 @@ import { CiBoxList } from "react-icons/ci";
 import { Oval } from 'react-loader-spinner';
 
 import useUserAuth from '../../hooks/userAuthHook.jsx';
-import './userHome.css';
+import './style/userHome.css';
 
 function UserHome({userData}) {
     

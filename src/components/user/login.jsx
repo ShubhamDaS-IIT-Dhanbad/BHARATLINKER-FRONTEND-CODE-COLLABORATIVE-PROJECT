@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../style/userLogin.css';
+import './style/userLogin.css';
 import { Client, Account, ID } from 'appwrite';
 import { FaArrowLeft} from "react-icons/fa";
 

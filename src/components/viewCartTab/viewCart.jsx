@@ -5,7 +5,7 @@ import { FaCaretRight } from "react-icons/fa";
 import { useNavigate } from 'react-router-dom';
 import { FaCartShopping } from "react-icons/fa6";
 
-const AddToCartTab = ({ totalQuantity,totalPrice}) => {
+const AddToCartTab = ({totalQuantity,totalPrice}) => {
   const navigate = useNavigate();
 
   const handleViewCart = () => {
