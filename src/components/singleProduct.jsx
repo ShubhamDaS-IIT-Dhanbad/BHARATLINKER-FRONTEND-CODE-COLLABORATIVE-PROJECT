@@ -82,25 +82,16 @@ const ProductDetails = ({ userData }) => {
             try {
                 await navigator.share({
                     title: productDetail?.title || "Product",
-                    text: `Check out this product: ${productDetail?.title || ""}\nImage: ${productDetail?.images[0] || ""}`,
-                    url: window.location.href, // Sharing the page URL
+                    text: `Check out this product: ${productDetail?.title || ""}`,
+                    url: window.location.href,
                 });
             } catch (error) {
                 console.error("Error sharing product:", error);
             }
         } else {
-            const shareText = `Check out this product: ${productDetail?.title || ""}\n${window.location.href}`;
-            const imageUrl = productDetail?.images[0] || "";
-    
-            if (imageUrl) {
-                navigator.clipboard.writeText(`${shareText}\nImage: ${imageUrl}`);
-                alert("Share link copied to clipboard! You can paste it manually.");
-            } else {
-                alert("Sharing not supported on this browser.");
-            }
+            alert("Sharing not supported on this browser.");
         }
     };
-    
 
 
     const handleAddToCart = async () => {
