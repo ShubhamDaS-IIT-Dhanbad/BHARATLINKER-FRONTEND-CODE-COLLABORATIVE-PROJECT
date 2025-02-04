@@ -1,9 +1,10 @@
-import React, { Fragment, useEffect, useState, useMemo } from "react";
+import React, { Fragment, useEffect, useState, useMemo, useCallback  } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Oval } from "react-loader-spinner";
 import { FaCaretRight, FaPlus, FaMinus } from "react-icons/fa";
 import { RiShareForwardLine } from "react-icons/ri";
+import { debounce } from "lodash";
 
 import SingleProductSearchBar from "./singlePageSearchbar.jsx";
 import AddToCartTab from "./viewCartTab/viewCart.jsx";
@@ -17,6 +18,8 @@ import "react-lazy-load-image-component/src/effects/blur.css";
 import "./style/singleProduct.css";
 
 const fallbackImage = "http://res.cloudinary.com/dthelgixr/image/upload/v1727870088/hd7kcjuz8jfjajnzmqkp.webp";
+const MAX_QUANTITY = 5;
+
 const ProductDetails = ({ userData }) => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
@@ -95,13 +98,13 @@ const ProductDetails = ({ userData }) => {
 
 
     const handleAddToCart = async () => {
-        if (!userData?.phoneNumber) { navigate("/login"); return; }
-        if (!productDetail.shops.$id) { alert("SHOP DOES NOT EXIST"); return; }
-        const cartItem = {
+        if (!userData?.phoneNumber) return navigate("/login");
+        if (!productDetail.shopId) return alert("SHOP DOES NOT EXIST");
+        await dispatch(addToUserCart({
             userId: userData.$id,
             productId: productDetail.$id,
             shopId: productDetail.shopId,
-            title: productDetail.title,
+            title: productDetail.title.slice(0,40),
             price: productDetail.price,
             discountedPrice: productDetail.discountedPrice || productDetail.price,
             quantity: 1,
@@ -109,31 +112,27 @@ const ProductDetails = ({ userData }) => {
             phoneNumber: userData.phoneNumber,
             shopEmail: productDetail.shops.email,
             customerName: userData.name
-        };
-        await dispatch(addToUserCart(cartItem));
+        }));
     };
 
-    const handleUpdateCart = async (increment = true) => {
-        if (!userData?.phoneNumber) { navigate("/login"); return; }
-        const cartId = cartItem.$id;
-        if (increment) {
-            const updatedCart = {
-                productId: productDetail.$id,
-                quantity: cartQuantity + 1,
-                customerName: userData.name
-            };
+    const debouncedUpdateCart = useCallback(
+        debounce(async (cartId, updatedCart) => {
             await dispatch(updateCartStateAsync(cartId, updatedCart));
+        }, 500),
+        [dispatch]
+    );
+
+    const handleUpdateCart = (increment) => {
+        if (!userData?.phoneNumber) return navigate("/login");
+        if (!cartItem) return;
+
+        const cartId = cartItem.$id;
+        const newQuantity = increment ? Math.min(cartQuantity + 1, MAX_QUANTITY) : Math.max(cartQuantity - 1, 0);
+        
+        if (newQuantity === 0) {
+            dispatch(removeFromUserCart({ productId: productDetail.$id, cartId }));
         } else {
-            if (cartQuantity > 1) {
-                const updatedCart = {
-                    productId: productDetail.$id,
-                    quantity: cartQuantity - 1,
-                    customerName: userData.name
-                };
-                await dispatch(updateCartStateAsync(cartId, updatedCart));
-            } else {
-                await dispatch(removeFromUserCart({ productId: productDetail.$id, cartId }));
-            }
+            debouncedUpdateCart(cartId, { productId: productDetail.$id, quantity: newQuantity, customerName: userData.name });
         }
     };
 

@@ -125,7 +125,7 @@ const MyCartPage = ({ userData }) => {
                                     const isOutOfStock = item.stock < item.quantity;
                                     return (
                                         <OrderProductCard
-                                            key={item.productId}
+                                            key={item.$id}
                                             productId={item.productId}
                                             order={item}
                                             isRemove={true}
