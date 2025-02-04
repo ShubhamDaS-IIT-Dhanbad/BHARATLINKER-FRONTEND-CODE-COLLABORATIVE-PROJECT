@@ -10,7 +10,6 @@ import ProductList from '../productList.jsx';
 import ProductSortBySection from './sortbySection.jsx';
 import ProductFilterBySection from './filterSection.jsx';
 import InfiniteScroll from 'react-infinite-scroll-component';
-
 import { useExecuteSearch } from '../../hooks/searchProductHook';
 import './searchPage.css';
 
@@ -38,6 +37,7 @@ const SearchPage = () => {
     useEffect(() => {
         handleInitialSearch();
     }, [products.length, updated]);
+    
     return (
         <>
             <div id="productSearchPage-container-top">

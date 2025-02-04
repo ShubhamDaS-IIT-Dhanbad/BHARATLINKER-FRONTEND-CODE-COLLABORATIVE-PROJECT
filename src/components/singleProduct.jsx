@@ -17,6 +17,7 @@ import { LazyLoadImage } from "react-lazy-load-image-component";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import "./style/singleProduct.css";
 
+
 const fallbackImage = "http://res.cloudinary.com/dthelgixr/image/upload/v1727870088/hd7kcjuz8jfjajnzmqkp.webp";
 const MAX_QUANTITY = 5;
 
@@ -76,7 +77,7 @@ const ProductDetails = ({ userData }) => {
             const userId = userData?.$id;
             dispatch(fetchUserCart(userId));
         }
-    }, []);
+    }, [userData]);
 
     const handleImageClick = (index) => setSelectedImage(productDetail?.images[index]);
     const handleShopClick = () => productDetail.shopId && navigate(`/shop/${productDetail.shopId}`);

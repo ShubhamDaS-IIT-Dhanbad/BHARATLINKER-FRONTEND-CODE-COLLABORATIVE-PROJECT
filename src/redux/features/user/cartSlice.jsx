@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { placeOrderProvider } from '../../../appWrite/order/order.js';
 import { addToCart, getCartItems, removeFromCart, updateCartQuantity } from '../../../appWrite/cart/cart.js';
+
 import debounce from "lodash.debounce";
 import throttle from "lodash.throttle";
 

@@ -27,7 +27,7 @@ const MyCartPage = ({ userData }) => {
     const [showAddressDetail, setShowAddressDetail] = useState(false);
     const [showCheckOutPage, setShowCheckOutPage] = useState(false);
 
-    const { cart, totalQuantity, totalPrice } = useSelector((state) => state.userCart);
+    const {cart} = useSelector((state) => state.userCart);
 
     // State management
     const [shopStatus, setShopStatus] = useState({});
