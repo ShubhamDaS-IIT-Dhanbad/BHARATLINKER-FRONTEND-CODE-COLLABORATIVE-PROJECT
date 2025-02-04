@@ -76,7 +76,7 @@ const ProductDetails = ({ userData }) => {
     }, []);
 
     const handleImageClick = (index) => setSelectedImage(productDetail?.images[index]);
-    const handleShopClick = () => productDetail.shops.$id && navigate(`/shop/${productDetail.shops.$id}`);
+    const handleShopClick = () => productDetail.shopId && navigate(`/shop/${productDetail.shopId}`);
     const handleShare = async () => {
         if (navigator.share) {
             try {

@@ -35,17 +35,16 @@ const ProductDetails = () => {
             return { heading: heading.trim(), content: contents.join("*").trim() };
         });
     };
-
     const fetchShopDetails = async (shopId) => {
         setLoading(true);
         const shop =
-            [...shops, ...singleShops].find((shop) => shop.$id === shopId) ||
+            [...shops, ...singleShops].find((shop) => shop?.$id === shopId) ||
             (await dispatch(fetchShopById(shopId))).payload;
 
         if (shop) {
             setShopDetail(shop);
-            setDescriptionSections(parseDescription(shop.description));
-            setSelectedImage(shop.shopImages[0] || "");
+            setDescriptionSections(parseDescription(shop?.description));
+            setSelectedImage(shop?.shopImages[0] || "");
         } else {
             console.error("Shop not found");
         }
@@ -53,11 +52,7 @@ const ProductDetails = () => {
     };
 
     useEffect(() => {
-        if (shopId) {
-            fetchShopDetails(shopId);
-        }
-    }, [shopId, shops, singleShops, dispatch]);
-    useEffect(() => {
+        if (shopId) {fetchShopDetails(shopId);}
         window.scrollTo(0, 0);
     }, []);
 
@@ -146,7 +141,7 @@ const ProductDetails = () => {
                         id="shop-detail-view-all-product"
                         onClick={() => {
                             const shopNameQuery = encodeURIComponent(shopDetail?.shopName || '-'); // Encode the shopName to ensure it's URL-safe
-                            navigate(`/shop/product/${shopDetail.$id}?shopName=${shopNameQuery}`);
+                            navigate(`/shop/product/${shopDetail?.$id}?shopName=${shopNameQuery}`);
                         }}
                     >
                         View all products of {shopDetail?.shopName ? shopDetail?.shopName : "-"}
@@ -156,9 +151,9 @@ const ProductDetails = () => {
 
                     <div className="shop-detail-options">
                         <div
-                            className={`shop-detail-option ${shopDetail.isOpened ? 'open' : 'closed'}`}
+                            className={`shop-detail-option ${shopDetail?.isOpened ? 'open' : 'closed'}`}
                         >
-                            {shopDetail.isOpened ? <FaDoorOpen size={35} /> : <FaDoorClosed size={35} />}
+                            {shopDetail?.isOpened ? <FaDoorOpen size={35} /> : <FaDoorClosed size={35} />}
                         </div>
                         <div className="shop-detail-option" onClick={handlePhoneClick}>
                             <CiPhone size={35} />
