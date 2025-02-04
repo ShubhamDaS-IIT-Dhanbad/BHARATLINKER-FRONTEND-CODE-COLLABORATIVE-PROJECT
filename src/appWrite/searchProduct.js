@@ -15,15 +15,15 @@ class SearchProductService {
         this.bucket = new Storage(this.client);
     }
     async getProducts({
-        shopId,
-        inputValue,
+        shopId="",
+        inputValue="",
         userLat,
         userLong,
-        radius,
-        page,
+        radius=5,
+        page=1,
         productsPerPage = 4,
-        sortByAsc,
-        sortByDesc
+        sortByAsc=false,
+        sortByDesc=false
     }) {
         try {
             const inputTokens = inputValue.trim().toLowerCase(); // Single string
