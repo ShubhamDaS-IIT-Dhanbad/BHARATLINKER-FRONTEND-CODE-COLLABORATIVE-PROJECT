@@ -1,99 +1,65 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 
-import { LiaSortSolid } from 'react-icons/lia';
-import { MdFilterList } from 'react-icons/md';
-import SearchBar from './searchBar.jsx';
-import { RotatingLines } from 'react-loader-spinner';
+import { Oval } from 'react-loader-spinner';
 import ProductList from './productList.jsx';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
+import Navbar from '../navbar.jsx';
 import ProductSortBySection from './sortbySection.jsx';
 import ProductFilterBySection from './filterSection.jsx';
 
-import { fetchProducts, loadMoreProducts } from '../../redux/features/shopProducts/searchProductSlice.jsx';
+import { useExecuteSearch } from '../../hooks/searchShopProductHook.jsx';
 import './shopProducts.css';
 
 const ProductSearch = () => {
+    const location = useLocation();
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const { shopId, shopName } = useParams();
+    const { shopId } = useParams(); // Get shopId from URL params
 
-    const productsPerPage = 20;
-    const [inputValue, setInputValue] = useState('');
+    // Parse shopName from query params
+    const queryParams = new URLSearchParams(location.search);
+    const shopName = queryParams.get('shopName') || '';
+
+    // ✅ Pass `shopId` to the custom hook
+    const { executeSearch, onLoadMore } = useExecuteSearch(shopId);
+
     const [loadingMoreProducts, setLoadingMoreProducts] = useState(false);
     const [showSortBy, setShowSortBy] = useState(false);
     const [showFilterBy, setShowFilterBy] = useState(false);
 
     const shopData = useSelector((state) => state.shopproducts.shops[shopId]) || {};
+    const {loading} = useSelector((state) => state.shopproducts);
+
     const {
         products = [],
-        loading: shopLoading = false,
         hasMoreProducts = false,
-        currentPage = 1,
-        sortByAsc = true,
-        sortByDesc,
-        selectedBrands,
-        selectedCategories,
     } = shopData;
 
     const globalLoading = useSelector((state) => state.shopproducts.loading);
 
-    const handleSearch = useCallback(() => {
-        const params = {
-            inputValue,
-            page: 1,
-            productsPerPage,
-            pinCodes: [742136],
-            selectedCategories,
-            selectedBrands,
-            sortByAsc,
-            sortByDesc,
-            shopId,
-        };
-        dispatch(fetchProducts(params));
-    }, [dispatch, inputValue, selectedCategories, selectedBrands, sortByAsc, sortByDesc, shopId]);
-
-    const onLoadMore = useCallback(() => {
-        if (!hasMoreProducts || loadingMoreProducts) return;
-        setLoadingMoreProducts(true);
-        const params = {
-            inputValue,
-            page: currentPage + 1,
-            productsPerPage,
-            pinCodes: [742136, 742137],
-            selectedCategories,
-            selectedBrands,
-            sortByAsc,
-            sortByDesc,
-            shopId,
-        };
-        dispatch(loadMoreProducts(params)).finally(() => setLoadingMoreProducts(false));
-    }, [dispatch, inputValue, currentPage, loadingMoreProducts, hasMoreProducts, selectedCategories, selectedBrands, sortByAsc, sortByDesc, shopId]);
+    // Initial search when the component loads
+    const handleInitialSearch = useCallback(() => {
+        if (products.length === 0 && !globalLoading) {
+            executeSearch();
+        }
+    }, []);
 
     useEffect(() => {
-        if (shopId && products.length === 0 && !globalLoading) {
-            handleSearch();
-        }
-    }, [shopId, products.length, globalLoading, handleSearch]);
+        handleInitialSearch();
+    }, [handleInitialSearch]);
 
     return (
         <>
             <div id="shopSearchPage-container-top">
-                <SearchBar
-                    shopData={shopData}
-                    shopId={shopId}
-                    setInputValue={setInputValue}
-                    shopName={shopName}
-                    inputValue={inputValue}
-                    handleSearchProduct={handleSearch}
-                />
+                <Navbar headerTitle={shopName.slice(0, 10).toUpperCase()} />
             </div>
 
-            {(globalLoading || shopLoading) && !loadingMoreProducts ? (
-                <div className="refurbished-page-loading-container">
-                    <RotatingLines width="60" height="60" color="#007bff" />
+            {loading ? (
+                <div className="shop-product-page-loading-container">
+                    <Oval height={30} width={30} color="green" secondaryColor="white" ariaLabel="loading" />
                 </div>
             ) : (
                 <InfiniteScroll
@@ -110,39 +76,17 @@ const ProductSearch = () => {
             {showSortBy && (
                 <ProductSortBySection
                     shopId={shopId}
-                    handleSearch={handleSearch}
-                    showSortBy={showSortBy}
+                    handleSearch={executeSearch}
                     setShowSortBy={setShowSortBy}
-                    sortByAsc={sortByAsc}
-                    sortByDesc={sortByDesc}
                 />
             )}
             {showFilterBy && (
                 <ProductFilterBySection
                     shopId={shopId}
-                    selectedBrands={selectedBrands}
-                    selectedCategories={selectedCategories}
-                    handleSearch={handleSearch}
+                    handleSearch={executeSearch}
                     setShowFilterBy={setShowFilterBy}
                 />
             )}
-
-            <div id="shop-products-footer">
-                <div
-                    id="shop-products-footer-sortby"
-                    onClick={() => setShowSortBy(!showSortBy)}
-                >
-                    <LiaSortSolid size={33} />
-                    SORT BY
-                </div>
-                <div
-                    id="shop-products-footer-filterby"
-                    onClick={() => setShowFilterBy(!showFilterBy)}
-                >
-                    <MdFilterList size={33} />
-                    FILTER BY
-                </div>
-            </div>
         </>
     );
 };

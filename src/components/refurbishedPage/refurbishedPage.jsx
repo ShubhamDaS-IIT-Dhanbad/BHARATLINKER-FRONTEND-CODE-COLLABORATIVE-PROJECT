@@ -51,7 +51,6 @@ const RefurbishedPage = () => {
           {(loading) ? (
             <div className="fallback-loading">
               <Oval height={30} width={30} color="green" secondaryColor="white" ariaLabel="loading" />
-
             </div>
           ) : (
             <InfiniteScroll
@@ -89,7 +88,7 @@ const RefurbishedPage = () => {
             />
           )}
 
-          <div id="refurbishedProductPage-footer">
+          {/* <div id="refurbishedProductPage-footer">
             <div
               id="refurbishedProductPage-footer-sortby"
               onClick={() => setShowSortBy(true)}
@@ -110,7 +109,7 @@ const RefurbishedPage = () => {
               <MdFilterList size={33} />
               FILTER BY
             </div>
-          </div>
+          </div> */}
 
         
     </>);

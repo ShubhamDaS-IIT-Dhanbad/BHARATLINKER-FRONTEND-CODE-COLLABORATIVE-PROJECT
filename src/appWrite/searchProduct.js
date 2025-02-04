@@ -15,6 +15,7 @@ class SearchProductService {
         this.bucket = new Storage(this.client);
     }
     async getProducts({
+        shopId,
         inputValue,
         userLat,
         userLong,
@@ -32,13 +33,16 @@ class SearchProductService {
             if (inputValue.length > 0) {
                 queries.push(Query.search("keywords", inputTokens));
             }
+            if (shopId.length > 0) {
+                queries.push(Query.equal("shopId", shopId));
+            }
     
             // Add sorting queries
             if (sortByAsc) queries.push(Query.orderAsc("discountedPrice"));
             if (sortByDesc) queries.push(Query.orderDesc("discountedPrice"));
     
             // Add geolocation queries if the location and radius are provided
-            if (userLat !== undefined && userLong !== undefined && radius !== undefined) {
+            if (userLat !== undefined && userLong !== undefined && radius !== undefined && !shopId) {
                 const center = { latitude: userLat, longitude: userLong };
                 const bounds = getBoundsOfDistance(center, radius * 1000);
     
@@ -115,6 +119,7 @@ class SearchProductService {
             return false;
         }
     }
+    
     
 }
 

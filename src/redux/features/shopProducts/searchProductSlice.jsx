@@ -17,10 +17,9 @@ export const fetchProducts = createAsyncThunk(
                 sortByAsc,
                 sortByDesc,
                 selectedBrands,
-                selectedCategories, // send empty array if no categories selected
+                selectedCategories,
                 shopId
             });
-    
             if (response.products && response.success) {
                 return {
                     shopId,
@@ -186,6 +185,7 @@ const shopProductsSlice = createSlice({
 
     },
     extraReducers: (builder) => {
+
         builder
             .addCase(fetchProducts.pending, (state) => {
                 state.loading = true;
@@ -205,11 +205,10 @@ const shopProductsSlice = createSlice({
                         selectedBrands: []
                     };
                 }
-
                 state.shops[shopId].products = products;
                 state.shops[shopId].hasMoreProducts = hasMoreProducts;
                 state.shops[shopId].totalPages = totalPages;
-                state.shops[shopId].currentPage = 1;  // Set currentPage to 1 for the initial fetch
+                state.shops[shopId].currentPage = 1;
                 state.loading = false;
             })
             .addCase(fetchProducts.rejected, (state, action) => {

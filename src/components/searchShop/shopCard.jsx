@@ -25,10 +25,10 @@ function ShopCard({ shop }) {
             <div className="shop-card-header" onClick={handleCardClick}>
                 <LazyLoadImage
                     className="shop-card-image"
-                    src={shopImageUrl}  // Image URL
-                    alt={shopDisplayName}  // Alt text for accessibility
-                    effect="fadeIn"  // Optional blur effect while loading
-                    loading="lazy"  // Native lazy loading
+                    src={shopImageUrl}
+                    alt={shopDisplayName}
+                    effect="fadeIn" 
+                    loading="lazy"  
                 />
             </div>
 
