@@ -15,9 +15,7 @@ import './shopProducts.css';
 
 const ProductSearch = () => {
     const location = useLocation();
-    const navigate = useNavigate();
-    const dispatch = useDispatch();
-    const { shopId } = useParams(); // Get shopId from URL params
+    const { shopId } = useParams();
 
     // Parse shopName from query params
     const queryParams = new URLSearchParams(location.search);
@@ -54,7 +52,7 @@ const ProductSearch = () => {
     return (
         <>
             <div id="shopSearchPage-container-top">
-                <Navbar headerTitle={shopName.slice(0, 10).toUpperCase()} />
+                <Navbar headerTitle={shopName.slice(0, 20).toUpperCase()} />
             </div>
 
             {loading ? (

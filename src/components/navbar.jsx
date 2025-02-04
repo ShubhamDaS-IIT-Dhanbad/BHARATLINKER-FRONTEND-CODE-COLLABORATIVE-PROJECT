@@ -21,13 +21,13 @@ const Navbar = ({ headerTitle }) => {
     const { getLocationFromCookie } = useLocationFromCookie();
     const navigate = useNavigate();
     const location = useLocation();
-    
-    const userLocation=getLocationFromCookie();
-    
+
+    const userLocation = getLocationFromCookie();
+
     const [isLocationHas, setIsLocationHas] = useState(!!(userLocation?.address && userLocation?.lat && userLocation?.lon));
     const [searchInput, setSearchInput] = useState('');
     const [locationTabVisible, setLocationTabVisible] = useState(false);
-    
+
     const { executeSearch } = useExecuteSearch();
     const { query: searchQuery } = useSelector((state) => state.searchproducts);
     const { executeSearchShop } = useSearchShop();
@@ -38,6 +38,7 @@ const Navbar = ({ headerTitle }) => {
     const isHomePage = location.pathname === '/';
     const isSearchPage = location.pathname === '/search';
     const isShopPage = location.pathname === '/shop';
+    const isShopProductPage = location.pathname.startsWith('/shop/product');
     const isRefurbishedPage = location.pathname === '/refurbished';
     
     useEffect(() => {
@@ -54,9 +55,9 @@ const Navbar = ({ headerTitle }) => {
         const userSession = Cookies.get('BharatLinkerUserData');
         navigate(userSession ? '/user' : '/login');
     };
-    
+
     const toggleLocationTab = () => setLocationTabVisible((prev) => !prev);
-    
+
     const handleSearch = (e) => {
         if (e.key === 'Enter' || e.type === 'click') {
             if (isHomePage) {
@@ -71,7 +72,7 @@ const Navbar = ({ headerTitle }) => {
             }
         }
     };
-    
+
     return (
         <>
             <div className={isHomePage ? "home-page-header-visible" : "product-page-header-visible"}>
@@ -82,11 +83,13 @@ const Navbar = ({ headerTitle }) => {
                         ) : (
                             <FaArrowLeft size={25} id='product-page-user-icon' onClick={() => navigate('/')} aria-label="Go to Home" tabIndex={0} />
                         )}
+
                         <div className={isHomePage ? "home-page-user-location" : "product-page-user-location"}>
                             <p className={isHomePage ? "home-page-location-label" : "product-page-location-label"}>{headerTitle}</p>
+
                             <div className={isHomePage ? "home-page-location-value" : "product-page-location-value"}>
-                                {userLocation?.address ? userLocation.address.slice(0, 30) : 'SET LOCATION, INDIA'}
-                                <TiArrowSortedDown size={15} onClick={toggleLocationTab} />
+                                {isShopProductPage ? `EXPLORE PRODUCT` : `${userLocation?.address ? userLocation.address.slice(0, 30) : 'SET LOCATION, INDIA'}`}
+                                {!isShopProductPage && <TiArrowSortedDown size={15} onClick={toggleLocationTab} />}
                             </div>
                         </div>
                     </div>
