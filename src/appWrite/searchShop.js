@@ -41,7 +41,7 @@ class SearchShopService {
         try {
             const inputTokens = inputValue.trim().toLowerCase().split(" ");
             const queries = [];
-            queries.push(Query.select(["$id", "shopName","shopImages", "address", "description", "isOpened", "registrationStatus", "customerCare", "email", "category"]));
+            queries.push(Query.select(["$id", "shopName","shopImages", "address","lat","long", "description", "isOpened", "registrationStatus", "customerCare", "email", "category"]));
 
             if (inputValue.length > 0) {
                 queries.push(Query.search('keyword', inputValue.trim().toLowerCase()));
@@ -140,7 +140,7 @@ class SearchShopService {
         try {
             const queries = [
                 Query.equal("$id", shopId),
-                Query.select(["$id", "shopName","shopImages", "address", "description", "isOpened", "registrationStatus", "customerCare", "email", "category"])
+                Query.select(["$id", "shopName","shopImages","lat","long", "address", "description", "isOpened", "registrationStatus", "customerCare", "email", "category"])
             ];
     
             const response = await this.databases.listDocuments(
