@@ -19,7 +19,6 @@ const Shop = () => {
     const { shops, updated, loading, loadingMoreShops, hasMoreShops } = useSelector((state) => state.searchshops);
     const { executeSearchShop, onLoadMoreShop } = useSearchShop();
 
-    const [showSortBy, setShowSortBy] = useState(false);
     const [showFilterBy, setShowFilterBy] = useState(false);
 
     useEffect(() => {
@@ -93,16 +92,19 @@ const Shop = () => {
                 />
             )}
 
-            <div id="searchShopPage-footer">
-                <div id="searchShopPage-footer-sortby" onClick={() => setShowSortBy(!showSortBy)}>
+            {/* <div id="searchShopPage-footer">
+                <div id="searchShopPage-footer-sortby" 
+                >
                     <LiaSortSolid size={33} />
                     SORT BY
                 </div>
-                <div id="searchShopPage-footer-filterby" onClick={() => setShowFilterBy(!showFilterBy)}>
+                <div id="searchShopPage-footer-filterby" 
+                onClick={() => setShowFilterBy(!showFilterBy)}
+                >
                     <MdFilterList size={33} />
                     FILTER BY
                 </div>
-            </div>
+            </div> */}
         </>
     );
 };

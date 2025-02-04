@@ -83,7 +83,7 @@ const SearchPage = () => {
                 />
             )}
 
-            <div id="productSearchPage-footer">
+            {/* <div id="productSearchPage-footer">
                 <div
                     id="productSearchPage-footer-sortby"
                     onClick={() => setShowSortBy(!showSortBy)}
@@ -98,7 +98,7 @@ const SearchPage = () => {
                     <MdFilterList size={33} />
                     FILTER BY
                 </div>
-            </div>
+            </div> */}
         </>
     );
 };
