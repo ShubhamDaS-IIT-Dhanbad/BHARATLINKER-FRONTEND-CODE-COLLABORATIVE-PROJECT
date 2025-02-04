@@ -27,7 +27,7 @@ function ShopCard({ shop }) {
                     className="shop-card-image"
                     src={shopImageUrl}  // Image URL
                     alt={shopDisplayName}  // Alt text for accessibility
-                    effect="blur"  // Optional blur effect while loading
+                    effect="fadeIn"  // Optional blur effect while loading
                     loading="lazy"  // Native lazy loading
                 />
             </div>
