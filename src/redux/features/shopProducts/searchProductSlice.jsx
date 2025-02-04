@@ -62,7 +62,8 @@ export const loadMoreProducts = createAsyncThunk(
                 return {
                     shopId,
                     products: response.products,
-                    hasMoreProducts: response.products.length >= productsPerPage
+                    hasMoreProducts: response.products.length >= productsPerPage,
+                    totalPages: response.totalPages || 1
                 };
             } else {
                 return rejectWithValue('Invalid data structure in response');
