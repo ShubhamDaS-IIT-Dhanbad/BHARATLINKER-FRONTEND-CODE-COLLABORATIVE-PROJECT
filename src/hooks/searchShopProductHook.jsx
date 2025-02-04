@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchProducts, loadMoreProducts, resetShopProducts } from '../redux/features/shopProducts/searchProductSlice.jsx';
 import useLocationFromCookie from './useLocationFromCookie.jsx';
 
-export const useExecuteSearch = (shopId) => {
+export const useShopProductExecuteSearch = (shopId) => {
     const dispatch = useDispatch();
     const { getLocationFromCookie } = useLocationFromCookie();
 
@@ -23,7 +23,7 @@ export const useExecuteSearch = (shopId) => {
     const selectedBrands = useSelector((state) => state.searchproductsfiltersection.selectedBrands);
     const selectedCategories = useSelector((state) => state.searchproductsfiltersection.selectedCategories);
 
-    const executeSearch = (inputValue = "") => {
+    const executeShopProductSearch = (inputValue = "") => {
         if (loading || loadingMoreProducts) return;
         const params = {
             inputValue,
@@ -40,7 +40,7 @@ export const useExecuteSearch = (shopId) => {
         dispatch(fetchProducts(params));
     };
 
-    const onLoadMore = (inputValue = "") => {
+    const onLoadMoreShopProduct = (inputValue = "") => {
         if (!hasMoreProducts || loadingMoreProducts) return;
 
         const params = {
@@ -57,5 +57,5 @@ export const useExecuteSearch = (shopId) => {
         dispatch(loadMoreProducts(params));
     };
 
-    return { executeSearch, onLoadMore };
+    return { executeShopProductSearch, onLoadMoreShopProduct };
 };

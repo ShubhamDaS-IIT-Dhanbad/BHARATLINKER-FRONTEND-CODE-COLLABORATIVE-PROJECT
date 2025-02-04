@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { useNavigate, useParams, useLocation } from 'react-router-dom';
+import { useSelector} from 'react-redux';
+import {useParams, useLocation } from 'react-router-dom';
 
 import { Oval } from 'react-loader-spinner';
 import ProductList from './productList.jsx';
@@ -10,7 +10,7 @@ import Navbar from '../navbar.jsx';
 import ProductSortBySection from './sortbySection.jsx';
 import ProductFilterBySection from './filterSection.jsx';
 
-import { useExecuteSearch } from '../../hooks/searchShopProductHook.jsx';
+import { useShopProductExecuteSearch } from '../../hooks/searchShopProductHook.jsx';
 import './shopProducts.css';
 
 const ProductSearch = () => {
@@ -22,7 +22,7 @@ const ProductSearch = () => {
     const shopName = queryParams.get('shopName') || '';
 
     // ✅ Pass `shopId` to the custom hook
-    const { executeSearch, onLoadMore } = useExecuteSearch(shopId);
+    const { executeShopProductSearch, onLoadMoreShopProduct } = useShopProductExecuteSearch(shopId);
 
     const [loadingMoreProducts, setLoadingMoreProducts] = useState(false);
     const [showSortBy, setShowSortBy] = useState(false);
@@ -41,7 +41,7 @@ const ProductSearch = () => {
     // Initial search when the component loads
     const handleInitialSearch = useCallback(() => {
         if (products.length === 0 && !globalLoading) {
-            executeSearch();
+            executeShopProductSearch();
         }
     }, []);
 
@@ -52,7 +52,7 @@ const ProductSearch = () => {
     return (
         <>
             <div id="shopSearchPage-container-top">
-                <Navbar headerTitle={shopName.slice(0, 20).toUpperCase()} />
+                <Navbar headerTitle={shopName.slice(0, 20).toUpperCase()} shopId={shopId}/>
             </div>
 
             {loading ? (
@@ -62,7 +62,7 @@ const ProductSearch = () => {
             ) : (
                 <InfiniteScroll
                     dataLength={products.length}
-                    next={onLoadMore}
+                    next={onLoadMoreShopProduct}
                     hasMore={hasMoreProducts}
                     loader={<h4>Loading more products...</h4>}
                     scrollThreshold={0.9}

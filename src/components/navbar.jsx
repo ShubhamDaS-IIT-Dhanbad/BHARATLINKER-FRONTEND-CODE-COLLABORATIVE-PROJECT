@@ -15,9 +15,10 @@ import useLocationFromCookie from '../hooks/useLocationFromCookie.jsx';
 import { useExecuteSearch } from '../hooks/searchProductHook.jsx';
 import { useSearchShop } from '../hooks/searchShopHook.jsx';
 import { useSearchRefurbishedProductsHook } from '../hooks/searchRefurbishedHook.jsx';
+import { useShopProductExecuteSearch } from '../hooks/searchShopProductHook.jsx';
 
 import './style/navbar.css';
-const Navbar = ({ headerTitle }) => {
+const Navbar = ({ headerTitle , shopId }) => {
     const { getLocationFromCookie } = useLocationFromCookie();
     const navigate = useNavigate();
     const location = useLocation();
@@ -34,13 +35,15 @@ const Navbar = ({ headerTitle }) => {
     const { query: shopQuery } = useSelector((state) => state.searchshops);
     const { executeSearchRefurbished } = useSearchRefurbishedProductsHook();
     const { query: refurbishedQuery } = useSelector((state) => state.refurbishedproducts);
+    const { executeShopProductSearch } = useShopProductExecuteSearch(shopId);
+    const { query: shopProductQuery } = useSelector((state) => state.shopproducts);
 
     const isHomePage = location.pathname === '/';
     const isSearchPage = location.pathname === '/search';
     const isShopPage = location.pathname === '/shop';
     const isShopProductPage = location.pathname.startsWith('/shop/product');
     const isRefurbishedPage = location.pathname === '/refurbished';
-    
+
     useEffect(() => {
         if (isSearchPage) {
             setSearchInput(searchQuery);
@@ -69,6 +72,8 @@ const Navbar = ({ headerTitle }) => {
                 executeSearchShop(searchInput);
             } else if (isRefurbishedPage) {
                 executeSearchRefurbished(searchInput);
+            } else if (isShopProductPage) {
+                executeShopProductSearch(searchInput);
             }
         }
     };
