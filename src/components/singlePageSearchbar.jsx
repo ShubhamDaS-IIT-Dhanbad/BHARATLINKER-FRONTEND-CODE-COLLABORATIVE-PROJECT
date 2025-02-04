@@ -1,7 +1,6 @@
 import React, { useState} from 'react';
-import { FaCaretDown, FaArrowLeft } from "react-icons/fa"; 
+import {FaArrowLeft } from "react-icons/fa"; 
 import { useNavigate } from 'react-router-dom'; 
-import LocationTab from './locationTab/locationTab.jsx';
 import useLocationFromCookie from '../hooks/useLocationFromCookie.jsx';
 import './style/singlePageSearchbar.css';
 
@@ -11,8 +10,6 @@ const SinglePageSearchBar = ({ heading }) => {
     
     // Get user location from cookie
     const userLocation = getLocationFromCookie();
-    
-    const [locationTab, setLocationTab] = useState(false);
     const [location, setLocation] = useState(userLocation?.address || 'SET LOCATION, INDIA');
 
     // Handle the back navigation
@@ -35,15 +32,12 @@ const SinglePageSearchBar = ({ heading }) => {
                             className="single-product-search-location-value"
                             aria-label="Change Location"
                             tabIndex={0}
-                            onClick={() => setLocationTab(true)}
                         >
                             {location.slice(0, 30)}..
                         </div>
                     </div>
                 </div>
             </div>
-
-            {locationTab && <LocationTab setLocationTab={setLocationTab} />}
         </>
     );
 };

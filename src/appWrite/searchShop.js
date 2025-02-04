@@ -36,132 +36,100 @@ class SearchShopService {
         userLat,
         userLong,
         radius,
-        page,
-        shopId
+        page
     }) {
         try {
-            const inputTokens = inputValue
-                .split(' ')
-                .filter(token => token.trim() !== '')
-                .map(token => token.toLowerCase());
-    
+            const inputTokens = inputValue.trim().toLowerCase().split(" ");
             const queries = [];
-    
-            // Input value query (only for shopName in this case)
-            if (inputTokens.length > 0) {
-                queries.push(Query.contains('shopName', inputTokens));
+            queries.push(Query.select(["$id", "shopName","shopImages", "address", "description", "isOpened", "registrationStatus", "customerCare", "email", "category"]));
+
+            if (inputValue.length > 0) {
+                queries.push(Query.search('keyword', inputValue.trim().toLowerCase()));
             }
-    
-            // Filter by selected categories
-              // Filter by categories
-              if (selectedCategories.length > 0) {
+
+            // Filter by categories
+            if (selectedCategories.length > 0) {
                 queries.push(Query.contains('category', selectedCategories));
             }
-    
-            // Geolocation filtering using bounding box
+
+            // Geolocation filtering
             if (userLat !== undefined && userLong !== undefined && radius !== undefined) {
                 const boundingBox = getBoundsOfDistance(
                     { latitude: userLat, longitude: userLong },
                     radius * 1000 // Convert radius from km to meters
                 );
-    
-                const latMin = boundingBox[0].latitude;
-                const latMax = boundingBox[1].latitude;
-                const lonMin = boundingBox[0].longitude;
-                const lonMax = boundingBox[1].longitude;
-    
-                queries.push(Query.greaterThanEqual('lat', latMin));
-                queries.push(Query.lessThanEqual('lat', latMax));
-                queries.push(Query.greaterThanEqual('long', lonMin));
-                queries.push(Query.lessThanEqual('long', lonMax));
+
+                queries.push(Query.between('lat', boundingBox[0].latitude, boundingBox[1].latitude));
+                queries.push(Query.between('long', boundingBox[0].longitude, boundingBox[1].longitude));
             }
-    
-            // Fetch products with pagination
-            const fetchShops = async () => {
-                const categoryQueries = [...queries];
-    
-                // Filter by shopId if provided
-                if (shopId !== undefined) {
-                    categoryQueries.push(Query.equal('shop', shopId));
-                }
-    
-                // Pagination logic
-                const offset = (page - 1) * shopsPerPage;
-                categoryQueries.push(Query.limit(shopsPerPage));
-                categoryQueries.push(Query.offset(offset));
-    
-                const response = await this.databases.listDocuments(
-                    conf.appwriteShopsDatabaseId,
-                    conf.appwriteShopsCollectionId,
-                    categoryQueries
-                );
-    
-                return response.documents || [];
-            };
-    
-            const allShops = await fetchShops();
+
+
+            const offset = (page - 1) * shopsPerPage;
+            queries.push(Query.limit(shopsPerPage));
+            queries.push(Query.offset(offset));
+
+            // Fetch data from Appwrite
+            const { documents: allShops = [] } = await this.databases.listDocuments(
+                conf.appwriteShopsDatabaseId,
+                conf.appwriteShopsCollectionId,
+                queries
+            );
             if (!Array.isArray(allShops)) {
                 throw new TypeError("Expected 'allShops' to be an array.");
             }
-            // If no input value, return the shops directly
+
             if (inputValue.length === 0) {
                 return { success: true, shops: allShops };
             }
-    
-            // Scoring and filtering based on tokens and location
-            const scoredShops = allShops.map(shop => {
-                let score = 0;
-                let distance = null;
-    
-                // Score based on input tokens (match against shopName)
-                inputTokens.forEach(token => {
-                    if (shop.shopName.toLowerCase().includes(token)) score += 3;
-                    if (shop.shopName.toLowerCase().startsWith(token)) score += 5;
-                });
-    
-                // Calculate distance using Haversine formula if geolocation is provided
-                if (radius && userLat && userLong) {
-                    const toRadians = (deg) => (deg * Math.PI) / 180;
-                    const dLat = toRadians(shop.latitude - userLat);
-                    const dLon = toRadians(shop.longitude - userLong);
-                    const lat1 = toRadians(userLat);
-                    const lat2 = toRadians(shop.latitude);
-    
-                    const a = Math.sin(dLat / 2) ** 2 +
-                        Math.sin(dLon / 2) ** 2 * Math.cos(lat1) * Math.cos(lat2);
-                    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-                    const R = 6371;
-                    distance = R * c;
-    
-                    // Filter out shops outside the radius
-                    if (distance > radius) {
-                        return null;
+
+            // Scoring and filtering
+            const scoredShops = allShops
+                .map(shop => {
+                    let score = 0;
+                    let distance = null;
+
+                    inputTokens.forEach(token => {
+                        const shopName = shop.shopName.toLowerCase();
+                        if (shopName.includes(token)) score += 3;
+                        if (shopName.startsWith(token)) score += 5;
+                    });
+
+                    // Distance calculation
+                    if (radius && userLat && userLong && shop.latitude && shop.longitude) {
+                        const toRadians = deg => (deg * Math.PI) / 180;
+                        const dLat = toRadians(shop.latitude - userLat);
+                        const dLon = toRadians(shop.longitude - userLong);
+                        const lat1 = toRadians(userLat);
+                        const lat2 = toRadians(shop.latitude);
+
+                        const a = Math.sin(dLat / 2) ** 2 + Math.sin(dLon / 2) ** 2 * Math.cos(lat1) * Math.cos(lat2);
+                        const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+                        const R = 6371; // Earth radius in km
+                        distance = R * c;
+
+                        if (distance > radius) {
+                            return null;
+                        }
                     }
-                }
-    
-                // Return shop with score and distance (if applicable)
-                return { ...shop, score, distance };
-            }).filter(shop => shop !== null);
-    
-            // Sort by score
-            scoredShops.sort((a, b) => b.score - a.score);
-    
-            // Pagination logic
-            const startIndex = (page - 1) * shopsPerPage;
-            const paginatedShops = scoredShops.slice(startIndex, startIndex + shopsPerPage);
-            return {
-                success: true,
-                shops: paginatedShops
-            };
-    
+
+                    return { ...shop, score, distance };
+                })
+                .filter(shop => shop !== null)
+                .sort((a, b) => b.score - a.score);
+
+            // Pagination
+            const paginatedShops = scoredShops.slice(0, shopsPerPage);
+
+            return { success: true, shops: paginatedShops };
         } catch (error) {
             console.error('Appwrite service :: getShops', error);
             return { success: false, error: error.message };
         }
     }
-    
-    
-    
+
+
+
+
 
     /**
      * Fetch a shop by ID.
@@ -170,17 +138,24 @@ class SearchShopService {
      */
     async getShopById(shopId) {
         try {
-            const shop = await this.databases.getDocument(
+            const queries = [
+                Query.equal("$id", shopId),
+                Query.select(["$id", "shopName","shopImages", "address", "description", "isOpened", "registrationStatus", "customerCare", "email", "category"])
+            ];
+    
+            const response = await this.databases.listDocuments(
                 conf.appwriteShopsDatabaseId,
                 conf.appwriteShopsCollectionId,
-                shopId
+                queries
             );
-            return shop;
+            if (response.documents.length === 0)return null;
+            return response.documents[0];
         } catch (error) {
             console.error('Appwrite service :: getShopById', error);
             return false;
         }
     }
+    
 }
 
 const searchShopService = new SearchShopService();
