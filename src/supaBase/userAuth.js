@@ -14,7 +14,6 @@ export const sendOTP = async (phone) => {
     if (error) throw error;
   } catch (error) {
     console.error("Error sending OTP:", error.message);
-    alert("Failed to send OTP. Please try again.");
   }
 };
 export const verifyOTP = async (phone, otpCode) => {
@@ -30,7 +29,6 @@ export const verifyOTP = async (phone, otpCode) => {
     return data;
   } catch (error) {
     console.error("Error verifying OTP:", error.message);
-    alert("Failed to verify OTP. Please try again.");
     return null;
   }
 };
@@ -55,7 +53,6 @@ export const loginUserWithPassword = async ({ phone, password }) => {
     }
   } catch (error) {
     console.error("Login failed:", error.message);
-    alert("Login failed. Please check your details and try again.");
     return null;
   }
 };
