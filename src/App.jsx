@@ -51,7 +51,7 @@ const RoutesWithConditionalHeader = React.memo(() => {
   const { PrivateRoute, getUserDataFromCookie } = useUserAuth();
   const [userData,setUserData]=useState("");
   useEffect(()=>{
-    if(!userData){setUserData(getUserDataFromCookie());}
+    if(!userData){ setUserData(getUserDataFromCookie());}
   },[userData])
   return (
     <>
