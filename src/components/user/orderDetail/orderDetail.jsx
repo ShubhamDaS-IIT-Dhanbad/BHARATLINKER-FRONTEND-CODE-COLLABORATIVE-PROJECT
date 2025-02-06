@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { updateOrderStateToCanceled } from "../../../appWrite/order/order.js";
-import { deleteOrder, updateOrder } from "../../../redux/features/user/orderSlice.jsx"; // Ensure correct imports
+import { deleteOrder, updateOrder } from "../../../redux/features/user/orderSlice.jsx";
 import "./orderDetail.css";
 
 import { TiInfoOutline } from "react-icons/ti";
-import Navbar from "../a.navbarComponent/navbar.jsx";
+import Navbar from "../navbar.jsx";
 import useUserAuth from "../../../hooks/userAuthHook.jsx";
 import { Oval } from "react-loader-spinner";
 
