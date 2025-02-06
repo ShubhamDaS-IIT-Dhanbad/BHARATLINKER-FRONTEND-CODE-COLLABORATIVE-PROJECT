@@ -79,7 +79,7 @@ const RoutesWithConditionalHeader = React.memo(() => {
                 <meta name="description" content="Login to access your Bharat Linker account and manage your business efficiently." />
                 <meta name="robots" content="noindex, nofollow" />
               </Helmet>
-              <LoginPage userData={userData} />
+              <LoginPage userData={userData} setUserData={setUserData}/>
             </>
           }
         />
