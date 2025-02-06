@@ -32,7 +32,7 @@ function Order({ userData }) {
   const selectedOrders = orderStates[selectedOrderType];
 
   const fetchInitialOrders = (status) => {
-    const userId = userData?.$id;
+    const userId = userData?.phone;console.log(userId)
     if (!userId) return;
     dispatch(fetchOrdersByStatus({ userId, status, page: 1 }));
   };
@@ -45,13 +45,14 @@ function Order({ userData }) {
   };
 
   useEffect(() => {
-    if (userData?.$id) {
+    if (userData?.phone) {
       if (pendingOrders.data.length === 0) fetchInitialOrders("pending");
       if (confirmedOrders.data.length === 0) fetchInitialOrders("confirmed");
       if (deliveredOrders.data.length === 0) fetchInitialOrders("delivered");
       if (canceledOrders.data.length === 0) fetchInitialOrders("canceled");
     }
   }, [userData]);
+  
   useEffect(()=>{
     window.scrollTo(0,0);
   },[selectedOrderType])

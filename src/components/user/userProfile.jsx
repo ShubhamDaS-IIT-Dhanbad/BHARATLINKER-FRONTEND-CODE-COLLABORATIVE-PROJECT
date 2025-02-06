@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import Navbar from './a.navbarComponent/navbar.jsx';
+import Navbar from './navbar.jsx';
 import { Helmet } from 'react-helmet';
 import { SlLocationPin } from 'react-icons/sl';
 import { MdMyLocation } from 'react-icons/md';
@@ -8,14 +8,12 @@ import { IoSearch } from 'react-icons/io5';
 import './style/userProfile.css';
 
 import conf from '../../conf/conf.js';
-import useUserAuth from '../../hooks/userAuthHook.jsx';
 import useLocationFromCookie from '../../hooks/useLocationFromCookie.jsx';
 
 import { RiRefreshLine } from "react-icons/ri";
 import { TiInfoOutline } from "react-icons/ti";
 
 function UserRefurbishedProduct({ userData }) {
-  const { fetchUserData, updateUserData } = useUserAuth();
 
   const [name, setName] = useState('');
   const [address, setAddress] = useState('');
@@ -104,7 +102,7 @@ function UserRefurbishedProduct({ userData }) {
     const phone = userData.phoneNumber;
 
     try {
-      await fetchUserData(phone);
+      // await fetchUserData(phone);
     } catch (error) {
       console.error('Error fetching user data:', error);
     } finally {
@@ -117,7 +115,6 @@ function UserRefurbishedProduct({ userData }) {
     setIsUpdating(true);
     const updatedData = { ...userData, name, address, lat, long };
     try {
-      await updateUserData(updatedData);
     } catch (error) {
       console.error('Error updating user data:', error);
     } finally {

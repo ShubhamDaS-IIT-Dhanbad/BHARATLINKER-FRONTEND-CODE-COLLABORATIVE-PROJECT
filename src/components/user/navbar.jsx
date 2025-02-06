@@ -3,8 +3,8 @@ import { BiSearchAlt } from "react-icons/bi";
 import { useNavigate, useLocation } from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa";
 import { useSelector } from "react-redux";
-import { useExecuteUserSearch } from "../../../hooks/searchUserProductHook.jsx";
-import "../../style/navbar.css";
+import { useExecuteUserSearch } from "../../hooks/searchUserProductHook.jsx";
+import "../style/navbar.css";
 
 const Navbar = ({userData, headerTitle, onBackNavigation }) => {
   const navigate = useNavigate();

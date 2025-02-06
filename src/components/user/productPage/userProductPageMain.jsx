@@ -2,7 +2,7 @@ import React, { useEffect} from 'react';
 import { useSelector } from 'react-redux';
 
 import { Helmet } from 'react-helmet';
-import Navbar from '../a.navbarComponent/navbar.jsx';
+import Navbar from '../navbar.jsx';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { RotatingLines } from 'react-loader-spinner';
 import { Oval } from 'react-loader-spinner';
@@ -13,7 +13,7 @@ import ProductList from '../../productList.jsx';
 
 import './userProductPageMain.css';
 
-function UserRefurbishedProduct() {
+function UserRefurbishedProduct({userData}) {
     const { executeSearch, onLoadMore } = useExecuteUserSearch();
     const {
         refurbishedProducts,
@@ -54,7 +54,7 @@ function UserRefurbishedProduct() {
             </Helmet>
             <header>
                 <div className="user-refurbished-product-page-header">
-                    <Navbar headerTitle={"YOUR REFURBISHED"} />
+                    <Navbar userData={userData} headerTitle={"YOUR REFURBISHED"} />
                 </div>
             </header>
             <main>

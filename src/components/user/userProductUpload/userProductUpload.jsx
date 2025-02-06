@@ -2,21 +2,17 @@ import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 import UploadBooksForm from './userUploadProductForm.jsx';
-
-import useUserAuth from '../../../hooks/userAuthHook.jsx';
-import Navbar from '../a.navbarComponent/navbar.jsx';
+import Navbar from '../navbar.jsx';
 import './userProductUpload.css';
 
-const UploadProduct = () => {
+const UploadProduct = ({userData}) => {
     const navigate = useNavigate();
-    
-    const { userData } = useUserAuth();
     const { productType } = useParams();
 
     return (
         <>
             <header>
-                <Navbar headerTitle={"UPLOAD REFURBISHED"} />
+                <Navbar userData={userData} headerTitle={"UPLOAD REFURBISHED"} />
             </header>
             {
                 productType != 'gadget' && <div className='user-upload-book-type'>

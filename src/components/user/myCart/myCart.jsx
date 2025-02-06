@@ -34,11 +34,11 @@ const MyCartPage = ({ userData }) => {
     const [deliveryAddress, setDeliveryAddress] = useState();
 
     useEffect(() => {
-        if (cart?.length === 0 && userData?.phoneNumber) {
-            dispatch(fetchUserCart(userData.phoneNumber));
+        if (cart?.length === 0 && userData?.phone) {
+            dispatch(fetchUserCart(userData.phone));
         }
         window.scrollTo(0, 0);
-    }, [dispatch, userData?.phoneNumber]);
+    }, [dispatch, userData?.phone]);
 
     useEffect(() => {
         const checkShopStatus = async () => {
@@ -65,7 +65,7 @@ const MyCartPage = ({ userData }) => {
         } catch (error) {
             console.error("Cart update failed:", error);
         }
-    }, [dispatch, userData?.phoneNumber]);
+    }, [dispatch, userData?.phone]);
 
     if (showLocationTab) return (
         <LocationTab

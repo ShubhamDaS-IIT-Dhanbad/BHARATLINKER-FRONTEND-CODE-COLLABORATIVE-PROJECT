@@ -18,7 +18,7 @@ const SingleRefurbishedProductCard = lazy(() => import('./components/singleRefur
 
 const ShopProducts = lazy(() => import('./components/shopProducts/shopProducts.jsx'));
 const User = lazy(() => import('./components/user/userHome.jsx'));
-const UserProfile = lazy(() => import('./components/user/userProfile/userProfile.jsx'));
+const UserProfile = lazy(() => import('./components/user/userProfile.jsx'));
 const UserProductPageMain = lazy(() => import('./components/user/productPage/userProductPageMain.jsx'));
 const RefurbishedBooksUploadUser = lazy(() => import('./components/user/userProductUpload/userProductUpload.jsx'));
 const UserUpdateBookModule = lazy(() => import('./components/user/userProductUpdate/userProductUpdate.jsx'));

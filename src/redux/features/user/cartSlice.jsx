@@ -9,6 +9,7 @@ import throttle from "lodash.throttle";
 export const fetchUserCart = createAsyncThunk(
     "usercart/fetchUserCart",
     async (userId, { rejectWithValue }) => {
+        console.log(userId)
         try {
             const response = await getCartItems(userId);
             return response;
