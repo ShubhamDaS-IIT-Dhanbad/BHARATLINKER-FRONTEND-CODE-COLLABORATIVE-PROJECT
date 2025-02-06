@@ -15,7 +15,7 @@ import CheckOutPage from './checkOutPage.jsx';
 import LocationTab from '../../locationTab/locationTab.jsx';
 
 // Styles
-import '../userProfile/userProfile.css';
+import '../style/userProfile.css';
 import './myCart.css';
 import '../../searchPage/sortby.css';
 
