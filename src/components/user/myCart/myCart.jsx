@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import PropTypes from 'prop-types';
 
 // Project components and utilities
-import Navbar from "../a.navbarComponent/navbar.jsx";
+import Navbar from "../navbar.jsx";
 import OrderProductCard from './cartCard.jsx';
 import { updateCartStateAsync, removeFromUserCart, fetchUserCart } from '../../../redux/features/user/cartSlice.jsx';
 import { fetchShopStatus } from '../../../appWrite/shop/shop.js';
