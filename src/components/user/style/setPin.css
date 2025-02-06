@@ -11,8 +11,9 @@
 }
 
 .set-pin-container-div {
-    background-color: white;
-    padding: 15px;
+    background-color: #f9f9f9;
+    padding: 10px;min-height: 50vh;
+    padding-bottom: 5vh;
 }
 
 
@@ -48,7 +49,7 @@
 
 .pin-button {
     width: 90vw;
-    padding: 15px;
+    padding: 10px;
     border: none;
     border-radius: 8px;
     font-weight: 500;
@@ -66,7 +67,7 @@
     color: #f9f9f9;
     font-size: medium;
     font-weight: 700;
-    margin-top: 80px;
+    margin-top: 50px;
 }
 
 .pin-button.secondary {
@@ -83,7 +84,7 @@
 .user-pin-text {
     display: flex;
     flex-direction: column;
-    font-size: 23px;
+    font-size: 17px;
     margin-top: 9px;
     margin-bottom: 7px;
     overflow: scroll;
