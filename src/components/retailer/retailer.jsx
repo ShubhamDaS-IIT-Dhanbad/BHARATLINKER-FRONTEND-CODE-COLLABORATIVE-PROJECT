@@ -9,7 +9,7 @@ import { AiOutlineProduct } from 'react-icons/ai';
 import { Oval } from 'react-loader-spinner';
 import ToggleIsOpenShop from './ToggleShop/main.jsx';
 import './retailer.css';
-import '../user/userHome.css';
+import '../user/style/userHome.css';
 
 function UserHome({ retailerData }) {
   const navigate = useNavigate();
