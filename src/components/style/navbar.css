@@ -266,3 +266,99 @@
     font-size: 14px;
     color: #666;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.popup-overlay {
+    position: fixed;
+    inset: 0;
+    display: flex;align-items: flex-start;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.406);
+    z-index: 101;
+  }
+  
+  .popup-card {
+    position: relative;
+    padding: 10px;margin-top: 57px;
+    width: calc(95% - 20px);
+    max-width: 400px;display: flex;flex-direction: column;
+    gap: 5px;
+    background: rgb(255, 255, 255);
+    border-radius: 8px;text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .popup-pointer {
+    position: absolute;
+    top: -8px;
+    left: 20px;
+    width: 16px;
+    height: 16px;
+    background: white;
+    transform: rotate(45deg);
+  }
+  
+  .popup-title {
+    font-size: 1rem;text-align: center;
+    margin: 0;padding: 0;
+    font-weight: bold;
+  }
+  
+  .popup-text {
+    font-size: 0.7rem;
+    padding: 0;margin: 0;
+    color: #4a4a4a;
+  }
+  
+  .popup-buttons {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .popup-button {
+    flex: 1;
+    padding: 6px;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    transition: background 0.2s;
+  }
+  
+  .popup-button.primary {
+    background: #16a34a;
+    color: white;
+    border: none;
+  }
+  
+  .popup-button.primary:hover {
+    background: #15803d;
+  }
+  
+  .popup-button.secondary {
+    border: 1px solid #16a34a;
+    color: #16a34a;
+    background: white;
+  }
+  
+  .popup-button.secondary:hover {
+    background: #f0fdf4;
+  }
+  

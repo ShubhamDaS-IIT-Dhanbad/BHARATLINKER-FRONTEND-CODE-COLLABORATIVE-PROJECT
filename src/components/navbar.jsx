@@ -18,7 +18,7 @@ import { useSearchRefurbishedProductsHook } from '../hooks/searchRefurbishedHook
 import { useShopProductExecuteSearch } from '../hooks/searchShopProductHook.jsx';
 
 import './style/navbar.css';
-const Navbar = ({ headerTitle , shopId }) => {
+const Navbar = ({ headerTitle, shopId }) => {
     const { getLocationFromCookie } = useLocationFromCookie();
     const navigate = useNavigate();
     const location = useLocation();
@@ -44,6 +44,10 @@ const Navbar = ({ headerTitle , shopId }) => {
     const isShopProductPage = location.pathname.startsWith('/shop/product');
     const isRefurbishedPage = location.pathname === '/refurbished';
 
+    useEffect(()=>{
+        
+        if(!userLocation.address && !userLocation.lat && !userLocation.lon) {setIsLocationHas(false);}
+    },[isLocationHas])
     useEffect(() => {
         if (isSearchPage) {
             setSearchInput(searchQuery);
@@ -115,12 +119,16 @@ const Navbar = ({ headerTitle , shopId }) => {
             </div>
             {locationTabVisible && <LocationTab setLocationTab={setLocationTabVisible} />}
             {!isLocationHas && (
-                <div className="home-location-not-present">
-                    <div className="home-location-not-present-d1">
-                        <div className="home-location-not-present-message">User Your Location is not set</div>
-                        <div className="home-location-not-present-options" onClick={() => { setLocationTabVisible(true); setIsLocationHas(true); }}>
-                            <div className="home-location-not-present-use-loc-btn">USE CURRENT LOCATION</div>
-                            <div className="home-location-not-present-use-manual-btn">SEARCH MANUALLY</div>
+                <div className="popup-overlay">
+                    <div className="popup-card">
+                        <div className="popup-pointer"></div>
+                        <h2 className="popup-title">Select your location</h2>
+                        <p className="popup-text">
+                            We need your location to show you curated assortment from your nearest store
+                        </p>
+                        <div className="popup-buttons" onClick={() => { setLocationTabVisible(true); setIsLocationHas(true); }}>
+                            <button className="popup-button primary">Use my location</button>
+                            <button className="popup-button secondary">Select manually</button>
                         </div>
                     </div>
                 </div>

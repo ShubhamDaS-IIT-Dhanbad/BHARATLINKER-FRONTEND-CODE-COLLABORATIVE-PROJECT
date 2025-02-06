@@ -37,6 +37,7 @@ const Home = () => {
             <div id="productSearchPage-container-top">
                 <HomePageNavbar headerTitle={"Bharat | Linker"} />
             </div>
+            
             <div id="home-div" style={{
                 display: 'flex',
                 flexDirection: 'column',

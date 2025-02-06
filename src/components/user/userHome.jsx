@@ -39,7 +39,7 @@ function UserHome({ userData}) {
                     <div className="dashboard-header-user">
                         <p id="dashboard-header-user-location">Bharat | Linker</p>
                         <p id="dashboard-header-user-phn">
-                            {userData ? `+${userData.phone}` : "xxxxx xxxxx"}
+                            {userData ? `+91 ${userData.phoneNumber}` : "xxxxx xxxxx"}
                         </p>
                     </div>
                     <IoHomeOutline
