@@ -81,7 +81,7 @@ function SignUpForm({userData,setUserData}) {
         }),
         { expires: 7, secure: true }
       );
-      navigate('/user');
+      navigate('/');
     } catch (error) {
       setErrorMessage('Invalid OTP. Please try again.');
       setOtp(new Array(6).fill(''));
@@ -111,7 +111,7 @@ function SignUpForm({userData,setUserData}) {
         }),
         { expires: 7, secure: true }
       );
-      navigate('/user');
+      navigate('/');
     } catch (error) {
       setErrorMessage('Invalid phone number or password');
       console.error('Login failed:', error);
