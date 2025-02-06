@@ -129,7 +129,6 @@ const sendOtp = async (contactInfo) => {
 
 
 const createSession = async (userId, otpCode) => {
-    console.log(userId,otpCode,"here")
     try {
         const session = await account.createSession(userId, otpCode);
         return session;

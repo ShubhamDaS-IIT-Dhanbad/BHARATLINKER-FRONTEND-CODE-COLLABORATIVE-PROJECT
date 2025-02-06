@@ -8,21 +8,18 @@ import { TbDeviceMobileCharging } from "react-icons/tb";
 import { AiOutlineProduct } from "react-icons/ai";
 import { CiBoxList } from "react-icons/ci";
 import { Oval } from "react-loader-spinner";
-import SetPinPage from "./setPin.jsx";
 import useUserAuth from "../../hooks/userAuthHook.jsx";
 import "./style/userHome.css";
 
 function UserHome({ userData}) {
+    console.log(userData);
     useEffect(() => {
         window.scrollTo(0, 0);
-        if (!userData.password) {setPinSet(false);
-        } else {setPinSet(true);}
-    }, [userData]);
+    }, []);
 
     const { logout } = useUserAuth();
     const [isLogout, setIsLogout] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
-    const [pinSet, setPinSet] = useState(true);
     const navigate = useNavigate();
 
     // Handle user logout
@@ -154,7 +151,6 @@ function UserHome({ userData}) {
                     </div>
                 </div>
             )}
-            {!pinSet && <SetPinPage onPinSet={()=>{setPinSet(false)}}/>}
         </>
     );
 }

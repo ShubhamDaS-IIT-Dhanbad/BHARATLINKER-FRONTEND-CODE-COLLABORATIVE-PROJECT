@@ -15,7 +15,7 @@ const useUserAuth = () => {
 
     useEffect(() => {
         if (location.pathname.startsWith('/user')) {
-            const userSession = Cookies.get('BharatLinkerUserSession');
+            const userSession = Cookies.get('BharatLinkerUserData');
             if (userSession) {
                 try {
                     setUserData(JSON.parse(userSession));
@@ -94,7 +94,6 @@ const useUserAuth = () => {
         try {
             console.log("Logging out...");
             document.cookie = "BharatLinkerUserData=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-            document.cookie = "BharatLinkerUserSession=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
             dispatch(resetCart());
             navigate('/login');
         } catch (error) {
@@ -103,14 +102,10 @@ const useUserAuth = () => {
     };
     const PrivateRoute = ({ children }) => {
         const userData = Cookies.get("BharatLinkerUserData");
-    
         if (!userData) {
             return <Navigate to="/login" replace />;
         }
-    
         const parsedUserData = JSON.parse(userData);
-    
-        // Ensure children are wrapped inside a valid React element
         return React.Children.map(children, (child) =>
             React.isValidElement(child) ? React.cloneElement(child, { userData: parsedUserData }) : child
         );
