@@ -3,8 +3,6 @@ import { Navigate, useNavigate, useLocation } from 'react-router-dom';
 import {useDispatch} from 'react-redux';
 import Cookies from 'js-cookie';
 
-import { fetchUserByPhoneNumber } from '../appWrite/userData/userData.js';
-import { updateUserByPhoneNumber } from '../appWrite/userData/userData.js';
 
 import {resetCart} from '../redux/features/user/cartSlice.jsx'
 
@@ -115,3 +113,10 @@ const useUserAuth = () => {
 };
 
 export default useUserAuth;
+
+
+
+
+
+// import { fetchUserByPhoneNumber } from '../appWrite/userData/userData.js';
+// import { updateUserByPhoneNumber } from '../appWrite/userData/userData.js';

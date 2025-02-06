@@ -1,4 +1,10 @@
 const conf = {
+    supabaseuserauthurl: String(import.meta.env.VITE_SUPABASE_URL),
+    supabaseuserauthanonkey: String(import.meta.env.VITE_SUPABASE_ANON_KEY),
+
+
+
+
     appwriteUrl: String(import.meta.env.VITE_APPWRITE_URL),
 
     geoapifyapikey: String(import.meta.env.VITE_REACT_APP_GEOAPIFY_API_KEY),

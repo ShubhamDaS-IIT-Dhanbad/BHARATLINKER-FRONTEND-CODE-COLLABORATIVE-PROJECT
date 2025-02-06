@@ -8,7 +8,6 @@ import { registerShop, sendOtp, createSession, deleteSession } from '../../appWr
 import { ErrorPopup } from './popups/popUp.jsx';
 
 import '../style/shopLogin.css';
-import '../style/userLogin.css';
 
 function SignUpForm() {
     const navigate = useNavigate();

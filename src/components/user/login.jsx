@@ -1,207 +1,268 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './style/userLogin.css';
-import { Client, Account, ID } from 'appwrite';
-import { FaArrowLeft} from "react-icons/fa";
-
-import { FaCircleExclamation } from "react-icons/fa6";
-import Cookies from 'js-cookie';
-import { fetchUserByPhoneNumber } from '../../appWrite/userData/userData.js';
 import { TailSpin } from 'react-loader-spinner';
-
-const i1 = 'https://res.cloudinary.com/demc9mecm/image/upload/v1737378112/vokh5op2d88jerrkksan.png';
-const i2 = 'https://res.cloudinary.com/demc9mecm/image/upload/v1737378115/d7xgicjpub5ag6udeisd.png';
+import { sendOTP, verifyOTP, loginUserWithPassword } from '../../supaBase/userAuth.js';
+import Cookies from 'js-cookie';import { IoCloseCircleOutline } from "react-icons/io5";
+import './style/userLogin.css';
+import { AiOutlineLogin } from "react-icons/ai";
+import { GoChevronLeft } from "react-icons/go";
+import i1 from './asset/lll.png';
 
 function SignUpForm() {
   const navigate = useNavigate();
-  const [verifyingOtp, setVerifyingOtp] = useState(false);
-  const [loading, setLoading] = useState(false);
+
   const [phone, setPhone] = useState('');
-  const [userId, setUserId] = useState('');
-  const [otpSent, setOtpSent] = useState(false);
   const [otp, setOtp] = useState(new Array(6).fill(""));
+  const [passwordDigits, setPasswordDigits] = useState(new Array(5).fill(""));
+  const [otpSent, setOtpSent] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [verifyingOtp, setVerifyingOtp] = useState(false);
   const [timer, setTimer] = useState(30);
   const [isResendDisabled, setIsResendDisabled] = useState(true);
-
-  // Initialize Appwrite client and account service
-  const client = new Client()
-    .setEndpoint('https://cloud.appwrite.io/v1')
-    .setProject('670211c2003bf4774272');
-
-  const account = new Account(client);
-
-  const handlePhoneChange = (e) => setPhone(e.target.value);
-
-  const handleOTPChange = (element, index) => {
-    if (isNaN(element.value)) return;
-
-    const newOtp = otp.map((d, idx) => (idx === index ? element.value : d));
-    setOtp(newOtp);
-
-    if (element.value === "" && index > 0) {
-      document.getElementById(`otp-input-${index - 1}`).focus();
-    } else if (element.value !== "" && index < otp.length - 1) {
-      document.getElementById(`otp-input-${index + 1}`).focus();
-    }
-
-    const otpCode = newOtp.join('');
-    if (otpCode.length === 6) verifyOTP(otpCode);
-  };
-
-  const handleKeyDown = (event, index) => {
-    if (event.key === 'Backspace') {
-      event.preventDefault();
-      const newOtp = [...otp];
-      if (newOtp[index] === "" && index > 0) {
-        document.getElementById(`otp-input-${index - 1}`).focus();
-      } else {
-        newOtp[index] = "";
-        setOtp(newOtp);
-      }
-    }
-  };
+  const [loginWithPassword, setLoginWithPassword] = useState(true);
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
+    const userData = Cookies.get('BharatLinkerUserData');
+    if (userData) {navigate('/user');}
+  }, [navigate]);
+  useEffect(() => {
     let countdown;
-    if (timer > 0) {
-      countdown = setInterval(() => setTimer((prev) => prev - 1), 1000);
+    if (otpSent && timer > 0) {
+      countdown = setInterval(() => setTimer(prev => prev - 1), 1000);
     } else {
       setIsResendDisabled(false);
     }
     return () => clearInterval(countdown);
-  }, [timer]);
+  }, [timer, otpSent]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  const sendOTP = async () => {
+  const handleSendOTP = async () => {
+    if (phone.length !== 10) return;
     setLoading(true);
+    setErrorMessage('');
     try {
-      const token = await account.createPhoneToken(ID.unique(), `+91${phone}`);
-      setUserId(token.userId);
+      await sendOTP(`+91${phone}`);
       setOtpSent(true);
       setIsResendDisabled(true);
       setTimer(30);
+      setOtp(new Array(6).fill(""));
     } catch (error) {
-      console.error(`Failed to send SMS: ${error.message}`);
+      setErrorMessage('Failed to send OTP. Try again.');
+      console.error(`Failed to send OTP: ${error.message}`);
     } finally {
       setLoading(false);
     }
   };
 
-  const verifyOTP = async (otpCode) => {
-    if (otpCode.length !== 6 || !/^[0-9]+$/.test(otpCode)) return;
+  const handleVerifyOTP = async () => {
+    if (otp.join('').length !== 6) return;
     setVerifyingOtp(true);
-
+    setErrorMessage('');
     try {
-      const session = await account.createSession(userId, otpCode);
-      console.log('OTP verified, session created:', session);
+      const response = await verifyOTP(phone, otp.join(''));
+      if (response  && response.data.user.aud == "authenticated") {
+        Cookies.set('BharatLinkerUserData', JSON.stringify(response.data.user.user_metadata), {
+          expires: 60, // Store for 60 days
+          secure: true,
+          sameSite: 'Strict'
+      });
+      
 
-      try {
-        const userData = await fetchUserByPhoneNumber(phone);
-        if (userData) {
-          userData.cart = userData.cart ? JSON.parse(userData.cart) : [];
-          userData.userId=session.userId;
-          Cookies.set('BharatLinkerUserData', JSON.stringify(userData), { expires: 7, path: '' });
-          console.log('User data fetched and stored:', userData);
-        } else {
-          console.warn('No user data found for the provided phone number');
-        }
-      } catch (fetchError) {
-        console.error('Error fetching user data:', fetchError);
+        console.log('OTP verified successfully:', response.session);
+      } else {
+        throw new Error('Invalid response structure');
       }
-
-      navigate('/user');
     } catch (error) {
-      console.error('Error during OTP verification:', error);
+      setErrorMessage('Invalid OTP. Please try again.');
       setOtp(new Array(6).fill(''));
+      console.error('OTP verification failed:', error);
     } finally {
       setVerifyingOtp(false);
     }
   };
 
+  const handleLoginWithPassword = async () => {
+    if (phone.length !== 10 || passwordDigits.some(d => d === "")) return;
+    setLoading(true);
+    setErrorMessage('');
+    try {
+      const response = await loginUserWithPassword({ phone: `+91${phone}`, password: passwordDigits.join('') });
+      if (response  && response.data.user.aud == "authenticated") {
+        // Store session details in cookies for 60 days
+        Cookies.set('BharatLinkerUserData', JSON.stringify(response.data.user.user_metadata), {
+          expires: 60, // Store for 60 days
+          secure: true,
+          sameSite: 'Strict'
+      });
+      
+
+        console.log('OTP verified successfully:', response.session);
+      } else {
+        throw new Error('Invalid response structure');
+      }
+    } catch (error) {
+      setErrorMessage('Invalid phone number or password');
+      console.error('Login failed:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleOtpChange = useCallback((e, index) => {
+    const value = e.target.value.slice(-1);
+    const newOtp = [...otp];
+    newOtp[index] = value;
+    setOtp(newOtp);
+    if (value && index < 5) {
+      document.getElementById(`otp-input-${index + 1}`).focus();
+    }
+    else if (!value && index > 0) {
+      document.getElementById(`otp-input-${index - 1}`).focus();
+    }
+  }, [otp]);
+
+  const handleDigitChange = useCallback((e, index) => {
+    const value = e.target.value.slice(-1);
+    const newDigits = [...passwordDigits];
+    newDigits[index] = value;
+    setPasswordDigits(newDigits);
+    if (value && index < 4) {
+      document.getElementById(`pw-input-${index + 1}`).focus();
+    }
+    else if (!value && index > 0) {
+      document.getElementById(`pw-input-${index - 1}`).focus();
+    }
+  }, [passwordDigits]);
+
   return (
-    <div className='user-login-container'>
+    <>
       {!otpSent ? (
-        <div className="signup-phn-container">
-          <div className="login-verification-top-header">
-            <FaArrowLeft size={25} onClick={() => navigate('/')} style={{ position: "fixed", left: "10px" }} />
-            Bharat | Linker
+        <div className='auth-form-container'>
+          <div className='auth-form-container-back-container' onClick={() => { navigate('/') }}>
+            <GoChevronLeft size={25} />
+          </div>
+          <div className='auth-form-container-u1'>
+            <img src={i1} />
+            <div className="user-login-container-text">
+              <div style={{ marginTop: "-1px" }}>SIGN UP TO KEEP</div>
+              <div style={{ marginTop: "-7px" }}>DISCOVERING THE BEST YOUR</div>
+              <div style={{ marginTop: "-7px" }}>COMMUNITY HAS TO OFFER!</div>
+            </div>
           </div>
 
-          <img className='retailer-login-img' src={i2} alt="Signup" />
-          <div className="signup-container-text">
-            <div>Sign up to keep</div>
-            <div style={{ marginTop: "-7px" }}>discovering the best your</div>
-            <div style={{ marginTop: "-7px" }}>locality has to offer!</div>
-          </div>
-          <div className="signup-container-p">
-            Add your phone number. We'll send you a verification code so we know you're real.
-          </div>
-
-          <div className="phone-input-container">
-            <div className="country-code">
-              <img src={i1} alt="India Flag" className="flag-icon" />
-              <span style={{ color: "black" }}>+91</span>
+          <div className='phone-input-container'>
+            <div className='country-code-pill'>
+              <span>+91</span>
             </div>
             <input
-              type="tel"
-              placeholder="Enter phone number"
+              type='number'
+              className='premium-input'
+              placeholder='Enter mobile number'
               value={phone}
-              onChange={handlePhoneChange}
-              maxLength="10"
+              onChange={(e) => setPhone(e.target.value.replace(/[^0-9]/g, ''))}
+              maxLength='10'
             />
           </div>
 
-          <button className="send-otp-button" onClick={sendOTP} disabled={loading || !phone}>
-            {loading ? <TailSpin height={20} width={20} color="#ffffff" /> : "SEND OTP"}
-          </button>
-
-          <p className="terms-text">
-            By providing my phone number, I hereby agree and accept the{' '}
-            <a href="#terms">Terms of Service</a> and <a href="#privacy">Privacy Policy</a> in use of this app.
-          </p>
+          {!loginWithPassword ? (
+            <>
+              <button
+                className='premium-button primary'
+                onClick={handleSendOTP}
+                disabled={loading || phone.length !== 10}
+              >
+                {loading ? <TailSpin height={24} width={24} color='#ffffff' /> : 'SEND OTP'}
+              </button>
+              <p className='user-login-terms'>By continuing, you agree to our terms of service & Privcy Policy</p>
+              <p className='auth-alternate-action' onClick={() => setLoginWithPassword(true)}>
+                  Login with Password instead <AiOutlineLogin size={22} />
+              </p>
+            </>
+          ) : (
+            <>
+              <div className='password-inputs'>
+                {passwordDigits.map((_, index) => (
+                  <input
+                    key={index}
+                    id={`pw-input-${index}`}
+                    type='number'
+                    className='digit-input'
+                    maxLength='1'
+                    value={passwordDigits[index]}
+                    onChange={(e) => handleDigitChange(e, index)}
+                  />
+                ))}
+              </div>
+              
+               <button
+                className='premium-button primary'
+                onClick={handleLoginWithPassword}
+                disabled={loading || phone.length !== 10 || passwordDigits.some(d => d === "")}
+              >
+                {loading ? <TailSpin height={24} width={24} color='#ffffff' /> : 'LOG IN'}
+              </button>
+              <p className='user-login-terms'>By continuing, you agree to our terms of service & Privcy Policy</p>
+              <p className='auth-alternate-action' onClick={() => setLoginWithPassword(false)}>
+                Login via OTP instead <AiOutlineLogin size={22} />
+              </p>
+            </>
+          )}
+          {errorMessage && <div className="premium-error-message" onClick={()=>{setErrorMessage(false)}}>{errorMessage} < IoCloseCircleOutline size={20} /></div>}
         </div>
       ) : (
-        <div className="otp-verification">
-          <div className="otp-verification-top-header">
-            <FaArrowLeft size={25} onClick={() => { setOtpSent(false); setOtp(new Array(6).fill("")); }} />
-            OTP Verification
-            <FaCircleExclamation size={25} />
+        <div className='otp-auth-form-container'>
+
+          <div className='otp-header'>
+            <div className='auth-form-container-back-container' onClick={() => setOtpSent(false)}>
+              <GoChevronLeft size={30} />
+            </div>
+            <h3 className='otp-title'>OTP Verification</h3>
           </div>
 
-          <div className="otp-verification-text-verify">Verify your</div>
-          <div className="otp-verification-text-phn">Phone number</div>
-          <p className="otp-verification-text-p">Enter your OTP code here</p>
+          <p className='otp-instruction'>Enter the 6-digit code sent to +91 {phone}</p>
+          {errorMessage && <div className="premium-error-message">{errorMessage}</div>}
 
-          <div className="otp-inputs">
-            {otp.map((data, index) => (
+          <div className='otp-input-group'>
+            {otp.map((_, index) => (
               <input
-                className="otp-input"
-                type="text"
-                maxLength="1"
                 key={index}
-                value={data}
                 id={`otp-input-${index}`}
-                onChange={(e) => handleOTPChange(e.target, index)}
-                onFocus={(e) => e.target.select()}
-                onKeyDown={(e) => handleKeyDown(e, index)}
+                type='number'
+                className='otp-digit-input'
+                maxLength='1'
+                value={otp[index]}
+                onChange={(e) => handleOtpChange(e, index)}
               />
             ))}
           </div>
-          {verifyingOtp && <div style={{ marginTop: "30px" }}><TailSpin height={20} width={20} color="#ffffff" /></div>}
-          <p className="resend-text">Didn't receive the code?</p>
+
           <button
-            className={`resend-btn ${isResendDisabled ? 'disabled' : ''}`}
-            onClick={!isResendDisabled ? sendOTP : null}
-            disabled={isResendDisabled}
+            className='premium-button primary'
+            onClick={handleVerifyOTP}
+            disabled={verifyingOtp || otp.join('').length !== 6}
           >
-            Resend new code {isResendDisabled && `in (${timer}s)`}
+            {verifyingOtp ? <TailSpin height={24} width={24} color='#ffffff' /> : 'Verify & Continue'}
           </button>
+
+          {isResendDisabled && <div className='resend-otp'>
+            <button
+              className={`otp-premium-button secondary ${isResendDisabled ? 'disabled' : ''}`}
+              onClick={handleSendOTP}
+              disabled={isResendDisabled}
+            >
+              Resend OTP {isResendDisabled && `(${timer}s)`}
+            </button>
+          </div>
+          }
+          {errorMessage && <div className="premium-error-message" onClick={()=>{setErrorMessage(false)}}>{errorMessage} < IoCloseCircleOutline size={20} /></div>}
         </div>
+        
       )}
-    </div>
+    </>
   );
 }
 

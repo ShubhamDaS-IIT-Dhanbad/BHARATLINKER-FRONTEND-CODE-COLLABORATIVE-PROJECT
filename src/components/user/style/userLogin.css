@@ -1,195 +1,203 @@
 
-.user-login-container {
-  width: 100vw;
-  min-height: 100vh;padding: 10px;
-  display: flex;
-  background-color: transparent;
-  padding: 0;
-  margin: 0;
+/* userLogin.css */
+.auth-form-container {
+  overflow-x: hidden;
+  padding: 20px;display: flex;flex-direction: column;
+  align-items: center;
+  max-width: calc(100vw - 40px);width: calc(100vw - 40px);
+  min-height: 80vh;
+  background: #f9f9f9;
+}
+.otp-auth-form-container{
+  overflow-x: hidden;
+  padding: 20px;display: flex;flex-direction: column;
+  align-items: center;justify-content: center;
+  max-width: calc(100vw - 40px);width: calc(100vw - 40px);
+  min-height: 40vh;
+  background: #f9f9f9;
+}
+.auth-form-container-back-container{
+  position: fixed;top: 20px;left: 20px;
+  width: 40px;height: 40px;
+  border-radius: 50%;box-shadow: #333;
+  display: flex;justify-content: center;align-items: center;
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+.user-login-container-text{
+  display: flex;flex-direction: column;
+  justify-content: center;align-items: center;
+  font-size: 23px;
+  overflow: scroll;
+  font-weight: 700;font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif
+}
+.auth-form-container-u1{
+  display: flex;justify-content:space-evenly;align-items: center;
+  flex-direction: column;gap: 10px;
+  width: 90vw;height: 35vh;margin-top: 30px;
+}
+.auth-form-container-u1 img{
+  width: 90vw;
 }
 
-.signup-phn-container{
-  margin: 0 auto;color: white;padding: 10px;
-  text-align: center;overflow-y: scroll;
-  font-family: 'Roboto', sans-serif;
-  display: flex;flex-direction: column;background-color: #d81b60;
-  align-items: center;flex-grow: 1;min-height: 10vh;
-}
-.login-verification-top-header{
-  height: 60px;width: 100vw;
-  color: white;
-  display: flex;position: fixed;top: 0;background-color: #d81b60;
-  justify-content:center;align-items:center;
-  font-size: 25px;letter-spacing: 1px;font-weight: 700;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.639);
-}
-
-
-
-
-
-
-.signup-container-text {
-  display: flex;
-  flex-direction: column;
-  font-size: 25px;
-  font-weight: 700;
-  margin-top: 35px;
-}
-
-.signup-container-text div {
-  margin: 0;
-  padding: 0;
-}
-
-.signup-container-p {
-  margin-top: 50px;width: 90vw;
-  font-size: 11px;font-weight: 800;
-  color:rgba(255, 255, 255, 0.842);
-}
-
-.retailer-login-img {
-  margin-top: 37px;
-  width: 65vw;
-}
-
-
-
+/* background-color: rgb(28, 121, 43); */
 .phone-input-container {
+  display: flex;width: 80vw;
+  align-items: center;border-radius: 8px;
+  border: 1px solid #e0e0e0;
+  margin-bottom: 10px;
+}
+
+.country-code-pill {
+  padding: 7px 10px;
+  border-radius: 8px;
+  font-weight: 500;
+}
+
+.premium-input {
+  outline: none;border: none;
+  width: 100%;background-color: transparent;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+.premium-button {
+  width: 81vw;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: opacity 0.2s;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 7px;width: 89vw;
-  background-color: rgb(255, 255, 255);
-  padding: 1px;
-  border-radius: 5px;
+  gap: 8px;
 }
 
-.country-code {
+.premium-button.primary {
+  background-color: rgb(28, 121, 43);
+  color: #f9f9f9;font-size: medium;
+  font-weight: 700;
+}
+
+.premium-button.secondary {
+  background: transparent;
+  color: rgb(28, 121, 43);
+  border: 1px solid rgb(28, 121, 43);
+}
+.digit-input:focus{
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  outline: none;
+}
+.phone-input-container:focus,
+.otp-digit-input:focus {box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  outline: none;
+}
+
+.premium-button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+
+.auth-alternate-action {
+  display: flex;justify-content: center;align-items: center;
+  gap: 7px;
+  text-align: center;
+  margin-top: 15px;font-size: 14px;
+  color: #ff4444a0;
+  background: #ffeaea;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+
+
+
+
+
+.password-inputs{
+  display: flex;width: 80vw;margin-bottom: 10px;
+  gap: 10px;justify-content: center;align-items: center;
+}
+.digit-input{
+  width: calc(16vw - 14.4px);
+  height: 50px;
+  text-align: center;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 18px;
+}
+.otp-input-group {
+  display: flex;width: 80vw;margin-bottom: 10px;
+  gap: 5px;justify-content: center;align-items: center;
+}
+.otp-digit-input {
+  width: calc(16vw - 21px);
+  height: 50px;
+  text-align: center;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 18px;
+}
+
+
+
+
+.otp-header {
+  width: 100vw;height: 90px;
+  position: fixed;top: 0;
   display: flex;
   align-items: center;
-  background-color: transparent;
-  height: 25px;
-  padding: 10px;
-  border-radius: 10px;
-  border-right: none;
- 
+  gap: 15px;justify-content: center;
+  margin-bottom: 25px;
 }
 
-.flag-icon {
-  width: 33px;
-  height: 25px;
-  margin-right: 8px;
-}
-
-
-.phone-input-container input {
-  width: 100%;
-  background-color: transparent;
-  border-radius: 10px;border: none;
-  border-left: none;
-  outline: none;
-  font-size: 15px;font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-  height: 25px;font-weight: 500;
-  padding: 2px;
-}
-
-.send-otp-button {
-  background-color: transparent;
-  color: rgb(255, 255, 255);border: 1.7px solid rgb(255, 255, 255);
-  padding: 12px 20px;font-weight: 900;
-  border-radius: 5px;
-  display: flex;justify-content: center;align-items: center;
-  font-size: 16px;letter-spacing: 1.1px;
-  margin-top: 7px;
-  margin-bottom: 20px;
-  width: 89vw;
-  height: 50px;
-}
-
-.send-otp-button:hover {
-  border: 1.7px solid rgb(255, 255, 255);background-color: transparent;
-  color: #ffffff;
-}
-.send-otp-button:active {
-  border: 1.7px solid rgb(255, 255, 255);background-color: transparent;
-  color: #ffffff;background-color: transparent;
-}
-
-.terms-text {
-  font-size: 12px;font-weight: 900;
-  color: #ffffff;
-}
-
-.terms-text a {
-  color: rgb(68, 255, 105);
-  text-decoration: none;font-size: larger;
-}
-
-.terms-text a:hover {
-  text-decoration: underline;
-}
-
-
-
-
-
-
-.otp-verification{
-  background-color: #1A1A2E;
-  color: white;height: 100vh;
-  display: flex;flex-direction: column;
-  align-items: center;
-}
-.otp-verification-top-header{
-  height: 60px;padding: 0px 10px 0px 10px;
-  display: flex;justify-content:space-between;align-items:center;
-  font-size: 19px;letter-spacing: 1px;
-  width: calc(100vw - 20px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.639);
-}
-.otp-verification-text-verify{
-  font-size: 25px;font-weight: 700;
-  margin-top: 35px;
-}
-.otp-verification-text-phn{
-  font-size: 27px;font-weight: 700;
-  margin-top: -10px;
-}
-.otp-verification-text-p{
-  margin-top: 0px;
-}
-
-
-.otp-inputs{
-  display: flex;margin-top: 10px;gap: 5px;
-  justify-content: center;align-items: center;
-}
-.otp-input{
-  width: 40px;height: 40px;
-  border-radius: 10px;background-color: #ffffff;
-  border: none;font-size: 30px;display: flex;
-  justify-content: center;align-items: center;
-  text-align: center;border: 1px solid black;
-}
-
-.verify-otp-button{
-  background-color: rgb(91, 228, 168);
-  color: white;
-  padding: 12px 20px;
+.back-button {
+  background: none;
   border: none;
-  border-radius: 5px;
-  
-  font-size: 15px;font-weight: 700;
-  margin-top: 50px;
-  margin-bottom: 20px;
-  width: 40vw;
-  height: 50px;
+  color: #333;
 }
 
-.resend-text{
-  margin-top: 30px;
+.otp-title {
+  margin: 0;
 }
-.resend-btn{
-  color: #d81b60;
+
+.otp-instruction {
+  color: #666;font-size: 14px;
+  margin-bottom: 10px;
 }
+.premium-error-message {
+  color: #ff4444;
+  background: #ffeaea;
+  padding: 12px;display: flex;justify-content: center;
+  align-items: center;gap: 5px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  position: fixed;bottom: 10px;
+  text-align: center;
+}
+
+
+
+.resend-otp {
+  margin-top: 20px;
+  text-align: center;border: none;
+}
+.resend-otp button{
+  margin-top: 20px;
+  text-align: center;border: none;
+}
+
+
+.user-login-terms{
+  font-size: 11px;margin-top: 5px;
+  display: flex;justify-content: center;align-items: center;
+  width: 80vw;
+  color: #3333337b;
+}
+
+
+
