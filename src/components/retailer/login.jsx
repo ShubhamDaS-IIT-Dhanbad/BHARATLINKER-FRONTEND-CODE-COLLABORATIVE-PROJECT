@@ -10,7 +10,6 @@ import OTPInput from 'react-otp-input';
 import { ErrorPopup } from './popups/popUp.jsx';
 
 import '../style/shopLogin.css';
-import '../style/userLogin.css';
 import './style/auth.css'
 
 function LoginForm() {
