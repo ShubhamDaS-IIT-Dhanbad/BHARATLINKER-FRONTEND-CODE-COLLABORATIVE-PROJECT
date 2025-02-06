@@ -3,14 +3,12 @@ import { BiSearchAlt } from "react-icons/bi";
 import { useNavigate, useLocation } from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa";
 import { useSelector } from "react-redux";
-import useUserAuth from "../../../hooks/userAuthHook.jsx";
 import { useExecuteUserSearch } from "../../../hooks/searchUserProductHook.jsx";
 import "../../style/navbar.css";
 
-const Navbar = ({ headerTitle, onBackNavigation }) => {
+const Navbar = ({userData, headerTitle, onBackNavigation }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { userData } = useUserAuth();
   const { executeSearch } = useExecuteUserSearch();
 
   const { query } = useSelector((state) => state.userRefurbishedProducts);
@@ -58,7 +56,7 @@ const Navbar = ({ headerTitle, onBackNavigation }) => {
           <div className="product-page-user-location">
             <p className="product-page-location-label">{headerTitle}</p>
             <p id="dashboard-header-user-phn">
-              {userData ? userData.phoneNumber : "xxxxx xxxxx"}
+              {userData ? `+${userData.phone}` : "xxxxx xxxxx"}
             </p>
           </div>
         </div>

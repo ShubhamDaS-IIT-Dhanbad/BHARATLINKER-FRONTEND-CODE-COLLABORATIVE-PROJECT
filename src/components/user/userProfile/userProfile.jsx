@@ -133,7 +133,7 @@ function UserRefurbishedProduct({ userData }) {
       </Helmet>
 
       <header>
-        <Navbar headerTitle="USER PROFILE" />
+        <Navbar userData={userData} headerTitle="USER PROFILE" />
       </header>
 
       <div className="user-profile-div">
