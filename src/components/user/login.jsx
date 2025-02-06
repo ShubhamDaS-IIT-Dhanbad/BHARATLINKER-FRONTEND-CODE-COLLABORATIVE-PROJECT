@@ -25,7 +25,8 @@ function SignUpForm({userData,setUserData}) {
   const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => { 
-   if(userData){navigate('/user');}
+    const userSession=Cookies.get('BharatLinkerUserSession');
+    if(userSession) {navigate('/user');}
   }, []);
   
   useEffect(() => {
