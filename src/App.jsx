@@ -47,12 +47,7 @@ function App() {
 }
 
 const RoutesWithConditionalHeader = React.memo(() => {
-  
-  const { PrivateRoute, getUserDataFromCookie } = useUserAuth();
-  const [userData,setUserData]=useState("");
-  useEffect(()=>{
-    if(!userData){ setUserData(getUserDataFromCookie());}
-  },[userData])
+  const { PrivateRoute} = useUserAuth();
   return (
     <>
       <Routes>
@@ -65,7 +60,7 @@ const RoutesWithConditionalHeader = React.memo(() => {
                 <meta name="description" content="Welcome to Bharat Linker, your one-stop solution for business management." />
                 <meta name="robots" content="index, follow" />
               </Helmet>
-              <HomePage userData={userData} />
+              <HomePage />
             </>
           }
         />
@@ -79,7 +74,7 @@ const RoutesWithConditionalHeader = React.memo(() => {
                 <meta name="description" content="Login to access your Bharat Linker account and manage your business efficiently." />
                 <meta name="robots" content="noindex, nofollow" />
               </Helmet>
-              <LoginPage userData={userData} setUserData={setUserData}/>
+              <LoginPage/>
             </>
           }
         />
@@ -92,7 +87,7 @@ const RoutesWithConditionalHeader = React.memo(() => {
                 <title>Search Products - Bharat Linker</title>
                 <meta name="description" content="Search and explore a wide range of products on Bharat Linker." />
               </Helmet >
-              <SearchPage userData={userData} />
+              <SearchPage />
             </>
           }
         />
@@ -106,7 +101,7 @@ const RoutesWithConditionalHeader = React.memo(() => {
                 <title>Product Details - Bharat Linker</title>
                 <meta name="description" content="View detailed information about the selected product on Bharat Linker." />
               </Helmet>
-              <SingleProduct userData={userData} />
+              <SingleProduct/>
             </>
           }
         />
@@ -120,7 +115,7 @@ const RoutesWithConditionalHeader = React.memo(() => {
                 <title>Search Shops - Bharat Linker</title>
                 <meta name="description" content="Search and explore various shops on Bharat Linker." />
               </Helmet>
-              <SearchShop userData={userData} />
+              <SearchShop />
             </>
           }
         />
@@ -134,7 +129,7 @@ const RoutesWithConditionalHeader = React.memo(() => {
                 <title>Shop Details - Bharat Linker</title>
                 <meta name="description" content="Discover detailed information about this shop on Bharat Linker." />
               </Helmet>
-              <SingleShopCard userData={userData} />
+              <SingleShopCard />
             </>
           }
         />
@@ -149,7 +144,7 @@ const RoutesWithConditionalHeader = React.memo(() => {
                 <title>Refurbished Products - Bharat Linker</title>
                 <meta name="description" content="Explore high-quality refurbished products on Bharat Linker." />
               </Helmet>
-              <RefurbishedPage userData={userData} />
+              <RefurbishedPage  />
             </>
           }
         />
@@ -161,7 +156,7 @@ const RoutesWithConditionalHeader = React.memo(() => {
                 <title>Refurbished Details - Bharat Linker</title>
                 <meta name="description" content="Search and explore a wide range of products on Bharat Linker." />
               </Helmet >
-              <SingleRefurbishedProductCard userData={userData} />
+              <SingleRefurbishedProductCard/>
             </>}
         />
 
@@ -242,12 +237,12 @@ const RoutesWithConditionalHeader = React.memo(() => {
           path="/user"
           element=
           {
-            <PrivateRoute>
+            <PrivateRoute >
               <Helmet>
                 <title>User Dashboard - Bharat Linker</title>
                 <meta name="description" content="Access your Bharat Linker user dashboard to manage your account, orders, and more." />
               </Helmet>
-              <User userData={userData} setUserData={setUserData}/>
+              <User/>
             </PrivateRoute>
           }
         />
@@ -261,7 +256,7 @@ const RoutesWithConditionalHeader = React.memo(() => {
                 <title>User Profile - Bharat Linker</title>
                 <meta name="description" content="View and update your Bharat Linker user profile." />
               </Helmet>
-              <UserProfile userData={userData} />
+              <UserProfile  />
             </PrivateRoute>
           }
         />
@@ -274,7 +269,7 @@ const RoutesWithConditionalHeader = React.memo(() => {
                 <title>Manage Refurbished Products - Bharat Linker</title>
                 <meta name="description" content="View and manage your refurbished product listings on Bharat Linker." />
               </Helmet>
-              <UserProductPageMain userData={userData} />
+              <UserProductPageMain  />
             </PrivateRoute>
           }
         />
@@ -287,7 +282,7 @@ const RoutesWithConditionalHeader = React.memo(() => {
                 <title>Upload Products - Bharat Linker</title>
                 <meta name="description" content="Upload your products for sale on Bharat Linker, including refurbished items." />
               </Helmet>
-              <RefurbishedBooksUploadUser userData={userData} />
+              <RefurbishedBooksUploadUser />
             </PrivateRoute>
           }
         />
@@ -300,7 +295,7 @@ const RoutesWithConditionalHeader = React.memo(() => {
                 <title>Update Product - Bharat Linker</title>
                 <meta name="description" content="Edit and update the details of your refurbished products on Bharat Linker." />
               </Helmet>
-              <UserUpdateBookModule userData={userData} />
+              <UserUpdateBookModule />
             </PrivateRoute>
           }
         />
@@ -313,7 +308,7 @@ const RoutesWithConditionalHeader = React.memo(() => {
                 <title>Notifications - Bharat Linker</title>
                 <meta name="description" content="View all your notifications related to account activity and updates." />
               </Helmet>
-              <UserNotification userData={userData} />
+              <UserNotification />
             </PrivateRoute>
           }
         />
@@ -326,7 +321,7 @@ const RoutesWithConditionalHeader = React.memo(() => {
                 <title>Orders - Bharat Linker</title>
                 <meta name="description" content="View and manage your orders on Bharat Linker." />
               </Helmet>
-              <UserOrder userData={userData} />
+              <UserOrder />
             </PrivateRoute>
           }
         />
@@ -339,7 +334,7 @@ const RoutesWithConditionalHeader = React.memo(() => {
                 <title>Cart - Bharat Linker</title>
                 <meta name="description" content="View and manage your cart on Bharat Linker." />
               </Helmet>
-              <UserCart userData={userData} />
+              <UserCart />
             </PrivateRoute>
           }
         />
@@ -352,7 +347,7 @@ const RoutesWithConditionalHeader = React.memo(() => {
                 <title>Orders - Bharat Linker</title>
                 <meta name="description" content="Order detail on Bharat Linker." />
               </Helmet>
-              <UserOrderDetail userData={userData} />
+              <UserOrderDetail/>
             </PrivateRoute>
           }
         />

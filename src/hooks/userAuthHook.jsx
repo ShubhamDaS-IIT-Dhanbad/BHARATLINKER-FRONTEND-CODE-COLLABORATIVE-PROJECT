@@ -1,3 +1,4 @@
+import React from 'react';
 import { useState, useEffect } from 'react';
 import { Navigate, useNavigate, useLocation } from 'react-router-dom';
 import {useDispatch} from 'react-redux';
@@ -100,16 +101,21 @@ const useUserAuth = () => {
             console.error('Logout failed:', error);
         }
     };
-    
-
     const PrivateRoute = ({ children }) => {
-        const userSession = Cookies.get('BharatLinkerUserSession');
-        if (!userSession) {
+        const userData = Cookies.get("BharatLinkerUserData");
+    
+        if (!userData) {
             return <Navigate to="/login" replace />;
         }
-        return children;
+    
+        const parsedUserData = JSON.parse(userData);
+    
+        // Ensure children are wrapped inside a valid React element
+        return React.Children.map(children, (child) =>
+            React.isValidElement(child) ? React.cloneElement(child, { userData: parsedUserData }) : child
+        );
     };
-
+        
     return { userData, getUserDataFromCookie, fetchUserData, updateUserData, logout, PrivateRoute };
 };
 

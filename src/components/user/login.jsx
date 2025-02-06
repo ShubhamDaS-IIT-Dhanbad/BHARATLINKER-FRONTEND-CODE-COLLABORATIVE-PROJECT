@@ -6,11 +6,9 @@ import Cookies from 'js-cookie';import { IoCloseCircleOutline } from "react-icon
 import './style/userLogin.css';
 import { AiOutlineLogin } from "react-icons/ai";
 import { GoChevronLeft } from "react-icons/go";
-// import useUserAuth from "../../hooks/userAuthHook.jsx";
 import i1 from './asset/lll.png';
 
-function SignUpForm({userData,setUserData}) {
-  // const { getUserDataFromCookie } = useUserAuth();
+function SignUpForm() {
   const navigate = useNavigate();
 
   const [phone, setPhone] = useState('');
@@ -25,7 +23,7 @@ function SignUpForm({userData,setUserData}) {
   const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => { 
-    const userSession=Cookies.get('BharatLinkerUserSession');
+    const userSession=Cookies.get('BharatLinkerUserData');
     if(userSession) {navigate('/user');}
   }, []);
   
@@ -68,10 +66,7 @@ function SignUpForm({userData,setUserData}) {
   
     try {
       const { session, user, error } = await verifyOTP(phone, otp.join(''));
-      
       if (error) throw error;
-      
-      // setUserData(getUserDataFromCookie());
       Cookies.set('BharatLinkerUserSession', JSON.stringify(session), { expires: 7, secure: true });
       Cookies.set(
         "BharatLinkerUserData",
@@ -81,7 +76,7 @@ function SignUpForm({userData,setUserData}) {
         }),
         { expires: 7, secure: true }
       );
-      navigate('/');
+      navigate('/user');
     } catch (error) {
       setErrorMessage('Invalid OTP. Please try again.');
       setOtp(new Array(6).fill(''));
@@ -98,10 +93,8 @@ function SignUpForm({userData,setUserData}) {
   
     try {
       const { session, user, error } = await loginUserWithPassword({phone:`+91${phone}`,password: passwordDigits.join('')});
-  
       if (error) throw error;
       
-      // setUserData(getUserDataFromCookie());
       Cookies.set('BharatLinkerUserSession', JSON.stringify(session), { expires: 7, secure: true });
       Cookies.set(
         "BharatLinkerUserData",
@@ -111,7 +104,7 @@ function SignUpForm({userData,setUserData}) {
         }),
         { expires: 7, secure: true }
       );
-      navigate('/');
+      navigate('/user');
     } catch (error) {
       setErrorMessage('Invalid phone number or password');
       console.error('Login failed:', error);

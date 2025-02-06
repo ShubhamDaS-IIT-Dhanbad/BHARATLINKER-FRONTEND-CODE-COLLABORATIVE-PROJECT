@@ -12,15 +12,11 @@ import SetPinPage from "./setPin.jsx";
 import useUserAuth from "../../hooks/userAuthHook.jsx";
 import "./style/userHome.css";
 
-function UserHome({ userData,setUserData }) {
-    const { getUserDataFromCookie } = useUserAuth();
+function UserHome({ userData}) {
     useEffect(() => {
         window.scrollTo(0, 0);
-        if (!userData.password) {
-            setPinSet(false);
-        } else {
-            setPinSet(true);
-        }
+        if (!userData.password) {setPinSet(false);
+        } else {setPinSet(true);}
     }, [userData]);
 
     const { logout } = useUserAuth();
@@ -158,7 +154,7 @@ function UserHome({ userData,setUserData }) {
                     </div>
                 </div>
             )}
-            {!pinSet && <SetPinPage onPinSet={()=>{setUserData(getUserDataFromCookie());setPinSet(false)}}/>}
+            {!pinSet && <SetPinPage onPinSet={()=>{setPinSet(false)}}/>}
         </>
     );
 }

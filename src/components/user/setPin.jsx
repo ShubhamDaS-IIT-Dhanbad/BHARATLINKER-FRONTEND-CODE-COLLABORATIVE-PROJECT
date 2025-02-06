@@ -1,9 +1,11 @@
 import { useState, useCallback } from "react";
+import { useNavigate } from "react-router-dom";
 import { TailSpin } from 'react-loader-spinner';
 import { updateUserMetaData } from '../../supaBase/userAuth.js';
 import './style/setPin.css';
 import Cookies from 'js-cookie'
 const SetPinPage = ({onPinSet}) => {
+    const navigate=useNavigate();
     const [pin, setPin] = useState(Array(6).fill(""));
     const [confirmPin, setConfirmPin] = useState(Array(6).fill(""));
     const [updating, setUpdating] = useState(false);
@@ -56,6 +58,7 @@ const SetPinPage = ({onPinSet}) => {
                 }),
                 { expires: currentExpiration, secure: true }
             );
+            navigate('/user');
             onPinSet(false);
         } catch (error) {
             console.error("Error updating user data:", error);
