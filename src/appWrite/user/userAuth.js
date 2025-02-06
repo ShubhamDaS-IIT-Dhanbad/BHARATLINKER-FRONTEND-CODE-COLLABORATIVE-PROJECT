@@ -20,7 +20,7 @@ export const verifyOTP = async (userId, otpCode) => {
     try {
       // Verify OTP and create a session
       const session = await account.createSession(userId, otpCode);
-      const userPreferences = await fetchUserPreferences(session.userId);
+      const userPreferences = await account.getPrefs(session.userId);
       console.log("User preferences:",session, userPreferences);
       return { session, userPreferences };
     } catch (error) {

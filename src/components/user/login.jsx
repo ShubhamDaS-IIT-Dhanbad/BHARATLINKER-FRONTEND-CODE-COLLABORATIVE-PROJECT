@@ -66,12 +66,12 @@ function SignUpForm() {
     setErrorMessage('');
     try {
       const {session,userPreferences} = await verifyOTP(userId, otp.join(''));
-      console.log(session);
+      console.log(session,userPreferences,"lp");
       Cookies.set("BharatLinkerUserData", JSON.stringify({
         userId: session.userId,
         id: session.$id,
         phoneNumber: phone,
-        userPreferences
+        ...userPreferences
       }), { expires: 7, secure: true });
       navigate('/user');
     } catch {

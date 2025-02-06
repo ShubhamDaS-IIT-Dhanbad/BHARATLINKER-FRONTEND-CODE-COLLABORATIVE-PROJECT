@@ -12,7 +12,6 @@ import useUserAuth from "../../hooks/userAuthHook.jsx";
 import "./style/userHome.css";
 
 function UserHome({ userData}) {
-    console.log(userData);
     useEffect(() => {
         window.scrollTo(0, 0);
     }, []);
