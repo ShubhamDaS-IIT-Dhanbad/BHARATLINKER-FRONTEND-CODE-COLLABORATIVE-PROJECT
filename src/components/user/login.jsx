@@ -6,11 +6,11 @@ import Cookies from 'js-cookie';import { IoCloseCircleOutline } from "react-icon
 import './style/userLogin.css';
 import { AiOutlineLogin } from "react-icons/ai";
 import { GoChevronLeft } from "react-icons/go";
-import useUserAuth from "../../hooks/userAuthHook.jsx";
+// import useUserAuth from "../../hooks/userAuthHook.jsx";
 import i1 from './asset/lll.png';
 
 function SignUpForm({userData,setUserData}) {
-  const { getUserDataFromCookie } = useUserAuth();
+  // const { getUserDataFromCookie } = useUserAuth();
   const navigate = useNavigate();
 
   const [phone, setPhone] = useState('');
@@ -70,7 +70,7 @@ function SignUpForm({userData,setUserData}) {
       
       if (error) throw error;
       
-      setUserData(getUserDataFromCookie());
+      // setUserData(getUserDataFromCookie());
       Cookies.set('BharatLinkerUserSession', JSON.stringify(session), { expires: 7, secure: true });
       Cookies.set(
         "BharatLinkerUserData",
@@ -100,7 +100,7 @@ function SignUpForm({userData,setUserData}) {
   
       if (error) throw error;
       
-      setUserData(getUserDataFromCookie());
+      // setUserData(getUserDataFromCookie());
       Cookies.set('BharatLinkerUserSession', JSON.stringify(session), { expires: 7, secure: true });
       Cookies.set(
         "BharatLinkerUserData",
