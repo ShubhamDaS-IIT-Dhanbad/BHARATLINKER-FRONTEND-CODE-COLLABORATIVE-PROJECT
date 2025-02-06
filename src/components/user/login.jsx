@@ -34,22 +34,31 @@ function SignUpForm() {
   }, [timer, otpSent]);
 
   const handleSendOTP = async () => {
-    if (phone.length !== 10) return;
+    if (phone.length !== 10) return; // Check if phone number is valid
     setLoading(true);
-    setErrorMessage('');
+    setErrorMessage(''); // Clear any previous error message
     try {
+      // Send OTP and get userId
       const userId = await sendOTP(`+91${phone}`);
-      setUserId(userId);
-      setOtpSent(true);
-      setIsResendDisabled(true);
-      setTimer(30);
-      setOtp(new Array(6).fill(""));
-    } catch {
+  
+      // Check if userId is returned successfully, then proceed
+      if (userId) {
+        setUserId(userId); // Set userId
+        setOtpSent(true); // OTP sent successfully
+        setIsResendDisabled(true); // Disable resend button
+        setTimer(30); // Set timer for 30 seconds
+        setOtp(new Array(6).fill("")); // Reset OTP array
+      } else {
+        setErrorMessage('Failed to send OTP. Try again.'); // Show error if userId is not valid
+      }
+    } catch (error) {
+      // Catch any errors from sendOTP or other issues
       setErrorMessage('Failed to send OTP. Try again.');
     } finally {
-      setLoading(false);
+      setLoading(false); // Stop loading animation
     }
   };
+  
 
   const handleVerifyOTP = async () => {
     if (otp.join('').length !== 6) return;
