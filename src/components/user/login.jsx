@@ -6,6 +6,7 @@ import Cookies from 'js-cookie';import { IoCloseCircleOutline } from "react-icon
 import './style/userLogin.css';
 import { AiOutlineLogin } from "react-icons/ai";
 import { GoChevronLeft } from "react-icons/go";
+
 import i1 from './asset/lll.png';
 
 function SignUpForm() {
@@ -13,7 +14,7 @@ function SignUpForm() {
 
   const [phone, setPhone] = useState('');
   const [otp, setOtp] = useState(new Array(6).fill(""));
-  const [passwordDigits, setPasswordDigits] = useState(new Array(5).fill(""));
+  const [passwordDigits, setPasswordDigits] = useState(new Array(6).fill(""));
   const [otpSent, setOtpSent] = useState(false);
   const [loading, setLoading] = useState(false);
   const [verifyingOtp, setVerifyingOtp] = useState(false);
@@ -22,10 +23,11 @@ function SignUpForm() {
   const [loginWithPassword, setLoginWithPassword] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
 
-  useEffect(() => {
-    const userData = Cookies.get('BharatLinkerUserData');
-    if (userData) {navigate('/user');}
-  }, [navigate]);
+  useEffect(() => { 
+    const session = Cookies.get('BharatLinkerUserSession');
+   if(session){navigate('/user');}
+  }, []);
+  
   useEffect(() => {
     let countdown;
     if (otpSent && timer > 0) {
@@ -62,20 +64,21 @@ function SignUpForm() {
     if (otp.join('').length !== 6) return;
     setVerifyingOtp(true);
     setErrorMessage('');
+  
     try {
-      const response = await verifyOTP(phone, otp.join(''));
-      if (response  && response.data.user.aud == "authenticated") {
-        Cookies.set('BharatLinkerUserData', JSON.stringify(response.data.user.user_metadata), {
-          expires: 60, // Store for 60 days
-          secure: true,
-          sameSite: 'Strict'
-      });
+      const { session, user, error } = await verifyOTP(phone, otp.join(''));
       
-
-        console.log('OTP verified successfully:', response.session);
-      } else {
-        throw new Error('Invalid response structure');
-      }
+      if (error) throw error;
+      Cookies.set('BharatLinkerUserSession', JSON.stringify(session), { expires: 7, secure: true });
+      Cookies.set(
+        "BharatLinkerUserData",
+        JSON.stringify({
+          ...user.user_metadata, 
+          phone:user.phone, 
+        }),
+        { expires: 7, secure: true }
+      );
+      navigate('/user');
     } catch (error) {
       setErrorMessage('Invalid OTP. Please try again.');
       setOtp(new Array(6).fill(''));
@@ -84,26 +87,26 @@ function SignUpForm() {
       setVerifyingOtp(false);
     }
   };
-
+  
   const handleLoginWithPassword = async () => {
     if (phone.length !== 10 || passwordDigits.some(d => d === "")) return;
     setLoading(true);
     setErrorMessage('');
+  
     try {
-      const response = await loginUserWithPassword({ phone: `+91${phone}`, password: passwordDigits.join('') });
-      if (response  && response.data.user.aud == "authenticated") {
-        // Store session details in cookies for 60 days
-        Cookies.set('BharatLinkerUserData', JSON.stringify(response.data.user.user_metadata), {
-          expires: 60, // Store for 60 days
-          secure: true,
-          sameSite: 'Strict'
-      });
-      
-
-        console.log('OTP verified successfully:', response.session);
-      } else {
-        throw new Error('Invalid response structure');
-      }
+      const { session, user, error } = await loginUserWithPassword({phone:`+91${phone}`,password: passwordDigits.join('')});
+  
+      if (error) throw error;
+      Cookies.set('BharatLinkerUserSession', JSON.stringify(session), { expires: 7, secure: true });
+      Cookies.set(
+        "BharatLinkerUserData",
+        JSON.stringify({
+          ...user.user_metadata, 
+          phone:user.phone, 
+        }),
+        { expires: 7, secure: true }
+      );
+      navigate('/user');
     } catch (error) {
       setErrorMessage('Invalid phone number or password');
       console.error('Login failed:', error);
@@ -111,6 +114,7 @@ function SignUpForm() {
       setLoading(false);
     }
   };
+  
 
   const handleOtpChange = useCallback((e, index) => {
     const value = e.target.value.slice(-1);
@@ -130,7 +134,7 @@ function SignUpForm() {
     const newDigits = [...passwordDigits];
     newDigits[index] = value;
     setPasswordDigits(newDigits);
-    if (value && index < 4) {
+    if (value && index < 5) {
       document.getElementById(`pw-input-${index + 1}`).focus();
     }
     else if (!value && index > 0) {

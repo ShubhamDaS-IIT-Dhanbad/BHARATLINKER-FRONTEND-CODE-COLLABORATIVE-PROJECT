@@ -1,0 +1,121 @@
+.set-pin-container {
+    background-color: rgba(0, 0, 0, 0.306);
+    position: fixed;
+    top: 0;
+    z-index: 102;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+}
+
+.set-pin-container-div {
+    background-color: white;
+    padding: 15px;
+}
+
+
+
+
+
+
+.pin-inputs {
+    display: flex;
+    width: 80vw;
+    margin-bottom: 10px;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+}
+
+.pin-input {
+    width: calc(15vw - 20px);
+    height: 40px;
+    text-align: center;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 18px;
+}
+
+
+.pin-input:focus{
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+    outline: none;
+  }
+
+
+
+.pin-button {
+    width: 90vw;
+    padding: 15px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: opacity 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin: 10px auto;
+}
+
+
+.pin-button.primary {
+    background-color: rgb(28, 121, 43);
+    color: #f9f9f9;
+    font-size: medium;
+    font-weight: 700;
+    margin-top: 80px;
+}
+
+.pin-button.secondary {
+    background: transparent;
+    color: rgb(28, 121, 43);
+    border: 1px solid rgb(28, 121, 43);
+}
+
+.pin-button:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.user-pin-text {
+    display: flex;
+    flex-direction: column;
+    font-size: 23px;
+    margin-top: 9px;
+    margin-bottom: 7px;
+    overflow: scroll;
+    font-weight: 500;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif
+}
+
+.pin-error-message {
+    color: #ff4444;
+    background: #ffeaea;
+    padding: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    border-radius: 8px;
+    width: 90vw;
+    position: fixed;
+    top: 10px;
+    text-align: center;
+    z-index: 102;
+    margin: 0px auto;
+    align-self: center;
+    font-size: 13px;
+}
+
+.user-pin-terms {
+    font-size: 11px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 80vw;
+    margin: 0 auto;
+    color: #3333337b;
+}

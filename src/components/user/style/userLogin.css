@@ -120,10 +120,10 @@
 
 .password-inputs{
   display: flex;width: 80vw;margin-bottom: 10px;
-  gap: 10px;justify-content: center;align-items: center;
+  gap:5px;justify-content: center;align-items: center;
 }
 .digit-input{
-  width: calc(16vw - 14.4px);
+  width: calc(16vw - 19.5px);
   height: 50px;
   text-align: center;
   border: 1px solid #e0e0e0;

@@ -9,7 +9,7 @@
     left: 0;
     right: 0;
     padding:15px;
-    z-index: 1000;
+    z-index: 100;
 }
 
 .dashboard-header-user {
@@ -139,3 +139,41 @@
 .user-book-delete-option-no {
     color: red;
 }
+
+
+
+
+
+.password-inputs{
+    display: flex;width: 80vw;margin-bottom: 10px;
+    gap: 10px;justify-content: center;align-items: center;
+  }
+  .digit-input{
+    width: calc(16vw - 14.4px);
+    height: 50px;
+    text-align: center;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 18px;
+  }
+  .otp-input-group {
+    display: flex;width: 80vw;margin-bottom: 10px;
+    gap: 5px;justify-content: center;align-items: center;
+  }
+  .otp-digit-input {
+    width: calc(16vw - 21px);
+    height: 50px;
+    text-align: center;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 18px;
+  }
+  
+.digit-input:focus{
+    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+    outline: none;
+  }
+  .phone-input-container:focus,
+  .otp-digit-input:focus {box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+    outline: none;
+  }

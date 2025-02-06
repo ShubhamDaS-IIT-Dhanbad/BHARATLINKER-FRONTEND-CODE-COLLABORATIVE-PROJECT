@@ -47,11 +47,12 @@ function App() {
 }
 
 const RoutesWithConditionalHeader = React.memo(() => {
+  
+  const { PrivateRoute, getUserDataFromCookie } = useUserAuth();
   const [userData,setUserData]=useState("");
   useEffect(()=>{
     if(!userData){setUserData(getUserDataFromCookie());}
   },[userData])
-  const { PrivateRoute, getUserDataFromCookie } = useUserAuth();
   return (
     <>
       <Routes>
@@ -246,7 +247,7 @@ const RoutesWithConditionalHeader = React.memo(() => {
                 <title>User Dashboard - Bharat Linker</title>
                 <meta name="description" content="Access your Bharat Linker user dashboard to manage your account, orders, and more." />
               </Helmet>
-              <User userData={userData} />
+              <User userData={userData} setUserData={setUserData}/>
             </PrivateRoute>
           }
         />

@@ -17,47 +17,49 @@ export const sendOTP = async (phone) => {
     alert("Failed to send OTP. Please try again.");
   }
 };
-// Function to verify OTP
 export const verifyOTP = async (phone, otpCode) => {
   try {
-    const response = await supabase.auth.verifyOtp({
+    const { data, error } = await supabase.auth.verifyOtp({
       phone: `+91${phone}`,
       token: otpCode,
-      type: 'sms',
+      type: "sms",
     });
-    console.log(response);
-    return response;
+    if (error) throw error;
+    await supabase.auth.signOut({ scope: "others" });
+
+    return data;
   } catch (error) {
     console.error("Error verifying OTP:", error.message);
     alert("Failed to verify OTP. Please try again.");
+    return null;
   }
 };
 
-
+// Function to log in with password or OTP
 export const loginUserWithPassword = async ({ phone, password }) => {
-    try {
-      let response;
-      if (password) {
-        response = await supabase.auth.signInWithPassword({
-          phone: `+91${phone}`,
-          password,
-        });
-      } else {
-        response = await supabase.auth.signInWithOtp({
-          phone: `+91${phone}`,
-        });
-      }
-  
+  try {
+    let response;
+
+    // Ensure both phone and password are provided
+    if (phone && password) {
+      response = await supabase.auth.signInWithPassword({
+        phone: phone,
+        password: password,
+      });
+
       if (response.error) throw response.error;
-  
-      console.log("Login successful:", response.data);
+      await supabase.auth.signOut({ scope: "others" });
       return response.data;
-    } catch (error) {
-      console.error("Login failed:", error.message);
-      alert("Login failed. Please check your details and try again.");
-      return null;
+    } else {
+      throw new Error("Phone and password are required.");
     }
-  };
+  } catch (error) {
+    console.error("Login failed:", error.message);
+    alert("Login failed. Please check your details and try again.");
+    return null;
+  }
+};
+
   
 
 
@@ -71,40 +73,43 @@ export const checkUserExists = async () => {
     return null;
   }
 };
-export const updateUserData = async (userData) => {
-    try {
-      // Extract only the allowed fields
-      const allowedFields = ['name', 'lat', 'long', 'email'];
-      const filteredData = Object.keys(userData)
-        .filter(key => allowedFields.includes(key))
-        .reduce((obj, key) => {
-          obj[key] = userData[key];
-          return obj;
-        }, {});
-  
-      // Check if password is provided and is exactly 6 digits
-      if (userData.password && /^\d{6}$/.test(userData.password)) {
+export const updateUserMetaData = async (userData) => {
+  try {
+    // Extract only the allowed fields
+    const allowedFields = ['name', 'lat', 'long', 'email'];
+    const filteredData = Object.keys(userData)
+      .filter(key => allowedFields.includes(key))
+      .reduce((obj, key) => {
+        obj[key] = userData[key];
+        return obj;
+      }, {});
+
+    // Validate and include password if it's a valid 5-digit number
+    if (userData.password) {
+      if (/^\d{6}$/.test(userData.password)) {
         filteredData.password = userData.password;
+      } else {
+        throw new Error("Password must be exactly 5 digits.");
       }
-  
-      if (Object.keys(filteredData).length === 0) {
-        throw new Error("No valid fields provided for update.");
-      }
-  
-      const { data, error } = await supabase.auth.updateUser({
-        data: filteredData,
-        password: filteredData.password || undefined
-      });
-  
-      if (error) throw error;
-  
-      console.log("User data updated successfully:", data);
-      return data;
-    } catch (error) {
-      console.error("Error updating user data:", error.message);
-      return null;
     }
-  };
+
+    if (Object.keys(filteredData).length === 0) {
+      throw new Error("No valid fields provided for update.");
+    }
+
+    const { data, error } = await supabase.auth.updateUser({
+      data: filteredData,
+      password: filteredData.password || undefined
+    });
+
+    if (error) throw error;
+    return data;
+  } catch (error) {
+    console.error("Error updating user data:", error.message);
+    return null;
+  }
+};
+
 
   
 

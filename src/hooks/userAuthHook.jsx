@@ -14,7 +14,7 @@ const useUserAuth = () => {
 
     useEffect(() => {
         if (location.pathname.startsWith('/user')) {
-            const userSession = Cookies.get('BharatLinkerUserData');
+            const userSession = Cookies.get('BharatLinkerUserSession');
             if (userSession) {
                 try {
                     setUserData(JSON.parse(userSession));
@@ -93,6 +93,7 @@ const useUserAuth = () => {
         try {
             console.log("Logging out...");
             document.cookie = "BharatLinkerUserData=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+            document.cookie = "BharatLinkerUserSession=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
             dispatch(resetCart());
             navigate('/login');
         } catch (error) {
@@ -102,7 +103,7 @@ const useUserAuth = () => {
     
 
     const PrivateRoute = ({ children }) => {
-        const userSession = Cookies.get('BharatLinkerUserData');
+        const userSession = Cookies.get('BharatLinkerUserSession');
         if (!userSession) {
             return <Navigate to="/login" replace />;
         }
