@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import Navbar from '../a.navbarComponent/navbar.jsx';
+import Navbar from './a.navbarComponent/navbar.jsx';
 import { Helmet } from 'react-helmet';
 import { SlLocationPin } from 'react-icons/sl';
 import { MdMyLocation } from 'react-icons/md';
 import { Oval } from 'react-loader-spinner';
 import { IoSearch } from 'react-icons/io5';
-import './userProfile.css';
-import conf from '../../../conf/conf.js';
-import useUserAuth from '../../../hooks/userAuthHook.jsx';
-import useLocationFromCookie from '../../../hooks/useLocationFromCookie.jsx';
+import './style/userProfile.css';
+
+import conf from '../../conf/conf.js';
+import useUserAuth from '../../hooks/userAuthHook.jsx';
+import useLocationFromCookie from '../../hooks/useLocationFromCookie.jsx';
 
 import { RiRefreshLine } from "react-icons/ri";
 import { TiInfoOutline } from "react-icons/ti";
