@@ -44,10 +44,6 @@ const Navbar = ({ headerTitle, shopId }) => {
     const isShopProductPage = location.pathname.startsWith('/shop/product');
     const isRefurbishedPage = location.pathname === '/refurbished';
 
-    useEffect(()=>{
-        
-        if(!userLocation.address && !userLocation.lat && !userLocation.lon) {setIsLocationHas(false);}
-    },[isLocationHas])
     useEffect(() => {
         if (isSearchPage) {
             setSearchInput(searchQuery);
