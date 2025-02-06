@@ -158,7 +158,7 @@ function UserHome({ userData,setUserData }) {
                     </div>
                 </div>
             )}
-            {true && <SetPinPage onPinSet={()=>{setUserData(getUserDataFromCookie());setPinSet(false)}}/>}
+            {!pinSet && <SetPinPage onPinSet={()=>{setUserData(getUserDataFromCookie());setPinSet(false)}}/>}
         </>
     );
 }

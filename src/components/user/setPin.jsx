@@ -56,7 +56,7 @@ const SetPinPage = ({onPinSet}) => {
                 }),
                 { expires: currentExpiration, secure: true }
             );
-            onPinSet();
+            onPinSet(false);
         } catch (error) {
             console.error("Error updating user data:", error);
         } finally {
