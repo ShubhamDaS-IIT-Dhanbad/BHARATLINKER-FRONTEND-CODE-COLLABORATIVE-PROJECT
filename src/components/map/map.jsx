@@ -108,50 +108,31 @@ const LocationMap = ({
     async function handleUserProfileUpdate(locationData) {
         if (window.location.pathname === "/user/profile") {
             const userData = JSON.parse(Cookies.get("BharatLinkerUserData") || "{}");
-    
             if (!userData || !userData.address || !Array.isArray(userData.address)) {
                 console.warn("No valid address data found.");
                 return;
             }
-    
-            // Convert existing addresses into comma-separated format
             let updatedAddressList = userData.address.map(addr => 
-                `${addr.latitude},${addr.longitude},${addr.address}`
+                `${addr.latitude}@${addr.longitude}@${addr.address}`
             );
-    
-            // Add new locationData entry
             if (locationData?.lat && locationData?.long && locationData?.address) {
                 updatedAddressList.push(`${locationData.lat}@${locationData.long}@${locationData.address.slice(0, 60)}`);
             }
-    
             const updateData = {
-                documentId: userData.userId, // Assuming user ID is stored here
-                address: updatedAddressList, // Update with formatted address data
+                documentId: userData.userId,
+                address: updatedAddressList,
             };
-    
-            console.log(updateData, "Data to Update in Appwrite");
-            console.log(updatedAddressList, "Updated Address List");
-    
             try {
-                // Update user data in Appwrite
                 await updateUserById(updateData);
-    
-                // Update local state
                 setDeliveryAddress(updatedAddressList);
-                // setLocationTab(false);
-                // setShowMap(false);
-    
-                // Parse updated addresses into structured format
                 const parsedAddress = updatedAddressList.map(addr => {
-                    const [latitude, longitude, address] = addr.split('*=@').map(val => val.trim());
+                    const [latitude, longitude, address] = addr.split('@').map(val => val.trim());
                     return {
                         latitude: parseFloat(latitude),
                         longitude: parseFloat(longitude),
                         address: address
                     };
                 });
-    
-                // Update cookie while keeping the existing expiry date
                 const updatedUserData = { ...userData, address: parsedAddress };
                 Cookies.set("BharatLinkerUserData", JSON.stringify(updatedUserData), { expires: 30 });
     

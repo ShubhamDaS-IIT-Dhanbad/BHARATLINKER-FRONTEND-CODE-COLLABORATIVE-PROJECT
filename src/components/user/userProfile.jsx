@@ -8,8 +8,11 @@ import { FaPlus } from "react-icons/fa";
 import './style/userProfile.css';
 
 import LocationTab from '../locationTab/locationTab.jsx';
+import { updateUserById } from '../../appWrite/user/userData.js';
+import Cookies from 'js-cookie';
 
 function UserRefurbishedProduct({ userData }) {
+  const navigate = useNavigate();
   const [address, setAddress] = useState([]);
   const [showLocationTab, setShowLocationTab] = useState(false);
   const [deliveryAddress, setDeliveryAddress] = useState(null);
@@ -24,16 +27,38 @@ function UserRefurbishedProduct({ userData }) {
   const handleAddAddress = () => {
     setShowLocationTab(true);
   };
+
+  const handleDeleteAddress = async (index) => {
+    if (!userData || !userData.userId) return;
+    const updatedAddressList = [...address];
+    updatedAddressList.splice(index, 1);
+
+    const updateData = {
+      documentId: userData.userId,
+      address: updatedAddressList,
+    };
+
+    try {
+      await updateUserById(updateData);
+      setAddress(updatedAddressList);
+      const updatedUserData = { ...userData, address: updatedAddressList };
+      Cookies.set("BharatLinkerUserData", JSON.stringify(updatedUserData), { expires: 30 });
+    } catch (error) {
+      console.error("Error deleting address:", error);
+    }
+  };
+
   if (showLocationTab) {
     return (
       <LocationTab
-        documentId={userData.id}
+        documentId={userData.userId}
         header="ADD NEW ADDRESS"
         setDeliveryAddress={setDeliveryAddress}
         setLocationTab={setShowLocationTab}
       />
     );
   }
+
   return (
     <>
       <Helmet>
@@ -64,7 +89,7 @@ function UserRefurbishedProduct({ userData }) {
                     <p>{addr.address}</p>
                   </div>
                   <div className="card-footer">
-                    <RiDeleteBinFill size={20} />
+                    <RiDeleteBinFill size={20} onClick={() => handleDeleteAddress(index)} style={{ cursor: "pointer" }} />
                   </div>
                 </div>
               ))
@@ -81,7 +106,6 @@ function UserRefurbishedProduct({ userData }) {
 }
 
 export default UserRefurbishedProduct;
-
 
 
  {/* <div className="profile-section-card">

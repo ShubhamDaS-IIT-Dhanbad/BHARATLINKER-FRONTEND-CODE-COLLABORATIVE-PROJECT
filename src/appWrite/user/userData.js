@@ -55,7 +55,7 @@ async function updateUserById(updatedData) {
             documentId,
             { address } // Correct syntax
         );
-
+console.log(updatedUser,"ipip")
         return updatedUser;
     } catch (error) {
         console.error("Error in updateUserById:", error);
