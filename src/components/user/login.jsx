@@ -40,7 +40,7 @@ function SignUpForm() {
     try {
       // Send OTP and get userId
       const userId = await sendOTP(`+91${phone}`);
-  
+
       // Check if userId is returned successfully, then proceed
       if (userId) {
         setUserId(userId); // Set userId
@@ -58,21 +58,40 @@ function SignUpForm() {
       setLoading(false); // Stop loading animation
     }
   };
-  
+
 
   const handleVerifyOTP = async () => {
     if (otp.join('').length !== 6) return;
     setVerifyingOtp(true);
     setErrorMessage('');
     try {
-      const {session,userPreferences} = await verifyOTP(userId, otp.join(''));
-      console.log(session,userPreferences,"lp");
+      const { session, userData } = await verifyOTP(userId, otp.join(''), `91${phone}`);
+      const parsedAddress = Array.isArray(userData.address)
+        ? userData.address.map(addr => {
+          try {
+            const [latitude, longitude, address] = addr.split(',').map(val => val.trim());
+            return {
+              latitude: parseFloat(latitude),
+              longitude: parseFloat(longitude),
+              address: address
+            };
+          } catch (error) {
+            console.error("Error parsing address:", error);
+            return null;
+          }
+        }).filter(Boolean)
+        : [];
+
+
+
       Cookies.set("BharatLinkerUserData", JSON.stringify({
         userId: session.userId,
         id: session.$id,
         phoneNumber: phone,
-        ...userPreferences
+        address: parsedAddress,
+        name: userData.name
       }), { expires: 7, secure: true });
+
       navigate('/user');
     } catch {
       setErrorMessage('Invalid OTP. Please try again.');
@@ -84,7 +103,7 @@ function SignUpForm() {
 
   const handleOtpChange = useCallback((e, index) => {
     const value = e.target.value.slice(-1);
-    
+
     setOtp(prevOtp => {
       const newOtp = [...prevOtp];
       newOtp[index] = value;

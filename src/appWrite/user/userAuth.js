@@ -1,8 +1,9 @@
 import { Client, Account, ID } from "appwrite";
-
+import { fetchUserByPhoneNumber } from "./userData.js";
+import conf from '../../conf/conf.js';
 const client = new Client()
-  .setEndpoint("https://cloud.appwrite.io/v1") // Appwrite endpoint
-  .setProject("678f98180003def050fa"); // Your project ID
+  .setEndpoint("https://cloud.appwrite.io/v1") 
+  .setProject(conf.appwriteBlUsersProjectId);
 
 const account = new Account(client);
 
@@ -15,31 +16,18 @@ export const sendOTP = async (phone) => {
     console.error("Error sending OTP:", error.message);
   }
 };
-
-export const verifyOTP = async (userId, otpCode) => {
-    try {
-      // Verify OTP and create a session
+export const verifyOTP = async (userId, otpCode ,phoneNumber) => {
+    try {console.log(userId, otpCode ,phoneNumber)
       const session = await account.createSession(userId, otpCode);
-      const userPreferences = await account.getPrefs(session.userId);
-      console.log("User preferences:",session, userPreferences);
-      return { session, userPreferences };
+      console.log("User preferences:",session);
+      const userData=await fetchUserByPhoneNumber(phoneNumber);
+      return { session, userData };
     } catch (error) {
       console.error("Error verifying OTP:", error.message);
       return null;
     }
   };
-  
-  // Function to fetch user preferences (replace with your actual method)
-  const fetchUserPreferences = async (userId) => {
-    try {
-      // Replace with actual logic to fetch preferences (from Appwrite or other services)
-      const preferences = await database.getUserPreferences(userId);
-      return preferences;
-    } catch (error) {
-      console.error("Error fetching user preferences:", error.message);
-      return null;
-    }
-  };
+ 
   
   
   
@@ -55,35 +43,6 @@ export const checkUserExists = async () => {
   }
 };
 
-// Function to update user metadata
-export const updateUserMetaData = async (userData) => {
-  try {
-    const allowedFields = ["name", "lat", "long", "email"];
-    const filteredData = {};
-    
-    Object.keys(userData).forEach((key) => {
-      if (allowedFields.includes(key)) {
-        filteredData[key] = userData[key];
-      }
-    });
-    
-    if (userData.password && /^\d{6}$/.test(userData.password)) {
-      filteredData.password = userData.password;
-    } else if (userData.password) {
-      throw new Error("Password must be exactly 6 digits.");
-    }
-    
-    if (Object.keys(filteredData).length === 0) {
-      throw new Error("No valid fields provided for update.");
-    }
-    
-    const updatedUser = await account.updatePrefs(filteredData);
-    return updatedUser;
-  } catch (error) {
-    console.error("Error updating user data:", error.message);
-    return null;
-  }
-};
 
 // Function to log out user
 export const logout = async () => {

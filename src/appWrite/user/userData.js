@@ -4,7 +4,7 @@ import { Client, Databases, Query } from 'appwrite';
 const client = new Client();
 client
     .setEndpoint(conf.appwriteUrl)
-    .setProject(conf.appwriteUsersProjectId);
+    .setProject(conf.appwriteBlUsersProjectId);
 
 const databases = new Databases(client);
 
@@ -49,39 +49,28 @@ async function updateUserByPhoneNumber(updatedData) {
 
 
 // Function to fetch or create user data by phone number
-async function fetchUserByPhoneNumber(phn) {
+async function fetchUserByPhoneNumber(phoneNumber) {
     try {
-        if (!phn) {
+        if (!phoneNumber) {
             throw new Error("Phone number (phn) is required.");
         }
-
-        // Convert phone number to string if it's a number
-        const phoneNumber = typeof phn === 'number' ? phn.toString() : phn;
+        if (isNaN(phoneNumber)) {
+            throw new Error("Invalid phone number.");
+        }
 
         const queries = [Query.equal('phoneNumber', phoneNumber)];
         const result = await databases.listDocuments(
-            conf.appwriteUsersDatabaseId,
-            conf.appwriteUsersCollectionId,
+            conf.appwriteBlUsersDatabaseId,
+            conf.appwriteBlUsersCollectionId,
             queries
-        );
+        );console.log(result);
 
         if (result.documents.length === 0) {
             const newUser = {
-                phoneNumber: phoneNumber,  // Ensure phoneNumber is stored as a string
-                address: null,
-                lat: null,
-                long: null,
-                cart: '[]'
+                phoneNumber: phoneNumber,
+                address: []
             };
-
-            // Pass the correct 'data' parameter when creating the document
-            const createdDocument = await databases.createDocument(
-                conf.appwriteUsersDatabaseId,
-                conf.appwriteUsersCollectionId,
-                "unique()", // Pass a unique ID or use "unique()" to generate one
-                newUser     // Ensure the user data is passed as the second parameter (data)
-            );
-            return createdDocument;
+            return newUser;
         }
         return result.documents[0];
     } catch (error) {
@@ -89,7 +78,6 @@ async function fetchUserByPhoneNumber(phn) {
         return null;
     }
 }
-
 
 
 
