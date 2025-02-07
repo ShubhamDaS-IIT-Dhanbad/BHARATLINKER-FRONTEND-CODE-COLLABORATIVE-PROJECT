@@ -81,19 +81,22 @@ function UserRefurbishedProduct({ userData }) {
           <div className="address-grid">
             {address.map((addr, index) => (
               <div key={index} className="address-card">
+
                 <div className="address-content">
                   <p className="address-text">{addr.address}</p>
-                  <div className="address-actions">
+                  {/* <div className="address-actions">
                     <button className="icon-button text-button">
                       <RiRefreshLine className="icon-sm" />
                       <span>Update</span>
                     </button>
-                  </div>
+                  </div> */}
                 </div>
-                <div className="card-footer">
+
+                {/* <div className="card-footer">
                   <TiInfoOutline className="icon-sm text-muted" />
                   <span className="footer-text">Tap to edit address</span>
-                </div>
+                </div> */}
+
               </div>
             ))}
 
