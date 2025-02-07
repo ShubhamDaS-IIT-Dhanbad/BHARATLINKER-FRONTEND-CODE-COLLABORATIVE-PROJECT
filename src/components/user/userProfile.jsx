@@ -95,7 +95,6 @@ function UserRefurbishedProduct({ userData }) {
               ))
             ) : (
               <div className="empty-state">
-                <p>No addresses found.</p>
               </div>
             )}
           </div>
