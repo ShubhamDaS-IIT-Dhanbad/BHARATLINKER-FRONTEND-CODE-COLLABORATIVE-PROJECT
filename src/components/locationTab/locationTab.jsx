@@ -13,7 +13,7 @@ import './locationTab.css';
 const PREDEFINED_RADIUS_OPTIONS = [1, 2, 3, 5, 7, 9, 11, 13, 17, 19, 23, 29, 97, 203];
 const DEBOUNCE_DELAY = 300;
 
-const LocationTab = ({ header, setLocationTab, setShowAddressDetail, setDeliveryAddress }) => {
+const LocationTab = ({documentId, header, setLocationTab, setShowAddressDetail, setDeliveryAddress }) => {
     // State management
     const [loading, setLoading] = useState(false);
     const [fetchingUserLocation, setFetchingUserLocation] = useState(false);
@@ -136,6 +136,7 @@ const LocationTab = ({ header, setLocationTab, setShowAddressDetail, setDelivery
     // Render
     return showMap ? (
         <Map
+            documentId={documentId}
             latMap={mapState.lat}
             longMap={mapState.long}
             addressMap={mapState.address}
@@ -194,7 +195,7 @@ const LocationTab = ({ header, setLocationTab, setShowAddressDetail, setDelivery
 
             {suggestions.length === 0 && currentLocationSection}
 
-            {!window.location.pathname.includes('/user/cart') && (
+            {!window.location.pathname.includes('/user/cart') && !window.location.pathname.includes('/user/profile')&&(
                 <div className="radius-control-container">
                     {radiusControls}
                 </div>

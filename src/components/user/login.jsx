@@ -69,7 +69,7 @@ function SignUpForm() {
       const parsedAddress = Array.isArray(userData.address)
         ? userData.address.map(addr => {
           try {
-            const [latitude, longitude, address] = addr.split(',').map(val => val.trim());
+            const [latitude, longitude, address] = addr.split('@').map(val => val.trim());
             return {
               latitude: parseFloat(latitude),
               longitude: parseFloat(longitude),
@@ -85,7 +85,8 @@ function SignUpForm() {
 
 
       Cookies.set("BharatLinkerUserData", JSON.stringify({
-        userId: session.userId,
+        userId: userData.$id,
+        uId: session.userId,
         id: session.$id,
         phoneNumber: phone,
         address: parsedAddress,

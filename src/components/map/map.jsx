@@ -3,13 +3,14 @@ import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from "react-leaf
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { FiMapPin } from "react-icons/fi";
+import Cookies from 'js-cookie';
 import debounce from "lodash.debounce";
 import { FaAngleLeft } from "react-icons/fa6";
 import { Oval } from "react-loader-spinner";
 import useLocationFromCookie from "../../hooks/useLocationFromCookie.jsx";
-
+import { updateUserById } from "../../appWrite/user/userData.js";
 import "./map.css";
-
+import { useNavigate } from "react-router-dom";
 // Constants for better readability
 const DEFAULT_ZOOM = 15;
 const TILE_LAYER_URL = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
@@ -31,6 +32,7 @@ const createCustomIcon = (color = "#4CAF50") =>
     });
 
 const LocationMap = ({
+    documentId,
     latMap,
     longMap,
     addressMap,
@@ -39,6 +41,7 @@ const LocationMap = ({
     setDeliveryAddress,
     setShowAddressDetail,
 }) => {
+    const navigate=useNavigate();
     const { updateLocation } = useLocationFromCookie();
     const [position, setPosition] = useState([latMap, longMap]);
     const [loading, setLoading] = useState(true);
@@ -97,8 +100,72 @@ const LocationMap = ({
         return null;
     };
     
+
+
+
+
+
+    async function handleUserProfileUpdate(locationData) {
+        if (window.location.pathname === "/user/profile") {
+            const userData = JSON.parse(Cookies.get("BharatLinkerUserData") || "{}");
+    
+            if (!userData || !userData.address || !Array.isArray(userData.address)) {
+                console.warn("No valid address data found.");
+                return;
+            }
+    
+            // Convert existing addresses into comma-separated format
+            let updatedAddressList = userData.address.map(addr => 
+                `${addr.latitude},${addr.longitude},${addr.address}`
+            );
+    
+            // Add new locationData entry
+            if (locationData?.lat && locationData?.long && locationData?.address) {
+                updatedAddressList.push(`${locationData.lat}@${locationData.long}@${locationData.address.slice(0, 60)}`);
+            }
+    
+            const updateData = {
+                documentId: userData.userId, // Assuming user ID is stored here
+                address: updatedAddressList, // Update with formatted address data
+            };
+    
+            console.log(updateData, "Data to Update in Appwrite");
+            console.log(updatedAddressList, "Updated Address List");
+    
+            try {
+                // Update user data in Appwrite
+                await updateUserById(updateData);
+    
+                // Update local state
+                setDeliveryAddress(updatedAddressList);
+                // setLocationTab(false);
+                // setShowMap(false);
+    
+                // Parse updated addresses into structured format
+                const parsedAddress = updatedAddressList.map(addr => {
+                    const [latitude, longitude, address] = addr.split('*=@').map(val => val.trim());
+                    return {
+                        latitude: parseFloat(latitude),
+                        longitude: parseFloat(longitude),
+                        address: address
+                    };
+                });
+    
+                // Update cookie while keeping the existing expiry date
+                const updatedUserData = { ...userData, address: parsedAddress };
+                Cookies.set("BharatLinkerUserData", JSON.stringify(updatedUserData), { expires: 30 });
+    
+                console.log("User address updated successfully:", updatedAddressList);
+                navigate('/user/profile')
+            } catch (error) {
+                console.error("Error updating user address:", error);
+            }
+        }
+    }
+    
+    
     // Confirm location handler
-    const handleConfirm = useCallback(() => {
+    const handleConfirm = useCallback(() =>  {
         setLoadingConfirm(true);
 
         const locationData = {
@@ -106,8 +173,9 @@ const LocationMap = ({
             long: position[1],
             address: address,
         };
-
-        if (window.location.pathname === "/user/cart") {
+        if(window.location.pathname === "/user/profile"){
+            handleUserProfileUpdate(locationData);
+        }else if (window.location.pathname === "/user/cart") {
             setDeliveryAddress(locationData);
             setTimeout(() => {
                 setLoadingConfirm(false);
@@ -131,6 +199,11 @@ const LocationMap = ({
             }, 1000);
         }
     }, [position, address, setDeliveryAddress, setShowMap, setLocationTab, setShowAddressDetail, updateLocation]);
+
+
+
+
+
 
     // Memoized map component
     const memoizedMap = useMemo(() => (

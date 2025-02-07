@@ -5,44 +5,7 @@ const client = new Client();
 client
     .setEndpoint(conf.appwriteUrl)
     .setProject(conf.appwriteBlUsersProjectId);
-
 const databases = new Databases(client);
-
-
-async function updateUserByPhoneNumber(updatedData) {
-    try {
-        const { phn, ...restData } = updatedData;
-
-        if (!phn) {
-            throw new Error("Phone number (phn) is required as the document ID.");
-        }
-
-        const queries = [Query.equal('phoneNumber', phn)];
-        const result = await databases.listDocuments(
-            conf.appwriteUsersDatabaseId,
-            conf.appwriteUsersCollectionId,
-            queries
-        );
-
-        if (result.documents.length === 0) {
-            throw new Error(`No document found with phoneNumber: ${phn}`);
-        }
-
-        const documentId = result.documents[0].$id;
-
-        const updatedUser = await databases.updateDocument(
-            conf.appwriteUsersDatabaseId,
-            conf.appwriteUsersCollectionId,
-            documentId,
-            restData
-        );
-        return updatedUser;
-    } catch (error) {
-        console.error('Error in updateUserByPhoneNumber:', error);
-        return false;
-    }
-}
-
 
 
 
@@ -78,6 +41,29 @@ async function fetchUserByPhoneNumber(phoneNumber) {
         return null;
     }
 }
+async function updateUserById(updatedData) {
+    try {
+        const { documentId, address } = updatedData;
+
+        if (!documentId) {
+            throw new Error("Document ID is required.");
+        }
+
+        const updatedUser = await databases.updateDocument(
+            conf.appwriteBlUsersDatabaseId,
+            conf.appwriteBlUsersCollectionId,
+            documentId,
+            { address } // Correct syntax
+        );
+
+        return updatedUser;
+    } catch (error) {
+        console.error("Error in updateUserById:", error);
+        return false;
+    }
+}
+
+
 
 
 
@@ -145,4 +131,4 @@ async function updateCartByPhoneNumber({phoneNumber, cart}) {
     }
 }
 
-export { fetchUserCartByPhoneNumber, updateUserByPhoneNumber, updateCartByPhoneNumber, fetchUserByPhoneNumber };
+export { fetchUserCartByPhoneNumber, updateUserById, updateCartByPhoneNumber, fetchUserByPhoneNumber };
