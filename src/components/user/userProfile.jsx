@@ -79,34 +79,32 @@ function UserRefurbishedProduct({ userData }) {
           </div>
 
           <div className="address-grid">
-            {address.map((addr, index) => (
-              <div key={index} className="address-card">
 
-                <div className="address-content">
-                  <p className="address-text">{addr.address}</p>
-                  {/* <div className="address-actions">
+            {address.length > 0 &&
+              address.map((addr, index) => (
+                <div key={index} className="address-card">
+
+                  <div className="address-content">
+                    <p className="address-text">{addr.address}</p>
+                    {/* <div className="address-actions">
                     <button className="icon-button text-button">
                       <RiRefreshLine className="icon-sm" />
                       <span>Update</span>
                     </button>
                   </div> */}
-                </div>
+                  </div>
 
-                {/* <div className="card-footer">
+                  {/* <div className="card-footer">
                   <TiInfoOutline className="icon-sm text-muted" />
                   <span className="footer-text">Tap to edit address</span>
                 </div> */}
 
-              </div>
-            ))}
+                </div>
+              ))}
 
             {address.length === 0 && (
               <div className="empty-state">
-                <div className="empty-state-content">
-                  <FaPlus className="empty-state-icon" />
-                  <h3>No Saved Addresses</h3>
-                  <p>Add your first address to get started</p>
-                </div>
+                
               </div>
             )}
           </div>

@@ -94,7 +94,6 @@
   padding: 0.75rem 1.5rem;
   border-radius: 8px;
   border: none;
-  cursor: pointer;
   transition: background 0.2s ease;
 }
 
@@ -106,7 +105,6 @@
   background: none;
   border: none;
   padding: 0.25rem;
-  cursor: pointer;
   display: inline-flex;
   align-items: center;
   color: #718096;
