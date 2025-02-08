@@ -30,7 +30,7 @@ function Order({ userData }) {
   const selectedOrders = orderStates[selectedOrderType];
 
   const fetchInitialOrders = (status) => {
-    const phoneNumber = userData?.phoneNumber; console.log(phoneNumber)
+    const phoneNumber = userData?.phoneNumber;
     if (!phoneNumber) return;
     dispatch(fetchOrdersByStatus({ phoneNumber, status, page: 1 }));
   };
@@ -43,7 +43,6 @@ function Order({ userData }) {
   };
 
   useEffect(() => {
-    console.log("Fetching orders...");
     if (userData?.phoneNumber) {
       ["pending", "confirmed", "delivered", "canceled"].forEach((status) => {
         if (orderStates[status].data.length === 0) {
@@ -63,7 +62,7 @@ function Order({ userData }) {
       {/* Header */}
       <header>
         <div className="user-refurbished-product-page-header">
-          <Navbar userData={userData} headerTitle={"ORDER DETAIL"} />
+          <Navbar userData={userData} headerTitle={"YOUR ORDER"} />
         </div>
       </header>
 

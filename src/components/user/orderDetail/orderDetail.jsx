@@ -86,7 +86,9 @@ const OrderDetails = () => {
     return (
         <>
             <header>
-                <Navbar headerTitle={"ORDER DETAIL"} onBackNavigation={() => navigate(-1)} />
+                <div className="user-refurbished-product-page-header">
+                    <Navbar userData={userData} headerTitle={"ORDER DETAIL"} onBackNavigation={() => navigate(-1)} />
+                </div>
             </header>
 
             <div className="order-details-container">
