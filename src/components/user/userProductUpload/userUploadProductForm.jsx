@@ -114,7 +114,7 @@ const UploadBooksModulesForm = ({ userData }) => {
               <textarea
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                placeholder="# for heading and * for points"
+                placeholder="use # for heading and * for points"
                 rows="4"
                 className={formErrors.description ? 'error' : ''}
               />

@@ -106,6 +106,9 @@
     outline: none;
     border-color: var(--primary-color);
   }
+  .floating-input textarea::placeholder {
+    padding-top: 10px;font-size: 12px;
+  }
   
   .floating-input input:placeholder-shown + label,
   .floating-input textarea:placeholder-shown + label {
