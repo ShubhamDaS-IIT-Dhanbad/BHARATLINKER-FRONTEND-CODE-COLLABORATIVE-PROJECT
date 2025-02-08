@@ -41,7 +41,7 @@ const ProductDetails = () => {
       const product = refurbishedProducts.find((product) => product.$id === refurbishedId);
       if (product) {
         setProductDetails(product);
-        setSelectedImage(product.images[0] || fallbackImage);
+        setSelectedImage(product.image[0] || fallbackImage);
         setDescriptionSections(parseDescription(product.description));
         setShopDetail(product.shopDetails || null);
       } else {
@@ -54,7 +54,7 @@ const ProductDetails = () => {
   }, [refurbishedProducts, refurbishedId, navigate]);
 
   const handleImageClick = (index) => {
-    setSelectedImage(productDetail?.images[index]);
+    setSelectedImage(productDetail?.image[index]);
   };
 
   const handleShare = () => {
@@ -70,16 +70,15 @@ const ProductDetails = () => {
       alert("Sharing is not supported on this browser.");
     }
   };
-
   const handlePhoneClick = () => {
-    if (productDetail?.phn) {
-      window.location.href = `tel:${productDetail.phn}`;
+    if (productDetail?.phoneNumber) {
+      window.location.href = `tel:+${productDetail.phoneNumber}`;
     }
   };
 
   const handleWhatsappClick = () => {
-    if (productDetail?.phn) {
-      window.location.href = `https://wa.me/${productDetail.phn}`;
+    if (productDetail?.phoneNumber) {
+      window.location.href = `https://wa.me/+${productDetail.phoneNumber}`;
     }
   };
   useEffect(() => {
@@ -110,7 +109,7 @@ const ProductDetails = () => {
             </div>
 
             <div id="product-details-thumbnails">
-              {productDetail?.images?.map((image, index) => (
+              {productDetail?.image?.map((image, index) => (
                 <div
                   key={index}
                   onClick={() => handleImageClick(index)}

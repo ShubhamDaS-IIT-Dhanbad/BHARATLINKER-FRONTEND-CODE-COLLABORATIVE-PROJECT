@@ -54,7 +54,7 @@ class SearchRefurbishedProductService {
             queries.push(Query.limit(productsPerPage), Query.offset(offset));
     
             // Specify fields to fetch using Query.select
-            queries.push(Query.select(["$id","title", "description", "price", "discountedPrice","image"
+            queries.push(Query.select(["$id","title","phoneNumber", "description", "price", "discountedPrice","image"
             ]));
     
             // Fetch products from the database
