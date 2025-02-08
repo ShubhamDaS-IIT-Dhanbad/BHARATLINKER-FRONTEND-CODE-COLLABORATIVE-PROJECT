@@ -8,8 +8,8 @@ class UserRefurbishedProduct {
 
     constructor() {
         this.client
-            .setEndpoint(conf.appwriteUrl)
-            .setProject(conf.appwriteRefurbishProductProjectId);
+        .setEndpoint(conf.appwriteUrl)
+        .setProject(conf.appwriteBlUsersProjectId);
         this.databases = new Databases(this.client);
     }
 
@@ -66,7 +66,6 @@ class UserRefurbishedProduct {
             throw error;
         }
     }
-
     async cleanupUploadedImages(uploadedImages) {
         const deletionPromises = uploadedImages.map(url => this.deleteImageFromCloudinary(url));
         await Promise.all(deletionPromises);
@@ -74,43 +73,56 @@ class UserRefurbishedProduct {
     }
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     //upload module imp
     async uploadProductWithImages(productData, files = []) {
         let uploadedImages = [];
-
         try {
-            console.log(productData);
+            console.log("Uploading product with:", productData, files);
+    
+            // Upload images to Cloudinary
             uploadedImages = await this.uploadImagesToCloudinary(files);
             const imageUrls = uploadedImages.map((image) => image.secure_url);
+    
+            console.log("Image URLs:", imageUrls);
+    
             const newProductData = {
-                class: productData.class,
-                language: productData.language.toLowerCase(),
-                subject: productData.subject.toLowerCase(),
+                image: imageUrls, // Ensure 'image' is an array of URLs
                 title: productData.title.toLowerCase(),
                 description: productData.description.toLowerCase(),
                 price: Number(productData.price),
                 discountedPrice: Number(productData.discountedPrice),
-                keywords: productData.keywords.split(','),
-                phn: productData.phn,
-                category: productData.category.toLowerCase(),
-                brand: productData.brand.toLowerCase(),
-                productType: productData.productType,
-                lat:productData.lat,
-                long:productData.long
+                keyword: productData.keyword.toLowerCase(),
+                phoneNumber: productData.phoneNumber,
+                latitude: productData.coordinates?.lat || 0,  // Dynamic location
+                longitude: productData.coordinates?.lng || 0
             };
-            // Create a document in the Appwrite database with the uploaded images
+    
+            // Create document in Appwrite
             const document = await this.databases.createDocument(
-                conf.appwriteRefurbishProductDatabaseId,
-                conf.appwriteRefurbishedModulesCollectionId,
+                conf.appwriteBlUsersDatabaseId,
+                conf.appwriteBlProductsCollectionId,
                 ID.unique(),
-                {
-                    ...newProductData,
-                    images: imageUrls
-                }
+                newProductData
             );
+    
             return document;
         } catch (error) {
-            console.error('Error uploading product:', error);
+            console.error("Error uploading product:", error);
             await this.cleanupUploadedImages(uploadedImages);
             throw error;
         }

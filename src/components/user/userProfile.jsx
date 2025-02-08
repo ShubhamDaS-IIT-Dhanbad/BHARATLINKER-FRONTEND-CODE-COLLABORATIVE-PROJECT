@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import Navbar from './navbar.jsx';
 import { Helmet } from 'react-helmet';
 import { FaLocationDot } from "react-icons/fa6";
@@ -12,7 +11,6 @@ import { updateUserById } from '../../appWrite/user/userData.js';
 import Cookies from 'js-cookie';
 
 function UserRefurbishedProduct({ userData }) {
-  const navigate = useNavigate();
   const [address, setAddress] = useState([]);
   const [showLocationTab, setShowLocationTab] = useState(false);
   const [deliveryAddress, setDeliveryAddress] = useState(null);
@@ -30,23 +28,27 @@ function UserRefurbishedProduct({ userData }) {
 
   const handleDeleteAddress = async (index) => {
     if (!userData || !userData.userId) return;
+  
     const updatedAddressList = [...address];
     updatedAddressList.splice(index, 1);
-
+  
+    let updatedAddress = updatedAddressList.map(addr =>
+      `${addr.latitude}@${addr.longitude}@${addr.address}`
+    );
+  
     const updateData = {
       documentId: userData.userId,
-      address: updatedAddressList,
+      address: updatedAddress,
     };
-
-    try {
-      await updateUserById(updateData);
-      setAddress(updatedAddressList);
-      const updatedUserData = { ...userData, address: updatedAddressList };
-      Cookies.set("BharatLinkerUserData", JSON.stringify(updatedUserData), { expires: 30 });
-    } catch (error) {
+    setAddress(updatedAddressList);
+    const updatedUserData = { ...userData, address: updatedAddressList };
+    Cookies.set("BharatLinkerUserData", JSON.stringify(updatedUserData), { expires: 30 });
+    updateUserById(updateData).catch((error) => {
       console.error("Error deleting address:", error);
-    }
+    });
   };
+  
+  
 
   if (showLocationTab) {
     return (
@@ -71,11 +73,17 @@ function UserRefurbishedProduct({ userData }) {
       <div className="user-profile-content">
         <div className="profile-section-card" style={{ marginTop: "10px" }}>
           <div className="section-header-row">
-            <button className="primary-button" onClick={handleAddAddress}>
+            <button
+              className="primary-button"
+              onClick={handleAddAddress}
+              disabled={address.length > 4}
+              style={{ opacity: address.length > 4 ? 0.5 : 1, cursor: address.length > 4 ? "not-allowed" : "pointer" }}
+            >
               <FaPlus className="icon-xs" />
               <span>Add New Address</span>
             </button>
           </div>
+
 
           <div className="address-grid">
             {address.length > 0 ? (
@@ -95,6 +103,7 @@ function UserRefurbishedProduct({ userData }) {
               ))
             ) : (
               <div className="empty-state">
+                <p>No addresses available. Please add one.</p>
               </div>
             )}
           </div>
@@ -103,38 +112,4 @@ function UserRefurbishedProduct({ userData }) {
     </>
   );
 }
-
 export default UserRefurbishedProduct;
-
-
- {/* <div className="profile-section-card">
-          <div className="editable-field-group">
-            <input
-              type="text"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              className="profile-input-field"
-              placeholder="Enter your full name"
-              required
-              disabled={!isEditing}
-            />
-            {isEditing ? (
-              <button className="icon-button save-icon" onClick={handleSaveClick}>
-                <FaSave className="icon-sm" />
-              </button>
-            ) : (
-              <button className="icon-button edit-icon" onClick={handleEditClick}>
-                <FaEdit className="icon-sm" />
-              </button>
-            )}
-          </div>
-        </div> */}
-
-// {showi && (
-//   <div className="info-box">
-//     This location will be used to display refurbished products from other users in your area.
-//     Your latitude and longitude are stored for accurate location tracking.
-//   </div>
-// )}
-
-

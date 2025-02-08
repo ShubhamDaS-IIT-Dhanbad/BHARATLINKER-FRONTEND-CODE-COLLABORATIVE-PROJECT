@@ -123,7 +123,7 @@ const LocationMap = ({
                 address: updatedAddressList,
             };
             try {
-                await updateUserById(updateData);
+                updateUserById(updateData);
                 setDeliveryAddress(updatedAddressList);
                 const parsedAddress = updatedAddressList.map(addr => {
                     const [latitude, longitude, address] = addr.split('@').map(val => val.trim());
@@ -135,8 +135,6 @@ const LocationMap = ({
                 });
                 const updatedUserData = { ...userData, address: parsedAddress };
                 Cookies.set("BharatLinkerUserData", JSON.stringify(updatedUserData), { expires: 30 });
-    
-                console.log("User address updated successfully:", updatedAddressList);
                 navigate('/user/profile')
             } catch (error) {
                 console.error("Error updating user address:", error);

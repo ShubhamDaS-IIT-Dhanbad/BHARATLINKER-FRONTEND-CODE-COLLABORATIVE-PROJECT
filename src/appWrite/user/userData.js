@@ -53,9 +53,8 @@ async function updateUserById(updatedData) {
             conf.appwriteBlUsersDatabaseId,
             conf.appwriteBlUsersCollectionId,
             documentId,
-            { address } // Correct syntax
+            { address }
         );
-console.log(updatedUser,"ipip")
         return updatedUser;
     } catch (error) {
         console.error("Error in updateUserById:", error);

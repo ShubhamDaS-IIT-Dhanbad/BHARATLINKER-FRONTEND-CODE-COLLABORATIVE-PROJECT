@@ -274,7 +274,7 @@ const RoutesWithConditionalHeader = React.memo(() => {
           }
         />
         <Route
-          path="/user/upload/:productType"
+          path="/user/upload"
           element=
           {
             <PrivateRoute>

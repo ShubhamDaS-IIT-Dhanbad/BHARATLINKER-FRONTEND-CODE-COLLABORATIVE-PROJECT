@@ -11,7 +11,7 @@ import { Oval } from "react-loader-spinner";
 import useUserAuth from "../../hooks/userAuthHook.jsx";
 import "./style/userHome.css";
 
-function UserHome({ userData}) {
+function UserHome({ userData }) {
     useEffect(() => {
         window.scrollTo(0, 0);
     }, []);
@@ -61,7 +61,17 @@ function UserHome({ userData}) {
                             className="dashboard-Your-information-icons"
                             aria-label="Your profile"
                         />
-                        <p className="dashboard-Your-info-p">Profile</p>
+                        <p className="dashboard-Your-info-p">ADDRESS BOOK</p>
+                    </article>
+                    <article
+                        className="dashboard-Your-Refurbished"
+                        onClick={() => navigate("/user/upload")}
+                    >
+                        <TbDeviceMobileCharging
+                            className="dashboard-Your-information-icons"
+                            aria-label="Upload gadgets"
+                        />
+                        <p className="dashboard-Your-info-p">UPLOAD</p>
                     </article>
                     <article
                         className="dashboard-Your-Refurbished"
@@ -71,28 +81,9 @@ function UserHome({ userData}) {
                             className="dashboard-Your-information-icons"
                             aria-label="Your refurbished items"
                         />
-                        <p className="dashboard-Your-info-p">Your refurbished</p>
+                        <p className="dashboard-Your-info-p">UPDATE</p>
                     </article>
-                    <article
-                        className="dashboard-Your-Refurbished"
-                        onClick={() => navigate("/user/upload/book")}
-                    >
-                        <FiUploadCloud
-                            className="dashboard-Your-information-icons"
-                            aria-label="Upload books"
-                        />
-                        <p className="dashboard-Your-info-p">Upload Books</p>
-                    </article>
-                    <article
-                        className="dashboard-Your-Refurbished"
-                        onClick={() => navigate("/user/upload/gadget")}
-                    >
-                        <TbDeviceMobileCharging
-                            className="dashboard-Your-information-icons"
-                            aria-label="Upload gadgets"
-                        />
-                        <p className="dashboard-Your-info-p">Upload Gadgets</p>
-                    </article>
+
                     <article
                         className="dashboard-Your-Refurbished"
                         onClick={() => navigate("/user/order")}
@@ -101,7 +92,7 @@ function UserHome({ userData}) {
                             className="dashboard-Your-information-icons"
                             aria-label="Your orders"
                         />
-                        <p className="dashboard-Your-info-p">Order</p>
+                        <p className="dashboard-Your-info-p">ORDER'S</p>
                     </article>
                     <article
                         className="dashboard-Your-Refurbished"
@@ -111,7 +102,7 @@ function UserHome({ userData}) {
                             className="dashboard-Your-information-icons"
                             aria-label="Logout"
                         />
-                        <p className="dashboard-Your-info-p">Logout</p>
+                        <p className="dashboard-Your-info-p">LOG - OUT</p>
                     </article>
                 </section>
             </main>

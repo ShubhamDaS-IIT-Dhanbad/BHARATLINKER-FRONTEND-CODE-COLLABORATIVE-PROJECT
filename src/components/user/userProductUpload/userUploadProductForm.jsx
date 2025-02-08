@@ -1,420 +1,248 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { IoClose } from 'react-icons/io5';
-import { CiImageOn } from 'react-icons/ci';
-import { MdOutlineCategory } from "react-icons/md";
-import { TbBrandAirtable, TbWorldUpload } from "react-icons/tb";
+import { FiUploadCloud, FiDollarSign, FiMapPin } from 'react-icons/fi';
+import UserRefurbishedProduct from '../../../appWrite/UserRefurbishedProductService/userRefurbishedProduct.js';
+import ProgressBar from '../progressBar.jsx';
 
-import { Oval } from 'react-loader-spinner';
-import userRefurbishedProduct from '../../../appWrite/UserRefurbishedProductService/userRefurbishedProduct.js';
+const UploadBooksModulesForm = ({ userData }) => {
+  const navigate = useNavigate();
+  const [currentStep, setCurrentStep] = useState(1);
+  const [coordinates, setCoordinates] = useState({ latitude: 90, longitude: 80 });
+  const [formData, setFormData] = useState({
+    title: '',
+    description: '',
+    price: '',
+    discountedPrice: '',
+    keyword: '',
+    phoneNumber: `91${userData.phoneNumber}`
+  });
+  const [files, setFiles] = useState([]);
+  const [formErrors, setFormErrors] = useState({});
+  const [uploadStatus, setUploadStatus] = useState(null);
+  const [isUploading, setIsUploading] = useState(false);
 
+  const steps = [
+    { title: 'Product Info', icon: <FiUploadCloud /> },
+    { title: 'Pricing', icon: <FiDollarSign /> },
+    { title: 'Location', icon: <FiMapPin /> },
+  ];
 
-const UploadBooksModulesForm = ({ userData, productType }) => {
-    const navigate = useNavigate();
-
-    const [showPopUpLocation, setShowPopUpLocation] = useState(false);
-    const [popUpState, setPopUpState] = useState({
-        classPopUp: false,
-        subjectPopUp: false,
-        languagePopUp: false,
-        categoryPopUp: false,
-        brandPopUp: false,
-    });
-    const [coordinates, setCoordinates] = useState({ lat: null, long: null });
-    const [uploadStatus, setUploadStatus] = useState({
-        success: false,
-        fail: false,
-    });
-
-    const [formData, setFormData] = useState({
-        class: '',
-        language: '',
-        subject: '',
-        title: '',
-        description: '',
-        price: '',
-        discountedPrice: '',
-        keywords: '',
-        productType,
-        brand: '',
-        category: '',
-        phn: `+91${userData.phoneNumber || ''}`,
-    });
-
-    const [images, setImages] = useState([null, null, null]);
-    const [isUploading, setIsUploading] = useState(false);
-    const [allFieldEntered, setAllFieldEntered] = useState(true);
-
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setFormData(prevData => ({
-            ...prevData,
-            [name]: value,
-        }));
-    };
-
-    const handleDrop = (index, event) => {
-        event.preventDefault();
-        handleImageChange(index, event.dataTransfer.files);
-    };
-
-
-    useEffect(() => {
-        if (userData.phoneNumber) {
-            if (userData.lat && userData.long) {
-                setCoordinates({ lat: userData.lat, long: userData.long });
-            } else {
-                setShowPopUpLocation(true);
-            }
+  const validateStep = (step) => {
+    const errors = {};
+    switch (step) {
+      case 1:
+        if (!formData.title.trim()) errors.title = 'Product title required';
+        if (!formData.description.trim()) errors.description = 'Description required';
+        if (!formData.keyword.trim()) errors.keyword = 'Keyword required';
+        break;
+      case 2:
+        if (!formData.price) errors.price = 'Original price required';
+        if (!formData.discountedPrice) errors.discountedPrice = 'Selling price required';
+        if (parseFloat(formData.discountedPrice) >= parseFloat(formData.price)) {
+          errors.discountedPrice = 'Must be less than original price';
         }
-    }, [userData])
+        break;
+      case 3:
+        if (!coordinates) errors.location = 'Location required';
+        if (files.length < 1) errors.images = 'At least one image required';
+        break;
+      default:
+        break;
+    }
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
 
+  const handleNext = () => {
+    if (validateStep(currentStep)) {
+      setCurrentStep((prev) => Math.min(prev + 1, 3));
+    }
+  };
 
-
-    const handleImageChange = (index, files) => {
-        if (files && files[0]) {
-            setImages(prevImages => {
-                const updatedImages = [...prevImages];
-                updatedImages[index] = files[0];
-                return updatedImages;
-            });
-        }
-    };
-
-
-
-
-
-    const handleClassSelect = (selectedClass) => {
-        setFormData((prevFormData) => ({
-            ...prevFormData,
-            class: selectedClass,
-        }));
-        setPopUpState(prevState => ({ ...prevState, classPopUp: false }));
-    };
-    const handleLanguageSelect = (selectedLanguage) => {
-        setFormData((prevFormData) => ({
-            ...prevFormData, language: selectedLanguage,
-        }));
-        setPopUpState(prevState => ({ ...prevState, languagePopUp: false }));
-    };
-    const handleSubjectSelect = (selectedSubject) => {
-        setFormData(prevFormData => ({ ...prevFormData, subject: selectedSubject }));
-        setPopUpState(prevState => ({ ...prevState, subjectPopUp: false }));
-    };
-    const handleCategorySelect = (selectedCategory) => {
-        setFormData(prevFormData => ({ ...prevFormData, category: selectedCategory }));
-        setPopUpState(prevState => ({ ...prevState, categoryPopUp: false }));
-    };
-    const handleBrandSelect = (selectedBrand) => {
-        setFormData(prevFormData => ({ ...prevFormData, brand: selectedBrand }));
-        setPopUpState(prevState => ({ ...prevState, brandPopUp: false }));
-    };
-
-
-
-
-
-
-
-
-    const handleSubmit = () => {
-        const { lat = coordinates.lat, long = coordinates.long, title, price, discountedPrice, class: selectedClass, language, category, brand } = formData;
-        if (!lat || !long) { setShowPopUpLocation(true); return; }
-
-        // Check if required fields are filled based on the product type
-        const isModuleOrBookValid = (productType === 'module' || productType === 'book') &&
-            [title, price, discountedPrice].every(Boolean);
-        const isGadgetValid = productType === 'gadget' &&
-            [title, price, discountedPrice].every(Boolean);
-
-        // If fields are not valid, show error and return
-        if (!isModuleOrBookValid && !isGadgetValid) {
-            setAllFieldEntered(false);
-            return;
-        }
-
-        // Check if lat and long are valid
-        if (!lat || !long) {
-            alert('Your Address Location is not set or error in retriving location -> go to PROFILE and set LOCATION');  // Popup message
-            return;
-        }
-
-        // Prepare the final form data
-        const finalFormData = {
-            ...formData,
-            phn: `+91${userData?.phoneNumber || ''}`,
-            lat: coordinates.lat,
-            long: coordinates.long
-        };
-
-        // Start uploading
-        setIsUploading(true);
-        userRefurbishedProduct.uploadProductWithImages(finalFormData, images)
-            .then(() => {
-                setUploadStatus({ success: true, fail: false });
-                resetForm();
-            })
-            .catch(() => {
-                setUploadStatus({ success: false, fail: true });
-            })
-            .finally(() => {
-                setIsUploading(false);
-            });
-    };
-
-
-
-    const resetForm = () => {
+  const handleSubmit = async () => {
+    if (validateStep(3)) {
+      setIsUploading(true);
+      try {
+        await UserRefurbishedProduct.uploadProductWithImages({ ...formData, coordinates }, files);
+        setUploadStatus('success');
         setFormData({
-            class: '',
-            language: '',
-            subject: '',
-            title: '',
-            description: '',
-            price: '',
-            discountedPrice: '',
-            keywords: '',
-            productType: 'module',
+          title: '',
+          description: '',
+          price: '',
+          discountedPrice: '',
+          keyword: '',
+          phoneNumber: `91${userData.phoneNumber}`
         });
-        setImages([null, null, null]);
-    };
+        setFiles([]);
+        setCoordinates({ latitude: 90, longitude: 80 });
+        setCurrentStep(1);
+      } catch (error) {
+        setUploadStatus('error');
+        console.error('Upload failed:', error);
+      } finally {
+        setIsUploading(false);
+      }
+    }
+  };
+  return (
+    <div className="multi-step-form">
+      <ProgressBar steps={steps} currentStep={currentStep} />
 
-    const renderPopUp = (popUpKey, options, handleSelect) => {
-        const kpopup = popUpKey.slice(0, -5);
-        return (
-            popUpState[popUpKey] && (
-                <div className="refurbished-book-module-class-popup">
-                    <div
-                        className="refurbished-book-module-class-popup-close-popup"
-                        onClick={() => setPopUpState(prevState => ({ ...prevState, [popUpKey]: false }))}
-                    >
-                        <IoClose size={25} />
-                    </div>
-                    <div style={{ color: "white" }}>
-                        {`${kpopup.toUpperCase()}`}
-                    </div>
-                    <div className="refurbished-book-module-class-popup-options">
-                        {options.map((item) => (
-                            <div
-                                key={item}
-                                className={`${formData[kpopup] === item ? 'selected-green' : 'refurbished-book-module-class-popup-class-option'}`}
-                                onClick={() => handleSelect(item)}
-                            >
-                                {item.charAt(0).toUpperCase() + item.slice(1)}
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            )
-        );
-    };
-
-
-
-    const PopupSuccess = ({ message, onClose }) => (
-        <div className="user-refurbished-book-module-success-popup">
-            <div className="user-refurbished-book-module-success-popup-inner">
-                <div className="user-refurbished-book-module-success-popup-message">
-                    {message}
-                </div>
-                <div className="user-refurbished-book-module-success-popup-ok" onClick={onClose}>
-                    Ok
-                </div>
+      <div className="form-container">
+        {currentStep === 1 && (
+          <div className="step-card">
+            <div className="floating-input">
+              <input
+                type="text"
+                value={formData.title}
+                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                placeholder=" "
+                className={formErrors.title ? 'error' : ''}
+              />
+              <label>Product Title</label>
+              {formErrors.title && <span className="error-hint">{formErrors.title}</span>}
             </div>
-        </div>
-    );
 
-    const PopupFail = ({ message, onClose }) => (
-        <div className="user-refurbished-book-module-fail-popup">
-            <div className="user-refurbished-book-module-fail-popup-inner">
-                <div className="user-refurbished-book-module-fail-popup-message">
-                    {message}
-                </div>
-                <div className="user-refurbished-book-module-fail-popup-ok" onClick={onClose}>
-                    Ok
-                </div>
+            <div className="floating-input textarea">
+              <textarea
+                value={formData.description}
+                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                placeholder=" "
+                rows="4"
+                className={formErrors.description ? 'error' : ''}
+              />
+              <label>Detailed Description</label>
+              {formErrors.description && <span className="error-hint">{formErrors.description}</span>}
             </div>
-        </div>
-    );
 
-    return (
-        <>
-            <div className="user-refurbished-product-book-module-upload-form">
-                {productType != 'gadget' ?
-                    <div style={{ display: "flex", gap: "5px", marginBottom: "17px" }}>
-                        <div
-                            className={`user-refurbished-product-book-module-upload-form-class ${formData.class && formData.class !== 'class' ? 'active' : ''}`}
-                            onClick={() => setPopUpState(prevState => ({ ...prevState, classPopUp: !prevState.classPopUp }))}
-                        >
-                            C
-                        </div>
-                        <div
-                            className={`user-refurbished-product-book-module-upload-form-subject ${formData.subject ? 'active' : ''}`}
-                            onClick={() => setPopUpState(prevState => ({ ...prevState, subjectPopUp: !prevState.subjectPopUp }))}
-                        >
-                            S
-                        </div>
-                        <div
-                            className={`user-refurbished-product-book-module-upload-form-language ${formData.language ? 'active' : ''}`}
-                            onClick={() => setPopUpState(prevState => ({ ...prevState, languagePopUp: !prevState.languagePopUp }))}
-                        >
-                            L
-                        </div>
-                    </div>
-                    :
-                    <>
-                        <div className='user-refurbished-product-category-brand-div' style={{ marginTop: "50px", display: 'flex', gap: '10px' }}>
-                            <div
-                                className={`user-refurbished-product-book-module-upload-form-category ${formData.category ? 'active' : ''}`}
-                                onClick={() => setPopUpState(prevState => ({ ...prevState, categoryPopUp: !prevState.categoryPopUp }))}>
-                                <MdOutlineCategory size={30} />
-                            </div>
-                            <div className={`user-refurbished-product-book-module-upload-form-brand ${formData.brand ? 'active' : ''}`}
-                                onClick={() => setPopUpState(prevState => ({ ...prevState, brandPopUp: !prevState.brandPopUp }))}>
-                                <TbBrandAirtable size={30} />
-                            </div>
-                        </div>
-                    </>
-                }
+            <div className="floating-input">
+              <input
+                type="text"
+                value={formData.keyword}
+                onChange={(e) => setFormData({ ...formData, keyword: e.target.value })}
+                placeholder=" "
+                className={formErrors.keyword ? 'error' : ''}
+              />
+              <label>Keyword</label>
+              {formErrors.keyword && <span className="error-hint">{formErrors.keyword}</span>}
+            </div>
+          </div>
+        )}
 
-
-                {renderPopUp('classPopUp', ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'], handleClassSelect)}
-                {renderPopUp('languagePopUp', ['Beng', 'Eng'], handleLanguageSelect)}
-                {renderPopUp('subjectPopUp', ['math', 'science', 'history', 'english'], handleSubjectSelect)}
-                {renderPopUp('categoryPopUp', ['category', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'], handleCategorySelect)}
-                {renderPopUp('brandPopUp', ['brand', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'], handleBrandSelect)}
-
-
-
-
-                <div className='user-refurbished-product-title-description-div'>
-                    <textarea
-                        name="title"
-                        value={formData.title}
-                        onChange={handleInputChange}
-                        placeholder="Enter a relevant title"
-                        className='user-refurbished-product-book-module-upload-form-textarea'
-                        style={{ maxWidth: "90vw", minHeight: "10vh" }}
-                    />
-                    <textarea
-                        name="description"
-                        value={formData.description}
-                        onChange={handleInputChange}
-placeholder="
-(# HEADING) AND (* DETAILS)
-Mention any notable issues or refurbishments.Be clear and concise for better understanding.
-
-Example:-
-#Condition: 
-    *Refurbished - Like New
-#Features: 
-    *16GB RAM, 512GB SSD
-#Includes:
-    *Original charger and carrying case
-#Issues: 
-    *Minor scratches on the outer casing
-                        "
-                        className='user-refurbished-product-book-module-upload-form-textarea'
-                        style={{ maxWidth: "90vw", minHeight: "90vh" }}
-                    />
-                </div>
-
-
-                <div className='user-refurbished-product-price-discounted-div'>
-                    <input
-                        type="number"
-                        name="price"
-                        value={formData.price}
-                        onChange={handleInputChange}
-                        placeholder="Enter original price"
-                        style={{ maxWidth: "90vw", height: "4vh" }}
-                        className='user-refurbished-product-book-module-upload-form-textarea'
-                    />
-                    <input
-                        type="number"
-                        name="discountedPrice"
-                        value={formData.discountedPrice}
-                        onChange={handleInputChange}
-                        placeholder="Enter discounted price"
-                        style={{ maxWidth: "90vw", height: "4vh" }}
-                        className='user-refurbished-product-book-module-upload-form-textarea'
-                    />
-                </div>
-
-                <textarea
-                    name="keywords"
-                    placeholder="Keywords (separated by commas [,])"
-                    value={formData.keywords}
-                    onChange={handleInputChange}
-                    className='user-refurbished-product-book-module-upload-form-textarea'
-                    style={{ maxWidth: "90vw", minHeight: "20vh" }}
+        {currentStep === 2 && (
+          <div className="step-card">
+            <div className="price-inputs">
+              <div className="floating-input">
+                <input
+                  type="number"
+                  value={formData.price}
+                  onChange={(e) => setFormData({ ...formData, price: e.target.value })}
+                  placeholder=" "
+                  className={formErrors.price ? 'error' : ''}
                 />
+                <label>Original Price (₹)</label>
+                {formErrors.price && <span className="error-hint">{formErrors.price}</span>}
+              </div>
 
-                <div className="user-refurbished-product-book-module-upload-form-image-section">
-                    {images.map((image, index) => (
-                        <div
-                            key={index}
-                            className="user-refurbished-product-book-module-upload-form-image-container"
-                            onDrop={(event) => handleDrop(index, event)}
-                            onDragOver={(event) => event.preventDefault()}
-                        >
-                            {image ? (
-                                <img
-                                    src={URL.createObjectURL(image)}
-                                    onClick={() => handleImageChange(index, [])}
-                                    alt={`Uploaded ${index + 1}`}
-                                    className="user-refurbished-product-book-module-upload-form-uploaded-image"
-                                />
-                            ) : (
-                                <CiImageOn className="user-refurbished-product-book-module-upload-form-image-placeholder" onClick={() => document.getElementById(`image-upload-${index}`).click()} size={60} />
-
-                            )}
-                            <input
-                                type="file"
-                                id={`image-upload-${index}`}
-                                style={{ display: 'none' }}
-                                onChange={(event) => handleImageChange(index, event.target.files)}
-                            />
-                        </div>
-                    ))}
-                </div>
-
-                {!showPopUpLocation && <div
-                    className={`user-refurbished-product-upload-form-submit ${isUploading ? 'disabled' : ''}`}
-                >
-                    {allFieldEntered ? <div onClick={isUploading ? null : handleSubmit}>UPLOAD</div> : <div onClick={() => { setAllFieldEntered(true) }}>All fields are required! OK</div>}
-                </div>}
-
-
+              <div className="floating-input">
+                <input
+                  type="number"
+                  value={formData.discountedPrice}
+                  onChange={(e) => setFormData({ ...formData, discountedPrice: e.target.value })}
+                  placeholder=" "
+                  className={formErrors.discountedPrice ? 'error' : ''}
+                />
+                <label>Selling Price (₹)</label>
+                {formErrors.discountedPrice && (
+                  <span className="error-hint">{formErrors.discountedPrice}</span>
+                )}
+              </div>
             </div>
+          </div>
+        )}
 
-            {isUploading && (
-                <div className="user-refurbished-product-book-module-upload-form-loader">
-                    <Oval height={40} width={40} color="#fff" />
-                </div>
-            )}
-            {uploadStatus.success && (
-                <PopupSuccess message={`${productType} uploaded successfully!`} onClose={() => setUploadStatus({ success: false, fail: false })} isSuccess />
-            )}
-            {uploadStatus.fail && (
-                <PopupFail message={`Failed to upload ${productType}. Please try again!`} onClose={() => setUploadStatus({ success: false, fail: false })} isSuccess={false} />
-            )}
+        {currentStep === 3 && (
+          <div className="step-card">
+            <div
+              className={`dropzone ${formErrors.images ? 'error' : ''}`}
+              onClick={() => document.getElementById('fileInput').click()}
+            >
+              <FiUploadCloud className="upload-icon" />
+              <p>Click to select</p>
+              <small>(Max 3 images, 5MB each)</small>
 
-            {showPopUpLocation &&
-                <div className='user-upload-location-popup'>
-                    set location in you profile
-                    <div className='user-upload-location-popup-ok' onClick={() => {
-                        setShowPopUpLocation(false);
-                        navigate('/user/profile')
-                    }}>
-                        ok
-                    </div>
-                </div>
-            }
+              <input
+                id="fileInput"
+                type="file"
+                accept="image/*"
+                multiple
+                style={{ display: 'none' }}
+                onChange={(e) => {
+                  const selectedFiles = Array.from(e.target.files);
+                  setFiles((prevFiles) => [...prevFiles, ...selectedFiles].slice(0, 3));
+                }}
+              />
 
-        </>
-    );
+              <div className="preview-grid">
+                {files.map((file, index) => (
+                  <div key={index} className="image-preview">
+                    <img src={URL.createObjectURL(file)} alt={`Preview ${index}`} />
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setFiles(files.filter((_, i) => i !== index));
+                      }}
+                    >
+                      ×
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div>Choose Location</div>
+          </div>
+        )}
+
+        <div className="form-navigation">
+          {currentStep > 1 && (
+            <button className="outline-button" onClick={() => setCurrentStep((prev) => prev - 1)}>
+              Back
+            </button>
+          )}
+
+          {currentStep < 3 ? (
+            <button className="primary-button" onClick={handleNext}>
+              Continue
+            </button>
+          ) : (
+            <button className="primary-button" onClick={handleSubmit} disabled={isUploading}>
+            {isUploading ? (
+              <div className="spinner"></div>
+            ) : (
+              'Publish Listing'
+            )}
+          </button>
+          )}
+        </div>
+      </div>
+
+      {uploadStatus && (
+        <div className={`status-toast ${uploadStatus}`}>
+          {uploadStatus === 'success' ? (
+            <>
+              <span>🎉 Listing published successfully!</span>
+              <button onClick={() => setUploadStatus(null)}>Ok</button>
+            </>
+          ) : (
+            <>
+              <span>❌ Upload failed. Please try again.</span>
+              <button onClick={() => setUploadStatus(null)}>Dismiss</button>
+            </>
+          )}
+        </div>
+      )}
+    </div>
+  );
 };
 
 export default UploadBooksModulesForm;
