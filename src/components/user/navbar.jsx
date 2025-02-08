@@ -37,6 +37,7 @@ const Navbar = ({userData, headerTitle, onBackNavigation }) => {
 
   return (
     <div className="product-page-header-visible" >
+      
       <div className="product-page-header-container">
         <div className="product-page-header-user-section">
           <FaArrowLeft

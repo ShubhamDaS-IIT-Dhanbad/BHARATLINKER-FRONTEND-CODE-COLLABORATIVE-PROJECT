@@ -61,9 +61,7 @@ function Order({ userData }) {
     <>
       {/* Header */}
       <header>
-        <div className="user-refurbished-product-page-header">
           <Navbar userData={userData} headerTitle={"YOUR ORDER"} />
-        </div>
       </header>
 
       {/* Order Type Buttons */}
