@@ -24,12 +24,10 @@ class SearchRefurbishedProductService {
         sortByDesc = false,
     }) {
         try {
-            const inputTokens = inputValue.trim().toLowerCase(); // Single string
-    
             const queries = [];
             // Add search query if inputValue is provided
             if (inputValue.length > 0) {
-                queries.push(Query.search("keyword", inputTokens));
+                queries.push(Query.search("keyword", inputValue.toLowerCase()));
             }
     
             // Add sorting queries
@@ -63,31 +61,10 @@ class SearchRefurbishedProductService {
                 conf.appwriteBlProductsCollectionId,
                 queries
             );
-    
             if (!Array.isArray(allProducts)) throw new TypeError("Expected 'allProducts' to be an array.");
-            if (inputValue.length === 0) return { success: true, products: allProducts };
-    
-            // Process and score products based on input search terms
-            const scoredProducts = allProducts
-                .map(product => {
-                    const titleLower = product.title.toLowerCase();
-                    const descLower = product.description.toLowerCase();
-    
-                    let score = 0;
-    
-                    if (titleLower.includes(inputTokens)) score += 3;
-                    if (descLower.includes(inputTokens)) score += 2;
-                    if (titleLower.startsWith(inputTokens)) score += 5;
-                    if (descLower.startsWith(inputTokens)) score += 4;
-    
-                    return { ...product, score };
-                }).filter((product) => product !== null);
-    
-            scoredProducts.sort((a, b) => b.score - a.score);
-    
             return {
                 success: true,
-                products: scoredProducts
+                products: allProducts
             };
         } catch (error) {
             console.error("Appwrite service :: getProducts", error);
