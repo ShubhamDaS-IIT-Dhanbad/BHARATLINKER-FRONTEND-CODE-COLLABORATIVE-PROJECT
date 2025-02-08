@@ -115,7 +115,7 @@ class UserRefurbishedProduct {
         }
     }
     /*imp*/
-    async updateUserRefurbishedProduct(productId, toDeleteImagesUrls, updatedData, newFiles = []) {
+    async updateUserProduct(productId, toDeleteImagesUrls, updatedData, newFiles = []) {
         let uploadedImages = [];
         let allImageUrls = updatedData.images ? [...updatedData.images] : [];
     
@@ -136,16 +136,10 @@ class UserRefurbishedProduct {
                 const newImageUrls = uploadedImages.map(image => image.secure_url);
                 allImageUrls = [...allImageUrls, ...validUrls, ...newImageUrls];
             } else {
-                allImageUrls = [...allImageUrls, ...validUrls];
-            }
-    
-            // Update image URLs in updatedData
+                allImageUrls = [...allImageUrls, ...validUrls];}
             updatedData.image = allImageUrls;
     
-            // Ensure productId is correctly passed
             const productIdValue = typeof productId === 'object' && productId.id ? productId.id : productId;
-    console.log(updatedData,"d")
-            // Update document
             const updatedDocument = await this.databases.updateDocument(
                 conf.appwriteBlUsersDatabaseId,
                 conf.appwriteBlProductsCollectionId,

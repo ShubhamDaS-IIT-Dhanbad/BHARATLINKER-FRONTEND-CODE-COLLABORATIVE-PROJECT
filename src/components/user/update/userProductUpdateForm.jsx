@@ -3,11 +3,13 @@ import { FiUploadCloud, FiDollarSign, FiMapPin } from 'react-icons/fi';
 import UserRefurbishedProduct from '../../../appWrite/UserRefurbishedProductService/userRefurbishedProduct.js';
 import ProgressBar from '../progressBar.jsx';
 import { Oval } from 'react-loader-spinner';
+import { useDispatch } from 'react-redux';
 import '../upload/userProductUpload.css';
+import {updateProduct} from '../../../redux/features/user/userAllRefurbishedProductsSlice.jsx'
 
 const UpdateForm = ({ userData, product }) => {
+  const dispatch=useDispatch();
   const [currentStep, setCurrentStep] = useState(1);
-  const [coordinates, setCoordinates] = useState();
   const [formData, setFormData] = useState({
     title: product?.title || '',
     description: product?.description || '',
@@ -75,7 +77,6 @@ const UpdateForm = ({ userData, product }) => {
     if (validateStep(3)) {
       setIsUploading(true);
       try {
-        // Get only updated fields
         const updatedFields = Object.keys(formData).reduce((acc, key) => {
           if (formData[key] !== product[key]) {
             acc[key] = formData[key];
@@ -83,13 +84,13 @@ const UpdateForm = ({ userData, product }) => {
           return acc;
         }, {});
   
-        await UserRefurbishedProduct.updateUserRefurbishedProduct(
+        const updatedData=await UserRefurbishedProduct.updateUserProduct(
           product.$id,
           toDeleteImagesUrls,
           { ...updatedFields },
           files
         );
-  
+        dispatch(updateProduct({productId:product.$id,updatedData}));
         setUploadStatus('success');
         setCurrentStep(1);
       } catch (error) {

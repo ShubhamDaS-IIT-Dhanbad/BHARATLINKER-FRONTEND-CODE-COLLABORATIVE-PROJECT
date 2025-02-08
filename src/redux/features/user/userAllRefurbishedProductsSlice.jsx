@@ -10,7 +10,7 @@ export const fetchUserRefurbishedProducts = createAsyncThunk(
 
       if (response?.products?.length === 0) {
         return {
-          inputValue:params.inputValue,
+          inputValue: params.inputValue,
           refurbishedProducts: [],
           totalPages: 0,
           productsPerPage: params.productsPerPage,
@@ -19,7 +19,7 @@ export const fetchUserRefurbishedProducts = createAsyncThunk(
 
       if (response.products) {
         return {
-          inputValue:params.inputValue,
+          inputValue: params.inputValue,
           refurbishedProducts: response.products,
           productsPerPage: params.productsPerPage,
           totalPages: Math.ceil(response.products.length / params.productsPerPage),
@@ -43,7 +43,7 @@ export const loadMoreUserRefurbishedProducts = createAsyncThunk(
 
       if (response?.products) {
         return {
-          inputValue:params.query,
+          inputValue: params.query,
           refurbishedProducts: response.products,
           productsPerPage: params.productsPerPage,
           totalPages: Math.ceil(response.products.length / params.productsPerPage),
@@ -62,7 +62,7 @@ export const loadMoreUserRefurbishedProducts = createAsyncThunk(
 const userRefurbishedProductsSlice = createSlice({
   name: 'userRefurbishedProducts',
   initialState: {
-    query:"",
+    query: "",
     refurbishedProducts: [],
     loading: false,
     currentPage: 1,
@@ -99,8 +99,12 @@ const userRefurbishedProductsSlice = createSlice({
       );
     },
     updateProduct: (state, action) => {
-      // You can implement update logic here if needed
+      const { productId, updatedData } = action.payload;
+      state.refurbishedProducts = state.refurbishedProducts.map(product =>
+        product.$id === productId ? { ...product, ...updatedData } : product
+      );
     },
+
     addUserRefurbishedProduct: (state, action) => {
       const newProduct = action.payload;
       state.refurbishedProducts = [newProduct, ...state.refurbishedProducts];
@@ -119,8 +123,8 @@ const userRefurbishedProductsSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchUserRefurbishedProducts.fulfilled, (state, action) => {
-        const {inputValue, refurbishedProducts, totalPages, productsPerPage } = action.payload;
-        state.query=inputValue;
+        const { inputValue, refurbishedProducts, totalPages, productsPerPage } = action.payload;
+        state.query = inputValue;
         if (refurbishedProducts.length > 0) {
           const newProducts = refurbishedProducts.filter(
             (product) =>
@@ -153,8 +157,8 @@ const userRefurbishedProductsSlice = createSlice({
         state.error = null;
       })
       .addCase(loadMoreUserRefurbishedProducts.fulfilled, (state, action) => {
-        const {inputValue, refurbishedProducts, totalPages, productsPerPage } = action.payload;
-        state.query=inputValue;
+        const { inputValue, refurbishedProducts, totalPages, productsPerPage } = action.payload;
+        state.query = inputValue;
         if (refurbishedProducts.length > 0) {
           const newProducts = refurbishedProducts.filter(
             (product) =>
