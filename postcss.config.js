@@ -21,7 +21,7 @@ export default {
         "./public/index.html",
       ],
       safelist: {
-        standard: [/^leaflet-/], // ✅ Keeps all Leaflet CSS classes
+        standard: [/^leaflet-/], 
       },
       defaultExtractor: (content) =>
         content.match(/[\w-/:]+(?<!:)/g) || [],
