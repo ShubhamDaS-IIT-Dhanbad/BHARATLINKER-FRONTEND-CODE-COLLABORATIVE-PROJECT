@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { FiUploadCloud, FiDollarSign, FiMapPin } from 'react-icons/fi';
-import UserRefurbishedProduct from '../../../appWrite/UserRefurbishedProductService/userRefurbishedProduct.js';
+import UserRefurbishedProduct from '../../../appWrite/user/userProduct.js';
 import ProgressBar from '../progressBar.jsx';
 import { Oval } from 'react-loader-spinner';
 import { useDispatch } from 'react-redux';
