@@ -47,9 +47,6 @@ function UserRefurbishedProduct({ userData }) {
       console.error("Error deleting address:", error);
     });
   };
-  
-  
-
   if (showLocationTab) {
     return (
       <LocationTab

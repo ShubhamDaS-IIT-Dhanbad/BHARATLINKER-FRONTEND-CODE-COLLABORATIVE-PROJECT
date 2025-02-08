@@ -14,31 +14,24 @@ const Navbar = ({userData, headerTitle, onBackNavigation }) => {
   const { query } = useSelector((state) => state.userRefurbishedProducts);
   const [searchInput, setSearchInput] = useState("");
 
-  // Handle search when clicking the icon
   const handleSearchIconClick = () => {
     if (searchInput.trim()) {
       executeSearch(searchInput);
     }
   };
-
-  // Handle search when pressing "Enter"
   const handleSearchKeyPress = (e) => {
     if (e.key === "Enter") {
       executeSearch(searchInput);
     }
   };
-
-  // Update searchInput when query changes
   useEffect(() => {
     setSearchInput(query);
   }, [query]);
-
-  // Handle navigation logic
   const handleBackNavigation = () => {
     if (onBackNavigation) {
-      onBackNavigation(); // Call the passed function if present
+      onBackNavigation();
     } else {
-      navigate("/user"); // Default to navigate to /user
+      navigate("/user");
     }
   };
 

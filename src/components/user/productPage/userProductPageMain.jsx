@@ -4,7 +4,6 @@ import { useSelector } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import Navbar from '../navbar.jsx';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { RotatingLines } from 'react-loader-spinner';
 import { Oval } from 'react-loader-spinner';
 
 import { useExecuteUserSearch } from '../../../hooks/searchUserProductHook.jsx';
@@ -60,7 +59,7 @@ function UserRefurbishedProduct({userData}) {
             <main>
                 {loading ? (
                     <div className="fallback-loading">
-                        <Oval height={30} width={30} color="white" secondaryColor="gray" ariaLabel="loading" />
+                        <Oval height={30} width={30} color="green" secondaryColor="white" ariaLabel="loading" />
                     </div>
                 ) : (
                     <InfiniteScroll
@@ -70,11 +69,6 @@ function UserRefurbishedProduct({userData}) {
                     >
                         <ProductList products={refurbishedProducts} loading={loading} />
                     </InfiniteScroll>
-                )}
-                {loadingMoreProducts && (
-                    <div className="user-refurbished-product-page-loading-more">
-                        <RotatingLines width="40" height="40" color="#007bff" />
-                    </div>
                 )}
             </main>
         </div>
