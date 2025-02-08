@@ -10,7 +10,7 @@ import { useExecuteUserSearch } from '../../../hooks/searchUserProductHook.jsx';
 import ProductList from '../../productList.jsx';
 
 
-import './userProductPageMain.css';
+import '../style/userProductPageMain.css';
 
 function UserRefurbishedProduct({userData}) {
     const { executeSearch, onLoadMore } = useExecuteUserSearch();
