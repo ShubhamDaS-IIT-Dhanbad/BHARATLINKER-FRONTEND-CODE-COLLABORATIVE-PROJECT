@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from "react-leaflet";
-import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { FiMapPin } from "react-icons/fi";
 import Cookies from 'js-cookie';
@@ -9,6 +8,7 @@ import { FaAngleLeft } from "react-icons/fa6";
 import { Oval } from "react-loader-spinner";
 import useLocationFromCookie from "../../hooks/useLocationFromCookie.jsx";
 import { updateUserById } from "../../appWrite/user/userData.js";
+import "leaflet/dist/leaflet.css";
 import "./map.css";
 import { useNavigate } from "react-router-dom";
 // Constants for better readability
@@ -215,7 +215,7 @@ const LocationMap = ({
 
             <div className="map-wrapper">
                 {memoizedMap}
-
+                
                 <div className="map-address-container">
                     <div className="map-address-content">
                         {loading ? (
