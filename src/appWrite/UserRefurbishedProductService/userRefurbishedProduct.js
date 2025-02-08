@@ -109,7 +109,7 @@ class UserRefurbishedProduct {
                 keyword: productData.keyword.toLowerCase(),
                 phoneNumber: productData.phoneNumber,
                 latitude: productData.coordinates?.latitude || 0,  // Dynamic location
-                longitude: productData.coordinates?.lngitude || 0
+                longitude: productData.coordinates?.longitude || 0
             };
     
             // Create document in Appwrite
