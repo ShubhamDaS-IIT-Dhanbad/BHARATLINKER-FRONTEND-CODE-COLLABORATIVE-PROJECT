@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { FaArrowLeft } from 'react-icons/fa';
 import { Oval } from "react-loader-spinner";
-import { useNavigate } from "react-router-dom";
+import Navbar from '../navbar.jsx';
 import { fetchOrdersByStatus, loadMoreOrders } from "../../../redux/features/user/orderSlice.jsx";
 import OrderProductCard from "./orderProductCard";
 import e1 from './e1.png';
@@ -11,7 +10,6 @@ import e1 from './e1.png';
 import "./order.css";
 
 function Order({ userData }) {
-  const navigate = useNavigate();
   const dispatch = useDispatch();
   const {
     pendingOrders,
@@ -32,52 +30,42 @@ function Order({ userData }) {
   const selectedOrders = orderStates[selectedOrderType];
 
   const fetchInitialOrders = (status) => {
-    const userId = userData?.phone;console.log(userId)
-    if (!userId) return;
-    dispatch(fetchOrdersByStatus({ userId, status, page: 1 }));
+    const phoneNumber = userData?.phoneNumber; console.log(phoneNumber)
+    if (!phoneNumber) return;
+    dispatch(fetchOrdersByStatus({ phoneNumber, status, page: 1 }));
   };
 
   const fetchNextPage = () => {
-    const userId = userData?.$id;
-    if (!userId) return;
+    const phoneNumber = userData?.phoneNumber;
+    if (!phoneNumber) return;
     const nextPage = selectedOrders.currentPage + 1;
-    dispatch(loadMoreOrders({ userId, status: selectedOrderType, page: nextPage }));
+    dispatch(loadMoreOrders({ phoneNumber, status: selectedOrderType, page: nextPage }));
   };
 
   useEffect(() => {
-    if (userData?.phone) {
-      if (pendingOrders.data.length === 0) fetchInitialOrders("pending");
-      if (confirmedOrders.data.length === 0) fetchInitialOrders("confirmed");
-      if (deliveredOrders.data.length === 0) fetchInitialOrders("delivered");
-      if (canceledOrders.data.length === 0) fetchInitialOrders("canceled");
+    console.log("Fetching orders...");
+    if (userData?.phoneNumber) {
+      ["pending", "confirmed", "delivered", "canceled"].forEach((status) => {
+        if (orderStates[status].data.length === 0) {
+          console.log(`Fetching ${status} orders`);
+          fetchInitialOrders(status);
+        }
+      });
     }
-  }, [userData]);
+  }, []);
   
-  useEffect(()=>{
-    window.scrollTo(0,0);
-  },[selectedOrderType])
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [selectedOrderType])
   return (
     <>
       {/* Header */}
-      <div className="retailer-update-header">
-        <FaArrowLeft
-          id="retailer-update-header-left-icon"
-          size={25}
-          onClick={() => navigate('/user')}
-          aria-label="Back to retailer home"
-          tabIndex={0}
-        />
-        <div className="retailer-update-header-inner-div">
-          <p className="retailer-update-header-inner-div-p">
-            ORDER DETAILS
-          </p>
-          {userData?.phoneNumber && (
-            <div className="retailer-upload-product-header-shopname" aria-label="Change Location" tabIndex={0}>
-              {userData?.phoneNumber}
-            </div>
-          )}
+      <header>
+        <div className="user-refurbished-product-page-header">
+          <Navbar userData={userData} headerTitle={"ORDER DETAIL"} />
         </div>
-      </div>
+      </header>
 
       {/* Order Type Buttons */}
       <div className="retailer-order-type-buttons">
@@ -104,7 +92,7 @@ function Order({ userData }) {
         }
       >
         <div className="retailer-order-div-container">
-          {selectedOrders.data.length === 0? (
+          {selectedOrders.data.length === 0 ? (
             <div className="retailer-order-empty">
               <img className="retailer-order-empty-img" src={e1} alt="No Orders" />
             </div>

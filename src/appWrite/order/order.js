@@ -10,7 +10,7 @@ const client = new Client()
 const databases = new Databases(client);
 
 const placeOrderProvider = async (
-  { userId,
+  { phoneNumber,
     shopId,
     productId,
     quantity,
@@ -22,7 +22,6 @@ const placeOrderProvider = async (
     image,
     title,
     name,
-    phoneNumber,
     shopEmail,
     houseNo,
     building,
@@ -56,7 +55,7 @@ const placeOrderProvider = async (
       conf.appwriteOrdersCollectionId,
       ID.unique(),
       {
-        userId,
+        phoneNumber,
         shopId,
         productId,
         quantity,
@@ -65,7 +64,7 @@ const placeOrderProvider = async (
         address,
         lat,
         long,
-        image, phoneNumber, name,
+        image,name,
         title: truncatedTitle,
         shopEmail,
         houseNo,
@@ -82,15 +81,15 @@ const placeOrderProvider = async (
 
 
 
-const getOrderByUserId = async (userId, state, page, ordersPerPage = 10) => {
+const getOrderByUserId = async (phoneNumber, state, page, ordersPerPage = 10) => {
   try {
-    if (!userId) {
+    if (!phoneNumber) {
       throw new Error('Shop ID is missing');
     }
 
     // Construct queries
     const queries = [
-      Query.equal('userId', userId), // Filter by shop ID
+      Query.equal('phoneNumber', phoneNumber), // Filter by shop ID
       Query.equal('state', state),   // Filter by state
     ];
 
@@ -113,7 +112,7 @@ const getOrderByUserId = async (userId, state, page, ordersPerPage = 10) => {
       totalPages: Math.ceil(response.total / ordersPerPage),
     };
   } catch (error) {
-    console.error('Error fetching orders by userId:', error.message);
+    console.error('Error fetching orders by phoneNumber:', error.message);
     throw error;
   }
 };

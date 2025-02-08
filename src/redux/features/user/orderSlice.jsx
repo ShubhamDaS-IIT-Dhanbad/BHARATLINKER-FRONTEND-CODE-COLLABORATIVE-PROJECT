@@ -11,20 +11,20 @@ const initialState = {
 };
 
 // Fetch orders based on status and page
-const fetchOrders = async (userId, status, page) => {
+const fetchOrders = async (phoneNumber, status, page) => {
   let statuses = [status];
   if (status === 'confirmed') statuses = ['confirmed', 'dispatched'];
   
-  const response = await getOrderByUserId(userId, statuses, page);
+  const response = await getOrderByUserId(phoneNumber, statuses, page);
   return { documents: response.documents, total: response.total };
 };
 
 // Fetch orders by status
 export const fetchOrdersByStatus = createAsyncThunk(
   'retailerorders/fetchOrdersByStatus',
-  async ({ userId, status, page }, { rejectWithValue }) => {
+  async ({ phoneNumber, status, page }, { rejectWithValue }) => {
     try {
-      const { documents, total } = await fetchOrders(userId, status, page);
+      const { documents, total } = await fetchOrders(phoneNumber, status, page);
       return { documents, total, status };
     } catch (error) {
       return rejectWithValue(error.response?.data || 'Failed to fetch orders');
@@ -35,9 +35,9 @@ export const fetchOrdersByStatus = createAsyncThunk(
 // Load more orders
 export const loadMoreOrders = createAsyncThunk(
   'retailerorders/loadMoreOrders',
-  async ({ userId, status, page }, { rejectWithValue }) => {
+  async ({ phoneNumber, status, page }, { rejectWithValue }) => {
     try {
-      const { documents, total } = await fetchOrders(userId, status, page);
+      const { documents, total } = await fetchOrders(phoneNumber, status, page);
       return { documents, total, status, page };
     } catch (error) {
       return rejectWithValue(error.response?.data || 'Failed to load more orders');

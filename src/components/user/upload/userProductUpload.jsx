@@ -4,6 +4,7 @@ import Navbar from '../navbar.jsx';
 import '../style/userProductUpload.css';
 
 const UploadProduct = ({userData}) => {
+    console.log("Q")
     return (
         <>
             <header>

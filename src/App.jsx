@@ -311,6 +311,7 @@ const RoutesWithConditionalHeader = React.memo(() => {
             </PrivateRoute>
           }
         />
+        
         <Route
           path="/user/cart"
           element=
