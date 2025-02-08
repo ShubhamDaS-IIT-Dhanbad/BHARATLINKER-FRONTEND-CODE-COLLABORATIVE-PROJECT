@@ -1,4 +1,3 @@
-
 import React, { Fragment, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
@@ -31,9 +30,16 @@ const ProductDetails = () => {
     const sections = description.split("#").slice(1);
     return sections.map((section) => {
       const [heading, ...contents] = section.split("*");
-      return { heading: heading.trim(), content: contents.join("*").trim() };
+      return {
+        heading: heading.trim(),
+        content: contents
+          .map((item, i) => <p key={i} className="detail-para">{item.trim()}</p>)
+          .filter(Boolean)
+      };
     });
   };
+
+
 
   useEffect(() => {
     const fetchProductDetails = async () => {
@@ -70,6 +76,7 @@ const ProductDetails = () => {
       alert("Sharing is not supported on this browser.");
     }
   };
+
   const handlePhoneClick = () => {
     if (productDetail?.phoneNumber) {
       window.location.href = `tel:+${productDetail.phoneNumber}`;
@@ -81,10 +88,10 @@ const ProductDetails = () => {
       window.location.href = `https://wa.me/+${productDetail.phoneNumber}`;
     }
   };
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-
 
   return (
     <Fragment>
@@ -119,7 +126,6 @@ const ProductDetails = () => {
                       : "product-detail-image-unselect"
                   }
                 />
-
               ))}
             </div>
 
@@ -155,14 +161,10 @@ const ProductDetails = () => {
                   )}
                 </div>
                 <p id="productDetails-price1">
-                  MRP{" "}
-                  <span id="productDetails-price2">₹{productDetail?.price}</span>
+                  MRP <span id="productDetails-price2">₹{productDetail?.price}</span>
                 </p>
               </div>
-              <div
-                id={`product-details-price-${true ? "instock" : "instock"
-                  }`}
-              >
+              <div id={`product-details-price-${true ? "instock" : "instock"}`}>
                 on sale
               </div>
             </div>
@@ -177,6 +179,7 @@ const ProductDetails = () => {
                   </div>
                 ))}
               </div>
+
             </div>
           </div>
         )
