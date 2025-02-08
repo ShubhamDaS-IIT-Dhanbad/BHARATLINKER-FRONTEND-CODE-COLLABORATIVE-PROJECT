@@ -3,7 +3,7 @@ import { IoHomeOutline } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 import { MdOutlineAdminPanelSettings } from "react-icons/md";
 import { HiOutlineUserCircle } from "react-icons/hi2";
-import { FiUploadCloud } from "react-icons/fi";
+import { PiAddressBookTabsLight } from "react-icons/pi";
 import { TbDeviceMobileCharging } from "react-icons/tb";
 import { AiOutlineProduct } from "react-icons/ai";
 import { CiBoxList } from "react-icons/ci";
@@ -56,8 +56,8 @@ function UserHome({ userData }) {
                         className="dashboard-Your-Refurbished"
                         onClick={() => navigate("/user/profile")}
                     >
-                        <HiOutlineUserCircle
-                            size={27}
+                        <PiAddressBookTabsLight
+                            size={25}
                             className="dashboard-Your-information-icons"
                             aria-label="Your profile"
                         />

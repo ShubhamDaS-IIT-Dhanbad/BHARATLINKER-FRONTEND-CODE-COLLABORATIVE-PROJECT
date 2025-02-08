@@ -4,7 +4,6 @@ import Navbar from '../navbar.jsx';
 import './userProductUpload.css';
 
 const UploadProduct = ({userData}) => {
-    if(userData.address.length==0){alert("firts set a address");}
     return (
         <>
             <header>

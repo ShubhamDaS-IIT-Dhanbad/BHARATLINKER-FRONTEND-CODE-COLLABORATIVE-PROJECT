@@ -230,7 +230,7 @@ const UploadBooksModulesForm = ({ userData }) => {
                   ))
                 ) : (
                   <div className="empty-state">
-                    <p>No addresses available. Please add one.</p>
+                    <p>No addresses available. go to address book and add one.</p>
                   </div>
                 )}
               </div>
