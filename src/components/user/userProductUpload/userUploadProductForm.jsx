@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { FiUploadCloud, FiDollarSign, FiMapPin } from 'react-icons/fi';
 import UserRefurbishedProduct from '../../../appWrite/UserRefurbishedProductService/userRefurbishedProduct.js';
 import ProgressBar from '../progressBar.jsx';
-
+import { Oval } from 'react-loader-spinner';
+import { FaLocationDot } from "react-icons/fa6";
 const UploadBooksModulesForm = ({ userData }) => {
-  const navigate = useNavigate();
+  const [selectedAddressIndex, setSelectedAddressIndex] = useState();
   const [currentStep, setCurrentStep] = useState(1);
-  const [coordinates, setCoordinates] = useState({ latitude: 90, longitude: 80 });
+  const [coordinates, setCoordinates] = useState();
+  const [showLocationList, setShowLocationList] = useState(false);
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -43,8 +44,8 @@ const UploadBooksModulesForm = ({ userData }) => {
         }
         break;
       case 3:
-        if (!coordinates) errors.location = 'Location required';
-        if (files.length < 1) errors.images = 'At least one image required';
+        if (!coordinates) {alert("location not available!"); errors.location = 'Location required';}
+        if (files.length < 1){alert("at least 1 image is  required!"); errors.images = 'At least one image required';}
         break;
       default:
         break;
@@ -74,7 +75,7 @@ const UploadBooksModulesForm = ({ userData }) => {
           phoneNumber: `91${userData.phoneNumber}`
         });
         setFiles([]);
-        setCoordinates({ latitude: 90, longitude: 80 });
+        setCoordinates();
         setCurrentStep(1);
       } catch (error) {
         setUploadStatus('error');
@@ -84,6 +85,12 @@ const UploadBooksModulesForm = ({ userData }) => {
       }
     }
   };
+  const handleLocationSelect = (location, index) => {
+    setCoordinates({ latitude: location.latitude, longitude: location.longitude });
+    setShowLocationList(false);
+    setSelectedAddressIndex(index);
+  };
+
   return (
     <div className="multi-step-form">
       <ProgressBar steps={steps} currentStep={currentStep} />
@@ -163,14 +170,10 @@ const UploadBooksModulesForm = ({ userData }) => {
 
         {currentStep === 3 && (
           <div className="step-card">
-            <div
-              className={`dropzone ${formErrors.images ? 'error' : ''}`}
-              onClick={() => document.getElementById('fileInput').click()}
-            >
+            <div className="dropzone" onClick={() => document.getElementById('fileInput').click()}>
               <FiUploadCloud className="upload-icon" />
               <p>Click to select</p>
               <small>(Max 3 images, 5MB each)</small>
-
               <input
                 id="fileInput"
                 type="file"
@@ -182,8 +185,9 @@ const UploadBooksModulesForm = ({ userData }) => {
                   setFiles((prevFiles) => [...prevFiles, ...selectedFiles].slice(0, 3));
                 }}
               />
+            </div>
 
-              <div className="preview-grid">
+            <div className="preview-grid">
                 {files.map((file, index) => (
                   <div key={index} className="image-preview">
                     <img src={URL.createObjectURL(file)} alt={`Preview ${index}`} />
@@ -198,8 +202,39 @@ const UploadBooksModulesForm = ({ userData }) => {
                   </div>
                 ))}
               </div>
+
+
+
+
+            <div className="upload-choose-location" onClick={() => setShowLocationList(!showLocationList)}>
+              Choose Location
+              <FaLocationDot color="rgb(12, 131, 31)" size={20} />
             </div>
-            <div>Choose Location</div>
+            {showLocationList && (
+              <div className="address-grid">
+                {userData.address.length > 0 ? (
+                  userData.address.map((addr, index) => (
+                    <div
+                      key={index}
+                      className={`address-card ${selectedAddressIndex === index ? 'selected' : ''}`}
+                      onClick={() => handleLocationSelect(addr, index)}
+                    >
+                      <div className="address-content">
+                        <FaLocationDot color="rgb(12, 131, 31)" size={20} />
+                      </div>
+                      <div className="address-body">
+                        <h1>Address</h1>
+                        <p>{addr.address}</p>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <div className="empty-state">
+                    <p>No addresses available. Please add one.</p>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         )}
 
@@ -216,12 +251,18 @@ const UploadBooksModulesForm = ({ userData }) => {
             </button>
           ) : (
             <button className="primary-button" onClick={handleSubmit} disabled={isUploading}>
-            {isUploading ? (
-              <div className="spinner"></div>
-            ) : (
-              'Publish Listing'
-            )}
-          </button>
+              {isUploading ? (
+               <Oval
+               height={30}
+               width={30}
+               color="green"
+               secondaryColor="white"
+               ariaLabel="loading"
+           />
+              ) : (
+                'Publish Listing'
+              )}
+            </button>
           )}
         </div>
       </div>

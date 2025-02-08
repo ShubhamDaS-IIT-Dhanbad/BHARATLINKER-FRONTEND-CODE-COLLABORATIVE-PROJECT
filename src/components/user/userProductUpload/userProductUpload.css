@@ -191,7 +191,6 @@
     border-radius: 8px;
     padding: 2rem;
     text-align: center;
-    cursor: pointer;
     transition: all 0.3s ease;
   }
   
@@ -250,7 +249,6 @@
     border-radius: 50%;
     width: 24px;
     height: 24px;
-    cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -363,3 +361,88 @@
       transform: translateX(0);
     }
   }
+
+
+
+
+  .upload-location-list{
+    background-color: #10b981;
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+.address-card {
+  border-radius: 10px;
+  position: relative;
+  min-height:40px;
+  display: flex;
+  justify-content: space-between;align-items: center;padding-left: 5px;
+  transition: all 0.2s ease;
+}
+.address-content{
+  border: 1.3px solid rgb(12, 131, 31);
+  display: flex;justify-content: center;align-items: center;
+  width: 40px;height: 40px;border-radius: 10px;
+}
+.address-body{
+  display: flex;flex-grow: 1;margin-left: 10px;
+  flex-direction: column;justify-content: center;
+}
+.address-body h1{
+padding: 0;margin: 0;
+font-size: 12px;
+}
+.address-body p{
+  padding: 0;margin: 0;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  font-size: 11px;
+}
+
+/* Card Footer */
+.card-footer {
+  color: rgb(236, 67, 67);display: flex;
+  justify-content: center;align-items: center;
+}
+
+
+
+/* Address Grid */
+.address-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+
+
+
+
+.address-card.selected {
+  background-color: black;
+  color: white;
+}
+
+
+
+
+.upload-choose-location{
+  margin-top: 20px;padding: 10px;justify-content: center;align-items: center;
+  gap: 10px;background-color:rgb(12, 131, 31);
+  display: flex;color: white;
+}

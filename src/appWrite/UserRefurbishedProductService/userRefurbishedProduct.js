@@ -108,8 +108,8 @@ class UserRefurbishedProduct {
                 discountedPrice: Number(productData.discountedPrice),
                 keyword: productData.keyword.toLowerCase(),
                 phoneNumber: productData.phoneNumber,
-                latitude: productData.coordinates?.lat || 0,  // Dynamic location
-                longitude: productData.coordinates?.lng || 0
+                latitude: productData.coordinates?.latitude || 0,  // Dynamic location
+                longitude: productData.coordinates?.lngitude || 0
             };
     
             // Create document in Appwrite
