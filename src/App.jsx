@@ -22,7 +22,6 @@ const UserProfile = lazy(() => import('./components/user/userProfile.jsx'));
 const UserProductPageMain = lazy(() => import('./components/user/productPage/userProductPageMain.jsx'));
 const UserUpload= lazy(() => import('./components/user/upload/userProductUpload.jsx'));
 const UserUpdateBookModule = lazy(() => import('./components/user/update/userProductUpdate.jsx'));
-const UserNotification = lazy(() => import('./components/user/notification/userNotification.jsx'));
 const UserOrder = lazy(() => import('./components/user/order/order.jsx'));
 const UserCart = lazy(() => import('./components/user/myCart/myCart.jsx'));
 const UserOrderDetail = lazy(() => import('./components/user/orderDetail/orderDetail.jsx'));
@@ -296,19 +295,6 @@ const RoutesWithConditionalHeader = React.memo(() => {
                 <meta name="description" content="Edit and update the details of your refurbished products on Bharat Linker." />
               </Helmet>
               <UserUpdateBookModule />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/user/notification"
-          element=
-          {
-            <PrivateRoute>
-              <Helmet>
-                <title>Notifications - Bharat Linker</title>
-                <meta name="description" content="View all your notifications related to account activity and updates." />
-              </Helmet>
-              <UserNotification />
             </PrivateRoute>
           }
         />
