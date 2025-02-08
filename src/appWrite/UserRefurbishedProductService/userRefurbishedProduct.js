@@ -5,19 +5,16 @@ import CryptoJS from 'crypto-js';
 class UserRefurbishedProduct {
     client = new Client();
     databases;
-
     constructor() {
         this.client
         .setEndpoint(conf.appwriteUrl)
         .setProject(conf.appwriteBlUsersProjectId);
         this.databases = new Databases(this.client);
     }
-
     async uploadImageToCloudinary(file) {
         const formData = new FormData();
         formData.append('file', file);
         formData.append('upload_preset', conf.refurbishBooksCloudinaryPreset);
-
         try {
             const response = await fetch(`https://api.cloudinary.com/v1_1/${conf.refurbishProductCloudinaryCloudName}/image/upload`, {
                 method: 'POST',
@@ -31,14 +28,11 @@ class UserRefurbishedProduct {
             throw error;
         }
     }
-
     async uploadImagesToCloudinary(files) {
         const validFiles = files.filter(file => file && typeof file === 'object');
         const uploadPromises = validFiles.map(file => this.uploadImageToCloudinary(file));
         return await Promise.all(uploadPromises);
     }
-
-
     async deleteImageFromCloudinary(imageUrl) {
         if (!imageUrl) return;
         const urlParts = imageUrl.split('/');
@@ -90,36 +84,29 @@ class UserRefurbishedProduct {
 
     //upload module imp
     async uploadProductWithImages(productData, files = []) {
+        if( !productData.coordinates.latitude || !productData.coordinates.longitude) throw error;
         let uploadedImages = [];
         try {
-            console.log("Uploading product with:", productData, files);
-    
-            // Upload images to Cloudinary
             uploadedImages = await this.uploadImagesToCloudinary(files);
             const imageUrls = uploadedImages.map((image) => image.secure_url);
-    
-            console.log("Image URLs:", imageUrls);
-    
+
             const newProductData = {
-                image: imageUrls, // Ensure 'image' is an array of URLs
+                image: imageUrls,
                 title: productData.title.toLowerCase(),
                 description: productData.description.toLowerCase(),
                 price: Number(productData.price),
                 discountedPrice: Number(productData.discountedPrice),
                 keyword: productData.keyword.toLowerCase(),
                 phoneNumber: productData.phoneNumber,
-                latitude: productData.coordinates?.latitude || 0,  // Dynamic location
+                latitude: productData.coordinates?.latitude || 0,
                 longitude: productData.coordinates?.longitude || 0
             };
-    
-            // Create document in Appwrite
             const document = await this.databases.createDocument(
                 conf.appwriteBlUsersDatabaseId,
                 conf.appwriteBlProductsCollectionId,
                 ID.unique(),
                 newProductData
             );
-    
             return document;
         } catch (error) {
             console.error("Error uploading product:", error);
@@ -221,25 +208,15 @@ class UserRefurbishedProduct {
         }
     
         try {
-            const inputTokens = inputValue.split(' ').filter(token => token.trim() !== '').map(token => token.toLowerCase());
-    
             const queries = [];
-            queries.push(Query.equal('phn', phn));
+            queries.push(Query.equal('phoneNumber', phn));
            
             if (inputValue.length > 0) {
-                queries.push(Query.or([
-                    Query.contains('title', inputTokens),
-                    Query.contains('description', inputTokens),
-                    Query.contains('keywords', inputTokens),
-                ]));
+                queries.push(Query.contains('keyword',inputValue));
             }
     
-            if (sortByAsc) {
-                queries.push(Query.orderAsc('price'));
-            }
-            if (sortByDesc) {
-                queries.push(Query.orderDesc('price'));
-            }
+            if (sortByAsc) {queries.push(Query.orderAsc('price'));}
+            if (sortByDesc) {queries.push(Query.orderDesc('price'));}
     
             const offset = (page - 1) * productsPerPage;
             queries.push(Query.limit(productsPerPage), Query.offset(offset));
@@ -258,14 +235,14 @@ class UserRefurbishedProduct {
                     categoryQueries.push(Query.equal('isInStock', isInStock));
                 }
                 const response = await this.databases.listDocuments(
-                    conf.appwriteRefurbishProductDatabaseId,
+                    conf.appwriteBlUsersDatabaseId,
                     collectionId,
                     categoryQueries
                 );
-                return response.documents || []; // Ensure an array is returned
+                return response.documents || [];
             };
     
-            const allProducts = await fetchProducts(conf.appwriteRefurbishedModulesCollectionId);
+            const allProducts = await fetchProducts(conf.appwriteBlProductsCollectionId);
             if (!Array.isArray(allProducts)) {
                 throw new TypeError("Expected 'allProducts' to be an array.");
             }
@@ -277,40 +254,10 @@ class UserRefurbishedProduct {
                     products: allProducts
                 };
             }
-    
-            // Scoring and filtering
-            const scoredProducts = allProducts.map(product => {
-                let score = 0;
-    
-                // Check matches in title and description
-                inputTokens.forEach(token => {
-                    if (product.title.toLowerCase().includes(token)) score += 3; // Exact match in title
-                    if (product.description.toLowerCase().includes(token)) score += 2; // Exact match in description
-                    if (product.title.toLowerCase().startsWith(token)) score += 5; // Title starts with token
-                    if (product.description.toLowerCase().startsWith(token)) score += 4; // Description starts with token
-                });
-    
-                return { ...product, score }; // Attach score to each product
-            });
-    
-            // Filter out products with no score (if necessary)
-            const filteredProducts = scoredProducts.filter(product => product.score > 0);
-    
-            // Sort by score in descending order
-            filteredProducts.sort((a, b) => b.score - a.score);
-    
-            // Apply additional sorting by price if needed
-            if (sortByAsc) {
-                filteredProducts.sort((a, b) => a.price - b.price);
-            }
-            if (sortByDesc) {
-                filteredProducts.sort((a, b) => b.price - a.price);
-            }
-    
             return {
                 success: true,
-                products: filteredProducts
-            };
+                    products: allProducts
+                };
     
         } catch (error) {
             console.error('Error fetching user refurbished products:', error);

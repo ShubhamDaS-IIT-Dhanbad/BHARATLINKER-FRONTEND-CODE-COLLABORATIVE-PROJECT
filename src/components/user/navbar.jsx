@@ -23,7 +23,7 @@ const Navbar = ({userData, headerTitle, onBackNavigation }) => {
 
   // Handle search when pressing "Enter"
   const handleSearchKeyPress = (e) => {
-    if (e.key === "Enter" && searchInput.trim()) {
+    if (e.key === "Enter") {
       executeSearch(searchInput);
     }
   };

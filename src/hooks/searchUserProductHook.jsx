@@ -17,7 +17,7 @@ export const useExecuteUserSearch = () => {
         if (loadingMoreProducts || !userData?.phoneNumber) return;
         const searchQuery = inputValue || '';
         const params = {
-            phn: `+91${userData?.phoneNumber}`,
+            phn: `91${userData?.phoneNumber}`,
 
             inputValue: searchQuery,
             page: 1,
@@ -35,7 +35,7 @@ export const useExecuteUserSearch = () => {
         if (!hasMoreProducts || loadingMoreProducts || !userData?.phoneNumber) return;
         const searchQuery = inputValue || '';
         const params = {
-            phn: `+91${userData?.phoneNumber}`,
+            phn: `91${userData?.phoneNumber}`,
 
             inputValue: searchQuery,
             page: currentPage + 1,

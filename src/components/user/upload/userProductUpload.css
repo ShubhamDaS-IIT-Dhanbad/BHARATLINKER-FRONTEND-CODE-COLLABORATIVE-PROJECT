@@ -448,3 +448,10 @@ font-size: 12px;
   gap: 10px;background-color:rgb(12, 131, 31);
   display: flex;color: white;
 }
+
+
+
+.user-upload-count{
+  padding-top: 10px;
+  font-size: 12px;
+}

@@ -91,47 +91,70 @@ const UploadBooksModulesForm = ({ userData }) => {
     setSelectedAddressIndex(index);
   };
 
+
+
+
+
+
+  const MAX_TITLE_LENGTH = 500;
+  const MAX_DESCRIPTION_LENGTH = 2000;
+  const MAX_KEYWORD_LENGTH = 50;
+  const handleInputChange = (e, field, maxLength) => {
+    const value = e.target.value;
+    if (value.length <= maxLength) {
+      setFormData({ ...formData, [field]: value });
+    }
+  };
   return (
     <div className="multi-step-form">
       <ProgressBar steps={steps} currentStep={currentStep} />
 
       <div className="form-container">
-        {currentStep === 1 && (
+      {currentStep === 1 && (
           <div className="step-card">
             <div className="floating-input">
               <input
                 type="text"
                 value={formData.title}
-                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                onChange={(e) => handleInputChange(e, 'title', MAX_TITLE_LENGTH)}
                 placeholder=" "
                 className={formErrors.title ? 'error' : ''}
               />
               <label>Product Title</label>
               {formErrors.title && <span className="error-hint">{formErrors.title}</span>}
+              <span className='user-upload-count'  style={{ color: formData.title.length === MAX_TITLE_LENGTH ? 'red' : 'inherit' }}>
+                {formData.title.length}/{MAX_TITLE_LENGTH}
+              </span>
             </div>
 
             <div className="floating-input textarea">
               <textarea
                 value={formData.description}
-                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                onChange={(e) => handleInputChange(e, 'description', MAX_DESCRIPTION_LENGTH)}
                 placeholder="use # for heading and * for points"
                 rows="4"
                 className={formErrors.description ? 'error' : ''}
               />
               <label>Detailed Description</label>
               {formErrors.description && <span className="error-hint">{formErrors.description}</span>}
+              <span className='user-upload-count' style={{ color: formData.description.length === MAX_DESCRIPTION_LENGTH ? 'red' : 'inherit' }}>
+                {formData.description.length}/{MAX_DESCRIPTION_LENGTH}
+              </span>
             </div>
 
             <div className="floating-input">
               <input
                 type="text"
                 value={formData.keyword}
-                onChange={(e) => setFormData({ ...formData, keyword: e.target.value })}
+                onChange={(e) => handleInputChange(e, 'keyword', MAX_KEYWORD_LENGTH)}
                 placeholder=" "
                 className={formErrors.keyword ? 'error' : ''}
               />
-              <label>Keyword seperated by comma</label>
+              <label>Keyword separated by comma</label>
               {formErrors.keyword && <span className="error-hint">{formErrors.keyword}</span>}
+              <span className='user-upload-count'  style={{ color: formData.keyword.length === MAX_KEYWORD_LENGTH ? 'red' : 'inherit' }}>
+                {formData.keyword.length}/{MAX_KEYWORD_LENGTH}
+              </span>
             </div>
           </div>
         )}
