@@ -93,9 +93,9 @@ const userRefurbishedProductsSlice = createSlice({
       }
     },
     deleteProduct: (state, action) => {
-      const productId = action.payload;
+      const {productId} = action.payload;
       state.refurbishedProducts = state.refurbishedProducts.filter(
-        (product) => product.$id !== productId.id
+        (product) => product.$id !== productId
       );
     },
     updateProduct: (state, action) => {

@@ -1,13 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { FiUploadCloud, FiDollarSign, FiMapPin } from 'react-icons/fi';
-import UserRefurbishedProduct from '../../../appWrite/user/userProduct.js';
 import ProgressBar from '../progressBar.jsx';
 import { Oval } from 'react-loader-spinner';
 import { useDispatch } from 'react-redux';
-import {updateProduct} from '../../../redux/features/user/userAllRefurbishedProductsSlice.jsx'
+import {useNavigate} from 'react-router-dom';
+import UserRefurbishedProduct from '../../../appWrite/user/userProduct.js'
+import { updateProduct,deleteProduct } from '../../../redux/features/user/userAllRefurbishedProductsSlice.jsx'
 
 const UpdateForm = ({ userData, product }) => {
-  const dispatch=useDispatch();
+  const dispatch = useDispatch();
+  const navigate=useNavigate();
+
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
     title: product?.title || '',
@@ -29,6 +32,8 @@ const UpdateForm = ({ userData, product }) => {
     setFiles(product.image);
   }, [product, userData]);
 
+
+  const [isDeleting, setIsDeleting] = useState(false);
   const [files, setFiles] = useState([]);
   const [toDeleteImagesUrls, setToDeleteImagesUrls] = useState([]);
   const [formErrors, setFormErrors] = useState({});
@@ -82,14 +87,14 @@ const UpdateForm = ({ userData, product }) => {
           }
           return acc;
         }, {});
-  
-        const updatedData=await UserRefurbishedProduct.updateUserProduct(
+
+        const updatedData = await UserRefurbishedProduct.updateUserProduct(
           product.$id,
           toDeleteImagesUrls,
           { ...updatedFields },
           files
         );
-        dispatch(updateProduct({productId:product.$id,updatedData}));
+        dispatch(updateProduct({ productId: product.$id, updatedData }));
         setUploadStatus('success');
         setCurrentStep(1);
       } catch (error) {
@@ -100,7 +105,7 @@ const UpdateForm = ({ userData, product }) => {
       }
     }
   };
-  
+
 
 
 
@@ -111,6 +116,19 @@ const UpdateForm = ({ userData, product }) => {
     const value = e.target.value;
     if (value.length <= maxLength) {
       setFormData({ ...formData, [field]: value });
+    }
+  };
+
+
+
+  const handleDelete = async () => {
+    const confirmation = window.confirm("Are you sure you want to cancel this order?");
+    if (confirmation) {
+      setIsDeleting(true);
+      await UserRefurbishedProduct.deleteProduct(product.$id, product.image);
+      dispatch(deleteProduct({productId:product.$id}));
+      setIsDeleting(false);
+      navigate(-1);
     }
   };
   return (
@@ -243,30 +261,40 @@ const UpdateForm = ({ userData, product }) => {
         )}
 
         <div className="form-navigation">
-          {currentStep > 1 && (
+          {currentStep > 1 ? (
             <button className="outline-button" onClick={() => setCurrentStep((prev) => prev - 1)}>
               Back
             </button>
-          )}
+          ) : (<div className="order-detail-cancel" onClick={isDeleting ? null : handleDelete}>
+            {isDeleting ? (
+              <Oval height={20} width={20} color="white" secondaryColor="#b41818" ariaLabel="loading" />
+            ) : (
+              "DELETE ORDER"
+            )}
+          </div>)}
 
           {currentStep < 3 ? (
             <button className="primary-button" onClick={handleNext}>
               Continue
             </button>
           ) : (
-            <button className="primary-button" onClick={handleSubmit} disabled={isUploading}>
-              {isUploading ? (
-                <Oval
-                  height={30}
-                  width={30}
-                  color="green"
-                  secondaryColor="white"
-                  ariaLabel="loading"
-                />
-              ) : (
-                'Update'
-              )}
-            </button>
+            <>
+
+
+              <button className="primary-button" onClick={handleSubmit} disabled={isUploading}>
+                {isUploading ? (
+                  <Oval
+                    height={30}
+                    width={30}
+                    color="green"
+                    secondaryColor="white"
+                    ariaLabel="loading"
+                  />
+                ) : (
+                  'Update'
+                )}
+              </button>
+            </>
           )}
         </div>
       </div>

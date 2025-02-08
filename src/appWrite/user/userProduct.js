@@ -61,6 +61,7 @@ class UserRefurbishedProduct {
         }
     }
     async cleanupUploadedImages(uploadedImages) {
+        console.log(uploadedImages,"jetetet")
         const deletionPromises = uploadedImages.map(url => this.deleteImageFromCloudinary(url));
         await Promise.all(deletionPromises);
         console.log('Successfully cleaned up uploaded images');
@@ -150,16 +151,16 @@ class UserRefurbishedProduct {
         }
     }
     async deleteProduct(productId, imagesToDelete) {
-        try {
+        try {console.log(imagesToDelete)
             imagesToDelete = imagesToDelete.filter(url => url !== null);
-            if (imagesToDelete.length > 0) {
+            if (imagesToDelete.length > 0) {console.log(imagesToDelete)
                 await this.cleanupUploadedImages(imagesToDelete);
                 console.log(`Successfully deleted images: ${imagesToDelete.join(', ')}`);
             }
             const response = await this.databases.deleteDocument(
-                conf.appwriteRefurbishProductDatabaseId,
-                conf.appwriteRefurbishedModulesCollectionId,
-                productId.id
+                conf.appwriteBlUsersDatabaseId,
+                conf.appwriteBlProductsCollectionId,
+                productId
             );
             console.log('Product deleted successfully:', response);
             return { status: "success" };
