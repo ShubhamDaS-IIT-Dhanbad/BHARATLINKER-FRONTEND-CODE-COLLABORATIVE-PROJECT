@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import UploadBooksForm from './userProductUpdateForm.jsx';
-
 import { useNavigate } from 'react-router-dom';
 
 import Navbar from '../navbar.jsx';

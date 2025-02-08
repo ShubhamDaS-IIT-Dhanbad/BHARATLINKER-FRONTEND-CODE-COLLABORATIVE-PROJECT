@@ -25,9 +25,11 @@ const UpdateForm = ({ userData, product }) => {
       keyword: product?.keyword || '',
       phoneNumber: `91${userData?.phoneNumber || ''}`
     });
+    setFiles(product.image);
   }, [product, userData]);
 
   const [files, setFiles] = useState([]);
+  const [toDeleteImagesUrls, setToDeleteImagesUrls] = useState([]);
   const [formErrors, setFormErrors] = useState({});
   const [uploadStatus, setUploadStatus] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
@@ -54,8 +56,7 @@ const UpdateForm = ({ userData, product }) => {
         }
         break;
       case 3:
-        if (!coordinates) {alert("location not available!"); errors.location = 'Location required';}
-        if (files.length < 1){alert("at least 1 image is  required!"); errors.images = 'At least one image required';}
+        if (files.length < 1) { alert("at least 1 image is  required!"); errors.images = 'At least one image required'; }
         break;
       default:
         break;
@@ -74,18 +75,22 @@ const UpdateForm = ({ userData, product }) => {
     if (validateStep(3)) {
       setIsUploading(true);
       try {
-        await UserRefurbishedProduct.uploadProductWithImages({ ...formData, coordinates }, files);
+        // Get only updated fields
+        const updatedFields = Object.keys(formData).reduce((acc, key) => {
+          if (formData[key] !== product[key]) {
+            acc[key] = formData[key];
+          }
+          return acc;
+        }, {});
+  
+        await UserRefurbishedProduct.updateUserRefurbishedProduct(
+          product.$id,
+          toDeleteImagesUrls,
+          { ...updatedFields },
+          files
+        );
+  
         setUploadStatus('success');
-        setFormData({
-          title: '',
-          description: '',
-          price: '',
-          discountedPrice: '',
-          keyword: '',
-          phoneNumber: `91${userData.phoneNumber}`
-        });
-        setFiles([]);
-        setCoordinates();
         setCurrentStep(1);
       } catch (error) {
         setUploadStatus('error');
@@ -95,7 +100,8 @@ const UpdateForm = ({ userData, product }) => {
       }
     }
   };
- 
+  
+
 
 
   const MAX_TITLE_LENGTH = 500;
@@ -112,7 +118,7 @@ const UpdateForm = ({ userData, product }) => {
       <ProgressBar steps={steps} currentStep={currentStep} />
 
       <div className="form-container">
-      {currentStep === 1 && (
+        {currentStep === 1 && (
           <div className="step-card">
             <div className="floating-input">
               <input
@@ -124,7 +130,7 @@ const UpdateForm = ({ userData, product }) => {
               />
               <label>Product Title</label>
               {formErrors.title && <span className="error-hint">{formErrors.title}</span>}
-              <span className='user-upload-count'  style={{ color: formData.title.length === MAX_TITLE_LENGTH ? 'red' : 'inherit' }}>
+              <span className='user-upload-count' style={{ color: formData.title.length === MAX_TITLE_LENGTH ? 'red' : 'inherit' }}>
                 {formData.title.length}/{MAX_TITLE_LENGTH}
               </span>
             </div>
@@ -154,7 +160,7 @@ const UpdateForm = ({ userData, product }) => {
               />
               <label>Keyword separated by comma</label>
               {formErrors.keyword && <span className="error-hint">{formErrors.keyword}</span>}
-              <span className='user-upload-count'  style={{ color: formData.keyword.length === MAX_KEYWORD_LENGTH ? 'red' : 'inherit' }}>
+              <span className='user-upload-count' style={{ color: formData.keyword.length === MAX_KEYWORD_LENGTH ? 'red' : 'inherit' }}>
                 {formData.keyword.length}/{MAX_KEYWORD_LENGTH}
               </span>
             </div>
@@ -213,22 +219,26 @@ const UpdateForm = ({ userData, product }) => {
             </div>
 
             <div className="preview-grid">
-                {files.map((file, index) => (
+              {files.map((file, index) => {
+                const imageUrl = file instanceof File ? URL.createObjectURL(file) : file;
+                return (
                   <div key={index} className="image-preview">
-                    <img src={URL.createObjectURL(file)} alt={`Preview ${index}`} />
+                    <img src={imageUrl} alt={`Preview ${index}`} />
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
+                        if (typeof file === "string" && file.startsWith("https://res.cloudinary.com")) {
+                          setToDeleteImagesUrls((prev) => [...prev, file]);
+                        }
                         setFiles(files.filter((_, i) => i !== index));
                       }}
                     >
                       ×
                     </button>
                   </div>
-                ))}
-              </div>
-
-
+                );
+              })}
+            </div>
           </div>
         )}
 
@@ -246,15 +256,15 @@ const UpdateForm = ({ userData, product }) => {
           ) : (
             <button className="primary-button" onClick={handleSubmit} disabled={isUploading}>
               {isUploading ? (
-               <Oval
-               height={30}
-               width={30}
-               color="green"
-               secondaryColor="white"
-               ariaLabel="loading"
-           />
+                <Oval
+                  height={30}
+                  width={30}
+                  color="green"
+                  secondaryColor="white"
+                  ariaLabel="loading"
+                />
               ) : (
-                'Publish Listing'
+                'Update'
               )}
             </button>
           )}
@@ -265,12 +275,12 @@ const UpdateForm = ({ userData, product }) => {
         <div className={`status-toast ${uploadStatus}`}>
           {uploadStatus === 'success' ? (
             <>
-              <span>🎉 Listing published successfully!</span>
+              <span>🎉 updated successfully!</span>
               <button onClick={() => setUploadStatus(null)}>Ok</button>
             </>
           ) : (
             <>
-              <span>❌ Upload failed. Please try again.</span>
+              <span>❌ Update failed. Please try again.</span>
               <button onClick={() => setUploadStatus(null)}>Dismiss</button>
             </>
           )}

@@ -117,50 +117,54 @@ class UserRefurbishedProduct {
     /*imp*/
     async updateUserRefurbishedProduct(productId, toDeleteImagesUrls, updatedData, newFiles = []) {
         let uploadedImages = [];
-        let allImageUrls = updatedData.images || [];
+        let allImageUrls = updatedData.images ? [...updatedData.images] : [];
+    
         try {
+            // Remove specified images
             if (toDeleteImagesUrls.length > 0) {
                 await this.cleanupUploadedImages(toDeleteImagesUrls);
+                allImageUrls = allImageUrls.filter(url => !toDeleteImagesUrls.includes(url));
             }
-            const validUrls = newFiles.filter(url => url !== null && typeof url === 'string');
+    
+            // Separate URLs and files
+            const validUrls = newFiles.filter(url => typeof url === 'string' && url !== null);
             const filesToUpload = newFiles.filter(file => typeof file === 'object');
-
+    
+            // Upload new images if any
             if (filesToUpload.length > 0) {
                 uploadedImages = await this.uploadImagesToCloudinary(filesToUpload);
                 const newImageUrls = uploadedImages.map(image => image.secure_url);
-                allImageUrls = [...validUrls, ...allImageUrls, ...newImageUrls];
+                allImageUrls = [...allImageUrls, ...validUrls, ...newImageUrls];
             } else {
-                allImageUrls = [...validUrls, ...allImageUrls];
+                allImageUrls = [...allImageUrls, ...validUrls];
             }
-            const updatedProductData = {
-                ...updatedData,
-                language: updatedData.language.toLowerCase(),
-                subject: updatedData.subject.toLowerCase(),
-                title: updatedData.title.toLowerCase(),
-                description: updatedData.description.toLowerCase(),
-                price: Number(updatedData.price),
-                discountedPrice: Number(updatedData.discountedPrice),
-                category: updatedData?.category?.toLowerCase() || '',
-                brand: updatedData?.brand?.toLowerCase() || '',
-                keywords: updatedData.keywords.split(','),
-                images: allImageUrls,
-                lat:updatedData.lat,
-                long:updatedData.long
-            };
+    
+            // Update image URLs in updatedData
+            updatedData.image = allImageUrls;
+    
+            // Ensure productId is correctly passed
+            const productIdValue = typeof productId === 'object' && productId.id ? productId.id : productId;
+    console.log(updatedData,"d")
+            // Update document
             const updatedDocument = await this.databases.updateDocument(
-                conf.appwriteRefurbishProductDatabaseId,
-                conf.appwriteRefurbishedModulesCollectionId,
-                productId.id,
-                updatedProductData
+                conf.appwriteBlUsersDatabaseId,
+                conf.appwriteBlProductsCollectionId,
+                productIdValue,
+                updatedData
             );
-
+    
             return updatedDocument;
         } catch (error) {
             console.error('Error updating product:', error);
-            if (uploadedImages.length > 0) await this.cleanupUploadedImages(uploadedImages);
+            if (uploadedImages.length > 0) {
+                const uploadedUrls = uploadedImages.map(image => image.secure_url);
+                await this.cleanupUploadedImages(uploadedUrls);
+            }
+    
             throw error;
         }
     }
+    
 
     /*imp*/
     async deleteProduct(productId, imagesToDelete) {
