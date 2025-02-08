@@ -97,12 +97,7 @@
       height: 100vh;
     }
 
-    #show-root-loader-img {
-      width: 60vw;
-      max-width: 300px;
-      height: auto;
-      margin: 0 auto;
-    }
+    
   </style>
 </head>
 
@@ -110,8 +105,14 @@
   <!-- Root Element for React -->
   <div id="root">
     <!-- Loading Spinner -->
-    <div id="show-root-loader-img-div">
-      <img id="show-root-loader-img" src="./src/assets/bl.svg" alt="Bharat Linker Logo" loading="eager" />
+    <div id="show-root-loader-img-div"
+      style="display: flex;
+      justify-content: center;
+      align-items: center;margin: 0 auto;
+      height: 100vh;"
+    >
+      <img id="show-root-loader-img" 
+      style="width: 60vw; max-width: 300px; height: auto; margin: 0 auto;" src="./src/assets/bl.svg" alt="Bharat Linker Logo" loading="eager" />
     </div>
   </div>
 
