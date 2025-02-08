@@ -86,19 +86,7 @@
   <link rel="preload" as="image" href="./src/assets/bl.svg" />
 
   <!-- Stylesheet -->
-  <style>
-    #root{
-      padding: 0;margin: 0;
-    }
-    #show-root-loader-img-div {
-      display: flex;
-      justify-content: center;
-      align-items: center;margin: 0 auto;
-      height: 100vh;
-    }
-
-    
-  </style>
+ 
 </head>
 
 <body>
@@ -106,16 +94,11 @@
   <div id="root">
     <!-- Loading Spinner -->
     <div id="show-root-loader-img-div"
-      style="display: flex;
-      justify-content: center;
-      align-items: center;margin: 0 auto;
-      height: 100vh;"
-    >
-      <img id="show-root-loader-img" 
-      style="width: 60vw; max-width: 300px; height: auto; margin: 0 auto;" src="./src/assets/bl.svg" alt="Bharat Linker Logo" loading="eager" />
+      style="display: flex; justify-content: center; align-items: center; height: 100vh;">
+      <img id="show-root-loader-img" src="./src/assets/bl.svg" alt="Bharat Linker Logo"
+        style="width: 60vw; max-width: 300px; height: auto;" loading="eager">
     </div>
   </div>
-
   <!-- Scripts -->
   <script type="module" src="./src/main.jsx"></script>
 
