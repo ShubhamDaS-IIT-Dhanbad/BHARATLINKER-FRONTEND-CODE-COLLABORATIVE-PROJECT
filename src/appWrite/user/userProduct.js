@@ -114,23 +114,16 @@ class UserRefurbishedProduct {
             throw error;
         }
     }
-    /*imp*/
     async updateUserProduct(productId, toDeleteImagesUrls, updatedData, newFiles = []) {
         let uploadedImages = [];
         let allImageUrls = updatedData.images ? [...updatedData.images] : [];
-    
         try {
-            // Remove specified images
             if (toDeleteImagesUrls.length > 0) {
                 await this.cleanupUploadedImages(toDeleteImagesUrls);
                 allImageUrls = allImageUrls.filter(url => !toDeleteImagesUrls.includes(url));
             }
-    
-            // Separate URLs and files
             const validUrls = newFiles.filter(url => typeof url === 'string' && url !== null);
             const filesToUpload = newFiles.filter(file => typeof file === 'object');
-    
-            // Upload new images if any
             if (filesToUpload.length > 0) {
                 uploadedImages = await this.uploadImagesToCloudinary(filesToUpload);
                 const newImageUrls = uploadedImages.map(image => image.secure_url);
@@ -146,7 +139,6 @@ class UserRefurbishedProduct {
                 productIdValue,
                 updatedData
             );
-    
             return updatedDocument;
         } catch (error) {
             console.error('Error updating product:', error);
@@ -154,13 +146,9 @@ class UserRefurbishedProduct {
                 const uploadedUrls = uploadedImages.map(image => image.secure_url);
                 await this.cleanupUploadedImages(uploadedUrls);
             }
-    
             throw error;
         }
     }
-    
-
-    /*imp*/
     async deleteProduct(productId, imagesToDelete) {
         try {
             imagesToDelete = imagesToDelete.filter(url => url !== null);
@@ -244,8 +232,6 @@ class UserRefurbishedProduct {
             if (!Array.isArray(allProducts)) {
                 throw new TypeError("Expected 'allProducts' to be an array.");
             }
-    
-            // Skip scoring when inputValue is empty
             if (inputValue.length === 0) {
                 return {
                     success: true,

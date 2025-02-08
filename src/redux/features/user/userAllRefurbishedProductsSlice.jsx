@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import userRefurbishedProductsService from '../../../appWrite/UserRefurbishedProductService/userRefurbishedProduct.js';
+import userRefurbishedProductsService from '../../../appWrite/user/userProduct.js';
 
 // Async thunk for fetching refurbished products
 export const fetchUserRefurbishedProducts = createAsyncThunk(

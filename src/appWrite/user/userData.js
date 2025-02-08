@@ -26,10 +26,10 @@ async function fetchUserByPhoneNumber(phoneNumber) {
             conf.appwriteBlUsersDatabaseId,
             conf.appwriteBlUsersCollectionId,
             queries
-        );console.log(result);
-
+        );
         if (result.documents.length === 0) {
             const newUser = {
+                total:0,
                 phoneNumber: phoneNumber,
                 address: []
             };
