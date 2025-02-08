@@ -2,15 +2,15 @@ import React, { useEffect} from 'react';
 import { useSelector } from 'react-redux';
 
 import { Helmet } from 'react-helmet';
-import Navbar from '../navbar.jsx';
+import Navbar from './navbar.jsx';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { Oval } from 'react-loader-spinner';
 
-import { useExecuteUserSearch } from '../../../hooks/searchUserProductHook.jsx';
-import ProductList from '../../productList.jsx';
+import { useExecuteUserSearch } from '../../hooks/searchUserProductHook.jsx';
+import ProductList from '../productList.jsx';
 
 
-import '../style/userProductPageMain.css';
+import './style/userProductPageMain.css';
 
 function UserRefurbishedProduct({userData}) {
     const { executeSearch, onLoadMore } = useExecuteUserSearch();
