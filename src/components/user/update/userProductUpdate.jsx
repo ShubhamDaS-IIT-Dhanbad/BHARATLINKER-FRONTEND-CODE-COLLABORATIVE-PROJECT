@@ -5,7 +5,7 @@ import UploadBooksForm from './userProductUpdateForm.jsx';
 import { useNavigate } from 'react-router-dom';
 
 import Navbar from '../navbar.jsx';
-import './userProductUpdate.css';
+import '../style/userProductUpload.css';
 
 const UploadProduct = ({ userData }) => {
     const navigate=useNavigate();

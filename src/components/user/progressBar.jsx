@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
+import './style/progressBar.css'
 const ProgressBar = ({ steps, currentStep }) => {
   return (
     <div className="progress-bar">

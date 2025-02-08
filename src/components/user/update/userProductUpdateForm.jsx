@@ -4,7 +4,6 @@ import UserRefurbishedProduct from '../../../appWrite/user/userProduct.js';
 import ProgressBar from '../progressBar.jsx';
 import { Oval } from 'react-loader-spinner';
 import { useDispatch } from 'react-redux';
-import '../upload/userProductUpload.css';
 import {updateProduct} from '../../../redux/features/user/userAllRefurbishedProductsSlice.jsx'
 
 const UpdateForm = ({ userData, product }) => {
