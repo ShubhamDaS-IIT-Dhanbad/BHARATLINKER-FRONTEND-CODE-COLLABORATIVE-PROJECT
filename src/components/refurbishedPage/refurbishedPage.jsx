@@ -1,6 +1,4 @@
-import React, { useState, useEffect } from 'react';
-import { LiaSortSolid } from 'react-icons/lia';
-import { MdFilterList } from 'react-icons/md';
+import React, { useState, useEffect ,useCallback} from 'react';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useSelector } from 'react-redux';
 
@@ -29,66 +27,64 @@ const RefurbishedPage = () => {
     sortByAsc,
     sortByDesc
   } = useSelector((state) => state.refurbishedproducts);
-  const selectedBrands = useSelector(
-    (state) => state.refurbishedproductsfiltersection.selectedRefurbishedBrands
-  );
-  const selectedCategories = useSelector(
-    (state) => state.refurbishedproductsfiltersection.selectedRefurbishedCategories
-  );
-
-  useEffect(() => {
-    if (refurbishedProducts.length === 0) {
+  const selectedBrands = useSelector((state) => state.refurbishedproductsfiltersection.selectedRefurbishedBrands);
+  const selectedCategories = useSelector((state) => state.refurbishedproductsfiltersection.selectedRefurbishedCategories);
+  const handleInitialSearch = useCallback(() => {
+    if (refurbishedProducts.length === 0 && !loading) {
       executeSearchRefurbished();
     }
-  }, [updated, selectedBrands, selectedCategories]);
+  }, [refurbishedProducts.length, updated]);
+  useEffect(() => {
+    handleInitialSearch();
+  }, [refurbishedProducts.length, updated]);
 
   return (
     <>
-          <div id="refurbishedPage-container-top">
-            <RefurbishedNavbar headerTitle={"REFURBISHED PAGE"} />
-          </div>
+      <div id="refurbishedPage-container-top">
+        <RefurbishedNavbar headerTitle={"REFURBISHED PAGE"} />
+      </div>
 
-          {(loading) ? (
-            <div className="fallback-loading">
+      {(loading) ? (
+        <div className="fallback-loading">
+          <Oval height={30} width={30} color="green" secondaryColor="white" ariaLabel="loading" />
+        </div>
+      ) : (
+        <InfiniteScroll
+          dataLength={refurbishedProducts.length}
+          next={onLoadMoreRefurbished}
+          hasMore={hasMoreProducts}
+          loader={loadingMoreProducts && (
+            <div id="search-shop-load-more-shop-loader">
               <Oval height={30} width={30} color="green" secondaryColor="white" ariaLabel="loading" />
             </div>
-          ) : (
-            <InfiniteScroll
-              dataLength={refurbishedProducts.length}
-              next={onLoadMoreRefurbished}
-              hasMore={hasMoreProducts}
-              loader={loadingMoreProducts && (
-                <div id="search-shop-load-more-shop-loader">
-                  <Oval height={30} width={30} color="green" secondaryColor="white" ariaLabel="loading" />
-                </div>
-              )}
-            >
-              <RefurbishedProductList
-                products={refurbishedProducts}
-                loading={loading}
-                sortByAsc={sortByAsc}
-                sortByDesc={sortByDesc}
-              />
-            </InfiniteScroll>)
-          }
-
-          {showSortBy && (
-            <RefurbishedProductSortBySection
-              showSortBy={showSortBy}
-              setShowSortBy={setShowSortBy}
-              sortByAsc={sortByAsc}
-              sortByDesc={sortByDesc}
-            />
           )}
+        >
+          <RefurbishedProductList
+            products={refurbishedProducts}
+            loading={loading}
+            sortByAsc={sortByAsc}
+            sortByDesc={sortByDesc}
+          />
+        </InfiniteScroll>)
+      }
 
-          {showFilterBy && (
-            <RefurbishedProductFilterBySection
-              showFilterBy={showFilterBy}
-              setShowFilterBy={setShowFilterBy}
-            />
-          )}
+      {showSortBy && (
+        <RefurbishedProductSortBySection
+          showSortBy={showSortBy}
+          setShowSortBy={setShowSortBy}
+          sortByAsc={sortByAsc}
+          sortByDesc={sortByDesc}
+        />
+      )}
 
-          {/* <div id="refurbishedProductPage-footer">
+      {showFilterBy && (
+        <RefurbishedProductFilterBySection
+          showFilterBy={showFilterBy}
+          setShowFilterBy={setShowFilterBy}
+        />
+      )}
+
+      {/* <div id="refurbishedProductPage-footer">
             <div
               id="refurbishedProductPage-footer-sortby"
               onClick={() => setShowSortBy(true)}
@@ -111,7 +107,7 @@ const RefurbishedPage = () => {
             </div>
           </div> */}
 
-        
+
     </>);
 };
 

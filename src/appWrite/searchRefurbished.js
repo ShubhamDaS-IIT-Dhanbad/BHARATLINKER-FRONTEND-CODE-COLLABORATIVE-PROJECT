@@ -9,7 +9,7 @@ class SearchRefurbishedProductService {
     constructor() {
         this.client
             .setEndpoint(conf.appwriteUrl)
-            .setProject(conf.appwriteRefurbishProductProjectId);
+            .setProject(conf.appwriteBlUsersProjectId);
 
         this.databases = new Databases(this.client);
     }
@@ -29,7 +29,7 @@ class SearchRefurbishedProductService {
             const queries = [];
             // Add search query if inputValue is provided
             if (inputValue.length > 0) {
-                queries.push(Query.search("keywords", inputTokens));
+                queries.push(Query.search("keyword", inputTokens));
             }
     
             // Add sorting queries
@@ -42,10 +42,10 @@ class SearchRefurbishedProductService {
                 const bounds = getBoundsOfDistance(center, radius * 1000);
     
                 queries.push(
-                    Query.greaterThanEqual("lat", bounds[0].latitude),
-                    Query.lessThanEqual("lat", bounds[1].latitude),
-                    Query.greaterThanEqual("long", bounds[0].longitude),
-                    Query.lessThanEqual("long", bounds[1].longitude)
+                    Query.greaterThanEqual("latitude", bounds[0].latitude),
+                    Query.lessThanEqual("latitude", bounds[1].latitude),
+                    Query.greaterThanEqual("longitude", bounds[0].longitude),
+                    Query.lessThanEqual("longitude", bounds[1].longitude)
                 );
             }
     
@@ -54,13 +54,13 @@ class SearchRefurbishedProductService {
             queries.push(Query.limit(productsPerPage), Query.offset(offset));
     
             // Specify fields to fetch using Query.select
-            queries.push(Query.select(["$id","title", "description", "price", "discountedPrice","images"
+            queries.push(Query.select(["$id","title", "description", "price", "discountedPrice","image"
             ]));
     
             // Fetch products from the database
             const { documents: allProducts = [] } = await this.databases.listDocuments(
-                conf.appwriteRefurbishProductDatabaseId,
-                conf.appwriteRefurbishedModulesCollectionId,
+                conf.appwriteBlUsersDatabaseId,
+                conf.appwriteBlProductsCollectionId,
                 queries
             );
     
@@ -99,10 +99,10 @@ class SearchRefurbishedProductService {
         try {
             const queries = [];
             queries.push(Query.equal("$id",productId));
-            queries.push(Query.select(["$id","title", "description", "price", "discountedPrice","price","images"]));
+            queries.push(Query.select(["$id","title", "description", "price", "discountedPrice","price","image"]));
             const { documents: product = [] } = await this.databases.listDocuments(
-                conf.appwriteRefurbishProductDatabaseId,
-                conf.appwriteRefurbishedModulesCollectionId,
+                conf.appwriteBlUsersDatabaseId,
+                conf.appwriteBlProductsCollectionId,
                 queries
             );
             return product[0];
