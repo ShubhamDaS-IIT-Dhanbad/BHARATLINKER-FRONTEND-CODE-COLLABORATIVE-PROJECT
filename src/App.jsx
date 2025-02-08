@@ -20,7 +20,7 @@ const ShopProducts = lazy(() => import('./components/shopProducts/shopProducts.j
 const User = lazy(() => import('./components/user/userHome.jsx'));
 const UserProfile = lazy(() => import('./components/user/userProfile.jsx'));
 const UserProductPageMain = lazy(() => import('./components/user/productPage/userProductPageMain.jsx'));
-const RefurbishedBooksUploadUser = lazy(() => import('./components/user/upload/userProductUpload.jsx'));
+const UserUpload= lazy(() => import('./components/user/upload/userProductUpload.jsx'));
 const UserUpdateBookModule = lazy(() => import('./components/user/userProductUpdate/userProductUpdate.jsx'));
 const UserNotification = lazy(() => import('./components/user/notification/userNotification.jsx'));
 const UserOrder = lazy(() => import('./components/user/order/order.jsx'));
@@ -282,7 +282,7 @@ const RoutesWithConditionalHeader = React.memo(() => {
                 <title>Upload Products - Bharat Linker</title>
                 <meta name="description" content="Upload your products for sale on Bharat Linker, including refurbished items." />
               </Helmet>
-              <RefurbishedBooksUploadUser />
+              <UserUpload/>
             </PrivateRoute>
           }
         />
