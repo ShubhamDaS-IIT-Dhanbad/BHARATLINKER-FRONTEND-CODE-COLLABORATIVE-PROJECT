@@ -34,11 +34,11 @@ const MyCartPage = ({ userData }) => {
     const [deliveryAddress, setDeliveryAddress] = useState();
 
     useEffect(() => {
-        if (cart?.length === 0 && userData?.phone) {
-            dispatch(fetchUserCart(userData.phone));
+        if (cart?.length === 0 && userData?.phoneNumber) {
+            dispatch(fetchUserCart(userData.phoneNumber));
         }
         window.scrollTo(0, 0);
-    }, [dispatch, userData?.phone]);
+    }, [dispatch, userData?.phoneNumber]);
 
     useEffect(() => {
         const checkShopStatus = async () => {
@@ -65,7 +65,7 @@ const MyCartPage = ({ userData }) => {
         } catch (error) {
             console.error("Cart update failed:", error);
         }
-    }, [dispatch, userData?.phone]);
+    }, [dispatch, userData?.phoneNumber]);
 
     if (showLocationTab) return (
         <LocationTab
@@ -101,6 +101,7 @@ const MyCartPage = ({ userData }) => {
     return (
         <>
             <Navbar
+                userData={userData} 
                 headerTitle="MY CART"
                 onBackNavigation={() => navigate(-1)}
             />
@@ -176,7 +177,7 @@ const MyCartPage = ({ userData }) => {
 
 MyCartPage.propTypes = {
     userData: PropTypes.shape({
-        $id: PropTypes.string.isRequired,
+        userId: PropTypes.string.isRequired,
         phoneNumber: PropTypes.string.isRequired,
         name: PropTypes.string
     }).isRequired

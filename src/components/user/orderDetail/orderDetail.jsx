@@ -131,7 +131,6 @@ const OrderDetails = () => {
                             )}
                         </div>
                     )}
-                    {console.log(order, "shubham")}
                     <div className="order-info">
                         <div className="order-info-c">
                             <div className="order-info-h">ORDERED DATE</div>

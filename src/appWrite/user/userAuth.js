@@ -21,7 +21,7 @@ export const verifyOTP = async (userId, otpCode, phoneNumber) => {
     const session = await account.createSession(userId, otpCode);
     let userData = await fetchUserByPhoneNumber(phoneNumber);
     if (userData.total == 0) {
-      databases.createDocument(
+      await databases.createDocument(
         conf.appwriteBlUsersDatabaseId,
         conf.appwriteBlUsersCollectionId,
         ID.unique(),

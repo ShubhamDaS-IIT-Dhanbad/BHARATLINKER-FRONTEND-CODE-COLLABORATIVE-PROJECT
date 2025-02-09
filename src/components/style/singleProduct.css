@@ -128,15 +128,6 @@
 
 
 
-#product-details-price-button {
-    margin: 10px 10px 0px 10px;
-    padding: 0px 0px 20px 0px;
-    display: flex; border-bottom: 0.1px solid rgba(183, 183, 183, 0.475);
-    align-items: center;
-    justify-content: space-between;
-    font-weight: 500;
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-}
 
 #searchProductDetails-price-button-inner {
     display: flex;flex-wrap: wrap;
@@ -205,8 +196,17 @@ margin-left: 5px;
 
 
 
+#product-details-price-button {
+    margin: 10px 10px 0px 10px;
+    padding: 0px 0px 20px 0px;
+    display: flex; border-bottom: 0.1px solid rgba(183, 183, 183, 0.475);
+    align-items: center;
+    justify-content: space-between;
+    font-weight: 500;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
 
-#product-details-price-outofstock {
+.product-details-price-outofstock {
     min-width: 110px;max-width: 110px;
     height: 40px;
     border: 1px solid rgb(208, 67, 67);
@@ -220,7 +220,7 @@ margin-left: 5px;
     font-size: 19px;
 }
 
-#product-details-price-instock {
+.product-details-price-instock {
     min-width: 110px;max-width: 110px;
     height: 40px;
     border: 1px solid rgb(67, 208, 123);

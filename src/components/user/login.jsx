@@ -82,8 +82,6 @@ function SignUpForm() {
         }).filter(Boolean)
         : [];
 
-
-
       Cookies.set("BharatLinkerUserData", JSON.stringify({
         userId: userData.$id,
         uId: session.userId,

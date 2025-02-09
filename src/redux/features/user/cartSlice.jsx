@@ -9,7 +9,6 @@ import throttle from "lodash.throttle";
 export const fetchUserCart = createAsyncThunk(
     "usercart/fetchUserCart",
     async (userId, { rejectWithValue }) => {
-        console.log(userId)
         try {
             const response = await getCartItems(userId);
             return response;
@@ -127,6 +126,7 @@ const cartSlice = createSlice({
         cart: [],
         totalQuantity: 0,
         totalPrice: 0,
+        isCartFetched:false,
         cartLoading: false,
         orderSuccess: false,
         orderLoading: false,
@@ -167,6 +167,7 @@ const cartSlice = createSlice({
                 state.cart = action.payload;
                 state.totalQuantity = state.cart.reduce((total, item) => total + item.quantity, 0);
                 state.totalPrice = state.cart.reduce((total, item) => total + item.discountedPrice * item.quantity, 0);
+                state.isCartFetched=true;
             })
             .addCase(fetchUserCart.rejected, (state, action) => {
                 state.cartLoading = false;

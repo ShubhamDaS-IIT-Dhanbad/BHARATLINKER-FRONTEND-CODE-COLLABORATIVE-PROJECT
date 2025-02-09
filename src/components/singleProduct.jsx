@@ -6,6 +6,7 @@ import { FaCaretRight, FaPlus, FaMinus } from "react-icons/fa";
 import { RiShareForwardLine } from "react-icons/ri";
 import { debounce } from "lodash";
 
+import  Cookies from 'js-cookie';
 import SingleProductSearchBar from "./singlePageSearchbar.jsx";
 import AddToCartTab from "./viewCartTab/viewCart.jsx";
 
@@ -21,13 +22,14 @@ import "./style/singleProduct.css";
 const fallbackImage = "http://res.cloudinary.com/dthelgixr/image/upload/v1727870088/hd7kcjuz8jfjajnzmqkp.webp";
 const MAX_QUANTITY = 5;
 
-const ProductDetails = ({ userData }) => {
+const ProductDetails = () => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const { productId } = useParams();
 
+    const [userData,setUserData]=useState();
     const { products } = useSelector((state) => state.searchproducts);
-    const { cart, totalQuantity, totalPrice } = useSelector((state) => state.userCart);
+    const { cart, totalQuantity, totalPrice ,isCartFetched } = useSelector((state) => state.userCart);
 
     const [loading, setLoading] = useState(true);
     const [productDetail, setProductDetails] = useState(null);
@@ -55,9 +57,12 @@ const ProductDetails = ({ userData }) => {
                 const product =
                     products.find((product) => product.$id === productId) ||
                     (await searchProductService.getProductById(productId));
+    
                 if (product) {
                     setProductDetails(product);
-                    setSelectedImage(product?.images.length > 0 ? product?.images[0] || fallbackImage : fallbackImage);
+                    setSelectedImage(
+                        product?.images?.length > 0 ? product.images[0] || fallbackImage : fallbackImage
+                    );
                     setDescriptionSections(parseDescription(product.description));
                 } else {
                     navigate("/404");
@@ -69,12 +74,21 @@ const ProductDetails = ({ userData }) => {
                 setLoading(false);
             }
         };
+        const userData = Cookies.get("BharatLinkerUserData");
+        if (userData) {
+            try {
+                setUserData(JSON.parse(userData));
+            } catch (error) {
+                console.error("Error parsing user data:", error);
+            }
+        }
+    
         fetchDetails();
-    }, []);
+    },[]);
 
     useEffect(() => {
-        if (cart.length === 0 && userData?.$id) {
-            const userId = userData?.$id;
+        if (cart.length === 0 && userData?.userId && !isCartFetched) {
+            const userId = userData?.userId;
             dispatch(fetchUserCart(userId));
         }
     }, [userData]);
@@ -96,13 +110,13 @@ const ProductDetails = ({ userData }) => {
             alert("Sharing not supported on this browser.");
         }
     };
-
-
     const handleAddToCart = async () => {
-        if (!userData?.phoneNumber) return navigate("/login");
+        console.log(userData)
+        if (!userData.phoneNumber) return navigate("/login");
         if (!productDetail.shopId) return alert("SHOP DOES NOT EXIST");
+        console.log(productDetail)
         await dispatch(addToUserCart({
-            userId: userData.$id,
+            userId: userData.userId,
             productId: productDetail.$id,
             shopId: productDetail.shopId,
             title: productDetail.title.slice(0,40),
@@ -110,9 +124,9 @@ const ProductDetails = ({ userData }) => {
             discountedPrice: productDetail.discountedPrice || productDetail.price,
             quantity: 1,
             productImage: productDetail?.images[0],
-            phoneNumber: userData.phoneNumber,
+            phoneNumber: `91${userData.phoneNumber}`,
             shopEmail: productDetail.shops.email,
-            customerName: userData.name
+            customerName: userData.name || "user"
         }));
     };
 
@@ -124,6 +138,7 @@ const ProductDetails = ({ userData }) => {
     );
 
     const handleUpdateCart = (increment) => {
+        console.log(userData)
         if (!userData?.phoneNumber) return navigate("/login");
         if (!cartItem) return;
 
@@ -203,7 +218,8 @@ const ProductDetails = ({ userData }) => {
                                     MRP <span id="productDetails-price2">₹{productDetail?.price}</span>
                                 </p>
                             </div>
-                            <div id={`product-details-price-${productDetail?.isInStock ? "instock" : "outofstock"}`}>
+                            
+                            <div className={productDetail.isInStock ? "product-details-price-instock" : "product-details-price-outofstock"}>
                                 {cartQuantity === 0 ? (
                                     <div onClick={handleAddToCart}>add to cart</div>
                                 ) : (
