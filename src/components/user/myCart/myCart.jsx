@@ -34,11 +34,11 @@ const MyCartPage = ({ userData }) => {
     const [deliveryAddress, setDeliveryAddress] = useState();
 
     useEffect(() => {
-        if (cart?.length === 0 && userData?.phoneNumber) {
-            dispatch(fetchUserCart(userData.phoneNumber));
+        if (cart?.length === 0 && userData?.userId) {
+            dispatch(fetchUserCart(userData.userId));
         }
         window.scrollTo(0, 0);
-    }, [dispatch, userData?.phoneNumber]);
+    }, [dispatch, userData?.userId]);
 
     useEffect(() => {
         const checkShopStatus = async () => {
