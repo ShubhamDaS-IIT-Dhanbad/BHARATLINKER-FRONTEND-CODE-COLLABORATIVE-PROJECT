@@ -1,4 +1,4 @@
-import React, { Fragment, useEffect, useState, useMemo, useCallback  } from "react";
+import React, { Fragment, useEffect, useState, useMemo, useCallback } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Oval } from "react-loader-spinner";
@@ -6,7 +6,7 @@ import { FaCaretRight, FaPlus, FaMinus } from "react-icons/fa";
 import { RiShareForwardLine } from "react-icons/ri";
 import { debounce } from "lodash";
 
-import  Cookies from 'js-cookie';
+import Cookies from 'js-cookie';
 import SingleProductSearchBar from "./singlePageSearchbar.jsx";
 import AddToCartTab from "./viewCartTab/viewCart.jsx";
 
@@ -27,9 +27,9 @@ const ProductDetails = () => {
     const dispatch = useDispatch();
     const { productId } = useParams();
 
-    const [userData,setUserData]=useState();
+    const [userData, setUserData] = useState();
     const { products } = useSelector((state) => state.searchproducts);
-    const { cart, totalQuantity, totalPrice ,isCartFetched } = useSelector((state) => state.userCart);
+    const { cart, totalQuantity, totalPrice, isCartFetched } = useSelector((state) => state.userCart);
 
     const [loading, setLoading] = useState(true);
     const [productDetail, setProductDetails] = useState(null);
@@ -57,7 +57,7 @@ const ProductDetails = () => {
                 const product =
                     products.find((product) => product.$id === productId) ||
                     (await searchProductService.getProductById(productId));
-    
+
                 if (product) {
                     setProductDetails(product);
                     setSelectedImage(
@@ -82,9 +82,9 @@ const ProductDetails = () => {
                 console.error("Error parsing user data:", error);
             }
         }
-    
+
         fetchDetails();
-    },[]);
+    }, []);
 
     useEffect(() => {
         if (cart.length === 0 && userData?.userId && !isCartFetched) {
@@ -114,12 +114,11 @@ const ProductDetails = () => {
         console.log(userData)
         if (!userData.phoneNumber) return navigate("/login");
         if (!productDetail.shopId) return alert("SHOP DOES NOT EXIST");
-        console.log(productDetail)
-        await dispatch(addToUserCart({
+        dispatch(addToUserCart({
             userId: userData.userId,
             productId: productDetail.$id,
             shopId: productDetail.shopId,
-            title: productDetail.title.slice(0,40),
+            title: productDetail.title.slice(0, 40),
             price: productDetail.price,
             discountedPrice: productDetail.discountedPrice || productDetail.price,
             quantity: 1,
@@ -132,19 +131,18 @@ const ProductDetails = () => {
 
     const debouncedUpdateCart = useCallback(
         debounce(async (cartId, updatedCart) => {
-            await dispatch(updateCartStateAsync(cartId, updatedCart));
+            dispatch(updateCartStateAsync(cartId, updatedCart));
         }, 500),
         [dispatch]
     );
 
     const handleUpdateCart = (increment) => {
-        console.log(userData)
         if (!userData?.phoneNumber) return navigate("/login");
         if (!cartItem) return;
 
         const cartId = cartItem.$id;
         const newQuantity = increment ? Math.min(cartQuantity + 1, MAX_QUANTITY) : Math.max(cartQuantity - 1, 0);
-        
+
         if (newQuantity === 0) {
             dispatch(removeFromUserCart({ productId: productDetail.$id, cartId }));
         } else {
@@ -218,18 +216,21 @@ const ProductDetails = () => {
                                     MRP <span id="productDetails-price2">₹{productDetail?.price}</span>
                                 </p>
                             </div>
-                            
-                            <div className={productDetail.isInStock ? "product-details-price-instock" : "product-details-price-outofstock"}>
-                                {cartQuantity === 0 ? (
-                                    <div onClick={handleAddToCart}>add to cart</div>
-                                ) : (
-                                    <div className="product-details-count-container">
-                                        <FaMinus size={13} onClick={() => handleUpdateCart(false)} />
-                                        {cartQuantity}
-                                        <FaPlus size={15} onClick={() => handleUpdateCart(true)} />
-                                    </div>
-                                )}
-                            </div>
+                            {productDetail.isInStock && productDetail.shops.isOpened ?
+                                <div className="product-details-price-instock">
+                                    {cartQuantity === 0 ? (
+                                        <div onClick={handleAddToCart}>add to cart</div>
+                                    ) : (
+                                        <div className="product-details-count-container">
+                                            <FaMinus size={13} onClick={() => handleUpdateCart(false)} />
+                                            {cartQuantity}
+                                            <FaPlus size={15} onClick={() => handleUpdateCart(true)} />
+                                        </div>
+                                    )}
+                                </div> :
+                                <div className="product-details-price-outofstock">
+                                    ON SITE
+                                </div>}
                         </div>
                         <div className="product-detail-description-container">
                             <div>Product Details</div>

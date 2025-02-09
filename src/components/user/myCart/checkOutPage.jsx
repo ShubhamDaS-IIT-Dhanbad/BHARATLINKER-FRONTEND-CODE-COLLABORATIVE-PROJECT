@@ -20,7 +20,7 @@ function CheckOutPage({ userData, items, deliveryAddress, setDeliveryAddress, se
     try {
       for (const item of items) {
         const order = await placeOrderProvider({
-          userId: userData.$id,
+          userId: userData.userId,
           shopId: item.shopId,
           productId: item.productId,
           quantity: Number(item.quantity),
@@ -32,7 +32,7 @@ function CheckOutPage({ userData, items, deliveryAddress, setDeliveryAddress, se
           address: deliveryAddress.address,
           lat: deliveryAddress.lat,
           long: deliveryAddress.long,
-          name: userData.name,
+          name: userData.name || "user",
           phoneNumber: userData.phoneNumber,
           houseNo:deliveryAddress.buildingNo,
           building:deliveryAddress.houseNo,

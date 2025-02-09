@@ -10,7 +10,10 @@ const client = new Client()
 const databases = new Databases(client);
 
 const placeOrderProvider = async (
-  { phoneNumber,
+
+  { 
+    userId,
+    phoneNumber,
     shopId,
     productId,
     quantity,
@@ -55,6 +58,7 @@ const placeOrderProvider = async (
       conf.appwriteOrdersCollectionId,
       ID.unique(),
       {
+        userId,
         phoneNumber,
         shopId,
         productId,
