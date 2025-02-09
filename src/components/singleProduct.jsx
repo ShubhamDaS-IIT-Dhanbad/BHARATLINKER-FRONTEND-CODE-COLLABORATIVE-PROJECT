@@ -111,9 +111,9 @@ const ProductDetails = () => {
         }
     };
     const handleAddToCart = async () => {
-        console.log(userData)
-        if (!userData.phoneNumber) return navigate("/login");
-        if (!productDetail.shopId) return alert("SHOP DOES NOT EXIST");
+        if(!userData) return navigate("/login");
+        if (!userData?.phoneNumber) return navigate("/login");
+        if (!productDetail?.shopId) return alert("SHOP DOES NOT EXIST");
         dispatch(addToUserCart({
             userId: userData.userId,
             productId: productDetail.$id,
