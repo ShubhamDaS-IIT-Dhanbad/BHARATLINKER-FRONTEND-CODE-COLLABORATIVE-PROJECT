@@ -27,8 +27,10 @@ const RefurbishedPage = () => {
     sortByAsc,
     sortByDesc
   } = useSelector((state) => state.refurbishedproducts);
+  
   const selectedBrands = useSelector((state) => state.refurbishedproductsfiltersection.selectedRefurbishedBrands);
   const selectedCategories = useSelector((state) => state.refurbishedproductsfiltersection.selectedRefurbishedCategories);
+
   const handleInitialSearch = useCallback(() => {
     if (refurbishedProducts.length === 0 && !loading) {
       executeSearchRefurbished();
@@ -36,7 +38,7 @@ const RefurbishedPage = () => {
   }, [refurbishedProducts.length, updated]);
   useEffect(() => {
     handleInitialSearch();
-  }, [refurbishedProducts.length, updated]);
+  }, [updated]);
 
   return (
     <>

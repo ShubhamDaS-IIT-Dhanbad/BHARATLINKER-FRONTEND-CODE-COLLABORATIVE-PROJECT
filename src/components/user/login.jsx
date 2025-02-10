@@ -34,28 +34,24 @@ function SignUpForm() {
   }, [timer, otpSent]);
 
   const handleSendOTP = async () => {
-    if (phone.length !== 10) return; // Check if phone number is valid
+    if (phone.length !== 10) return; 
     setLoading(true);
-    setErrorMessage(''); // Clear any previous error message
+    setErrorMessage(''); 
     try {
-      // Send OTP and get userId
       const userId = await sendOTP(`+91${phone}`);
-
-      // Check if userId is returned successfully, then proceed
       if (userId) {
-        setUserId(userId); // Set userId
-        setOtpSent(true); // OTP sent successfully
-        setIsResendDisabled(true); // Disable resend button
-        setTimer(30); // Set timer for 30 seconds
-        setOtp(new Array(6).fill("")); // Reset OTP array
+        setUserId(userId);
+        setOtpSent(true);
+        setIsResendDisabled(true); 
+        setTimer(30);
+        setOtp(new Array(6).fill(""));
       } else {
-        setErrorMessage('Failed to send OTP. Try again.'); // Show error if userId is not valid
+        setErrorMessage('Failed to send OTP. Try again.');
       }
     } catch (error) {
-      // Catch any errors from sendOTP or other issues
       setErrorMessage('Failed to send OTP. Try again.');
     } finally {
-      setLoading(false); // Stop loading animation
+      setLoading(false);
     }
   };
 
@@ -90,7 +86,6 @@ function SignUpForm() {
         address: parsedAddress,
         name: userData.name
       }), { expires: 7, secure: true });
-
       navigate('/user');
     } catch {
       setErrorMessage('Invalid OTP. Please try again.');
@@ -102,14 +97,11 @@ function SignUpForm() {
 
   const handleOtpChange = useCallback((e, index) => {
     const value = e.target.value.slice(-1);
-
     setOtp(prevOtp => {
       const newOtp = [...prevOtp];
       newOtp[index] = value;
       return newOtp;
     });
-
-    // Move focus logic
     if (value && index < 5) {
       document.getElementById(`otp-input-${index + 1}`).focus();
     } else if (!value && index > 0) {

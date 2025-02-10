@@ -4,9 +4,9 @@ import { fetchRefurbishedProducts, loadMoreRefurbishedProducts, resetRefurbished
 
 export const useSearchRefurbishedProductsHook = () => {
     const dispatch = useDispatch();
-    const {location } = useLocationFromCookie();
+    const { getLocationFromCookie } = useLocationFromCookie();
+    const storedLocation = getLocationFromCookie() || {};
 
-    const storedLocation = location;
     const { 
         refurbishedProducts, 
         currentPage, 
@@ -19,6 +19,7 @@ export const useSearchRefurbishedProductsHook = () => {
 
       const selectedBrands = useSelector((state) => state.refurbishedproductsfiltersection.selectedRefurbishedBrands);
       const selectedCategories = useSelector((state) => state.refurbishedproductsfiltersection.selectedRefurbishedCategories);
+
 
  
     const productsPerPage = 3;
