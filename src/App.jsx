@@ -5,6 +5,7 @@ import { Helmet, HelmetProvider } from "react-helmet-async";
 import useUserAuth from './hooks/userAuthHook.jsx';
 import { Oval } from 'react-loader-spinner';
 
+import Download from './components/downloadapp.jsx';
 import HomePage from './components/homePage/home.jsx';
 import SearchPage from './components/searchPage/searchPage.jsx';
 import SearchShop from './components/searchShop/searchShop.jsx';
@@ -63,7 +64,19 @@ const RoutesWithConditionalHeader = React.memo(() => {
             </>
           }
         />
-        
+        <Route
+          path="/download"
+          element={
+            <>
+              <Helmet>
+                <title>Bharat Linker</title>
+                <meta name="description" content="Welcome to Bharat Linker, your one-stop solution for business management." />
+                <meta name="robots" content="index, follow" />
+              </Helmet>
+              <Download />
+            </>
+          }
+        />
         <Route
           path="/login"
           element={
