@@ -41,7 +41,7 @@
 
 .search-page-product-card-bottom-stock.outofstock {
     background-color: rgb(255, 255, 255);
-    color: rgb(232, 74, 74);
+    color: rgb(232, 74, 74);font-size: 13px;
     border: 0.1px solid palevioletred;
 }
 

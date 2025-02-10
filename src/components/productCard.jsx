@@ -50,7 +50,7 @@ function SearchPageProductCard({ id, image, title, discountedPrice, isInStock })
                     <div
                         className="user-product-edit-button"
                         onClick={(e) => {
-                            e.stopPropagation(); // Prevent event bubbling
+                            e.stopPropagation();
                             navigate(`/user/refurbished/update/${id}`)
                         }}
                     >
@@ -59,8 +59,8 @@ function SearchPageProductCard({ id, image, title, discountedPrice, isInStock })
                 )}
 
                 {isSearchPage && (
-                    <div className={`search-page-product-card-bottom-stock ${isInStock > 0 ? 'instock' : 'outofstock'}`}>
-                        {isInStock > 0 ? 'IN STOCK' : 'OUT OF STOCK'}
+                    <div className={`search-page-product-card-bottom-stock ${isInStock ? 'instock' : 'outofstock'}`}>
+                        {isInStock ? 'ADD TO CART' : 'NOT DELIVERABLE'}
                     </div>
                 )}
 

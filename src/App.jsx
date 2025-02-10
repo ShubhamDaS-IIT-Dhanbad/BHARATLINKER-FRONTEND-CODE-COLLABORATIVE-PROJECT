@@ -9,7 +9,7 @@ import Download from './components/downloadapp.jsx';
 import HomePage from './components/homePage/home.jsx';
 import SearchPage from './components/searchPage/searchPage.jsx';
 import SearchShop from './components/searchShop/searchShop.jsx';
-import RefurbishedPage from './components/refurbishedPage/refurbishedPage.jsx';
+import RefurbishedPage from './components/searchRefurbished/refurbishedPage.jsx';
 
 const LoginPage = lazy(() => import('./components/user/login.jsx'));
 
