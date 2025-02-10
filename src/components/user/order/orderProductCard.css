@@ -2,7 +2,7 @@
     width: 95vw;
     display: flex;
     height: 140px;
-    background-color: #ffffff;
+    background-color: #f9f9f9;
 }
 .order-product-card-parent {
     width: 95vw;
@@ -23,7 +23,7 @@
 
 .order-product-card-img img {
     height: 120px;
-    border: 1px solid rgba(0, 0, 0, 0.363);
+    border: 0.5px solid rgba(0, 0, 0, 0.203);
     width: 100%;
     object-fit: cover;
 }
@@ -93,7 +93,8 @@
 }
 
 .retailer-order-product-card-detail-2 {
-    border: 1.3px solid black;color: black;
+   
+    border: 0.5px solid rgba(0, 0, 0, 0.203);color: black;
 }
 
 
@@ -261,8 +262,9 @@
 
 .order-product-card-address {
     display: flex;
-    flex-direction: column;background-color: white;
-    border: 1px solid rgba(0, 0, 0, 0.491);
+    flex-direction: column;
+    background-color: #f9f9f9;
+    border: 0.5px solid rgba(0, 0, 0, 0.203);
     gap: 3px;padding: 9px;color: rgb(0, 0, 0);
 }
 

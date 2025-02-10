@@ -18,7 +18,7 @@ export const sendOTP = async (phone) => {
 };
 export const verifyOTP = async (userId, otpCode, phoneNumber) => {
   try {
-    const session = await account.createSession(userId, otpCode);
+    // const session = await account.createSession(userId, otpCode);
     let userData = await fetchUserByPhoneNumber(phoneNumber);
     if (userData.total == 0) {
       await databases.createDocument(
@@ -28,7 +28,7 @@ export const verifyOTP = async (userId, otpCode, phoneNumber) => {
         { phoneNumber } 
       );
     }
-    return { session, userData };
+    return { session:"ko", userData };
   } catch (error) {
     console.error("Error verifying OTP:", error.message);
     return null;

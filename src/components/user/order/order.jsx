@@ -12,6 +12,7 @@ import "./order.css";
 function Order({ userData }) {
   const dispatch = useDispatch();
   const {
+    loading,
     pendingOrders,
     confirmedOrders,
     deliveredOrders,
@@ -45,13 +46,13 @@ function Order({ userData }) {
   useEffect(() => {
     if (userData?.phoneNumber) {
       ["pending", "confirmed", "delivered", "canceled"].forEach((status) => {
-        if (orderStates[status].data.length === 0) {
+        if (orderStates[status].data.length === 0 && status==selectedOrderType) {
           console.log(`Fetching ${status} orders`);
           fetchInitialOrders(status);
         }
       });
     }
-  }, []);
+  }, [selectedOrderType]);
   
 
   useEffect(() => {
@@ -89,7 +90,7 @@ function Order({ userData }) {
         }
       >
         <div className="retailer-order-div-container">
-          {selectedOrders.data.length === 0 ? (
+          {(selectedOrders.data.length === 0 && !loading) ? (
             <div className="retailer-order-empty">
               <img className="retailer-order-empty-img" src={e1} alt="No Orders" />
             </div>

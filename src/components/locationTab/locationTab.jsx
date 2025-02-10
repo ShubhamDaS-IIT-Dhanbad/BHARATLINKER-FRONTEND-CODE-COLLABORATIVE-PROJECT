@@ -171,8 +171,8 @@ const LocationTab = ({documentId, header, setLocationTab, setShowAddressDetail, 
                     )}
                 </div>
 
-                {loading && (
-                    <div className="loading-indicator">
+                {loading  && (
+                    <div className="location-loading-indicator">
                         <Oval height={20} width={20} color="green" ariaLabel="loading" />
                     </div>
                 )}

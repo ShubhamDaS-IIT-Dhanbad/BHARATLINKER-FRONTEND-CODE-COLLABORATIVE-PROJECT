@@ -205,10 +205,10 @@
   }
   
   /* Loading States */
-  .loader-container {
+  .location-loading-indicator{
     display: flex;
     justify-content: center;
-    padding: 20px 0;
+    padding: 60px 0;
   }
   
   @media (max-width: 480px) {

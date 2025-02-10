@@ -8,7 +8,7 @@ function DownloadApp() {
     const handleBeforeInstallPrompt = (event) => {
       event.preventDefault();
       setDeferredPrompt(event);
-      setShowPopup(true); // Show the install prompt popup
+      setShowPopup(true);
     };
 
     window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);

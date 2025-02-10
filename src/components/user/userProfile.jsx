@@ -94,7 +94,7 @@ function UserRefurbishedProduct({ userData }) {
                     <p>{addr.address}</p>
                   </div>
                   <div className="card-footer">
-                    <RiDeleteBinFill size={20} onClick={() => handleDeleteAddress(index)} style={{ cursor: "pointer" }} />
+                    <RiDeleteBinFill size={20} onClick={() => handleDeleteAddress(index)}/>
                   </div>
                 </div>
               ))

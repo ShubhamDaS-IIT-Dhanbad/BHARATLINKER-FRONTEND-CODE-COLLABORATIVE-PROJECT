@@ -61,7 +61,7 @@ function UserHome({ userData }) {
                             className="dashboard-Your-information-icons"
                             aria-label="Your profile"
                         />
-                        <p className="dashboard-Your-info-p">ADDRESS BOOK</p>
+                        <p className="dashboard-Your-info-p">Address book</p>
                     </article>
                     <article
                         className="dashboard-Your-Refurbished"
@@ -71,7 +71,7 @@ function UserHome({ userData }) {
                             className="dashboard-Your-information-icons"
                             aria-label="Upload gadgets"
                         />
-                        <p className="dashboard-Your-info-p">UPLOAD</p>
+                        <p className="dashboard-Your-info-p">Upload</p>
                     </article>
                     <article
                         className="dashboard-Your-Refurbished"
@@ -81,7 +81,7 @@ function UserHome({ userData }) {
                             className="dashboard-Your-information-icons"
                             aria-label="Your refurbished items"
                         />
-                        <p className="dashboard-Your-info-p">UPDATE</p>
+                        <p className="dashboard-Your-info-p">Update</p>
                     </article>
 
                     <article
@@ -92,7 +92,7 @@ function UserHome({ userData }) {
                             className="dashboard-Your-information-icons"
                             aria-label="Your orders"
                         />
-                        <p className="dashboard-Your-info-p">ORDER'S</p>
+                        <p className="dashboard-Your-info-p">Order</p>
                     </article>
                     <article
                         className="dashboard-Your-Refurbished"
@@ -102,7 +102,7 @@ function UserHome({ userData }) {
                             className="dashboard-Your-information-icons"
                             aria-label="Logout"
                         />
-                        <p className="dashboard-Your-info-p">LOG - OUT</p>
+                        <p className="dashboard-Your-info-p">Log - Out</p>
                     </article>
                 </section>
             </main>

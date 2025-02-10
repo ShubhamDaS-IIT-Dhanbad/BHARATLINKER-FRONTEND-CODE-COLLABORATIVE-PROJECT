@@ -37,10 +37,11 @@
 
 /* Buttons for order types */
 .retailer-order-type-buttons {
-    display: flex;background-color: #ffffff;
+    display: flex;
+    background-color: #f9f9f9;
     justify-content: center;
     align-items: center;
-    position: fixed;
+    position:absolute;
     top: 77px;
     gap: 5px;
     width: 100vw;
@@ -59,8 +60,8 @@
 }
 
 .retailer-order-type-button.active {
-    border: 1.3px solid rgb(135, 129, 255);
-    background-color: rgb(135, 129, 255);
+    border: 1.3px solid rgb(12, 131, 31);;
+    background-color:  rgb(12, 131, 31);;
     color: white;
 }
 

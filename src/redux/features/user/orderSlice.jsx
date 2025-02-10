@@ -1,9 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import { getOrderByUserId, updateOrderState } from '../../../appWrite/order/order.js';
+import { getOrderByUserId } from '../../../appWrite/order/order.js';
 
 const ordersPerPage = 10;
 
 const initialState = {
+  loading :false,
   pendingOrders: { data: [], loading: false, error: null, hasMore: true, currentPage: 1 },
   confirmedOrders: { data: [], loading: false, error: null, hasMore: true, currentPage: 1 },
   deliveredOrders: { data: [], loading: false, error: null, hasMore: true, currentPage: 1 },
@@ -82,23 +83,27 @@ const ordersSlice = createSlice({
         const { status } = action.meta.arg;
         state[`${status}Orders`].loading = true;
         state[`${status}Orders`].error = null;
+        state.loading=true;
       })
       .addCase(fetchOrdersByStatus.fulfilled, (state, action) => {
         const { status, documents } = action.payload;
         state[`${status}Orders`].loading = false;
         state[`${status}Orders`].data = documents;
         state[`${status}Orders`].hasMore = documents.length >= ordersPerPage;
+        state.loading=false;
       })
       .addCase(fetchOrdersByStatus.rejected, (state, action) => {
         const { status } = action.meta.arg;
         state[`${status}Orders`].loading = false;
         state[`${status}Orders`].error = action.payload;
+        state.loading=false;
       })
 
       // Load More Orders
       .addCase(loadMoreOrders.pending, (state, action) => {
         const { status } = action.meta.arg;
         state[`${status}Orders`].error = null;
+        state.loading=true;
       })
       .addCase(loadMoreOrders.fulfilled, (state, action) => {
         const { status, documents, page } = action.payload;
@@ -110,10 +115,12 @@ const ordersSlice = createSlice({
         state[`${status}Orders`].data = [...existingOrders, ...newOrders];
         state[`${status}Orders`].currentPage = page;
         state[`${status}Orders`].hasMore = documents.length >= ordersPerPage;
+        state.loading=false;
       })
       .addCase(loadMoreOrders.rejected, (state, action) => {
         const { status } = action.meta.arg;
         state[`${status}Orders`].error = action.payload;
+        state.loading=false;
       });
   },
 });
