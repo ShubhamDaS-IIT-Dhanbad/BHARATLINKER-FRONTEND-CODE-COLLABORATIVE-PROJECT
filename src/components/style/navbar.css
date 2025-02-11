@@ -144,8 +144,7 @@
     position: fixed;
     top: 0;
     background-color: #f9f9f9;
-    background: linear-gradient(90deg, #199569, #21ab53);
-    color: #ffffff;padding:10px 10px 7px 10px;
+    color: #000000;padding:10px 10px 7px 10px;
     z-index: 1000;
     transition: transform 0.3s ease, opacity 0.3s ease;
 }
