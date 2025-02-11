@@ -85,8 +85,7 @@ const SearchPage = () => {
                     setShowFilterBy={setShowFilterBy}
                 />
             )}
-            {!loading &&
-                <AddToCartTab totalQuantity={totalQuantity} totalPrice={totalPrice} />}
+            {!loading &&<AddToCartTab totalQuantity={totalQuantity} totalPrice={totalPrice} />}
             {/* <div id="productSearchPage-footer">
                 <div
                     id="productSearchPage-footer-sortby"

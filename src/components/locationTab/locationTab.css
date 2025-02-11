@@ -28,7 +28,6 @@
   .back-icon {
     color: #0c0c0c;
     position: fixed;left: 15px;
-    transition: opacity 0.2s;
   }
   
   .back-icon:hover {
@@ -57,7 +56,6 @@
     border-radius: 12px;
     padding: 10px;
     margin-bottom: 24px;
-    transition: transform 0.2s;
   }
   
   .location-prominent-button {
@@ -91,11 +89,10 @@
   
   .enable-button {
     border: 1.4px solid rgba(0, 0, 0, 0.237);
-    color: rgb(12, 131, 31);;background-color: #ffffff;
+    color: rgb(12, 131, 31);background-color: #ffffff;
     padding: 6px 17px;
     border-radius: 3px;
     font-weight: 800;
-    transition: opacity 0.2s;
   }
   
  
@@ -234,47 +231,26 @@
 
   .radius-control-container {
     display: flex;
-    align-items: center;
-    gap: 10px;position: fixed;
-    bottom: 10px;
-    overflow-x: scroll;
+    gap: 10px;background-color: rgb(240, 36, 36);
     border-radius: 8px;
-    padding:10px 10px 0px 10px;
 }
-
-.radius-control-container label {
-    font-size: 16px;
-    font-weight: bold;
-    color: #333;
-}
-
 .radius-options {
     display: flex;
-    gap: 8px;
-    width:calc(100vw - 20px);
-    overflow-x: scroll;
+    gap: 8px;margin-top: 10px;
+    width:calc(100vw - 20px);display: flex;justify-content: center;align-items: center;
 }
 
 .radius-btn {
     display: flex;
     font-size: 13px;
-    border: 1.1px solid #0000007c;
+    border: 1px solid #000000e7;
     background-color: white;
-    color: #00000058;
-    border-radius: 5px;
-    transition: all 0.3s ease;
+    color: #000000bd;
     min-width: 53px;height: 27px;
     justify-content: center;align-items: center;
 }
 
 .radius-btn.selected {
-    display: flex;
-    font-size: 13px;
-    border: 1.1px solid #ffffff7c;
+  color: white;border: none;
     background-color: rgb(12, 131, 31);
-    color: #ffffff;
-    border-radius: 5px;
-    transition: all 0.3s ease;
-    min-width: 58px;height: 27px;
-    justify-content: center;align-items: center;
 }

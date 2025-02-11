@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback, useMemo, useRef } from 'react';
-import { IoSearch} from "react-icons/io5";
+import { IoSearch } from "react-icons/io5";
 import { IoIosCloseCircleOutline } from "react-icons/io";
 import { FaAngleLeft } from "react-icons/fa6";
 import { MdMyLocation } from "react-icons/md";
@@ -10,10 +10,10 @@ import Map from '../map/map.jsx';
 import './locationTab.css';
 
 // Constants for better readability and maintainability
-const PREDEFINED_RADIUS_OPTIONS = [1, 2, 3, 5, 7, 9, 11, 13, 17, 19, 23, 29, 97, 203];
+const PREDEFINED_RADIUS_OPTIONS = [1, 3, 5, 9, 13];
 const DEBOUNCE_DELAY = 300;
 
-const LocationTab = ({documentId, header, setLocationTab, setShowAddressDetail, setDeliveryAddress }) => {
+const LocationTab = ({ documentId, header, setLocationTab, setShowAddressDetail, setDeliveryAddress }) => {
     // State management
     const [loading, setLoading] = useState(false);
     const [fetchingUserLocation, setFetchingUserLocation] = useState(false);
@@ -170,8 +170,14 @@ const LocationTab = ({documentId, header, setLocationTab, setShowAddressDetail, 
                         />
                     )}
                 </div>
+                {!window.location.pathname.includes('/user/cart') && !window.location.pathname.includes('/user/profile') && (
 
-                {loading  && (
+                    <>
+                        {radiusControls}
+                    </>
+                )}
+
+                {loading && (
                     <div className="location-loading-indicator">
                         <Oval height={20} width={20} color="green" ariaLabel="loading" />
                     </div>
@@ -194,12 +200,6 @@ const LocationTab = ({documentId, header, setLocationTab, setShowAddressDetail, 
             </div>
 
             {suggestions.length === 0 && currentLocationSection}
-
-            {!window.location.pathname.includes('/user/cart') && !window.location.pathname.includes('/user/profile')&&(
-                <div className="radius-control-container">
-                    {radiusControls}
-                </div>
-            )}
         </div>
     );
 };
