@@ -5,6 +5,7 @@ import { MdFilterList } from "react-icons/md";
 import { Oval } from 'react-loader-spinner';
 import 'react-loading-skeleton/dist/skeleton.css';
 
+import AddToCartTab from "../viewCartTab/viewCart.jsx";
 import SearchBar from '../navbar.jsx';
 import ProductList from '../productList.jsx';
 import ProductSortBySection from './sortbySection.jsx';
@@ -14,7 +15,9 @@ import { useExecuteSearch } from '../../hooks/searchProductHook';
 import './searchPage.css';
 
 const SearchPage = () => {
-    const { executeSearch, onLoadMore } = useExecuteSearch();
+    const { executeSearch, onLoadMore } = useExecuteSearch();  
+    const { cart, totalQuantity, totalPrice, isCartFetched } = useSelector((state) => state.userCart);
+    
 
     const [showSortBy, setShowSortBy] = useState(false);
     const [showFilterBy, setShowFilterBy] = useState(false);
@@ -37,7 +40,7 @@ const SearchPage = () => {
     useEffect(() => {
         handleInitialSearch();
     }, [products.length, updated]);
-    
+
     return (
         <>
             <div id="productSearchPage-container-top">
@@ -82,7 +85,8 @@ const SearchPage = () => {
                     setShowFilterBy={setShowFilterBy}
                 />
             )}
-
+            {!loading &&
+                <AddToCartTab totalQuantity={totalQuantity} totalPrice={totalPrice} />}
             {/* <div id="productSearchPage-footer">
                 <div
                     id="productSearchPage-footer-sortby"

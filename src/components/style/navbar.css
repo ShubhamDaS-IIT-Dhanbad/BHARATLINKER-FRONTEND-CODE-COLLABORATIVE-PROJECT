@@ -144,7 +144,8 @@
     position: fixed;
     top: 0;
     background-color: #f9f9f9;
-    color: #000000;padding:10px 10px 7px 10px;
+    background: linear-gradient(90deg, #199569, #21ab53);
+    color: #ffffff;padding:10px 10px 7px 10px;
     z-index: 1000;
     transition: transform 0.3s ease, opacity 0.3s ease;
 }
@@ -212,7 +213,7 @@
     margin-top: 5px;
     justify-content: center;
     align-items: center;
-    display: flex;
+    display: flex;color: black;
 }
 
 /* Search Input Container */
@@ -220,14 +221,15 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    border-radius: 11px;border: 1.4px solid rgb(0, 0, 0);
+    border-radius: 11px;
+    border:1px solid rgba(0, 0, 0);
     width: 96vw;
     background-color: #f9f9f9;
     height: 41px;
 }
 .product-page-search-input-container:hover{
   outline: none;
-  border-color: rgb(12, 131, 31);scale: 1.005;
+  scale: 1.009;
   box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.1);
 }
 .home-page-search-input-container:hover{
