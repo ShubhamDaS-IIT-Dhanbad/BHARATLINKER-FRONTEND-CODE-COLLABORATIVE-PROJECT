@@ -7,7 +7,6 @@ import { FaCircleExclamation } from 'react-icons/fa6';
 import { registerShop, sendOtp, createSession, deleteSession } from '../../appWrite/shop/shop.js';
 import { ErrorPopup } from './popups/popUp.jsx';
 
-import '../style/shopLogin.css';
 
 function SignUpForm() {
     const navigate = useNavigate();
