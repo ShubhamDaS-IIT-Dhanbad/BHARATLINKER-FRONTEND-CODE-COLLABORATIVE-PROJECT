@@ -11,7 +11,7 @@ import ToggleIsOpenShop from './ToggleShop/main.jsx';
 import './retailer.css';
 import '../user/style/userHome.css';
 
-function UserHome({ retailerData }) {
+function UserHome({ shopData }) {
   const navigate = useNavigate();
 
   const [isLogout, setIsLogout] = useState(false);
@@ -52,10 +52,10 @@ function UserHome({ retailerData }) {
           />
           <div className='retailer-home-header-user'>
             <p id='retailer-home-header-user-location'>
-              {retailerData?.shopName?.toUpperCase() || ""}
+              {shopData?.shopName?.toUpperCase() || ""}
             </p>
             <p id='retailer-home-header-user-email'>
-              {retailerData?.phoneNumber || ""}
+              {shopData?.phoneNumber || ""}
             </p>
           </div>
           <IoHomeOutline
@@ -96,7 +96,7 @@ function UserHome({ retailerData }) {
           />
 
           <div className='retailer-home-toggle-isopen'>
-            <ToggleIsOpenShop retailerData={retailerData} />
+            <ToggleIsOpenShop shopData={shopData} />
           </div>
         </section>
       </main>
@@ -105,7 +105,7 @@ function UserHome({ retailerData }) {
         <div className='logout-pop-up'>
           <div className='logout-pop-up-inner-div'>
             <div className='logout-pop-up-inner-div-logout-statement'>
-              {retailerData.shopName} - LOGOUT ?
+              {shopData.shopName} - LOGOUT ?
             </div>
             <div className='logout-pop-up-inner-div-no-yes'>
               <div

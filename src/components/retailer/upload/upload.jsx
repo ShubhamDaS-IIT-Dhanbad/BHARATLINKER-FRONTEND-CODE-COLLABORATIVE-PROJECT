@@ -1,38 +1,16 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
-import { FaArrowLeft } from 'react-icons/fa';
 import UploadBooksForm from './userUploadProductForm.jsx';
-import './upload.css';
+import Navbar from '../navbar.jsx';
+import '../style/userProductUpload.css';
 
-const UploadProduct = ({ retailerData }) => {
-    const navigate = useNavigate();
-
+const UploadProduct = ({shopData}) => {
     return (
         <>
-            <div className='retailer-product-upload-header-container'>
-                <FaArrowLeft
-                    className='retailer-product-upload-header-back-btn'
-                    size={25}
-                    onClick={() => navigate('/retailer')}
-                    aria-label="Back to Retailer Dashboard"
-                    tabIndex={0}
-                />
-                <div className='retailer-product-upload-header-content'>
-                    <h1 className='retailer-product-upload-header-main-title'>
-                        Upload New Product
-                        <span className='retailer-product-upload-header-title-decoration'></span>
-                    </h1>
-                    <div
-                        className='retailer-product-upload-header-shop-badge'
-                        aria-label="Current Shop"
-                        tabIndex={0}
-                    >
-                        <span className='retailer-product-upload-header-shop-icon'>🏪</span>
-                        {retailerData?.shopName}
-                    </div>
-                </div>
-            </div>
-            <UploadBooksForm retailerData={retailerData} />
+            <header>
+            <Navbar shopData={shopData} headerTitle={"UPLOAD PRODUCT"} />
+            </header>
+            <UploadBooksForm shopData={shopData}/>
+
         </>
     );
 };

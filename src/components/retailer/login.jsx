@@ -1,217 +1,188 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaArrowLeft } from 'react-icons/fa';
-import { FaCircleExclamation } from 'react-icons/fa6';
+import { TailSpin } from 'react-loader-spinner';
+import { sendOTP, verifyOTP } from '../../appWrite/shop/shopAuth.js';
+import Cookies from 'js-cookie';
+import { IoCloseCircleOutline } from "react-icons/io5";
+import { GoChevronLeft } from "react-icons/go";
+import i1 from './asset/lll.png';
+import '../user/style/userLogin.css';
 
-import { sendOtp, createSession, getShopData } from '../../appWrite/shop/shop.js';
-import { Oval } from 'react-loader-spinner';
+function SignUpForm() {
+  const navigate = useNavigate();
+  const [userId, setUserId] = useState();
+  const [phone, setPhone] = useState('');
+  const [otp, setOtp] = useState(new Array(6).fill(""));
+  const [otpSent, setOtpSent] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [verifyingOtp, setVerifyingOtp] = useState(false);
+  const [timer, setTimer] = useState(30);
+  const [isResendDisabled, setIsResendDisabled] = useState(true);
+  const [errorMessage, setErrorMessage] = useState('');
 
-import OTPInput from 'react-otp-input';
-import { ErrorPopup } from './popups/popUp.jsx';
+  useEffect(() => {
+    if (Cookies.get('BharatLinkerShopData')) navigate('/shop');
+  }, []);
 
-import '../style/shopLogin.css';
-import './style/auth.css'
+  useEffect(() => {
+    if (otpSent && timer > 0) {
+      const countdown = setInterval(() => setTimer(prev => prev - 1), 1000);
+      return () => clearInterval(countdown);
+    } else {
+      setIsResendDisabled(false);
+    }
+  }, [timer, otpSent]);
 
-function LoginForm() {
-    const navigate = useNavigate();
-    const [phoneOrEmail, setPhoneOrEmail] = useState('');
-    const [isEmail, setIsEmail] = useState(false);
-    const [otpSent, setOtpSent] = useState(false);
-    const [otp, setOtp] = useState();
-    const [timer, setTimer] = useState(30);
-    const [isResendDisabled, setIsResendDisabled] = useState(true);
-    const [userId, setUserId] = useState(null);
-    const [loading, setLoading] = useState(false);
-    const [loadingVerification, setLoadingVerification] = useState(false);
-    const [error, setError] = useState(null);
+  const handleSendOTP = async () => {
+    if (phone.length !== 10) return; 
+    setLoading(true);
+    setErrorMessage(''); 
+    try {
+      // const userId = await sendOTP(`+91${phone}`) ;
+      if (userId || 1) {
+        setUserId(userId);
+        setOtpSent(true);
+        setIsResendDisabled(true); 
+        setTimer(30);
+        setOtp(new Array(6).fill(""));
+      } else {
+        setErrorMessage('Failed to send OTP. Try again.');
+      }
+    } catch (error) {
+      setErrorMessage('Failed to send OTP. Try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    const handlePhoneOrEmailChange = (e) => {
-        const value = e.target.value;
-        setPhoneOrEmail(value);
-        if (value.includes('@')) {
-            setIsEmail(true);
-        } else {
-            setIsEmail(false);
-        }
-    };
 
-    useEffect(() => {
-        let countdown;
-        if (timer > 0) {
-            countdown = setInterval(() => setTimer((prev) => prev - 1), 1000);
-        } else {
-            setIsResendDisabled(false);
-        }
-        return () => clearInterval(countdown);
-    }, [timer]);
+  const handleVerifyOTP = async () => {
+    if (otp.join('').length !== 6) return;
+    setVerifyingOtp(true);
+    setErrorMessage('');
+    try {
+      const { session, shopData } = await verifyOTP(userId, otp.join(''), `91${phone}`);
+      const parsedAddress = Array.isArray(shopData.address)
+        ? shopData.address.map(addr => {
+          try {
+            const [latitude, longitude, address] = addr.split('@').map(val => val.trim());
+            return {
+              latitude: parseFloat(latitude),
+              longitude: parseFloat(longitude),
+              address: address
+            };
+          } catch (error) {
+            console.error("Error parsing address:", error);
+            return null;
+          }
+        }).filter(Boolean)
+        : [];
 
-    const sendOTP = async () => {
-        setLoading(true);
-        try {
-            const isPhone = /^\d{10}$/.test(phoneOrEmail);
-            const isEmail = /\S+@\S+\.\S+/.test(phoneOrEmail);
+      Cookies.set("BharatLinkerShopData", JSON.stringify({
+        shopId: shopData.$id,
+        uId: session?.userId || "90",
+        id: session?.$id || "90",
+        phoneNumber: phone,
+        address: parsedAddress,
+        shopName: shopData.shopName
+      }), { expires: 7, secure: true });
+      navigate('/user');
+    } catch {
+      setErrorMessage('Invalid OTP. Please try again.');
+      setOtp(new Array(6).fill(''));
+    } finally {
+      setVerifyingOtp(false);
+    }
+  };
 
-            if (!isPhone && !isEmail) {
-                alert("Please enter a valid phone number or email.");
-                setLoading(false);
-                return;
-            }
+  const handleOtpChange = useCallback((e, index) => {
+    const value = e.target.value.slice(-1);
+    setOtp(prevOtp => {
+      const newOtp = [...prevOtp];
+      newOtp[index] = value;
+      return newOtp;
+    });
+    if (value && index < 5) {
+      document.getElementById(`otp-input-${index + 1}`).focus();
+    } else if (!value && index > 0) {
+      document.getElementById(`otp-input-${index - 1}`).focus();
+    }
+  }, []);
 
-            const response = isPhone
-                ? await sendOtp(phoneOrEmail)
-                : await sendOtp(phoneOrEmail, true);
-
-            setUserId(response);
-            setOtpSent(true);
-            setIsResendDisabled(true);
-            setTimer(30);
-            setError(null);
-        } catch (error) {
-            console.error(`Failed to send OTP: ${error.message}`);
-            alert('Failed to send OTP. Please try again.');
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    const verifyOTP = async (otpCode) => {
-        setLoadingVerification(true);
-        try {
-            const sessionId = await createSession(userId, otpCode);
-            const contact = phoneOrEmail;
-            const shopData = await getShopData(contact);
-    
-            shopData.sessionId = sessionId;
-    
-            // Setting the cookie using document.cookie
-            const cookieValue = JSON.stringify(shopData);
-            const expires = new Date();
-            expires.setDate(expires.getDate() + 7);
-            document.cookie = `BharatLinkerShopData=${encodeURIComponent(cookieValue)}; expires=${expires.toUTCString()}; path=/`;
-    
-            if (shopData.registrationStatus === 'pending') {
-                navigate('/retailer/pending');
-            } else if (shopData.registrationStatus === 'rejected') {
-                navigate('/retailer/rejected');
-            } else if (shopData.registrationStatus === 'approved') {
-                navigate('/retailer');
-            }
-        } catch (err) {
-            console.error(`Failed to verify OTP: ${err.message}`);
-            setError("Shop with this phone/email already exists.");
-            setOtp(new Array(6).fill(''));
-        } finally {
-            setLoadingVerification(false);
-        }
-    };
-    
-
-    const renderLoginForm = () => (
-        <div className="retailer-login">
-            <div className="retailer-login-top-header">
-                <FaArrowLeft size={25} onClick={() => navigate('/')} className="retailer-login-back-arrow" />
-                BHARAT | LINKER
+  return (
+    <>
+      {!otpSent ? (
+        <div className='auth-form-container'>
+          <div className='auth-form-container-back-container' onClick={() => navigate('/')}> <GoChevronLeft size={25} /> </div>
+          <div className='auth-form-container-u1'>
+            <img src={i1} alt='Illustration' />
+            <div className="user-login-container-text">
+              <div>SIGN UP TO KEEP</div>
+              <div>DISCOVERING THE BEST YOUR</div>
+              <div>COMMUNITY HAS TO OFFER!</div>
             </div>
-            <div className="retailer-login-div-parent">
-                <div className="retailer-login-div" style={{ borderColor: 'rgb(3, 223, 193)' }}>Login</div>
-                <div className="retailer-login-register-div" onClick={() => navigate('/secure/register')}>Register</div>
-            </div>
+          </div>
 
-             <div className="signup-container-text">
-                <div>WELCOME</div>
-                <div style={{ marginTop: "-7px" }}></div>
-                <div style={{ marginTop: "-7px" }}>OFFER THE BEST TO YOUR COMMUNITY!</div>
-            </div>
-
-            <p className="retailer-signup-container-p">
-                Add your phone number or email. We'll send you a verification code so we know you're real.
-            </p>
-            <div className="retailer-login-phone-input-container">
-                <input
-                    type="text"
-                    placeholder="Your Email or Phone"
-                    value={phoneOrEmail}
-                    onChange={handlePhoneOrEmailChange}
-                />
-            </div>
-            <button
-                className="retailer-login-send-otp-button"
-                onClick={sendOTP}
-                disabled={(isEmail ? !phoneOrEmail.includes('@') : phoneOrEmail.length !== 10) || loading}
-                style={{ backgroundColor: "rgb(3, 223, 193)" }}
-            >
-                {loading ? (
-                    <Oval height={24} width={24} color="white" secondaryColor="gray" ariaLabel="loading" />
-                ) : (
-                    'SEND OTP'
-                )}
-            </button>
-            <p className="retailer-login-terms-text">
-                By providing my phone number or email, I hereby agree and accept the{' '}
-                <a href="#terms">Terms of Service</a> and <a href="#privacy">Privacy Policy</a>.
-            </p>
-        </div>
-    );
-
-    const renderOtpVerificationForm = () => (
-        <div className="retailer-login-otp-verification">
-            <div className="retailer-login-otp-verification-top-header">
-                <FaArrowLeft
-                    size={25}
-                    onClick={() => {
-                        setOtpSent(false);
-                        setOtp(new Array(6).fill(''));
-                    }}
-                />
-                OTP Verification
-                <FaCircleExclamation size={25} />
-            </div>
-            <p className="retailer-login-otp-verification-text-p">Enter your OTP code here</p>
-            <OTPInput
-                value={otp}
-                onChange={(value) => {
-                    setOtp(value);
-                    if (value.length === 6) verifyOTP(value);
-                }}
-                numInputs={6}
-                renderSeparator={<span className='otp-input-span'> </span>}
-                renderInput={(props) => (
-                    <input  // Use text to allow numeric input, type 'number' can cause issues with some browsers
-                        inputMode='numeric' 
-                        type="number" // This ensures the numeric keypad appears on mobile
-                        pattern='\d*'  // Ensures only numbers can be entered
-                        {...props}
-                        className="otp-input"
-                    />
-                )}
-                shouldAutoFocus={true}
+          <div className='phone-input-container'>
+            <div className='country-code-pill'><span>+91</span></div>
+            <input
+              type='number'
+              className='premium-input'
+              placeholder='Enter mobile number'
+              value={phone}
+              onChange={(e) => setPhone(e.target.value.replace(/[^0-9]/g, ''))}
+              maxLength='10'
             />
+          </div>
 
-            {loadingVerification ? (
-                <div className="loader-container" style={{ margin: "20px" }}>
-                    <Oval height={24} width={24} color="rgb(3, 223, 193)" secondaryColor="gray" ariaLabel="loading" />
-                </div>
-            ) : (
-                <>
-                    <p className="resend-text">Didn't receive the code?</p>
-                    <button
-                        className={`retailer-login-resend-btn ${isResendDisabled ? 'disabled' : ''}`}
-                        onClick={!isResendDisabled ? sendOTP : null}
-                        disabled={isResendDisabled}
-                    >
-                        Resend new code {isResendDisabled && `in (${timer}s)`}
-                    </button>
-                </>
-            )}
-            {error && <ErrorPopup error={error} />}
+          <button className='premium-button primary' onClick={handleSendOTP} disabled={loading || phone.length !== 10}>
+            {loading ? <TailSpin height={24} width={24} color='#ffffff' /> : 'SEND OTP'}
+          </button>
+          <p className='user-login-terms'>By continuing, you agree to our terms of service & Privacy Policy</p>
+          {errorMessage && <div className="premium-error-message">{errorMessage} <IoCloseCircleOutline size={20} /></div>}
         </div>
-    );
+      ) : (
+        <div className='otp-auth-form-container'>
+          <div className='otp-header'>
+            <div className='auth-form-container-back-container' onClick={() => setOtpSent(false)}> <GoChevronLeft size={30} /> </div>
+            <h3 className='otp-title'>OTP Verification</h3>
+          </div>
 
-    return (
-        <div className="retailer-login">
-            {otpSent ? renderOtpVerificationForm() : renderLoginForm()}
+          <p className='otp-instruction'>Enter the 6-digit code sent to +91 {phone}</p>
+          {errorMessage && <div className="premium-error-message">{errorMessage}</div>}
+
+          <div className='otp-input-group'>
+            {otp.map((_, index) => (
+              <input
+                key={index}
+                id={`otp-input-${index}`}
+                type='number'
+                className='otp-digit-input'
+                maxLength='1'
+                value={otp[index]}
+                onChange={(e) => handleOtpChange(e, index)}
+                inputMode="numeric"
+                autoFocus={index === 0}
+              />
+            ))}
+          </div>
+
+          <button className='premium-button primary' onClick={handleVerifyOTP} disabled={verifyingOtp || otp.join('').length !== 6}>
+            {verifyingOtp ? <TailSpin height={24} width={24} color='#ffffff' /> : 'Verify & Continue'}
+          </button>
+
+          {isResendDisabled && (
+            <div className='resend-otp'>
+              <button className='otp-premium-button secondary' onClick={handleSendOTP} disabled={isResendDisabled}>
+                Resend OTP {isResendDisabled && `(${timer}s)`}
+              </button>
+            </div>
+          )}
+          {errorMessage && <div className="premium-error-message">{errorMessage} <IoCloseCircleOutline size={20} /></div>}
         </div>
-    );
+      )}
+    </>
+  );
 }
 
-export default LoginForm;
+export default SignUpForm;

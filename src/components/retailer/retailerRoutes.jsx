@@ -3,7 +3,7 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import Cookies from "js-cookie";
 import { Oval } from "react-loader-spinner";
-
+import useRetailerAuthHook from '../../hooks/retailerAuthHook.jsx'
 // Lazy-loaded components
 const Retailer = React.lazy(() => import("./retailer.jsx"));
 const RetailerDashboard = React.lazy(() => import("./dashboard/dashboard.jsx"));
@@ -15,15 +15,11 @@ const RetailerOrders = React.lazy(() => import("./order/order.jsx"));
 const RetailerOrderDetail = React.lazy(() => import("./orderDetail/orderDetail.jsx"));
 
 // Private route to protect routes if not authenticated
-const PrivateRoute = ({ children }) => {
-  const isAuthenticated = Cookies.get("BharatLinkerShopData");
-  if (!isAuthenticated) {
-    return <Navigate to="/error" />;
-  }
-  return children;
-};
+
+
 
 const RetailerRoutes = React.memo(() => {
+  const { PrivateRoute} = useRetailerAuthHook();
 
   const getRetailerDataFromCookie = useCallback(() => {
     const storedData = Cookies.get("BharatLinkerShopData");

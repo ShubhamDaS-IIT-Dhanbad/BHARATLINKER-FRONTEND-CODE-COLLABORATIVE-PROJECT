@@ -1,3 +1,4 @@
+import React from 'react';
 import { useState, useEffect, useCallback } from 'react';
 import { Navigate, useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
@@ -62,20 +63,16 @@ const useRetailerAuthHook = () => {
     }
   };
 
-  const PrivateRoute = useCallback(
-    ({ children }) => {
-      if (!location.pathname.startsWith('/retailer')) {
-        return null;
-      }
-
-      const retailerSession = getRetailerDataFromCookie();
-      if (!retailerSession) {
-        return <Navigate to="/" replace />;
-      }
-      return children;
-    },
-    [location.pathname, getRetailerDataFromCookie]
-  );
+  const PrivateRoute = ({ children }) => {
+          const shopData = Cookies.get("BharatLinkerShopData");
+          if (!shopData) {
+              return <Navigate to="/shop/login" replace />;
+          }
+          const parsedShopData = JSON.parse(shopData);
+          return React.Children.map(children, (child) =>
+              React.isValidElement(child) ? React.cloneElement(child, { shopData: parsedShopData }) : child
+          );
+      };
 
   return { retailerData, getRetailerDataFromCookie, logout, PrivateRoute };
 };
