@@ -12,7 +12,7 @@
     display: flex;background-color: transparent;
     align-items: center;
     justify-content: center;
-    z-index: 1000;
+    z-index: 1001;
 }
 #productSearchPage-container-top ::-webkit-scrollbar{
     width: 0px;height: 0px;
