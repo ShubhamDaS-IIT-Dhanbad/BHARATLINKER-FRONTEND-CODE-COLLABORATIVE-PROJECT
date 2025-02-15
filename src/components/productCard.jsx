@@ -41,7 +41,7 @@ function SearchPageProductCard({ id, image, title, price, discountedPrice, isInS
 
             <div className='search-page-product-card-bottom'>
                 <span className='search-page-product-card-shop-name'>{productName}</span>
-                <div>
+                <div style={{display:"flex",flexDirection:"column",gap:"7px"}}>
                     <span className='search-page-product-card-shop'>
                         ₹{productPrice}
                     </span>
