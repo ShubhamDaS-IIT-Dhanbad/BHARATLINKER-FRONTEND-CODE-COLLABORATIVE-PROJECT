@@ -144,7 +144,9 @@
     position: fixed;
     top: 0;
     background-color: #f9f9f9;
-    color: #000000;padding:10px 10px 7px 10px;
+    background: linear-gradient(135deg, #3d74d4, #3276e4);
+
+    color: #ffffff;padding:10px 10px 7px 10px;
     z-index: 1000;
     transition: transform 0.3s ease, opacity 0.3s ease;
 }
@@ -212,7 +214,7 @@
     margin-top: 5px;
     justify-content: center;
     align-items: center;
-    display: flex;color: black;
+    display: flex;color: rgb(255, 255, 255);
 }
 
 /* Search Input Container */
@@ -221,9 +223,9 @@
     justify-content: center;
     align-items: center;
     border-radius: 11px;
-    border:1px solid rgba(0, 0, 0);
+    border:1.5px solid rgb(255, 255, 255);
     width: 96vw;
-    background-color: #f9f9f9;
+    background: linear-gradient(135deg, #4c81dc, #2769d3);
     height: 41px;
 }
 .product-page-search-input-container:hover{
@@ -245,7 +247,7 @@
 /* Search Input */
 .product-page-search-input {
     border: none;
-    color: #000000;
+    color: #ffffff;
     background-color: #f9f9f9;
     font-size: 1rem;
     padding-left: 10px;
@@ -257,12 +259,12 @@
 /* Autofill Styles for Chrome, Edge, and Safari */
 .product-page-search-input:-webkit-autofill {
     background-color: #f9f9f9 !important;
-    color: #000000 !important;font-size: 1rem;
+    color: #ffffff !important;font-size: 1rem;
     -webkit-box-shadow: 0 0 0px 1000px #f9f9f9 inset !important;
     box-shadow: 0 0 0px 1000px #f9f9f9 inset !important;
 }
 .product-page-search-input::placeholder {
-    color: #000000 !important;
+    color: #ffffff !important;
     font-size: 0.9rem;font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 }
 
