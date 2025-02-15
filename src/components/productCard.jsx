@@ -6,7 +6,7 @@ import "react-lazy-load-image-component/src/effects/blur.css";
 
 const DEFAULT_IMAGE_URL = 'http://res.cloudinary.com/dthelgixr/image/upload/v1727870088/hd7kcjuz8jfjajnzmqkp.webp';
 
-function SearchPageProductCard({ id, image, title, discountedPrice, isInStock }) {
+function SearchPageProductCard({ id, image, title, price, discountedPrice, isInStock }) {
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -14,6 +14,7 @@ function SearchPageProductCard({ id, image, title, discountedPrice, isInStock })
     const imageUrl = image?.[0] || DEFAULT_IMAGE_URL;
     const productName = title ? (title.length > 45 ? `${title.substring(0, 45)}..` : title) : 'Product Name';
     const productPrice = discountedPrice?.toLocaleString() || '0';
+    const mrpPrice = price?.toLocaleString() || '0';
 
     // Consolidated path checks
     const currentPath = location.pathname;
@@ -39,37 +40,48 @@ function SearchPageProductCard({ id, image, title, discountedPrice, isInStock })
             </div>
 
             <div className='search-page-product-card-bottom'>
-                <div className="search-page-product-card-shop-price">
-                    <span className='search-page-product-card-shop-name'>{productName}</span>
+                <span className='search-page-product-card-shop-name'>{productName}</span>
+                <div>
                     <span className='search-page-product-card-shop'>
                         ₹{productPrice}
                     </span>
+                    {isRefurbishedPage && (
+                        <div
+                            className="user-product-edit-button"
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                navigate(`/user/refurbished/update/${id}`)
+                            }}
+                        >
+                            Edit
+                        </div>
+                    )}
+
+                    {isSearchPage && (
+                        <div className={`search-page-product-card-bottom-stock ${isInStock ? 'instock' : 'outofstock'}`}>
+                            {isInStock ? 'ADD TO CART' : 'NOT DELIVERABLE'}
+                        </div>
+                    )}
+
+                    {isSearchRefurbished && (
+                        <div className="search-page-product-card-bottom-stock instock">
+                            ON SALE
+                        </div>
+                    )}
                 </div>
-
-                {isRefurbishedPage && (
-                    <div
-                        className="user-product-edit-button"
-                        onClick={(e) => {
-                            e.stopPropagation();
-                            navigate(`/user/refurbished/update/${id}`)
-                        }}
-                    >
-                        Edit
-                    </div>
-                )}
-
-                {isSearchPage && (
-                    <div className={`search-page-product-card-bottom-stock ${isInStock ? 'instock' : 'outofstock'}`}>
-                        {isInStock ? 'ADD TO CART' : 'NOT DELIVERABLE'}
-                    </div>
-                )}
-
-                {isSearchRefurbished && (
-                    <div className="search-page-product-card-bottom-stock instock">
-                        ON SALE
-                    </div>
-                )}
             </div>
+            <div className="search-page-discount-container">
+                    {price && discountedPrice ? (
+                        <span>
+                            {Math.round(
+                                ((price - discountedPrice) / price) * 100
+                            )}
+                            % off
+                        </span>
+                    ) : (
+                        "Price not available"
+                    )}
+                </div>
         </div>
     );
 }

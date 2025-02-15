@@ -29,8 +29,6 @@ const ProductList = () => {
     if (!loadingState && productsToRender?.length === 0 && !hasMoreState) {
         return <NoProductsFound />;
     }
-
-
     return (
         <>
             <div id="product-page-grid">

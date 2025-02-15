@@ -11,7 +11,7 @@ import SingleProductSearchBar from "./singlePageSearchbar.jsx";
 import AddToCartTab from "./viewCartTab/viewCart.jsx";
 
 import searchProductService from "../appWrite/searchProduct.js";
-import { addToUserCart, fetchUserCart, updateCartStateAsync, removeFromUserCart } from "../redux/features/user/cartSlice.jsx";
+import { addToUserCart,updateCartStateAsync, removeFromUserCart } from "../redux/features/user/cartSlice.jsx";
 
 import { LazyLoadImage } from "react-lazy-load-image-component";
 
@@ -29,7 +29,7 @@ const ProductDetails = () => {
 
     const [userData, setUserData] = useState();
     const { products } = useSelector((state) => state.searchproducts);
-    const { cart, totalQuantity, totalPrice, isCartFetched } = useSelector((state) => state.userCart);
+    const { cart, totalQuantity, totalPrice} = useSelector((state) => state.userCart);
 
     const [loading, setLoading] = useState(true);
     const [productDetail, setProductDetails] = useState(null);
@@ -85,13 +85,6 @@ const ProductDetails = () => {
 
         fetchDetails();
     }, []);
-
-    useEffect(() => {
-        if (cart.length === 0 && userData?.userId && !isCartFetched) {
-            const userId = userData?.userId;
-            dispatch(fetchUserCart(userId));
-        }
-    }, [userData]);
 
     const handleImageClick = (index) => setSelectedImage(productDetail?.images[index]);
     const handleShopClick = () => productDetail.shopId && navigate(`/shop/${productDetail.shopId}`);

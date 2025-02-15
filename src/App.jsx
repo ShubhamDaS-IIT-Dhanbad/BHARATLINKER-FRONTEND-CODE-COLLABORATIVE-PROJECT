@@ -1,6 +1,7 @@
 import React, { Suspense, lazy, useEffect, useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-
+import Cookies from 'js-cookie';
+import { useDispatch, useSelector } from "react-redux";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import useUserAuth from './hooks/userAuthHook.jsx';
 import { Oval } from 'react-loader-spinner';
@@ -21,7 +22,7 @@ const ShopProducts = lazy(() => import('./components/shopProducts/shopProducts.j
 const User = lazy(() => import('./components/user/userHome.jsx'));
 const UserProfile = lazy(() => import('./components/user/userProfile.jsx'));
 const UserProductPageMain = lazy(() => import('./components/user/userProductPageMain.jsx'));
-const UserUpload= lazy(() => import('./components/user/upload/userProductUpload.jsx'));
+const UserUpload = lazy(() => import('./components/user/upload/userProductUpload.jsx'));
 const UserUpdateBookModule = lazy(() => import('./components/user/update/userProductUpdate.jsx'));
 const UserOrder = lazy(() => import('./components/user/order/order.jsx'));
 const UserCart = lazy(() => import('./components/user/myCart/myCart.jsx'));
@@ -30,6 +31,9 @@ const UserOrderDetail = lazy(() => import('./components/user/orderDetail/orderDe
 const RetailerRoutes = lazy(() => import('./components/retailer/retailerRoutes.jsx'));
 const RetailerLogin = React.lazy(() => import("./components/retailer/login.jsx"));
 const RetailerRegister = React.lazy(() => import("./components/retailer/register.jsx"));
+
+
+import { fetchUserCart } from "./redux/features/user/cartSlice.jsx";
 
 function App() {
   return (
@@ -47,7 +51,24 @@ function App() {
 }
 
 const RoutesWithConditionalHeader = React.memo(() => {
-  const { PrivateRoute} = useUserAuth();
+  const { PrivateRoute } = useUserAuth();
+  const { cart, isCartFetched } = useSelector((state) => state.userCart);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (!isCartFetched) {
+      const userData = Cookies.get('BharatLinkerUserData');
+      let parsedUserData = null;
+      try {
+        parsedUserData = userData ? JSON.parse(userData) : null;
+      } catch (error) {
+        console.error("Not authenticated !");
+      }
+      if (cart.length === 0 && parsedUserData?.userId && !isCartFetched) {
+        dispatch(fetchUserCart(parsedUserData.userId));
+      }
+    }
+  }, []);
+
   return (
     <>
       <Routes>
@@ -86,7 +107,7 @@ const RoutesWithConditionalHeader = React.memo(() => {
                 <meta name="description" content="Login to access your Bharat Linker account and manage your business efficiently." />
                 <meta name="robots" content="noindex, nofollow" />
               </Helmet>
-              <LoginPage/>
+              <LoginPage />
             </>
           }
         />
@@ -113,7 +134,7 @@ const RoutesWithConditionalHeader = React.memo(() => {
                 <title>Product Details - Bharat Linker</title>
                 <meta name="description" content="View detailed information about the selected product on Bharat Linker." />
               </Helmet>
-              <SingleProduct/>
+              <SingleProduct />
             </>
           }
         />
@@ -156,7 +177,7 @@ const RoutesWithConditionalHeader = React.memo(() => {
                 <title>Refurbished Products - Bharat Linker</title>
                 <meta name="description" content="Explore high-quality refurbished products on Bharat Linker." />
               </Helmet>
-              <RefurbishedPage  />
+              <RefurbishedPage />
             </>
           }
         />
@@ -168,7 +189,7 @@ const RoutesWithConditionalHeader = React.memo(() => {
                 <title>Refurbished Details - Bharat Linker</title>
                 <meta name="description" content="Search and explore a wide range of products on Bharat Linker." />
               </Helmet >
-              <SingleRefurbishedProductCard/>
+              <SingleRefurbishedProductCard />
             </>}
         />
 
@@ -254,7 +275,7 @@ const RoutesWithConditionalHeader = React.memo(() => {
                 <title>User Dashboard - Bharat Linker</title>
                 <meta name="description" content="Access your Bharat Linker user dashboard to manage your account, orders, and more." />
               </Helmet>
-              <User/>
+              <User />
             </PrivateRoute>
           }
         />
@@ -268,7 +289,7 @@ const RoutesWithConditionalHeader = React.memo(() => {
                 <title>User Profile - Bharat Linker</title>
                 <meta name="description" content="View and update your Bharat Linker user profile." />
               </Helmet>
-              <UserProfile  />
+              <UserProfile />
             </PrivateRoute>
           }
         />
@@ -281,7 +302,7 @@ const RoutesWithConditionalHeader = React.memo(() => {
                 <title>Manage Refurbished Products - Bharat Linker</title>
                 <meta name="description" content="View and manage your refurbished product listings on Bharat Linker." />
               </Helmet>
-              <UserProductPageMain  />
+              <UserProductPageMain />
             </PrivateRoute>
           }
         />
@@ -294,7 +315,7 @@ const RoutesWithConditionalHeader = React.memo(() => {
                 <title>Upload Products - Bharat Linker</title>
                 <meta name="description" content="Upload your products for sale on Bharat Linker, including refurbished items." />
               </Helmet>
-              <UserUpload/>
+              <UserUpload />
             </PrivateRoute>
           }
         />
@@ -324,7 +345,7 @@ const RoutesWithConditionalHeader = React.memo(() => {
             </PrivateRoute>
           }
         />
-        
+
         <Route
           path="/user/cart"
           element=
@@ -347,7 +368,7 @@ const RoutesWithConditionalHeader = React.memo(() => {
                 <title>Orders - Bharat Linker</title>
                 <meta name="description" content="Order detail on Bharat Linker." />
               </Helmet>
-              <UserOrderDetail/>
+              <UserOrderDetail />
             </PrivateRoute>
           }
         />

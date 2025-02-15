@@ -16,7 +16,7 @@ import './searchPage.css';
 
 const SearchPage = () => {
     const { executeSearch, onLoadMore } = useExecuteSearch();  
-    const { cart, totalQuantity, totalPrice, isCartFetched } = useSelector((state) => state.userCart);
+    const {totalQuantity, totalPrice} = useSelector((state) => state.userCart);
     
 
     const [showSortBy, setShowSortBy] = useState(false);
