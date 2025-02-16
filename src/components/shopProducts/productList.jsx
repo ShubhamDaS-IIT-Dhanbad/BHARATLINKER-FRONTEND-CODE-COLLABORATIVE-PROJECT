@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import SearchPageProductCard from './searchPageProductCard.jsx';
+import SearchPageProductCard from '../productCard.jsx';
 
 const ProductList = ({products,loading,hasMoreProducts,loadingMoreProducts }) => {
     // Loading state while products are being fetched
@@ -22,6 +22,7 @@ const ProductList = ({products,loading,hasMoreProducts,loadingMoreProducts }) =>
                         image={product.images}
                         title={product.title.length > 45 ? `${product.title.substr(0, 45)}...` : product.title}
                         price={product.price}
+                        discountedPrice={product.discountedPrice}
                         isInStock={product.isInStock}
                     />
                 ))}

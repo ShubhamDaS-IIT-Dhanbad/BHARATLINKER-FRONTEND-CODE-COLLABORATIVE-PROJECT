@@ -20,6 +20,7 @@ function SearchPageProductCard({ id, image, title, price, discountedPrice, isInS
     const currentPath = location.pathname;
     const isRefurbishedPage = currentPath === '/user/refurbished';
     const isSearchPage = currentPath === '/search';
+    const isShopProductPage = currentPath === '/shop/product';
     const isSearchRefurbished = currentPath === '/refurbished';
 
     const handleCardClick = () => {
@@ -57,7 +58,7 @@ function SearchPageProductCard({ id, image, title, price, discountedPrice, isInS
                         </div>
                     )}
 
-                    {isSearchPage && (
+                    {!isSearchRefurbished && !isRefurbishedPage && (
                         <div className={`search-page-product-card-bottom-stock ${isInStock ? 'instock' : 'outofstock'}`}>
                             {isInStock ? 'ADD TO CART' : 'NOT DELIVERABLE'}
                         </div>
