@@ -10,7 +10,7 @@ import Cookies from 'js-cookie';
 import SingleProductSearchBar from "./singlePageSearchbar.jsx";
 import AddToCartTab from "./viewCartTab/viewCart.jsx";
 
-import searchProductService from "../appWrite/searchProduct.js";
+import searchProductService from "../appWrite/main/searchProduct.js";
 import { addToUserCart,updateCartStateAsync, removeFromUserCart } from "../redux/features/user/cartSlice.jsx";
 
 import { LazyLoadImage } from "react-lazy-load-image-component";
