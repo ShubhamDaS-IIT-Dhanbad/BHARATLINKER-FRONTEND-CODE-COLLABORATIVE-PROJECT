@@ -1,4 +1,4 @@
-import conf from '../conf/conf.js';
+import conf from '../../conf/conf.js';
 import { Client, Databases, Storage, Query } from 'appwrite';
 import { getBoundsOfDistance } from 'geolib';
 class SearchProductService {
@@ -26,16 +26,10 @@ class SearchProductService {
         sortByDesc=false
     }) {
         try {
-            const inputTokens = inputValue.trim().toLowerCase(); // Single string
-    
+            const inputTokens = inputValue.trim().toLowerCase();
             const queries = [];
-            // Add search query if inputValue is provided
-            if (inputValue.length > 0) {
-                queries.push(Query.search("keywords", inputTokens));
-            }
-            if (shopId.length > 0) {
-                queries.push(Query.equal("shopId", shopId));
-            }
+            if (inputValue.length > 0) {queries.push(Query.search("keywords", inputTokens));}
+            if (shopId.length > 0) {queries.push(Query.equal("shopId", shopId));}
     
             // Add sorting queries
             if (sortByAsc) queries.push(Query.orderAsc("discountedPrice"));
@@ -53,17 +47,12 @@ class SearchProductService {
                     Query.lessThanEqual("long", bounds[1].longitude)
                 );
             }
-    
-            // Add pagination queries
             const offset = (page - 1) * productsPerPage;
             queries.push(Query.limit(productsPerPage), Query.offset(offset));
-    
-            // Specify fields to fetch using Query.select
             queries.push(Query.select(["$id","shopId","title", "description", "price", "discountedPrice","isInStock","images","shops.registrationStatus",
                 "shops.shopName","shops.$id","shops.isOpened","shops.email"
             ]));
     
-            // Fetch products from the database
             const { documents: allProducts = [] } = await this.databases.listDocuments(
                 conf.appwriteProductsDatabaseId,
                 conf.appwriteProductsCollectionId,
@@ -72,8 +61,6 @@ class SearchProductService {
     
             if (!Array.isArray(allProducts)) throw new TypeError("Expected 'allProducts' to be an array.");
             if (inputValue.length === 0) return { success: true, products: allProducts };
-    
-            // Process and score products based on input search terms
             const scoredProducts = allProducts
                 .map(product => {
                     const titleLower = product.title.toLowerCase();
@@ -100,7 +87,6 @@ class SearchProductService {
             return { success: false, error: error.message };
         }
     }
-    // Method to fetch a product by ID
     async getProductById(productId) {
         try {
             const queries = [];
@@ -118,9 +104,7 @@ class SearchProductService {
             console.log('Appwrite service :: getProductById', error);
             return false;
         }
-    }
-    
-    
+    } 
 }
 
 const searchProductService = new SearchProductService();

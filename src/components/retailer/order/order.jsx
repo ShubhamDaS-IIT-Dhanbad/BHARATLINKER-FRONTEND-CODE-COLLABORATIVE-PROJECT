@@ -10,7 +10,7 @@ import e1 from './e1.png';
 
 import "./order.css";
 
-function Order({ retailerData }) {
+function Order({ shopData }) {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const {
@@ -32,26 +32,26 @@ function Order({ retailerData }) {
   const selectedOrders = orderStates[selectedOrderType];
 
   const fetchInitialOrders = (status) => {
-    const shopId = retailerData?.$id;
+    const shopId = shopData?.shopId;
     if (!shopId) return;
     dispatch(fetchOrdersByStatus({ shopId, status, page: 1 }));
   };
 
   const fetchNextPage = () => {
-    const shopId = retailerData?.$id;
+    const shopId = shopData?.shopId;
     if (!shopId) return;
     const nextPage = selectedOrders.currentPage + 1;
     dispatch(loadMoreOrders({ shopId, status: selectedOrderType, page: nextPage }));
   };
 
   useEffect(() => {
-    if (retailerData?.$id) {
+    if (shopData?.shopId) {
       if (pendingOrders.data.length === 0) fetchInitialOrders("pending");
       if (confirmedOrders.data.length === 0) fetchInitialOrders("confirmed");
       if (deliveredOrders.data.length === 0) fetchInitialOrders("delivered");
       if (canceledOrders.data.length === 0) fetchInitialOrders("canceled");
     }
-  }, [retailerData]);
+  }, [shopData]);
   useEffect(()=>{
     window.scrollTo(0,0);
   },[selectedOrderType])
@@ -70,9 +70,9 @@ function Order({ retailerData }) {
           <p className="retailer-update-header-inner-div-p">
             ORDER DETAILS
           </p>
-          {retailerData?.shopName && (
+          {shopData?.shopName && (
             <div className="retailer-upload-product-header-shopname" aria-label="Change Location" tabIndex={0}>
-              {retailerData?.shopName?.toUpperCase()}
+              {shopData?.shopName?.toUpperCase()}
             </div>
           )}
         </div>

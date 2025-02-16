@@ -65,7 +65,7 @@ const RoutesWithConditionalHeader = React.memo(() => {
       }
       if (cart.length === 0 && parsedUserData?.userId && !isCartFetched) {
         dispatch(fetchUserCart(parsedUserData.userId));
-      }
+      } 
     }
   }, []);
 

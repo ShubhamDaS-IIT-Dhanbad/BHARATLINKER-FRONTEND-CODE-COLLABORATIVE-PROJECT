@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import {getRetailerProducts} from '../../../appWrite/uploadProduct/upload.js';
+import shopProduct from '../../../appWrite/shop/shopProduct.js';
 
 
 
@@ -7,7 +7,7 @@ export const fetchProducts = createAsyncThunk(
     'retailerproducts/fetchProducts',
     async ({ inputValue, shopId, selectedCategories, selectedBrands, page, productsPerPage, sortByAsc, sortByDesc }, { rejectWithValue }) => {
         try {
-            const response = await getRetailerProducts({
+            const response = await shopProduct.getShopProducts({
                 shopId,
                 inputValue,
                 page,
@@ -45,7 +45,7 @@ export const loadMoreProducts = createAsyncThunk(
     'retailerProducts/loadMoreProducts',
     async ({ inputValue, shopId, selectedCategories, selectedBrands, page, productsPerPage, sortByAsc, sortByDesc }, { rejectWithValue }) => {
         try {
-            const response = await getRetailerProducts({
+            const response = await shopProduct.getShopProducts({
                 shopId,
                 inputValue,
                 page,

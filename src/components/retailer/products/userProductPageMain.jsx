@@ -17,7 +17,7 @@ import ProductList from './productList.jsx';
 import './product.css';
 import Cookies from 'js-cookie';
 
-const retailerProduct = () => {
+const retailerProduct = ({shopData}) => {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const {
@@ -42,7 +42,8 @@ const retailerProduct = () => {
 
     // Debounced search function
     const handleSearch = useCallback(() => {
-        if (!userData?.$id) return;
+        console.log(shopData)
+        if (!userData?.shopId) return;
         const params = {
             inputValue,
             page: 1,
@@ -51,7 +52,7 @@ const retailerProduct = () => {
             selectedBrands: [],
             sortByAsc: false,
             sortByDesc: false,
-            shopId: userData.$id,
+            shopId: shopData.shopId,
         };
         dispatch(resetProducts());
         dispatch(fetchProducts(params));

@@ -1,39 +1,31 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import UploadForm from './updateForm.jsx';
 import { useNavigate } from 'react-router-dom';
-import { FaArrowLeft } from 'react-icons/fa';
-import UploadBooksForm from './updateForm.jsx';
 
-import './update.css';
+import Navbar from '../navbar.jsx';
+import '../style/upload.css';
 
-const UploadProduct = ({ retailerData }) => {
-    const navigate = useNavigate();
+const UploadProduct = ({ shopData }) => {
+    const navigate=useNavigate();
+
+    const { id: productId } = useParams();
+    const [product, setProduct] = useState('');
+    const products = useSelector((state) => state.retailerProducts.products);
+    useEffect(() => {
+        window.scrollTo(0,0);
+        const product = products.find((product) => product.$id === productId);
+        if (product) {setProduct(product);
+        }else{navigate('/user/refurbished')}
+    }, []);
+
     return (
         <>
-            <div className='retailer-product-upload-header-container'>
-                <FaArrowLeft
-                    className='retailer-product-upload-header-back-btn'
-                    size={25}
-                    onClick={() => navigate('/retailer/products')}
-                    aria-label="Back to Retailer Dashboard"
-                    tabIndex={0}
-                />
-                <div className='retailer-product-upload-header-content'>
-                    <h1 className='retailer-product-upload-header-main-title'>
-                        Update Product Data
-                        <span className='retailer-product-upload-header-title-decoration'></span>
-                    </h1>
-                    <div
-                        className='retailer-product-upload-header-shop-badge'
-                        aria-label="Current Shop"
-                        tabIndex={0}
-                    >
-                        <span className='retailer-product-upload-header-shop-icon'>🏪</span>
-                        {retailerData?.shopName}
-                    </div>
-                </div>
-            </div>
-
-            <UploadBooksForm retailerData={retailerData} />
+            <header>
+                <Navbar  onBackNavigation={()=>{navigate(-1)}} shopData={shopData} headerTitle={"UPDATE PRODUCT"} />
+            </header>
+            <UploadForm shopData={shopData} product={product} />
 
         </>
     );

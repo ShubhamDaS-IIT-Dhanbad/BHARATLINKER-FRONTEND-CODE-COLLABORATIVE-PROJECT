@@ -1,359 +1,321 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useEffect, useState } from 'react';
+import { FiUploadCloud, FiDollarSign, FiMapPin } from 'react-icons/fi';
+import ProgressBar from '../progressBar.jsx';
 import { Oval } from 'react-loader-spinner';
-import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate, useParams } from 'react-router-dom';
-import { updateProduct, deleteProduct } from '../../../appWrite/uploadProduct/upload.js';
-import { CiImageOn } from 'react-icons/ci';
-import { deleteProductSlice, updateProductSlice } from '../../../redux/features/retailer/product.jsx';
-import Cookies from 'js-cookie';
+import { useDispatch } from 'react-redux';
+import {useNavigate} from 'react-router-dom';
+import UserRefurbishedProduct from '../../../appWrite/user/userProduct.js'
+import { updateProduct,deleteProduct } from '../../../redux/features/user/userAllRefurbishedProductsSlice.jsx'
 
-const UploadBooksModulesForm = ({retailerData}) => {
-    const dispatch = useDispatch();
-    const navigate = useNavigate();
-    const { id: productId } = useParams();
+const UpdateForm = ({ shopData, product }) => {
+  const dispatch = useDispatch();
+  const navigate=useNavigate();
 
-    const products = useSelector((state) => state.retailerProducts.products);
-    const product = products.find((p) => p.$id === productId);
+  const [currentStep, setCurrentStep] = useState(1);
+  const [formData, setFormData] = useState({
+    title: product?.title || '',
+    description: product?.description || '',
+    price: product?.price || '',
+    discountedPrice: product?.discountedPrice || '',
+    keyword: product?.keyword || '',
+    phoneNumber: `91${shopData?.phoneNumber || ''}`
+  });
+  useEffect(() => {
+    setFormData({
+      title: product?.title || '',
+      description: product?.description || '',
+      price: product?.price || '',
+      discountedPrice: product?.discountedPrice || '',
+      keyword: product?.keyword || '',
+      phoneNumber: `91${shopData?.phoneNumber || ''}`
+    });
+    setFiles(product.image);
+  }, [product, shopData]);
 
-    const [isInStockState, setIsInStockState]=useState(true);
-    const [status, setStatus] = useState({ loading: true, error: null, success: null });
-    const [isUpdating, setIsUpdating] = useState(false);
-    const [isDeleting, setIsDeleting] = useState(false);
-    const [imagesToDelete, setImagesToDelete] = useState([]);
-    const [newImagesFiles, setNewImagesFiles] = useState(Array(3).fill(null));
 
-    const initialFormState = {
-        title: '',
-        description: '',
-        price: '',
-        discountedPrice: '',
-        keywords: ''
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [files, setFiles] = useState([]);
+  const [toDeleteImagesUrls, setToDeleteImagesUrls] = useState([]);
+  const [formErrors, setFormErrors] = useState({});
+  const [uploadStatus, setUploadStatus] = useState(null);
+  const [isUploading, setIsUploading] = useState(false);
 
-    };
+  const steps = [
+    { title: 'Product Info', icon: <FiUploadCloud /> },
+    { title: 'Pricing', icon: <FiDollarSign /> },
+    { title: 'Location', icon: <FiMapPin /> },
+  ];
 
-    const [formData, setFormData] = useState(initialFormState);
-    const [images, setImages] = useState();
-
-    useEffect(() => {
-        const loadProductData = async () => {
-            try {
-                if (!product) {
-                    navigate('/retailer/products');
-                    return;
-                }
-
-                const { title, description, price, discountedPrice, keywords, images: productImages,isInStock } = product;
-                setIsInStockState(isInStock);
-                setFormData({
-                    title,
-                    description,
-                    price,
-                    discountedPrice,
-                    keywords: Array.isArray(keywords) ? keywords.join(', ') : keywords,
-                    isInStock
-                });
-                setImages([...productImages, ...Array(3).fill(null)].slice(0, 3));
-            } catch (error) {
-                setStatus(prev => ({ ...prev, error: 'Failed to load product data' }));
-            } finally {
-                setStatus(prev => ({ ...prev, loading: false }));
-            }
-        };
-
-        if (Cookies.get('BharatLinkerShopData')) {
-            loadProductData();
+  const validateStep = (step) => {
+    const errors = {};
+    switch (step) {
+      case 1:
+        if (!formData.title.trim()) errors.title = 'Product title required';
+        if (!formData.description.trim()) errors.description = 'Description required';
+        if (!formData.keyword.trim()) errors.keyword = 'Keyword required';
+        break;
+      case 2:
+        if (!formData.price) errors.price = 'Original price required';
+        if (!formData.discountedPrice) errors.discountedPrice = 'Selling price required';
+        if (parseFloat(formData.discountedPrice) >= parseFloat(formData.price)) {
+          errors.discountedPrice = 'Must be less than original price';
         }
-    }, [product, navigate]);
-
-    const handleInputChange = (e) => {
-        const { name, value } = e.target;
-        setFormData(prev => ({ ...prev, [name]: value }));
-    };
-
-    const handleImageChange = useCallback((index, file) => {
-        if (!file) return;
-
-        const reader = new FileReader();
-        reader.onload = () => {
-            setImages(prev => {
-                const newImages = [...prev];
-                newImages[index] = reader.result;
-                return newImages;
-            });
-        };
-        reader.readAsDataURL(file);
-
-        setNewImagesFiles(prev => {
-            const newFiles = [...prev];
-            newFiles[index] = file;
-            return newFiles;
-        });
-    }, []);
-
-    const handleDrop = useCallback((index, e) => {
-        e.preventDefault();
-        const file = e.dataTransfer.files[0];
-        if (file) handleImageChange(index, file);
-    }, [handleImageChange]);
-
-    const removeImage = useCallback((index) => {
-        setImages(prev => {
-            const newImages = [...prev];
-            const currentImage = newImages[index];
-
-            if (typeof currentImage === 'string' && !currentImage.startsWith('data:')) {
-                setImagesToDelete(prevUrls => [...prevUrls, currentImage]);
-            }
-
-            newImages[index] = null;
-            return newImages;
-        });
-
-        setNewImagesFiles(prev => {
-            const newFiles = [...prev];
-            newFiles[index] = null;
-            return newFiles;
-        });
-    }, []);
-
-    const validateForm = () => {
-        const requiredFields = ['title', 'description', 'price', 'discountedPrice'];
-        const isValid = requiredFields.every(field => formData[field]?.trim());
-        const hasAtLeastOneImage = images.some(img => img !== null);
-
-        if (!isValid) {
-            setStatus(prev => ({ ...prev, error: 'Please fill all required fields' }));
-            return false;
-        }
-
-        if (!hasAtLeastOneImage) {
-            setStatus(prev => ({ ...prev, error: 'At least one image is required' }));
-            return false;
-        }
-
-        return true;
-    };
-
-    const handleProductUpdate = async () => {
-        const confirmUpdate = window.confirm('Are you sure you want to update this product?');
-        if (!confirmUpdate) return;
-
-        setIsUpdating(true);
-        try {
-            const validImages = images.filter(img =>
-                typeof img === 'string' && img.startsWith('https://res.cloudinary.com/')
-            );
-            const filesToUpload = newImagesFiles.filter(file => file !== null);
-           console.log(retailerData)
-            const updatedData = await updateProduct(
-                productId,
-                imagesToDelete,
-                { ...formData, images: validImages ,isInStock:isInStockState,lat:retailerData?.lat,long:retailerData?.long},
-                filesToUpload
-            );
-
-            dispatch(updateProductSlice({ productId, updatedData }));
-            setStatus({ loading: false, error: null, success: 'Product updated successfully!' });
-            setTimeout(() => setStatus(prev => ({ ...prev, success: null })), 2000);
-        } catch (error) {
-            setStatus({ loading: false, error: 'Update failed. Please try again.', success: null });
-        } finally {
-            setIsUpdating(false);
-            setImagesToDelete([]);
-            setNewImagesFiles(Array(3).fill(null));
-        }
-    };
-
-    const handleProductDelete = async () => {
-        const confirmDelete = window.confirm('Are you sure you want to permanently delete this product?');
-        if (!confirmDelete) return;
-
-        setIsDeleting(true);
-        try {
-            const imagesToDelete = product.images;
-            await deleteProduct(productId, imagesToDelete);
-            dispatch(deleteProductSlice(productId));
-            setStatus({ loading: false, success: 'Product deleted successfully!', error: null });
-            setTimeout(() => navigate('/retailer/products'), 500);
-        } catch (error) {
-            setStatus({ loading: false, error: 'Deletion failed. Please try again.', success: null });
-        }
-
-        setIsDeleting(false);
-    };
-
-    if (status.loading) {
-        return (
-            <div className="loader-container">
-                <Oval color="#00BFFF" height={80} width={80} />
-            </div>
-        );
+        break;
+      case 3:
+        if (files.length < 1) { alert("at least 1 image is  required!"); errors.images = 'At least one image required'; }
+        break;
+      default:
+        break;
     }
+    setFormErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
 
-    return (
-        <div className="retailer-update-product-container">
-            {status.error && (
-                <div className="retailer-update-product-error">
-                    {status.error}
-                </div>
+  const handleNext = () => {
+    if (validateStep(currentStep)) {
+      setCurrentStep((prev) => Math.min(prev + 1, 3));
+    }
+  };
+
+  const handleSubmit = async () => {
+    if (validateStep(3)) {
+      setIsUploading(true);
+      try {
+        const updatedFields = Object.keys(formData).reduce((acc, key) => {
+          if (formData[key] !== product[key]) {
+            acc[key] = formData[key];
+          }
+          return acc;
+        }, {});
+
+        const updatedData = await UserRefurbishedProduct.updateUserProduct(
+          product.$id,
+          toDeleteImagesUrls,
+          { ...updatedFields },
+          files
+        );
+        dispatch(updateProduct({ productId: product.$id, updatedData }));
+        setUploadStatus('success');
+        setCurrentStep(1);
+      } catch (error) {
+        setUploadStatus('error');
+        console.error('Upload failed:', error);
+      } finally {
+        setIsUploading(false);
+      }
+    }
+  };
+
+
+
+
+  const MAX_TITLE_LENGTH = 500;
+  const MAX_DESCRIPTION_LENGTH = 2000;
+  const MAX_KEYWORD_LENGTH = 50;
+  const handleInputChange = (e, field, maxLength) => {
+    const value = e.target.value;
+    if (value.length <= maxLength) {
+      setFormData({ ...formData, [field]: value });
+    }
+  };
+
+
+
+  const handleDelete = async () => {
+    const confirmation = window.confirm("Are you sure you want to cancel this order?");
+    if (confirmation) {
+      setIsDeleting(true);
+      await UserRefurbishedProduct.deleteProduct(product.$id, product.image);
+      dispatch(deleteProduct({productId:product.$id}));
+      setIsDeleting(false);
+      navigate(-1);
+    }
+  };
+  return (
+    <div className="multi-step-form">
+      <ProgressBar steps={steps} currentStep={currentStep} />
+
+      <div className="form-container">
+        {currentStep === 1 && (
+          <div className="step-card">
+            <div className="floating-input">
+              <input
+                type="text"
+                value={formData.title}
+                onChange={(e) => handleInputChange(e, 'title', MAX_TITLE_LENGTH)}
+                placeholder=" "
+                className={formErrors.title ? 'error' : ''}
+              />
+              <label>Product Title</label>
+              {formErrors.title && <span className="error-hint">{formErrors.title}</span>}
+              <span className='user-upload-count' style={{ color: formData.title.length === MAX_TITLE_LENGTH ? 'red' : 'inherit' }}>
+                {formData.title.length}/{MAX_TITLE_LENGTH}
+              </span>
+            </div>
+
+            <div className="floating-input textarea">
+              <textarea
+                value={formData.description}
+                onChange={(e) => handleInputChange(e, 'description', MAX_DESCRIPTION_LENGTH)}
+                placeholder="use # for heading and * for points"
+                rows="4"
+                className={formErrors.description ? 'error' : ''}
+              />
+              <label>Detailed Description</label>
+              {formErrors.description && <span className="error-hint">{formErrors.description}</span>}
+              <span className='user-upload-count' style={{ color: formData.description.length === MAX_DESCRIPTION_LENGTH ? 'red' : 'inherit' }}>
+                {formData.description.length}/{MAX_DESCRIPTION_LENGTH}
+              </span>
+            </div>
+
+            <div className="floating-input">
+              <input
+                type="text"
+                value={formData.keyword}
+                onChange={(e) => handleInputChange(e, 'keyword', MAX_KEYWORD_LENGTH)}
+                placeholder=" "
+                className={formErrors.keyword ? 'error' : ''}
+              />
+              <label>Keyword separated by comma</label>
+              {formErrors.keyword && <span className="error-hint">{formErrors.keyword}</span>}
+              <span className='user-upload-count' style={{ color: formData.keyword.length === MAX_KEYWORD_LENGTH ? 'red' : 'inherit' }}>
+                {formData.keyword.length}/{MAX_KEYWORD_LENGTH}
+              </span>
+            </div>
+          </div>
+        )}
+
+        {currentStep === 2 && (
+          <div className="step-card">
+            <div className="price-inputs">
+              <div className="floating-input">
+                <input
+                  type="number"
+                  value={formData.price}
+                  onChange={(e) => setFormData({ ...formData, price: e.target.value })}
+                  placeholder=" "
+                  className={formErrors.price ? 'error' : ''}
+                />
+                <label>Original Price (₹)</label>
+                {formErrors.price && <span className="error-hint">{formErrors.price}</span>}
+              </div>
+
+              <div className="floating-input">
+                <input
+                  type="number"
+                  value={formData.discountedPrice}
+                  onChange={(e) => setFormData({ ...formData, discountedPrice: e.target.value })}
+                  placeholder=" "
+                  className={formErrors.discountedPrice ? 'error' : ''}
+                />
+                <label>Selling Price (₹)</label>
+                {formErrors.discountedPrice && (
+                  <span className="error-hint">{formErrors.discountedPrice}</span>
+                )}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {currentStep === 3 && (
+          <div className="step-card">
+            <div className="dropzone" onClick={() => document.getElementById('fileInput').click()}>
+              <FiUploadCloud className="upload-icon" />
+              <p>Click to select</p>
+              <small>(Max 3 images, 5MB each)</small>
+              <input
+                id="fileInput"
+                type="file"
+                accept="image/*"
+                multiple
+                style={{ display: 'none' }}
+                onChange={(e) => {
+                  const selectedFiles = Array.from(e.target.files);
+                  setFiles((prevFiles) => [...prevFiles, ...selectedFiles].slice(0, 3));
+                }}
+              />
+            </div>
+
+            <div className="preview-grid">
+              {files.map((file, index) => {
+                const imageUrl = file instanceof File ? URL.createObjectURL(file) : file;
+                return (
+                  <div key={index} className="image-preview">
+                    <img src={imageUrl} alt={`Preview ${index}`} />
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (typeof file === "string" && file.startsWith("https://res.cloudinary.com")) {
+                          setToDeleteImagesUrls((prev) => [...prev, file]);
+                        }
+                        setFiles(files.filter((_, i) => i !== index));
+                      }}
+                    >
+                      ×
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
+
+        <div className="form-navigation">
+          {currentStep > 1 ? (
+            <button className="outline-button" onClick={() => setCurrentStep((prev) => prev - 1)}>
+              Back
+            </button>
+          ) : (<div className="order-detail-cancel" onClick={isDeleting ? null : handleDelete}>
+            {isDeleting ? (
+              <Oval height={20} width={20} color="white" secondaryColor="#b41818" ariaLabel="loading" />
+            ) : (
+              "DELETE ORDER"
             )}
+          </div>)}
 
-            {status.success && (
-                <div className="retailer-update-product-success">
-                    {status.success}
-                </div>
-            )}
+          {currentStep < 3 ? (
+            <button className="primary-button" onClick={handleNext}>
+              Continue
+            </button>
+          ) : (
+            <>
 
-            <div className="retailer-update-product-section">
-                <label className="retailer-update-product-label">
-                    Product Title
-                    <input
-                        type="text"
-                        name="title"
-                        value={formData.title}
-                        onChange={handleInputChange}
-                        className="retailer-update-product-input"
-                        required
-                    />
-                </label>
 
-                <label className="retailer-update-product-label">
-                    Description
-                    <textarea
-                        name="description"
-                        value={formData.description}
-                        onChange={handleInputChange}
-                        className="retailer-update-product-textarea"
-                        rows="6"
-                        required
-                    />
-                </label>
-
-                <label className="retailer-update-product-label">
-                    Original Price (₹)
-                    <input
-                        type="number"
-                        name="price"
-                        value={formData.price}
-                        onChange={handleInputChange}
-                        className="retailer-update-product-input"
-                        required
-                    />
-                </label>
-
-                <label className="retailer-update-product-label">
-                    Discounted Price (₹)
-                    <input
-                        type="number"
-                        name="discountedPrice"
-                        value={formData.discountedPrice}
-                        onChange={handleInputChange}
-                        className="retailer-update-product-input"
-                        required
-                    />
-                </label>
-
-                <label className="retailer-update-product-label">
-                    Keywords (comma separated)
-                    <input
-                        type="text"
-                        name="keywords"
-                        value={formData.keywords}
-                        onChange={handleInputChange}
-                        className="retailer-update-product-input"
-                        placeholder="e.g., fiction, bestseller, romance"
-                    />
-                </label>
-                <div className="retailer-update-product-instock-container">
-                    <label className="retailer-update-product-label">
-                        IN STOCK
-                       {isInStockState ? <div className="retailer-update-product-instock-container-stock"></div> : <div className="retailer-update-product-instock-container-sel" onClick={
-                        ()=>{
-                            setIsInStockState(true);
-                        }}></div>} 
-                    </label>
-                    <label className="retailer-update-product-label">
-                        OUT OF STOCK
-                        
-                       {isInStockState ? <div className="retailer-update-product-instock-container-sel"  onClick={
-                        ()=>{
-                            setIsInStockState(false);
-                        }}></div> : <div className="retailer-update-product-instock-container-stock"></div>} 
-                    </label>
-                </div>
-            </div>
-
-            <div className="retailer-upload-product-image-section">
-                <label className="retailer-upload-product-input-label">
-                    Product Images (minimum 1 required)
-                </label>
-                <div className="retailer-upload-product-image-grid">
-                    {images.map((image, index) => (
-                        <div
-                            key={index}
-                            className="retailer-upload-product-image-upload-card"
-                            onDrop={(e) => handleDrop(index, e)}
-                            onDragOver={(e) => e.preventDefault()}
-                        >
-                            {image ? (
-                                <div className="retailer-upload-product-image-preview-wrapper">
-                                    <img
-                                        src={image}
-                                        alt={`Preview ${index + 1}`}
-                                        className="retailer-upload-product-preview-image"
-                                    />
-                                    <button
-                                        className="retailer-upload-product-remove-image-button"
-                                        onClick={() => removeImage(index)}
-                                        aria-label="Remove image"
-                                    >
-                                        ×
-                                    </button>
-                                </div>
-                            ) : (
-                                <label className="retailer-upload-product-image-upload-box">
-                                    <CiImageOn className="retailer-upload-product-upload-icon" />
-                                    <input
-                                        type="file"
-                                        hidden
-                                        onChange={(e) => handleImageChange(index, e.target.files[0])}
-                                        accept="image/*"
-                                    />
-                                </label>
-                            )}
-                        </div>
-                    ))}
-                </div>
-            </div>
-
-            <div className="retailer-update-product-actions">
-                <button
-                    type="button"
-                    className={`retailer-update-product-delete-button ${isUpdating ? 'disabled' : ''}`}
-                    onClick={handleProductDelete}
-                    disabled={status.loading || isUpdating}
-                >
-                    {isDeleting ? (
-                        <Oval color="#FFF" height={20} width={20} />
-                    ) : (
-                        'Delete Product'
-                    )}
-                </button>
-
-                <button
-                    className={`retailer-upload-product-submit-button ${isUpdating ? 'uploading' : ''}`}
-                    onClick={handleProductUpdate}
-                    disabled={isUpdating}
-                >
-                    {isUpdating ? (
-                        <Oval color="#fff" height={24} width={24} />
-                    ) : (
-                        'Update Product'
-                    )}
-                </button>
-            </div>
+              <button className="primary-button" onClick={handleSubmit} disabled={isUploading}>
+                {isUploading ? (
+                  <Oval
+                    height={30}
+                    width={30}
+                    color="green"
+                    secondaryColor="white"
+                    ariaLabel="loading"
+                  />
+                ) : (
+                  'Update'
+                )}
+              </button>
+            </>
+          )}
         </div>
-    );
+      </div>
+
+      {uploadStatus && (
+        <div className={`status-toast ${uploadStatus}`}>
+          {uploadStatus === 'success' ? (
+            <>
+              <span>🎉 updated successfully!</span>
+              <button onClick={() => setUploadStatus(null)}>Ok</button>
+            </>
+          ) : (
+            <>
+              <span>❌ Update failed. Please try again.</span>
+              <button onClick={() => setUploadStatus(null)}>Dismiss</button>
+            </>
+          )}
+        </div>
+      )}
+    </div>
+  );
 };
 
-export default UploadBooksModulesForm;
+export default UpdateForm;

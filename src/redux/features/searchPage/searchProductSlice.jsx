@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import searchProductService from '../../../appWrite/searchProduct.js';
+import searchProductService from '../../../appWrite/main/searchProduct.js';
 
 // Async thunk to fetch products
 export const fetchProducts = createAsyncThunk(

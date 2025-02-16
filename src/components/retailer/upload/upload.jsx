@@ -1,7 +1,7 @@
 import React from 'react';
-import UploadBooksForm from './userUploadProductForm.jsx';
+import UploadForm from './uploadForm.jsx';
 import Navbar from '../navbar.jsx';
-import '../style/userProductUpload.css';
+import '../style/upload.css';
 
 const UploadProduct = ({shopData}) => {
     return (
@@ -9,7 +9,7 @@ const UploadProduct = ({shopData}) => {
             <header>
             <Navbar shopData={shopData} headerTitle={"UPLOAD PRODUCT"} />
             </header>
-            <UploadBooksForm shopData={shopData}/>
+            <UploadForm shopData={shopData}/>
 
         </>
     );

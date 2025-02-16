@@ -5,7 +5,7 @@ import ProgressBar from '../progressBar.jsx';
 import { Oval } from 'react-loader-spinner';
 import { FaLocationDot } from "react-icons/fa6";
 
-const UploadBooksModulesForm = ({ shopData }) => {
+const Upload = ({ shopData }) => {
   const [selectedAddressIndex, setSelectedAddressIndex] = useState();
   const [currentStep, setCurrentStep] = useState(1);
   const [coordinates, setCoordinates] = useState();
@@ -310,4 +310,4 @@ const UploadBooksModulesForm = ({ shopData }) => {
   );
 };
 
-export default UploadBooksModulesForm;
+export default Upload;

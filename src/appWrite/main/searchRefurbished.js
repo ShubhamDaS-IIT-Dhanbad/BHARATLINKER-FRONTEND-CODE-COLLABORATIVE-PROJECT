@@ -1,4 +1,4 @@
-import conf from '../conf/conf.js';
+import conf from '../../conf/conf.js';
 import { Client, Databases, Query } from 'appwrite';
 import { getBoundsOfDistance } from 'geolib';
 

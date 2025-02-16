@@ -1,6 +1,6 @@
 // src/redux/features/refurbishedProductsSlice.jsx
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import searchRefurbishedProductService from '../../../appWrite/searchRefurbished.js';
+import searchRefurbishedProductService from '../../../appWrite/main/searchRefurbished.js';
 
 // Async thunk for fetching refurbished products
 export const fetchRefurbishedProducts = createAsyncThunk(
