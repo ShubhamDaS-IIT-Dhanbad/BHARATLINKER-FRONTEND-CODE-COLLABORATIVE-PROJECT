@@ -68,7 +68,7 @@
     flex-direction: column;
     justify-content: space-between;
     color: #000000;
-    overflow: scroll;
+    overflow: hidden;
 }
 
 .search-page-product-card-shop-name {
