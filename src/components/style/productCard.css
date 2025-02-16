@@ -4,8 +4,8 @@
     max-width: 200px;
     display: flex;
     flex-direction: column;
-    min-height: 350px;
-    max-height: 350px;
+    min-height: 370px;
+    max-height: 370px;
     margin-top: 10px;
     align-items: center;
     z-index: 3;
@@ -36,7 +36,7 @@
 
 .search-page-product-card-bottom-stock.instock {
     color: rgb(25, 148, 46);
-    border:1.5px solid rgb(25, 148, 46);
+    border:1.4px solid rgb(25, 148, 46);
 }
 
 .search-page-product-card-bottom-stock.outofstock {
