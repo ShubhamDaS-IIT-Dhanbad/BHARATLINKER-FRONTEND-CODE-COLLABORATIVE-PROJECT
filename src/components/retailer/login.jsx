@@ -82,6 +82,8 @@ function SignUpForm() {
         shopId: shopData.$id,
         uId: session?.userId || "90",
         id: session?.$id || "90",
+        latitude: shopData?.latitude || "90",
+        longitude: shopData?.longitude || "90",
         phoneNumber: phone,
         address: parsedAddress,
         shopName: shopData.shopName

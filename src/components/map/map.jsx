@@ -39,6 +39,7 @@ const LocationMap = ({
     setShowMap,
     setLocationTab,
     setDeliveryAddress,
+    setShopAddress,
     setShowAddressDetail,
 }) => {
     const navigate=useNavigate();
@@ -154,7 +155,16 @@ const LocationMap = ({
         };
         if(window.location.pathname === "/user/profile"){
             handleUserProfileUpdate(locationData);
-        }else if (window.location.pathname === "/user/cart") {
+        }else if (window.location.pathname === "/secure/shop/address") {
+            setShopAddress(locationData);
+            setTimeout(() => {
+                setLoadingConfirm(false);
+                setShowMap(false);
+                setLocationTab(false);
+                setShowAddressDetail(true);
+            }, 900);
+        }
+        else if (window.location.pathname === "/user/cart") {
             setDeliveryAddress(locationData);
             setTimeout(() => {
                 setLoadingConfirm(false);

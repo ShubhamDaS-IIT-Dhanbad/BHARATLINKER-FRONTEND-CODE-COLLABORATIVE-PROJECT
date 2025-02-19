@@ -89,18 +89,20 @@ class ShopProduct {
         let uploadedImages = [];
         try {
             uploadedImages = await this.uploadImagesToCloudinary(files);
+            console.log(uploadedImages)
             const imageUrls = uploadedImages.map((image) => image.secure_url);
 
             const newProductData = {
-                image: imageUrls,
+                shopId:productData.shopId,
+                shop:productData.shopId,
+                images: imageUrls,
                 title: productData.title.toLowerCase(),
                 description: productData.description.toLowerCase(),
                 price: Number(productData.price),
                 discountedPrice: Number(productData.discountedPrice),
-                keyword: productData.keyword.toLowerCase(),
-                phoneNumber: productData.phoneNumber,
-                latitude: productData.coordinates?.latitude || 0,
-                longitude: productData.coordinates?.longitude || 0
+                keywords: productData.keyword.toLowerCase(),
+                latitude: productData.coordinates?.latitude,
+                longitude: productData.coordinates?.longitude
             };
             const document = await this.databases.createDocument(
                 conf.appwriteProductsDatabaseId,
@@ -131,7 +133,7 @@ class ShopProduct {
                 allImageUrls = [...allImageUrls, ...validUrls, ...newImageUrls];
             } else {
                 allImageUrls = [...allImageUrls, ...validUrls];}
-            updatedData.image = allImageUrls;
+            updatedData.images = allImageUrls;
     
             const productIdValue = typeof productId === 'object' && productId.id ? productId.id : productId;
             const updatedDocument = await this.databases.updateDocument(

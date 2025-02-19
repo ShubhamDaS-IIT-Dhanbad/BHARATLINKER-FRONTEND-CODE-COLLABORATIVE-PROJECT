@@ -2,25 +2,13 @@ import React from 'react';
 import { useState, useEffect, useCallback } from 'react';
 import { Navigate, useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { Client, Account } from 'appwrite';
 import Cookies from 'js-cookie';
-import conf from '../conf/conf.js';
 
 const useRetailerAuthHook = () => {
   const dispatch = useDispatch();
   const [retailerData, setRetailerData] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
-
-  const client = useCallback(
-    () =>
-      new Client()
-        .setEndpoint('https://cloud.appwrite.io/v1')
-        .setProject(conf.appwriteUsersProjectId),
-    []
-  );
-
-  const account = useCallback(() => new Account(client()), [client]);
 
   const getRetailerDataFromCookie = useCallback(() => {
     const storedData = Cookies.get('BharatLinkerShopData');
@@ -37,7 +25,7 @@ const useRetailerAuthHook = () => {
   }, []);
 
   useEffect(() => {
-    if (!location.pathname.startsWith('/retailer')) return;
+    if (!location.pathname.startsWith('/secure/shop')) return;
     const retailerSession = getRetailerDataFromCookie();
 
     if (retailerSession) {
@@ -45,9 +33,9 @@ const useRetailerAuthHook = () => {
       const { registrationStatus } = retailerSession || {};
 
       if (registrationStatus === 'pending') {
-        navigate('/retailer/pending');
+        navigate('/shop/pending');
       } else if (registrationStatus === 'rejected') {
-        navigate('/retailer/rejected');
+        navigate('/shop/rejected');
       }
     } else {
       navigate('/');

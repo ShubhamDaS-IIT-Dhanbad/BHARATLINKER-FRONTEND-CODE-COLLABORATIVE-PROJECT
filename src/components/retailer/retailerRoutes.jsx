@@ -4,9 +4,11 @@ import { Helmet } from "react-helmet-async";
 import Cookies from "js-cookie";
 import { Oval } from "react-loader-spinner";
 import useRetailerAuthHook from '../../hooks/retailerAuthHook.jsx'
+
 // Lazy-loaded components
-const Retailer = React.lazy(() => import("./retailer.jsx"));
+const ShopHome = React.lazy(() => import("./shopHome.jsx"));
 const RetailerDashboard = React.lazy(() => import("./dashboard/dashboard.jsx"));
+const ShopAddress = React.lazy(() => import("./shopAddress.jsx"));
 const RetailerProducts = React.lazy(() => import("./products/userProductPageMain.jsx"));
 const RetailerUpload = React.lazy(() => import("./upload/upload.jsx"));
 const RetailerUpdate = React.lazy(() => import("./update/update.jsx"));
@@ -20,20 +22,6 @@ const RetailerOrderDetail = React.lazy(() => import("./orderDetail/orderDetail.j
 
 const RetailerRoutes = React.memo(() => {
   const { PrivateRoute} = useRetailerAuthHook();
-
-  const getRetailerDataFromCookie = useCallback(() => {
-    const storedData = Cookies.get("BharatLinkerShopData");
-    if (storedData) {
-      try {
-        return JSON.parse(storedData);
-      } catch (error) {
-        console.error("Error parsing retailer data from cookie:", error);
-        return null;
-      }
-    }
-    return null;
-  }, []);
-  const retailerData = getRetailerDataFromCookie();
 
   return (
     <Suspense
@@ -61,7 +49,7 @@ const RetailerRoutes = React.memo(() => {
         />
 
         <Route
-          path="/retailer"
+          path="/secure/shop"
           element={
             <PrivateRoute>
               <Helmet>
@@ -71,7 +59,7 @@ const RetailerRoutes = React.memo(() => {
                   content="Welcome to the BharatLinker Retailer dashboard."
                 />
               </Helmet>
-              <Retailer retailerData={retailerData} />
+              <ShopHome/>
             </PrivateRoute>
           }
         />
@@ -87,7 +75,22 @@ const RetailerRoutes = React.memo(() => {
                   content="Manage your retailer profile, view analytics, and access business tools."
                 />
               </Helmet>
-              <RetailerDashboard retailerData={retailerData} />
+              <RetailerDashboard />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/secure/shop/address"
+          element={
+            <PrivateRoute>
+              <Helmet>
+                <title>Shop Address - BharatLinker</title>
+                <meta
+                  name="shop address"
+                  content="Manage your retailer profile, view analytics, and access business tools."
+                />
+              </Helmet>
+              <ShopAddress />
             </PrivateRoute>
           }
         />
@@ -103,7 +106,7 @@ const RetailerRoutes = React.memo(() => {
                   content="View and manage your product inventory on BharatLinker."
                 />
               </Helmet>
-              <RetailerProducts retailerData={retailerData} />
+              <RetailerProducts  />
             </PrivateRoute>
           }
         />
@@ -119,7 +122,7 @@ const RetailerRoutes = React.memo(() => {
                   content="Update your product details on BharatLinker."
                 />
               </Helmet>
-              <RetailerUpdate retailerData={retailerData} />
+              <RetailerUpdate  />
             </PrivateRoute>
           }
         />
@@ -135,13 +138,13 @@ const RetailerRoutes = React.memo(() => {
                   content="Upload new products to your BharatLinker retailer account."
                 />
               </Helmet>
-              <RetailerUpload retailerData={retailerData} />
+              <RetailerUpload />
             </PrivateRoute>
           }
         />
 
         <Route
-          path="/retailer/orders"
+          path="/shop/orders"
           element={
             <PrivateRoute>
               <Helmet>
@@ -151,13 +154,13 @@ const RetailerRoutes = React.memo(() => {
                   content="orders"
                 />
               </Helmet>
-              <RetailerOrders retailerData={retailerData} />
+              <RetailerOrders/>
             </PrivateRoute>
           }
         />
 
         <Route
-          path="/retailer/order/:id"
+          path="/shop/order/:id"
           element={
             <PrivateRoute>
               <Helmet>
@@ -167,7 +170,7 @@ const RetailerRoutes = React.memo(() => {
                   content="orders"
                 />
               </Helmet>
-              <RetailerOrderDetail retailerData={retailerData} />
+              <RetailerOrderDetail/>
             </PrivateRoute>
           }
         />

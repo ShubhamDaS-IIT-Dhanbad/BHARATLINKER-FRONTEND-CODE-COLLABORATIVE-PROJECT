@@ -21,7 +21,6 @@ export const sendOTP = async (phone) => {
 
 export const verifyOTP = async (shopId, otpCode, phoneNumber) => {
   try {
-    // const session = await account.createSession(shopId, otpCode);
     let shopData = await fetchShopData(phoneNumber);
     if (!shopData || shopData.total === 0) {
       shopData = await databases.createDocument(

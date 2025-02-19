@@ -1,22 +1,19 @@
 import React, { useState } from 'react';
 import { FiUploadCloud, FiDollarSign, FiMapPin } from 'react-icons/fi';
-import UserRefurbishedProduct from '../../../appWrite/user/userProduct.js';
+import shopProduct from '../../../appWrite/shop/shopProduct.js';
 import ProgressBar from '../progressBar.jsx';
 import { Oval } from 'react-loader-spinner';
-import { FaLocationDot } from "react-icons/fa6";
 
 const Upload = ({ shopData }) => {
-  const [selectedAddressIndex, setSelectedAddressIndex] = useState();
   const [currentStep, setCurrentStep] = useState(1);
-  const [coordinates, setCoordinates] = useState();
-  const [showLocationList, setShowLocationList] = useState(false);
+  const [coordinates, setCoordinates] = useState({ latitude:shopData.latitude, longitude: shopData.longitude });
   const [formData, setFormData] = useState({
+    shopId:shopData.shopId,
     title: '',
     description: '',
     price: '',
     discountedPrice: '',
-    keyword: '',
-    phoneNumber: `91${shopData.phoneNumber}`
+    keyword: ''
   });
   const [files, setFiles] = useState([]);
   const [formErrors, setFormErrors] = useState({});
@@ -65,18 +62,16 @@ const Upload = ({ shopData }) => {
     if (validateStep(3)) {
       setIsUploading(true);
       try {
-        await UserRefurbishedProduct.uploadProductWithImages({ ...formData, coordinates }, files);
+        await shopProduct.uploadShopProduct({ ...formData, coordinates }, files);
         setUploadStatus('success');
         setFormData({
           title: '',
           description: '',
           price: '',
           discountedPrice: '',
-          keyword: '',
-          phoneNumber: `91${shopData.phoneNumber}`
+          keyword: ''
         });
         setFiles([]);
-        setCoordinates();
         setCurrentStep(1);
       } catch (error) {
         setUploadStatus('error');
@@ -85,11 +80,6 @@ const Upload = ({ shopData }) => {
         setIsUploading(false);
       }
     }
-  };
-  const handleLocationSelect = (location, index) => {
-    setCoordinates({ latitude: location.latitude, longitude: location.longitude });
-    setShowLocationList(false);
-    setSelectedAddressIndex(index);
   };
 
 
@@ -226,39 +216,6 @@ const Upload = ({ shopData }) => {
                   </div>
                 ))}
               </div>
-
-
-
-
-            <div className="upload-choose-location" onClick={() => setShowLocationList(!showLocationList)}>
-              Choose Location
-              <FaLocationDot color="rgb(12, 131, 31)" size={20} />
-            </div>
-            {showLocationList && (
-              <div className="address-grid">
-                {shopData.address.length > 0 ? (
-                  shopData.address.map((addr, index) => (
-                    <div
-                      key={index}
-                      className={`address-card ${selectedAddressIndex === index ? 'selected' : ''}`}
-                      onClick={() => handleLocationSelect(addr, index)}
-                    >
-                      <div className="address-content">
-                        <FaLocationDot color="rgb(12, 131, 31)" size={20} />
-                      </div>
-                      <div className="address-body">
-                        <h1>Address</h1>
-                        <p>{addr.address}</p>
-                      </div>
-                    </div>
-                  ))
-                ) : (
-                  <div className="empty-state">
-                    <p>No addresses available. go to address book and add one.</p>
-                  </div>
-                )}
-              </div>
-            )}
           </div>
         )}
 

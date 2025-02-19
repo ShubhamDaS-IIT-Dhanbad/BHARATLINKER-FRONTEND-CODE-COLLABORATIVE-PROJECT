@@ -21,7 +21,7 @@ const Home = () => {
         if (retailerCookie) {
             const shopData = JSON.parse(retailerCookie);
             const path = shopData.registrationStatus === 'pending' ? '/retailer/pending' :
-                shopData.registrationStatus === 'rejected' ? '/retailer/rejected' : '/retailer';
+                shopData.registrationStatus === 'rejected' ? '/retailer/rejected' : '/secure/shop';
             navigate(path);
         } else {
             navigate('/secure/login');

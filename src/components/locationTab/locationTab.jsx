@@ -13,8 +13,8 @@ import './locationTab.css';
 const PREDEFINED_RADIUS_OPTIONS = [1, 3, 5, 9, 13];
 const DEBOUNCE_DELAY = 300;
 
-const LocationTab = ({ documentId, header, setLocationTab, setShowAddressDetail, setDeliveryAddress }) => {
-    // State management
+const LocationTab = ({ documentId, header, setLocationTab, setShowAddressDetail, setDeliveryAddress ,setShopAddress}) => {
+
     const [loading, setLoading] = useState(false);
     const [fetchingUserLocation, setFetchingUserLocation] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
@@ -23,18 +23,11 @@ const LocationTab = ({ documentId, header, setLocationTab, setShowAddressDetail,
     const [showMap, setShowMap] = useState(false);
     const [radius, setRadius] = useState('');
 
-    // Custom hook for location management
     const { location, updateLocation, fetchLocationSuggestions } = useLocationFromCookie();
-
-    // Ref for debounce timeout
     const debounceTimeout = useRef(null);
-
-    // Set initial radius from location cookie
     useEffect(() => {
         if (location?.radius) setRadius(location.radius);
     }, [location]);
-
-    // Debounced search handler
     const handleSearch = useCallback(async (query) => {
         if (!query.trim()) return;
         setLoading(true);
@@ -142,6 +135,7 @@ const LocationTab = ({ documentId, header, setLocationTab, setShowAddressDetail,
             addressMap={mapState.address}
             setShowMap={setShowMap}
             setDeliveryAddress={setDeliveryAddress}
+            setShopAddress={setShopAddress}
             setShowAddressDetail={setShowAddressDetail}
             setLocationTab={setLocationTab}
         />
@@ -170,8 +164,8 @@ const LocationTab = ({ documentId, header, setLocationTab, setShowAddressDetail,
                         />
                     )}
                 </div>
-                {!window.location.pathname.includes('/user/cart') && !window.location.pathname.includes('/user/profile') && (
-
+                {!window.location.pathname.includes('/user/cart') && !window.location.pathname.includes('/user/profile') &&
+                !window.location.pathname.includes('/shop/address') && (
                     <>
                         {radiusControls}
                     </>

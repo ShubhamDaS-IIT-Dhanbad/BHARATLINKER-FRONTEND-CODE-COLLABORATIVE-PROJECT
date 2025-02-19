@@ -30,27 +30,34 @@ export async function fetchShopData(phoneNumber) {
     return null;
   }
 }
-
-// Function to update shop data
-export async function updateShopData(updatedData) {
+export async function updateShopData(updatedData, shopId) {
   try {
-    const { documentId, address } = updatedData;
-
-    if (!documentId) {
-      throw new Error("Document ID is required.");
+    if (!shopId) {
+      throw new Error("Shop ID is required.");
     }
-    if (!Array.isArray(address)) {
-      throw new Error("Address must be an array.");
+
+    const updateFields = {};
+
+    for (const key in updatedData) {
+      if (updatedData[key] !== undefined && updatedData[key] !== null) {
+        updateFields[key] = updatedData[key];
+      }
+    }
+
+    if (Object.keys(updateFields).length === 0) {
+      throw new Error("No valid fields to update.");
     }
 
     return await databases.updateDocument(
       conf.appwriteShopsDatabaseId,
       conf.appwriteShopsCollectionId,
-      documentId,
-      { address }
+      shopId,
+      updateFields
     );
   } catch (error) {
     console.error("Error in updateShopData:", error.message);
     return false;
   }
 }
+
+

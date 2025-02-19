@@ -94,8 +94,8 @@ const cleanupUploadedImages = async (uploadedImages) => {
 
     try {
         const deletionPromises = uploadedImages
-            .filter(isValidUrl) // Filter valid URLs only
-            .map(url => deleteImageFromCloudinary(String(url))); // Convert URL to string and delete valid images
+            .filter(isValidUrl)
+            .map(url => deleteImageFromCloudinary(String(url)));
 
         await Promise.all(deletionPromises);
         console.log('Successfully cleaned up uploaded images');

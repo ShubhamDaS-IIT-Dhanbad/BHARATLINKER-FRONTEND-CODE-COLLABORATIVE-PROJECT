@@ -4,7 +4,7 @@ import ProgressBar from '../progressBar.jsx';
 import { Oval } from 'react-loader-spinner';
 import { useDispatch } from 'react-redux';
 import {useNavigate} from 'react-router-dom';
-import UserRefurbishedProduct from '../../../appWrite/user/userProduct.js'
+import shopProduct from '../../../appWrite/shop/shopProduct.js';
 import { updateProduct,deleteProduct } from '../../../redux/features/user/userAllRefurbishedProductsSlice.jsx'
 
 const UpdateForm = ({ shopData, product }) => {
@@ -17,8 +17,8 @@ const UpdateForm = ({ shopData, product }) => {
     description: product?.description || '',
     price: product?.price || '',
     discountedPrice: product?.discountedPrice || '',
-    keyword: product?.keyword || '',
-    phoneNumber: `91${shopData?.phoneNumber || ''}`
+    keywords: product?.keywords || '',
+    shopId: shopData?.shopId
   });
   useEffect(() => {
     setFormData({
@@ -26,10 +26,10 @@ const UpdateForm = ({ shopData, product }) => {
       description: product?.description || '',
       price: product?.price || '',
       discountedPrice: product?.discountedPrice || '',
-      keyword: product?.keyword || '',
-      phoneNumber: `91${shopData?.phoneNumber || ''}`
+      keywords: product?.keywords || '',
+    shopId:shopData?.shopId
     });
-    setFiles(product.image);
+    setFiles(product.images);
   }, [product, shopData]);
 
 
@@ -52,7 +52,7 @@ const UpdateForm = ({ shopData, product }) => {
       case 1:
         if (!formData.title.trim()) errors.title = 'Product title required';
         if (!formData.description.trim()) errors.description = 'Description required';
-        if (!formData.keyword.trim()) errors.keyword = 'Keyword required';
+        if (!formData.keywords.trim()) errors.keywords = 'Keyword required';
         break;
       case 2:
         if (!formData.price) errors.price = 'Original price required';
@@ -88,7 +88,7 @@ const UpdateForm = ({ shopData, product }) => {
           return acc;
         }, {});
 
-        const updatedData = await UserRefurbishedProduct.updateUserProduct(
+        const updatedData = await shopProduct.updateShopProduct(
           product.$id,
           toDeleteImagesUrls,
           { ...updatedFields },
@@ -111,7 +111,7 @@ const UpdateForm = ({ shopData, product }) => {
 
   const MAX_TITLE_LENGTH = 500;
   const MAX_DESCRIPTION_LENGTH = 2000;
-  const MAX_KEYWORD_LENGTH = 50;
+  const MAX_KEYWORDS_LENGTH = 50;
   const handleInputChange = (e, field, maxLength) => {
     const value = e.target.value;
     if (value.length <= maxLength) {
@@ -125,7 +125,7 @@ const UpdateForm = ({ shopData, product }) => {
     const confirmation = window.confirm("Are you sure you want to cancel this order?");
     if (confirmation) {
       setIsDeleting(true);
-      await UserRefurbishedProduct.deleteProduct(product.$id, product.image);
+      await shopProduct.deleteShopProduct(product.$id, product.image);
       dispatch(deleteProduct({productId:product.$id}));
       setIsDeleting(false);
       navigate(-1);
@@ -171,15 +171,15 @@ const UpdateForm = ({ shopData, product }) => {
             <div className="floating-input">
               <input
                 type="text"
-                value={formData.keyword}
-                onChange={(e) => handleInputChange(e, 'keyword', MAX_KEYWORD_LENGTH)}
+                value={formData.keywords}
+                onChange={(e) => handleInputChange(e, 'keywords', MAX_KEYWORDS_LENGTH)}
                 placeholder=" "
-                className={formErrors.keyword ? 'error' : ''}
+                className={formErrors.keywords ? 'error' : ''}
               />
-              <label>Keyword separated by comma</label>
-              {formErrors.keyword && <span className="error-hint">{formErrors.keyword}</span>}
-              <span className='user-upload-count' style={{ color: formData.keyword.length === MAX_KEYWORD_LENGTH ? 'red' : 'inherit' }}>
-                {formData.keyword.length}/{MAX_KEYWORD_LENGTH}
+              <label>Keywords separated by comma</label>
+              {formErrors.keywords && <span className="error-hint">{formErrors.keywords}</span>}
+              <span className='user-upload-count' style={{ color: formData.keywords.length === MAX_KEYWORDS_LENGTH ? 'red' : 'inherit' }}>
+                {formData.keywords.length}/{MAX_KEYWORDS_LENGTH}
               </span>
             </div>
           </div>
