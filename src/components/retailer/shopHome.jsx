@@ -9,7 +9,7 @@ import { GrDocumentImage } from "react-icons/gr";
 import { MdMyLocation } from "react-icons/md";
 import { FaDoorClosed, FaDoorOpen } from "react-icons/fa";
 import i1 from './asset/r1.png';
-import './style/shophome.css';
+import './style/shopHome.css';
 
 const Profile = ({ shopData }) => {
   const navigate = useNavigate();
