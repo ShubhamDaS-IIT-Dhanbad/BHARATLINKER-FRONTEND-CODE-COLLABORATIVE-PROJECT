@@ -62,21 +62,6 @@ function SignUpForm() {
     setErrorMessage('');
     try {
       const { session, shopData } = await verifyOTP(userId, otp.join(''), `91${phone}`);
-      const parsedAddress = Array.isArray(shopData.address)
-        ? shopData.address.map(addr => {
-          try {
-            const [latitude, longitude, address] = addr.split('@').map(val => val.trim());
-            return {
-              latitude: parseFloat(latitude),
-              longitude: parseFloat(longitude),
-              address: address
-            };
-          } catch (error) {
-            console.error("Error parsing address:", error);
-            return null;
-          }
-        }).filter(Boolean)
-        : [];
 
       Cookies.set("BharatLinkerShopData", JSON.stringify({
         shopId: shopData.$id,
@@ -85,8 +70,11 @@ function SignUpForm() {
         latitude: shopData?.latitude || "90",
         longitude: shopData?.longitude || "90",
         phoneNumber: phone,
-        address: parsedAddress,
-        shopName: shopData.shopName
+        shopAddress: shopData?.address,
+        shopNo: shopData?.shopNo,
+        buildingName: shopData?.buildingName,
+        landmark: shopData?.landmark || "",
+        shopName: shopData?.shopName
       }), { expires: 7, secure: true });
       navigate('/user');
     } catch {
