@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 import Navbar from "../navbar.jsx";
 import OrderProductCard from './cartCard.jsx';
 import { updateCartStateAsync, removeFromUserCart, fetchUserCart } from '../../../redux/features/user/cartSlice.jsx';
-import { fetchShopStatus } from '../../../appWrite/shop/shop.js';
+// import { fetchShopStatus } from '../../../appWrite/shop/shop.js';
 
 import DeliveryAddress from './deliveryAddress.jsx';
 import CheckOutPage from './checkOutPage.jsx';
@@ -46,8 +46,8 @@ const MyCartPage = ({ userData }) => {
             for (const item of cart) {
                 if (!statusMap[item.shopId]) {
                     try {
-                        const response = await fetchShopStatus(item.shopId);
-                        statusMap[item.shopId] = response;
+                        // const response = await fetchShopStatus(item.shopId);
+                        // statusMap[item.shopId] = response;
                     } catch (error) {
                         console.error('Error fetching shop status:', error);
                         statusMap[item.shopId] = false;
