@@ -12,7 +12,7 @@ import "./pending.css";
 
 
 const i1='https://res.cloudinary.com/demc9mecm/image/upload/v1737182575/mz1bdy2skwtmouqxfqtf.jpg'; //i1.png
-import { getShopData } from '../../../appWrite/shop/shop.js';
+import { getShopData } from '../../../appWrite/shop/shopClodinary.js';
 
 const RetailerPending = () => {
   const navigate = useNavigate();

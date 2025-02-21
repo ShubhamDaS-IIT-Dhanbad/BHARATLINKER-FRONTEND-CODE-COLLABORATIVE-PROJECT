@@ -30,15 +30,15 @@ const ShopAddressDetail = ({
         setLoading(true);
 
         const updatedData = {
-            latitude: shopAddress?.latitude,
-            longitude: shopAddress?.longitude,
+            shopLatitude: shopAddress?.latitude,
+            shopLongitude: shopAddress?.longitude,
             shopAddress: shopAddress?.address || "",
-            shopNumber: shopAddressDetail.shopNo ||"NA",
+            shopNumber: shopAddressDetail.shopNo || "NA",
             buildingName: shopAddressDetail.buildingName || "NA",
             landMark: shopAddressDetail.landmark || "NA",
         };
 
-        const success = await updateShopData(updatedData, shopId);
+        const success = await updateShopData(shopId,updatedData);
         if (success) {
             setShopAddressDetail((prev) => ({
                 ...prev,
@@ -80,7 +80,7 @@ const ShopAddressDetail = ({
             </header>
 
             <section>
-                <div className="shop-address-container">
+                <div className="shop-address-detail-container">
 
                     <section className="shop-address-saved-shop-location">
                         <div className="shop-address-saved-shop-location-content">
@@ -92,49 +92,47 @@ const ShopAddressDetail = ({
                     </section>
 
                     <form className="shop-address-form" onSubmit={handleSubmit}>
-                        <fieldset style={{ boxShadow: "rgba(211, 32, 74, 0.04) 0px 8px 24px" }}>
-                            <legend>Enter Shop Address Details</legend>
-                            <div className="detail-item">
-                                <fieldset>
-                                    <legend>Building & Block Name</legend>
-                                    <input
-                                        type="text"
-                                        name="shopNo"
-                                        value={shopAddressDetail.shopNo}
-                                        onChange={handleChange}
-                                        placeholder="E.g., 12A, 1st Floor"
-                                        required
-                                    />
-                                </fieldset>
-                            </div>
 
-                            <div className="detail-item">
-                                <fieldset>
-                                    <legend>Building & Block Name</legend>
-                                    <input
-                                        type="text"
-                                        name="buildingName"
-                                        value={shopAddressDetail.buildingName}
-                                        onChange={handleChange}
-                                        placeholder="E.g., Skyline Plaza, Block B"
-                                        required
-                                    />
-                                </fieldset>
-                            </div>
+                        <div className="detail-item">
+                            <fieldset>
+                                <legend>Building & Block Name</legend>
+                                <input
+                                    type="text"
+                                    name="shopNo"
+                                    value={shopAddressDetail.shopNo}
+                                    onChange={handleChange}
+                                    placeholder="E.g., 12A, 1st Floor"
+                                    required
+                                />
+                            </fieldset>
+                        </div>
 
-                            <div className="detail-item">
-                                <fieldset>
-                                    <legend>Landmark & Area</legend>
-                                    <input
-                                        type="text"
-                                        name="landmark"
-                                        value={shopAddressDetail.landmark}
-                                        onChange={handleChange}
-                                        placeholder="E.g., Near City Center Mall"
-                                    />
-                                </fieldset>
-                            </div>
-                        </fieldset>
+                        <div className="detail-item">
+                            <fieldset>
+                                <legend>Building & Block Name</legend>
+                                <input
+                                    type="text"
+                                    name="buildingName"
+                                    value={shopAddressDetail.buildingName}
+                                    onChange={handleChange}
+                                    placeholder="E.g., Skyline Plaza, Block B"
+                                    required
+                                />
+                            </fieldset>
+                        </div>
+
+                        <div className="detail-item">
+                            <fieldset>
+                                <legend>Landmark & Area</legend>
+                                <input
+                                    type="text"
+                                    name="landmark"
+                                    value={shopAddressDetail.landmark}
+                                    onChange={handleChange}
+                                    placeholder="E.g., Near City Center Mall"
+                                />
+                            </fieldset>
+                        </div>
                     </form>
                 </div>
             </section>

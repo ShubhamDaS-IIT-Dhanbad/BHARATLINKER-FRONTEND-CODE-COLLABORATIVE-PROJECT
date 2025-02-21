@@ -79,3 +79,7 @@ const Navbar = ({shopData, headerTitle, onBackNavigation }) => {
 };
 
 export default Navbar;
+
+
+
+

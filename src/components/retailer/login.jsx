@@ -34,15 +34,15 @@ function SignUpForm() {
   }, [timer, otpSent]);
 
   const handleSendOTP = async () => {
-    if (phone.length !== 10) return; 
+    if (phone.length !== 10) return;
     setLoading(true);
-    setErrorMessage(''); 
+    setErrorMessage('');
     try {
       // const userId = await sendOTP(`+91${phone}`) ;
       if (userId || 1) {
         setUserId(userId);
         setOtpSent(true);
-        setIsResendDisabled(true); 
+        setIsResendDisabled(true);
         setTimer(30);
         setOtp(new Array(6).fill(""));
       } else {
@@ -62,19 +62,23 @@ function SignUpForm() {
     setErrorMessage('');
     try {
       const { session, shopData } = await verifyOTP(userId, otp.join(''), `91${phone}`);
-
       Cookies.set("BharatLinkerShopData", JSON.stringify({
         shopId: shopData.$id,
         uId: session?.userId || "90",
         id: session?.$id || "90",
-        latitude: shopData?.latitude || "90",
-        longitude: shopData?.longitude || "90",
-        phoneNumber: phone,
-        shopAddress: shopData?.address,
+        shopName: shopData?.shopName,
+        shopDescription:shopData?.shopDescription,
+        shopLatitude: shopData?.shopLatitude || "90",
+        shopLongitude: shopData?.shopLongitude || "90",
+        shopPhoneNumber: shopData.shopPhoneNumber,
+        shopAddress: shopData?.shopAddress,
+        isShopOpen: shopData?.isShopOpen,
         shopNo: shopData?.shopNo,
         buildingName: shopData?.buildingName,
         landmark: shopData?.landmark || "",
-        shopName: shopData?.shopName
+        shopImages:shopData.shopImages,
+        shopKeywords: shopData?.shopKeywords,
+        shopEmail: shopData?.shopEmail
       }), { expires: 7, secure: true });
       navigate('/user');
     } catch {

@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaChevronLeft } from "react-icons/fa";
 import { TiInfoOutline } from "react-icons/ti";
-import { TbLocation } from "react-icons/tb";
 import LocationTab from "../locationTab/locationTab.jsx";
+import { FaLocationCrosshairs } from "react-icons/fa6";
 import ShopAddressDetailComponent from "./shopAddressDetail.jsx";
 import "./style/shopAddress.css";
 
@@ -39,7 +39,7 @@ function ShopAddress({ shopData }) {
           setLocationTab={setIsLocationTabVisible}
         />
       ) : (
-        <>
+        <div className="shop-address-container">
           {/* Header */}
           <header className="shop-address-header">
             <button
@@ -58,52 +58,62 @@ function ShopAddress({ shopData }) {
           </header>
 
           {/* Shop Address Display */}
-          <div className="address-card">
-            <fieldset>
-              <legend>Shop Location Details</legend>
-              <div className="address-section">
-                <p className="address-text">
-                  {shopData?.shopAddress || "No physical address available"}
-                </p>
-              </div>
+          {shopData.shopAddress ?
+            (
+              <>
+                <div className="address-card">
 
-              <div className="details-grid">
+                  <div className="address-card-inner">
 
-                <div className="detail-item">
-                  <fieldset>
-                    <legend>Shop No. & Floor</legend>
-                    <span className="detail-value">{shopData?.shopNo || "N/A"}</span>
-                  </fieldset>
+                    <div className="address-section">
+                      <span className="address-text">
+                        {shopData?.shopAddress || "No physical address available"}
+                      </span>
+                    </div>
+
+                    <div className="details-grid">
+
+                      <div className="detail-item">
+                        <fieldset>
+                          <legend>Shop No. & Floor</legend>
+                          <span className="detail-value">{shopData?.shopNo || "N/A"}</span>
+                        </fieldset>
+                      </div>
+
+                      <div className="detail-item">
+                        <fieldset>
+                          <legend>Building & Block Name </legend>
+                          <span className="detail-value">{shopData?.buildingName || "N/A"}</span>
+                        </fieldset>
+                      </div>
+
+                      <div className="detail-item">
+                        <fieldset>
+                          <legend>Landmark & Area</legend>
+                          <span className="detail-value">{shopData?.landmark || "Not specified"}</span>
+                        </fieldset>
+                      </div>
+                    </div>
+                  </div>
                 </div>
+              </>
+            ) : (
+              <>
 
-                <div className="detail-item">
-                  <fieldset>
-                    <legend>Building & Block Name </legend>
-                    <span className="detail-value">{shopData?.buildingName || "N/A"}</span>
-                  </fieldset>
-                </div>
-
-                <div className="detail-item">
-                  <fieldset>
-                    <legend>Landmark & Area</legend>
-                    <span className="detail-value">{shopData?.landmark || "Not specified"}</span>
-                  </fieldset>
-                </div>
-              </div>
-            </fieldset>
-          </div>
-
+              </>
+            )
+          }
 
           <div className="shop-address-footer">
             <div className="shop-address-footer-location"
               onClick={() =>
                 window.open(
-                  `https://www.google.com/maps?q=${shopData.latitude},${shopData.longitude}`,
+                  `https://www.google.com/maps?q=${shopData.shopLatitude},${shopData.shopLongitude}`,
                   "_blank"
                 )
               }
             >
-              <TbLocation />
+              < FaLocationCrosshairs />
             </div>
             <div className="shop-address-footer-update"
               onClick={() => setIsLocationTabVisible(true)}
@@ -120,7 +130,7 @@ function ShopAddress({ shopData }) {
                 <h2 className="shop-address-popup-title">
                   Shop Location Warning
                 </h2>
-                <p className="shop-address-popup-text">
+                <p style={{ fontSize: "13px" }} className="shop-address-popup-text">
                   "DONT CHANGE SHOP LOCATION MULTIPLE TIMES SET AT ONCE AND LEAVE IT!"
                   Changing your shop location won't update previously uploaded
                   products. Update them manually if needed.
@@ -142,7 +152,7 @@ function ShopAddress({ shopData }) {
               </div>
             </div>
           )}
-        </>
+        </div>
       )}
     </>
   );

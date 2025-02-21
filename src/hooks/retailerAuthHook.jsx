@@ -2,6 +2,7 @@ import React from 'react';
 import { useState, useEffect, useCallback } from 'react';
 import { Navigate, useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
+import {updateShopData} from '../appWrite/shop/shopData.js';
 import Cookies from 'js-cookie';
 
 const useRetailerAuthHook = () => {
@@ -12,7 +13,7 @@ const useRetailerAuthHook = () => {
 
   const getRetailerDataFromCookie = useCallback(() => {
     const storedData = Cookies.get('BharatLinkerShopData');
-    
+
     if (storedData) {
       try {
         return JSON.parse(storedData);
@@ -52,17 +53,35 @@ const useRetailerAuthHook = () => {
   };
 
   const PrivateRoute = ({ children }) => {
-          const shopData = Cookies.get("BharatLinkerShopData");
-          if (!shopData) {
-              return <Navigate to="/shop/login" replace />;
-          }
-          const parsedShopData = JSON.parse(shopData);
-          return React.Children.map(children, (child) =>
-              React.isValidElement(child) ? React.cloneElement(child, { shopData: parsedShopData }) : child
-          );
+    const shopData = Cookies.get("BharatLinkerShopData");
+    if (!shopData) {return <Navigate to="/shop/login" replace />;}
+    const parsedShopData = JSON.parse(shopData);
+    return React.Children.map(children, (child) =>
+      React.isValidElement(child) ? React.cloneElement(child, { shopData: parsedShopData }) : child
+    );
+  };
+  const updateShopCookie = async (updatedData, shopId) => {
+    try {
+      const updatedShopData = await updateShopData(shopId,updatedData);
+      let existingData = {};
+      try {
+        const cookieData = Cookies.get("BharatLinkerShopData");
+        if (cookieData) {
+          existingData = JSON.parse(cookieData);
+        }
+      } catch (error) {
+        console.error("Error parsing BharatLinkerShopData cookie:", error);
+      }
+      const updatedCookieData = {
+        ...existingData,
+        ...updatedShopData,
       };
-
-  return { retailerData, getRetailerDataFromCookie, logout, PrivateRoute };
+      Cookies.set("BharatLinkerShopData", JSON.stringify(updatedCookieData), { expires: 7 });
+    } catch (error) {
+      console.error("Failed to update shop cookie:", error);
+    }
+  };
+  return { retailerData, getRetailerDataFromCookie, logout, PrivateRoute ,updateShopCookie };
 };
 
 export default useRetailerAuthHook;

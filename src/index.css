@@ -29,10 +29,6 @@ div {
   padding: 0;
 }
 
-/* Prevent scrollbars and ensure full height */
-html, body {
-  height: 100%; 
-}
 body {
   font-family: inherit; /* Inherit font-family from :root */
   background-color: #f9f9f9; /* Background color for the page */

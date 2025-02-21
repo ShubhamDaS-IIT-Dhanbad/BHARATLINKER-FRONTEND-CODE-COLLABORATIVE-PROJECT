@@ -19,19 +19,18 @@ export const sendOTP = async (phone) => {
   }
 };
 
-export const verifyOTP = async (shopId, otpCode, phoneNumber) => {
+export const verifyOTP = async (shopId, otpCode, shopPhoneNumber) => {
   try {
-    let shopData = await fetchShopData(phoneNumber);
+    let shopData = await fetchShopData(shopPhoneNumber);
     if (!shopData || shopData.total === 0) {
       shopData = await databases.createDocument(
         conf.appwriteShopsDatabaseId,
         conf.appwriteShopsCollectionId,
         ID.unique(),
-        { phoneNumber, total: 0, address: [] }
+        { shopPhoneNumber }
       );
-    }
-
-    return { session: "ko", shopData };
+    }console.log(shopData,"login..........")
+    return { session: "test1", shopData };
   } catch (error) {
     console.error("Error verifying OTP:", error.message);
     return null;

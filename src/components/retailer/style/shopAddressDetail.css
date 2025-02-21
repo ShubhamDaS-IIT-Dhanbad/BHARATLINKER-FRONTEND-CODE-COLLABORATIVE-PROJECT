@@ -1,8 +1,9 @@
 /* CSS */
-.shop-address-container {
+.shop-address-detail-container {
   font-family: Arial, sans-serif;
   color: #333;
-  overflow-y: scroll;
+  overflow-y: scroll;margin-top: 57px;
+  padding: 10px;
 }
 .shop-address-saved-shop-location-content{
   
@@ -32,7 +33,7 @@
 .shop-address-form fieldset {
   border: 1.3px solid rgb(211, 32, 74);
   border-radius: 8px;
-  padding: 15px;
+  padding: 15px;width: 100%;
 }
 
 .shop-address-form legend {

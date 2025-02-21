@@ -7,7 +7,7 @@ import useRetailerAuthHook from '../../hooks/retailerAuthHook.jsx'
 
 // Lazy-loaded components
 const ShopHome = React.lazy(() => import("./shopHome.jsx"));
-const RetailerDashboard = React.lazy(() => import("./dashboard/dashboard.jsx"));
+const ShopDashboard = React.lazy(() => import("./shopData/shopData.jsx"));
 const ShopAddress = React.lazy(() => import("./shopAddress.jsx"));
 const RetailerProducts = React.lazy(() => import("./products/userProductPageMain.jsx"));
 const RetailerUpload = React.lazy(() => import("./upload/upload.jsx"));
@@ -65,7 +65,7 @@ const RetailerRoutes = React.memo(() => {
         />
 
         <Route
-          path="/retailer/dashboard"
+          path="/secure/shopdata"
           element={
             <PrivateRoute>
               <Helmet>
@@ -75,7 +75,7 @@ const RetailerRoutes = React.memo(() => {
                   content="Manage your retailer profile, view analytics, and access business tools."
                 />
               </Helmet>
-              <RetailerDashboard />
+              <ShopDashboard />
             </PrivateRoute>
           }
         />
