@@ -166,6 +166,7 @@ const getOrderByShopId = async (shopId, state, page, ordersPerPage = 10) => {
 
 const updateOrderByShopId = async (orderId, state) => {
   try {
+    console.log(orderId,state,"ji")
     if (!orderId) {
       throw new Error('User ID is missing');
     }
@@ -234,6 +235,7 @@ const updateOrderStateToConfirmed = async (orderId, state, expectedDeliveryDate)
 };
 
 const updateOrderStateToDispatched = async (orderId, state, deliveryBoyPhn) => {
+  console.log("shubham das",orderId, state, deliveryBoyPhn)
   try {
     if (!orderId || !deliveryBoyPhn) {
       throw new Error('Order ID or delivery boy phone is missing');

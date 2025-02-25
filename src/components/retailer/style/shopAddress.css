@@ -238,14 +238,14 @@
 
 .address-section {
   margin-bottom: 12px;
-  background-color: rgb(254, 60, 100);color: white;
+  background-color: rgb(253, 85, 119);color: #f1f1f1;
   border: 1.1px solid rgba(254, 60, 99, 0.938);margin-bottom: 5px;
-  padding: 15px;box-shadow: rgba(254, 60, 99, 0.189) 0px 7px 29px 0px;
+  padding: 15px;
+
 }
 
 .address-text {
   font-size: 14px;
-  color: #ffffff;
 }
 
 .details-grid {

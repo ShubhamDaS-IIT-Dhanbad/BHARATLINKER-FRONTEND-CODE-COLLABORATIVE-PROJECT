@@ -13,7 +13,6 @@ function ShopAddress({ shopData }) {
   const [isLocationTabVisible, setIsLocationTabVisible] = useState(!shopData.shopAddress);
   const [showShopAddressDetail, setShowShopAddressDetail] = useState(false);
   const [showInfo, setShowInfo] = useState(false);
-
   const navigate = useNavigate();
   useEffect(() => {
     window.scrollTo(0, 0);

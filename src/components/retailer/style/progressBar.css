@@ -1,52 +1,97 @@
-
+:root {
+  --primary-color: #007bff; /* Your brand color */
+  --border-color: #e0e0e0;  /* Light gray alternative */
+}
   /* Progress Bar */
-  .progress-bar {
-    display: flex;
-    justify-content: space-between;
-    position: relative;
-  }
-  
-  .progress-bar::before {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 0;
-    right: 0;
-    height: 2px;
-    z-index: -1;
-  }
-  
-  .progress-bar .step {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    width: 28%;height: 100px;padding:7px;border-radius: 0px;
-    box-shadow: rgba(0, 0, 0, 0.05) 0px 6px 24px 0px, rgba(0, 0, 0, 0.08) 0px 0px 0px 1px;
-  }
-  .step-title{
-    font-size: 13px;font-weight: 500;
-  }
-  .progress-bar .step .step-icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    background: var(--border-color);
-    color: white;
-    margin-bottom: 0.5rem;
-    transition: all 0.3s ease;
-  }
-  
-  .progress-bar .step.active .step-icon {
-    background: var(--primary-color);
-    transform: scale(1.1);
-  }
-  
-  .progress-bar .step-icon svg {
-    width: 20px;
-    height: 20px;
-  }
-  
+.progress-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  position: relative;gap: 10px;
+  padding: 20px 0;width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+
+/* Active progress line effect */
+.progress-bar::after {
+  content: '';
+  position: absolute;
+  top: 40px;
+  left: 14%;
+  width: 0;
+  height: 4px;
+  background: var(--primary-color, #007bff);
+  z-index: -1;
+  transition: width 0.4s ease;
+}
+
+/* Step container */
+.progress-bar .step {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;justify-content: center;
+  width: 28%;height: 120px;
+  padding: 10px;
+  background: rgb(219, 66, 102);
+  transition: all 0.3s ease;
+}
+
+/* Hover effect */
+.progress-bar .step:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08),
+              0 2px 4px rgba(0, 0, 0, 0.12);
+}
+
+/* Step icon */
+.progress-bar .step .step-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #f0f0f0;
+  color: #666;
+  margin-bottom: 12px;
+  transition: all 0.3s ease;
+  border: 2px solid #ffffff;
+  box-shadow: 0 0 0 2px #e0e0e0;
+}
+
+/* Active step styling */
+.progress-bar .step.active .step-icon {
+  background: var(--primary-color, #007bff);
+  color: #ffffff;
+  transform: scale(1.05);
+  box-shadow: 0 0 0 2px var(--primary-color, #007bff);
+}
+
+/* Completed step styling */
+.progress-bar .step.completed .step-icon {
+  background: #28a745;
+  box-shadow: 0 0 0 2px #28a745;
+}
+
+/* Icon size */
+.progress-bar .step-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+/* Step title */
+.step-title {
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+  text-align: center;
+  line-height: 1.4;
+  transition: color 0.3s ease;
+}
+
+.progress-bar .step.active .step-title {
+  color: var(--primary-color, #007bff);
+}

@@ -4,9 +4,11 @@ import { FaChevronLeft, FaDoorClosed, FaDoorOpen, FaSpinner } from "react-icons/
 import { TbShoppingCartHeart } from "react-icons/tb";
 import { MdOutlineAdminPanelSettings, MdMyLocation } from "react-icons/md";
 import { AiOutlineProduct } from "react-icons/ai";
-import { RiLogoutCircleLine } from "react-icons/ri";
+import { RiLogoutCircleLine, RiLockPasswordLine } from "react-icons/ri";
 import { GrDocumentImage } from "react-icons/gr";
+import { MdOutlineWorkspacePremium } from "react-icons/md";
 import useRetailerAuthHook from "../../hooks/retailerAuthHook.jsx";
+import Password from './password/password.jsx'; // Assuming this is the correct path
 import i1 from "./asset/r1.png";
 import "./style/shopHome.css";
 
@@ -17,29 +19,40 @@ const Profile = ({ shopData }) => {
   const [showPopup, setShowPopup] = useState(!shopData.shopAddress);
   const [logoutPopup, setLogoutPopup] = useState(false);
   const [openClosePopup, setOpenClosePopup] = useState(false);
-  const [pendingOpenState, setPendingOpenState] = useState(null);
+  const [showPassword, setShowPassword] = useState(false); // Added for Password component
   const [loading, setLoading] = useState(false);
 
   const handleOpenCloseToggle = useCallback(() => {
-    setPendingOpenState((prev) => !prev);
     setOpenClosePopup(true);
   }, []);
 
   const confirmOpenCloseToggle = useCallback(async () => {
-    if (pendingOpenState !== null) {
+    if (isOpen !== null) {
       setLoading(true);
-      await updateShopCookie({ isShopOpen: pendingOpenState }, shopData.shopId);
-      setIsOpen(pendingOpenState);
-      setLoading(false);
-      setOpenClosePopup(false);
+      try {
+        await updateShopCookie({ isShopOpen: !isOpen }, shopData.shopId);
+        setIsOpen(!isOpen); // Update state only on success
+      } catch (error) {
+        console.error("Failed to update shop status:", error);
+      } finally {
+        setLoading(false);
+        setOpenClosePopup(false);
+        navigate('/secure/shop');
+      }
     }
-  }, [pendingOpenState, updateShopCookie, shopData.shopId]);
+  }, [isOpen, updateShopCookie, shopData.shopId, navigate]);
+
+  const handlePasswordClick = useCallback(() => {
+    setShowPassword(true);
+  }, []);
 
   const menuItems = useMemo(() => [
     { icon: <MdOutlineAdminPanelSettings size={26} />, label: "SHOP DATA", path: "/secure/shopdata" },
     { icon: <MdMyLocation size={24} />, label: "SHOP LOCATION", path: "/secure/shop/address" },
-    { icon: <GrDocumentImage size={22} />, label: "UPLOAD HERE", path: "/upload" },
-    { icon: <AiOutlineProduct size={26} />, label: "ALL PRODUCT", path: "/product" },
+    { icon: <GrDocumentImage size={22} />, label: "UPLOAD HERE", path: "/secure/shop/upload" },
+    { icon: <AiOutlineProduct size={26} />, label: "ALL PRODUCT", path: "/secure/retailer/products" },
+    { icon: <RiLockPasswordLine size={26} />, label: "PASSWORD", path: "#", onClick: handlePasswordClick },
+    { icon: <MdOutlineWorkspacePremium size={26} />, label: "SUBSCRIPTION", path: "/secure/shop/subscription" },
     { icon: <RiLogoutCircleLine size={22} />, label: "LOG - OUT", path: "#", onClick: () => setLogoutPopup(true) },
     {
       icon: isOpen ? <FaDoorOpen size={26} /> : <FaDoorClosed size={26} />,
@@ -47,15 +60,19 @@ const Profile = ({ shopData }) => {
       path: "#",
       onClick: handleOpenCloseToggle,
     },
-  ], [isOpen, handleOpenCloseToggle]);
+  ], [isOpen, handleOpenCloseToggle, handlePasswordClick]);
 
   return (
     <>
       <header>
         <div className="shop-home-1">
-          <button className="shop-home-back-btn" onClick={() => navigate("/")}> <FaChevronLeft /> </button>
+          <button className="shop-home-back-btn" onClick={() => navigate("/")}>
+            <FaChevronLeft />
+          </button>
           <span>DASHBOARD</span>
-          <button className="shop-home-header-t2" onClick={() => navigate("/shop/orders")}> <TbShoppingCartHeart /> </button>
+          <button className="shop-home-header-t2" onClick={() => navigate("/secure/shop/orders")}>
+            <TbShoppingCartHeart />
+          </button>
         </div>
       </header>
 
@@ -65,7 +82,9 @@ const Profile = ({ shopData }) => {
             <div className="shop-home-profile-header-pic-header">
               <img src={i1} className="shop-home-profile-header-pic" alt="Shop" />
             </div>
-            <span className="shop-home-profile-header-shop-name">{shopData?.shopName.toUpperCase()}</span>
+            <span className="shop-home-profile-header-shop-name">
+              {shopData?.shopName.toUpperCase()}
+            </span>
             <span className="shop-home-profile-header-store">OWN E-COMMERCE PLATFORM</span>
           </div>
           <div className="info-box">
@@ -91,8 +110,8 @@ const Profile = ({ shopData }) => {
           title="Select your shop location"
           text="We need your shop's location to provide a curated assortment from the nearest store."
           buttons={[
-            { label: "Use current location", primary: true, onClick: () => {} },
-            { label: "Set manually", primary: false },
+            { label: "Use current location", primary: true, onClick: () => {} }, // Add functionality if needed
+            { label: "Set manually", primary: false, onClick: () => setShowPopup(false) }, // Example action
           ]}
         />
       )}
@@ -108,22 +127,26 @@ const Profile = ({ shopData }) => {
         />
       )}
 
+      {showPassword && (
+        <Password shopId={shopData.shopId} showPassword={showPassword} setShowPassword={setShowPassword} />
+      )}
+
       {openClosePopup && (
         <Popup
-          title={pendingOpenState ? "Ready to Open Your Shop?" : "Close Shop for Now?"}
-          text={`Are you sure you want to ${pendingOpenState ? "open" : "close"} your shop? This action will be visible to customers.`}
+          title={!isOpen ? "Ready to Open Your Shop?" : "Close Shop for Now?"}
+          text={`Are you sure you want to ${!isOpen ? "open" : "close"} your shop? This action will be visible to customers.`}
           buttons={[
-            { 
+            {
               label: loading ? <FaSpinner className="loading-spinner" /> : "Confirm",
-              primary: true, 
+              primary: true,
               onClick: confirmOpenCloseToggle,
-              disabled: loading, 
+              disabled: loading,
             },
-            { 
-              label: "Cancel", 
-              primary: false, 
+            {
+              label: "Cancel",
+              primary: false,
               onClick: () => setOpenClosePopup(false),
-              disabled: loading, 
+              disabled: loading,
             },
           ]}
         />

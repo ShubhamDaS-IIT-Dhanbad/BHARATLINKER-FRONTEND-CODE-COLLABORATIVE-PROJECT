@@ -1,73 +1,69 @@
-/* Container for the entire header */
-.retailer-update-header {
-    background-color: #ffffff;
-    color: #000;
-    position: fixed;
-    top: 0;
-    height: 60px;
+
+.shop-order-1 {
     display: flex;
-    flex-grow: 1;
+    justify-content: center;
     align-items: center;
     padding: 10px;
-    width: 100vw;
+    background-color: #f9f9f9;
+    color: rgb(0, 0, 0);
+    font-size: 23px;
+    width: calc(100vw - 20px);
+    height: 50px;
 }
-
-/* Left Icon */
-.retailer-update-header-left-icon {
-    margin-left: 4px;
-    color: #000;
-}
-
-/* Inner div containing title and shop name */
-.retailer-update-header-inner-div {
-    padding-left: 10px;
+.shop-order-back-btn {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.091);
+    color: #f9f9f9;
+    background-color: black;
     display: flex;
-    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+    border: none;
+    border-radius: 10px;
+    font-size: 18px;
+    position: absolute;
+    left: 10px;
 }
 
-.retailer-update-header-inner-div-p {
-    font-size: 25px;
-    font-weight: 600;
-    margin: 0;
-}
 
-.retailer-upload-product-header-shopname {
-    margin-top: -10px;
-}
+
+
+
+
+
+
 
 /* Buttons for order types */
 .retailer-order-type-buttons {
-    display: flex;background-color: #ffffff;
+    display: flex;
+    background-color: #f9f9f9;
     justify-content: center;
     align-items: center;
-    position: fixed;
-    top: 77px;
     gap: 5px;
     width: 100vw;
-    padding: 0 0 5px 0;
+    padding: 10px 0 10px 0;
 }
 
-.retailer-order-type-button {
-    border: 1.2px solid rgb(27, 28, 28);
+.retailer-order-type-button {border:1.2px solid rgb(211, 32, 74);
     font-size: 13px;
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 6px;
     font-weight: 600;
-    border-radius: 7px;
 }
 
 .retailer-order-type-button.active {
-    border: 1.3px solid rgb(135, 129, 255);
-    background-color: rgb(135, 129, 255);
-    color: white;
+    
+  background-color: rgb(211, 32, 74);
+  box-shadow: rgba(211, 32, 74, 0.231) 0px 8px 24px;
+    color: white;border:1.2px solid rgb(211, 32, 74);
 }
 
 /* Orders container */
 .retailer-order-div-container {
     padding: 10px;
-    margin-top: 110px;
+    margin-top: 140px;
 }
 
 /* Loader for infinite scroll */

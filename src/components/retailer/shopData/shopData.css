@@ -3,7 +3,7 @@
   justify-content: center;
   align-items: center;
   padding: 10px;
-  background-color: #f9f9f9;
+  background-color:  #ffffff;
   position: fixed;
   color: rgb(0, 0, 0);
   top: 0;
@@ -12,18 +12,17 @@
 }
 
 .shop-data-info-btn {
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.091);
   color: #ffffff;
   display: flex;
-  background-color: #000000;
   justify-content: center;
   align-items: center;
   padding: 10px;
-  border: none;
   border-radius: 10px;
   font-size: 18px;
   position: absolute;
   right: 10px;
+  background: #000000e1;
+  border: 1px solid #030303;
 }
 
 .shop-data-header span {
@@ -34,18 +33,17 @@
 }
 
 .shop-data-back-btn {
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.091);
   color: #f9f9f9;
-  background-color: black;
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 10px;
-  border: none;
   border-radius: 10px;
   font-size: 18px;
   position: absolute;
   left: 10px;
+  background: #000000e1;
+  border: 1px solid #030303;
 }
 
 
@@ -54,11 +52,9 @@
 
 /* ShopData Component Styles */
 .shop-data-container {
-  width: 100%;
-  max-width: 800px;
-  margin: 77px auto;
-  background: #f9f9f9;;
-  border-radius: 10px;
+  display: flex;flex-direction: column;
+  padding-top: 90px;min-height: calc(100vh - 90px);justify-content: space-between;
+ background-color:  #ffffff;
 }
 
 .progress-bar {
@@ -67,10 +63,9 @@
 
 .shop-data-section {
   display: flex;
-  padding: 20px;
+  padding: 0px 20px;
   flex-direction: column;
   gap: 15px;
-  border-color: aqua;
 }
 
 .shop-data-input-group fieldset {
@@ -82,7 +77,7 @@
   font-size: 13px;
 }
 .shop-data-input-group input {
-  width: 100%;
+  width: 100%;color: rgb(0, 0, 0);
   font-size: 17px;
   font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
   border: none;
@@ -94,7 +89,7 @@
   width: 100%;
   min-height: 60vh;
   font-size: 17px;
-  border: none;
+  border: none;color: rgb(0, 0, 0);
   outline: none;
   background-color: transparent;
 }
@@ -110,32 +105,49 @@
   width: 100%;
   max-width: 400px;
   height: 150px;
-  border: 2px dashed #4a90e2;
   border-radius: 10px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align: center;
-  background-color: #f8f9fa;
-  color: #4a90e2;
+  color: #2874f0;
   font-weight: bold;
   transition: all 0.3s ease-in-out;
-}
 
-.shop-data-dropzone:hover {
-  background-color: #e3f2fd;
-  border-color: #007bff;
+
+  
+  background: #2270ef4c;
+  border: 1px solid #2874f0;
 }
 
 .shop-data-dropzone p {
   font-size: 16px;
   margin: 5px 0;
 }
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 9999;
+  pointer-events: all;
+}
 
 .shop-data-dropzone small {
   font-size: 12px;
-  color: #666;
+  color: #2874f0;
+}
+
+
+.shop-data-pic-header{
+  max-width: 100%;height: 350px;
+  display: flex;justify-content: center;align-items: center;
+}
+.shop-data-pic{
+max-width: 100%;max-height: 350px;
 }
 
 
@@ -146,13 +158,13 @@
  display: flex;gap: 5px;
 }
 .shop-data-button-container{
-  display:flex;
+  display:flex;margin-top: 50px;
   gap: 5px;justify-content: flex-end;align-items: center;
-  padding: 20px;
+  padding: 20px;position: relative;bottom: 0;
+  width:calc(100vw - 40px);
 }
 .shop-data-button-container button{
-  background-color: rgb(211, 32, 74);color: white;
-  box-shadow: rgba(211, 32, 74, 0.578) 0px 8px 24px;
+  background-color: rgb(233, 61, 101);color: white;
   border: none;height: 50px;width: 30vw;
   outline: none;
 }
@@ -173,14 +185,14 @@
 
 .shop-data-img-container {
   display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
+  flex-wrap: wrap;align-items: center;
+  gap: 5px;
   margin-top: 15px;
 }
 
 .shop-data-image-preview {
   position: relative;
-  width: 100px;
+  width: calc((100vw - 40px -30px)/3);
   height: 100px;
   border-radius: 8px;
   overflow: hidden;
@@ -222,8 +234,23 @@
 
 
 
-
-
+.shop-data-1-desc{
+  background-color: #ffffff;
+  padding: 15px;
+  color: #0f63ea;
+  margin: 0px 0px 10px 0px;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+ 
+  font-size: 12px;
+  background: #2875f04c;
+  border: 1px solid #2874f0;
+  border-radius: 4px;
+  padding: 20px;
+  margin: 20px 0;
+}
+.shop-data-img{
+  width: 70vw;align-self: center;
+}
 
 
 
@@ -307,8 +334,4 @@
   color: rgb(254, 75, 117);
   background: white;
   transition: background 0.2s;
-}
-
-.shop-address-popup-button-secondary:hover {
-  background: #f0fdf4;
 }

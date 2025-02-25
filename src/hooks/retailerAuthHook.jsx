@@ -1,14 +1,12 @@
 import React from 'react';
 import { useState, useEffect, useCallback } from 'react';
 import { Navigate, useNavigate, useLocation } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
 import {updateShopData} from '../appWrite/shop/shopData.js';
 import Cookies from 'js-cookie';
 
 const useRetailerAuthHook = () => {
-  const dispatch = useDispatch();
+  const navigate=useNavigate();
   const [retailerData, setRetailerData] = useState(null);
-  const navigate = useNavigate();
   const location = useLocation();
 
   const getRetailerDataFromCookie = useCallback(() => {
@@ -47,6 +45,7 @@ const useRetailerAuthHook = () => {
     try {
       console.log('Logging out...');
       document.cookie = 'BharatLinkerShopData=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+      navigate('/')
     } catch (error) {
       console.error('Logout failed:', error);
     }

@@ -12,7 +12,7 @@ const ProgressBar = ({ steps, currentStep }) => {
           <div className="step-icon">
             {step.icon || (index + 1)}
           </div>
-          <span className="step-title">{step.title}</span>
+          {/* <span className="step-title">{step.title}</span> */}
         </div>
       ))}
     </div>

@@ -30,8 +30,8 @@ const ShopAddressDetail = ({
         setLoading(true);
 
         const updatedData = {
-            shopLatitude: shopAddress?.latitude,
-            shopLongitude: shopAddress?.longitude,
+            shopLatitude: shopAddress?.lat,
+            shopLongitude: shopAddress?.long,
             shopAddress: shopAddress?.address || "",
             shopNumber: shopAddressDetail.shopNo || "NA",
             buildingName: shopAddressDetail.buildingName || "NA",
@@ -53,6 +53,8 @@ const ShopAddressDetail = ({
                 : {};
             const updatedCookieData = {
                 ...existingData,
+                shopLatitude:shopAddress?.lat,
+                shopLongitude:shopAddress?.long,
                 shopAddress: shopAddress?.address,
                 shopNo: shopAddressDetail.shopNo,
                 buildingName: shopAddressDetail.buildingName,

@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import InfiniteScroll from "react-infinite-scroll-component";
-import { FaArrowLeft } from 'react-icons/fa';
 import { Oval } from "react-loader-spinner";
 import { useNavigate } from "react-router-dom";
 import { fetchOrdersByStatus, loadMoreOrders } from "../../../redux/features/retailer/orderSlice";
 import OrderProductCard from "./orderProductCard";
 import e1 from './e1.png';
 
+import { FaChevronLeft } from "react-icons/fa";
 import "./order.css";
 
 function Order({ shopData }) {
@@ -30,6 +30,7 @@ function Order({ shopData }) {
   };
 
   const selectedOrders = orderStates[selectedOrderType];
+  const loading = orderStates[selectedOrderType].loading;
 
   const fetchInitialOrders = (status) => {
     const shopId = shopData?.shopId;
@@ -52,46 +53,32 @@ function Order({ shopData }) {
       if (canceledOrders.data.length === 0) fetchInitialOrders("canceled");
     }
   }, [shopData]);
-  useEffect(()=>{
-    window.scrollTo(0,0);
-  },[selectedOrderType])
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [selectedOrderType])
   return (
     <>
       {/* Header */}
-      <div className="retailer-update-header">
-        <FaArrowLeft
-          id="retailer-update-header-left-icon"
-          size={25}
-          onClick={() => navigate('/retailer')}
-          aria-label="Back to retailer home"
-          tabIndex={0}
-        />
-        <div className="retailer-update-header-inner-div">
-          <p className="retailer-update-header-inner-div-p">
-            ORDER DETAILS
-          </p>
-          {shopData?.shopName && (
-            <div className="retailer-upload-product-header-shopname" aria-label="Change Location" tabIndex={0}>
-              {shopData?.shopName?.toUpperCase()}
-            </div>
-          )}
+      <header style={{position:"fixed",top:"0"}}>
+        <div className="shop-order-1">
+          <button className="shop-order-back-btn" onClick={() => navigate("/secure/shop")}>
+            <FaChevronLeft />
+          </button>
+          <span>ORDER DETAILS</span>
         </div>
-      </div>
+        <div className="retailer-order-type-buttons">
+          {["pending", "confirmed", "delivered", "canceled"].map((type) => (
+            <div
+              key={type}
+              className={`retailer-order-type-button ${selectedOrderType === type ? "active" : ""}`}
+              onClick={() => setSelectedOrderType(type)}
+            >
+              {type.toUpperCase()}
+            </div>
+          ))}
+        </div>
+      </header>
 
-      {/* Order Type Buttons */}
-      <div className="retailer-order-type-buttons">
-        {["pending", "confirmed", "delivered", "canceled"].map((type) => (
-          <div
-            key={type}
-            className={`retailer-order-type-button ${selectedOrderType === type ? "active" : ""}`}
-            onClick={() => setSelectedOrderType(type)}
-          >
-            {type.toUpperCase()}
-          </div>
-        ))}
-      </div>
-
-      {/* Infinite Scroll for Orders */}
       <InfiniteScroll
         dataLength={selectedOrders.data.length}
         next={fetchNextPage}
@@ -103,7 +90,7 @@ function Order({ shopData }) {
         }
       >
         <div className="retailer-order-div-container">
-          {selectedOrders.data.length === 0? (
+          {selectedOrders.data.length === 0 && !loading? (
             <div className="retailer-order-empty">
               <img className="retailer-order-empty-img" src={e1} alt="No Orders" />
             </div>

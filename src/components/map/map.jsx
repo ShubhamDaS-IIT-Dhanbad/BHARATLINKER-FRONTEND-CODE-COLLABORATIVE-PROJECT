@@ -156,6 +156,7 @@ const LocationMap = ({
         if(window.location.pathname === "/user/profile"){
             handleUserProfileUpdate(locationData);
         }else if (window.location.pathname === "/secure/shop/address") {
+            console.log(locationData,"data shop")
             setShopAddress(locationData);
             setTimeout(() => {
                 setLoadingConfirm(false);

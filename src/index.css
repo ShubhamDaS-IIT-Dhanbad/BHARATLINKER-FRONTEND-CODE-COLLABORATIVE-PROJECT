@@ -8,7 +8,7 @@ body ::-webkit-scrollbar{
   justify-content: center;
   align-items: center;
   height:100vh;width: 100vw;
-  z-index:9999999999;
+  z-index:9999999;
   background-color: #f9f9f9;
 
 } 
@@ -30,9 +30,9 @@ div {
 }
 
 body {
-  font-family: inherit; /* Inherit font-family from :root */
-  background-color: #f9f9f9; /* Background color for the page */
-  color: #333; /* Base text color */
+  font-family: inherit;
+  background-color: #f9f9f9;
+  color: #333;
   line-height: 1.6;
   padding: 0;
   margin: 0;

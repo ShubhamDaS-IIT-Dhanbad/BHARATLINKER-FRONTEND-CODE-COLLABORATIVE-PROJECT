@@ -1,317 +1,288 @@
-import React, { useEffect, useState } from 'react';
-import { FiUploadCloud, FiDollarSign, FiMapPin } from 'react-icons/fi';
-import ProgressBar from '../progressBar.jsx';
+import React, { useEffect, useState, useCallback } from 'react';
+import { FiUploadCloud } from 'react-icons/fi';
 import { Oval } from 'react-loader-spinner';
 import { useDispatch } from 'react-redux';
-import {useNavigate} from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import shopProduct from '../../../appWrite/shop/shopProduct.js';
-import { updateProduct,deleteProduct } from '../../../redux/features/user/userAllRefurbishedProductsSlice.jsx'
+import { updateProduct, deleteProduct } from '../../../redux/features/retailer/product.jsx';
+import up1 from '../asset/up3.png';
+
+const MAX_LENGTHS = { TITLE: 500, DESCRIPTION: 2000, KEYWORDS: 50 };
+const MAX_IMAGES = 3;
+const MAX_FILE_SIZE = 5 * 1024 * 1024;
 
 const UpdateForm = ({ shopData, product }) => {
   const dispatch = useDispatch();
-  const navigate=useNavigate();
-
+  const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
-    title: product?.title || '',
-    description: product?.description || '',
-    price: product?.price || '',
-    discountedPrice: product?.discountedPrice || '',
-    keywords: product?.keywords || '',
-    shopId: shopData?.shopId
+    title: '', description: '', price: '', discountedPrice: '', keywords: '',
+    shopId: '', isInStock: true, isActive: true,
   });
-  useEffect(() => {
-    setFormData({
-      title: product?.title || '',
-      description: product?.description || '',
-      price: product?.price || '',
-      discountedPrice: product?.discountedPrice || '',
-      keywords: product?.keywords || '',
-    shopId:shopData?.shopId
-    });
-    setFiles(product.images);
-  }, [product, shopData]);
-
-
-  const [isDeleting, setIsDeleting] = useState(false);
   const [files, setFiles] = useState([]);
   const [toDeleteImagesUrls, setToDeleteImagesUrls] = useState([]);
   const [formErrors, setFormErrors] = useState({});
   const [uploadStatus, setUploadStatus] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
 
-  const steps = [
-    { title: 'Product Info', icon: <FiUploadCloud /> },
-    { title: 'Pricing', icon: <FiDollarSign /> },
-    { title: 'Location', icon: <FiMapPin /> },
-  ];
+  // Prevent page refresh or close
+  useEffect(() => {
+    const handleBeforeUnload = (e) => {
+      if (isUploading || isDeleting) {
+        e.preventDefault();
+        e.returnValue = 'Are you sure you want to leave? Your changes may not be saved.';
+        return 'Are you sure you want to leave? Your changes may not be saved.';
+      }
+    };
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  }, [isUploading, isDeleting]);
 
-  const validateStep = (step) => {
+  useEffect(() => { window.scrollTo(0, 0); }, [currentStep]);
+  useEffect(() => {
+    if (!product || !shopData) return;
+    setFormData({
+      title: product.title || '',
+      description: product.description || '',
+      price: product.price ? Math.floor(product.price).toString() : '',
+      discountedPrice: product.discountedPrice ? Math.floor(product.discountedPrice).toString() : '',
+      keywords: product.keywords || '',
+      shopId: shopData.shopId || '',
+      isInStock: product.isInStock ?? true,
+      isActive: product.isActive ?? true,
+    });
+    setFiles(product.images || []);
+  }, [product, shopData]);
+
+  const validateStep = useCallback((step) => {
     const errors = {};
-    switch (step) {
-      case 1:
-        if (!formData.title.trim()) errors.title = 'Product title required';
-        if (!formData.description.trim()) errors.description = 'Description required';
-        if (!formData.keywords.trim()) errors.keywords = 'Keyword required';
-        break;
-      case 2:
-        if (!formData.price) errors.price = 'Original price required';
-        if (!formData.discountedPrice) errors.discountedPrice = 'Selling price required';
-        if (parseFloat(formData.discountedPrice) >= parseFloat(formData.price)) {
-          errors.discountedPrice = 'Must be less than original price';
-        }
-        break;
-      case 3:
-        if (files.length < 1) { alert("at least 1 image is  required!"); errors.images = 'At least one image required'; }
-        break;
-      default:
-        break;
+    if (step === 1) {
+      if (!formData.title.trim()) errors.title = 'Product title is required';
+      else if (formData.title.length > MAX_LENGTHS.TITLE) errors.title = `Title must be < ${MAX_LENGTHS.TITLE} chars`;
+      if (!formData.description.trim()) errors.description = 'Description is required';
+      else if (formData.description.length > MAX_LENGTHS.DESCRIPTION) errors.description = `Description must be < ${MAX_LENGTHS.DESCRIPTION} chars`;
+      if (!formData.keywords.trim()) errors.keywords = 'Keywords are required';
+      else if (formData.keywords.length > MAX_LENGTHS.KEYWORDS) errors.keywords = `Keywords must be < ${MAX_LENGTHS.KEYWORDS} chars`;
+    } else if (step === 2) {
+      if (!formData.price) errors.price = 'Original price is required';
+      else if (!/^\d+$/.test(formData.price) || parseInt(formData.price) <= 0) errors.price = 'Price must be a positive whole number';
+      if (!formData.discountedPrice) errors.discountedPrice = 'Selling price is required';
+      else if (!/^\d+$/.test(formData.discountedPrice) || parseInt(formData.discountedPrice) <= 0) errors.discountedPrice = 'Selling price must be a positive whole number';
+      else if (parseInt(formData.discountedPrice) >= parseInt(formData.price)) errors.discountedPrice = 'Selling price must be < original price';
+    } else if (step === 3 && files.length === 0) {
+      errors.images = 'At least one image is required';
+      alert('At least 1 image is required!');
     }
     setFormErrors(errors);
     return Object.keys(errors).length === 0;
-  };
+  }, [formData, files]);
 
-  const handleNext = () => {
-    if (validateStep(currentStep)) {
-      setCurrentStep((prev) => Math.min(prev + 1, 3));
+  const handleInputChange = (e, field, maxLength) => {
+    const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
+    if (['price', 'discountedPrice'].includes(field)) {
+      if (value === '' || /^\d+$/.test(value)) {
+        setFormData(prev => ({ ...prev, [field]: value }));
+      }
+    } else if (['isInStock', 'isActive'].includes(field)) {
+      setFormData(prev => ({ ...prev, [field]: value }));
+    } else if (!maxLength || value.length <= maxLength) {
+      setFormData(prev => ({ ...prev, [field]: value }));
     }
   };
+
+  const handleFileChange = (e) => {
+    const newFiles = Array.from(e.target.files).filter(file => {
+      if (file.size > MAX_FILE_SIZE) { alert(`${file.name} exceeds 5MB limit`); return false; }
+      return true;
+    });
+    setFiles(prev => [...prev, ...newFiles].slice(0, MAX_IMAGES));
+  };
+
+  const removeFile = (index) => {
+    setFiles(prev => {
+      const file = prev[index];
+      if (typeof file === 'string' && file.startsWith('https://res.cloudinary.com')) {
+        setToDeleteImagesUrls(prevUrls => [...prevUrls, file]);
+      }
+      return prev.filter((_, i) => i !== index);
+    });
+  };
+
+  const handleNext = () => validateStep(currentStep) && setCurrentStep(prev => Math.min(prev + 1, 3));
 
   const handleSubmit = async () => {
-    if (validateStep(3)) {
-      setIsUploading(true);
-      try {
-        const updatedFields = Object.keys(formData).reduce((acc, key) => {
-          if (formData[key] !== product[key]) {
-            acc[key] = formData[key];
-          }
-          return acc;
-        }, {});
+    if (!validateStep(3)) return;
+    setIsUploading(true);
+  
+    try {
+        const updatedFields = {};
 
+        Object.entries(formData).forEach(([key, value]) => {
+            const originalValue = product[key];
+            let newValue = value;
+
+            if (['price', 'discountedPrice'].includes(key)) {
+                newValue = value === '' ? 0 : parseInt(value, 10); // Ensure integer conversion
+            }
+
+            if (newValue !== originalValue) {
+                updatedFields[key] = newValue;
+            }
+        });
+
+        // Add latitude and longitude to the updatedFields
+        Object.assign(updatedFields, {
+            latitude: shopData.shopLatitude,
+            longitude: shopData.shopLongitude
+        });
+        // Update product in the shop
         const updatedData = await shopProduct.updateShopProduct(
-          product.$id,
-          toDeleteImagesUrls,
-          { ...updatedFields },
-          files
+            product.$id,
+            toDeleteImagesUrls,
+            updatedFields,
+            files
         );
+        // Dispatch the updated product data
         dispatch(updateProduct({ productId: product.$id, updatedData }));
+
         setUploadStatus('success');
         setCurrentStep(1);
-      } catch (error) {
+        setToDeleteImagesUrls([]);
+    } catch (error) {
         setUploadStatus('error');
-        console.error('Upload failed:', error);
-      } finally {
+        console.error('Product update failed:', error);
+    } finally {
         setIsUploading(false);
-      }
     }
-  };
-
-
-
-
-  const MAX_TITLE_LENGTH = 500;
-  const MAX_DESCRIPTION_LENGTH = 2000;
-  const MAX_KEYWORDS_LENGTH = 50;
-  const handleInputChange = (e, field, maxLength) => {
-    const value = e.target.value;
-    if (value.length <= maxLength) {
-      setFormData({ ...formData, [field]: value });
-    }
-  };
-
+};
 
 
   const handleDelete = async () => {
-    const confirmation = window.confirm("Are you sure you want to cancel this order?");
-    if (confirmation) {
-      setIsDeleting(true);
-      await shopProduct.deleteShopProduct(product.$id, product.image);
-      dispatch(deleteProduct({productId:product.$id}));
-      setIsDeleting(false);
-      navigate(-1);
-    }
+    // if (!window.confirm('Are you sure you want to delete this product?')) return;
+    // setIsDeleting(true);
+    // try {
+    //   await shopProduct.deleteShopProduct(product.$id, product.images);
+    //   dispatch(deleteProduct({ productId: product.$id }));
+    //   navigate(-1);
+    // } catch (error) {
+    //   console.error('Product deletion failed:', error);
+    // } finally {
+    //   setIsDeleting(false);
+    // }
   };
-  return (
-    <div className="multi-step-form">
-      <ProgressBar steps={steps} currentStep={currentStep} />
 
-      <div className="form-container">
+  const renderStepContent = () => {
+    return (
+      <div className="step-card">
         {currentStep === 1 && (
-          <div className="step-card">
-            <div className="floating-input">
-              <input
-                type="text"
-                value={formData.title}
-                onChange={(e) => handleInputChange(e, 'title', MAX_TITLE_LENGTH)}
-                placeholder=" "
-                className={formErrors.title ? 'error' : ''}
-              />
-              <label>Product Title</label>
-              {formErrors.title && <span className="error-hint">{formErrors.title}</span>}
-              <span className='user-upload-count' style={{ color: formData.title.length === MAX_TITLE_LENGTH ? 'red' : 'inherit' }}>
-                {formData.title.length}/{MAX_TITLE_LENGTH}
-              </span>
-            </div>
-
-            <div className="floating-input textarea">
-              <textarea
-                value={formData.description}
-                onChange={(e) => handleInputChange(e, 'description', MAX_DESCRIPTION_LENGTH)}
-                placeholder="use # for heading and * for points"
-                rows="4"
-                className={formErrors.description ? 'error' : ''}
-              />
-              <label>Detailed Description</label>
-              {formErrors.description && <span className="error-hint">{formErrors.description}</span>}
-              <span className='user-upload-count' style={{ color: formData.description.length === MAX_DESCRIPTION_LENGTH ? 'red' : 'inherit' }}>
-                {formData.description.length}/{MAX_DESCRIPTION_LENGTH}
-              </span>
-            </div>
-
-            <div className="floating-input">
-              <input
-                type="text"
-                value={formData.keywords}
-                onChange={(e) => handleInputChange(e, 'keywords', MAX_KEYWORDS_LENGTH)}
-                placeholder=" "
-                className={formErrors.keywords ? 'error' : ''}
-              />
-              <label>Keywords separated by comma</label>
-              {formErrors.keywords && <span className="error-hint">{formErrors.keywords}</span>}
-              <span className='user-upload-count' style={{ color: formData.keywords.length === MAX_KEYWORDS_LENGTH ? 'red' : 'inherit' }}>
-                {formData.keywords.length}/{MAX_KEYWORDS_LENGTH}
-              </span>
-            </div>
-          </div>
-        )}
-
-        {currentStep === 2 && (
-          <div className="step-card">
-            <div className="price-inputs">
-              <div className="floating-input">
-                <input
-                  type="number"
-                  value={formData.price}
-                  onChange={(e) => setFormData({ ...formData, price: e.target.value })}
-                  placeholder=" "
-                  className={formErrors.price ? 'error' : ''}
-                />
-                <label>Original Price (₹)</label>
-                {formErrors.price && <span className="error-hint">{formErrors.price}</span>}
-              </div>
-
-              <div className="floating-input">
-                <input
-                  type="number"
-                  value={formData.discountedPrice}
-                  onChange={(e) => setFormData({ ...formData, discountedPrice: e.target.value })}
-                  placeholder=" "
-                  className={formErrors.discountedPrice ? 'error' : ''}
-                />
-                <label>Selling Price (₹)</label>
-                {formErrors.discountedPrice && (
-                  <span className="error-hint">{formErrors.discountedPrice}</span>
-                )}
-              </div>
-            </div>
-          </div>
-        )}
-
-        {currentStep === 3 && (
-          <div className="step-card">
-            <div className="dropzone" onClick={() => document.getElementById('fileInput').click()}>
-              <FiUploadCloud className="upload-icon" />
-              <p>Click to select</p>
-              <small>(Max 3 images, 5MB each)</small>
-              <input
-                id="fileInput"
-                type="file"
-                accept="image/*"
-                multiple
-                style={{ display: 'none' }}
-                onChange={(e) => {
-                  const selectedFiles = Array.from(e.target.files);
-                  setFiles((prevFiles) => [...prevFiles, ...selectedFiles].slice(0, 3));
-                }}
-              />
-            </div>
-
-            <div className="preview-grid">
-              {files.map((file, index) => {
-                const imageUrl = file instanceof File ? URL.createObjectURL(file) : file;
-                return (
-                  <div key={index} className="image-preview">
-                    <img src={imageUrl} alt={`Preview ${index}`} />
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        if (typeof file === "string" && file.startsWith("https://res.cloudinary.com")) {
-                          setToDeleteImagesUrls((prev) => [...prev, file]);
-                        }
-                        setFiles(files.filter((_, i) => i !== index));
-                      }}
-                    >
-                      ×
-                    </button>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        )}
-
-        <div className="form-navigation">
-          {currentStep > 1 ? (
-            <button className="outline-button" onClick={() => setCurrentStep((prev) => prev - 1)}>
-              Back
-            </button>
-          ) : (<div className="order-detail-cancel" onClick={isDeleting ? null : handleDelete}>
-            {isDeleting ? (
-              <Oval height={20} width={20} color="white" secondaryColor="#b41818" ariaLabel="loading" />
-            ) : (
-              "DELETE ORDER"
-            )}
-          </div>)}
-
-          {currentStep < 3 ? (
-            <button className="primary-button" onClick={handleNext}>
-              Continue
-            </button>
-          ) : (
-            <>
-
-
-              <button className="primary-button" onClick={handleSubmit} disabled={isUploading}>
-                {isUploading ? (
-                  <Oval
-                    height={30}
-                    width={30}
-                    color="green"
-                    secondaryColor="white"
-                    ariaLabel="loading"
+          <>
+            <div className="shop-upload-1-desc">Upload product details for an accurate and engaging presentation.</div>
+            {['title', 'description', 'keywords'].map(field => (
+              <fieldset key={field} className={`floating-input ${field === 'description' ? 'textarea' : ''}`}>
+                <legend>{field.charAt(0).toUpperCase() + field.slice(1)}{field === 'keywords' && ' (comma-separated)'}</legend>
+                {field === 'description' ? (
+                  <textarea
+                    value={formData[field]} onChange={(e) => handleInputChange(e, field, MAX_LENGTHS[field.toUpperCase()])}
+                    rows="4" className={formErrors[field] ? 'error' : ''} disabled={isUploading}
+                    placeholder="# for heading and * for points"
                   />
                 ) : (
-                  'Update'
+                  <input
+                    type="text" value={formData[field]} onChange={(e) => handleInputChange(e, field, MAX_LENGTHS[field.toUpperCase()])}
+                    className={formErrors[field] ? 'error' : ''} disabled={isUploading}
+                    placeholder={`Enter product ${field}${field === 'keywords' ? ' e.g., electronics, phone, new' : ''}`}
+                  />
                 )}
-              </button>
-            </>
+                {formErrors[field] && <span className="error-hint">{formErrors[field]}</span>}
+                <span className="user-upload-count" style={{ color: formData[field].length >= MAX_LENGTHS[field.toUpperCase()] ? 'red' : 'inherit' }}>
+                  {formData[field].length}/{MAX_LENGTHS[field.toUpperCase()]}
+                </span>
+              </fieldset>
+            ))}
+          </>
+        )}
+        {currentStep === 2 && (
+          <div className="price-inputs">
+            {['price', 'discountedPrice', 'isInStock', 'isActive'].map(field => (
+              <fieldset key={field} className="floating-input">
+                <legend>{field === 'price' ? 'Original Price (₹)' : field === 'discountedPrice' ? 'Selling Price (₹)' : field === 'isInStock' ? 'Is In Stock' : 'Status'}</legend>
+                {['isInStock', 'isActive'].includes(field) ? (
+                  <div className="toggle-switch">
+                    <input type="checkbox" checked={formData[field]} onChange={(e) => handleInputChange(e, field)} disabled={isUploading} />
+                    <span>{formData[field] ? (field === 'isInStock' ? 'In Stock' : 'Active') : (field === 'isInStock' ? 'Out of Stock' : 'Deactivated')}</span>
+                  </div>
+                ) : (
+                  <input
+                    type="number" // Changed to number type for better UX
+                    value={formData[field]} onChange={(e) => handleInputChange(e, field)} className={formErrors[field] ? 'error' : ''}
+                    disabled={isUploading} placeholder={`Enter ${field === 'price' ? 'original' : 'selling'} price`} min="0" step="1"
+                  />
+                )}
+                {formErrors[field] && <span className="error-hint">{formErrors[field]}</span>}
+              </fieldset>
+            ))}
+          </div>
+        )}
+        {currentStep === 3 && (
+          <>
+            <div className="dropzone" onClick={() => !isUploading && files.length < MAX_IMAGES && document.getElementById('fileInput')?.click()}>
+              <FiUploadCloud className="upload-icon" />
+              <p>Click to select</p>
+              <small>(Max {MAX_IMAGES} images, 5MB each)</small>
+              <input id="fileInput" type="file" accept="image/*" multiple style={{ display: 'none' }} onChange={handleFileChange} disabled={isUploading || files.length >= MAX_IMAGES} />
+            </div>
+            {formErrors.images && <span className="error-hint">{formErrors.images}</span>}
+            <div className="preview-grid">
+              {files.map((file, index) => (
+                <div key={index} className="image-preview">
+                  <img src={file instanceof File ? URL.createObjectURL(file) : file} alt={`Preview ${index}`} onError={(e) => { e.target.src = up1; }} />
+                  <button onClick={() => removeFile(index)} disabled={isUploading} aria-label="Remove image">×</button>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
+      </div>
+    );
+  };
+
+  return (
+    <div className="multi-step-form">
+      {isUploading && <div className="overlay" />}
+      <div className="shop-upload-pic-header"><img src={up1} className="shop-upload-pic" alt="Shop header" /></div>
+      <div className="form-container">
+        {renderStepContent()}
+        <div className="form-navigation">
+          {currentStep > 1 ? (
+            <button className="outline-button" onClick={() => setCurrentStep(prev => prev - 1)} disabled={isUploading}>BACK</button>
+          ) : (
+            <button className="order-detail-cancel" onClick={handleDelete} disabled={isDeleting || isUploading}>
+              {isDeleting ? <Oval height={20} width={20} color="white" secondaryColor="#b41818" ariaLabel="loading" /> : 'DELETE'}
+            </button>
+          )}
+          {currentStep < 3 ? (
+            <button className="primary-button" onClick={handleNext} disabled={isUploading}>CONTINUE</button>
+          ) : (
+            <button className="primary-button" onClick={handleSubmit} disabled={isUploading}>
+              {isUploading ? <Oval height={30} width={30} color="white" secondaryColor="#2874f0" ariaLabel="loading" /> : 'UPDATE'}
+            </button>
           )}
         </div>
       </div>
-
       {uploadStatus && (
-        <div className={`status-toast ${uploadStatus}`}>
-          {uploadStatus === 'success' ? (
-            <>
-              <span>🎉 updated successfully!</span>
-              <button onClick={() => setUploadStatus(null)}>Ok</button>
-            </>
-          ) : (
-            <>
-              <span>❌ Update failed. Please try again.</span>
-              <button onClick={() => setUploadStatus(null)}>Dismiss</button>
-            </>
-          )}
+        <div className="shop-popup-overlay">
+          <div className="shop-popup-card">
+            <div className="shop-popup-pointer"></div>
+            <h2 className="shop-popup-title">{uploadStatus === 'success' ? 'Update Successful!' : 'Update Failed'}</h2>
+            <div style={{ fontSize: '13px' }} className="shop-popup-text">
+              {uploadStatus === 'success' ? 'Your product has been successfully updated.' : 'There was an error updating your product. Please try again.'}
+            </div>
+            <div className="shop-popup-buttons">
+              <button className="shop-popup-btn-primary" onClick={() => setUploadStatus(null)}>OK</button>
+              {uploadStatus === 'error' && <button className="shop-popup-btn-secondary" onClick={() => setUploadStatus(null)}>Close</button>}
+            </div>
+          </div>
         </div>
       )}
     </div>

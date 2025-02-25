@@ -30,8 +30,8 @@
 }
 
 .user-product-edit-button {
-    color: rgb(76, 199, 45);
-    border: 0.1px solid rgb(106, 232, 74);
+     color: rgb(25, 148, 46);
+    border:1.4px solid rgb(25, 148, 46);
 }
 
 .search-page-product-card-bottom-stock.instock {
@@ -43,7 +43,7 @@
     background-color: rgb(255, 255, 255);
     color: rgb(232, 74, 74);
     font-size: 13px;
-    border: 0.1px solid palevioletred;
+    border: 1.4px solid palevioletred;
 }
 
 .search-page-product-card-top {

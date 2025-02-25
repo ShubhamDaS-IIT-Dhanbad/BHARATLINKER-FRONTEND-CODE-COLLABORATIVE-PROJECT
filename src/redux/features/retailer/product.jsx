@@ -1,11 +1,9 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import shopProduct from '../../../appWrite/shop/shopProduct.js';
 
-
-
 export const fetchProducts = createAsyncThunk(
     'retailerproducts/fetchProducts',
-    async ({ inputValue, shopId, selectedCategories, selectedBrands, page, productsPerPage, sortByAsc, sortByDesc }, { rejectWithValue }) => {
+    async ({ inputValue, shopId, selectedCategories, selectedBrands, page, productsPerPage, sortByAsc, sortByDesc }, { rejectWithValue, signal }) => {
         try {
             const response = await shopProduct.getShopProducts({
                 shopId,
@@ -16,34 +14,27 @@ export const fetchProducts = createAsyncThunk(
                 sortByDesc,
                 selectedBrands,
                 selectedCategories
-            });
-            if (response?.products?.length === 0) {
-                return {
-                    products: [],
-                    totalPages: 0,
-                };
+            }, { signal });
+            
+            if (!response?.success) {
+                return rejectWithValue('Invalid response from server');
             }
 
-            if (response.products && response.success) {
-                return {
-                    total:response.total,
-                    products: response.products,
-                    hasMoreProducts: response.products.length >= productsPerPage,
-                };
-            } else {
-                return rejectWithValue('Invalid data structure in response');
-            }
+            return {
+                total: response.total || 0,
+                products: response.products || [],
+                hasMoreProducts: (response.products?.length || 0) >= productsPerPage,
+            };
         } catch (error) {
-            console.error("Error fetching products:", error);
-            return rejectWithValue(error.response?.data || error.message);
+            if (error.name === 'AbortError') return;
+            return rejectWithValue(error.message || 'Failed to fetch products');
         }
     }
 );
 
-// Exported Thunk
 export const loadMoreProducts = createAsyncThunk(
     'retailerProducts/loadMoreProducts',
-    async ({ inputValue, shopId, selectedCategories, selectedBrands, page, productsPerPage, sortByAsc, sortByDesc }, { rejectWithValue }) => {
+    async ({ inputValue, shopId, selectedCategories, selectedBrands, page, productsPerPage, sortByAsc, sortByDesc }, { rejectWithValue, signal }) => {
         try {
             const response = await shopProduct.getShopProducts({
                 shopId,
@@ -54,23 +45,23 @@ export const loadMoreProducts = createAsyncThunk(
                 selectedBrands,
                 sortByAsc,
                 sortByDesc,
-            });
-            if (response.products && response.success) {
-                return {
-                    products: response.products,
-                    hasMoreProducts: response.products.length >= productsPerPage,
-                };
-            } else {
-                return rejectWithValue('Invalid data structure in response');
+            }, { signal });
+            
+            if (!response?.success) {
+                return rejectWithValue('Invalid response from server');
             }
+
+            return {
+                products: response.products || [],
+                hasMoreProducts: (response.products?.length || 0) >= productsPerPage,
+            };
         } catch (error) {
-            console.error("Error fetching products:", error);
-            return rejectWithValue(error.response?.data || error.message);
+            if (error.name === 'AbortError') return;
+            return rejectWithValue(error.message || 'Failed to load more products');
         }
     }
 );
 
-// Initial state
 const initialState = {
     products: [],
     loading: false,
@@ -85,114 +76,65 @@ const initialState = {
     hasMoreProducts: true,
     error: null,
     productsPerPage: 10,
-    total:0
+    total: 0,
+    loaded:false
 };
 
-// Slice
 const retailerProductsSlice = createSlice({
     name: 'retailerProducts',
     initialState,
     reducers: {
-        setCurrentPage: (state, action) => {
-            state.currentPage = action.payload;
-        },
-        resetProducts: (state) => {
-            state.products = [];
-            state.loading = false;
-            state.loadingMoreProducts = false;
-            state.currentPage = 1;
-            state.totalPages = 1;
-            state.hasMoreProducts = true;
-            state.error = null;
-            state.productsPerPage = 10;
-        },
+        resetShopProducts: () => initialState,
         toggleSortOrder: (state, action) => {
             const order = action.payload;
-            if (order === 'asc') {
-                state.sortByAsc = !state.sortByAsc;
-                if (state.sortByAsc) state.sortByDesc = false;
-            } else if (order === 'desc') {
-                state.sortByDesc = !state.sortByDesc;
-                if (state.sortByDesc) state.sortByAsc = false;
-            }
-        },
-        sortProductReducer: (state) => {
-            const { sortByAsc, sortByDesc } = state;
-            if (sortByAsc) {
-                state.products = state.products.sort((a, b) => a.price - b.price);
-            } else if (sortByDesc) {
-                state.products = state.products.sort((a, b) => b.price - a.price);
-            }
-        },
-        setPriceRange: (state, action) => {
-            const { min, max } = action.payload;
-            state.priceRange = { min, max };
-        },
-        resetSortFilters: (state) => {
-            state.sortByAsc = false;
-            state.sortByDesc = false;
-            state.priceRange = { min: Number.MIN_SAFE_INTEGER, max: Number.MAX_SAFE_INTEGER };
+            state.sortByAsc = order === 'asc' ? !state.sortByAsc : false;
+            state.sortByDesc = order === 'desc' ? !state.sortByDesc : false;
         },
         toggleCategory: (state, action) => {
             const category = action.payload;
-            if (state.selectedCategories.includes(category)) {
-                state.selectedCategories = state.selectedCategories.filter((item) => item !== category);
-            } else {
-                state.selectedCategories.push(category);
-            }
+            state.selectedCategories = state.selectedCategories.includes(category)
+                ? state.selectedCategories.filter(item => item !== category)
+                : [...state.selectedCategories, category];
         },
         toggleBrand: (state, action) => {
             const brand = action.payload;
-            if (state.selectedBrands.includes(brand)) {
-                state.selectedBrands = state.selectedBrands.filter((item) => item !== brand);
-            } else {
-                state.selectedBrands.push(brand);
+            state.selectedBrands = state.selectedBrands.includes(brand)
+                ? state.selectedBrands.filter(item => item !== brand)
+                : [...state.selectedBrands, brand];
+        },
+        updateProduct: (state, action) => {
+            const { productId, updatedData } = action.payload;
+            const index = state.products.findIndex(p => p.$id === productId);
+            if (index !== -1) {
+                state.products[index] = { ...state.products[index], ...updatedData };
             }
         },
-        resetFilters: (state) => {
-            state.selectedCategories = [];
-            state.selectedBrands = [];
-        },
-        deleteProductSlice: (state, action) => {
+        deleteProduct: (state, action) => {
             const productId = action.payload;
             state.products = state.products.filter((product) => product.$id !== productId);
         },
-        updateProductSlice: (state, action) => {
-            const { productId, updatedData } = action.payload;
-            
-            state.products = state.products.map((product) =>
-                product.$id === productId ? { ...product, ...updatedData } : product
-            );
-        },
-        
     },
-
-
-
-
-
-
     extraReducers: (builder) => {
         builder
             .addCase(fetchProducts.pending, (state) => {
                 state.loading = true;
                 state.error = null;
+                state.loaded=true;
             })
             .addCase(fetchProducts.fulfilled, (state, action) => {
-                const { products, hasMoreProducts ,total} = action.payload;
-                state.total=16;
-                state.products = products;
-                state.hasMoreProducts = hasMoreProducts;
                 state.loading = false;
+                if (action.payload) {
+                    state.products = action.payload.products;
+                    state.total = action.payload.total;
+                    state.hasMoreProducts = action.payload.hasMoreProducts;
+                    state.currentPage = 1;
+                }
             })
             .addCase(fetchProducts.rejected, (state, action) => {
                 state.loading = false;
-                state.error = action.payload || 'Something went wrong';
+                state.error = action.payload;
                 state.hasMoreProducts = false;
             })
-
-
-
 
 
 
@@ -201,54 +143,30 @@ const retailerProductsSlice = createSlice({
                 state.error = null;
             })
             .addCase(loadMoreProducts.fulfilled, (state, action) => {
-                const { products, hasMoreProducts } = action.payload;
-
-                if (products.length > 0) {
-                    const newProducts = products.filter(
-                        (product) => !state.products.some((existingProduct) => existingProduct.$id === product.$id)
-                    );
-
-                    state.products = [...state.products, ...newProducts];
-
-                    if (state.sortByAsc) {
-                        state.products.sort((a, b) => a.price - b.price);
-                    } else if (state.sortByDesc) {
-                        state.products.sort((a, b) => b.price - a.price);
-                    }
-                }
-
-                state.currentPage += 1;
-                state.hasMoreProducts = hasMoreProducts;
                 state.loadingMoreProducts = false;
+                if (action.payload) {
+                    const newProducts = action.payload.products.filter(
+                        product => !state.products.some(p => p.$id === product.$id)
+                    );
+                    state.products = [...state.products, ...newProducts];
+                    state.hasMoreProducts = action.payload.hasMoreProducts;
+                    state.currentPage += 1;
+                }
             })
             .addCase(loadMoreProducts.rejected, (state, action) => {
                 state.loadingMoreProducts = false;
-                state.error = action.payload || 'Something went wrong';
-                state.hasMoreProducts = false;
+                state.error = action.payload;
             });
     },
 });
 
-// Selectors
-export const selectRetailerProducts = (state) => state.retailerProducts.products;
-export const selectLoading = (state) => state.retailerProducts.loading;
-export const selectCurrentPage = (state) => state.retailerProducts.currentPage;
-export const selectError = (state) => state.retailerProducts.error;
-export const selectSelectedCategories = (state) => state.retailerProducts.selectedCategories;
-
-// Exporting actions and reducer
 export const {
-    setCurrentPage,
-    resetProducts,
-    sortProductReducer,
+    resetShopProducts,
     toggleSortOrder,
-    toggleBrand,
-    setPriceRange,
-    resetSortFilters,
-    resetFilters,
     toggleCategory,
-    deleteProductSlice,
-    updateProductSlice,
+    toggleBrand,
+    updateProduct,
+    deleteProduct,
 } = retailerProductsSlice.actions;
 
 export default retailerProductsSlice.reducer;

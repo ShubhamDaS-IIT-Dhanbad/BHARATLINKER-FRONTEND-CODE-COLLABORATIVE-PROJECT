@@ -1,4 +1,4 @@
-import { Client, Databases, Account, ID } from "appwrite";
+import { Client, Databases, Query, Account, ID } from "appwrite";
 import { fetchShopData } from "./shopData.js";
 import conf from '../../conf/conf.js';
 
@@ -8,6 +8,40 @@ const client = new Client()
 
 const account = new Account(client);
 const databases = new Databases(client);
+
+
+export const updatePassword = async (shopId, password) => {
+  try {
+    let passwordStr = String(password);
+    let passwordInt = parseInt(passwordStr, 10);
+
+    if (isNaN(passwordInt) || passwordStr !== passwordInt.toString() || !/^\d{6}$/.test(passwordStr)) {
+      throw new Error("Password must be exactly 6 digits");
+    }
+
+    console.log("Password as integer:", passwordInt);
+
+    const shopData = await databases.updateDocument(
+      conf.appwriteShopsDatabaseId,
+      conf.appwriteShopsCollectionId,
+      shopId,
+      {
+        shopPassword: passwordInt
+      }
+    );
+    console.log("Password updated successfully for shop:", shopData.$id);
+    return {
+      success: true,
+      shopData: shopData
+    };
+  } catch (error) {
+    console.error("Error updating password:", error.message);
+    return {
+      success: false,
+      error: error.message
+    };
+  }
+};
 
 export const sendOTP = async (phone) => {
   try {
@@ -29,10 +63,43 @@ export const verifyOTP = async (shopId, otpCode, shopPhoneNumber) => {
         ID.unique(),
         { shopPhoneNumber }
       );
-    }console.log(shopData,"login..........")
+    }
     return { session: "test1", shopData };
   } catch (error) {
     console.error("Error verifying OTP:", error.message);
+    return null;
+  }
+};
+export const verifyPassword = async (shopPhoneNumber, password) => {
+  try {
+    const passwordInt = parseInt(password);
+    if (isNaN(passwordInt) ||
+      passwordInt.toString().length !== 6 ||
+      passwordInt < 0) {
+      console.error("Password must be a 6-digit integer");
+      return null;
+    }
+
+    const queries = [
+      Query.equal("shopPhoneNumber", shopPhoneNumber),
+      Query.equal("shopPassword", passwordInt)
+    ];
+
+    const result = await databases.listDocuments(
+      conf.appwriteShopsDatabaseId,
+      conf.appwriteShopsCollectionId,
+      queries
+    );
+    if (result.documents.length > 0) {
+
+      console.log("successfully logged in");
+      const shopData = result.documents[0];
+      return { session: "test1", shopData };
+    } else {
+      return null;
+    }
+  } catch (error) {
+    console.error("Error verifying password:", error.message);
     return null;
   }
 };

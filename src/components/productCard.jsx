@@ -14,16 +14,16 @@ function SearchPageProductCard({ id, image, title, price, discountedPrice, isInS
     const imageUrl = image?.[0] || DEFAULT_IMAGE_URL;
     const productName = title ? (title.length > 45 ? `${title.substring(0, 45)}..` : title) : 'Product Name';
     const productPrice = discountedPrice?.toLocaleString() || '0';
-    const mrpPrice = price?.toLocaleString() || '0';
 
     // Consolidated path checks
     const currentPath = location.pathname;
+    const isShopProductPage = currentPath === '/secure/retailer/products';
     const isRefurbishedPage = currentPath === '/user/refurbished';
     const isSearchPage = currentPath === '/search';
-    const isShopProductPage = currentPath === '/shop/product';
     const isSearchRefurbished = currentPath === '/refurbished';
 
     const handleCardClick = () => {
+        if (isShopProductPage) navigate(`/secure/shop/update/${id}`);
         if (isSearchPage) navigate(`/product/${id}`);
         if (isSearchRefurbished) navigate(`/refurbished/${id}`);
     };
@@ -33,32 +33,25 @@ function SearchPageProductCard({ id, image, title, price, discountedPrice, isInS
             <div className="search-page-product-card-top">
                 <LazyLoadImage
                     className="search-page-product-card-top-image"
-                    src={imageUrl}  // Image URL
-                    alt={productName}  // Alt text for accessibility
-                    effect="zoomIn"  // Optional blur effect while loading
-                    loading="lazy"  // Native lazy loading
+                    src={imageUrl} // Image URL
+                    alt={productName} // Alt text for accessibility
+                    effect="blur" // Optional blur effect while loading
+                    loading="lazy" // Native lazy loading
                 />
             </div>
 
             <div className='search-page-product-card-bottom'>
                 <span className='search-page-product-card-shop-name'>{productName}</span>
-                <div style={{display:"flex",flexDirection:"column",gap:"7px"}}>
+                <div style={{ display: "flex", flexDirection: "column", gap: "7px" }}>
                     <span className='search-page-product-card-shop'>
                         ₹{productPrice}
                     </span>
-                    {isRefurbishedPage && (
-                        <div
-                            className="user-product-edit-button"
-                            onClick={(e) => {
-                                e.stopPropagation();
-                                navigate(`/user/refurbished/update/${id}`)
-                            }}
-                        >
-                            Edit
-                        </div>
+
+                    {(isShopProductPage || isRefurbishedPage) && (
+                        <div className="user-product-edit-button">Edit Product</div>
                     )}
 
-                    {!isSearchRefurbished && !isRefurbishedPage && (
+                    {!isSearchRefurbished && !isRefurbishedPage && !isShopProductPage && (
                         <div className={`search-page-product-card-bottom-stock ${isInStock ? 'instock' : 'outofstock'}`}>
                             {isInStock ? 'ADD TO CART' : 'NOT DELIVERABLE'}
                         </div>
@@ -71,18 +64,16 @@ function SearchPageProductCard({ id, image, title, price, discountedPrice, isInS
                     )}
                 </div>
             </div>
+
             <div className="search-page-discount-container">
-                    {price && discountedPrice ? (
-                        <span>
-                            {Math.round(
-                                ((price - discountedPrice) / price) * 100
-                            )}
-                            % off
-                        </span>
-                    ) : (
-                        "Price not available"
-                    )}
-                </div>
+                {price && discountedPrice ? (
+                    <span>
+                        {Math.round(((price - discountedPrice) / price) * 100)}% off
+                    </span>
+                ) : (
+                    "Price not available"
+                )}
+            </div>
         </div>
     );
 }
