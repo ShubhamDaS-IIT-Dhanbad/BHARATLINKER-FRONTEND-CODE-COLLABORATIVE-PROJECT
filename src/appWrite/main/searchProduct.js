@@ -91,8 +91,8 @@ class SearchProductService {
         try {
             const queries = [];
             queries.push(Query.equal("$id",productId));
-            queries.push(Query.select(["$id","shopId","title", "description", "price", "discountedPrice","isInStock","images","shops.registrationStatus",
-                "shops.shopName","shops.isOpened","shops.email"
+            queries.push(Query.select(["$id","shopId","title", "description", "price", "discountedPrice","isInStock","images",
+                "shop.shopName","shop.$id","shop.isShopOpen","shop.shopEmail"
             ]));
             const { documents: product = [] } = await this.databases.listDocuments(
                 conf.appwriteProductsDatabaseId,
