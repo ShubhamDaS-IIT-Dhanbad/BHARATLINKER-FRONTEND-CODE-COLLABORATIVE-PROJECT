@@ -3,12 +3,13 @@ import { useNavigate } from "react-router-dom";
 import { CiLocationOn } from "react-icons/ci";
 import { CiBoxList } from "react-icons/ci";
 import Navbar from "./navbar.jsx";
+import { PiShoppingBagOpenThin } from "react-icons/pi";
 import { IoIosLogOut } from "react-icons/io";
-import p1 from './asset/pro1.png';
+import { BsChatLeftText } from "react-icons/bs";
 import { FaPlus } from "react-icons/fa";
 import useUserAuth from "../../hooks/userAuthHook.jsx";
 import "./style/userHome.css";
-
+import { WiNightCloudyWindy } from "react-icons/wi";
 function UserHome({ userData }) {
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -35,7 +36,7 @@ function UserHome({ userData }) {
     return (
         <>
             <header>
-                <Navbar onBackNavigation={()=>{navigate("/")}} userData={userData} headerTitle="USER PROFILE" />
+                <Navbar onBackNavigation={() => { navigate("/") }} userData={userData} headerTitle="USER PROFILE" />
             </header>
 
             <main>
@@ -57,30 +58,64 @@ function UserHome({ userData }) {
                                     className="user-dashboard-info-icon"
                                     aria-label="Your profile"
                                 />
-                                <p className="user-dashboard-info-text">ADDRESS BOOK</p>
+                                <p className="user-dashboard-info-text">Address book</p>
                             </article>
 
                             <article
                                 className="user-dashboard-refurbished-item"
                                 onClick={() => navigate("/user/order")}
                             >
-                                <CiBoxList
-                                size={25}
+                                <PiShoppingBagOpenThin
+                                    size={25}
                                     className="user-dashboard-info-icon"
                                     aria-label="Your orders"
                                 />
-                                <p className="user-dashboard-info-text">ORDER</p>
+                                <p className="user-dashboard-info-text">Order</p>
+                            </article>
+                            <article
+                                className="user-dashboard-refurbished-item"
+                                onClick={() => navigate("/user/order")}
+                            >
+                                < BsChatLeftText
+                                    size={20}
+                                    className="user-dashboard-info-icon"
+                                    aria-label="Your orders"
+                                />
+                                <p className="user-dashboard-info-text">Support</p>
+                            </article>
+                            <article
+                                className="user-dashboard-refurbished-item"
+                                onClick={() => navigate("/user/order")}
+                            >
+                                <WiNightCloudyWindy
+
+                                    size={25}
+                                    className="user-dashboard-info-icon"
+                                    aria-label="About Us"
+                                />
+                                <p className="user-dashboard-info-text">About Us</p>
+                            </article>
+                            <article
+                                className="user-dashboard-refurbished-item"
+                                onClick={() => navigate("/user/order")}
+                            >
+                                <CiBoxList
+                                    size={25}
+                                    className="user-dashboard-info-icon"
+                                    aria-label="Your orders"
+                                />
+                                <p className="user-dashboard-info-text">Bharat Linker Lite</p>
                             </article>
                             <article
                                 className="user-dashboard-refurbished-item"
                                 onClick={() => setIsLogout(true)}
                             >
                                 <IoIosLogOut
-                                size={25}
+                                    size={25}
                                     className="user-dashboard-info-icon"
                                     aria-label="Logout"
                                 />
-                                <p className="user-dashboard-info-text">LOG - OUT</p>
+                                <p className="user-dashboard-info-text">Log - Out</p>
                             </article>
                         </div>
                     </div>
