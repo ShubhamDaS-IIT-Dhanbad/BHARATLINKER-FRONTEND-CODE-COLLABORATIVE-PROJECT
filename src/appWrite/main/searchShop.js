@@ -41,15 +41,15 @@ class SearchShopService {
         try {
             const inputTokens = inputValue.trim().toLowerCase().split(" ");
             const queries = [];
-            queries.push(Query.select(["$id", "shopName","shopImages", "address","lat","long", "description", "isOpened", "registrationStatus", "customerCare", "email", "category"]));
+            queries.push(Query.select(["$id", "shopName", "shopImages", "shopAddress", "shopLatitude", "shopLongitude", "shopDescription", "isShopOpen", "shopRegistrationStatus", "shopCustomerCare", "shopEmail", "shopCategory"]));
 
             if (inputValue.length > 0) {
-                queries.push(Query.search('keyword', inputValue.trim().toLowerCase()));
+                queries.push(Query.search('shopKeywords', inputValue.trim().toLowerCase()));
             }
 
             // Filter by categories
             if (selectedCategories.length > 0) {
-                queries.push(Query.contains('category', selectedCategories));
+                queries.push(Query.contains('shopCategory', selectedCategories));
             }
 
             // Geolocation filtering
@@ -59,8 +59,8 @@ class SearchShopService {
                     radius * 1000 // Convert radius from km to meters
                 );
 
-                queries.push(Query.between('lat', boundingBox[0].latitude, boundingBox[1].latitude));
-                queries.push(Query.between('long', boundingBox[0].longitude, boundingBox[1].longitude));
+                queries.push(Query.between('shopLatitude', boundingBox[0].latitude, boundingBox[1].latitude));
+                queries.push(Query.between('shopLongitude', boundingBox[0].longitude, boundingBox[1].longitude));
             }
 
 
@@ -140,22 +140,22 @@ class SearchShopService {
         try {
             const queries = [
                 Query.equal("$id", shopId),
-                Query.select(["$id", "shopName","shopImages","lat","long", "address", "description", "isOpened", "registrationStatus", "customerCare", "email", "category"])
+                Query.select(["$id", "shopName", "shopImages", "shopAddress", "shopLatitude", "shopLongitude", "shopDescription", "isShopOpen", "shopRegistrationStatus", "shopCustomerCare", "shopEmail", "shopCategory"])
             ];
-    
+
             const response = await this.databases.listDocuments(
                 conf.appwriteShopsDatabaseId,
                 conf.appwriteShopsCollectionId,
                 queries
             );
-            if (response.documents.length === 0)return null;
+            if (response.documents.length === 0) return null;
             return response.documents[0];
         } catch (error) {
             console.error('Appwrite service :: getShopById', error);
             return false;
         }
     }
-    
+
 }
 
 const searchShopService = new SearchShopService();

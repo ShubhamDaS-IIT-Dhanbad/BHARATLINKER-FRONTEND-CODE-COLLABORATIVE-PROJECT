@@ -94,7 +94,7 @@ const ProductDetails = memo(() => {
 
   const redirectMap = useCallback(() => {
     const fallbackMap = () => {
-      const mapUrl = `https://www.google.com/maps/search/?api=1&query=${shopDetail?.lat},${shopDetail?.long}`;
+      const mapUrl = `https://www.google.com/maps/search/?api=1&query=${shopDetail?.shopLatitude},${shopDetail?.shopLongitude}`;
       window.open(mapUrl, "_blank");
     };
 
@@ -102,7 +102,7 @@ const ProductDetails = memo(() => {
 
     navigator.geolocation.getCurrentPosition(
       ({ coords }) => {
-        const url = `https://www.google.com/maps/dir/?api=1&origin=${coords.latitude},${coords.longitude}&destination=${shopDetail?.lat},${shopDetail?.long}`;
+        const url = `https://www.google.com/maps/dir/?api=1&origin=${coords.latitude},${coords.longitude}&destination=${shopDetail?.shopLatitude},${shopDetail?.shopLongitude}`;
         window.open(url, "_blank");
       },
       (err) => {
@@ -170,7 +170,7 @@ const ProductDetails = memo(() => {
         </div>
 
         <div id="product-details-info">
-          <div id="product-details-title">{shopDetail?.shopName}</div>
+          <div id="product-details-title">{shopDetail?.shopName.toUpperCase()}</div>
           <div className="product-detaile-share" onClick={handleShare}>
             <RiShareForwardLine size={20} />
           </div>
@@ -182,8 +182,8 @@ const ProductDetails = memo(() => {
         </div>
 
         <div className="shop-detail-options">
-          <div className={`shop-detail-option ${shopDetail?.isOpened ? 'open' : 'closed'}`}>
-            {shopDetail?.isOpened ? <FaDoorOpen size={35} /> : <FaDoorClosed size={35} />}
+          <div className={`shop-detail-option ${shopDetail?.isShopOpen ? 'open' : 'closed'}`}>
+            {shopDetail?.isShopOpen ? <FaDoorOpen size={35} /> : <FaDoorClosed size={35} />}
           </div>
           <div className="shop-detail-option" onClick={handlePhoneClick}>
             <CiPhone size={35} />

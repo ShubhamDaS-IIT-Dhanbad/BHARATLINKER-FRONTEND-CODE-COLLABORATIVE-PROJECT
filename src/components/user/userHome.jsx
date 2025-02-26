@@ -4,8 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { MdOutlineAdminPanelSettings } from "react-icons/md";
 import { HiOutlineUserCircle } from "react-icons/hi2";
 import { PiAddressBookTabsLight } from "react-icons/pi";
-import { TbDeviceMobileCharging } from "react-icons/tb";
-import { AiOutlineProduct } from "react-icons/ai";
 import { CiBoxList } from "react-icons/ci";
 import { Oval } from "react-loader-spinner";
 import useUserAuth from "../../hooks/userAuthHook.jsx";
@@ -63,26 +61,7 @@ function UserHome({ userData }) {
                         />
                         <p className="dashboard-Your-info-p">Address book</p>
                     </article>
-                    <article
-                        className="dashboard-Your-Refurbished"
-                        onClick={() => navigate("/user/upload")}
-                    >
-                        <TbDeviceMobileCharging
-                            className="dashboard-Your-information-icons"
-                            aria-label="Upload gadgets"
-                        />
-                        <p className="dashboard-Your-info-p">Upload</p>
-                    </article>
-                    <article
-                        className="dashboard-Your-Refurbished"
-                        onClick={() => navigate("/user/refurbished")}
-                    >
-                        <AiOutlineProduct
-                            className="dashboard-Your-information-icons"
-                            aria-label="Your refurbished items"
-                        />
-                        <p className="dashboard-Your-info-p">Update</p>
-                    </article>
+                    
 
                     <article
                         className="dashboard-Your-Refurbished"
@@ -146,3 +125,27 @@ function UserHome({ userData }) {
 }
 
 export default UserHome;
+
+
+
+
+// <article
+//                         className="dashboard-Your-Refurbished"
+//                         onClick={() => navigate("/user/upload")}
+//                     >
+//                         <TbDeviceMobileCharging
+//                             className="dashboard-Your-information-icons"
+//                             aria-label="Upload gadgets"
+//                         />
+//                         <p className="dashboard-Your-info-p">Upload</p>
+//                     </article>
+//                     <article
+//                         className="dashboard-Your-Refurbished"
+//                         onClick={() => navigate("/user/refurbished")}
+//                     >
+//                         <AiOutlineProduct
+//                             className="dashboard-Your-information-icons"
+//                             aria-label="Your refurbished items"
+//                         />
+//                         <p className="dashboard-Your-info-p">Update</p>
+//                     </article>

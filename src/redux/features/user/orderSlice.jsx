@@ -22,7 +22,7 @@ const fetchOrders = async (phoneNumber, status, page) => {
 
 // Fetch orders by status
 export const fetchOrdersByStatus = createAsyncThunk(
-  'retailerorders/fetchOrdersByStatus',
+  'userorders/fetchOrdersByStatus',
   async ({ phoneNumber, status, page }, { rejectWithValue }) => {
     try {
       const { documents, total } = await fetchOrders(phoneNumber, status, page);
@@ -35,7 +35,7 @@ export const fetchOrdersByStatus = createAsyncThunk(
 
 // Load more orders
 export const loadMoreOrders = createAsyncThunk(
-  'retailerorders/loadMoreOrders',
+  'userorders/loadMoreOrders',
   async ({ phoneNumber, status, page }, { rejectWithValue }) => {
     try {
       const { documents, total } = await fetchOrders(phoneNumber, status, page);
@@ -96,6 +96,7 @@ const ordersSlice = createSlice({
         const { status } = action.meta.arg;
         state[`${status}Orders`].loading = false;
         state[`${status}Orders`].error = action.payload;
+        console.log("op")
         state.loading=false;
       })
 

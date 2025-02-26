@@ -98,7 +98,7 @@ const Navbar = ({ headerTitle, shopId }) => {
                             </div>
                         </div>
                     </div>
-                    {isHomePage && <TbCategory2 size={30} className="home-page-category-icon" onClick={() => navigate('/refurbished')} />}
+                    {/* {isHomePage && <TbCategory2 size={30} className="home-page-category-icon" onClick={() => navigate('/refurbished')} />} */}
                 </div>
                 <div className={isHomePage ? "home-page-search-section" : "product-page-search-section"}>
                     <div className={isHomePage ? "home-page-search-input-container" : "product-page-search-input-container"}>

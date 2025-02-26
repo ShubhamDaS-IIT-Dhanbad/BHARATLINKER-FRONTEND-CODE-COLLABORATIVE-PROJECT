@@ -108,12 +108,14 @@ function SignUpForm() {
       shopPhoneNumber: shopData.shopPhoneNumber,
       shopAddress: shopData?.shopAddress,
       isShopOpen: shopData?.isShopOpen,
-      shopNo: shopData?.shopNumber,
+      shopNumber: shopData?.shopNumber,
       buildingName: shopData?.buildingName,
-      landmark: shopData?.landMark || null,
+      landMark: shopData?.landMark || null,
       shopImages: shopData?.shopImages,
       shopKeywords: shopData?.shopKeywords,
-      shopEmail: shopData?.shopEmail
+      shopCustomerCare: shopData?.shopCustomerCare,
+      shopEmail: shopData?.shopEmail,
+      shopRegistrationStatus:shopData?.shopRegistrationStatus
     }), { expires: 7, secure: true });
     navigate('/secure/shop');
   };

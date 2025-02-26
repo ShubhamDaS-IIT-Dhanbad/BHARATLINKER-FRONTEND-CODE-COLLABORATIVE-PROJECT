@@ -21,9 +21,9 @@ const SingleRefurbishedProductCard = lazy(() => import('./components/singleRefur
 const ShopProducts = lazy(() => import('./components/shopProducts/shopProducts.jsx'));
 const User = lazy(() => import('./components/user/userHome.jsx'));
 const UserProfile = lazy(() => import('./components/user/userProfile.jsx'));
-const UserProductPageMain = lazy(() => import('./components/user/userProductPageMain.jsx'));
-const UserUpload = lazy(() => import('./components/user/upload/userProductUpload.jsx'));
-const UserUpdateBookModule = lazy(() => import('./components/user/update/userProductUpdate.jsx'));
+// const UserProductPageMain = lazy(() => import('./components/user/userProductPageMain.jsx'));
+// const UserUpload = lazy(() => import('./components/user/upload/userProductUpload.jsx'));
+// const UserUpdateBookModule = lazy(() => import('./components/user/update/userProductUpdate.jsx'));
 const UserOrder = lazy(() => import('./components/user/order/order.jsx'));
 const UserCart = lazy(() => import('./components/user/myCart/myCart.jsx'));
 const UserOrderDetail = lazy(() => import('./components/user/orderDetail/orderDetail.jsx'));
@@ -293,7 +293,7 @@ const RoutesWithConditionalHeader = React.memo(() => {
             </PrivateRoute>
           }
         />
-        <Route
+        {/* <Route
           path="/user/refurbished"
           element=
           {
@@ -331,7 +331,7 @@ const RoutesWithConditionalHeader = React.memo(() => {
               <UserUpdateBookModule />
             </PrivateRoute>
           }
-        />
+        /> */}
         <Route
           path="/user/order"
           element=

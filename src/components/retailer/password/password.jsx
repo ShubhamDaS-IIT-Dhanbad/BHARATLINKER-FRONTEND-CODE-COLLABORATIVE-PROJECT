@@ -104,42 +104,38 @@ function Password({ shopId, showPassword, setShowPassword }) {
                                     WANT TO CHANGE PASSWORD!
                                 </h2>
                                 <fieldset className="shop-update-password-input">
-                                    <legend>New Password</legend>
+                                    {/* <legend>New Password</legend> */}
                                     <div className="shop-update-password-container">
                                         <input
                                             type="number"
                                             value={formData.password}
                                             onChange={(e) => handleInputChange(e, 'password')}
                                             className={formErrors.password ? 'error' : ''}
-                                            placeholder="Enter 6-digit password"
+                                            placeholder="ENTER 6 DIGIT PASSWORD"
                                             maxLength={MAX_LENGTH}
                                             inputMode="numeric"
                                             pattern="[1-9][0-9]{5}"
                                             disabled={isUpdating}
                                         />
-                                        {formErrors.password && (
-                                            <span className="error-message">{formErrors.password}</span>
-                                        )}
+                                        
                                     </div>
                                 </fieldset>
 
                                 <fieldset className="shop-update-password-input">
-                                    <legend>Confirm Password</legend>
+                                    {/* <legend>Confirm Password</legend> */}
                                     <div className="shop-update-password-container">
                                         <input
                                             type="number"
                                             value={formData.confirmPassword}
                                             onChange={(e) => handleInputChange(e, 'confirmPassword')}
                                             className={formErrors.confirmPassword ? 'error' : ''}
-                                            placeholder="Confirm 6-digit password"
+                                            placeholder="CONFIRM PASSWORD"
                                             maxLength={MAX_LENGTH}
                                             inputMode="numeric"
                                             pattern="[1-9][0-9]{5}"
                                             disabled={isUpdating}
                                         />
-                                        {formErrors.confirmPassword && (
-                                            <span className="error-message">{formErrors.confirmPassword}</span>
-                                        )}
+                                        
                                     </div>
                                 </fieldset>
 

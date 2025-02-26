@@ -12,7 +12,7 @@ import "./pending.css";
 
 
 const i1='https://res.cloudinary.com/demc9mecm/image/upload/v1737182575/mz1bdy2skwtmouqxfqtf.jpg'; //i1.png
-import { getShopData } from '../../../appWrite/shop/shopClodinary.js';
+import { fetchShopData } from '../../../appWrite/shop/shopClodinary.js';
 
 const RetailerPending = () => {
   const navigate = useNavigate();
@@ -22,7 +22,7 @@ const RetailerPending = () => {
   const fetchShopData = async () => {
     setIsLoading(true);
     try {
-      const freshShopData = await getShopData(shopData?.phoneNumber);
+      const freshShopData = await fetchShopData(shopData?.shopPhoneNumber);
       if (freshShopData) {
         Cookies.set("BharatLinkerShopData", JSON.stringify(freshShopData), { expires: 7 });
         setShopData(freshShopData);

@@ -35,6 +35,34 @@ export async function fetchShopData(shopPhoneNumber) {
     return null;
   }
 }
+export async function fetchShopDataByAttribute(shopPhoneNumber, attribute) {
+  try {
+    if (!shopPhoneNumber) throw new Error("Phone number is required.");
+    if (isNaN(shopPhoneNumber)) throw new Error("Invalid phone number format.");
+    
+    // Validate attribute is an array
+    if (!Array.isArray(attribute) || attribute.length === 0) {
+      throw new Error("Attribute must be a non-empty array");
+    }
+
+    const queries = [
+      Query.equal('shopPhoneNumber', shopPhoneNumber),
+      Query.select(attribute) // Using Query.select to specify attributes
+    ];
+    
+    const result = await databases.listDocuments(
+      conf.appwriteShopsDatabaseId,
+      conf.appwriteShopsCollectionId,
+      queries
+    );
+
+    return result.documents.length > 0 ? result.documents[0] : null;
+
+  } catch (error) {
+    console.error("Error fetching shop data:", error.message);
+    return null;
+  }
+}
 
 /**
  * Update shop data with new details.

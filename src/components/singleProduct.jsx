@@ -117,7 +117,7 @@ const ProductDetails = () => {
             quantity: 1,
             productImage: productDetail?.images[0],
             phoneNumber: `91${userData.phoneNumber}`,
-            shopEmail: productDetail.shops.email,
+            shopEmail: productDetail.shop.shopEmail,
             customerName: userData.name || "user"
         }));
     };
@@ -186,7 +186,7 @@ const ProductDetails = () => {
                         </div>
                         <div id="product-details-shop">
                             Shop:{" "}
-                            <span onClick={handleShopClick}>{productDetail?.shops?.shopName ? productDetail.shops?.shopName?.toUpperCase() : "Loading..."}</span>
+                            <span onClick={handleShopClick}>{productDetail?.shop?.shopName ? productDetail.shop?.shopName?.toUpperCase() : "Loading..."}</span>
                         </div>
                         <div id="product-details-price-button">
                             <div id="searchProductDetails-price-button-inner">
@@ -209,7 +209,7 @@ const ProductDetails = () => {
                                     MRP <span id="productDetails-price2">₹{productDetail?.price}</span>
                                 </p>
                             </div>
-                            {productDetail.isInStock && productDetail.shops.isOpened ?
+                            {productDetail.isInStock && productDetail.shop.isShopOpen ?
                                 <div className="product-details-price-instock">
                                     {cartQuantity === 0 ? (
                                         <div onClick={handleAddToCart}>add to cart</div>

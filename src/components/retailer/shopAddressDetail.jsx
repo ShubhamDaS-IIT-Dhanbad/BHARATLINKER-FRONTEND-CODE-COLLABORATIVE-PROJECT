@@ -56,9 +56,9 @@ const ShopAddressDetail = ({
                 shopLatitude:shopAddress?.lat,
                 shopLongitude:shopAddress?.long,
                 shopAddress: shopAddress?.address,
-                shopNo: shopAddressDetail.shopNo,
+                shopNumber: shopAddressDetail.shopNo,
                 buildingName: shopAddressDetail.buildingName,
-                landmark: shopAddressDetail.landmark || "",
+                landMark: shopAddressDetail.landmark || "",
             };
             Cookies.set("BharatLinkerShopData", JSON.stringify(updatedCookieData), { expires: 7 });
 

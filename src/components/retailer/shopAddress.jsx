@@ -75,7 +75,7 @@ function ShopAddress({ shopData }) {
                       <div className="detail-item">
                         <fieldset>
                           <legend>Shop No. & Floor</legend>
-                          <span className="detail-value">{shopData?.shopNo || "N/A"}</span>
+                          <span className="detail-value">{shopData?.shopNumber || "N/A"}</span>
                         </fieldset>
                       </div>
 
@@ -89,7 +89,7 @@ function ShopAddress({ shopData }) {
                       <div className="detail-item">
                         <fieldset>
                           <legend>Landmark & Area</legend>
-                          <span className="detail-value">{shopData?.landmark || "Not specified"}</span>
+                          <span className="detail-value">{shopData?.landMark || "Not specified"}</span>
                         </fieldset>
                       </div>
                     </div>

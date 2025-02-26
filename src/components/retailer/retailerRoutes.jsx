@@ -13,10 +13,8 @@ const RetailerUpload = React.lazy(() => import("./upload/upload.jsx"));
 const RetailerUpdate = React.lazy(() => import("./update/update.jsx"));
 const RetailerPending = React.lazy(() => import("./pending/pending.jsx"));
 const RetailerOrders = React.lazy(() => import("./order/order.jsx"));
-const RetailerOrderDetail = React.lazy(() => import("./orderDetail/orderDetail.jsx"));
 const ShopPassword = React.lazy(() => import("./password/password.jsx"));
 // Private route to protect routes if not authenticated
-
 
 
 const RetailerRoutes = React.memo(() => {
@@ -172,21 +170,6 @@ const RetailerRoutes = React.memo(() => {
           }
         />
 
-        <Route
-          path="/secure/shop/order/:id"
-          element={
-            <PrivateRoute>
-              <Helmet>
-                <title>Retailer Order Detail- BharatLinker</title>
-                <meta
-                  name="description"
-                  content="orders"
-                />
-              </Helmet>
-              <RetailerOrderDetail />
-            </PrivateRoute>
-          }
-        />
       </Routes>
     </Suspense>
   );

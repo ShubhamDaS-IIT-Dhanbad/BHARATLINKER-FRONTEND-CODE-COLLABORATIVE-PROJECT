@@ -1,17 +1,16 @@
 import React from 'react';
 import { useState, useEffect, useCallback } from 'react';
 import { Navigate, useNavigate, useLocation } from 'react-router-dom';
-import {updateShopData} from '../appWrite/shop/shopData.js';
+import { updateShopData } from '../appWrite/shop/shopData.js';
 import Cookies from 'js-cookie';
 
 const useRetailerAuthHook = () => {
-  const navigate=useNavigate();
+  const navigate = useNavigate();
   const [retailerData, setRetailerData] = useState(null);
   const location = useLocation();
 
   const getRetailerDataFromCookie = useCallback(() => {
     const storedData = Cookies.get('BharatLinkerShopData');
-
     if (storedData) {
       try {
         return JSON.parse(storedData);
@@ -26,20 +25,14 @@ const useRetailerAuthHook = () => {
   useEffect(() => {
     if (!location.pathname.startsWith('/secure/shop')) return;
     const retailerSession = getRetailerDataFromCookie();
-
     if (retailerSession) {
       setRetailerData(retailerSession);
-      const { registrationStatus } = retailerSession || {};
-
-      if (registrationStatus === 'pending') {
-        navigate('/shop/pending');
-      } else if (registrationStatus === 'rejected') {
-        navigate('/shop/rejected');
+      const { shopRegistrationStatus } = retailerSession;
+      if (shopRegistrationStatus !== 'approved' && location.pathname !== '/secure/shop') {
+        navigate('/secure/shop');
       }
-    } else {
-      navigate('/');
     }
-  }, []);
+  }, [location.pathname, navigate]);
 
   const logout = async () => {
     try {
@@ -53,7 +46,7 @@ const useRetailerAuthHook = () => {
 
   const PrivateRoute = ({ children }) => {
     const shopData = Cookies.get("BharatLinkerShopData");
-    if (!shopData) {return <Navigate to="/shop/login" replace />;}
+    if (!shopData) { return <Navigate to="/shop/login" replace />; }
     const parsedShopData = JSON.parse(shopData);
     return React.Children.map(children, (child) =>
       React.isValidElement(child) ? React.cloneElement(child, { shopData: parsedShopData }) : child
@@ -61,7 +54,7 @@ const useRetailerAuthHook = () => {
   };
   const updateShopCookie = async (updatedData, shopId) => {
     try {
-      const updatedShopData = await updateShopData(shopId,updatedData);
+      const updatedShopData = await updateShopData(shopId, updatedData);
       let existingData = {};
       try {
         const cookieData = Cookies.get("BharatLinkerShopData");
@@ -80,7 +73,40 @@ const useRetailerAuthHook = () => {
       console.error("Failed to update shop cookie:", error);
     }
   };
-  return { retailerData, getRetailerDataFromCookie, logout, PrivateRoute ,updateShopCookie };
+  const updateShopCookieOnly = async (updatedShopData, shopId) => {
+    try {
+      // Get existing cookie data
+      let existingData = {};
+      try {
+        const cookieData = Cookies.get("BharatLinkerShopData");
+        if (cookieData) {
+          existingData = JSON.parse(cookieData);
+        }
+      } catch (error) {
+        console.error("Error parsing BharatLinkerShopData cookie:", error);
+      }
+
+      // Merge existing data with new updates
+      const updatedCookieData = {
+        ...existingData,
+        ...updatedShopData,
+        shopId: shopId || existingData.shopId, // Ensure shopId is preserved
+      };
+
+      // Set the updated cookie (7-day expiration)
+      Cookies.set("BharatLinkerShopData", JSON.stringify(updatedCookieData), { 
+        expires: 7,
+        secure: true,    // Recommended for production
+        sameSite: 'strict' // Security feature
+      });
+
+      return updatedCookieData; // Return the updated data if needed
+    } catch (error) {
+      console.error("Error updating shop cookie:", error);
+      throw error; // Re-throw to allow calling code to handle errors
+    }
+  };
+  return { retailerData, getRetailerDataFromCookie, logout, PrivateRoute, updateShopCookie, updateShopCookieOnly };
 };
 
 export default useRetailerAuthHook;
