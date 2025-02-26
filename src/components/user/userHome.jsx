@@ -41,7 +41,6 @@ function UserHome({ userData }) {
             <main>
                 <section className="user-dashboard-info-section">
                     <div className="user-dashboard-profile-div">
-                        <img src={p1} alt="User Profile" className="user-dashboard-profile-img"  />
                         <div className="user-dashboard-header-row">
                             <button
                                 className="user-dashboard-primary-button"

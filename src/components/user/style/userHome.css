@@ -36,7 +36,7 @@
 .user-dashboard-info-section {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 10px;padding-left: 20px;padding-right: 20px;
     margin-top: 70px;
     overflow-y: hidden;
     min-height: 90vh;
@@ -86,8 +86,8 @@
 }
 
 .user-dashboard-profile-img {
-    width: 100px;
-    height: 100px;
+    width: 50px;
+    height: 50px;
 }
 
 /* Section Header Row */
@@ -111,8 +111,7 @@
     color: white;
     padding: 0.75rem 1.5rem;
     border-radius: 8px;
-    border: none;
-    width: 150px;
+    border: none;width: 100%;
     transition: background 0.2s ease;
 }
 
