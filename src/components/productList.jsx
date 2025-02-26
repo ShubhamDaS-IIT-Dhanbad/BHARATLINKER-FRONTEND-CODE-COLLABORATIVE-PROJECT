@@ -17,8 +17,7 @@ const NoProductsFound = () => {
 const ProductList = () => {
     const location = useLocation();
     const { products, loading, loadingMoreProducts, hasMoreProducts } = useSelector((state) => state.searchproducts);
-    const { refurbishedProducts, loading: refurbishedLoading, error, currentPage, hasMoreProducts: refurbishedHasMoreProducts, loadingMoreProducts: refurbishedLoadingMoreProducts } = useSelector((state) => state.userRefurbishedProducts);
-
+    
     const isRefurbishedPage = location.pathname === '/user/refurbished';
 
     const productsToRender = isRefurbishedPage ? refurbishedProducts : products;
