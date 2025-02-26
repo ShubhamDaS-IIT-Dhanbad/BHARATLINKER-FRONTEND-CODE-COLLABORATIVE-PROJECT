@@ -4,7 +4,7 @@ import {
     fetchUserRefurbishedProducts,
     loadMoreUserRefurbishedProducts,
     resetUserRefurbishedProducts,
-} from '../redux/features/user/userAllRefurbishedProductsSlice.jsx';
+} from '../../../img/userAllRefurbishedProductsSlice.jsx';
 
 export const useExecuteUserSearch = () => {
     const dispatch = useDispatch();

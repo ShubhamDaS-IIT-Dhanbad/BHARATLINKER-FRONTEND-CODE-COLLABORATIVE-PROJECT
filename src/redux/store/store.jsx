@@ -19,7 +19,6 @@ import refurbishedproductsfiltersection from '../features/refurbishedPage/refurb
 
 //user
 import userdata from '../features/user/userDataSlice.jsx'
-import userRefurbishedProducts from '../features/user/userAllRefurbishedProductsSlice.jsx'
 import userCart from '../features/user/cartSlice.jsx'
 import userorders from '../features/user/orderSlice.jsx'
 
@@ -48,7 +47,6 @@ const store=configureStore({
 
         //user 
         userdata:userdata,
-        userRefurbishedProducts:userRefurbishedProducts,
         userCart:userCart,
         userorders:userorders,
 

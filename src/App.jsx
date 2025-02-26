@@ -19,19 +19,18 @@ const SingleShopCard = lazy(() => import('./components/singleShop.jsx'));
 const SingleRefurbishedProductCard = lazy(() => import('./components/singleRefurbishedProduct.jsx'));
 
 const ShopProducts = lazy(() => import('./components/shopProducts/shopProducts.jsx'));
-const User = lazy(() => import('./components/user/userHome.jsx'));
-const UserProfile = lazy(() => import('./components/user/userProfile.jsx'));
-// const UserProductPageMain = lazy(() => import('./components/user/userProductPageMain.jsx'));
-// const UserUpload = lazy(() => import('./components/user/upload/userProductUpload.jsx'));
-// const UserUpdateBookModule = lazy(() => import('./components/user/update/userProductUpdate.jsx'));
-const UserOrder = lazy(() => import('./components/user/order/order.jsx'));
-const UserCart = lazy(() => import('./components/user/myCart/myCart.jsx'));
-const UserOrderDetail = lazy(() => import('./components/user/orderDetail/orderDetail.jsx'));
-
 const RetailerRoutes = lazy(() => import('./components/retailer/retailerRoutes.jsx'));
 const RetailerLogin = React.lazy(() => import("./components/retailer/login.jsx"));
 const RetailerRegister = React.lazy(() => import("./components/retailer/register.jsx"));
 
+
+
+
+const User = lazy(() => import('./components/user/userHome.jsx'));
+const UserProfile = lazy(() => import('./components/user/userProfile.jsx'));
+const UserOrder = lazy(() => import('./components/user/order/order.jsx'));
+const UserCart = lazy(() => import('./components/user/myCart/myCart.jsx'));
+const UserOrderDetail = lazy(() => import('./components/user/orderDetail/orderDetail.jsx'));
 
 import { fetchUserCart } from "./redux/features/user/cartSlice.jsx";
 
@@ -293,45 +292,6 @@ const RoutesWithConditionalHeader = React.memo(() => {
             </PrivateRoute>
           }
         />
-        {/* <Route
-          path="/user/refurbished"
-          element=
-          {
-            <PrivateRoute>
-              <Helmet>
-                <title>Manage Refurbished Products - Bharat Linker</title>
-                <meta name="description" content="View and manage your refurbished product listings on Bharat Linker." />
-              </Helmet>
-              <UserProductPageMain />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/user/upload"
-          element=
-          {
-            <PrivateRoute>
-              <Helmet>
-                <title>Upload Products - Bharat Linker</title>
-                <meta name="description" content="Upload your products for sale on Bharat Linker, including refurbished items." />
-              </Helmet>
-              <UserUpload />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/user/refurbished/update/:id"
-          element=
-          {
-            <PrivateRoute>
-              <Helmet>
-                <title>Update Product - Bharat Linker</title>
-                <meta name="description" content="Edit and update the details of your refurbished products on Bharat Linker." />
-              </Helmet>
-              <UserUpdateBookModule />
-            </PrivateRoute>
-          }
-        /> */}
         <Route
           path="/user/order"
           element=

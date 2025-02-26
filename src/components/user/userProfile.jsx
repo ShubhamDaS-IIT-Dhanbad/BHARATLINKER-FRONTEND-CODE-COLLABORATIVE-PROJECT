@@ -65,7 +65,7 @@ function UserRefurbishedProduct({ userData }) {
         <meta name="description" content="your profile" />
         <meta name="keywords" content="profile, user profile, Bharat Linker" />
       </Helmet>
-      <Navbar userData={userData} headerTitle="USER PROFILE" />
+      <Navbar userData={userData} headerTitle="ADDRESS BOOK" />
 
       <div className="user-profile-content">
         <div className="profile-section-card" style={{ marginTop: "10px" }}>

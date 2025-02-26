@@ -1,4 +1,5 @@
-.dashboard-header-parent {
+/* Header */
+.user-dashboard-header-parent {
     display: flex;
     height: 50px;
     align-items: center;
@@ -8,23 +9,23 @@
     top: 0;
     left: 0;
     right: 0;
-    padding:15px;
-    z-index: 100;
+    overflow-y: hidden;
+    padding: 15px;
 }
 
-.dashboard-header-user {
+.user-dashboard-header-user {
     display: flex;
     flex-grow: 1;
     flex-direction: column;
     padding-left: 10px;
 }
 
-.dashboard-header-user > p {
+.user-dashboard-header-user > p {
     padding: 0;
     margin: 0;
 }
 
-#dashboard-header-user-location {
+#user-dashboard-header-user-location {
     font-size: 20px; /* Reduced slightly for consistency */
     font-weight: 600;
     white-space: nowrap; /* Prevents text from wrapping */
@@ -32,39 +33,44 @@
     text-overflow: ellipsis; 
 }
 
-.dashboard-Your-information{
-    display: flex;flex-direction: column;
-    gap: 10px;margin-top: 20px;
-    min-height: 90vh;margin-top: 100px;
+.user-dashboard-info-section {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 70px;
+    overflow-y: hidden;
+    min-height: 90vh;
 }
-.dashboard-Your-Refurbished{
-    display: flex;justify-content: start;align-items: center;
-   gap: 10px;
-    margin-left: 20px;
-}
-.dashboard-Your-information-icons{
-    background-color: aliceblue;
-    max-height: 40px;max-width: 40px;padding: 5px;
-    border-radius: 10px;
-    display: flex;justify-content: center;
+
+.user-dashboard-refurbished-item {
+    display: flex;
+    justify-content: start;
     align-items: center;
-    font-size:25px;
-}
-.dashboard-Your-information{
-    display: flex;flex-direction: column;
-}
-.dashboard-Your-info-p{
-    font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-    font-size: 18px;
+    gap: 10px;
 }
 
-
-
-.dashboard-footer-p{
-   text-align: center;
+.user-dashboard-info-icon {
+    background-color: rgb(205, 225, 242);
+    max-height: 40px;
+    max-width: 40px;
+    padding: 10px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 25px;
 }
 
-#dashboard-header-user-phn {
+.user-dashboard-info-text {
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-size: 17px;font-weight: 400;
+}
+
+.user-dashboard-footer-p {
+    text-align: center;
+}
+
+#user-dashboard-header-user-phn {
     margin-top: -5px;
     font-weight: 400;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
@@ -72,115 +78,140 @@
     color: #666;
 }
 
+/* Profile Section */
+.user-dashboard-profile-div {
+    display: flex;
+    min-height: 80vh;
+    overflow-y: hidden;
+}
+
+.user-dashboard-profile-img {
+    width: 100px;
+    height: 100px;
+}
+
+/* Section Header Row */
+.user-dashboard-header-row {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1.5rem;
+    width: 100%;
+    gap: 10px;
+    padding-left: 10px;
+    padding-top: 20px;
+}
+
+
+/* Buttons & Icons */
+.user-dashboard-primary-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: rgb(12, 131, 31);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    border: none;
+    width: 95%;
+    transition: background 0.2s ease;
+}
+
+.user-dashboard-primary-button:hover {
+    background: rgb(12, 131, 31);
+}
+
+.user-dashboard-icon-xs {
+    font-size: 12px;
+}
 
 
 
 
 
-  
 
-/* Common Styles for Pop-Up Container */
-.logout-pop-up{
+
+
+.user-dashboard-popup-overlay {
     position: fixed;
-    top: 0;
+    inset: 0;
     display: flex;
+    align-items: flex-start;
     justify-content: center;
-    align-items: center;
-    width: 100vw;
-    background-color: #1b1818e5;
-    height: 100vh;
-    
-    z-index: 20000;
+    background: rgba(0, 0, 0, 0.406);
+    z-index: 110;
 }
 
-/* Common Styles for Pop-Up Inner Div */
-.logout-pop-up-inner-div {
-    background-color: #fff;
-    border-radius: 10px;
-    width: 85vw;
-    height: 130px;
-}
-
-/* Common Styles for Pop-Up Statement Text */
-.logout-pop-up-inner-div-logout-statement{
+.user-dashboard-popup-card {
+    position: relative;
+    padding: 10px;
+    margin-top: 57px;
+    width: calc(95% - 20px);
+    max-width: 400px;
     display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 45%;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.075);
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-}
-
-/* Common Styles for No and Yes Options */
-.logout-pop-up-inner-div-no-yes{
-    display: flex;
-    height: 100%;
-}
-
-.logout-pop-up-inner-div-no, .user-book-update-option-no, .user-book-delete-option-no {
-    width: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 50%;
-    border-right: 1px solid rgba(0, 0, 0, 0.053);
-}
-
-.logout-pop-up-inner-div-yes, .user-book-update-option-yes, .user-book-delete-option-yes {
-    width: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 50%;
-}
-
-/* Specific Colors for Action Confirmation */
-.logout-pop-up-inner-div-yes {
-    color: green; /* Logout Confirmation */
-}
-
-.user-book-update-option-yes {
-    color: blue; /* Update Confirmation */
-}
-
-.user-book-delete-option-no {
-    color: red;
-}
-
-
-
-
-
-.password-inputs{
-    display: flex;width: 80vw;margin-bottom: 10px;
-    gap: 10px;justify-content: center;align-items: center;
-  }
-  .digit-input{
-    width: calc(16vw - 14.4px);
-    height: 50px;
-    text-align: center;
-    border: 1px solid #e0e0e0;
+    flex-direction: column;
+    gap: 5px;
+    background: rgb(255, 255, 255);
     border-radius: 8px;
-    font-size: 18px;
-  }
-  .otp-input-group {
-    display: flex;width: 80vw;margin-bottom: 10px;
-    gap: 5px;justify-content: center;align-items: center;
-  }
-  .otp-digit-input {
-    width: calc(16vw - 21px);
-    height: 50px;
     text-align: center;
-    border: 1px solid #e0e0e0;
-    border-radius: 8px;
-    font-size: 18px;
-  }
-  
-.digit-input:focus{
-    box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
-    outline: none;
-  }
-  .phone-input-container:focus,
-  .otp-digit-input:focus {box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
-    outline: none;
-  }
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.user-dashboard-popup-pointer {
+    position: absolute;
+    top: -8px;
+    left: 20px;
+    width: 16px;
+    height: 16px;
+    background: white;
+    transform: rotate(45deg);
+}
+
+.user-dashboard-popup-title {
+    font-size: 1rem;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    font-weight: bold;
+}
+
+.user-dashboard-popup-text {
+    font-size: 0.7rem;
+    padding: 0;
+    margin: 0;
+    color: #4a4a4a;
+}
+
+.user-dashboard-popup-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.user-dashboard-popup-button-primary {
+    flex: 1;
+    padding: 6px;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    background: rgb(254, 75, 117);
+    color: white;
+    border: none;
+    transition: background 0.2s;
+}
+
+.user-dashboard-popup-button-primary:hover {
+    background: rgb(254, 75, 117);
+}
+
+.user-dashboard-popup-button-secondary {
+    flex: 1;
+    padding: 6px;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    border: 1px solid rgb(254, 75, 117);
+    color: rgb(254, 75, 117);
+    background: white;
+    transition: background 0.2s;
+}
+
+.user-dashboard-popup-button-secondary:hover {
+    background: #f0fdf4;
+}
