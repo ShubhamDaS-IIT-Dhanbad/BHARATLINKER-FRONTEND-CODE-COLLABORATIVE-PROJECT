@@ -6,6 +6,7 @@ import Navbar from "./navbar.jsx";
 import { PiShoppingBagOpenThin } from "react-icons/pi";
 import { IoIosLogOut } from "react-icons/io";
 import { BsChatLeftText } from "react-icons/bs";
+import { CiMobile3 } from "react-icons/ci";
 import { FaPlus } from "react-icons/fa";
 import useUserAuth from "../../hooks/userAuthHook.jsx";
 import "./style/userHome.css";
@@ -99,7 +100,7 @@ function UserHome({ userData }) {
                                 className="user-dashboard-refurbished-item"
                                 onClick={() => navigate("/user/order")}
                             >
-                                <CiBoxList
+                                <CiMobile3 
                                     size={25}
                                     className="user-dashboard-info-icon"
                                     aria-label="Your orders"

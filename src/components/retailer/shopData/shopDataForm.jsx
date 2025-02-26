@@ -126,9 +126,9 @@ const ShopDataForm = React.memo(({ shopData }) => {
         JSON.stringify({ ...JSON.parse(Cookies.get("BharatLinkerShopData") || "{}"), ...updatedShopData }),
         { expires: 7 }
       );
-      setUploadStatus("Your file has been uploaded successfully! You can now proceed or review the data.");
+      setUploadStatus("Your Shop Data Has been successfully updated .");
     } catch (error) {
-      setUploadStatus("Upload failed. Please try again.");
+      setUploadStatus("Updation failed. Please try again.");
     } finally {
       setIsUploading(false);
       setShowInfo(true);

@@ -126,8 +126,7 @@ export async function updateShopImagesAndData({shopId, toDeleteImagesUrls, updat
     for (const [key, value] of Object.entries(updatedData)) {
       if (value !== undefined && value !== null) {
         updatedShopData[key] = 
-          key === 'customerCare' ? Number(value) :
-          value.toLowerCase();
+          value?.toLowerCase();
       }
     }
     const shopData= await databases.updateDocument(
