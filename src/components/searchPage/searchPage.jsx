@@ -52,7 +52,7 @@ const SearchPage = () => {
                 />
             </div>
 
-            {true ? (
+            {loading ? (
                 <div className="fallback-loading-img">
                    <img src={s1} />
                 </div>
