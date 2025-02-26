@@ -36,8 +36,8 @@ const ProductDetails = memo(() => {
   const singleShops = useSelector(({ singleshops }) => singleshops.singleShops);
 
   const descriptionSections = useMemo(
-    () => parseDescription(shopDetail?.description),
-    [shopDetail?.description]
+    () => parseDescription(shopDetail?.shopDescription),
+    [shopDetail?.shopDescription]
   );
 
   const fetchShopDetails = useCallback(async () => {
