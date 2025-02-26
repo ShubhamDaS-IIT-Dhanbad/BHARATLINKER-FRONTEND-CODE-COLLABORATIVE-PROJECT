@@ -53,7 +53,7 @@
     background-color: rgb(205, 225, 242);
     max-height: 40px;
     max-width: 40px;
-    padding: 10px;
+    padding: 6px;
     border-radius: 10px;
     display: flex;
     justify-content: center;
@@ -112,7 +112,7 @@
     padding: 0.75rem 1.5rem;
     border-radius: 8px;
     border: none;
-    width: 95%;
+    width: 150px;
     transition: background 0.2s ease;
 }
 

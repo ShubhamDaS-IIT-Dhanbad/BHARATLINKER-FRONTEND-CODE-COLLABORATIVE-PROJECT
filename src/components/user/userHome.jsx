@@ -54,7 +54,7 @@ function UserHome({ userData }) {
                                 onClick={() => navigate("/user/profile")}
                             >
                                 <CiLocationOn
-                                    size={30}
+                                    size={25}
                                     className="user-dashboard-info-icon"
                                     aria-label="Your profile"
                                 />
@@ -66,7 +66,7 @@ function UserHome({ userData }) {
                                 onClick={() => navigate("/user/order")}
                             >
                                 <CiBoxList
-                                size={30}
+                                size={25}
                                     className="user-dashboard-info-icon"
                                     aria-label="Your orders"
                                 />
@@ -77,7 +77,7 @@ function UserHome({ userData }) {
                                 onClick={() => setIsLogout(true)}
                             >
                                 <IoIosLogOut
-                                size={30}
+                                size={25}
                                     className="user-dashboard-info-icon"
                                     aria-label="Logout"
                                 />
