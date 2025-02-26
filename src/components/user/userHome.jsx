@@ -77,7 +77,7 @@ function UserHome({ userData }) {
                                 onClick={() => navigate("/user/order")}
                             >
                                 < BsChatLeftText
-                                    size={20}
+                                    size={24}
                                     className="user-dashboard-info-icon"
                                     aria-label="Your orders"
                                 />
