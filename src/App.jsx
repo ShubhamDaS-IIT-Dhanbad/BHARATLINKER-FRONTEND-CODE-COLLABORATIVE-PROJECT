@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import useUserAuth from './hooks/userAuthHook.jsx';
 import { Oval } from 'react-loader-spinner';
-
+import './App.css'
 import Download from './components/downloadapp.jsx';
 import HomePage from './components/homePage/home.jsx';
 import SearchPage from './components/searchPage/searchPage.jsx';

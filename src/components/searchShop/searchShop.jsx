@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import SearchBar from '../navbar.jsx';
-import { LiaSortSolid } from 'react-icons/lia';
-import { MdFilterList } from 'react-icons/md';
 import ShopList from './shopList.jsx';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
-
-import Skeleton from 'react-loading-skeleton';
+import s1 from '../../assets/s1.png'
 import 'react-loading-skeleton/dist/skeleton.css';
 import { Oval } from "react-loader-spinner";
 import { useSearchShop } from '../../hooks/searchShopHook.jsx';
@@ -39,28 +36,8 @@ const Shop = () => {
                 />
             </div>
             {(loading) ? (
-                <div id="skleton-page-grid">
-                    {skeletons.map((_, index) => (
-                        <div className="shop-card-container" key={index}>
-                            <div className="shop-card-header">
-                                <Skeleton height={180} width="100%" />
-                            </div>
-
-                            <div className="shop-card-details">
-                                <Skeleton width="50%" height={20} className="shop-card-name" />
-
-                                <div className="shop-card-info">
-                                    <div className="shop-card-divider"></div>
-
-                                    <div className="shop-card-address-toggle">
-                                        <Skeleton width="60%" height={20} />
-                                    </div>
-
-                                    <div className="shop-card-divider"></div>
-                                </div>
-                            </div>
-                        </div>
-                    ))}
+                <div className="fallback-loading-img">
+                    <img src={s1} />
                 </div>
             ) : (
                 <InfiniteScroll

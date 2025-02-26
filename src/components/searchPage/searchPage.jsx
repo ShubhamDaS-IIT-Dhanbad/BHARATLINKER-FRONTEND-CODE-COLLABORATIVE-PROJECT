@@ -12,6 +12,8 @@ import ProductSortBySection from './sortbySection.jsx';
 import ProductFilterBySection from './filterSection.jsx';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useExecuteSearch } from '../../hooks/searchProductHook';
+
+import s1 from '../../assets/s1.png';
 import './searchPage.css';
 
 const SearchPage = () => {
@@ -50,9 +52,9 @@ const SearchPage = () => {
                 />
             </div>
 
-            {loading ? (
-                <div className="fallback-loading">
-                    <Oval height={30} width={30} color="green" secondaryColor="white" ariaLabel="loading" />
+            {true ? (
+                <div className="fallback-loading-img">
+                   <img src={s1} />
                 </div>
             ) : (
                 <InfiniteScroll
