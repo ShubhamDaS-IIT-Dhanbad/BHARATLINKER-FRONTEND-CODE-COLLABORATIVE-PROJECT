@@ -1,11 +1,9 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useSelector} from 'react-redux';
 import {useParams, useLocation } from 'react-router-dom';
-
-import { Oval } from 'react-loader-spinner';
 import ProductList from './productList.jsx';
 import InfiniteScroll from 'react-infinite-scroll-component';
-
+import s1 from '../../assets/s1.png'
 import Navbar from '../navbar.jsx';
 import ProductSortBySection from './sortbySection.jsx';
 import ProductFilterBySection from './filterSection.jsx';
@@ -56,9 +54,9 @@ const ProductSearch = () => {
             </div>
 
             {loading ? (
-                <div className="shop-product-page-loading-container">
-                    <Oval height={30} width={30} color="green" secondaryColor="white" ariaLabel="loading" />
-                </div>
+                 <div className="fallback-loading-img">
+                                   <img src={s1} />
+                                </div>
             ) : (
                 <InfiniteScroll
                     dataLength={products.length}

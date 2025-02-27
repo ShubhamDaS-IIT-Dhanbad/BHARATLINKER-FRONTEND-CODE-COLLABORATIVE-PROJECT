@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types'; // Added this import
 import { useNavigate, useLocation } from 'react-router-dom';
 import "./style/productCard.css";
 import { LazyLoadImage } from "react-lazy-load-image-component";
@@ -13,19 +14,20 @@ function SearchPageProductCard({ id, image, title, price, discountedPrice, isInS
     // Improved image handling with optional chaining
     const imageUrl = image?.[0] || DEFAULT_IMAGE_URL;
     const productName = title ? (title.length > 45 ? `${title.substring(0, 45)}..` : title) : 'Product Name';
-    const productPrice = discountedPrice?.toLocaleString() || '0';
+    const productPrice = discountedPrice?.toLocaleString('en-IN', { style: 'currency', currency: 'INR' }) || '₹0';
 
-    // Consolidated path checks
+    // Consolidated and corrected path checks
     const currentPath = location.pathname;
     const isShopProductPage = currentPath === '/secure/retailer/products';
-    const isRefurbishedPage = currentPath === '/user/refurbished';
     const isSearchPage = currentPath === '/search';
-    const isSearchRefurbished = currentPath === '/refurbished';
+    const isSearchShopProductPage = currentPath.startsWith('/shop/product/');
 
     const handleCardClick = () => {
-        if (isShopProductPage) navigate(`/secure/shop/update/${id}`);
-        if (isSearchPage) navigate(`/product/${id}`);
-        if (isSearchRefurbished) navigate(`/refurbished/${id}`);
+        if (isShopProductPage) {
+            navigate(`/secure/shop/update/${id}`);
+        } else if (isSearchShopProductPage || isSearchPage) {
+            navigate(`/product/${id}`);
+        }
     };
 
     return (
@@ -33,10 +35,10 @@ function SearchPageProductCard({ id, image, title, price, discountedPrice, isInS
             <div className="search-page-product-card-top">
                 <LazyLoadImage
                     className="search-page-product-card-top-image"
-                    src={imageUrl} // Image URL
-                    alt={productName} // Alt text for accessibility
-                    effect="blur" // Optional blur effect while loading
-                    loading="lazy" // Native lazy loading
+                    src={imageUrl}
+                    alt={productName}
+                    effect="blur"
+                    loading="lazy"
                 />
             </div>
 
@@ -44,38 +46,41 @@ function SearchPageProductCard({ id, image, title, price, discountedPrice, isInS
                 <span className='search-page-product-card-shop-name'>{productName}</span>
                 <div style={{ display: "flex", flexDirection: "column", gap: "7px" }}>
                     <span className='search-page-product-card-shop'>
-                        ₹{productPrice}
+                        {productPrice}
                     </span>
 
-                    {(isShopProductPage || isRefurbishedPage) && (
+                    {isShopProductPage && (
                         <div className="user-product-edit-button">Edit Product</div>
                     )}
 
-                    {!isSearchRefurbished && !isRefurbishedPage && !isShopProductPage && (
+                    {!isShopProductPage && (
                         <div className={`search-page-product-card-bottom-stock ${isInStock ? 'instock' : 'outofstock'}`}>
                             {isInStock ? 'ADD TO CART' : 'NOT DELIVERABLE'}
-                        </div>
-                    )}
-
-                    {isSearchRefurbished && (
-                        <div className="search-page-product-card-bottom-stock instock">
-                            ON SALE
                         </div>
                     )}
                 </div>
             </div>
 
             <div className="search-page-discount-container">
-                {price && discountedPrice ? (
+                {price && discountedPrice && price > discountedPrice ? (
                     <span>
                         {Math.round(((price - discountedPrice) / price) * 100)}% off
                     </span>
                 ) : (
-                    "Price not available"
+                    <span>No discount</span>
                 )}
             </div>
         </div>
     );
 }
+
+SearchPageProductCard.propTypes = {
+    id: PropTypes.string.isRequired,
+    image: PropTypes.arrayOf(PropTypes.string),
+    title: PropTypes.string,
+    price: PropTypes.number,
+    discountedPrice: PropTypes.number,
+    isInStock: PropTypes.bool
+};
 
 export default SearchPageProductCard;
