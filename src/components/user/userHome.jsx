@@ -162,7 +162,7 @@ function UserHome({ userData }) {
 
             <main>
                 <section className="user-dashboard-info-section">
-                    {/* <img src={rd1} alt="User dashboard" /> */}
+                    
                     <div className="user-dashboard-header-row">
 
 
@@ -181,6 +181,7 @@ function UserHome({ userData }) {
                             </article>
                         ))}
                     </div>
+                    <img src={rd1} alt="User dashboard" />
                 </section>
             </main>
 

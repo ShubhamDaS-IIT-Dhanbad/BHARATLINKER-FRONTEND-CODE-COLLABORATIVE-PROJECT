@@ -38,7 +38,7 @@
     flex-direction: column;align-items: center;
     gap: 10px;padding-left: 20px;padding-right: 20px;
     margin-top: 97px;background-color:  #f9f9f9;
-    min-height: 90vh;
+    min-height: 50vh;
 }
 .user-dashboard-info-section img{
     width: 60vw;
@@ -100,7 +100,6 @@
     flex-direction: column;
     margin-bottom: 1.5rem;
     width: 100%;
-    min-height: 80vh;
     gap: 10px;
     padding-left: 10px;
 }
