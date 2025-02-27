@@ -10,6 +10,7 @@ import DeliveryAddress from './deliveryAddress.jsx';
 import CheckOutPage from './checkOutPage.jsx';
 import LocationTab from '../../locationTab/locationTab.jsx';
 import c1 from '../asset/c1.png';
+import s1 from '../asset/saving1.png';
 import './myCart.css';
 
 const MyCartPage = ({ userData }) => {
@@ -27,18 +28,25 @@ const MyCartPage = ({ userData }) => {
     const [showConfirmPopup, setShowConfirmPopup] = useState(false);
     const [pendingRemoval, setPendingRemoval] = useState(null);
 
-    const cartSummary = useMemo(() => ({
-        isEmpty: !cart || cart.length === 0,
-        hasOutOfStock: cart?.some(item => item.stock < item.quantity),
-        totalItems: cart?.reduce((sum, item) => sum + item.quantity, 0) || 0,
-    }), [cart]);
+    const cartSummary = useMemo(() => {
+        const items = cart || [];
+        return {
+            isEmpty: !items.length,
+            hasOutOfStock: items.some(item => item.stock < item.quantity),
+            totalItems: items.reduce((sum, item) => sum + item.quantity, 0) || 0,
+            totalSavings: items.reduce((sum, item) => {
+                const price = item.price || 0;
+                const discountedPrice = item.discountedPrice || price;
+                return sum + ((price - discountedPrice) * item.quantity);
+            }, 0)
+        };
+    }, [cart]);
 
     const transitionToView = useCallback((view) => {
         setViewState(prev => ({ ...prev, currentView: view, error: null }));
         window.history.pushState({ view }, '', `#${view}`);
     }, []);
 
-    // Handle browser back/forward navigation
     useEffect(() => {
         const handlePopState = (event) => {
             const newView = event.state?.view || 'cart';
@@ -133,7 +141,7 @@ const MyCartPage = ({ userData }) => {
 
     const handleBackNavigation = useCallback(() => {
         navigate(-1);
-    }, []);
+    }, [navigate]);
 
     const renderCartView = useCallback(() => (
         <>
@@ -155,11 +163,14 @@ const MyCartPage = ({ userData }) => {
                         </>
                     ) : (
                         <>
-
                             <div className="user-cart-container-img-div"><img src={c1} /></div>
-                            <div className="user-cart-container-total-saving">total saving </div>
+                            {cartSummary.totalSavings > 0 && (
+                                <div className="user-cart-container-total-saving">
+                                    <img src={s1} />
+                                    Total Savings: ₹{cartSummary.totalSavings.toFixed(2)}
+                                </div>
+                            )}
                             <section className="user-cart-items-section">
-                                {/* Group cart items by shopId */}
                                 {Object.entries(
                                     cart.reduce((acc, item) => {
                                         const shopId = item.shopId || 'unknown';
@@ -171,7 +182,6 @@ const MyCartPage = ({ userData }) => {
                                     }, {})
                                 ).map(([shopId, items]) => (
                                     <div key={shopId} className="user-cart-items-section-filedset">
-                                        {/* <legend>{items[0]?.shopName}</legend> */}
                                         {items.map((item) => (
                                             <OrderProductCard
                                                 key={item.$id}
