@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { CiLocationOn } from "react-icons/ci";
-import { CiBoxList } from "react-icons/ci";
 import Navbar from "./navbar.jsx";
 import { PiShoppingBagOpenThin } from "react-icons/pi";
 import { IoIosLogOut } from "react-icons/io";
@@ -12,7 +11,7 @@ import { CiMobile3 } from "react-icons/ci";
 import { FaPlus } from "react-icons/fa";
 import useUserAuth from "../../hooks/userAuthHook.jsx";
 import "./style/userHome.css";
-
+import rd1 from './asset/rd1.png';
 import AddToCartTab from "../viewCartTab/viewCart.jsx";
 import { WiNightCloudyWindy } from "react-icons/wi";
 function UserHome({ userData }) {
@@ -48,83 +47,83 @@ function UserHome({ userData }) {
 
             <main>
                 <section className="user-dashboard-info-section">
-                    <div className="user-dashboard-profile-div">
-                        <div className="user-dashboard-header-row">
-                            <button
-                                className="user-dashboard-primary-button"
-                            >
-                                <FaPlus className="user-dashboard-icon-xs" />
-                                <span>USER DATA</span>
-                            </button>
-                            <article
-                                className="user-dashboard-refurbished-item"
-                                onClick={() => navigate("/user/profile")}
-                            >
-                                <CiLocationOn
-                                    size={25}
-                                    className="user-dashboard-info-icon"
-                                    aria-label="Your profile"
-                                />
-                                <p className="user-dashboard-info-text">Address book</p>
-                            </article>
+                    <img src={rd1} />
 
-                            <article
-                                className="user-dashboard-refurbished-item"
-                                onClick={() => navigate("/user/order")}
-                            >
-                                <PiShoppingBagOpenThin
-                                    size={25}
-                                    className="user-dashboard-info-icon"
-                                    aria-label="Your orders"
-                                />
-                                <p className="user-dashboard-info-text">Order</p>
-                            </article>
-                            <article
-                                className="user-dashboard-refurbished-item"
-                                onClick={() => navigate("/user/order")}
-                            >
-                                < BsChatLeftText
-                                    size={24}
-                                    className="user-dashboard-info-icon"
-                                    aria-label="Your orders"
-                                />
-                                <p className="user-dashboard-info-text">Support</p>
-                            </article>
-                            <article
-                                className="user-dashboard-refurbished-item"
-                                onClick={() => navigate("/user/order")}
-                            >
-                                <WiNightCloudyWindy
+                    <div className="user-dashboard-header-row">
+                        <button
+                            className="user-dashboard-primary-button"
+                        >
+                            <FaPlus className="user-dashboard-icon-xs" />
+                            <span>USER DATA</span>
+                        </button>
+                        <article
+                            className="user-dashboard-refurbished-item"
+                            onClick={() => navigate("/user/profile")}
+                        >
+                            <CiLocationOn
+                                size={25}
+                                className="user-dashboard-info-icon"
+                                aria-label="Your profile"
+                            />
+                            <p className="user-dashboard-info-text">Address book</p>
+                        </article>
 
-                                    size={25}
-                                    className="user-dashboard-info-icon"
-                                    aria-label="About Us"
-                                />
-                                <p className="user-dashboard-info-text">About Us</p>
-                            </article>
-                            <article
-                                className="user-dashboard-refurbished-item"
-                                onClick={() => navigate("/user/order")}
-                            >
-                                <CiMobile3
-                                    size={25}
-                                    className="user-dashboard-info-icon"
-                                    aria-label="Your orders"
-                                />
-                                <p className="user-dashboard-info-text">Bharat Linker Lite</p>
-                            </article>
-                            <article
-                                className="user-dashboard-refurbished-item"
-                                onClick={() => setIsLogout(true)}
-                            >
-                                <IoIosLogOut
-                                    size={25}
-                                    className="user-dashboard-info-icon"
-                                    aria-label="Logout"
-                                />
-                                <p className="user-dashboard-info-text">Log - Out</p>
-                            </article>
-                        </div>
+                        <article
+                            className="user-dashboard-refurbished-item"
+                            onClick={() => navigate("/user/order")}
+                        >
+                            <PiShoppingBagOpenThin
+                                size={25}
+                                className="user-dashboard-info-icon"
+                                aria-label="Your orders"
+                            />
+                            <p className="user-dashboard-info-text">Order</p>
+                        </article>
+                        <article
+                            className="user-dashboard-refurbished-item"
+                            onClick={() => navigate("/support")}
+                        >
+                            < BsChatLeftText
+                                size={24}
+                                className="user-dashboard-info-icon"
+                                aria-label="Your orders"
+                            />
+                            <p className="user-dashboard-info-text">Support</p>
+                        </article>
+                        <article
+                            className="user-dashboard-refurbished-item"
+                            onClick={() => navigate("/about")}
+                        >
+                            <WiNightCloudyWindy
+
+                                size={25}
+                                className="user-dashboard-info-icon"
+                                aria-label="About Us"
+                            />
+                            <p className="user-dashboard-info-text">About Us</p>
+                        </article>
+                        <article
+                            className="user-dashboard-refurbished-item"
+                            onClick={() => navigate("/bharatlinker")}
+                        >
+                            <CiMobile3
+                                size={25}
+                                className="user-dashboard-info-icon"
+                                aria-label="Your orders"
+                            />
+                            <p className="user-dashboard-info-text">Bharat Linker Lite</p>
+                        </article>
+                        <article
+                            className="user-dashboard-refurbished-item"
+                            onClick={() => setIsLogout(true)}
+                        >
+                            <IoIosLogOut
+                                size={25}
+                                className="user-dashboard-info-icon"
+                                aria-label="Logout"
+                            />
+                            <p className="user-dashboard-info-text">Log - Out</p>
+                        </article>
                     </div>
                 </section>
             </main>
