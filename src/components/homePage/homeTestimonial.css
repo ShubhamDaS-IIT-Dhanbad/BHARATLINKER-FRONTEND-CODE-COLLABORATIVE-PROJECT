@@ -52,3 +52,45 @@
 .dot.active {
   background-color: #007bff;
 }
+.testimonial-image {
+  animation: swingShake 2.5s infinite ease-in-out;
+  transform-origin: top center; /* Makes it swing from the top */
+}
+
+@keyframes swingShake {
+  0% {
+    transform: rotate(0deg);
+  }
+  10% {
+    transform: rotate(4deg) translateX(2px);
+  }
+  20% {
+    transform: rotate(-4deg) translateX(-2px);
+  }
+  30% {
+    transform: rotate(3deg) translateX(1px);
+  }
+  40% {
+    transform: rotate(-3deg) translateX(-1px);
+  }
+  50% {
+    transform: rotate(2deg);
+  }
+  60% {
+    transform: rotate(-2deg);
+  }
+  70% {
+    transform: rotate(1deg);
+  }
+  80% {
+    transform: rotate(-1deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+/* Optional: Add hover effect to pause animation */
+.testimonial-image:hover {
+  animation-play-state: paused;
+}
