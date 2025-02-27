@@ -5,16 +5,22 @@ import { CiBoxList } from "react-icons/ci";
 import Navbar from "./navbar.jsx";
 import { PiShoppingBagOpenThin } from "react-icons/pi";
 import { IoIosLogOut } from "react-icons/io";
+
+import { useSelector } from 'react-redux';
 import { BsChatLeftText } from "react-icons/bs";
 import { CiMobile3 } from "react-icons/ci";
 import { FaPlus } from "react-icons/fa";
 import useUserAuth from "../../hooks/userAuthHook.jsx";
 import "./style/userHome.css";
+
+import AddToCartTab from "../viewCartTab/viewCart.jsx";
 import { WiNightCloudyWindy } from "react-icons/wi";
 function UserHome({ userData }) {
     useEffect(() => {
         window.scrollTo(0, 0);
     }, []);
+
+    const { totalQuantity, totalPrice } = useSelector((state) => state.userCart);
 
     const { logout } = useUserAuth();
     const [isLogout, setIsLogout] = useState(false);
@@ -100,7 +106,7 @@ function UserHome({ userData }) {
                                 className="user-dashboard-refurbished-item"
                                 onClick={() => navigate("/user/order")}
                             >
-                                <CiMobile3 
+                                <CiMobile3
                                     size={25}
                                     className="user-dashboard-info-icon"
                                     aria-label="Your orders"
@@ -149,6 +155,9 @@ function UserHome({ userData }) {
                     </div>
                 </div>
             )}
+
+
+            <AddToCartTab totalQuantity={totalQuantity} totalPrice={totalPrice} />
         </>
     );
 }

@@ -88,22 +88,7 @@ const SearchPage = () => {
                 />
             )}
             {!loading &&<AddToCartTab totalQuantity={totalQuantity} totalPrice={totalPrice} />}
-            {/* <div id="productSearchPage-footer">
-                <div
-                    id="productSearchPage-footer-sortby"
-                    onClick={() => setShowSortBy(!showSortBy)}
-                >
-                    <LiaSortSolid size={33} />
-                    SORT BY
-                </div>
-                <div
-                    id="productSearchPage-footer-filterby"
-                    onClick={() => setShowFilterBy(!showFilterBy)}
-                >
-                    <MdFilterList size={33} />
-                    FILTER BY
-                </div>
-            </div> */}
+            
         </>
     );
 };
