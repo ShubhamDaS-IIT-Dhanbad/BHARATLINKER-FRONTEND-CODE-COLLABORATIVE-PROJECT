@@ -10,7 +10,8 @@ const NoProductsFound = () => {
     return (
         <div className='search-not-found'>
             <img src={e1} alt="No products available" className="no-products-image" />
-            <p>Oops! We couldn't find any products in this area yet.</p>
+            <p>Oops! We couldn't find any products in this</p>
+            <p>area yet.</p>
         </div>
     );
 };
