@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import SearchBar from '../navbar.jsx';
 import ShopList from './shopList.jsx';
@@ -8,15 +8,11 @@ import s1 from '../../assets/s1.png'
 import 'react-loading-skeleton/dist/skeleton.css';
 import { Oval } from "react-loader-spinner";
 import { useSearchShop } from '../../hooks/searchShopHook.jsx';
-
-import ShopFilterBySection from './filterSection.jsx';
 import './searchShop.css';
 
 const Shop = () => {
     const { shops, updated, loading, loadingMoreShops, hasMoreShops } = useSelector((state) => state.searchshops);
     const { executeSearchShop, onLoadMoreShop } = useSearchShop();
-
-    const [showFilterBy, setShowFilterBy] = useState(false);
 
     useEffect(() => {
         if (shops.length === 0) {
@@ -57,27 +53,6 @@ const Shop = () => {
                 </InfiniteScroll>)}
 
 
-
-            {showFilterBy && (
-                <ShopFilterBySection
-                    showFilterBy={showFilterBy}
-                    setShowFilterBy={setShowFilterBy}
-                />
-            )}
-
-            {/* <div id="searchShopPage-footer">
-                <div id="searchShopPage-footer-sortby" 
-                >
-                    <LiaSortSolid size={33} />
-                    SORT BY
-                </div>
-                <div id="searchShopPage-footer-filterby" 
-                onClick={() => setShowFilterBy(!showFilterBy)}
-                >
-                    <MdFilterList size={33} />
-                    FILTER BY
-                </div>
-            </div> */}
         </>
     );
 };

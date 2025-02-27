@@ -1,15 +1,11 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect,useCallback } from 'react';
 import { useSelector } from 'react-redux';
-import { LiaSortSolid } from "react-icons/lia";
-import { MdFilterList } from "react-icons/md";
 import { Oval } from 'react-loader-spinner';
 import 'react-loading-skeleton/dist/skeleton.css';
 
 import AddToCartTab from "../viewCartTab/viewCart.jsx";
 import SearchBar from '../navbar.jsx';
 import ProductList from '../productList.jsx';
-import ProductSortBySection from './sortbySection.jsx';
-import ProductFilterBySection from './filterSection.jsx';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useExecuteSearch } from '../../hooks/searchProductHook';
 
@@ -21,8 +17,6 @@ const SearchPage = () => {
     const {totalQuantity, totalPrice} = useSelector((state) => state.userCart);
     
 
-    const [showSortBy, setShowSortBy] = useState(false);
-    const [showFilterBy, setShowFilterBy] = useState(false);
 
     const {
         updated,
@@ -30,8 +24,6 @@ const SearchPage = () => {
         loading,
         loadingMoreProducts,
         hasMoreProducts,
-        sortByAsc,
-        sortByDesc,
     } = useSelector((state) => state.searchproducts);
 
     const handleInitialSearch = useCallback(() => {
@@ -69,24 +61,7 @@ const SearchPage = () => {
                 </InfiniteScroll>
             )}
 
-            {showSortBy && (
-                <ProductSortBySection
-                    handleSearch={executeSearch}
-                    showSortBy={showSortBy}
-                    setShowSortBy={setShowSortBy}
-                    sortByAsc={sortByAsc}
-                    sortByDesc={sortByDesc}
-                    products={products}
-                />
-            )}
-
-            {showFilterBy && (
-                <ProductFilterBySection
-                    handleSearch={executeSearch}
-                    showFilterBy={showFilterBy}
-                    setShowFilterBy={setShowFilterBy}
-                />
-            )}
+            
             {!loading &&<AddToCartTab totalQuantity={totalQuantity} totalPrice={totalPrice} />}
             
         </>

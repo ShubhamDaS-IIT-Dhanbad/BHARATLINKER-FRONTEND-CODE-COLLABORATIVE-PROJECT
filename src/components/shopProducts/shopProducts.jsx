@@ -5,8 +5,8 @@ import ProductList from './productList.jsx';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import s1 from '../../assets/s1.png'
 import Navbar from '../navbar.jsx';
-import ProductSortBySection from './sortbySection.jsx';
-import ProductFilterBySection from './filterSection.jsx';
+
+import AddToCartTab from "../viewCartTab/viewCart.jsx";
 
 import { useShopProductExecuteSearch } from '../../hooks/searchShopProductHook.jsx';
 import './shopProducts.css';
@@ -14,6 +14,8 @@ import './shopProducts.css';
 const ProductSearch = () => {
     const location = useLocation();
     const { shopId } = useParams();
+    
+        const {totalQuantity, totalPrice} = useSelector((state) => state.userCart);
 
     // Parse shopName from query params
     const queryParams = new URLSearchParams(location.search);
@@ -22,9 +24,6 @@ const ProductSearch = () => {
     // ✅ Pass `shopId` to the custom hook
     const { executeShopProductSearch, onLoadMoreShopProduct } = useShopProductExecuteSearch(shopId);
 
-    const [loadingMoreProducts, setLoadingMoreProducts] = useState(false);
-    const [showSortBy, setShowSortBy] = useState(false);
-    const [showFilterBy, setShowFilterBy] = useState(false);
 
     const shopData = useSelector((state) => state.shopproducts.shops[shopId]) || {};
     const { loading } = useSelector((state) => state.shopproducts);
@@ -68,21 +67,8 @@ const ProductSearch = () => {
                     <ProductList products={products} />
                 </InfiniteScroll>
             )}
-
-            {showSortBy && (
-                <ProductSortBySection
-                    shopId={shopId}
-                    handleSearch={executeSearch}
-                    setShowSortBy={setShowSortBy}
-                />
-            )}
-            {showFilterBy && (
-                <ProductFilterBySection
-                    shopId={shopId}
-                    handleSearch={executeSearch}
-                    setShowFilterBy={setShowFilterBy}
-                />
-            )}
+            
+            <AddToCartTab totalQuantity={totalQuantity} totalPrice={totalPrice} />
         </>
     );
 };
