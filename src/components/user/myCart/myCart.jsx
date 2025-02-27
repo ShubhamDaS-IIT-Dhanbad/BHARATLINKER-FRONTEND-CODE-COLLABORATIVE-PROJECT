@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 
 import Navbar from '../navbar.jsx';
 import OrderProductCard from './cartCard.jsx';
-import { removeFromUserCart, fetchUserCart } from '../../../redux/features/user/cartSlice.jsx';
+import { removeFromUserCart } from '../../../redux/features/user/cartSlice.jsx';
 import DeliveryAddress from './deliveryAddress.jsx';
 import CheckOutPage from './checkOutPage.jsx';
 import LocationTab from '../../locationTab/locationTab.jsx';
@@ -17,7 +17,6 @@ const MyCartPage = ({ userData }) => {
     const navigate = useNavigate();
     const { cart } = useSelector((state) => state.userCart);
 
-    // Consolidated view state management
     const [viewState, setViewState] = useState({
         currentView: 'cart',
         isLoading: false,
@@ -28,28 +27,44 @@ const MyCartPage = ({ userData }) => {
     const [showConfirmPopup, setShowConfirmPopup] = useState(false);
     const [pendingRemoval, setPendingRemoval] = useState(null);
 
-    // Memoized cart calculations
     const cartSummary = useMemo(() => ({
         isEmpty: !cart || cart.length === 0,
         hasOutOfStock: cart?.some(item => item.stock < item.quantity),
         totalItems: cart?.reduce((sum, item) => sum + item.quantity, 0) || 0,
     }), [cart]);
 
-    // Centralized view transition handler
     const transitionToView = useCallback((view) => {
         setViewState(prev => ({ ...prev, currentView: view, error: null }));
+        // Push new state to history for browser navigation
+        window.history.pushState({ view }, '', `#${view}`);
     }, []);
 
-    
+    // Handle browser back/forward navigation
+    useEffect(() => {
+        const handlePopState = (event) => {
+            const newView = event.state?.view || 'cart';
+            setViewState(prev => ({
+                ...prev,
+                currentView: newView
+            }));
+        };
 
-    // Check cart status after fetch
+        window.addEventListener('popstate', handlePopState);
+        
+        // Initial state push
+        window.history.replaceState({ view: 'cart' }, '', '#cart');
+
+        return () => {
+            window.removeEventListener('popstate', handlePopState);
+        };
+    }, []);
+
     useEffect(() => {
         if (cartSummary.isEmpty && !viewState.isLoading && viewState.currentView === 'cart') {
             navigate('/search');
         }
-    }, []);
+    }, [cartSummary.isEmpty, viewState.isLoading, viewState.currentView, navigate]);
 
-    // Handle item removal with confirmation
     const confirmRemoveItem = useCallback((cartId, productId) => {
         setPendingRemoval({ cartId, productId });
         setShowConfirmPopup(true);
@@ -78,7 +93,6 @@ const MyCartPage = ({ userData }) => {
         }
     }, [dispatch, pendingRemoval]);
 
-    // Render confirmation popup
     const renderConfirmPopup = useCallback(() => (
         <div className="user-dashboard-popup-overlay">
             <div className="user-dashboard-popup-card">
@@ -121,51 +135,21 @@ const MyCartPage = ({ userData }) => {
         </div>
     ), [handleRemoveItem, viewState.isLoading]);
 
-    // Render view components based on current state
-    const renderView = useCallback(() => {
-        switch (viewState.currentView) {
-            case 'location':
-                return (
-                    <LocationTab
-                        header="Delivery Address"
-                        setDeliveryAddress={setDeliveryAddress}
-                        setShowAddressDetail={() => transitionToView('address')}
-                        setLocationTab={() => transitionToView('cart')}
-                    />
-                );
-            case 'address':
-                return (
-                    <DeliveryAddress
-                        deliveryAddress={deliveryAddress}
-                        setDeliveryAddress={setDeliveryAddress}
-                        setShowCheckOutPage={() => transitionToView('checkout')}
-                        setShowAddressDetail={() => transitionToView('cart')}
-                    />
-                );
-            case 'checkout':
-                return (
-                    <CheckOutPage
-                        userData={userData}
-                        items={cart}
-                        deliveryAddress={deliveryAddress}
-                        setDeliveryAddress={setDeliveryAddress}
-                        setShowCheckOutPage={() => transitionToView('cart')}
-                        setShowAddressDetail={() => transitionToView('address')}
-                    />
-                );
-            case 'cart':
-            default:
-                return renderCartView();
+    const handleBackNavigation = useCallback(() => {
+        if (viewState.currentView === 'cart') {
+            navigate(-1);
+        } else {
+            transitionToView('cart');
+            // Note: We're using transitionToView which already handles history
         }
-    }, [viewState.currentView, deliveryAddress, cart, userData, transitionToView]);
+    }, [viewState.currentView, navigate, transitionToView]);
 
-    // Separate cart view rendering
     const renderCartView = useCallback(() => (
         <>
             <Navbar
                 userData={userData}
                 headerTitle="My Cart"
-                onBackNavigation={() => navigate(-1)}
+                onBackNavigation={handleBackNavigation}
             />
             <div className="user-cart-container">
                 <main className="user-cart-content">
@@ -218,7 +202,44 @@ const MyCartPage = ({ userData }) => {
             </div>
             {showConfirmPopup && renderConfirmPopup()}
         </>
-    ), [viewState, cartSummary, userData,showConfirmPopup, confirmRemoveItem, transitionToView, renderConfirmPopup]);
+    ), [viewState, cartSummary, userData, showConfirmPopup, confirmRemoveItem, transitionToView, navigate, handleBackNavigation]);
+
+    const renderView = useCallback(() => {
+        switch (viewState.currentView) {
+            case 'location':
+                return (
+                    <LocationTab
+                        header="Delivery Address"
+                        setDeliveryAddress={setDeliveryAddress}
+                        setShowAddressDetail={() => transitionToView('address')}
+                        setLocationTab={() => transitionToView('cart')}
+                    />
+                );
+            case 'address':
+                return (
+                    <DeliveryAddress
+                        deliveryAddress={deliveryAddress}
+                        setDeliveryAddress={setDeliveryAddress}
+                        setShowCheckOutPage={() => transitionToView('checkout')}
+                        setShowAddressDetail={() => transitionToView('cart')}
+                    />
+                );
+            case 'checkout':
+                return (
+                    <CheckOutPage
+                        userData={userData}
+                        items={cart}
+                        deliveryAddress={deliveryAddress}
+                        setDeliveryAddress={setDeliveryAddress}
+                        setShowCheckOutPage={() => transitionToView('cart')}
+                        setShowAddressDetail={() => transitionToView('address')}
+                    />
+                );
+            case 'cart':
+            default:
+                return renderCartView();
+        }
+    }, [viewState.currentView, deliveryAddress, cart, userData, transitionToView, renderCartView]);
 
     return renderView();
 };

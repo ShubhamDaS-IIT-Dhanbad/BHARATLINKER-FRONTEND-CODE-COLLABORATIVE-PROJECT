@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux'; // Import useDispatch
+import { useDispatch } from 'react-redux'; 
 import { FaAngleLeft } from "react-icons/fa6";
 import OrderProductCard from './cartCard.jsx';
 import { placeOrderProvider } from '../../../appWrite/order/order.js';
