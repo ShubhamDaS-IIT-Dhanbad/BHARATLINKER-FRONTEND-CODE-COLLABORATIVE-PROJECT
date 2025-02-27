@@ -182,7 +182,7 @@ const MyCartPage = ({ userData }) => {
                                         return acc;
                                     }, {})
                                 ).map(([shopId, items]) => (
-                                    <fieldset key={shopId} className="user-cart-items-section-filedset">
+                                    <div key={shopId} className="user-cart-items-section-filedset">
                                         {/* <legend>{items[0]?.shopName}</legend> */}
                                         {items.map((item) => (
                                             <OrderProductCard
@@ -194,7 +194,7 @@ const MyCartPage = ({ userData }) => {
                                                 isOutOfStock={item.stock < item.quantity}
                                             />
                                         ))}
-                                    </fieldset>
+                                    </div>
                                 ))}
                             </section>
                             <div className="cart-check-out-container">
