@@ -75,19 +75,6 @@ function UserHome({ userData }) {
         setPopup({ isOpen: false, type: null });
     };
 
-    // Handle Bharat Linker Lite PWA install
-    const handleBharatLinkerInstall = async () => {
-        if (deferredPrompt) {
-            deferredPrompt.prompt();
-            const { outcome } = await deferredPrompt.userChoice;
-            console.log(`User ${outcome === "accepted" ? "accepted" : "dismissed"} the PWA install prompt`);
-            setDeferredPrompt(null);
-        } else {
-            alert("To install Bharat Linker Lite, please add this page to your home screen via your browser settings.");
-            navigate("/bharatlinker");
-        }
-        setPopup({ isOpen: false, type: null });
-    };
 
     // Popup configurations
     const popupConfigs = {
