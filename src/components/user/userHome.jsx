@@ -32,11 +32,12 @@ function UserHome({ userData }) {
         await logout();
     };
 
-    const title = "Confirm Logout"; // Define title for the popup
-    const text = "Are you sure you want to log out?"; // Define text for the popup
+    const title = "Confirm Logout";
+    const text = "Are you sure you want to log out? This will end your current session, and you'll need to sign in again to access your account. Any unsaved changes or activities might be lost.";
     const buttons = [
-        { label: "No", onClick: () => setIsLogout(false), primary: false },
+        
         { label: "Yes", onClick: handleLogout, primary: true, disabled: isLoading },
+        { label: "No", onClick: () => setIsLogout(false), primary: false },
     ];
 
     return (
