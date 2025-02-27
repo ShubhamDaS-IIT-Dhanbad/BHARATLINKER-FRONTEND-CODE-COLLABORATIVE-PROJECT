@@ -1,13 +1,15 @@
 import React from 'react';
 import ShopCard from './shopCard.jsx';
 
-const ShopList = ({ shops, loading,hasMoreShops,loadingMoreShops}) => {
+import e1 from '../../assets/e1.png';
+const ShopList = ({ shops, loading }) => {
 
   if (!loading && shops?.length === 0) {
-    const notfound='https://res.cloudinary.com/demc9mecm/image/upload/v1736953901/ir4hy5fcwevhr8ibeaqq.png';
+    const notfound = 'https://res.cloudinary.com/demc9mecm/image/upload/v1736953901/ir4hy5fcwevhr8ibeaqq.png';
     return (
-      <div className='search-shop-no-shop-found'>
-        <img src={notfound} />
+      <div className='search-not-found'>
+        <img src={e1} alt="No products available" className="no-products-image" />
+        <p>Oops! We couldn't find any shops in this area yet.</p>
       </div>
     );
   }

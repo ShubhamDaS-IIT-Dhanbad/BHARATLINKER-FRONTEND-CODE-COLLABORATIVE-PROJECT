@@ -25,3 +25,50 @@
       transform: translateY(-10px);
     }
   }
+
+
+
+
+  
+.search-not-found {
+  display: flex;
+  flex-direction: column;
+  align-items: center;justify-content: center;
+  gap: 0rem;min-height: 90vh;
+  padding: 2rem;
+}
+.search-not-found p {
+  display: flex;font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  flex-direction: column;color: #0c0c0c50;
+  align-items: center;text-align: center;
+}
+.no-products-image {
+  max-width: 200px; /* Adjust size as needed */
+  animation: bounceShake 2s infinite ease-in-out;
+}
+
+@keyframes bounceShake {
+  0% {
+    transform: translateY(0) rotate(0deg);
+  }
+  20% {
+    transform: translateY(-10px) rotate(2deg);
+  }
+  40% {
+    transform: translateY(0) rotate(-2deg);
+  }
+  60% {
+    transform: translateY(-5px) rotate(1deg);
+  }
+  80% {
+    transform: translateY(0) rotate(-1deg);
+  }
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+}
+
+/* Optional: Pause animation on hover */
+.no-products-image:hover {
+  animation-play-state: paused;
+}

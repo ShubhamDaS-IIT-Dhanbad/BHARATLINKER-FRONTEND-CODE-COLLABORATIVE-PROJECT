@@ -24,8 +24,6 @@ const Shop = () => {
         }
     }, [updated]);
 
-
-    const skeletons = [1, 2, 3, 4, 5, 6];
     return (
 
 
@@ -55,8 +53,6 @@ const Shop = () => {
                     <ShopList
                         shops={shops}
                         loading={loading}
-                        loadingMoreShops={loadingMoreShops}
-                        hasMoreShops={hasMoreShops}
                     />
                 </InfiniteScroll>)}
 
