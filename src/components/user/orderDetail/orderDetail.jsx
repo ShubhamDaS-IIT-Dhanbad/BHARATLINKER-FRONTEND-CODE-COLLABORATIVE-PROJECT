@@ -80,7 +80,7 @@ const UserOrderDetail = ({ userData, order, setOrder }) => {
 
             <div className="user-order-detail-container">
                 <header className="user-order-detail-header">
-                    <h1>{getOrderTitle(order.state.toLowerCase())}</h1>
+                    <h1>{getOrderTitle(order.state.toUpperCase())}</h1>
                     <p>Hello, {userData?.name || "USER"}</p>
                     <p>Your order is {order.state}</p>
                 </header>
@@ -220,7 +220,7 @@ const UserOrderDetail = ({ userData, order, setOrder }) => {
 UserOrderDetail.propTypes = {
     userData: PropTypes.shape({
         name: PropTypes.string
-    }).isRequired,
+    }),
     order: PropTypes.shape({
         $id: PropTypes.string,
         $createdAt: PropTypes.string,
@@ -236,9 +236,8 @@ UserOrderDetail.propTypes = {
         houseNo: PropTypes.string,
         landMark: PropTypes.string,
         expectedDeliveryDate: PropTypes.string,
-        deliveryBoyPhn: PropTypes.string
+        deliveryBoyPhn: PropTypes.number
     }),
-    setOrder: PropTypes.func.isRequired
 };
 
 export default UserOrderDetail;
