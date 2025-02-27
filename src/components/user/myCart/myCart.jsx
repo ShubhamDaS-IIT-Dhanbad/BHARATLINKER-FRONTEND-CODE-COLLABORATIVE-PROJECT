@@ -92,7 +92,7 @@ const MyCartPage = ({ userData }) => {
             setPendingRemoval(null);
         }
     }, [dispatch, pendingRemoval]);
-console.log(cart)
+    
     const renderConfirmPopup = useCallback(() => (
         <div className="user-dashboard-popup-overlay">
             <div className="user-dashboard-popup-card">
