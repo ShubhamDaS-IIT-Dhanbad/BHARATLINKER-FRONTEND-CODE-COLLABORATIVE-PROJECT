@@ -26,9 +26,9 @@
 }
 
 #user-dashboard-header-user-location {
-    font-size: 20px; /* Reduced slightly for consistency */
+    font-size: 20px;
     font-weight: 600;
-    white-space: nowrap; /* Prevents text from wrapping */
+    white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis; 
 }
@@ -43,6 +43,25 @@
 .user-dashboard-info-section img{
     width: 60vw;
 }
+
+
+  .user-dashboard-info-section img {
+    width: 50vw;
+    animation: bounce 1s ease infinite;
+  }
+  
+  @keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+      transform: translateY(0);
+    }
+    40% {
+      transform: translateY(-20px);
+    }
+    60% {
+      transform: translateY(-10px);
+    }
+  }
+
 .user-dashboard-refurbished-item {
     display: flex;
     justify-content: start;
