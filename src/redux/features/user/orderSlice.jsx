@@ -1,127 +1,124 @@
+// orderSlice.jsx
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { getOrderByUserId } from '../../../appWrite/order/order.js';
 
-const ordersPerPage = 10;
+const ORDERS_PER_PAGE = 10;
 
 const initialState = {
-  loading :false,
-  pendingOrders: { data: [], loading: false, error: null, hasMore: true, currentPage: 1 },
-  confirmedOrders: { data: [], loading: false, error: null, hasMore: true, currentPage: 1 },
-  deliveredOrders: { data: [], loading: false, error: null, hasMore: true, currentPage: 1 },
-  canceledOrders: { data: [], loading: false, error: null, hasMore: true, currentPage: 1 },
+  loading: false,
+  pendingOrders: { data: [], loading: false, error: null, hasMore: true, currentPage: 0 },  // Changed to 0
+  confirmedOrders: { data: [], loading: false, error: null, hasMore: true, currentPage: 0 }, // Changed to 0
+  dispatchedOrders: { data: [], loading: false, error: null, hasMore: true, currentPage: 0 }, // Changed to 0
+  deliveredOrders: { data: [], loading: false, error: null, hasMore: true, currentPage: 0 }, // Changed to 0
+  canceledOrders: { data: [], loading: false, error: null, hasMore: true, currentPage: 0 },  // Changed to 0
 };
 
-// Fetch orders based on status and page
 const fetchOrders = async (phoneNumber, status, page) => {
-  let statuses = [status];
-  if (status === 'confirmed') statuses = ['confirmed', 'dispatched'];
-  
+  const statuses = status === 'confirmed' ? ['confirmed', 'dispatched'] : [status];
   const response = await getOrderByUserId(phoneNumber, statuses, page);
-  return { documents: response.documents, total: response.total };
+  return { documents: response.documents || [], total: response.total || 0 };  // Added fallbacks
 };
 
-// Fetch orders by status
 export const fetchOrdersByStatus = createAsyncThunk(
   'userorders/fetchOrdersByStatus',
   async ({ phoneNumber, status, page }, { rejectWithValue }) => {
     try {
-      const { documents, total } = await fetchOrders(phoneNumber, status, page);
-      return { documents, total, status };
+      const response = await fetchOrders(phoneNumber, status, page);
+      return { ...response, status, page };  // Include page in return
     } catch (error) {
-      return rejectWithValue(error.response?.data || 'Failed to fetch orders');
+      return rejectWithValue(error.message || 'Failed to fetch orders');
     }
   }
 );
 
-// Load more orders
 export const loadMoreOrders = createAsyncThunk(
   'userorders/loadMoreOrders',
   async ({ phoneNumber, status, page }, { rejectWithValue }) => {
     try {
-      const { documents, total } = await fetchOrders(phoneNumber, status, page);
-      return { documents, total, status, page };
+      const response = await fetchOrders(phoneNumber, status, page);
+      return { ...response, status, page };
     } catch (error) {
-      return rejectWithValue(error.response?.data || 'Failed to load more orders');
+      return rejectWithValue(error.message || 'Failed to load more orders');
     }
   }
 );
 
-// Orders Slice
 const ordersSlice = createSlice({
   name: 'userorders',
   initialState,
   reducers: {
     deleteOrder: (state, action) => {
       const { orderId, orderStateArrayName } = action.payload;
-      state[`${orderStateArrayName}Orders`].data = state[`${orderStateArrayName}Orders`].data.filter(
-        (order) => order.$id !== orderId
-      );
+      const orderState = state[`${orderStateArrayName}Orders`];
+      if (orderState) {
+        orderState.data = orderState.data.filter(
+          (order) => order.$id !== orderId
+        );
+      }
     },
     updateOrder: (state, action) => {
       const { orderId, updatedOrderData, orderStateArrayName } = action.payload;
-      const orderArray = state[`${orderStateArrayName}Orders`].data;
-    
+      const orderState = state[`${orderStateArrayName}Orders`];
+      if (!orderState) return;
+
+      const orderArray = orderState.data;
       const orderIndex = orderArray.findIndex((order) => order.$id === orderId);
-    
+      
       if (orderIndex !== -1) {
         orderArray[orderIndex] = { ...orderArray[orderIndex], ...updatedOrderData };
       } else {
-        orderArray.push(updatedOrderData);
+        orderArray.push({ ...updatedOrderData, $id: orderId });  // Ensure $id is included
       }
-      orderArray.sort((a, b) => {
-        if (a.$id === orderId) return -1;
-        if (b.$id === orderId) return 1;
-        return new Date(b.updatedAt) - new Date(a.updatedAt);
-      });
-    }
-    
-    
+      orderArray.sort((a, b) => new Date(b.updatedAt || 0) - new Date(a.updatedAt || 0));  // Added fallback
+    },
   },
   extraReducers: (builder) => {
     builder
       .addCase(fetchOrdersByStatus.pending, (state, action) => {
         const { status } = action.meta.arg;
+        state.loading = true;
         state[`${status}Orders`].loading = true;
         state[`${status}Orders`].error = null;
-        state.loading=true;
       })
       .addCase(fetchOrdersByStatus.fulfilled, (state, action) => {
-        const { status, documents } = action.payload;
-        state[`${status}Orders`].loading = false;
-        state[`${status}Orders`].data = documents;
-        state[`${status}Orders`].hasMore = documents.length >= ordersPerPage;
-        state.loading=false;
+        const { status, documents, total, page } = action.payload;
+        const orderState = state[`${status}Orders`];
+        state.loading = false;
+        orderState.loading = false;
+        orderState.data = documents;
+        orderState.currentPage = page;
+        orderState.hasMore = documents.length === ORDERS_PER_PAGE && 
+          documents.length < total;
       })
       .addCase(fetchOrdersByStatus.rejected, (state, action) => {
         const { status } = action.meta.arg;
+        state.loading = false;
         state[`${status}Orders`].loading = false;
         state[`${status}Orders`].error = action.payload;
-        console.log("op")
-        state.loading=false;
       })
-
-      // Load More Orders
       .addCase(loadMoreOrders.pending, (state, action) => {
         const { status } = action.meta.arg;
+        state.loading = true;
+        state[`${status}Orders`].loading = true;
         state[`${status}Orders`].error = null;
-        state.loading=true;
       })
       .addCase(loadMoreOrders.fulfilled, (state, action) => {
-        const { status, documents, page } = action.payload;
-        const existingOrders = state[`${status}Orders`].data;
-        const newOrders = documents.filter(
-          (doc) => !existingOrders.some((order) => order.$id === doc.$id)
-        );
-
-        state[`${status}Orders`].data = [...existingOrders, ...newOrders];
-        state[`${status}Orders`].currentPage = page;
-        state[`${status}Orders`].hasMore = documents.length >= ordersPerPage;
-        state.loading=false;
+        const { status, documents, total, page } = action.payload;
+        const orderState = state[`${status}Orders`];
+        state.loading = false;
+        orderState.loading = false;
+        const existingOrderIds = new Set(orderState.data.map(order => order.$id));
+        const newOrders = documents.filter(doc => !existingOrderIds.has(doc.$id));
+        orderState.data = [...orderState.data, ...newOrders];
+        orderState.currentPage = page;
+        orderState.hasMore = documents.length === ORDERS_PER_PAGE && 
+          orderState.data.length < total;
       })
       .addCase(loadMoreOrders.rejected, (state, action) => {
         const { status } = action.meta.arg;
+        state.loading = false;
+        state[`${status}Orders`].loading = false;
         state[`${status}Orders`].error = action.payload;
-        state.loading=false;
       });
   },
 });

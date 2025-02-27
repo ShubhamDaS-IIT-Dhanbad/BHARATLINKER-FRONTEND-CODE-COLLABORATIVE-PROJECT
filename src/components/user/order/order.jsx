@@ -1,59 +1,102 @@
-import React, { useEffect, useState } from "react";
+// Order.jsx
+import React, { useEffect, useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import PropTypes from 'prop-types';
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Oval } from "react-loader-spinner";
 import Navbar from '../navbar.jsx';
 import { fetchOrdersByStatus, loadMoreOrders } from "../../../redux/features/user/orderSlice.jsx";
 import OrderProductCard from "./orderProductCard";
-import e1 from './e1.png';
 import UserOrderDetail from '../orderDetail/orderDetail.jsx';
+import e1 from './e1.png';
 import "./order.css";
 
-function Order({ userData }) {
+const ORDER_TYPES = ["pending", "confirmed", "dispatched", "delivered", "canceled"]; // Added "dispatched" to match orderStates
+
+const Order = ({ userData }) => {
   const [selectedOrderId, setSelectedOrderId] = useState(null);
+  const [selectedOrderType, setSelectedOrderType] = useState("pending");
   const dispatch = useDispatch();
-  const {
+  const { 
     loading,
     pendingOrders,
     confirmedOrders,
+    dispatchedOrders,  // Changed from dispatchedOrders to match selector
     deliveredOrders,
-    canceledOrders,
+    canceledOrders 
   } = useSelector((state) => state.userorders);
 
-  // State to track selected order type
-  const [selectedOrderType, setSelectedOrderType] = useState("pending");
   const orderStates = {
     pending: pendingOrders,
     confirmed: confirmedOrders,
+    dispatched: dispatchedOrders,  // Changed from dispatched to match ORDER_TYPES
     delivered: deliveredOrders,
     canceled: canceledOrders,
   };
 
-  const selectedOrders = orderStates[selectedOrderType];
+  const selectedOrders = orderStates[selectedOrderType] || { 
+    data: [], 
+    hasMore: false, 
+    currentPage: 0 
+  };  // Added fallback for undefined state
 
-  const fetchInitialOrders = (status) => {
-    const phoneNumber = userData?.phoneNumber;
-    if (!phoneNumber) return;
-    dispatch(fetchOrdersByStatus({ phoneNumber, status, page: 1 }));
-  };
+  const fetchInitialOrders = useCallback((status) => {
+    if (!userData?.phoneNumber) return;
+    dispatch(fetchOrdersByStatus({ 
+      phoneNumber: userData.phoneNumber, 
+      status, 
+      page: 1 
+    }));
+  }, [userData, dispatch]);
 
-  const fetchNextPage = () => {
-    const phoneNumber = userData?.phoneNumber;
-    if (!phoneNumber) return;
+  const fetchNextPage = useCallback(() => {
+    if (!userData?.phoneNumber || !selectedOrders.hasMore) return;
     const nextPage = selectedOrders.currentPage + 1;
-    dispatch(loadMoreOrders({ phoneNumber, status: selectedOrderType, page: nextPage }));
-  };
+    dispatch(loadMoreOrders({ 
+      phoneNumber: userData.phoneNumber, 
+      status: selectedOrderType, 
+      page: nextPage 
+    }));
+  }, [userData, dispatch, selectedOrders, selectedOrderType]);
 
   useEffect(() => {
-    if (userData?.phoneNumber) {
-      ["pending", "confirmed", "delivered", "canceled"].forEach((status) => {
-        if (orderStates[status].data.length === 0 && status === selectedOrderType) {
-          console.log(`Fetching ${status} orders`);
-          fetchInitialOrders(status);
-        }
-      });
+    if (userData?.phoneNumber && selectedOrders.data.length === 0) {
+      fetchInitialOrders(selectedOrderType);
     }
-  }, [selectedOrderType]);
+  }, [selectedOrderType, userData, selectedOrders.data.length, fetchInitialOrders]);
+
+  const renderOrders = () => {
+    if (loading && selectedOrders.data.length === 0) {
+      return (
+        <div className="retailer-order-loading">
+          <Oval 
+            height={30} 
+            width={30} 
+            color="green" 
+            secondaryColor="white" 
+            ariaLabel="loading" 
+            visible={true}
+          />
+        </div>
+      );
+    }
+    
+    if (selectedOrders.data.length === 0) {
+      return (
+        <div className="retailer-order-empty">
+          <img className="retailer-order-empty-img" src={e1} alt="No Orders" />
+        </div>
+      );
+    }
+
+    return selectedOrders.data.map((order) => (
+      <OrderProductCard
+        key={order.$id}
+        order={order}
+        setSelectedOrderId={setSelectedOrderId}
+      />
+    ));
+  };
 
   return (
     <>
@@ -65,25 +108,23 @@ function Order({ userData }) {
         />
       ) : (
         <>
-          {/* Header */}
           <header>
-            <Navbar userData={userData} headerTitle={"YOUR ORDER"} />
+            <Navbar userData={userData} headerTitle="YOUR ORDER" />
           </header>
 
-          {/* Order Type Buttons */}
           <div className="retailer-order-type-buttons">
-            {["pending", "confirmed", "delivered", "canceled"].map((type) => (
-              <div
+            {ORDER_TYPES.map((type) => (
+              <button
                 key={type}
                 className={`retailer-order-type-button ${selectedOrderType === type ? "active" : ""}`}
                 onClick={() => setSelectedOrderType(type)}
+                aria-label={`View ${type} orders`}
               >
                 {type.toUpperCase()}
-              </div>
+              </button>
             ))}
           </div>
 
-          {/* Infinite Scroll for Orders */}
           <InfiniteScroll
             dataLength={selectedOrders.data.length}
             next={fetchNextPage}
@@ -96,35 +137,26 @@ function Order({ userData }) {
                   color="green"
                   secondaryColor="white"
                   ariaLabel="loading"
+                  visible={true}
                 />
               </div>
             }
+           
           >
             <div className="retailer-order-div-container">
-              {(selectedOrders.data.length === 0 && !loading) ? (
-                <div className="retailer-order-empty">
-                  <img
-                    className="retailer-order-empty-img"
-                    src={e1}
-                    alt="No Orders"
-                  />
-                </div>
-              ) : (
-                selectedOrders.data.map((order) => (
-                  <OrderProductCard
-                    order={order}
-                    key={order.$id}
-
-                    setSelectedOrderId={setSelectedOrderId}
-                  />
-                ))
-              )}
+              {renderOrders()}
             </div>
           </InfiniteScroll>
         </>
       )}
     </>
   );
-}
+};
+
+Order.propTypes = {
+  userData: PropTypes.shape({
+    phoneNumber: PropTypes.string.isRequired,
+  }).isRequired,
+};
 
 export default Order;

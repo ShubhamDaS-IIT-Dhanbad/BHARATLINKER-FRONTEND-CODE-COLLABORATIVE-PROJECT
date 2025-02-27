@@ -49,14 +49,14 @@
 }
 
 .retailer-order-type-button {
-    border: 1.2px solid rgb(27, 28, 28);
-    font-size: 13px;
+    border: 1px solid rgb(27, 28, 28);
+    font-size: 11px;background-color: transparent;
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 6px;
-    font-weight: 600;
-    border-radius: 7px;
+    padding: 6px 6px 6px 6px;
+    font-weight: 400;
+    border-radius: 2px;
 }
 
 .retailer-order-type-button.active {
