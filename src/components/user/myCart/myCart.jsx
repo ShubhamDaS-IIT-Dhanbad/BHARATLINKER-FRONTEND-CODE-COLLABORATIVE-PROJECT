@@ -9,7 +9,7 @@ import { removeFromUserCart } from '../../../redux/features/user/cartSlice.jsx';
 import DeliveryAddress from './deliveryAddress.jsx';
 import CheckOutPage from './checkOutPage.jsx';
 import LocationTab from '../../locationTab/locationTab.jsx';
-
+import c1 from '../asset/c1.png';
 import './myCart.css';
 
 const MyCartPage = ({ userData }) => {
@@ -92,7 +92,7 @@ const MyCartPage = ({ userData }) => {
             setPendingRemoval(null);
         }
     }, [dispatch, pendingRemoval]);
-    
+
     const renderConfirmPopup = useCallback(() => (
         <div className="user-dashboard-popup-overlay">
             <div className="user-dashboard-popup-card">
@@ -137,7 +137,7 @@ const MyCartPage = ({ userData }) => {
 
     const handleBackNavigation = useCallback(() => {
         navigate(-1);
-    }, [navigate]);
+    }, []);
 
     const renderCartView = useCallback(() => (
         <>
@@ -147,6 +147,7 @@ const MyCartPage = ({ userData }) => {
                 onBackNavigation={handleBackNavigation}
             />
             <div className="user-cart-container">
+                <div className="user-cart-container-img-div"><img src={c1} /></div>
                 <main className="user-cart-content">
                     {viewState.isLoading && (
                         <div className="loading-spinner">Loading...</div>
@@ -182,7 +183,7 @@ const MyCartPage = ({ userData }) => {
                                     }, {})
                                 ).map(([shopId, items]) => (
                                     <fieldset key={shopId} className="user-cart-items-section-filedset">
-                                        <legend>{items[0]?.shopName}</legend>
+                                        {/* <legend>{items[0]?.shopName}</legend> */}
                                         {items.map((item) => (
                                             <OrderProductCard
                                                 key={item.$id}

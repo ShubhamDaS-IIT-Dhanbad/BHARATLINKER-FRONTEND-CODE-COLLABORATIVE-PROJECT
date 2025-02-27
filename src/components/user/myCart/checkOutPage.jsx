@@ -8,50 +8,81 @@ import { removeFromUserCart } from '../../../redux/features/user/cartSlice.jsx';
 import './checkOutPage.css';
 
 function CheckOutPage({ userData, items, deliveryAddress, setDeliveryAddress, setShowCheckOutPage, setShowAddressDetail }) {
-  const dispatch = useDispatch();console.log(items,"here");
+  const dispatch = useDispatch();
+  console.log(items, "here");
   const totalPrice = items.reduce((acc, item) => acc + item.discountedPrice * item.quantity, 0);
   const totalSaved = items.reduce((acc, item) => acc + (item.price - item.discountedPrice) * item.quantity, 0);
 
   const [placingOrder, setPlacingOrder] = useState(false);
 
-  // Function to handle order placing
+  // Function to handle order placing with optimized email sending
   async function placeOrder() {
-    setPlacingOrder(true);console.log(deliveryAddress,"l")
+    setPlacingOrder(true);
     try {
-      for (const item of items) {
-        const order = await placeOrderProvider({
-          userId: userData.userId,
-          shopId: item.shopId,
-          productId: item.productId,
-          quantity: Number(item.quantity),
-          price: Number(item.price),
-          discountedPrice: Number(item.discountedPrice),
-          shopEmail: item.shopEmail,
+      // Group items by shopId
+      const shopOrders = items.reduce((acc, item) => {
+        const shopId = item.shopId || 'unknown';
+        if (!acc[shopId]) {
+          acc[shopId] = {
+            shopEmail: item.shopEmail,
+            items: [],
+            orderIds: [],
+          };
+        }
+        acc[shopId].items.push(item);
+        return acc;
+      }, {});
+
+      // Place orders and collect order IDs
+      for (const shopId in shopOrders) {
+        const shopData = shopOrders[shopId];
+        for (const item of shopData.items) {
+          const order = await placeOrderProvider({
+            userId: userData.userId,
+            shopId: item.shopId,
+            productId: item.productId,
+            quantity: Number(item.quantity),
+            price: Number(item.price),
+            discountedPrice: Number(item.discountedPrice),
+            shopEmail: item.shopEmail,
+            image: item.productImage,
+            title: item.title,
+            address: deliveryAddress.address,
+            latitude: deliveryAddress.lat,
+            longitude: deliveryAddress.long,
+            name: userData.name || "user",
+            phoneNumber: userData.phoneNumber,
+            houseNo: deliveryAddress.buildingNo,
+            building: deliveryAddress.houseNo,
+            landMark: deliveryAddress.landmark
+          });
+          shopData.orderIds.push(order.$id);
+          dispatch(removeFromUserCart({ productId: item.productId, cartId: item.$id }));
+        }
+      }
+
+      // Send one email per shop with bundled order data
+      for (const shopId in shopOrders) {
+        const { shopEmail, items: shopItems, orderIds } = shopOrders[shopId];
+        const orderDetails = shopItems.map(item => ({
+          orderId: orderIds[shopItems.indexOf(item)], // Match order ID with item
           image: item.productImage,
           title: item.title,
-          address: deliveryAddress.address,
-          latitude: deliveryAddress.lat,
-          longitude: deliveryAddress.long,
-          name: userData.name || "user",
-          phoneNumber: userData.phoneNumber,
-          houseNo:deliveryAddress.buildingNo,
-          building:deliveryAddress.houseNo,
-          landMark:deliveryAddress.landmark
-        });
-        dispatch(removeFromUserCart({ productId: item.productId, cartId: item.$id }));
-        handleSendEmail({
-          to: item.shopEmail,
-          type: 'orderPlaced',
-          orderId: order.$id,
-          image: item.image,
-          title: item.title,
-          address: deliveryAddress.address,
-          phoneNumber: userData.phoneNumber,
           quantity: Number(item.quantity),
           price: Number(item.price),
           discountedPrice: Number(item.discountedPrice),
-        }).catch(err => console.error("Error sending email for item:", item.title, err));
+        }));
+
+        await handleSendEmail({
+          to: shopEmail,
+          type: 'orderPlaced',
+          orderIds: orderIds.join(', '), // Comma-separated list of order IDs
+          orderDetails, // Array of item details
+          address: deliveryAddress.address,
+          phoneNumber: userData.phoneNumber,
+        }).catch(err => console.error(`Error sending email to ${shopEmail}:`, err));
       }
+
       alert('Order Placed Successfully!');
       setShowCheckOutPage(false);
       setShowAddressDetail(false);
@@ -62,7 +93,6 @@ function CheckOutPage({ userData, items, deliveryAddress, setDeliveryAddress, se
       setPlacingOrder(false);
     }
   }
-
 
   return (
     <>

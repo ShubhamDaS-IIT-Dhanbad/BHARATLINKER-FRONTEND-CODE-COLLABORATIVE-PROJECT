@@ -71,8 +71,8 @@
 .user-cart-cart-order-product-cart-delete-2-rm {
     align-self: flex-start;position: absolute;left: 5px;
     color: #ffffff;
-    border: 1.2px solid #dc3545;width: 20px;height: 20px;
+    border: 1.2px solid rgb(170, 255, 0);width: 20px;height: 20px;
     transition: color 0.2s ease;display: flex;top: 5px;
-    justify-content: center;align-items: center;background-color: rgb(255, 51, 98);
+    justify-content: center;align-items: center;background-color: rgb(170, 255, 0);
     margin-top: auto;border-radius: 7px;
 }

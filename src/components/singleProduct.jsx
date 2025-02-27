@@ -116,6 +116,7 @@ const ProductDetails = () => {
             discountedPrice: productDetail.discountedPrice || productDetail.price,
             quantity: 1,
             productImage: productDetail?.images[0],
+            shopName:productDetail.shop.shopName,
             phoneNumber: `91${userData.phoneNumber}`,
             shopEmail: productDetail.shop.shopEmail,
             customerName: userData.name || "user"

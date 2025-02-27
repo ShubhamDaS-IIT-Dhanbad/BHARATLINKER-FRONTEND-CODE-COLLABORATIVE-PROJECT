@@ -26,7 +26,41 @@
   padding-bottom: 20vh;
   margin-top: 70px;
 }
+.user-cart-container-img-div {
+ width: 100%;
+ display: flex;justify-content: center;align-items: center;
+}
 
+.user-cart-container-img-div img {
+  max-width: 200px;
+  animation: bounceShake 2s infinite ease-in-out;
+}
+
+@keyframes bounceShake {
+  0% {
+    transform: translateY(0) rotate(0deg);
+  }
+  20% {
+    transform: translateY(-10px) rotate(2deg);
+  }
+  40% {
+    transform: translateY(0) rotate(-2deg);
+  }
+  60% {
+    transform: translateY(-5px) rotate(1deg);
+  }
+  80% {
+    transform: translateY(0) rotate(-1deg);
+  }
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+}
+
+/* Optional: Pause animation on hover */
+.user-cart-container-img-div img:hover {
+  animation-play-state: paused;
+}
 /* Empty Cart State */
 .user-cart-empty {
   text-align: center;
@@ -50,21 +84,21 @@
 
 /* Cart Items Section */
 .user-cart-items-section {
-  margin-top: 37px;padding: 10px;
+  padding: 10px;
   background-color: #f9f9f9;
 }
 .user-cart-items-section-filedset{
-  padding-left: 10px;border-radius: 10px;
-  padding: 0;margin: 0;border: 1.3px solid rgba(255, 0, 0, 0.562);
+  padding-left: 10px;border-radius: 0px;
+  padding: 0;margin: 0;border: 1px solid rgb(170, 255, 0);
 }
 .user-cart-items-section-filedset legend{
   font-size: 19px;font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
-  color: rgba(255, 0, 0, 0.562);;font-weight: 400;
+  color: rgb(170, 255, 0);font-weight: 400;
 }
 
 /* CTA Buttons */
 .user-cart-cta-button {
-  background-color: rgb(37, 147, 37);
+  background-color: rgb(170, 255, 0);
   color: white;
   border: none;
   padding: 1rem 2.5rem;
