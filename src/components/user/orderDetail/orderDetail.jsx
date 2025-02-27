@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
+import PropTypes from 'prop-types';
 import { updateOrderStateToCanceled } from "../../../appWrite/order/order.js";
 import { deleteOrder, updateOrder } from "../../../redux/features/user/orderSlice.jsx";
 import "./orderDetail.css";
@@ -8,40 +9,11 @@ import { TiInfoOutline } from "react-icons/ti";
 import Navbar from "../navbar.jsx";
 import { Oval } from "react-loader-spinner";
 
-const OrderDetails = ({ userData, orderId, setSelectedOrderId }) => {
+const UserOrderDetail = ({ userData, order, setOrder }) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-
-    const [showi, setShowi] = useState(true);
-    const [order, setOrder] = useState(null);
+    const [showInfo, setShowInfo] = useState(true);
     const [isCancelling, setIsCancelling] = useState(false);
-
-    const {
-        pendingOrders,
-        confirmedOrders,
-        deliveredOrders,
-        canceledOrders,
-    } = useSelector((state) => state.userorders);
-
-    const orders = [
-        ...pendingOrders.data,
-        ...confirmedOrders.data,
-        ...deliveredOrders.data,
-        ...canceledOrders.data,
-    ];
-
-    useEffect(() => {
-        if (orders?.length > 0) {
-            const foundOrder = orders?.find((order) => order.$id === orderId);
-            if (!foundOrder) {
-                navigate("/user/order");
-            } else {
-                setOrder(foundOrder);
-            }
-        } else {
-            navigate("/user/order");
-        }
-    }, [orders, orderId, navigate]);
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -53,10 +25,12 @@ const OrderDetails = ({ userData, orderId, setSelectedOrderId }) => {
                 return "Your Order Is Pending!";
             case "confirmed":
                 return "Your Order Confirmed!";
-            case "shipped":
+            case "dispatched":
                 return "Your Order is on the Way!";
             case "delivered":
                 return "Your Order Has Been Delivered!";
+            case "canceled":
+                return "Your Order Has Been Canceled";
             default:
                 return "Order Details";
         }
@@ -74,9 +48,10 @@ const OrderDetails = ({ userData, orderId, setSelectedOrderId }) => {
                     updatedOrderData, 
                     orderStateArrayName: "canceled" 
                 }));
-                setSelectedOrderId(null); // Return to order list after cancellation
+                setOrder(null);
             } catch (error) {
                 console.error("Failed to cancel order:", error);
+                alert("Failed to cancel order. Please try again.");
             } finally {
                 setIsCancelling(false);
             }
@@ -84,28 +59,29 @@ const OrderDetails = ({ userData, orderId, setSelectedOrderId }) => {
     };
 
     const handlePhoneClick = (phoneNumber) => {
-        // Implement phone call functionality or navigation
-        window.location.href = `tel:${phoneNumber}`;
+        if (phoneNumber) {
+            window.location.href = `tel:${phoneNumber}`;
+        }
     };
 
     if (!order) {
-        return <div className="redirect-message"></div>;
+        return <div className="redirect-message">No order selected</div>;
     }
 
     return (
         <>
             <header>
                 <Navbar 
+                onBackNavigation={()=>{setOrder(null)}}
                     userData={userData} 
-                    headerTitle={"ORDER DETAIL"} 
-                    onBackNavigation={() => setSelectedOrderId(null)}
+                    headerTitle="ORDER DETAIL"
                 />
             </header>
 
             <div className="user-order-detail-container">
                 <header className="user-order-detail-header">
                     <h1>{getOrderTitle(order.state.toLowerCase())}</h1>
-                    <p>Hello, {userData?.name || "USER"} <br /></p>
+                    <p>Hello, {userData?.name || "USER"}</p>
                     <p>Your order is {order.state}</p>
                 </header>
 
@@ -115,7 +91,7 @@ const OrderDetails = ({ userData, orderId, setSelectedOrderId }) => {
                             className="order-product-card-img" 
                             onClick={() => navigate(`/product/${order.productId}`)}
                         >
-                            <img src={order.image} alt="Product" />
+                            <img src={order.image} alt={order.title} />
                         </div>
                         <div className="order-product-card-detail">
                             <div className="order-product-card-detail-1">{order.title}</div>
@@ -123,15 +99,15 @@ const OrderDetails = ({ userData, orderId, setSelectedOrderId }) => {
                                 <div style={{ display: "flex", gap: "7px" }}>
                                     <div className="order-product-card-detail-2-1">
                                         <p className="order-product-card-detail-2-1-tag">PRICE</p>
-                                        <p className="opcdp">₹{order?.discountedPrice}</p>
+                                        <p className="opcdp">₹{order.discountedPrice}</p>
                                     </div>
                                     <div className="order-product-card-detail-2-1">
                                         <p className="order-product-card-detail-2-1-tag">QTY</p>
-                                        <p className="opcdp">{order?.quantity}</p>
+                                        <p className="opcdp">{order.quantity}</p>
                                     </div>
                                     <div className="order-product-card-detail-2-1">
                                         <p className="order-product-card-detail-2-1-tag">SUBTOTAL</p>
-                                        <p className="opcdp">₹{order?.discountedPrice * order?.quantity}</p>
+                                        <p className="opcdp">₹{order.discountedPrice * order.quantity}</p>
                                     </div>
                                 </div>
                             </div>
@@ -139,9 +115,10 @@ const OrderDetails = ({ userData, orderId, setSelectedOrderId }) => {
                     </div>
 
                     {(order.state === "pending" || order.state === "confirmed") && (
-                        <div 
+                        <button 
                             className="user-order-detail-cancel" 
-                            onClick={isCancelling ? null : handleCancel}
+                            onClick={handleCancel}
+                            disabled={isCancelling}
                         >
                             {isCancelling ? (
                                 <Oval 
@@ -154,7 +131,7 @@ const OrderDetails = ({ userData, orderId, setSelectedOrderId }) => {
                             ) : (
                                 "CANCEL ORDER"
                             )}
-                        </div>
+                        </button>
                     )}
                     <div className="user-order-detail-info">
                         <div className="user-order-detail-info-c">
@@ -212,20 +189,24 @@ const OrderDetails = ({ userData, orderId, setSelectedOrderId }) => {
                     {order.deliveryBoyPhn && (
                         <div className="order-product-card-address-div">
                             <p className="order-product-card-address-p1">DELIVERY BOY</p>
-                            <div 
+                            <button 
                                 className="order-product-card-address-p2" 
                                 onClick={() => handlePhoneClick(order.deliveryBoyPhn)}
                             >
                                 {order.deliveryBoyPhn}
-                            </div>
+                            </button>
                         </div>
                     )}
 
                     <div className="user-order-detail-shop">
-                        <span onClick={() => navigate(`/shop/${order.shopId}`)}>VISIT SHOP</span>
-                        <TiInfoOutline size={20} onClick={() => setShowi(!showi)} />
+                        <button onClick={() => navigate(`/shop/${order.shopId}`)}>VISIT SHOP</button>
+                        <TiInfoOutline 
+                            size={20} 
+                            onClick={() => setShowInfo(!showInfo)} 
+                            aria-label="Toggle shop info"
+                        />
                     </div>
-                    {showi && (
+                    {showInfo && (
                         <div className="user-order-detail-info-box">
                             For any order-related issues, please contact the shop. Shop details are available on the Shop page.
                         </div>
@@ -236,4 +217,28 @@ const OrderDetails = ({ userData, orderId, setSelectedOrderId }) => {
     );
 };
 
-export default OrderDetails;
+UserOrderDetail.propTypes = {
+    userData: PropTypes.shape({
+        name: PropTypes.string
+    }).isRequired,
+    order: PropTypes.shape({
+        $id: PropTypes.string,
+        $createdAt: PropTypes.string,
+        productId: PropTypes.string,
+        shopId: PropTypes.string,
+        image: PropTypes.string,
+        title: PropTypes.string,
+        discountedPrice: PropTypes.number,
+        quantity: PropTypes.number,
+        state: PropTypes.string,
+        address: PropTypes.string,
+        building: PropTypes.string,
+        houseNo: PropTypes.string,
+        landMark: PropTypes.string,
+        expectedDeliveryDate: PropTypes.string,
+        deliveryBoyPhn: PropTypes.string
+    }),
+    setOrder: PropTypes.func.isRequired
+};
+
+export default UserOrderDetail;

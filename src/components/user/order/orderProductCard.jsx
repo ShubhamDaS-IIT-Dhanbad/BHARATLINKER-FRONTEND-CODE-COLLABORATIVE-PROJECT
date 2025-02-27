@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import PropTypes from 'prop-types';
 import { FaExclamationTriangle, FaLuggageCart, FaSadCry } from "react-icons/fa";
@@ -10,10 +9,8 @@ import { updateOrderStateToCanceled } from "../../../appWrite/order/order.js";
 import { updateOrder, deleteOrder } from "../../../redux/features/user/orderSlice.jsx";
 import "./userOrderCard.css"; 
 
-function OrderProductCard({ order, setSelectedOrderId }) {
-    const navigate = useNavigate();
+function OrderProductCard({ order, setOrder }) {
     const dispatch = useDispatch();
-    
     const [canceling, setCanceling] = useState(false);
     const [imageLoaded, setImageLoaded] = useState(false);
 
@@ -54,14 +51,6 @@ function OrderProductCard({ order, setSelectedOrderId }) {
         }
     };
 
-    const onClickPhn = (phoneNumber) => {
-        if (phoneNumber) {
-            window.location.href = `tel:${phoneNumber}`;
-        } else {
-            alert("Please enter a valid phone number.");
-        }
-    };
-
     return (
         <div className="user-order-card-parent">
             <div className="user-order-card">
@@ -77,8 +66,9 @@ function OrderProductCard({ order, setSelectedOrderId }) {
                     )}
                     <img 
                         src={order.image} 
-                        alt="Product" 
+                        alt={order.title} 
                         onLoad={() => setImageLoaded(true)}
+                        onError={() => setImageLoaded(true)} // Handle broken images
                         style={!imageLoaded ? { display: 'none' } : {}} 
                     />
                 </div>
@@ -88,46 +78,45 @@ function OrderProductCard({ order, setSelectedOrderId }) {
                         <div style={{ display: "flex", gap: "7px" }}>
                             <div className="user-order-card-detail-2-1">
                                 <p className="user-order-card-detail-2-1-tag">PRICE</p>
-                                <p className="opcdp">₹{order?.discountedPrice}</p>
+                                <p className="opcdp">₹{order.discountedPrice}</p>
                             </div>
                             <div className="user-order-card-detail-2-1">
                                 <p className="user-order-card-detail-2-1-tag">QTY</p>
-                                <p className="opcdp">{order?.quantity}</p>
+                                <p className="opcdp">{order.quantity}</p>
                             </div>
                             <div className="user-order-card-detail-2-1">
                                 <p className="user-order-card-detail-2-1-tag">SUBTOTAL</p>
-                                <p className="opcdp">₹{order?.discountedPrice * order?.quantity}</p>
+                                <p className="opcdp">₹{order.discountedPrice * order.quantity}</p>
                             </div>
                         </div>
                     </div>
                     <div className="user-order-card-detail-3-state">
-                        {getStatusIcon(order?.state)}
-                        {order?.state !== "canceled" && order?.state !== "delivered" && (
-                            <>
-                                {canceling ? (
-                                    <Oval 
-                                        height={20} 
-                                        width={20} 
-                                        color="green" 
-                                        secondaryColor="white" 
-                                        ariaLabel="loading" 
-                                    />
-                                ) : (
-                                    <div 
-                                        className="user-order-card-detail-3-state-cancel" 
-                                        onClick={handleCancel}
-                                    >
-                                        CANCEL
-                                    </div>
-                                )}
-                            </>
+                        {getStatusIcon(order.state)}
+                        {order.state !== "canceled" && order.state !== "delivered" && (
+                            canceling ? (
+                                <Oval 
+                                    height={20} 
+                                    width={20} 
+                                    color="green" 
+                                    secondaryColor="white" 
+                                    ariaLabel="loading" 
+                                />
+                            ) : (
+                                <button 
+                                    className="user-order-card-detail-3-state-cancel" 
+                                    onClick={handleCancel}
+                                    disabled={canceling}
+                                >
+                                    CANCEL
+                                </button>
+                            )
                         )}
-                        <div 
+                        <button 
                             className="retailer-user-order-card-detail-2" 
-                            onClick={() => setSelectedOrderId(order.$id)}
+                            onClick={() => setOrder(order)}
                         >
                             DETAIL
-                        </div>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -142,9 +131,9 @@ OrderProductCard.propTypes = {
         title: PropTypes.string.isRequired,
         discountedPrice: PropTypes.number.isRequired,
         quantity: PropTypes.number.isRequired,
-        state: PropTypes.string.isRequired
+        state: PropTypes.oneOf(["pending", "confirmed", "dispatched", "canceled", "delivered"]).isRequired
     }).isRequired,
-    setSelectedOrderId: PropTypes.func.isRequired
+    setOrder: PropTypes.func.isRequired
 };
 
 export default OrderProductCard;

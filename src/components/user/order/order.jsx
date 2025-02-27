@@ -1,4 +1,3 @@
-// Order.jsx
 import React, { useEffect, useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import PropTypes from 'prop-types';
@@ -11,17 +10,17 @@ import UserOrderDetail from '../orderDetail/orderDetail.jsx';
 import e1 from './e1.png';
 import "./order.css";
 
-const ORDER_TYPES = ["pending", "confirmed", "dispatched", "delivered", "canceled"]; // Added "dispatched" to match orderStates
+const ORDER_TYPES = ["pending", "confirmed", "dispatched", "delivered", "canceled"];
 
 const Order = ({ userData }) => {
-  const [selectedOrderId, setSelectedOrderId] = useState(null);
+  const [order, setOrder] = useState(null);
   const [selectedOrderType, setSelectedOrderType] = useState("pending");
   const dispatch = useDispatch();
   const { 
     loading,
     pendingOrders,
     confirmedOrders,
-    dispatchedOrders,  // Changed from dispatchedOrders to match selector
+    dispatchedOrders,
     deliveredOrders,
     canceledOrders 
   } = useSelector((state) => state.userorders);
@@ -29,7 +28,7 @@ const Order = ({ userData }) => {
   const orderStates = {
     pending: pendingOrders,
     confirmed: confirmedOrders,
-    dispatched: dispatchedOrders,  // Changed from dispatched to match ORDER_TYPES
+    dispatched: dispatchedOrders,
     delivered: deliveredOrders,
     canceled: canceledOrders,
   };
@@ -38,7 +37,7 @@ const Order = ({ userData }) => {
     data: [], 
     hasMore: false, 
     currentPage: 0 
-  };  // Added fallback for undefined state
+  };
 
   const fetchInitialOrders = useCallback((status) => {
     if (!userData?.phoneNumber) return;
@@ -63,10 +62,10 @@ const Order = ({ userData }) => {
     if (userData?.phoneNumber && selectedOrders.data.length === 0) {
       fetchInitialOrders(selectedOrderType);
     }
-  }, [selectedOrderType, userData, selectedOrders.data.length, fetchInitialOrders]);
+  }, [selectedOrderType, userData, selectedOrders.data.length]);
 
   const renderOrders = () => {
-    if (loading && selectedOrders.data.length === 0) {
+    if (loading) {
       return (
         <div className="retailer-order-loading">
           <Oval 
@@ -93,18 +92,18 @@ const Order = ({ userData }) => {
       <OrderProductCard
         key={order.$id}
         order={order}
-        setSelectedOrderId={setSelectedOrderId}
+        setOrder={setOrder}
       />
     ));
   };
 
   return (
     <>
-      {selectedOrderId ? (
+      {order ? (
         <UserOrderDetail
           userData={userData}
-          orderId={selectedOrderId}
-          setSelectedOrderId={setSelectedOrderId}
+          order={order}
+          setOrder={setOrder}
         />
       ) : (
         <>
