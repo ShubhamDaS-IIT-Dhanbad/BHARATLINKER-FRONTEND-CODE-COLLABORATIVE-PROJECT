@@ -57,8 +57,7 @@ const Home = () => {
                 backgroundColor: '#f9f9f9',
                 position: 'fixed',
                 bottom: '0',
-                zIndex: '100',
-                boxShadow:'0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23)'
+                zIndex: '100'
             }}>
                 <FooterButton icon={<RiSunCloudyLine size={37} />} label="Home" onClick={() => navigate('/')} />
                 <FooterButton icon={<TbCategoryPlus size={37} />} label="Products" onClick={() => navigate('/search')} />
