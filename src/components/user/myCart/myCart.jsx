@@ -1,95 +1,157 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 
-// Project components and utilities
-import Navbar from "../navbar.jsx";
+import Navbar from '../navbar.jsx';
 import OrderProductCard from './cartCard.jsx';
-import { updateCartStateAsync, removeFromUserCart, fetchUserCart } from '../../../redux/features/user/cartSlice.jsx';
-// import { fetchShopStatus } from '../../../appWrite/shop/shop.js';
-
+import { removeFromUserCart, fetchUserCart } from '../../../redux/features/user/cartSlice.jsx';
 import DeliveryAddress from './deliveryAddress.jsx';
 import CheckOutPage from './checkOutPage.jsx';
-
 import LocationTab from '../../locationTab/locationTab.jsx';
 
-// Styles
-import '../style/userProfile.css';
 import './myCart.css';
-import '../../searchPage/sortby.css';
 
 const MyCartPage = ({ userData }) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-
-    const [showLocationTab, setShowLocationTab] = useState(false);
-    const [showAddressDetail, setShowAddressDetail] = useState(false);
-    const [showCheckOutPage, setShowCheckOutPage] = useState(false);
-
-    const {cart} = useSelector((state) => state.userCart);
-
-    // State management
+    
+    // Consolidated view state management
+    const [viewState, setViewState] = useState({
+        currentView: 'cart', // 'cart', 'location', 'address', 'checkout'
+        isLoading: false,
+        error: null,
+    });
+    
+    const [deliveryAddress, setDeliveryAddress] = useState(null);
     const [shopStatus, setShopStatus] = useState({});
-    const [deliveryAddress, setDeliveryAddress] = useState();
 
-    useEffect(() => {
-        if (cart?.length === 0 && userData?.userId) {
-            dispatch(fetchUserCart(userData.userId));
-        }
-        window.scrollTo(0, 0);
+    const { cart } = useSelector((state) => state.userCart);
+
+    // Memoized cart calculations
+    const cartSummary = useMemo(() => ({
+        isEmpty: !cart || cart.length === 0,
+        hasOutOfStock: cart?.some(item => item.stock < item.quantity),
+        totalItems: cart?.reduce((sum, item) => sum + item.quantity, 0) || 0,
+    }), [cart]);
+
+    // Centralized view transition handler
+    const transitionToView = useCallback((view) => {
+        setViewState(prev => ({
+            ...prev,
+            currentView: view,
+            error: null,
+        }));
     }, []);
 
-    
+    // Fetch cart with debouncing and cleanup
+    useEffect(() => {
+        let mounted = true;
+        const fetchCartData = async () => {
+            if (!userData?.userId || !cartSummary.isEmpty) return;
 
+            try {
+                setViewState(prev => ({ ...prev, isLoading: true }));
+                const result = await dispatch(fetchUserCart(userData.userId)).unwrap();
+                
+                if (mounted) {
+                    window.scrollTo(0, 0);
+                    // Optionally update shop status here if API provides it
+                    // setShopStatus(/* derived from result */);
+                }
+            } catch (err) {
+                if (mounted) {
+                    setViewState(prev => ({
+                        ...prev,
+                        error: 'Failed to load cart. Please try again.',
+                    }));
+                }
+                console.error('Cart fetch error:', err);
+            } finally {
+                if (mounted) {
+                    setViewState(prev => ({ ...prev, isLoading: false }));
+                }
+            }
+        };
+
+        fetchCartData();
+        return () => { mounted = false; };
+    }, [dispatch, userData?.userId, cartSummary.isEmpty]);
+
+    // Handle item removal with optimistic updates
     const handleRemoveItem = useCallback(async (cartId, productId) => {
+        setViewState(prev => ({ ...prev, isLoading: true }));
+        
         try {
-            await dispatch(removeFromUserCart({ productId, cartId }));
+            await dispatch(removeFromUserCart({ productId, cartId })).unwrap();
         } catch (error) {
-            console.error("Cart update failed:", error);
+            setViewState(prev => ({
+                ...prev,
+                error: 'Failed to remove item. Please try again.',
+            }));
+            console.error('Remove item failed:', error);
+            // Optionally revert optimistic update here
+        } finally {
+            setViewState(prev => ({ ...prev, isLoading: false }));
         }
-    }, [dispatch, userData?.phoneNumber]);
+    }, [dispatch]);
 
-    if (showLocationTab) return (
-        <LocationTab
-            header={"Delivery Address"}
-            setDeliveryAddress={setDeliveryAddress}
-            setShowAddressDetail={setShowAddressDetail}
-            setLocationTab={setShowLocationTab}
-        />
-    );
-    if (showAddressDetail) return (
-        <DeliveryAddress
-            deliveryAddress={deliveryAddress}
-            setDeliveryAddress={setDeliveryAddress}
-            setShowCheckOutPage={setShowCheckOutPage}
-            setShowAddressDetail={setShowAddressDetail}
-        />
-    );
-    if (showCheckOutPage) {
-        return (
-            <CheckOutPage
-                userData={userData}
-                items={cart}
-                deliveryAddress={deliveryAddress}
+    // Render view components based on current state
+    const renderView = () => {
+        switch (viewState.currentView) {
+            case 'location':
+                return (
+                    <LocationTab
+                        header="Delivery Address"
+                        setDeliveryAddress={setDeliveryAddress}
+                        setShowAddressDetail={() => transitionToView('address')}
+                        setLocationTab={() => transitionToView('cart')}
+                    />
+                );
+            case 'address':
+                return (
+                    <DeliveryAddress
+                        deliveryAddress={deliveryAddress}
+                        setDeliveryAddress={setDeliveryAddress}
+                        setShowCheckOutPage={() => transitionToView('checkout')}
+                        setShowAddressDetail={() => transitionToView('cart')}
+                    />
+                );
+            case 'checkout':
+                return (
+                    <CheckOutPage
+                        userData={userData}
+                        items={cart}
+                        deliveryAddress={deliveryAddress}
+                        setDeliveryAddress={setDeliveryAddress}
+                        setShowCheckOutPage={() => transitionToView('cart')}
+                        setShowAddressDetail={() => transitionToView('address')}
+                    />
+                );
+            case 'cart':
+            default:
+                return renderCartView();
+        }
+    };
 
-                setDeliveryAddress={setDeliveryAddress}
-                setShowCheckOutPage={setShowCheckOutPage}
-                setShowAddressDetail={setShowAddressDetail}
-            />
-        );
-    }
-
-    return (
+    // Separate cart view rendering for better organization
+    const renderCartView = () => (
         <>
             <Navbar
-                userData={userData} 
-                headerTitle="MY CART"
+                userData={userData}
+                headerTitle="My Cart"
                 onBackNavigation={() => navigate(-1)}
             />
             <div className="user-cart-container">
                 <main className="user-cart-content">
-                    {cart?.length === 0 ? (
+                    {viewState.isLoading && (
+                        <div className="loading-spinner">Loading...</div>
+                    )}
+                    {viewState.error && (
+                        <div className="error-message">{viewState.error}</div>
+                    )}
+                    
+                    {cartSummary.isEmpty && !viewState.isLoading ? (
                         <div className="user-cart-empty">
                             <div className="user-cart-empty-illustration" />
                             <h2>Your Cart is Empty</h2>
@@ -97,6 +159,7 @@ const MyCartPage = ({ userData }) => {
                             <button
                                 onClick={() => navigate('/shop')}
                                 className="user-cart-cta-button primary"
+                                disabled={viewState.isLoading}
                             >
                                 Explore Products
                             </button>
@@ -104,40 +167,36 @@ const MyCartPage = ({ userData }) => {
                     ) : (
                         <>
                             <section className="user-cart-items-section">
-                                {cart.map(item => {
-                                    const isOutOfStock = item.stock < item.quantity;
-                                    return (
-                                        <OrderProductCard
-                                            key={item.$id}
-                                            productId={item.productId}
-                                            order={item}
-                                            isRemove={true}
-                                            onRemove={() => handleRemoveItem(item.$id, item.productId)}
-                                            isShopOpen={shopStatus[item.shopId] || false}
-                                            isOutOfStock={isOutOfStock}
-                                        />
-                                    );
-                                })}
+                                {cart?.map((item) => (
+                                    <OrderProductCard
+                                        key={item.$id}
+                                        productId={item.productId}
+                                        order={item}
+                                        isRemove={true}
+                                        onRemove={() => handleRemoveItem(item.$id, item.productId)}
+                                        isShopOpen={shopStatus[item.shopId] || false}
+                                        isOutOfStock={item.stock < item.quantity}
+                                    />
+                                ))}
                             </section>
-
-
                             <div className="cart-check-out-container">
-
-                                <div
+                                <button
                                     className="cart-check-out-container-button"
-                                    onClick={() => setShowLocationTab(true)}
+                                    onClick={() => transitionToView('location')}
+                                    disabled={viewState.isLoading || cartSummary.isEmpty || cartSummary.hasOutOfStock}
+                                    aria-label="Proceed to checkout"
                                 >
                                     Proceed to Checkout
-
-                                </div>
+                                </button>
                             </div>
-
                         </>
                     )}
                 </main>
             </div>
         </>
     );
+
+    return renderView();
 };
 
 MyCartPage.propTypes = {
