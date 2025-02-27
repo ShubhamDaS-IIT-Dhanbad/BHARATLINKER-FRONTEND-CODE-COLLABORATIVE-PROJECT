@@ -140,7 +140,6 @@ const MyCartPage = ({ userData }) => {
             navigate(-1);
         } else {
             transitionToView('cart');
-            // Note: We're using transitionToView which already handles history
         }
     }, [viewState.currentView, navigate, transitionToView]);
 
