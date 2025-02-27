@@ -164,12 +164,12 @@ const MyCartPage = ({ userData }) => {
                     ) : (
                         <>
                             <div className="user-cart-container-img-div"><img src={c1} /></div>
-                            {cartSummary.totalSavings > 0 && (
+                            {/* {cartSummary.totalSavings > 0 && (
                                 <div className="user-cart-container-total-saving">
                                     <img src={s1} />
                                     Total Savings: ₹{cartSummary.totalSavings.toFixed(2)}
                                 </div>
-                            )}
+                            )} */}
                             <section className="user-cart-items-section">
                                 {Object.entries(
                                     cart.reduce((acc, item) => {
