@@ -8,7 +8,7 @@ import { removeFromUserCart } from '../../../redux/features/user/cartSlice.jsx';
 import './checkOutPage.css';
 
 function CheckOutPage({ userData, items, deliveryAddress, setDeliveryAddress, setShowCheckOutPage, setShowAddressDetail }) {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch();console.log(items,"here");
   const totalPrice = items.reduce((acc, item) => acc + item.discountedPrice * item.quantity, 0);
   const totalSaved = items.reduce((acc, item) => acc + (item.price - item.discountedPrice) * item.quantity, 0);
 
@@ -16,7 +16,7 @@ function CheckOutPage({ userData, items, deliveryAddress, setDeliveryAddress, se
 
   // Function to handle order placing
   async function placeOrder() {
-    setPlacingOrder(true);
+    setPlacingOrder(true);console.log(deliveryAddress,"l")
     try {
       for (const item of items) {
         const order = await placeOrderProvider({
@@ -30,8 +30,8 @@ function CheckOutPage({ userData, items, deliveryAddress, setDeliveryAddress, se
           image: item.productImage,
           title: item.title,
           address: deliveryAddress.address,
-          lat: deliveryAddress.lat,
-          long: deliveryAddress.long,
+          latitude: deliveryAddress.lat,
+          longitude: deliveryAddress.long,
           name: userData.name || "user",
           phoneNumber: userData.phoneNumber,
           houseNo:deliveryAddress.buildingNo,

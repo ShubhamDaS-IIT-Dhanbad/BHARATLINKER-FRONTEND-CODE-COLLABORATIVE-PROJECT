@@ -38,26 +38,9 @@ const MyCartPage = ({ userData }) => {
             dispatch(fetchUserCart(userData.userId));
         }
         window.scrollTo(0, 0);
-    }, [dispatch, userData?.userId]);
+    }, []);
 
-    useEffect(() => {
-        const checkShopStatus = async () => {
-            const statusMap = {};
-            for (const item of cart) {
-                if (!statusMap[item.shopId]) {
-                    try {
-                        // const response = await fetchShopStatus(item.shopId);
-                        // statusMap[item.shopId] = response;
-                    } catch (error) {
-                        console.error('Error fetching shop status:', error);
-                        statusMap[item.shopId] = false;
-                    }
-                }
-            }
-            setShopStatus(statusMap);
-        };
-        if (cart.length > 0) { checkShopStatus(); }
-    }, [cart]);
+    
 
     const handleRemoveItem = useCallback(async (cartId, productId) => {
         try {
@@ -84,11 +67,10 @@ const MyCartPage = ({ userData }) => {
         />
     );
     if (showCheckOutPage) {
-        const availableItems = cart.filter(item => shopStatus[item.shopId]);
         return (
             <CheckOutPage
                 userData={userData}
-                items={availableItems}
+                items={cart}
                 deliveryAddress={deliveryAddress}
 
                 setDeliveryAddress={setDeliveryAddress}
@@ -138,23 +120,6 @@ const MyCartPage = ({ userData }) => {
                                 })}
                             </section>
 
-                            {/* <section className="user-cart-summary-section">
-                                <div className="cart-summary-card">
-                                    <h3>Order Summary</h3>
-                                    <div className="summary-row">
-                                        <span>Total Items:</span>
-                                        <span>{totalQuantity}</span>
-                                    </div>
-                                    <div className="summary-row total">
-                                        <span>Total Price:</span>
-                                        <span>₹{totalPrice.toFixed(2)}</span>
-                                    </div>
-                                    <button
-                                    >
-
-                                    </button>
-                                </div>
-                            </section> */}
 
                             <div className="cart-check-out-container">
 
