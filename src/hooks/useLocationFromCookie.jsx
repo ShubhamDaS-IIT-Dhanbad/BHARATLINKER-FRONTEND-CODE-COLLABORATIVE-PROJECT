@@ -6,8 +6,6 @@ import { batch } from 'react-redux';
 
 import { resetProducts } from '../redux/features/searchPage/searchProductSlice.jsx';
 import { resetShops } from '../redux/features/searchShop/searchShopSlice.jsx';
-import { resetRefurbishedProducts } from '../redux/features/refurbishedPage/refurbishedProductsSlice.jsx';
-
 // Constants for cookie configuration
 const LOCATION_COOKIE_NAME = 'BharatLinkerUserLocation';
 const COOKIE_EXPIRY_DAYS = 7;
@@ -66,7 +64,6 @@ const useLocationManager = () => {
     batch(() => {
       dispatch(resetProducts());
       dispatch(resetShops());
-      dispatch(resetRefurbishedProducts());
     });
   }, [dispatch]);
 

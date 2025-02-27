@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import searchShopService from '../../appWrite/main/searchShop.js'; // Adjust the path if necessary
+import searchShopService from '../../../appWrite/main/searchShop.js'; // Adjust the path if necessary
 
 // Async thunk to fetch shop details by ID
 export const fetchShopById = createAsyncThunk(

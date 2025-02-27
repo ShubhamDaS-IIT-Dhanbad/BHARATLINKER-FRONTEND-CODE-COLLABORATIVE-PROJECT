@@ -1,58 +1,44 @@
 import React, { useState, useEffect } from 'react';
 import { HiOutlineUserCircle } from 'react-icons/hi';
 import { TiArrowSortedDown } from 'react-icons/ti';
-import { TbCategory2 } from 'react-icons/tb';
 import { BiSearchAlt } from 'react-icons/bi';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Cookies from 'js-cookie';
-
 import { FaArrowLeft } from 'react-icons/fa';
 import { useSelector } from 'react-redux';
-
 import LocationTab from './locationTab/locationTab.jsx';
-
 import useLocationFromCookie from '../hooks/useLocationFromCookie.jsx';
 import { useExecuteSearch } from '../hooks/searchProductHook.jsx';
 import { useSearchShop } from '../hooks/searchShopHook.jsx';
-import { useSearchRefurbishedProductsHook } from '../hooks/searchRefurbishedHook.jsx';
 import { useShopProductExecuteSearch } from '../hooks/searchShopProductHook.jsx';
-
 import './style/navbar.css';
+
 const Navbar = ({ headerTitle, shopId }) => {
     const { getLocationFromCookie } = useLocationFromCookie();
     const navigate = useNavigate();
     const location = useLocation();
-
     const userLocation = getLocationFromCookie();
-
     const [isLocationHas, setIsLocationHas] = useState(!!(userLocation?.address && userLocation?.lat && userLocation?.lon));
     const [searchInput, setSearchInput] = useState('');
     const [locationTabVisible, setLocationTabVisible] = useState(false);
-
     const { executeSearch } = useExecuteSearch();
     const { query: searchQuery } = useSelector((state) => state.searchproducts);
     const { executeSearchShop } = useSearchShop();
     const { query: shopQuery } = useSelector((state) => state.searchshops);
-    const { executeSearchRefurbished } = useSearchRefurbishedProductsHook();
-    const { query: refurbishedQuery } = useSelector((state) => state.refurbishedproducts);
     const { executeShopProductSearch } = useShopProductExecuteSearch(shopId);
     const { query: shopProductQuery } = useSelector((state) => state.shopproducts);
-
     const isHomePage = location.pathname === '/';
     const isSearchPage = location.pathname === '/search';
     const isShopPage = location.pathname === '/shop';
     const isShopProductPage = location.pathname.startsWith('/shop/product');
-    const isRefurbishedPage = location.pathname === '/refurbished';
 
     useEffect(() => {
         if (isSearchPage) {
             setSearchInput(searchQuery);
         } else if (isShopPage) {
             setSearchInput(shopQuery);
-        } else if (isRefurbishedPage) {
-            setSearchInput(refurbishedQuery);
         }
-    }, [isSearchPage, isShopPage, isRefurbishedPage, searchQuery, shopQuery, refurbishedQuery]);
+    }, [isSearchPage, isShopPage, searchQuery, shopQuery]);
 
     const handleHomePageUserIconClick = () => {
         const userSession = Cookies.get('BharatLinkerUserData');
@@ -70,8 +56,6 @@ const Navbar = ({ headerTitle, shopId }) => {
                 executeSearch(searchInput);
             } else if (isShopPage) {
                 executeSearchShop(searchInput);
-            } else if (isRefurbishedPage) {
-                executeSearchRefurbished(searchInput);
             } else if (isShopProductPage) {
                 executeShopProductSearch(searchInput);
             }
@@ -88,17 +72,14 @@ const Navbar = ({ headerTitle, shopId }) => {
                         ) : (
                             <FaArrowLeft size={25} id='product-page-user-icon' onClick={() => navigate('/')} aria-label="Go to Home" tabIndex={0} />
                         )}
-
                         <div className={isHomePage ? "home-page-user-location" : "product-page-user-location"}>
                             <p className={isHomePage ? "home-page-location-label" : "product-page-location-label"}>{headerTitle}</p>
-
                             <div className={isHomePage ? "home-page-location-value" : "product-page-location-value"}>
                                 {isShopProductPage ? `EXPLORE PRODUCT` : `${userLocation?.address ? userLocation.address.slice(0, 30) : 'SET LOCATION, INDIA'}`}
                                 {!isShopProductPage && <TiArrowSortedDown size={15} onClick={toggleLocationTab} />}
                             </div>
                         </div>
                     </div>
-                    {/* {isHomePage && <TbCategory2 size={30} className="home-page-category-icon" onClick={() => navigate('/refurbished')} />} */}
                 </div>
                 <div className={isHomePage ? "home-page-search-section" : "product-page-search-section"}>
                     <div className={isHomePage ? "home-page-search-input-container" : "product-page-search-input-container"}>

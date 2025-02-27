@@ -6,7 +6,7 @@ import { LazyLoadImage } from "react-lazy-load-image-component";
 import { RiShareForwardLine } from "react-icons/ri";
 import { FaCaretRight, FaDoorClosed, FaDoorOpen } from "react-icons/fa";
 import { CiPhone, CiLocationOn, CiMail } from "react-icons/ci";
-import { fetchShopById } from "../redux/features/singleShopSlice.jsx";
+import { fetchShopById } from "../redux/features/searchShop/singleShopSlice.jsx";
 import SingleProductSearchBar from "./singlePageSearchbar.jsx";
 import "react-lazy-load-image-component/src/effects/blur.css";
 import "./style/singleShop.css";
