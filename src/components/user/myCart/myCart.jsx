@@ -157,6 +157,7 @@ const MyCartPage = ({ userData }) => {
                         <>
 
                             <div className="user-cart-container-img-div"><img src={c1} /></div>
+                            <div className="user-cart-container-total-saving">total saving </div>
                             <section className="user-cart-items-section">
                                 {/* Group cart items by shopId */}
                                 {Object.entries(
