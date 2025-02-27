@@ -50,8 +50,16 @@
 
 /* Cart Items Section */
 .user-cart-items-section {
-  margin-top: 37px;
+  margin-top: 37px;padding: 10px;
   background-color: #f9f9f9;
+}
+.user-cart-items-section-filedset{
+  padding-left: 10px;
+  padding: 0;margin: 0;border: 1.2px solid red;
+}
+.user-cart-items-section-filedset legend{
+  font-size: 19px;font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  color: red;font-weight: 400;
 }
 
 /* CTA Buttons */

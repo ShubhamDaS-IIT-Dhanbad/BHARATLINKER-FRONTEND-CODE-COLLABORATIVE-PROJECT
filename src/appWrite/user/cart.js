@@ -47,6 +47,7 @@ async function addToCart(cartItem) {
         productImage: cartItem.productImage,
         shopEmail:cartItem.shopEmail,
         customerName: cartItem.customerName,
+        shopName:cartItem.shopName,
         customerPhoneNumber: Number(cartItem.phoneNumber),
       }
     );

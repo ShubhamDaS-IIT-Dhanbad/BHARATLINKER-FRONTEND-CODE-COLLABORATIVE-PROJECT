@@ -92,7 +92,7 @@ const MyCartPage = ({ userData }) => {
             setPendingRemoval(null);
         }
     }, [dispatch, pendingRemoval]);
-
+console.log(cart)
     const renderConfirmPopup = useCallback(() => (
         <div className="user-dashboard-popup-overlay">
             <div className="user-dashboard-popup-card">
@@ -137,7 +137,7 @@ const MyCartPage = ({ userData }) => {
 
     const handleBackNavigation = useCallback(() => {
         navigate(-1);
-    }, []);
+    }, [navigate]);
 
     const renderCartView = useCallback(() => (
         <>
@@ -170,15 +170,30 @@ const MyCartPage = ({ userData }) => {
                     ) : (
                         <>
                             <section className="user-cart-items-section">
-                                {cart?.map((item) => (
-                                    <OrderProductCard
-                                        key={item.$id}
-                                        productId={item.productId}
-                                        order={item}
-                                        isRemove={true}
-                                        onRemove={() => confirmRemoveItem(item.$id, item.productId)}
-                                        isOutOfStock={item.stock < item.quantity}
-                                    />
+                                {/* Group cart items by shopId */}
+                                {Object.entries(
+                                    cart.reduce((acc, item) => {
+                                        const shopId = item.shopId || 'unknown'; // Fallback if shopId is missing
+                                        if (!acc[shopId]) {
+                                            acc[shopId] = [];
+                                        }
+                                        acc[shopId].push(item);
+                                        return acc;
+                                    }, {})
+                                ).map(([shopId, items]) => (
+                                    <fieldset key={shopId} className="user-cart-items-section-filedset">
+                                        <legend>{items[0]?.shopName}</legend>
+                                        {items.map((item) => (
+                                            <OrderProductCard
+                                                key={item.$id}
+                                                productId={item.productId}
+                                                order={item}
+                                                isRemove={true}
+                                                onRemove={() => confirmRemoveItem(item.$id, item.productId)}
+                                                isOutOfStock={item.stock < item.quantity}
+                                            />
+                                        ))}
+                                    </fieldset>
                                 ))}
                             </section>
                             <div className="cart-check-out-container">
