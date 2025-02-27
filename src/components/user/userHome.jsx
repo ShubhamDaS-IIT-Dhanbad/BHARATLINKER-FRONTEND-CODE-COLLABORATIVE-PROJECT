@@ -1,79 +1,157 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { CiLocationOn } from "react-icons/ci";
-import Navbar from "./navbar.jsx";
+import { useSelector } from "react-redux";
+import { CiLocationOn, CiMobile3 } from "react-icons/ci";
 import { PiShoppingBagOpenThin } from "react-icons/pi";
 import { IoIosLogOut } from "react-icons/io";
-import { useSelector } from "react-redux";
 import { BsChatLeftText } from "react-icons/bs";
-import { CiMobile3 } from "react-icons/ci";
 import { FaPlus } from "react-icons/fa";
+import { WiNightCloudyWindy } from "react-icons/wi";
 import useUserAuth from "../../hooks/userAuthHook.jsx";
+import Navbar from "./navbar.jsx";
+import AddToCartTab from "../viewCartTab/viewCart.jsx";
 import "./style/userHome.css";
 import rd1 from "./asset/rd1.png";
-import AddToCartTab from "../viewCartTab/viewCart.jsx";
-import { WiNightCloudyWindy } from "react-icons/wi";
+
+// Reusable Confirmation Popup Component (already provided in your code)
+const ConfirmationPopup = ({ isOpen, title, text, buttons }) => {
+    if (!isOpen) return null;
+
+    return (
+        <div className="user-dashboard-popup-overlay">
+            <div className="user-dashboard-popup-card">
+                <div className="user-dashboard-popup-pointer"></div>
+                <h2 className="user-dashboard-popup-title">{title}</h2>
+                {text && <p className="user-dashboard-popup-text">{text}</p>}
+                <div className="user-dashboard-popup-buttons">
+                    {buttons.map((btn, index) => (
+                        <button
+                            key={index}
+                            className={
+                                btn.primary
+                                    ? "user-dashboard-popup-button-primary"
+                                    : "user-dashboard-popup-button-secondary"
+                            }
+                            onClick={btn.onClick}
+                            disabled={btn.disabled || false}
+                        >
+                            {btn.label}
+                        </button>
+                    ))}
+                </div>
+            </div>
+        </div>
+    );
+};
 
 function UserHome({ userData }) {
+    const navigate = useNavigate();
+    const { totalQuantity, totalPrice } = useSelector((state) => state.userCart);
+    const { logout } = useUserAuth();
+    const [isLoading, setIsLoading] = useState(false);
+    const [deferredPrompt, setDeferredPrompt] = useState(null);
+    const [popup, setPopup] = useState({ isOpen: false, type: null }); // Unified popup state
+
+    // Scroll to top on mount
     useEffect(() => {
         window.scrollTo(0, 0);
     }, []);
 
-    const { totalQuantity, totalPrice } = useSelector((state) => state.userCart);
-    const { logout } = useUserAuth();
-    const [isLogout, setIsLogout] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
-    const [deferredPrompt, setDeferredPrompt] = useState(null); // For PWA install prompt
-    const navigate = useNavigate();
+    // Capture PWA install prompt
+    useEffect(() => {
+        const handleBeforeInstallPrompt = (e) => {
+            e.preventDefault();
+            setDeferredPrompt(e);
+        };
+        window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+        return () => window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
+    }, []);
 
-    // Handle user logout
+    // Handle logout
     const handleLogout = async () => {
         setIsLoading(true);
         await logout();
+        setIsLoading(false);
+        setPopup({ isOpen: false, type: null });
     };
 
-    // Capture the PWA install prompt event
-    useEffect(() => {
-        const handleBeforeInstallPrompt = (e) => {
-            // Prevent the default mini-infobar from appearing on mobile
-            e.preventDefault();
-            // Store the event to trigger it later
-            setDeferredPrompt(e);
-        };
-
-        window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
-
-        return () => {
-            window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
-        };
-    }, []);
-
-    // Handle Bharat Linker Lite PWA installation
+    // Handle Bharat Linker Lite PWA install
     const handleBharatLinkerInstall = async () => {
         if (deferredPrompt) {
-            // Show the install prompt
             deferredPrompt.prompt();
-            // Wait for the user to respond to the prompt
             const { outcome } = await deferredPrompt.userChoice;
-            if (outcome === "accepted") {
-                console.log("User accepted the PWA install prompt");
-            } else {
-                console.log("User dismissed the PWA install prompt");
-            }
-            // Clear the prompt after use
+            console.log(`User ${outcome === "accepted" ? "accepted" : "dismissed"} the PWA install prompt`);
             setDeferredPrompt(null);
         } else {
-            // Fallback: Navigate to a page or show a message if PWA install isn’t available
-            alert("To install Bharat Linker Lite, please add this page to your home screen from your browser settings.");
-            navigate("/bharatlinker"); // Optional fallback navigation
+            alert("To install Bharat Linker Lite, add this page to your home screen from browser settings.");
+            navigate("/bharatlinker");
         }
+        setPopup({ isOpen: false, type: null });
     };
 
-    const title = "Confirm Logout";
-    const text = "Are you sure you want to log out? This will end your current session, and you'll need to sign in again to access your account. Any unsaved changes or activities might be lost.";
-    const buttons = [
-        { label: "Yes", onClick: handleLogout, primary: true, disabled: isLoading },
-        { label: "No", onClick: () => setIsLogout(false), primary: false },
+    // Popup configurations
+    const popupConfigs = {
+        logout: {
+            title: "Confirm Logout",
+            text: "Are you sure you want to log out? This will end your current session, and you'll need to sign in again to access your account. Any unsaved changes or activities might be lost.",
+            buttons: [
+                { label: "Yes", onClick: handleLogout, primary: true, disabled: isLoading },
+                { label: "No", onClick: () => setPopup({ isOpen: false, type: null }), primary: false },
+            ],
+        },
+        support: {
+            title: "Contact Support",
+            text: "Need assistance? Proceed to our support page.",
+            buttons: [
+                { label: "Yes", onClick: () => { navigate("/support"); setPopup({ isOpen: false, type: null }); }, primary: true },
+                { label: "No", onClick: () => setPopup({ isOpen: false, type: null }), primary: false },
+            ],
+        },
+        about: {
+            title: "About Us",
+            text: "Want to know more about us? Visit our About Us page.",
+            buttons: [
+                { label: "Yes", onClick: () => { navigate("/about"); setPopup({ isOpen: false, type: null }); }, primary: true },
+                { label: "No", onClick: () => setPopup({ isOpen: false, type: null }), primary: false },
+            ],
+        },
+        bharatLinker: {
+            title: "Bharat Linker Lite",
+            text: "Install Bharat Linker Lite as a standalone app on your device?",
+            buttons: [
+                { label: "Install", onClick: handleBharatLinkerInstall, primary: true },
+                { label: "Cancel", onClick: () => setPopup({ isOpen: false, type: null }), primary: false },
+            ],
+        },
+    };
+
+    // Dynamic dashboard items
+    const dashboardItems = [
+        { icon: CiLocationOn, text: "Address book", path: "/user/profile" },
+        { icon: PiShoppingBagOpenThin, text: "Order", path: "/user/order" },
+        { 
+            icon: BsChatLeftText, 
+            text: "Support", 
+            size: 24, 
+            onClick: () => setPopup({ isOpen: true, type: "support" }) 
+        },
+        { 
+            icon: WiNightCloudyWindy, 
+            text: "About Us", 
+            onClick: () => setPopup({ isOpen: true, type: "about" }) 
+        },
+        { 
+            icon: CiMobile3, 
+            text: "Bharat Linker Lite", 
+            onClick: () => setPopup({ isOpen: true, type: "bharatLinker" }), 
+            ariaLabel: "Install Bharat Linker Lite" 
+        },
+        { 
+            icon: IoIosLogOut, 
+            text: "Log - Out", 
+            onClick: () => setPopup({ isOpen: true, type: "logout" }), 
+            ariaLabel: "Logout" 
+        },
     ];
 
     return (
@@ -85,108 +163,38 @@ function UserHome({ userData }) {
             <main>
                 <section className="user-dashboard-info-section">
                     <img src={rd1} alt="User dashboard" />
-
                     <div className="user-dashboard-header-row">
                         <button className="user-dashboard-primary-button">
                             <FaPlus className="user-dashboard-icon-xs" />
                             <span>USER DATA</span>
                         </button>
-                        <article
-                            className="user-dashboard-refurbished-item"
-                            onClick={() => navigate("/user/profile")}
-                        >
-                            <CiLocationOn
-                                size={25}
-                                className="user-dashboard-info-icon"
-                                aria-label="Your profile"
-                            />
-                            <p className="user-dashboard-info-text">Address book</p>
-                        </article>
 
-                        <article
-                            className="user-dashboard-refurbished-item"
-                            onClick={() => navigate("/user/order")}
-                        >
-                            <PiShoppingBagOpenThin
-                                size={25}
-                                className="user-dashboard-info-icon"
-                                aria-label="Your orders"
-                            />
-                            <p className="user-dashboard-info-text">Order</p>
-                        </article>
-                        <article
-                            className="user-dashboard-refurbished-item"
-                            onClick={() => navigate("/support")}
-                        >
-                            <BsChatLeftText
-                                size={24}
-                                className="user-dashboard-info-icon"
-                                aria-label="Support"
-                            />
-                            <p className="user-dashboard-info-text">Support</p>
-                        </article>
-                        <article
-                            className="user-dashboard-refurbished-item"
-                            onClick={() => navigate("/about")}
-                        >
-                            <WiNightCloudyWindy
-                                size={25}
-                                className="user-dashboard-info-icon"
-                                aria-label="About Us"
-                            />
-                            <p className="user-dashboard-info-text">About Us</p>
-                        </article>
-                        <article
-                            className="user-dashboard-refurbished-item"
-                            onClick={handleBharatLinkerInstall} // Trigger PWA install
-                        >
-                            <CiMobile3
-                                size={25}
-                                className="user-dashboard-info-icon"
-                                aria-label="Install Bharat Linker Lite"
-                            />
-                            <p className="user-dashboard-info-text">Bharat Linker Lite</p>
-                        </article>
-                        <article
-                            className="user-dashboard-refurbished-item"
-                            onClick={() => setIsLogout(true)}
-                        >
-                            <IoIosLogOut
-                                size={25}
-                                className="user-dashboard-info-icon"
-                                aria-label="Logout"
-                            />
-                            <p className="user-dashboard-info-text">Log - Out</p>
-                        </article>
+                        {dashboardItems.map((item, index) => (
+                            <article
+                                key={index}
+                                className="user-dashboard-refurbished-item"
+                                onClick={item.onClick || (() => navigate(item.path))}
+                            >
+                                <item.icon
+                                    size={item.size || 25}
+                                    className="user-dashboard-info-icon"
+                                    aria-label={item.ariaLabel || item.text}
+                                />
+                                <p className="user-dashboard-info-text">{item.text}</p>
+                            </article>
+                        ))}
                     </div>
                 </section>
             </main>
 
-            {/* Logout confirmation pop-up */}
-            {isLogout && (
-                <div className="user-dashboard-popup-overlay">
-                    <div className="user-dashboard-popup-card">
-                        <div className="user-dashboard-popup-pointer"></div>
-                        <h2 className="user-dashboard-popup-title">{title}</h2>
-                        {text ? <p className="user-dashboard-popup-text">{text}</p> : null}
-                        <div className="user-dashboard-popup-buttons">
-                            {buttons.map((btn, index) => (
-                                <button
-                                    key={index}
-                                    className={
-                                        btn.primary
-                                            ? "user-dashboard-popup-button-primary"
-                                            : "user-dashboard-popup-button-secondary"
-                                    }
-                                    onClick={btn.onClick}
-                                    disabled={btn.disabled || false}
-                                >
-                                    {btn.label}
-                                </button>
-                            ))}
-                        </div>
-                    </div>
-                </div>
+            {/* Unified popup */}
+            {popup.isOpen && (
+                <ConfirmationPopup
+                    isOpen={popup.isOpen}
+                    title={popupConfigs[popup.type].title}
+                    text={popupConfigs[popup.type].text}
+                    buttons={popupConfigs[popup.type].buttons}
+                />
             )}
 
             <AddToCartTab totalQuantity={totalQuantity} totalPrice={totalPrice} />
