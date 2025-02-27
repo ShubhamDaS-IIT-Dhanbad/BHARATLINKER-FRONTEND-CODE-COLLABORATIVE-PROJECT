@@ -27,7 +27,7 @@
   margin-top: 70px;
 }
 .user-cart-container-img-div {
- width: 100%;
+ width: 100%;min-height: 100px;
  display: flex;justify-content: center;align-items: center;
 }
 
