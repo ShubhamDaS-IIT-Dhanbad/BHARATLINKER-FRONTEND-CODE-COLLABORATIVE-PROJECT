@@ -50,7 +50,7 @@ const MyCartPage = ({ userData }) => {
         };
 
         window.addEventListener('popstate', handlePopState);
-        
+
         // Initial state push
         window.history.replaceState({ view: 'cart' }, '', '#cart');
 
@@ -136,12 +136,8 @@ const MyCartPage = ({ userData }) => {
     ), [handleRemoveItem, viewState.isLoading]);
 
     const handleBackNavigation = useCallback(() => {
-        if (viewState.currentView === 'cart') {
-            navigate(-1);
-        } else {
-            transitionToView('cart');
-        }
-    }, [viewState.currentView, navigate, transitionToView]);
+        navigate(-1);
+    }, []);
 
     const renderCartView = useCallback(() => (
         <>
