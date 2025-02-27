@@ -119,7 +119,7 @@ function UserHome({ userData }) {
             title: "Bharat Linker Lite",
            text: "To install Bharat Linker Lite, tap the three-dot menu in the top-right corner of your browser, select 'Add to Home Screen,' and follow the prompts to complete the installation.",
             buttons: [
-                { label: "Install", onClick: handleBharatLinkerInstall, primary: true },
+                { label: "Ok",onClick: () => setPopup({ isOpen: false, type: null }), primary: true },
                 { label: "Cancel", onClick: () => setPopup({ isOpen: false, type: null }), primary: false },
             ],
         },
@@ -164,7 +164,7 @@ function UserHome({ userData }) {
                 <section className="user-dashboard-info-section">
                     <img src={rd1} alt="User dashboard" />
                     <div className="user-dashboard-header-row">
-                        
+
                         <button className="user-dashboard-primary-button">
                             <FaPlus className="user-dashboard-icon-xs" />
                             <span>USER DATA</span>
