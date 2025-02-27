@@ -162,13 +162,9 @@ function UserHome({ userData }) {
 
             <main>
                 <section className="user-dashboard-info-section">
-                    <img src={rd1} alt="User dashboard" />
+                    {/* <img src={rd1} alt="User dashboard" /> */}
                     <div className="user-dashboard-header-row">
 
-                        <button className="user-dashboard-primary-button">
-                            <FaPlus className="user-dashboard-icon-xs" />
-                            <span>USER DATA</span>
-                        </button>
 
                         {dashboardItems.map((item, index) => (
                             <article
