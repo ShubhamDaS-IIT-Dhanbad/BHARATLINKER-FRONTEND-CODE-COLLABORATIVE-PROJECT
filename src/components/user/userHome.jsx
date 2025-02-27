@@ -117,7 +117,7 @@ function UserHome({ userData }) {
         },
         bharatLinker: {
             title: "Bharat Linker Lite",
-            text: "Install Bharat Linker Lite as a standalone app on your device to enjoy a seamless and optimized experience. Proceed with installation?",
+           text: "To install Bharat Linker Lite, tap the three-dot menu in the top-right corner of your browser, select 'Add to Home Screen,' and follow the prompts to complete the installation.",
             buttons: [
                 { label: "Install", onClick: handleBharatLinkerInstall, primary: true },
                 { label: "Cancel", onClick: () => setPopup({ isOpen: false, type: null }), primary: false },
