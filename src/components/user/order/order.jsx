@@ -6,10 +6,11 @@ import Navbar from '../navbar.jsx';
 import { fetchOrdersByStatus, loadMoreOrders } from "../../../redux/features/user/orderSlice.jsx";
 import OrderProductCard from "./orderProductCard";
 import e1 from './e1.png';
-
+import UserOrderDetail from '../orderDetail/orderDetail.jsx';
 import "./order.css";
 
 function Order({ userData }) {
+  const [selectedOrderId, setSelectedOrderId] = useState(null);
   const dispatch = useDispatch();
   const {
     loading,
@@ -46,61 +47,82 @@ function Order({ userData }) {
   useEffect(() => {
     if (userData?.phoneNumber) {
       ["pending", "confirmed", "delivered", "canceled"].forEach((status) => {
-        if (orderStates[status].data.length === 0 && status==selectedOrderType) {
+        if (orderStates[status].data.length === 0 && status === selectedOrderType) {
           console.log(`Fetching ${status} orders`);
           fetchInitialOrders(status);
         }
       });
     }
   }, [selectedOrderType]);
-  
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [selectedOrderType])
   return (
     <>
-      {/* Header */}
-      <header>
-          <Navbar userData={userData} headerTitle={"YOUR ORDER"} />
-      </header>
+      {selectedOrderId ? (
+        <UserOrderDetail
+          userData={userData}
+          orderId={selectedOrderId}
+          setSelectedOrderId={setSelectedOrderId}
+        />
+      ) : (
+        <>
+          {/* Header */}
+          <header>
+            <Navbar userData={userData} headerTitle={"YOUR ORDER"} />
+          </header>
 
-      {/* Order Type Buttons */}
-      <div className="retailer-order-type-buttons">
-        {["pending", "confirmed", "delivered", "canceled"].map((type) => (
-          <div
-            key={type}
-            className={`retailer-order-type-button ${selectedOrderType === type ? "active" : ""}`}
-            onClick={() => setSelectedOrderType(type)}
+          {/* Order Type Buttons */}
+          <div className="retailer-order-type-buttons">
+            {["pending", "confirmed", "delivered", "canceled"].map((type) => (
+              <div
+                key={type}
+                className={`retailer-order-type-button ${selectedOrderType === type ? "active" : ""}`}
+                onClick={() => setSelectedOrderType(type)}
+              >
+                {type.toUpperCase()}
+              </div>
+            ))}
+          </div>
+
+          {/* Infinite Scroll for Orders */}
+          <InfiniteScroll
+            dataLength={selectedOrders.data.length}
+            next={fetchNextPage}
+            hasMore={selectedOrders.hasMore}
+            loader={
+              <div className="retailer-order-loading">
+                <Oval
+                  height={30}
+                  width={30}
+                  color="green"
+                  secondaryColor="white"
+                  ariaLabel="loading"
+                />
+              </div>
+            }
           >
-            {type.toUpperCase()}
-          </div>
-        ))}
-      </div>
+            <div className="retailer-order-div-container">
+              {(selectedOrders.data.length === 0 && !loading) ? (
+                <div className="retailer-order-empty">
+                  <img
+                    className="retailer-order-empty-img"
+                    src={e1}
+                    alt="No Orders"
+                  />
+                </div>
+              ) : (
+                selectedOrders.data.map((order) => (
+                  <OrderProductCard
+                    order={order}
+                    key={order.$id}
 
-      {/* Infinite Scroll for Orders */}
-      <InfiniteScroll
-        dataLength={selectedOrders.data.length}
-        next={fetchNextPage}
-        hasMore={selectedOrders.hasMore}
-        loader={
-          <div className="retailer-order-loading">
-            <Oval height={30} width={30} color="green" secondaryColor="white" ariaLabel="loading" />
-          </div>
-        }
-      >
-        <div className="retailer-order-div-container">
-          {(selectedOrders.data.length === 0 && !loading) ? (
-            <div className="retailer-order-empty">
-              <img className="retailer-order-empty-img" src={e1} alt="No Orders" />
+                    setSelectedOrderId={setSelectedOrderId}
+                  />
+                ))
+              )}
             </div>
-          ) : (
-            selectedOrders.data.map((order) => (
-              <OrderProductCard order={order} key={order.$id} />
-            ))
-          )}
-        </div>
-      </InfiniteScroll>
+          </InfiniteScroll>
+        </>
+      )}
     </>
   );
 }

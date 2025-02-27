@@ -1,18 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { updateOrderStateToCanceled } from "../../../appWrite/order/order.js";
 import { deleteOrder, updateOrder } from "../../../redux/features/user/orderSlice.jsx";
 import "./orderDetail.css";
-
 import { TiInfoOutline } from "react-icons/ti";
 import Navbar from "../navbar.jsx";
-import useUserAuth from "../../../hooks/userAuthHook.jsx";
 import { Oval } from "react-loader-spinner";
 
-const OrderDetails = () => {
-    const { id } = useParams();
-    const { userData } = useUserAuth();
+const OrderDetails = ({ userData, orderId, setSelectedOrderId }) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
@@ -36,7 +32,7 @@ const OrderDetails = () => {
 
     useEffect(() => {
         if (orders?.length > 0) {
-            const foundOrder = orders?.find((order) => order.$id === id);
+            const foundOrder = orders?.find((order) => order.$id === orderId);
             if (!foundOrder) {
                 navigate("/user/order");
             } else {
@@ -45,7 +41,7 @@ const OrderDetails = () => {
         } else {
             navigate("/user/order");
         }
-    }, [orders, id, navigate]);
+    }, [orders, orderId, navigate]);
 
     useEffect(() => {
         window.scrollTo(0, 0);
@@ -70,11 +66,26 @@ const OrderDetails = () => {
         const confirmation = window.confirm("Are you sure you want to cancel this order?");
         if (confirmation) {
             setIsCancelling(true);
-            const updatedOrderData = await updateOrderStateToCanceled(order.$id, "canceled");
-            dispatch(deleteOrder({ orderId: order.$id, orderStateArrayName: order.state }));
-            dispatch(updateOrder({ orderId: order.$id, updatedOrderData, orderStateArrayName: "canceled" }));
-            setIsCancelling(false);
+            try {
+                const updatedOrderData = await updateOrderStateToCanceled(order.$id, "canceled");
+                dispatch(deleteOrder({ orderId: order.$id, orderStateArrayName: order.state }));
+                dispatch(updateOrder({ 
+                    orderId: order.$id, 
+                    updatedOrderData, 
+                    orderStateArrayName: "canceled" 
+                }));
+                setSelectedOrderId(null); // Return to order list after cancellation
+            } catch (error) {
+                console.error("Failed to cancel order:", error);
+            } finally {
+                setIsCancelling(false);
+            }
         }
+    };
+
+    const handlePhoneClick = (phoneNumber) => {
+        // Implement phone call functionality or navigation
+        window.location.href = `tel:${phoneNumber}`;
     };
 
     if (!order) {
@@ -84,19 +95,26 @@ const OrderDetails = () => {
     return (
         <>
             <header>
-                <Navbar userData={userData} headerTitle={"ORDER DETAIL"} onBackNavigation={() => navigate(-1)} />
+                <Navbar 
+                    userData={userData} 
+                    headerTitle={"ORDER DETAIL"} 
+                    onBackNavigation={() => setSelectedOrderId(null)}
+                />
             </header>
 
             <div className="user-order-detail-container">
                 <header className="user-order-detail-header">
-                    <h1>{getOrderTitle(order.state)}</h1>
+                    <h1>{getOrderTitle(order.state.toLowerCase())}</h1>
                     <p>Hello, {userData?.name || "USER"} <br /></p>
                     <p>Your order is {order.state}</p>
                 </header>
 
                 <div className="user-order-detail-summary">
                     <div className="order-product-card">
-                        <div className="order-product-card-img" onClick={() => navigate(`/product/${order.productId}`)}>
+                        <div 
+                            className="order-product-card-img" 
+                            onClick={() => navigate(`/product/${order.productId}`)}
+                        >
                             <img src={order.image} alt="Product" />
                         </div>
                         <div className="order-product-card-detail">
@@ -121,9 +139,18 @@ const OrderDetails = () => {
                     </div>
 
                     {(order.state === "pending" || order.state === "confirmed") && (
-                        <div className="user-order-detail-cancel" onClick={isCancelling ? null : handleCancel}>
+                        <div 
+                            className="user-order-detail-cancel" 
+                            onClick={isCancelling ? null : handleCancel}
+                        >
                             {isCancelling ? (
-                                <Oval height={20} width={20} color="white" secondaryColor="#b41818" ariaLabel="loading" />
+                                <Oval 
+                                    height={20} 
+                                    width={20} 
+                                    color="white" 
+                                    secondaryColor="#b41818" 
+                                    ariaLabel="loading" 
+                                />
                             ) : (
                                 "CANCEL ORDER"
                             )}
@@ -146,39 +173,49 @@ const OrderDetails = () => {
                             <div className="user-order-detail-info-h">SHIPPING ADDRESS</div>
                             <span>{order.address}</span>
                         </div>
-                        {order.building &&
+                        {order.building && (
                             <div className="user-order-detail-info-c">
                                 <div className="user-order-detail-info-h">BUILDING NO.</div>
                                 <span>{order.building}</span>
-                            </div>}
-                        {order.houseNo &&
+                            </div>
+                        )}
+                        {order.houseNo && (
                             <div className="user-order-detail-info-c">
                                 <div className="user-order-detail-info-h">HOUSE NO.</div>
                                 <span>{order.houseNo}</span>
-                            </div>}
-                        {order.landMark &&
+                            </div>
+                        )}
+                        {order.landMark && (
                             <div className="user-order-detail-info-c">
                                 <div className="user-order-detail-info-h">LANDMARK</div>
                                 <span>{order.landMark}</span>
-                            </div>}
+                            </div>
+                        )}
                     </div>
 
                     {order.expectedDeliveryDate && (
                         <>
                             <div className="order-product-card-address-div">
                                 <p className="order-product-card-address-p1">EXP DELIVERY DATE</p>
-                                <p className="order-product-card-address-p2">{new Date(order.expectedDeliveryDate).toLocaleDateString()}</p>
+                                <p className="order-product-card-address-p2">
+                                    {new Date(order.expectedDeliveryDate).toLocaleDateString()}
+                                </p>
                             </div>
                             <div className="order-product-card-address-div">
                                 <p className="order-product-card-address-p1">EXP DELIVERY TIME</p>
-                                <p className="order-product-card-address-p2">{new Date(order.expectedDeliveryDate).toLocaleTimeString()}</p>
+                                <p className="order-product-card-address-p2">
+                                    {new Date(order.expectedDeliveryDate).toLocaleTimeString()}
+                                </p>
                             </div>
                         </>
                     )}
                     {order.deliveryBoyPhn && (
                         <div className="order-product-card-address-div">
                             <p className="order-product-card-address-p1">DELIVERY BOY</p>
-                            <div className="order-product-card-address-p2" onClick={() => onClickPhn(order.deliveryBoyPhn)}>
+                            <div 
+                                className="order-product-card-address-p2" 
+                                onClick={() => handlePhoneClick(order.deliveryBoyPhn)}
+                            >
                                 {order.deliveryBoyPhn}
                             </div>
                         </div>

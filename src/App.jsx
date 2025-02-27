@@ -10,14 +10,10 @@ import Download from './components/downloadapp.jsx';
 import HomePage from './components/homePage/home.jsx';
 import SearchPage from './components/searchPage/searchPage.jsx';
 import SearchShop from './components/searchShop/searchShop.jsx';
-import RefurbishedPage from './components/searchRefurbished/refurbishedPage.jsx';
-
 const LoginPage = lazy(() => import('./components/user/login.jsx'));
 
 const SingleProduct = lazy(() => import('./components/singleProduct.jsx'));
 const SingleShopCard = lazy(() => import('./components/singleShop.jsx'));
-const SingleRefurbishedProductCard = lazy(() => import('./components/singleRefurbishedProduct.jsx'));
-
 const ShopProducts = lazy(() => import('./components/shopProducts/shopProducts.jsx'));
 const RetailerRoutes = lazy(() => import('./components/retailer/retailerRoutes.jsx'));
 const RetailerLogin = React.lazy(() => import("./components/retailer/login.jsx"));
@@ -167,32 +163,7 @@ const RoutesWithConditionalHeader = React.memo(() => {
         />
         <Route path="/shop/product/:shopId" element={<ShopProducts />} />
 
-        {/* Refurbished */}
-        <Route
-          path="/refurbished"
-          element={
-            <>
-              <Helmet>
-                <title>Refurbished Products - Bharat Linker</title>
-                <meta name="description" content="Explore high-quality refurbished products on Bharat Linker." />
-              </Helmet>
-              <RefurbishedPage />
-            </>
-          }
-        />
-        <Route
-          path="/refurbished/:refurbishedId"
-          element={
-            <>
-              <Helmet>
-                <title>Refurbished Details - Bharat Linker</title>
-                <meta name="description" content="Search and explore a wide range of products on Bharat Linker." />
-              </Helmet >
-              <SingleRefurbishedProductCard />
-            </>}
-        />
-
-
+       
 
 
 
@@ -319,19 +290,7 @@ const RoutesWithConditionalHeader = React.memo(() => {
             </PrivateRoute>
           }
         />
-        <Route
-          path="/user/order/:id"
-          element=
-          {
-            <PrivateRoute>
-              <Helmet>
-                <title>Orders - Bharat Linker</title>
-                <meta name="description" content="Order detail on Bharat Linker." />
-              </Helmet>
-              <UserOrderDetail />
-            </PrivateRoute>
-          }
-        />
+        
 
       </Routes>
     </>

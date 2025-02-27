@@ -1,0 +1,129 @@
+.user-order-card-parent {
+    width: 95vw;
+    display: flex;
+    flex-direction: column;
+    color: rgb(0, 0, 0);
+    padding-bottom: 15px;
+}
+
+.user-order-card {
+    width: 95vw;
+    display: flex;
+    height: 140px;
+    background-color: #f9f9f9;
+}
+
+.user-order-card-img {
+    height: 140px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40%;
+}
+
+.user-order-card-img img {
+    height: 120px;
+    border: 0.5px solid rgba(0, 0, 0, 0.203);
+    width: 100%;
+    object-fit: cover;
+}
+
+.user-order-card-detail {
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    padding: 0px 0px 0px 10px;
+}
+
+.user-order-card-detail-1 {
+    width: 100%;
+    font-size: 12px;
+    font-weight: 800;
+    height: 30%;
+    display: flex;
+    align-items: center;
+    line-height: 12px;
+}
+
+.user-order-card-detail-2 {
+    width: 100%;
+    justify-content: space-between;
+    align-items: center;
+    height: 30%;
+    display: flex;
+}
+
+.user-order-card-detail-2-1 {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.user-order-card-detail-2-1-tag {
+    font-weight: 600;
+    font-size: 11px;
+}
+
+.opcdp {
+    color: rgba(13, 14, 13, 0.475);
+    font-size: 13px;
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+.user-order-card-detail-3-state {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    height: 30%;
+    gap: 5px;
+}
+
+.user-order-card-detail-3-state-cancel {
+    display: flex;
+    align-items: center;
+    padding: 4px 5px 4px 5px;
+    gap: 10px;
+    font-size: 13px;
+    font-weight: 700;
+    color: #e56281;
+    border: 1.3px solid #e56281;
+}
+
+.retailer-user-order-card-detail-2 {
+    display: flex;
+    font-size: 12px;
+    color: black;
+    font-weight: 700;
+    height: 30px;
+    width: 60px;
+    border-radius: 2px;
+    justify-content: center;
+    align-items: center;
+    border: 0.5px solid rgba(0, 0, 0, 0.203);
+}
+
+/* Icon styling */
+.status-icon {
+    font-size: 20px;
+}
+
+.status-icon.pending {
+    color: #ff9800;
+}
+
+.status-icon.accepted {
+    color: #4caf50;
+}
+
+.status-icon.dispatched {
+    color: #2196f3;
+}
+
+.status-icon.canceled {
+    color: #ff3f6c;
+}
+
+.status-icon.delivered {
+    color: #16b710;
+}
