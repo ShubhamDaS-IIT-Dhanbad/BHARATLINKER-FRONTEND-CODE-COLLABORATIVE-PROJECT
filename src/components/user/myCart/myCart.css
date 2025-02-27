@@ -107,7 +107,6 @@
   font-weight: 500;
   transition: background-color 0.3s ease;
   text-transform: uppercase;
-  cursor: pointer;
 }
 
 .user-cart-cta-button:disabled {
@@ -141,7 +140,7 @@
   font-size: 16px;
   font-weight: 500;
   transition: background-color 0.3s ease;
-  cursor: pointer;
+  
 }
 
 .cart-check-out-container-button:hover:not(:disabled) {

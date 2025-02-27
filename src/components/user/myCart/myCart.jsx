@@ -35,7 +35,6 @@ const MyCartPage = ({ userData }) => {
 
     const transitionToView = useCallback((view) => {
         setViewState(prev => ({ ...prev, currentView: view, error: null }));
-        // Push new state to history for browser navigation
         window.history.pushState({ view }, '', `#${view}`);
     }, []);
 
@@ -50,10 +49,7 @@ const MyCartPage = ({ userData }) => {
         };
 
         window.addEventListener('popstate', handlePopState);
-
-        // Initial state push
         window.history.replaceState({ view: 'cart' }, '', '#cart');
-
         return () => {
             window.removeEventListener('popstate', handlePopState);
         };
@@ -147,7 +143,6 @@ const MyCartPage = ({ userData }) => {
                 onBackNavigation={handleBackNavigation}
             />
             <div className="user-cart-container">
-                <div className="user-cart-container-img-div"><img src={c1} /></div>
                 <main className="user-cart-content">
                     {viewState.isLoading && (
                         <div className="loading-spinner">Loading...</div>
@@ -155,26 +150,18 @@ const MyCartPage = ({ userData }) => {
                     {viewState.error && (
                         <div className="error-message">{viewState.error}</div>
                     )}
-                    {cartSummary.isEmpty && !viewState.isLoading ? (
-                        <div className="user-cart-empty">
-                            <div className="user-cart-empty-illustration" />
-                            <h2>Your Cart is Empty</h2>
-                            <p>Discover our products and find something you'll love</p>
-                            <button
-                                onClick={() => navigate('/shop')}
-                                className="user-cart-cta-button primary"
-                                disabled={viewState.isLoading}
-                            >
-                                Explore Products
-                            </button>
-                        </div>
+                    {!cartSummary.isEmpty && viewState.isLoading ? (
+                        <>
+                        </>
                     ) : (
                         <>
+
+                            <div className="user-cart-container-img-div"><img src={c1} /></div>
                             <section className="user-cart-items-section">
                                 {/* Group cart items by shopId */}
                                 {Object.entries(
                                     cart.reduce((acc, item) => {
-                                        const shopId = item.shopId || 'unknown'; // Fallback if shopId is missing
+                                        const shopId = item.shopId || 'unknown';
                                         if (!acc[shopId]) {
                                             acc[shopId] = [];
                                         }
