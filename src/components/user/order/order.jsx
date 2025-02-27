@@ -129,19 +129,6 @@ const Order = ({ userData }) => {
             dataLength={selectedOrders.data.length}
             next={fetchNextPage}
             hasMore={selectedOrders.hasMore}
-            loader={
-              <div className="retailer-order-loading">
-                <Oval
-                  height={30}
-                  width={30}
-                  color="green"
-                  secondaryColor="white"
-                  ariaLabel="loading"
-                  visible={true}
-                />
-              </div>
-            }
-           
           >
             <div className="retailer-order-div-container">
               {renderOrders()}

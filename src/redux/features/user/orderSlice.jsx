@@ -14,8 +14,7 @@ const initialState = {
 };
 
 const fetchOrders = async (phoneNumber, status, page) => {
-  const statuses = status === 'confirmed' ? ['confirmed', 'dispatched'] : [status];
-  const response = await getOrderByUserId(phoneNumber, statuses, page);
+  const response = await getOrderByUserId(phoneNumber, status, page);
   return { documents: response.documents || [], total: response.total || 0 };  // Added fallbacks
 };
 
