@@ -1,138 +1,117 @@
-.order-details-container {
-    max-width: 600px;
-    border-radius: 8px;
-    padding: 20px;
-  }
-  
-  .order-header {
-    text-align: center;
-  }
-  
-  .logo {
-    width: 50px;
-    margin-bottom: 10px;
-  }
-  
-  .order-header h1 {
-    font-size: 1.5em;
-    margin: 10px 0;
-    color: #333;
-  }
-  
-  .order-header p {
-    color: #777;
-    font-size: 1em;
-  }
-  
-  .order-summary {
-    margin-top: 20px;
-    border-top: 1px solid #ddd;
-    padding-top: 10px;
-  }
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  .order-detail-cancel{
-    background-color: #b41818;
-    margin: 30px 0px 30px 0px;width: 40%;color: white;
-    
-    box-shadow: 0 4px 6px rgba(184, 32, 32, 0.632);
-    height: 40px;display: flex;justify-content: center;align-items: center;
-    font-size: 13px;font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-  }
-  .order-info-c {
-    display: flex;
-    justify-content: space-between;
-    min-height: 30px;
-  }
-  
-  .order-info-h {
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-    font-size: 14px;
-    width: 50%;
-    display: flex;
-    align-items: center;
-  }
-  
-  .order-info-c span {
-    display: flex;
-    align-items: center;
-    width: 70%;
-    font-size: 13px;
-    padding-left: 10px;
-  }
-  
-  
-  
-  .oscd {
-    margin-top: 30px;
-  }
-  .oscd-info-c {
-    display: flex;
-    justify-content: space-between;
-    min-height: 30px;
-  }
-  .oscd-info-c span {
-    display: flex;
-    align-items: center;
-    width: 50%;
-    font-size: 13px;
-    padding-left: 10px;
-  }
-  .oscd-info-h {
-    font-weight: 800;
-    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-    font-size: 12px;
-    width: 50%;
-    display: flex;
-    align-items: center;
-  }
-  
-  
-  
-  .info-box{
-  
+.user-order-detail-container {
+  max-width: 600px;
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.user-order-detail-header {
+  text-align: center;
+}
+
+.user-order-detail-logo {
+  width: 50px;
+  margin-bottom: 10px;
+}
+
+.user-order-detail-header h1 {
+  font-size: 1.5em;
+  margin: 10px 0;
+  color: #333;
+}
+
+.user-order-detail-header p {
+  color: #777;
+  font-size: 1em;
+}
+
+.user-order-detail-summary {
+  margin-top: 20px;
+  border-top: 1px solid #ddd;
+  padding-top: 10px;
+}
+
+.user-order-detail-cancel {
+  background-color: #b41818;
+  margin: 30px 0px 30px 0px;
+  width: 40%;
+  color: white;
+  box-shadow: 0 4px 6px rgba(184, 32, 32, 0.632);
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 13px;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+.user-order-detail-info-c {
+  display: flex;
+  justify-content: space-between;
+  min-height: 30px;
+}
+
+.user-order-detail-info-h {
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-size: 14px;
+  width: 50%;
+  display: flex;
+  align-items: center;
+}
+
+.user-order-detail-info-c span {
+  display: flex;
+  align-items: center;
+  width: 70%;
+  font-size: 13px;
+  padding-left: 10px;
+}
+
+.user-order-detail-oscd {
+  margin-top: 30px;
+}
+
+.user-order-detail-oscd-info-c {
+  display: flex;
+  justify-content: space-between;
+  min-height: 30px;
+}
+
+.user-order-detail-oscd-info-c span {
+  display: flex;
+  align-items: center;
+  width: 50%;
+  font-size: 13px;
+  padding-left: 10px;
+}
+
+.user-order-detail-oscd-info-h {
+  font-weight: 800;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-size: 12px;
+  width: 50%;
+  display: flex;
+  align-items: center;
+}
+
+.user-order-detail-info-box {
   background-color: #100f0f;
-  padding: 15px;color: white;
+  padding: 15px;
+  color: white;
   border: 1px solid #ddd;
-  margin: 10px 0px 10px 0px;font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  margin: 10px 0px 10px 0px;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
   width: calc(98% - 30px);
   font-size: 10px;
-  
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.091);
-  }
-  
-  
-  
-  
-  
-  .order-detail-shop{
-    display: flex;align-items:center;justify-content: space-between;
-    margin-top: 10vh;
-  }
-  .order-detail-shop span{
-    border-bottom: 1px solid rgb(0, 0, 0);
-  }
-  
-  
-  
-  
+}
+
+.user-order-detail-shop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 10vh;
+}
+
+.user-order-detail-shop span {
+  border-bottom: 1px solid rgb(0, 0, 0);
+}

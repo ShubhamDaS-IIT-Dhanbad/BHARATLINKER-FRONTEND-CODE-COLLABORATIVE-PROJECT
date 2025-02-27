@@ -34,9 +34,7 @@ const OrderDetails = () => {
         ...canceledOrders.data,
     ];
 
-    // Fetch order details
     useEffect(() => {
-
         if (orders?.length > 0) {
             const foundOrder = orders?.find((order) => order.$id === id);
             if (!foundOrder) {
@@ -89,14 +87,14 @@ const OrderDetails = () => {
                 <Navbar userData={userData} headerTitle={"ORDER DETAIL"} onBackNavigation={() => navigate(-1)} />
             </header>
 
-            <div className="order-details-container">
-                <header className="order-header">
+            <div className="user-order-detail-container">
+                <header className="user-order-detail-header">
                     <h1>{getOrderTitle(order.state)}</h1>
                     <p>Hello, {userData?.name || "USER"} <br /></p>
                     <p>Your order is {order.state}</p>
                 </header>
 
-                <div className="order-summary">
+                <div className="user-order-detail-summary">
                     <div className="order-product-card">
                         <div className="order-product-card-img" onClick={() => navigate(`/product/${order.productId}`)}>
                             <img src={order.image} alt="Product" />
@@ -123,7 +121,7 @@ const OrderDetails = () => {
                     </div>
 
                     {(order.state === "pending" || order.state === "confirmed") && (
-                        <div className="order-detail-cancel" onClick={isCancelling ? null : handleCancel}>
+                        <div className="user-order-detail-cancel" onClick={isCancelling ? null : handleCancel}>
                             {isCancelling ? (
                                 <Oval height={20} width={20} color="white" secondaryColor="#b41818" ariaLabel="loading" />
                             ) : (
@@ -131,36 +129,36 @@ const OrderDetails = () => {
                             )}
                         </div>
                     )}
-                    <div className="order-info">
-                        <div className="order-info-c">
-                            <div className="order-info-h">ORDERED DATE</div>
+                    <div className="user-order-detail-info">
+                        <div className="user-order-detail-info-c">
+                            <div className="user-order-detail-info-h">ORDERED DATE</div>
                             <span>{new Date(order.$createdAt).toLocaleDateString()}</span>
                         </div>
-                        <div className="order-info-c">
-                            <div className="order-info-h">ORDER ID</div>
+                        <div className="user-order-detail-info-c">
+                            <div className="user-order-detail-info-h">ORDER ID</div>
                             <span>{order.$id}</span>
                         </div>
-                        <div className="order-info-c">
-                            <div className="order-info-h">PAYMENT METHOD</div>
+                        <div className="user-order-detail-info-c">
+                            <div className="user-order-detail-info-h">PAYMENT METHOD</div>
                             <span className="payment-icon">CASH ON DELIVERY</span>
                         </div>
-                        <div className="order-info-c">
-                            <div className="order-info-h">SHIPPING ADDRESS</div>
+                        <div className="user-order-detail-info-c">
+                            <div className="user-order-detail-info-h">SHIPPING ADDRESS</div>
                             <span>{order.address}</span>
                         </div>
                         {order.building &&
-                            <div className="order-info-c">
-                                <div className="order-info-h">BUILDING NO.</div>
+                            <div className="user-order-detail-info-c">
+                                <div className="user-order-detail-info-h">BUILDING NO.</div>
                                 <span>{order.building}</span>
                             </div>}
                         {order.houseNo &&
-                            <div className="order-info-c">
-                                <div className="order-info-h">HOUSE NO.</div>
+                            <div className="user-order-detail-info-c">
+                                <div className="user-order-detail-info-h">HOUSE NO.</div>
                                 <span>{order.houseNo}</span>
                             </div>}
                         {order.landMark &&
-                            <div className="order-info-c">
-                                <div className="order-info-h">LANDMARK</div>
+                            <div className="user-order-detail-info-c">
+                                <div className="user-order-detail-info-h">LANDMARK</div>
                                 <span>{order.landMark}</span>
                             </div>}
                     </div>
@@ -186,12 +184,12 @@ const OrderDetails = () => {
                         </div>
                     )}
 
-                    <div className="order-detail-shop">
+                    <div className="user-order-detail-shop">
                         <span onClick={() => navigate(`/shop/${order.shopId}`)}>VISIT SHOP</span>
                         <TiInfoOutline size={20} onClick={() => setShowi(!showi)} />
                     </div>
                     {showi && (
-                        <div className="info-box">
+                        <div className="user-order-detail-info-box">
                             For any order-related issues, please contact the shop. Shop details are available on the Shop page.
                         </div>
                     )}
