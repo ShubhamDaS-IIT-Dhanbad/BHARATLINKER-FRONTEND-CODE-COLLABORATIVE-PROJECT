@@ -13,7 +13,7 @@ import AddToCartTab from "../viewCartTab/viewCart.jsx";
 import "./style/userHome.css";
 import rd1 from "./asset/rd1.png";
 
-// Reusable Confirmation Popup Component (already provided in your code)
+// Reusable Confirmation Popup Component
 const ConfirmationPopup = ({ isOpen, title, text, buttons }) => {
     if (!isOpen) return null;
 
@@ -50,7 +50,7 @@ function UserHome({ userData }) {
     const { logout } = useUserAuth();
     const [isLoading, setIsLoading] = useState(false);
     const [deferredPrompt, setDeferredPrompt] = useState(null);
-    const [popup, setPopup] = useState({ isOpen: false, type: null }); // Unified popup state
+    const [popup, setPopup] = useState({ isOpen: false, type: null });
 
     // Scroll to top on mount
     useEffect(() => {
@@ -83,7 +83,7 @@ function UserHome({ userData }) {
             console.log(`User ${outcome === "accepted" ? "accepted" : "dismissed"} the PWA install prompt`);
             setDeferredPrompt(null);
         } else {
-            alert("To install Bharat Linker Lite, add this page to your home screen from browser settings.");
+            alert("To install Bharat Linker Lite, please add this page to your home screen via your browser settings.");
             navigate("/bharatlinker");
         }
         setPopup({ isOpen: false, type: null });
@@ -101,23 +101,23 @@ function UserHome({ userData }) {
         },
         support: {
             title: "Contact Support",
-            text: "Need assistance? Proceed to our support page.",
+            text: "We’re here to assist you! For inquiries, email us at bharatlinker@gmail.com or call our support team at +91 8250846979. Our team is continuously working to enhance your experience with Bharat Linker.",
             buttons: [
-                { label: "Yes", onClick: () => { navigate("/support"); setPopup({ isOpen: false, type: null }); }, primary: true },
-                { label: "No", onClick: () => setPopup({ isOpen: false, type: null }), primary: false },
+                { label: "OK", onClick: () => {setPopup({ isOpen: false, type: null }); }, primary: true },
+                { label: "Close", onClick: () => setPopup({ isOpen: false, type: null }), primary: false },
             ],
         },
         about: {
             title: "About Us",
-            text: "Want to know more about us? Visit our About Us page.",
+            text: "At Bharat Linker, we are dedicated to empowering retailers by building a robust platform to thrive in the era of e-commerce and quick commerce. Our mission is to provide innovative tools and solutions that enable retailers to compete effectively with leading platforms, ensuring their success in a dynamic digital marketplace. Visit our About Us page to learn more about our vision and commitment.",
             buttons: [
-                { label: "Yes", onClick: () => { navigate("/about"); setPopup({ isOpen: false, type: null }); }, primary: true },
-                { label: "No", onClick: () => setPopup({ isOpen: false, type: null }), primary: false },
+                { label: "OK", onClick: () => {setPopup({ isOpen: false, type: null }); }, primary: true },
+                { label: "Close", onClick: () => setPopup({ isOpen: false, type: null }), primary: false },
             ],
         },
         bharatLinker: {
             title: "Bharat Linker Lite",
-            text: "Install Bharat Linker Lite as a standalone app on your device?",
+            text: "Install Bharat Linker Lite as a standalone app on your device to enjoy a seamless and optimized experience. Proceed with installation?",
             buttons: [
                 { label: "Install", onClick: handleBharatLinkerInstall, primary: true },
                 { label: "Cancel", onClick: () => setPopup({ isOpen: false, type: null }), primary: false },

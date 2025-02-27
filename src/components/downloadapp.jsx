@@ -34,19 +34,21 @@ function DownloadApp() {
   };
 
   return (
-    <div>
+    <>
       {showPopup && (
         <div style={styles.popup}>
-          <p>Download the Bharat Linker App for a better experience!</p>
-          <button style={styles.button} onClick={handleInstall}>
-            Install App
-          </button>
-          <button style={styles.closeButton} onClick={() => setShowPopup(false)}>
-            ✖
-          </button>
+          <p style={styles.text}>Download the Bharat Linker App for a better experience!</p>
+          <div style={styles.buttonContainer}>
+            <button style={styles.button} onClick={handleInstall}>
+              Install App
+            </button>
+            <button style={styles.closeButton} onClick={() => setShowPopup(false)}>
+              ✖
+            </button>
+          </div>
         </div>
       )}
-    </div>
+    </>
   );
 }
 
@@ -61,23 +63,36 @@ const styles = {
     borderRadius: "8px",
     boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.1)",
     textAlign: "center",
-    zIndex: 1000
+    zIndex: 1000,
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+  },
+  text: {
+    marginBottom: "10px",
+    fontSize: "14px",
+    fontWeight: "500",
+  },
+  buttonContainer: {
+    display: "flex",
+    alignItems: "center",
+    gap: "10px",
   },
   button: {
-    backgroundColor: "#007bff",
+    backgroundColor: "black",
     color: "#fff",
     border: "none",
     padding: "10px 15px",
     borderRadius: "5px",
     cursor: "pointer",
-    marginRight: "10px"
   },
   closeButton: {
     backgroundColor: "transparent",
     border: "none",
     fontSize: "16px",
-    cursor: "pointer"
-  }
+    cursor: "pointer",
+    color: "black",
+  },
 };
 
 export default DownloadApp;
