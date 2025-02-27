@@ -47,7 +47,7 @@
 
   .user-dashboard-info-section img {
     width: 50vw;
-    animation: bounce 1s ease infinite;
+    animation: bounce 2s ease infinite;
   }
   
   @keyframes bounce {
@@ -58,7 +58,7 @@
       transform: translateY(-20px);
     }
     60% {
-      transform: translateY(-10px);
+      transform: translateY(-19px);
     }
   }
 
