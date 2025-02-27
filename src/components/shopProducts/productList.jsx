@@ -1,14 +1,16 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 import SearchPageProductCard from '../productCard.jsx';
-
+import e1 from '../../assets/e1.png';
 const ProductList = ({products,loading,hasMoreProducts,loadingMoreProducts }) => {
     // Loading state while products are being fetched
     if (loading) return <>Loading...</>;
 
     // Handle case where no products are found
     if (!loading && products.length === 0) {
-        return <>No products found.</>;
+        return <div className='search-not-found'>
+                <img src={e1} alt="No products available" className="no-products-image" />
+                <p>Oops! We couldn't find any product.</p>
+              </div>
     }
 
     return (

@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { useSelector} from 'react-redux';
-import {useParams, useLocation } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { useParams, useLocation } from 'react-router-dom';
 import ProductList from './productList.jsx';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import s1 from '../../assets/s1.png'
@@ -27,7 +27,7 @@ const ProductSearch = () => {
     const [showFilterBy, setShowFilterBy] = useState(false);
 
     const shopData = useSelector((state) => state.shopproducts.shops[shopId]) || {};
-    const {loading} = useSelector((state) => state.shopproducts);
+    const { loading } = useSelector((state) => state.shopproducts);
 
     const {
         products = [],
@@ -50,13 +50,13 @@ const ProductSearch = () => {
     return (
         <>
             <div id="shopSearchPage-container-top">
-                <Navbar headerTitle={shopName.slice(0, 20).toUpperCase()} shopId={shopId}/>
+                <Navbar headerTitle={shopName.slice(0, 20).toUpperCase()} shopId={shopId} />
             </div>
 
             {loading ? (
-                 <div className="fallback-loading-img">
-                                   <img src={s1} />
-                                </div>
+                <div className="fallback-loading-img">
+                    <img src={s1} />
+                </div>
             ) : (
                 <InfiniteScroll
                     dataLength={products.length}
