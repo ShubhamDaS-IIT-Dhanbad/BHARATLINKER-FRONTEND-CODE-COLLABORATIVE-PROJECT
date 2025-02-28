@@ -168,7 +168,6 @@ function UserHome({ userData }) {
                             </article>
                         ))}
                     </div>
-                    <img src={rd1} alt="User dashboard" />
                 </section>
             </main>
 
