@@ -14,7 +14,7 @@ import HomePage from './components/homePage/home.jsx';
 import SearchPage from './components/searchPage/searchPage.jsx';
 import SearchShop from './components/searchShop/searchShop.jsx';
 
-// Lazy Loaded Components
+// Lazy Loaded 
 const LoginPage = lazy(() => import('./components/user/login.jsx'));
 const SingleProduct = lazy(() => import('./components/singleProduct.jsx'));
 const SingleShopCard = lazy(() => import('./components/singleShop.jsx'));
