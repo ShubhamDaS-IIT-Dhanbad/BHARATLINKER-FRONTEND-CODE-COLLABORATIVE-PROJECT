@@ -75,14 +75,12 @@ function CheckOutPage({ userData, items, deliveryAddress, setDeliveryAddress, se
         await handleSendEmail({
           to: shopEmail,
           type: 'orderPlaced',
-          orderIds: orderIds.join(', '), // Comma-separated list of order IDs
+          orderIds: orderIds.join(', '),
           orderDetails, // Array of item details
           address: deliveryAddress.address,
           phoneNumber: userData.phoneNumber,
         }).catch(err => console.error(`Error sending email to ${shopEmail}:`, err));
       }
-
-      alert('Order Placed Successfully!');
       setShowCheckOutPage(false);
       setShowAddressDetail(false);
     } catch (error) {
@@ -110,7 +108,7 @@ function CheckOutPage({ userData, items, deliveryAddress, setDeliveryAddress, se
       </header>
 
       <div className="checkout-page">
-        
+
         <div className="checkout-main">
 
           <div className="cart-items-section">

@@ -76,7 +76,7 @@ const MyCartPage = ({ userData }) => {
         if (cartSummary.isEmpty && !viewState.isLoading && viewState.currentView === 'cart') {
             navigate('/search');
         }
-    }, [cartSummary.isEmpty, viewState.isLoading, viewState.currentView, navigate]);
+    }, []);
 
     const confirmRemoveItem = useCallback((cartId, productId) => {
         setPendingRemoval({ cartId, productId });
