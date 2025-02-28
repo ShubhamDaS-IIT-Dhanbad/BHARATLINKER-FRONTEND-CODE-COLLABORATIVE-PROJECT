@@ -200,7 +200,18 @@
   .suggestion-item svg {
     color: rgb(12, 131, 31);
   }
-  
+  .user-saved-address-div{
+    
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+    gap: 12px;
+    color: white;
+    background-color: rgb(12, 131, 31);
+    border-top:1px solid rgba(0, 0, 0, 0.34); ;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.34);
+    transition: background 0.2s;
+  }
   /* Loading States */
   .location-loading-indicator{
     display: flex;

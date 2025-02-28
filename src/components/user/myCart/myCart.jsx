@@ -27,18 +27,27 @@ const MyCartPage = ({ userData }) => {
     const [deliveryAddress, setDeliveryAddress] = useState(null);
     const [showConfirmPopup, setShowConfirmPopup] = useState(false);
     const [pendingRemoval, setPendingRemoval] = useState(null);
+    const [placingOrder, setPlacingOrder] = useState(false);
 
     const cartSummary = useMemo(() => {
         const items = cart || [];
+        const totalPrice = items.reduce((sum, item) => {
+            const price = item.discountedPrice || item.price || 0;
+            return sum + (price * item.quantity);
+        }, 0);
+        const totalSaved = items.reduce((sum, item) => {
+            const price = item.price || 0;
+            const discountedPrice = item.discountedPrice || price;
+            return sum + ((price - discountedPrice) * item.quantity);
+        }, 0);
+
         return {
             isEmpty: !items.length,
             hasOutOfStock: items.some(item => item.stock < item.quantity),
             totalItems: items.reduce((sum, item) => sum + item.quantity, 0) || 0,
-            totalSavings: items.reduce((sum, item) => {
-                const price = item.price || 0;
-                const discountedPrice = item.discountedPrice || price;
-                return sum + ((price - discountedPrice) * item.quantity);
-            }, 0)
+            totalSavings: totalSaved, // Kept as totalSavings to match original usage
+            totalPrice,
+            totalSaved,
         };
     }, [cart]);
 
@@ -52,7 +61,7 @@ const MyCartPage = ({ userData }) => {
             const newView = event.state?.view || 'cart';
             setViewState(prev => ({
                 ...prev,
-                currentView: newView
+                currentView: newView,
             }));
         };
 
@@ -83,7 +92,7 @@ const MyCartPage = ({ userData }) => {
         try {
             await dispatch(removeFromUserCart({
                 productId: pendingRemoval.productId,
-                cartId: pendingRemoval.cartId
+                cartId: pendingRemoval.cartId,
             })).unwrap();
         } catch (error) {
             setViewState(prev => ({
@@ -140,8 +149,22 @@ const MyCartPage = ({ userData }) => {
     ), [handleRemoveItem, viewState.isLoading]);
 
     const handleBackNavigation = useCallback(() => {
-        navigate(-1);
-    }, [navigate]);
+        switch (viewState.currentView) {
+            case 'location':
+                transitionToView('cart');
+                break;
+            case 'address':
+                transitionToView('location');
+                break;
+            case 'checkout':
+                transitionToView('address');
+                break;
+            case 'cart':
+            default:
+                navigate('/search'); // Exit cart page to previous route (e.g., search page)
+                break;
+        }
+    }, [viewState.currentView, transitionToView, navigate]);
 
     const renderCartView = useCallback(() => (
         <>
@@ -195,6 +218,29 @@ const MyCartPage = ({ userData }) => {
                                     </div>
                                 ))}
                             </section>
+                            {!cartSummary.isEmpty && (
+                                <div className="order-summary-card">
+                                    <h3>Order Summary</h3>
+                                    <div className="price-details">
+                                        <div className="price-row">
+                                            <span>Total MRP</span>
+                                            <span>₹{(cartSummary.totalPrice + cartSummary.totalSaved).toFixed(2)}</span>
+                                        </div>
+                                        <div className="price-row">
+                                            <span>Discount on MRP</span>
+                                            <span className="discount">-₹{cartSummary.totalSaved.toFixed(2)}</span>
+                                        </div>
+                                        <div className="price-row">
+                                            <span>Shipping Fee</span>
+                                            <span className="free-shipping">FREE</span>
+                                        </div>
+                                        <div className="total-price-row">
+                                            <span>Total Amount</span>
+                                            <span>₹{cartSummary.totalPrice.toFixed(2)}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
                             <div className="cart-check-out-container">
                                 <button
                                     className="cart-check-out-container-button"
@@ -211,13 +257,15 @@ const MyCartPage = ({ userData }) => {
             </div>
             {showConfirmPopup && renderConfirmPopup()}
         </>
-    ), [viewState, cartSummary, userData, showConfirmPopup, confirmRemoveItem, transitionToView, navigate, handleBackNavigation]);
+    ), [viewState, cartSummary, userData, showConfirmPopup, confirmRemoveItem, transitionToView, handleBackNavigation, placingOrder]);
 
     const renderView = useCallback(() => {
         switch (viewState.currentView) {
             case 'location':
                 return (
                     <LocationTab
+                        cartSummary={cartSummary}
+                        userData={userData}
                         header="Delivery Address"
                         setDeliveryAddress={setDeliveryAddress}
                         setShowAddressDetail={() => transitionToView('address')}
@@ -257,8 +305,8 @@ MyCartPage.propTypes = {
     userData: PropTypes.shape({
         userId: PropTypes.string.isRequired,
         phoneNumber: PropTypes.string.isRequired,
-        name: PropTypes.string
-    }).isRequired
+        name: PropTypes.string,
+    }).isRequired,
 };
 
 export default React.memo(MyCartPage);

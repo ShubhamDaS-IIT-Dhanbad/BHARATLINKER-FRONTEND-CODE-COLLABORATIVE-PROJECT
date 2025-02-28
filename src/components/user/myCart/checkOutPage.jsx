@@ -9,7 +9,6 @@ import './checkOutPage.css';
 
 function CheckOutPage({ userData, items, deliveryAddress, setDeliveryAddress, setShowCheckOutPage, setShowAddressDetail }) {
   const dispatch = useDispatch();
-  console.log(items, "here");
   const totalPrice = items.reduce((acc, item) => acc + item.discountedPrice * item.quantity, 0);
   const totalSaved = items.reduce((acc, item) => acc + (item.price - item.discountedPrice) * item.quantity, 0);
 
@@ -111,7 +110,9 @@ function CheckOutPage({ userData, items, deliveryAddress, setDeliveryAddress, se
       </header>
 
       <div className="checkout-page">
+        
         <div className="checkout-main">
+
           <div className="cart-items-section">
             <div className="cart-items-container">
               {items.map((item) => (
@@ -161,6 +162,8 @@ function CheckOutPage({ userData, items, deliveryAddress, setDeliveryAddress, se
               </button>
             </div>
           </div>
+
+
         </div>
       </div>
     </>

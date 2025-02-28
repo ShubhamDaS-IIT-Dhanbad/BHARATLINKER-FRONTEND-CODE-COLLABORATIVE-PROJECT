@@ -13,8 +13,7 @@ import './locationTab.css';
 const PREDEFINED_RADIUS_OPTIONS = [1, 3, 5, 9, 13];
 const DEBOUNCE_DELAY = 300;
 
-const LocationTab = ({ documentId, header, setLocationTab, setShowAddressDetail, setDeliveryAddress ,setShopAddress}) => {
-
+const LocationTab = ({userData, documentId, header, setLocationTab, setShowAddressDetail, setDeliveryAddress, setShopAddress}) => {
     const [loading, setLoading] = useState(false);
     const [fetchingUserLocation, setFetchingUserLocation] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
@@ -25,9 +24,11 @@ const LocationTab = ({ documentId, header, setLocationTab, setShowAddressDetail,
 
     const { location, updateLocation, fetchLocationSuggestions } = useLocationFromCookie();
     const debounceTimeout = useRef(null);
+
     useEffect(() => {
         if (location?.radius) setRadius(location.radius);
     }, [location]);
+
     const handleSearch = useCallback(async (query) => {
         if (!query.trim()) return;
         setLoading(true);
@@ -41,7 +42,6 @@ const LocationTab = ({ documentId, header, setLocationTab, setShowAddressDetail,
         }
     }, [fetchLocationSuggestions]);
 
-    // Debounced input handler
     const handleSearchInput = useCallback((e) => {
         const query = e.target.value;
         setSearchQuery(query);
@@ -50,7 +50,6 @@ const LocationTab = ({ documentId, header, setLocationTab, setShowAddressDetail,
         debounceTimeout.current = setTimeout(() => handleSearch(query), DEBOUNCE_DELAY);
     }, [handleSearch]);
 
-    // Geolocation handler
     const handleUseCurrentLocation = useCallback(async () => {
         setFetchingUserLocation(true);
         try {
@@ -73,7 +72,6 @@ const LocationTab = ({ documentId, header, setLocationTab, setShowAddressDetail,
         }
     }, []);
 
-    // Suggestion click handler
     const handleAddressClick = useCallback((suggestion) => {
         setSearchQuery(suggestion.label);
         setMapState({
@@ -84,7 +82,6 @@ const LocationTab = ({ documentId, header, setLocationTab, setShowAddressDetail,
         setShowMap(true);
     }, []);
 
-    // Memoized radius controls
     const radiusControls = useMemo(() => (
         <div className="radius-options">
             {PREDEFINED_RADIUS_OPTIONS.map((option) => (
@@ -102,7 +99,6 @@ const LocationTab = ({ documentId, header, setLocationTab, setShowAddressDetail,
         </div>
     ), [radius, updateLocation]);
 
-    // Memoized current location section
     const currentLocationSection = useMemo(() => (
         <div className="location-content">
             <div className="current-location-section">
@@ -125,7 +121,6 @@ const LocationTab = ({ documentId, header, setLocationTab, setShowAddressDetail,
             </div>
         </div>
     ), [fetchingUserLocation, handleUseCurrentLocation]);
-
     // Render
     return showMap ? (
         <Map
@@ -164,11 +159,34 @@ const LocationTab = ({ documentId, header, setLocationTab, setShowAddressDetail,
                         />
                     )}
                 </div>
-                {!window.location.pathname.includes('/user/cart') && !window.location.pathname.includes('/user/profile') &&
-                !window.location.pathname.includes('/shop/address') && (
-                    <>
-                        {radiusControls}
-                    </>
+                
+                {!window.location.pathname.includes('/user/cart') && 
+                 !window.location.pathname.includes('/user/profile') &&
+                 !window.location.pathname.includes('/shop/address') && (
+                    <>{radiusControls}</>
+                )}
+                
+                {/* Show saved addresses only when on cart page, no suggestions, and not loading */}
+                {window.location.pathname.includes('/user/cart') && 
+                 userData?.address && 
+                 suggestions.length === 0 && 
+                 !loading && (
+                    <div className="suggestions-list">
+                        {userData.address.map((address, index) => (
+                            <div
+                                key={`saved-address-${index}`}
+                                className="user-saved-address-div"
+                                onClick={() => handleAddressClick({
+                                    label: address.address,
+                                    lat: address.latitude,
+                                    lon: address.longitude
+                                })}
+                            >
+                                <SlLocationPin size={38} />
+                                <span>{address.address}</span>
+                            </div>
+                        ))}
+                    </div>
                 )}
 
                 {loading && (
@@ -193,7 +211,7 @@ const LocationTab = ({ documentId, header, setLocationTab, setShowAddressDetail,
                 )}
             </div>
 
-            {suggestions.length === 0 && currentLocationSection}
+            {suggestions.length === 0 && !loading && currentLocationSection}
         </div>
     );
 };

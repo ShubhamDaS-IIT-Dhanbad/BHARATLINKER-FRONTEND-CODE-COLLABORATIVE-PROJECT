@@ -11,6 +11,7 @@ import { updateUserById } from "../../appWrite/user/userData.js";
 import "leaflet/dist/leaflet.css";
 import "./map.css";
 import { useNavigate } from "react-router-dom";
+
 // Constants for better readability
 const DEFAULT_ZOOM = 15;
 const TILE_LAYER_URL = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
@@ -42,12 +43,12 @@ const LocationMap = ({
     setShopAddress,
     setShowAddressDetail,
 }) => {
-    const navigate=useNavigate();
+    const navigate = useNavigate();
     const { updateLocation } = useLocationFromCookie();
     const [position, setPosition] = useState([latMap, longMap]);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false); // Initially false since we'll show addressMap directly
     const [loadingConfirm, setLoadingConfirm] = useState(false);
-    const [address, setAddress] = useState(addressMap);
+    const [address, setAddress] = useState(addressMap || '');
     const mapRef = useRef(null);
     const abortControllerRef = useRef(new AbortController());
 
@@ -77,10 +78,12 @@ const LocationMap = ({
     // Debounced address fetch
     const debouncedGetAddress = useRef(debounce(getAddressFromLatLng, DEBOUNCE_DELAY)).current;
 
-    // Fetch address on initial load
+    // Fetch address on initial load only if no addressMap is provided
     useEffect(() => {
         if (!addressMap && latMap && longMap) {
             debouncedGetAddress(latMap, longMap);
+        } else {
+            setLoading(false); // Ensure loading is false when using addressMap
         }
     }, [addressMap, latMap, longMap, debouncedGetAddress]);
 
@@ -92,7 +95,7 @@ const LocationMap = ({
     const MapClickHandler = () => {
         useMapEvents({
             click(event) {
-                setLoading(true); // Move it here
+                setLoading(true);
                 const { lat, lng } = event.latlng;
                 setPosition([lat, lng]);
                 debouncedGetAddress(lat, lng);
@@ -100,11 +103,6 @@ const LocationMap = ({
         });
         return null;
     };
-    
-
-
-
-
 
     async function handleUserProfileUpdate(locationData) {
         if (window.location.pathname === "/user/profile") {
@@ -124,7 +122,7 @@ const LocationMap = ({
                 address: updatedAddressList,
             };
             try {
-                updateUserById(updateData);
+                await updateUserById(updateData);
                 setDeliveryAddress(updatedAddressList);
                 const parsedAddress = updatedAddressList.map(addr => {
                     const [latitude, longitude, address] = addr.split('@').map(val => val.trim());
@@ -136,16 +134,15 @@ const LocationMap = ({
                 });
                 const updatedUserData = { ...userData, address: parsedAddress };
                 Cookies.set("BharatLinkerUserData", JSON.stringify(updatedUserData), { expires: 30 });
-                navigate('/user/profile')
+                navigate('/user/profile');
             } catch (error) {
                 console.error("Error updating user address:", error);
             }
         }
     }
     
-    
     // Confirm location handler
-    const handleConfirm = useCallback(() =>  {
+    const handleConfirm = useCallback(() => {
         setLoadingConfirm(true);
 
         const locationData = {
@@ -153,10 +150,10 @@ const LocationMap = ({
             long: position[1],
             address: address,
         };
-        if(window.location.pathname === "/user/profile"){
+
+        if (window.location.pathname === "/user/profile") {
             handleUserProfileUpdate(locationData);
-        }else if (window.location.pathname === "/secure/shop/address") {
-            console.log(locationData,"data shop")
+        } else if (window.location.pathname === "/secure/shop/address") {
             setShopAddress(locationData);
             setTimeout(() => {
                 setLoadingConfirm(false);
@@ -164,8 +161,7 @@ const LocationMap = ({
                 setLocationTab(false);
                 setShowAddressDetail(true);
             }, 900);
-        }
-        else if (window.location.pathname === "/user/cart") {
+        } else if (window.location.pathname === "/user/cart") {
             setDeliveryAddress(locationData);
             setTimeout(() => {
                 setLoadingConfirm(false);
@@ -188,12 +184,7 @@ const LocationMap = ({
                 setShowMap(false);
             }, 1000);
         }
-    }, [position, address, setDeliveryAddress, setShowMap, setLocationTab, setShowAddressDetail, updateLocation]);
-
-
-
-
-
+    }, [position, address, setDeliveryAddress, setShowMap, setLocationTab, setShowAddressDetail, updateLocation, navigate]);
 
     // Memoized map component
     const memoizedMap = useMemo(() => (
@@ -234,9 +225,10 @@ const LocationMap = ({
                                 <Oval height={20} width={20} color="green" secondaryColor="white" ariaLabel="loading" />
                             </div>
                         ) : (
-                            <p className="map-address-text">{address}</p>
+                            <p className="map-address-text">{address || 'No address available'}</p>
                         )}
-                        <div className={`map-confirm-btn ${loading ? "disabled" : ""}`}
+                        <div 
+                            className={`map-confirm-btn ${loading ? "disabled" : ""}`}
                             onClick={!loading ? handleConfirm : undefined}
                         >
                             {loadingConfirm ? (
