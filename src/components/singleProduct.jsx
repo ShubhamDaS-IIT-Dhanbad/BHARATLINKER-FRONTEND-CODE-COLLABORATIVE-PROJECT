@@ -283,7 +283,7 @@ const ProductDetails = () => {
                                 )}
                             </div>
                         </div>
-                    </div>
+                    </div><></>
                     <AddToCartTab totalQuantity={totalQuantity} totalPrice={totalPrice} />
                 </Fragment>
             )}
