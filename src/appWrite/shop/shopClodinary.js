@@ -1,13 +1,6 @@
 import conf from '../../conf/conf.js';
-import { Client, Account, Databases } from 'appwrite';
 import CryptoJS from 'crypto-js';
 
-const client = new Client()
-    .setEndpoint('https://cloud.appwrite.io/v1')
-    .setProject(conf.appwriteShopsProjectId);
-
-const account = new Account(client);
-const databases = new Databases(client);
 
 const uploadImageToCloudinary = async (file) => {
     const formData = new FormData();

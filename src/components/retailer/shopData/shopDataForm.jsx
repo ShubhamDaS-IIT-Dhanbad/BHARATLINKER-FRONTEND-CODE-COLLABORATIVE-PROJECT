@@ -7,6 +7,7 @@ import { Oval } from "react-loader-spinner";
 import { updateShopImagesAndData } from "../../../appWrite/shop/shopData.js";
 import "./shopData.css";
 import sd1 from '../asset/r1.png'
+
 const MAX_LENGTHS = {
   shopName: 50,
   shopDescription: 2000,
@@ -15,7 +16,7 @@ const MAX_LENGTHS = {
   shopEmail: 50,
 };
 
-const ShopInput = React.memo(({ field, value, onChange }) => {
+const ShopInput = React.memo(({ field, value = "", onChange }) => {
   const isTextArea = field === "shopDescription";
   const maxLength = MAX_LENGTHS[field];
   return (
@@ -37,7 +38,7 @@ const ShopInput = React.memo(({ field, value, onChange }) => {
   );
 });
 
-const ShopSpecialInput = React.memo(({ field, value, onChange, type = "text" }) => (
+const ShopSpecialInput = React.memo(({ field, value = "", onChange, type = "text" }) => (
   <div className="shop-data-input-group">
     <fieldset>
       <legend>{field.replace(/shop/, "SHOP ").toUpperCase()}</legend>
@@ -53,7 +54,7 @@ const ImagePreview = React.memo(({ file, onDelete }) => (
   </div>
 ));
 
-const ShopDataForm = React.memo(({ shopData }) => {
+const ShopDataForm = React.memo(({ shopData = {} }) => {
   const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState({
@@ -84,19 +85,26 @@ const ShopDataForm = React.memo(({ shopData }) => {
 
   useEffect(() => {
     if (shopData) {
-      setFormData({ ...formData, ...shopData });
+      setFormData({
+        shopName: shopData.shopName || "",
+        shopDescription: shopData.shopDescription || "",
+        shopKeywords: shopData.shopKeywords || "",
+        shopEmail: shopData.shopEmail || "",
+        shopCustomerCare: shopData.shopCustomerCare || "",
+      });
       setFiles(shopData.shopImages || []);
     }
   }, [shopData]);
 
   const handleInputChange = useCallback((e, field, maxLength) => {
-    if (e.target.value.length <= maxLength) {
-      setFormData((prev) => ({ ...prev, [field]: e.target.value }));
+    const value = e.target.value || "";
+    if (value.length <= maxLength) {
+      setFormData((prev) => ({ ...prev, [field]: value }));
     }
   }, []);
 
   const handleFileChange = useCallback((e) => {
-    const newFiles = Array.from(e.target.files).slice(0, 3 - files.length);
+    const newFiles = Array.from(e.target.files || []).slice(0, 3 - files.length);
     setFiles((prev) => [...prev, ...newFiles]);
   }, [files.length]);
 
@@ -116,17 +124,20 @@ const ShopDataForm = React.memo(({ shopData }) => {
         {}
       );
       const updatedShopData = await updateShopImagesAndData({
-        shopId: shopData.shopId,
+        shopId: shopData.shopId || "",
         toDeleteImagesUrls: toDeleteImagesUrlsRef.current,
         updatedData: updatedFields,
         newFiles: filesRef.current,
       });
       Cookies.set(
         "BharatLinkerShopData",
-        JSON.stringify({ ...JSON.parse(Cookies.get("BharatLinkerShopData") || "{}"), ...updatedShopData }),
+        JSON.stringify({ 
+          ...(Cookies.get("BharatLinkerShopData") ? JSON.parse(Cookies.get("BharatLinkerShopData")) : {}), 
+          ...updatedShopData 
+        }),
         { expires: 7 }
       );
-      setUploadStatus("Your Shop Data Has been successfully updated .");
+      setUploadStatus("Your Shop Data Has been successfully updated.");
     } catch (error) {
       setUploadStatus("Updation failed. Please try again.");
     } finally {
@@ -151,7 +162,7 @@ const ShopDataForm = React.memo(({ shopData }) => {
                 🔄 Click <b>Update</b> to save. 📩 Retailers get <b>Email</b> notifications. 📞 <b>Customer Care</b> visible.
               </div>
               {["shopName", "shopDescription", "shopKeywords"].map((field) => (
-                <ShopInput key={field} field={field} value={formData[field]} onChange={handleInputChange} />
+                <ShopInput key={field} field={field} value={formData[field] || ""} onChange={handleInputChange} />
               ))}
             </div>
           )}
@@ -160,11 +171,11 @@ const ShopDataForm = React.memo(({ shopData }) => {
               <div className="shop-data-input-group">
                 <fieldset>
                   <legend>SHOP PHONE-NUMBER</legend>
-                  <p>{shopData.shopPhoneNumber}</p>
+                  <p>{shopData.shopPhoneNumber || "Not provided"}</p>
                 </fieldset>
               </div>
-              <ShopSpecialInput field="shopCustomerCare" value={formData.shopCustomerCare} onChange={handleInputChange} type="number" />
-              <ShopSpecialInput field="shopEmail" value={formData.shopEmail} onChange={handleInputChange} type="email" />
+              <ShopSpecialInput field="shopCustomerCare" value={formData.shopCustomerCare || ""} onChange={handleInputChange} type="number" />
+              <ShopSpecialInput field="shopEmail" value={formData.shopEmail || ""} onChange={handleInputChange} type="email" />
             </div>
           )}
           {currentStep === 3 && (
@@ -182,9 +193,13 @@ const ShopDataForm = React.memo(({ shopData }) => {
                 />
               </div>
               <div className="shop-data-img-container">
-                {files.map((file, index) => (
-                  <ImagePreview key={file instanceof File ? file.name : file} file={file} onDelete={() => handleDeleteImage(index)} />
-                ))}
+                {files.length > 0 ? (
+                  files.map((file, index) => (
+                    <ImagePreview key={file instanceof File ? file.name : file} file={file} onDelete={() => handleDeleteImage(index)} />
+                  ))
+                ) : (
+                  <p>No images uploaded</p>
+                )}
               </div>
             </div>
           )}

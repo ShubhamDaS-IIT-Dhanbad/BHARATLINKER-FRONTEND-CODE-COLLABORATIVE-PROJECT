@@ -71,7 +71,7 @@ class SearchShopService {
             // Fetch data from Appwrite
             const { documents: allShops = [] } = await this.databases.listDocuments(
                 conf.appwriteShopsDatabaseId,
-                conf.appwriteShopsCollectionId,
+                conf.appwriteShopsShopsCollectionId,
                 queries
             );
             if (!Array.isArray(allShops)) {
@@ -145,7 +145,7 @@ class SearchShopService {
 
             const response = await this.databases.listDocuments(
                 conf.appwriteShopsDatabaseId,
-                conf.appwriteShopsCollectionId,
+                conf.appwriteShopsShopsCollectionId,
                 queries
             );
             if (response.documents.length === 0) return null;

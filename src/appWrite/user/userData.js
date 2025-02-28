@@ -4,7 +4,7 @@ import { Client, Databases, Query } from 'appwrite';
 const client = new Client();
 client
     .setEndpoint(conf.appwriteUrl)
-    .setProject(conf.appwriteBlUsersProjectId);
+    .setProject(conf.appwriteUsersProjectId);
 const databases = new Databases(client);
 
 
@@ -23,13 +23,13 @@ async function fetchUserByPhoneNumber(phoneNumber) {
 
         const queries = [Query.equal('phoneNumber', phoneNumber)];
         const result = await databases.listDocuments(
-            conf.appwriteBlUsersDatabaseId,
-            conf.appwriteBlUsersCollectionId,
+            conf.appwriteUsersDatabaseId,
+            conf.appwriteUsersUsersCollectionId,
             queries
         );
         if (result.documents.length === 0) {
             const newUser = {
-                total:0,
+                total: 0,
                 phoneNumber: phoneNumber,
                 address: []
             };
@@ -50,8 +50,8 @@ async function updateUserById(updatedData) {
         }
 
         const updatedUser = await databases.updateDocument(
-            conf.appwriteBlUsersDatabaseId,
-            conf.appwriteBlUsersCollectionId,
+            conf.appwriteUsersDatabaseId,
+            conf.appwriteUsersUsersCollectionId,
             documentId,
             { address }
         );
@@ -85,7 +85,7 @@ async function fetchUserCartByPhoneNumber(phn) {
         // Fetch the full document (this will still be necessary)
         const result = await databases.listDocuments(
             conf.appwriteUsersDatabaseId,
-            conf.appwriteUsersCollectionId,
+            conf.appwriteUsersUsersCollectionId,
             queries
         );
 
@@ -103,14 +103,14 @@ async function fetchUserCartByPhoneNumber(phn) {
 }
 
 
-async function updateCartByPhoneNumber({phoneNumber, cart}) {
+async function updateCartByPhoneNumber({ phoneNumber, cart }) {
     try {
         const phoneNumberString = String(phoneNumber);
         const queries = [Query.equal('phoneNumber', phoneNumberString)];
 
         const result = await databases.listDocuments(
             conf.appwriteUsersDatabaseId,
-            conf.appwriteUsersCollectionId,
+            conf.appwriteUsersUsersCollectionId,
             queries
         );
         if (result.documents.length === 0) {
@@ -119,9 +119,9 @@ async function updateCartByPhoneNumber({phoneNumber, cart}) {
         const documentId = result.documents[0].$id;
         const updatedUser = await databases.updateDocument(
             conf.appwriteUsersDatabaseId,
-            conf.appwriteUsersCollectionId,
+            conf.appwriteUsersUsersCollectionId,
             documentId,
-            { cart: cart}
+            { cart: cart }
         );
         return updatedUser;
     } catch (error) {

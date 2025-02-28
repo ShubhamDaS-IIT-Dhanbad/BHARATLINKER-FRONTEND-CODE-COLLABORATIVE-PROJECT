@@ -1,10 +1,10 @@
 import conf from '../../conf/conf.js';
-import { ID,Client,Permission,Role, Databases, Query } from 'appwrite';
+import { ID,Client, Databases, Query } from 'appwrite';
 
 // Initialize the Appwrite client
 const client = new Client()
   .setEndpoint('https://cloud.appwrite.io/v1')
-  .setProject(conf.appwriteBlUsersProjectId);
+  .setProject(conf.appwriteUsersProjectId);
 
 const databases = new Databases(client);
 
@@ -13,8 +13,8 @@ async function getCartItems(userId, page = 1, limit = 10) {
   try {
     const offset = (page - 1) * limit;
     const response = await databases.listDocuments(
-      conf.appwriteBlUsersDatabaseId,
-      conf.appwriteBlCartCollectionId,
+      conf.appwriteUsersDatabaseId,
+      conf.appwriteUsersCartCollectionId,
       [
         Query.equal("userId", userId),
         Query.limit(limit),
@@ -33,8 +33,8 @@ async function getCartItems(userId, page = 1, limit = 10) {
 async function addToCart(cartItem) {
   try {
     const response = await databases.createDocument(
-      conf.appwriteBlUsersDatabaseId,
-      conf.appwriteBlCartCollectionId,
+      conf.appwriteUsersDatabaseId,
+      conf.appwriteUsersCartCollectionId,
       ID.unique(),
       {
         productId: cartItem.productId,
@@ -60,8 +60,8 @@ async function addToCart(cartItem) {
 async function updateCartQuantity(cartId, updatedCart) {
   try {
     const response = await databases.updateDocument(
-      conf.appwriteBlUsersDatabaseId,
-      conf.appwriteBlCartCollectionId,
+      conf.appwriteUsersDatabaseId,
+      conf.appwriteUsersCartCollectionId,
       cartId,
       {
         quantity: Number(updatedCart.quantity),
@@ -77,8 +77,8 @@ async function updateCartQuantity(cartId, updatedCart) {
 async function removeFromCart(cartId) {
   try {
     await databases.deleteDocument(
-      conf.appwriteBlUsersDatabaseId,
-      conf.appwriteBlCartCollectionId,
+      conf.appwriteUsersDatabaseId,
+      conf.appwriteUsersCartCollectionId,
       cartId
     );
     return true;

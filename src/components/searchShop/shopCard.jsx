@@ -9,8 +9,15 @@ function ShopCard({ shop }) {
     const navigate = useNavigate();
     const [showAddress, setShowAddress] = useState(false);
 
-    const shopImageUrl = shop.shopImages && shop.shopImages[0] ? shop.shopImages[0] : 'https://via.placeholder.com/300x180';
-    const shopDisplayName = shop.shopName || 'Shop Name';
+    // Fixed: Added error handling for shop.shopImages
+    const urlParts = shop?.shopImages?.[0]?.split('/') || [];
+    const publicIdWithExtension = urlParts[urlParts.length - 1] || '';
+    const publicId = publicIdWithExtension.split('@X@XX@X@')[1] || '';
+
+    const shopImageUrl = shop?.shopImages?.[0] 
+        ? `https://bharatlinker.publit.io/file/${publicId}` 
+        : 'https://via.placeholder.com/300x180';
+    const shopDisplayName = shop?.shopName || 'Shop Name';
 
     const toggleAddress = () => {
         setShowAddress(!showAddress);
@@ -27,7 +34,7 @@ function ShopCard({ shop }) {
                     className="shop-card-image"
                     src={shopImageUrl}
                     alt={shopDisplayName}
-                    effect="fadeIn" 
+                    effect="fadeIn" // Changed from blur to fadeIn since blur.css is imported
                     loading="lazy"  
                 />
             </div>
@@ -38,14 +45,15 @@ function ShopCard({ shop }) {
                 <div className="shop-card-info">
                     <div className="shop-card-divider"></div>
                     <div className="shop-card-address-toggle" onClick={toggleAddress}>
-                        <div>{shop?.category?.length > 0 ? shop?.category.toUpperCase() : <>About</>}</div>
+                        {/* Fixed: Removed unnecessary fragment and simplified conditional */}
+                        <div>{shop?.category?.length > 0 ? shop.category.toUpperCase() : 'About'}</div>
                         {showAddress ? <IoIosArrowUp size={20} /> : <IoIosArrowDown size={20} />}
                     </div>
 
                     {showAddress && (
                         <div className="shop-card-address">
                             Address:
-                            <p>{shop.address}</p>
+                            <p>{shop?.address || 'No address available'}</p>
                         </div>
                     )}
 

@@ -3,7 +3,7 @@ import { fetchUserByPhoneNumber } from "./userData.js";
 import conf from '../../conf/conf.js';
 const client = new Client()
   .setEndpoint("https://cloud.appwrite.io/v1")
-  .setProject(conf.appwriteBlUsersProjectId);
+  .setProject(conf.appwriteUsersProjectId);
 
 const account = new Account(client);
 const databases = new Databases(client);
@@ -22,13 +22,13 @@ export const verifyOTP = async (userId, otpCode, phoneNumber) => {
     let userData = await fetchUserByPhoneNumber(phoneNumber);
     if (userData.total == 0) {
       await databases.createDocument(
-        conf.appwriteBlUsersDatabaseId,
-        conf.appwriteBlUsersCollectionId,
+        conf.appwriteUsersDatabaseId,
+        conf.appwriteUsersUsersCollectionId,
         ID.unique(),
-        { phoneNumber } 
+        { phoneNumber }
       );
     }
-    return { session:"ko", userData };
+    return { session: "ko", userData };
   } catch (error) {
     console.error("Error verifying OTP:", error.message);
     return null;

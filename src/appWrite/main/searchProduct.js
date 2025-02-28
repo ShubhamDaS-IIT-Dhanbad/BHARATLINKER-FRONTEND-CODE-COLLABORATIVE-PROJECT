@@ -9,7 +9,7 @@ class SearchProductService {
     constructor() {
         this.client
             .setEndpoint(conf.appwriteUrl)
-            .setProject(conf.appwriteProductsProjectId);
+            .setProject(conf.appwriteShopsProjectId);
 
         this.databases = new Databases(this.client);
         this.bucket = new Storage(this.client);
@@ -55,8 +55,8 @@ class SearchProductService {
                 "shop.shopName","shop.$id","shop.isShopOpen","shop.shopEmail"
             ]));
             const { documents: allProducts = [] } = await this.databases.listDocuments(
-                conf.appwriteProductsDatabaseId,
-                conf.appwriteProductsCollectionId,
+                conf.appwriteShopsDatabaseId,
+                conf.appwriteShopsProductsCollectionId,
                 queries
             );
             if (!Array.isArray(allProducts)) throw new TypeError("Expected 'allProducts' to be an array.");
@@ -95,8 +95,8 @@ class SearchProductService {
                 "shop.shopName","shop.$id","shop.isShopOpen","shop.shopEmail"
             ]));
             const { documents: product = [] } = await this.databases.listDocuments(
-                conf.appwriteProductsDatabaseId,
-                conf.appwriteProductsCollectionId,
+                conf.appwriteShopsDatabaseId,
+                conf.appwriteShopsProductsCollectionId,
                 queries
             );
             return product[0];

@@ -1,5 +1,5 @@
 import React from 'react';
-import PropTypes from 'prop-types'; // Added this import
+import PropTypes from 'prop-types';
 import { useNavigate, useLocation } from 'react-router-dom';
 import "./style/productCard.css";
 import { LazyLoadImage } from "react-lazy-load-image-component";
@@ -11,12 +11,27 @@ function SearchPageProductCard({ id, image, title, price, discountedPrice, isInS
     const navigate = useNavigate();
     const location = useLocation();
 
-    // Improved image handling with optional chaining
-    const imageUrl = image?.[0] || DEFAULT_IMAGE_URL;
-    const productName = title ? (title.length > 45 ? `${title.substring(0, 45)}..` : title) : 'Product Name';
-    const productPrice = discountedPrice?.toLocaleString('en-IN', { style: 'currency', currency: 'INR' }) || '₹0';
+    // Improved image handling
+    const urlParts = Array.isArray(image) && image[0] ? image[0].split('/') : [];
+    const publicIdWithExtension = urlParts.length > 0 ? urlParts[urlParts.length - 1] : '';
+    const publicId = publicIdWithExtension.includes('@X@XX@X@') 
+        ? publicIdWithExtension.split('@X@XX@X@')[1] 
+        : publicIdWithExtension;
 
-    // Consolidated and corrected path checks
+    const imageUrl = Array.isArray(image) && image[0] 
+        ? (publicId ? `https://bharatlinker.publit.io/file/${publicId}` : image[0])
+        : DEFAULT_IMAGE_URL;
+
+    const productName = title 
+        ? (title.length > 45 ? `${title.substring(0, 45)}..` : title) 
+        : 'Product Name';
+    
+    const productPrice = discountedPrice 
+        ? discountedPrice.toLocaleString('en-IN', { style: 'currency', currency: 'INR' }) 
+        : price 
+        ? price.toLocaleString('en-IN', { style: 'currency', currency: 'INR' }) 
+        : '₹0';
+
     const currentPath = location.pathname;
     const isShopProductPage = currentPath === '/secure/retailer/products';
     const isSearchPage = currentPath === '/search';
@@ -39,6 +54,7 @@ function SearchPageProductCard({ id, image, title, price, discountedPrice, isInS
                     alt={productName}
                     effect="blur"
                     loading="lazy"
+                    placeholderSrc={DEFAULT_IMAGE_URL}
                 />
             </div>
 
@@ -62,7 +78,7 @@ function SearchPageProductCard({ id, image, title, price, discountedPrice, isInS
             </div>
 
             <div className="search-page-discount-container">
-                {price && discountedPrice && price > discountedPrice ? (
+                {price && discountedPrice && price > discountedPrice && price > 0 ? (
                     <span>
                         {Math.round(((price - discountedPrice) / price) * 100)}% off
                     </span>

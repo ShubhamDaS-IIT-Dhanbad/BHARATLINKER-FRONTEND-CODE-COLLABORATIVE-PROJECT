@@ -321,9 +321,9 @@ margin-left: 5px;
     display: flex;justify-content: center;align-items: center;
     gap: 7px;position: relative;bottom: 0;
 }
-.product-detail-image-select{
+.shop-detail-image-select{
     width: 6px; height: 6px;
-    background-color: #000000c0;
+    background-color: #000000;
     border-radius: 50%;
 }
 .product-detail-image-unselect{

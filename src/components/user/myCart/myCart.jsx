@@ -10,7 +10,6 @@ import DeliveryAddress from './deliveryAddress.jsx';
 import {CheckOutPage} from './checkOutPage.jsx';
 import LocationTab from '../../locationTab/locationTab.jsx';
 import c1 from '../asset/c1.png';
-import s1 from '../asset/saving1.png';
 import './myCart.css';
 
 const MyCartPage = ({ userData }) => {

@@ -5,21 +5,16 @@ import { Oval } from "react-loader-spinner";
 import { FaCaretRight, FaPlus, FaMinus } from "react-icons/fa";
 import { RiShareForwardLine } from "react-icons/ri";
 import { debounce } from "lodash";
-
 import Cookies from 'js-cookie';
 import SingleProductSearchBar from "./singlePageSearchbar.jsx";
 import AddToCartTab from "./viewCartTab/viewCart.jsx";
-
 import searchProductService from "../appWrite/main/searchProduct.js";
-import { addToUserCart,updateCartStateAsync, removeFromUserCart } from "../redux/features/user/cartSlice.jsx";
-
+import { addToUserCart, updateCartStateAsync, removeFromUserCart } from "../redux/features/user/cartSlice.jsx";
 import { LazyLoadImage } from "react-lazy-load-image-component";
-
 import "react-lazy-load-image-component/src/effects/blur.css";
 import "./style/singleProduct.css";
 
-
-const fallbackImage = "http://res.cloudinary.com/dthelgixr/image/upload/v1727870088/hd7kcjuz8jfjajnzmqkp.webp";
+const FALLBACK_IMAGE = "http://res.cloudinary.com/dthelgixr/image/upload/v1727870088/hd7kcjuz8jfjajnzmqkp.webp";
 const MAX_QUANTITY = 5;
 
 const ProductDetails = () => {
@@ -27,17 +22,17 @@ const ProductDetails = () => {
     const dispatch = useDispatch();
     const { productId } = useParams();
 
-    const [userData, setUserData] = useState();
+    const [userData, setUserData] = useState(null);
     const { products } = useSelector((state) => state.searchproducts);
-    const { cart, totalQuantity, totalPrice} = useSelector((state) => state.userCart);
+    const { cart, totalQuantity, totalPrice } = useSelector((state) => state.userCart);
 
     const [loading, setLoading] = useState(true);
     const [productDetail, setProductDetails] = useState(null);
-    const [selectedImage, setSelectedImage] = useState(fallbackImage);
+    const [selectedImage, setSelectedImage] = useState(FALLBACK_IMAGE);
     const [descriptionSections, setDescriptionSections] = useState([]);
 
     const cartItem = useMemo(() => cart.find((item) => item?.productId === productId), [cart, productId]);
-    const cartQuantity = cartItem ? cartItem?.quantity : 0;
+    const cartQuantity = cartItem?.quantity || 0;
 
     const parseDescription = (description) => {
         if (!description) return [];
@@ -47,22 +42,30 @@ const ProductDetails = () => {
             .map((section) => {
                 const [heading, ...contents] = section.split("*");
                 return { heading: heading.trim(), content: contents.join("*").trim() };
-            });
+            })
+            .filter(section => section.heading && section.content);
+    };
+
+    const getImageUrl = (imageString) => {
+        if (!imageString) return FALLBACK_IMAGE;
+        const urlParts = imageString.split('/');
+        const publicIdWithExtension = urlParts[urlParts.length - 1] || '';
+        const publicId = publicIdWithExtension.includes('@X@XX@X@') 
+            ? publicIdWithExtension.split('@X@XX@X@')[1] 
+            : publicIdWithExtension;
+        return publicId ? `https://bharatlinker.publit.io/file/${publicId}` : imageString;
     };
 
     useEffect(() => {
         const fetchDetails = async () => {
             setLoading(true);
             try {
-                const product =
-                    products.find((product) => product.$id === productId) ||
-                    (await searchProductService.getProductById(productId));
+                const product = products.find((p) => p.$id === productId) ||
+                    await searchProductService.getProductById(productId);
 
                 if (product) {
                     setProductDetails(product);
-                    setSelectedImage(
-                        product?.images?.length > 0 ? product.images[0] || fallbackImage : fallbackImage
-                    );
+                    setSelectedImage(product.images?.[0] ? getImageUrl(product.images[0]) : FALLBACK_IMAGE);
                     setDescriptionSections(parseDescription(product.description));
                 } else {
                     navigate("/404");
@@ -74,20 +77,28 @@ const ProductDetails = () => {
                 setLoading(false);
             }
         };
-        const userData = Cookies.get("BharatLinkerUserData");
-        if (userData) {
+
+        const userCookie = Cookies.get("BharatLinkerUserData");
+        if (userCookie) {
             try {
-                setUserData(JSON.parse(userData));
+                setUserData(JSON.parse(userCookie));
             } catch (error) {
                 console.error("Error parsing user data:", error);
             }
         }
 
         fetchDetails();
-    }, []);
+    }, [productId, products, navigate]);
 
-    const handleImageClick = (index) => setSelectedImage(productDetail?.images[index]);
-    const handleShopClick = () => productDetail.shopId && navigate(`/shop/${productDetail.shopId}`);
+    const handleImageClick = useCallback((index) => {
+        const imageUrl = productDetail?.images?.[index] ? getImageUrl(productDetail.images[index]) : FALLBACK_IMAGE;
+        setSelectedImage(imageUrl);
+    }, [productDetail]);
+
+    const handleShopClick = () => {
+        if (productDetail?.shopId) navigate(`/shop/${productDetail.shopId}`);
+    };
+
     const handleShare = async () => {
         if (navigator.share) {
             try {
@@ -103,29 +114,31 @@ const ProductDetails = () => {
             alert("Sharing not supported on this browser.");
         }
     };
-    const handleAddToCart = async () => {
-        if(!userData) return navigate("/login");
-        if (!userData?.phoneNumber) return navigate("/login");
+
+    const handleAddToCart = () => {
+        if (!userData) return navigate("/login");
+        if (!userData.phoneNumber) return navigate("/login");
         if (!productDetail?.shopId) return alert("SHOP DOES NOT EXIST");
+        
         dispatch(addToUserCart({
             userId: userData.userId,
             productId: productDetail.$id,
             shopId: productDetail.shopId,
             title: productDetail.title.slice(0, 40),
-            price: productDetail.price,
-            discountedPrice: productDetail.discountedPrice || productDetail.price,
+            price: productDetail.price || 0,
+            discountedPrice: productDetail.discountedPrice || productDetail.price || 0,
             quantity: 1,
-            productImage: productDetail?.images[0],
-            shopName:productDetail.shop.shopName,
+            productImage: productDetail.images?.[0] || FALLBACK_IMAGE,
+            shopName: productDetail.shop?.shopName || "Unknown Shop",
             phoneNumber: `91${userData.phoneNumber}`,
-            shopEmail: productDetail.shop.shopEmail,
+            shopEmail: productDetail.shop?.shopEmail || "",
             customerName: userData.name || "user"
         }));
     };
 
     const debouncedUpdateCart = useCallback(
-        debounce(async (cartId, updatedCart) => {
-            dispatch(updateCartStateAsync(cartId, updatedCart));
+        debounce((cartId, updatedCart) => {
+            dispatch(updateCartStateAsync({ cartId, ...updatedCart }));
         }, 500),
         [dispatch]
     );
@@ -135,12 +148,18 @@ const ProductDetails = () => {
         if (!cartItem) return;
 
         const cartId = cartItem.$id;
-        const newQuantity = increment ? Math.min(cartQuantity + 1, MAX_QUANTITY) : Math.max(cartQuantity - 1, 0);
+        const newQuantity = increment 
+            ? Math.min(cartQuantity + 1, MAX_QUANTITY) 
+            : Math.max(cartQuantity - 1, 0);
 
         if (newQuantity === 0) {
             dispatch(removeFromUserCart({ productId: productDetail.$id, cartId }));
         } else {
-            debouncedUpdateCart(cartId, { productId: productDetail.$id, quantity: newQuantity, customerName: userData.name });
+            debouncedUpdateCart(cartId, { 
+                productId: productDetail.$id, 
+                quantity: newQuantity, 
+                customerName: userData.name || "user" 
+            });
         }
     };
 
@@ -160,9 +179,10 @@ const ProductDetails = () => {
                         <div id="product-details-img">
                             <LazyLoadImage
                                 src={selectedImage}
-                                alt={`Prouct Image`}
+                                alt={productDetail?.title || "Product Image"}
                                 effect="opacity"
                                 id="product-details-img-selected"
+                                placeholderSrc={FALLBACK_IMAGE}
                             />
                         </div>
 
@@ -170,47 +190,66 @@ const ProductDetails = () => {
                             {productDetail?.images?.map((image, index) => (
                                 <div
                                     key={index}
+                                    alt={`Thumbnail ${index + 1}`}
                                     onClick={() => handleImageClick(index)}
-                                    className={selectedImage === image ? "product-detail-image-select" : "product-detail-image-unselect"}
+                                    className={selectedImage === getImageUrl(image) 
+                                        ? "product-detail-image-select" 
+                                        : "product-detail-image-unselect"}
                                 />
                             ))}
                         </div>
+
                         <div id="product-details-info">
-                            <div id="product-details-title">{productDetail?.title}</div>
+                            <div id="product-details-title">{productDetail?.title || "Product"}</div>
                             <div className="product-detaile-share" onClick={handleShare} title="Share this product">
                                 <RiShareForwardLine size={20} />
                             </div>
                         </div>
+
                         <div id="product-details-see-all-brand-product">
                             View all products by {productDetail?.brand || "-"}
-                            <FaCaretRight onClick={() => navigate(`/search?query=${productDetail?.brand}`)} size={20} />
+                            <FaCaretRight 
+                                onClick={() => productDetail?.brand && navigate(`/search?query=${productDetail.brand}`)} 
+                                size={20} 
+                            />
                         </div>
+
                         <div id="product-details-shop">
                             Shop:{" "}
-                            <span onClick={handleShopClick}>{productDetail?.shop?.shopName ? productDetail.shop?.shopName?.toUpperCase() : "Loading..."}</span>
+                            <span onClick={handleShopClick}>
+                                {productDetail?.shop?.shopName ? 
+                                    productDetail.shop.shopName.toUpperCase() : 
+                                    "Loading..."}
+                            </span>
                         </div>
+
                         <div id="product-details-price-button">
                             <div id="searchProductDetails-price-button-inner">
                                 <div id="productDetails-discounted-price">
-                                    ₹{productDetail?.discountedPrice}
+                                    ₹{productDetail?.discountedPrice || productDetail?.price || 0}
                                     <div className="product-detail-discount-container">
-                                        {productDetail?.price && productDetail?.discountedPrice ? (
+                                        {productDetail?.price && productDetail?.discountedPrice && 
+                                         productDetail.price > productDetail.discountedPrice ? (
                                             <span>
                                                 {Math.round(
-                                                    ((productDetail.price - productDetail.discountedPrice) / productDetail.price) * 100
-                                                )}
-                                                % off
+                                                    ((productDetail.price - productDetail.discountedPrice) / 
+                                                    productDetail.price) * 100
+                                                )}% off
                                             </span>
                                         ) : (
-                                            "Price not available"
+                                            "No discount"
                                         )}
                                     </div>
                                 </div>
-                                <p id="productDetails-price1">
-                                    MRP <span id="productDetails-price2">₹{productDetail?.price}</span>
-                                </p>
+                                {productDetail?.price && (!productDetail.discountedPrice || 
+                                    productDetail.price > productDetail.discountedPrice) && (
+                                    <p id="productDetails-price1">
+                                        MRP <span id="productDetails-price2">₹{productDetail.price}</span>
+                                    </p>
+                                )}
                             </div>
-                            {productDetail.isInStock && productDetail.shop.isShopOpen ?
+
+                            {productDetail?.isInStock && productDetail?.shop?.isShopOpen ? (
                                 <div className="product-details-price-instock">
                                     {cartQuantity === 0 ? (
                                         <div onClick={handleAddToCart}>add to cart</div>
@@ -221,20 +260,27 @@ const ProductDetails = () => {
                                             <FaPlus size={15} onClick={() => handleUpdateCart(true)} />
                                         </div>
                                     )}
-                                </div> :
+                                </div>
+                            ) : (
                                 <div className="product-details-price-outofstock">
                                     ON SITE
-                                </div>}
+                                </div>
+                            )}
                         </div>
+
                         <div className="product-detail-description-container">
                             <div>Product Details</div>
                             <div className="productDetails-lists-description-container">
-                                {descriptionSections?.map((section, index) => (
+                                {descriptionSections.length > 0 ? descriptionSections.map((section, index) => (
                                     <div key={index} className="description-section">
                                         <div className="description-heading">{section.heading}</div>
                                         <div className="description-content">{section.content}</div>
                                     </div>
-                                ))}
+                                )) : (
+                                    <div className="description-section">
+                                        <div className="description-content">No description available</div>
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </div>

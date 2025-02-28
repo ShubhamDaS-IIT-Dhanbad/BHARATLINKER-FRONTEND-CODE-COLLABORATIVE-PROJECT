@@ -15,9 +15,9 @@ const parseDescription = (description) => {
   if (!description) return [];
   return description.split("#").slice(1).map(section => {
     const [heading, ...contents] = section.split("*");
-    return { 
-      heading: heading.trim(), 
-      content: contents.join("*").trim() 
+    return {
+      heading: heading.trim(),
+      content: contents.join("*").trim()
     };
   });
 };
@@ -26,7 +26,7 @@ const ProductDetails = memo(() => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { shopId } = useParams();
-  
+
   const [shopDetail, setShopDetail] = useState(null);
   const [selectedImage, setSelectedImage] = useState("");
   const [loading, setLoading] = useState(true);
@@ -40,22 +40,31 @@ const ProductDetails = memo(() => {
     [shopDetail?.shopDescription]
   );
 
+  const getImageUrl = (imageString, index) => {
+    if (!imageString) return 'https://via.placeholder.com/300x180';
+    const urlParts = imageString.split('/') || [];
+    const publicIdWithExtension = urlParts[urlParts.length - 1] || '';
+    const publicId = publicIdWithExtension.split('@X@XX@X@')[1] || '';
+    return `https://bharatlinker.publit.io/file/${publicId}`;
+  };
+
   const fetchShopDetails = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
-      
+
       const cachedShop = [...shops, ...singleShops].find(shop => shop?.$id === shopId);
       if (cachedShop) {
         setShopDetail(cachedShop);
-        setSelectedImage(cachedShop.shopImages[0] || "");
+        setSelectedImage(getImageUrl(cachedShop.shopImages?.[0], 0));
+        setLoading(false);
         return;
       }
 
-      const result = await dispatch(fetchShopById(shopId));
-      if (result.payload) {
-        setShopDetail(result.payload);
-        setSelectedImage(result.payload.shopImages[0] || "");
+      const result = await dispatch(fetchShopById(shopId)).unwrap();
+      if (result) {
+        setShopDetail(result);
+        setSelectedImage(getImageUrl(result.shopImages?.[0], 0));
       } else {
         setError("Shop not found");
       }
@@ -73,7 +82,10 @@ const ProductDetails = memo(() => {
   }, [shopId, fetchShopDetails]);
 
   const handleImageClick = useCallback(
-    index => setSelectedImage(shopDetail?.shopImages[index]),
+    (index) => {
+      const imageUrl = getImageUrl(shopDetail?.shopImages?.[index], index);
+      setSelectedImage(imageUrl);
+    },
     [shopDetail]
   );
 
@@ -142,7 +154,6 @@ const ProductDetails = memo(() => {
       </div>
     );
   }
-
   return (
     <>
       <div id="product-details-search-container-top">
@@ -164,7 +175,7 @@ const ProductDetails = memo(() => {
             <div
               key={index}
               onClick={() => handleImageClick(index)}
-              className={selectedImage === image ? "product-detail-image-select" : "product-detail-image-unselect"}
+              className={selectedImage === image ? "shop-detail-image-select" : "product-detail-image-unselect"}
             />
           ))}
         </div>

@@ -55,7 +55,7 @@ const placeOrderProvider = async (
     // Create a document in the Appwrite database
     const response = await databases.createDocument(
       conf.appwriteShopsDatabaseId,
-      conf.appwriteOrdersCollectionId,
+      conf.appwriteShopsOrdersCollectionId,
       ID.unique(),
       {
         userId,
@@ -106,7 +106,7 @@ const getOrderByUserId = async (phoneNumber, state, page, ordersPerPage = 10) =>
     // Fetch documents
     const response = await databases.listDocuments(
       conf.appwriteShopsDatabaseId,
-      conf.appwriteOrdersCollectionId,
+      conf.appwriteShopsOrdersCollectionId,
       queries
     );
     return {
@@ -149,7 +149,7 @@ const getOrderByShopId = async (shopId, state, page, ordersPerPage = 10) => {
     // Fetch documents
     const response = await databases.listDocuments(
       conf.appwriteShopsDatabaseId,
-      conf.appwriteOrdersCollectionId,
+      conf.appwriteShopsOrdersCollectionId,
       queries
     );
     return {
@@ -173,7 +173,7 @@ const updateOrderByShopId = async (orderId, state) => {
     const documentId = orderId;
     const response = await databases.updateDocument(
       conf.appwriteShopsDatabaseId,
-      conf.appwriteOrdersCollectionId,
+      conf.appwriteShopsOrdersCollectionId,
       documentId,
       {
         state
@@ -196,7 +196,7 @@ const updateOrderState = async (orderId, state) => {
     const documentId = orderId;
     const response = await databases.updateDocument(
       conf.appwriteShopsDatabaseId,
-      conf.appwriteOrdersCollectionId,
+      conf.appwriteShopsOrdersCollectionId,
       documentId,
       {
         state
@@ -220,7 +220,7 @@ const updateOrderStateToConfirmed = async (orderId, state, expectedDeliveryDate)
     const documentId = orderId;
     const response = await databases.updateDocument(
       conf.appwriteShopsDatabaseId,
-      conf.appwriteOrdersCollectionId,
+      conf.appwriteShopsOrdersCollectionId,
       documentId,
       {
         state,
@@ -251,7 +251,7 @@ const updateOrderStateToDispatched = async (orderId, state, deliveryBoyPhn) => {
     const documentId = orderId;
     const response = await databases.updateDocument(
       conf.appwriteShopsDatabaseId,
-      conf.appwriteOrdersCollectionId,
+      conf.appwriteShopsOrdersCollectionId,
       documentId,
       {
         state,
@@ -274,7 +274,7 @@ const updateOrderStateToDelivered = async (orderId, state) => {
     const documentId = orderId;
     const response = await databases.updateDocument(
       conf.appwriteShopsDatabaseId,
-      conf.appwriteOrdersCollectionId,
+      conf.appwriteShopsOrdersCollectionId,
       documentId,
       {
         state,
@@ -294,7 +294,7 @@ const updateOrderStateToCanceled = async (orderId, state) => {
     const documentId = orderId;
     const response = await databases.updateDocument(
       conf.appwriteShopsDatabaseId,
-      conf.appwriteOrdersCollectionId,
+      conf.appwriteShopsOrdersCollectionId,
       documentId,
       {
         state,

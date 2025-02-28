@@ -23,7 +23,7 @@ export const updatePassword = async (shopId, password) => {
 
     const shopData = await databases.updateDocument(
       conf.appwriteShopsDatabaseId,
-      conf.appwriteShopsCollectionId,
+      conf.appwriteShopsShopsCollectionId,
       shopId,
       {
         shopPassword: passwordInt
@@ -59,7 +59,7 @@ export const verifyOTP = async (shopId, otpCode, shopPhoneNumber) => {
     if (!shopData || shopData.total === 0) {
       shopData = await databases.createDocument(
         conf.appwriteShopsDatabaseId,
-        conf.appwriteShopsCollectionId,
+      conf.appwriteShopsShopsCollectionId,
         ID.unique(),
         { shopPhoneNumber }
       );
@@ -87,7 +87,7 @@ export const verifyPassword = async (shopPhoneNumber, password) => {
 
     const result = await databases.listDocuments(
       conf.appwriteShopsDatabaseId,
-      conf.appwriteShopsCollectionId,
+      conf.appwriteShopsShopsCollectionId,
       queries
     );
     if (result.documents.length > 0) {

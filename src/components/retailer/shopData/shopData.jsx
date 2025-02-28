@@ -9,7 +9,8 @@ import './shopData.css';
 
 const ShopData = ({ shopData }) => {
     const navigate = useNavigate();
-    const [showInfo, setShowInfo] = useState(false); // Added state for controlling the info popup
+    const [showInfo, setShowInfo] = useState(false); 
+    console.log(shopData)
 
     useEffect(() => {
         window.scrollTo(0, 0);
