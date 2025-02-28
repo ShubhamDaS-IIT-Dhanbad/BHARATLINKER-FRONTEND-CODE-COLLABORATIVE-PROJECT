@@ -7,7 +7,7 @@ import Navbar from '../navbar.jsx';
 import OrderProductCard from './cartCard.jsx';
 import { removeFromUserCart } from '../../../redux/features/user/cartSlice.jsx';
 import DeliveryAddress from './deliveryAddress.jsx';
-import CheckOutPage from './checkOutPage.jsx';
+import {CheckOutPage} from './checkOutPage.jsx';
 import LocationTab from '../../locationTab/locationTab.jsx';
 import c1 from '../asset/c1.png';
 import s1 from '../asset/saving1.png';
