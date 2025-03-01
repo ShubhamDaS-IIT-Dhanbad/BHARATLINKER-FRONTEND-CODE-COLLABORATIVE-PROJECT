@@ -14,13 +14,9 @@ import { useNavigate } from "react-router-dom";
 
 // Constants for better readability
 const DEFAULT_ZOOM = 15;
-const HERE_TILE_LAYER_URL = "https://{s}.base.maps.ls.hereapi.com/maptile/2.1/maptile/newest/normal.day/{z}/{x}/{y}/256/png8?apiKey=Zq0jzkt4gZyvIS_hKgDgHOxmMND9k3LdKnmGbyBQoTg";
-const HERE_GEOCODING_API_URL = "https://reverse.geocoder.ls.hereapi.com/6.2/reversegeocode.json";
+const TILE_LAYER_URL = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
+const NOMINATIM_API_URL = "https://nominatim.openstreetmap.org/reverse?format=json";
 const DEBOUNCE_DELAY = 1000;
-
-// HERE API credentials
-const HERE_APP_ID = "gFKrdYqIR016dREUWBnR";
-const HERE_API_KEY = "Zq0jzkt4gZyvIS_hKgDgHOxmMND9k3LdKnmGbyBQoTg";
 
 // Custom marker icon
 const createCustomIcon = (color = "#4CAF50") =>
@@ -50,13 +46,13 @@ const LocationMap = ({
     const navigate = useNavigate();
     const { updateLocation } = useLocationFromCookie();
     const [position, setPosition] = useState([latMap, longMap]);
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(false); // Initially false since we'll show addressMap directly
     const [loadingConfirm, setLoadingConfirm] = useState(false);
     const [address, setAddress] = useState(addressMap || '');
     const mapRef = useRef(null);
     const abortControllerRef = useRef(new AbortController());
 
-    // Fetch address from coordinates using HERE Geocoding API
+    // Fetch address from coordinates
     const getAddressFromLatLng = useCallback(async (lat, lon) => {
         abortControllerRef.current.abort();
         abortControllerRef.current = new AbortController();
@@ -64,17 +60,15 @@ const LocationMap = ({
 
         try {
             const response = await fetch(
-                `${HERE_GEOCODING_API_URL}?prox=${lat},${lon}&mode=retrieveAddresses&maxresults=1&gen=9&app_id=${HERE_APP_ID}&apiKey=${HERE_API_KEY}`,
+                `${NOMINATIM_API_URL}&lat=${lat}&lon=${lon}`,
                 { signal: abortControllerRef.current.signal }
             );
             if (!response.ok) throw new Error("Network error");
             const data = await response.json();
-            const addressLabel = data.Response.View[0]?.Result[0]?.Location.Address.Label || "Address not found";
-            setAddress(addressLabel);
+            setAddress(data.display_name);
         } catch (error) {
             if (error.name !== "AbortError") {
-                console.error("Error fetching address from HERE:", error);
-                setAddress("Unable to fetch address");
+                console.error("Error fetching address:", error);
             }
         } finally {
             setLoading(false);
@@ -146,7 +140,7 @@ const LocationMap = ({
             }
         }
     }
-
+    
     // Confirm location handler
     const handleConfirm = useCallback(() => {
         setLoadingConfirm(true);
@@ -201,7 +195,7 @@ const LocationMap = ({
             zoomControl={false}
             whenCreated={(map) => (mapRef.current = map)}
         >
-            <TileLayer url={HERE_TILE_LAYER_URL} />
+            <TileLayer url={TILE_LAYER_URL} />
             <MapClickHandler />
             <Marker position={position} icon={createCustomIcon("#4CAF50")} draggable={true}>
                 <Popup className="custom-popup">
