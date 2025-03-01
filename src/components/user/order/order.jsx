@@ -92,13 +92,14 @@ const Order = ({ userData }) => {
 
   return (
     <>
-      {selectedOrder ? (
+      {selectedOrder ? (<>
         <UserOrderDetail
           userData={userData}
           order={selectedOrder}
           onImageClick={() => handleImageClick(selectedOrder.productId)}
           setOrder={setSelectedOrder}
         />
+        </>
       ) : (
         <>
           <header>

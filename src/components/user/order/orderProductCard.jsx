@@ -6,31 +6,89 @@ import { updateOrderStateToCanceled } from "../../../appWrite/order/order.js";
 import { updateOrder, deleteOrder } from "../../../redux/features/user/orderSlice.jsx";
 import "./userOrderCard.css";
 
+// Reusable Confirmation Popup Component
+const ConfirmationPopup = ({ isOpen, title, text, buttons }) => {
+    if (!isOpen) return null;
+
+    return (
+        <div className="user-dashboard-popup-overlay">
+            <div className="user-dashboard-popup-card">
+                <div className="user-dashboard-popup-pointer"></div>
+                <h2 className="user-dashboard-popup-title">{title}</h2>
+                {text && <p className="user-dashboard-popup-text">{text}</p>}
+                <div className="user-dashboard-popup-buttons">
+                    {buttons.map((btn, index) => (
+                        <button
+                            key={index}
+                            className={
+                                btn.primary
+                                    ? "user-dashboard-popup-button-primary"
+                                    : "user-dashboard-popup-button-secondary"
+                            }
+                            onClick={btn.onClick}
+                            disabled={btn.disabled || false}
+                        >
+                            {btn.label}
+                        </button>
+                    ))}
+                </div>
+            </div>
+        </div>
+    );
+};
+
 function OrderProductCard({ order, setOrder, onImageClick }) {
     const dispatch = useDispatch();
     const [canceling, setCanceling] = useState(false);
     const [imageLoaded, setImageLoaded] = useState(false);
+    const [showConfirmPopup, setShowConfirmPopup] = useState(false);
+    const [showErrorPopup, setShowErrorPopup] = useState(false);
 
-    const handleCancel = async () => {
-        if (window.confirm("Are you sure you want to cancel this order?")) {
-            try {
-                setCanceling(true);
-                const updatedOrderData = await updateOrderStateToCanceled(order.$id, "canceled");
-                dispatch(deleteOrder({ orderId: order.$id, orderStateArrayName: order.state }));
-                dispatch(updateOrder({
-                    orderId: order.$id,
-                    updatedOrderData,
-                    orderStateArrayName: "canceled"
-                }));
-                setOrder(null); // Reset order in parent component
-            } catch (error) {
-                console.error("Failed to cancel order:", error);
-                alert("Failed to cancel order. Please try again.");
-            } finally {
-                setCanceling(false);
-            }
+    const handleCancelClick = () => {
+        setShowConfirmPopup(true);
+    };
+
+    const handleConfirmCancel = async () => {
+        try {
+            setCanceling(true);
+            setShowConfirmPopup(false);
+            const updatedOrderData = await updateOrderStateToCanceled(order.$id, "canceled");
+            dispatch(deleteOrder({ orderId: order.$id, orderStateArrayName: order.state }));
+            dispatch(updateOrder({
+                orderId: order.$id,
+                updatedOrderData,
+                orderStateArrayName: "canceled"
+            }));
+            setOrder(null);
+        } catch (error) {
+            console.error("Failed to cancel order:", error);
+            setShowErrorPopup(true);
+        } finally {
+            setCanceling(false);
         }
     };
+
+    const confirmButtons = [
+        {
+            label: "Yes",
+            onClick: handleConfirmCancel,
+            primary: true,
+            disabled: canceling
+        },
+        {
+            label: "No",
+            onClick: () => setShowConfirmPopup(false),
+            primary: false
+        }
+    ];
+
+    const errorButtons = [
+        {
+            label: "OK",
+            onClick: () => setShowErrorPopup(false),
+            primary: true
+        }
+    ];
 
     return (
         <div className="user-order-card-parent">
@@ -76,7 +134,7 @@ function OrderProductCard({ order, setOrder, onImageClick }) {
                         {order.state !== "canceled" && order.state !== "delivered" && (
                             <button
                                 className={`user-order-card-detail-3-state-cancel ${canceling ? "disabled" : ""}`}
-                                onClick={handleCancel}
+                                onClick={handleCancelClick}
                                 disabled={canceling}
                             >
                                 {canceling ? (
@@ -99,6 +157,22 @@ function OrderProductCard({ order, setOrder, onImageClick }) {
                     </div>
                 </div>
             </div>
+
+            {/* Confirmation Popup for Cancel */}
+            <ConfirmationPopup
+                isOpen={showConfirmPopup}
+                title="Cancel Order - Action Cannot Be Undone"
+                text="Are you absolutely sure you want to cancel this order? Once canceled, this action **cannot** be undone, and the order will be permanently removed from processing. Please confirm your decision carefully."                
+                buttons={confirmButtons}
+            />
+
+            {/* Error Popup */}
+            <ConfirmationPopup
+                isOpen={showErrorPopup}
+                title="Error"
+                text="Failed to cancel order. Please try again."
+                buttons={errorButtons}
+            />
         </div>
     );
 }

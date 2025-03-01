@@ -135,3 +135,87 @@
 .status-icon.delivered {
     color: #16b710;
 }
+
+
+
+
+
+
+
+/* Popup Styles */
+.user-dashboard-popup-overlay {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.406);
+    z-index: 1001;
+}
+
+.user-dashboard-popup-card {
+    position: relative;
+    padding: 10px;
+    margin-top: 57px;
+    width: calc(95% - 20px);
+    max-width: 400px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    background: rgb(255, 255, 255);
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.user-dashboard-popup-pointer {
+    position: absolute;
+    top: -8px;
+    left: 20px;
+    width: 16px;
+    height: 16px;
+    background: white;
+    transform: rotate(45deg);
+}
+
+.user-dashboard-popup-title {
+    font-size: 1rem;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    font-weight: bold;
+}
+
+.user-dashboard-popup-text {
+    font-size: 0.7rem;
+    padding: 0;
+    margin: 0;
+    color: #4a4a4a;
+}
+
+.user-dashboard-popup-buttons {
+    display: flex;
+    gap: 10px;
+}
+
+.user-dashboard-popup-button-primary {
+    flex: 1;
+    padding: 6px;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    background: rgb(254, 75, 117);
+    color: white;
+    border: none;
+    transition: background 0.2s;
+}
+
+.user-dashboard-popup-button-secondary {
+    flex: 1;
+    padding: 6px;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    border: 1px solid rgb(254, 75, 117);
+    color: rgb(254, 75, 117);
+    background: white;
+    transition: background 0.2s;
+}
