@@ -24,19 +24,16 @@ const Order = ({ userData }) => {
     error
   } = useSelector((state) => state.userorders);
 
-  // Fetch initial orders when component mounts or when userData changes
   const fetchInitialOrders = useCallback(() => {
     if (!userData?.phoneNumber) return;
     dispatch(fetchUserOrders({ phoneNumber: userData.phoneNumber, page: 1 }));
   }, [userData?.phoneNumber, dispatch]);
 
-  // Load more orders for infinite scrolling
   const fetchNextPage = useCallback(() => {
     if (!userData?.phoneNumber || !hasMore || loading) return;
     dispatch(loadMoreOrders({ phoneNumber: userData.phoneNumber, page: currentPage + 1 }));
   }, [userData?.phoneNumber, dispatch, hasMore, currentPage, loading]);
 
-  // Enhanced navigation handler
   const handleImageClick = useCallback((productId) => {
     if (!productId) {
       console.error('Product ID is missing');
