@@ -4,50 +4,51 @@ import "./style/userTestimonial.css";
 const Testimonial = ({ti1}) => {
   const testimonials = [
     {
-      title: "BHARAT | LINKER",
-      description:"We are testing our platform in the Dhanbad,Jharkhand regions. As a small team of recent graduates, our resources are limited, but we are passionate about improving and expanding our services based on your feedback.",
+      title: "Struggles in the Tech Era",
+      description:
+        "In this new technological era, local rural retailers struggle to keep up with e-commerce giants like Flipkart, Zepto, and Blinkit. Limited digital access and resources put them at a disadvantage. We’re here to bridge that gap.",
       image: ti1,
     },    
     {
-      title: "Our Aim",
+      title: "Empowering Rural Retail",
       description:
-        "At BharatLinker, our goal is to create a seamless and efficient platform that connects users with the right services. We aim to provide solutions that foster growth and development for businesses and individuals alike.",
+        "At BharatLinker, we aim to empower rural retailers facing the challenges of this tech-driven age. Our platform helps them compete with giants like Flipkart and Blinkit by connecting them to a wider audience.",
       image: ti1,
     },
     {
-      title: "Help Us Grow",
+      title: "Help Us Lift Local Stores",
       description:
-        "We are constantly working towards improving our platform and services. Your feedback and support are invaluable in helping us expand and refine our offerings to better serve your needs.",
+        "Rural retailers battle high fees, low visibility, and fast delivery promises from platforms like Zepto in this technological era. Your support and feedback can help us create tools to level the playing field.",
       image: ti1,
     },
     {
-      title: "Join Us in Our Mission",
+      title: "Join Our Mission",
       description:
-        "We invite you to be a part of BharatLinker’s journey. Whether you’re a user or a service provider, together, we can build a more connected and efficient digital ecosystem.",
+        "Be part of BharatLinker’s effort to support rural retailers in this digital age. Together, we can help them overcome the dominance of e-commerce giants like Flipkart and Blinkit for a fairer future.",
       image: ti1,
     },
     {
-      title: "Our Commitment",
+      title: "Our Commitment to Growth",
       description:
-        "BharatLinker is committed to delivering exceptional service and innovative solutions. We are here to support you every step of the way and provide a reliable platform for your digital needs.",
+        "BharatLinker is dedicated to helping rural retailers thrive in this new technological era. We provide affordable, innovative solutions to counter the challenges posed by e-commerce giants.",
       image: ti1,
     },
     {
-      title: "Your Feedback Matters",
+      title: "Your Input Shapes Tomorrow",
       description:
-        "We value the input of our users. Your feedback helps us shape the future of BharatLinker, allowing us to provide better features and improve the overall experience for everyone.",
+        "Rural retailers need your help to adapt to this tech-driven world. Your feedback enables BharatLinker to tackle their struggles against platforms like Flipkart and Zepto effectively.",
       image: ti1,
     },
     {
-      title: "Building the Future Together",
+      title: "Building a Future Together",
       description:
-        "As we continue to grow, we remain focused on creating a platform that truly addresses the needs of our users. Join us in building the future of digital connections.",
+        "In this technological era, e-commerce giants often outpace rural stores. Join us in creating a platform that boosts their growth and resilience against companies like Blinkit and Flipkart.",
       image: ti1,
     },
     {
-      title: "Stay Connected",
+      title: "Support Local, Stay Connected",
       description:
-        "At BharatLinker, we believe in the power of connection. Stay updated with our latest features and developments by following us and becoming part of our community.",
+        "By staying connected with BharatLinker, you help rural retailers navigate the challenges of this digital age. Support local businesses as they stand up to e-commerce giants and thrive.",
       image: ti1,
     },
   ];
@@ -66,10 +67,10 @@ const Testimonial = ({ti1}) => {
           alt={testimonials[current].title}
           className="user-testimonial-image"
         />
-        <h3 className="user-testimonial-title">{testimonials[current].title}</h3>
+        <h3 className="user-testimonial-title">{testimonials[current].title.toUpperCase()}</h3>
         <p className="user-testimonial-description">{testimonials[current].description}</p>
       </div>
-      {/* <div className="user-testimonial-dots">
+      <div className="user-testimonial-dots">
         {testimonials.map((_, index) => (
           <span
             key={index}
@@ -77,7 +78,7 @@ const Testimonial = ({ti1}) => {
             onClick={() => handleDotClick(index)}
           ></span>
         ))}
-      </div> */}
+      </div>
     </div>
   );
 };

@@ -34,22 +34,20 @@
 }
 
 .user-testimonial-dots {
-  margin-top: 20px;
+  margin-top: 0px;margin-bottom: 50px;
 }
 
 .user-testimonial-dot {
   height: 10px;
   width: 10px;
   margin: 0 5px;
-  background-color: #ccc;
+  background: rgb(213, 248, 228);
   border-radius: 50%;
   display: inline-block;
-  cursor: pointer;
-  transition: background-color 0.3s;
 }
 
 .user-testimonial-dot.active {
-  background-color: #007bff;
+  background: rgb(91, 228, 168);
 }
 
 
