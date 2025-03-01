@@ -156,6 +156,7 @@
 .user-login-otp-instruction {
   color: #666;
   font-size: 14px;
+  margin-top: 50px;
   margin-bottom: 10px;
 }
 
@@ -192,8 +193,8 @@
 
 .user-login-otp-premium-button.user-login-secondary {
   background: transparent;
-  color: rgb(28, 121, 43);
-  border: 1px solid rgb(28, 121, 43);
+  color: rgb(28, 121, 43);border: none;
+  outline: none;
 }
 
 /* Error Message */

@@ -6,6 +6,7 @@ import Cookies from 'js-cookie';
 import { IoCloseCircleOutline } from "react-icons/io5";
 import { GoChevronLeft } from "react-icons/go";
 import i1 from './asset/lg1.png';
+import i2 from './asset/otp1.png';
 import './style/userLogin.css';
 
 function SignUpForm() {
@@ -34,15 +35,15 @@ function SignUpForm() {
   }, [timer, otpSent]);
 
   const handleSendOTP = async () => {
-    if (phone.length !== 10) return; 
+    if (phone.length !== 10) return;
     setLoading(true);
-    setErrorMessage(''); 
+    setErrorMessage('');
     try {
       // const userId = await sendOTP(`+91${phone}`) ;
       if (userId || 1) {
         setUserId(userId);
         setOtpSent(true);
-        setIsResendDisabled(true); 
+        setIsResendDisabled(true);
         setTimer(30);
         setOtp(new Array(6).fill(""));
       } else {
@@ -113,7 +114,7 @@ function SignUpForm() {
       {!otpSent ? (
         <div className='user-login-auth-form-container'>
           <div className='user-login-auth-form-back-container' onClick={() => navigate('/')}> <GoChevronLeft size={25} /> </div>
-          
+
           <div className='user-login-auth-form-u1'>
             <img src={i1} alt='Illustration' />
             <div className="user-login-container-text">
@@ -148,7 +149,9 @@ function SignUpForm() {
             <div className='user-login-auth-form-back-container' onClick={() => setOtpSent(false)}> <GoChevronLeft size={30} /> </div>
             <h3 className='user-login-otp-title'>OTP Verification</h3>
           </div>
-
+          <div className='user-login-auth-form-u1'>
+            <img src={i2} alt='Illustration' />
+          </div>
           <p className='user-login-otp-instruction'>Enter the 6-digit code sent to +91 {phone}</p>
           {errorMessage && <div className="user-login-premium-error-message">{errorMessage}</div>}
 
