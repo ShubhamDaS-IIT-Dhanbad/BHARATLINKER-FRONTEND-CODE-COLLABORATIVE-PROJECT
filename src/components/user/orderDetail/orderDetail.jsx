@@ -112,7 +112,7 @@ const UserOrderDetail = ({ userData, order, setOrder }) => {
                         </div>
                         {order.retailerMessage && (
                             <div className="uod-info-c">
-                            <div className="uod-info-h">" MESSAGE FROM SHOP "</div>
+                            <div className="uod-info-h">MESSAGE FROM SHOP</div>
                             <span>" {order.retailerMessage} "</span>
                         </div>
                         )}
