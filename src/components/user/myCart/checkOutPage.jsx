@@ -105,7 +105,7 @@ function CheckOutPage({ userData, items, deliveryAddress, setDeliveryAddress, se
             </header>
 
             {placingOrder && <div className="overlay" />}
-            <div className="checkout-page">
+            <div className="checkout-page" style={{marginTop:"50px"}}>
                 <div className="checkout-main">
                     <div className="cart-items-section">
                         <div className="cart-items-container">
