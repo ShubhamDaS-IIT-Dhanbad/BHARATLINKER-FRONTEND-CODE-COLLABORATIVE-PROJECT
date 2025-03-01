@@ -12,7 +12,7 @@ import { useExecuteSearch } from '../hooks/searchProductHook.jsx';
 import { useSearchShop } from '../hooks/searchShopHook.jsx';
 import { useShopProductExecuteSearch } from '../hooks/searchShopProductHook.jsx';
 import './style/navbar.css';
-// this is
+
 const Navbar = ({ headerTitle, shopId }) => {
     const { getLocationFromCookie } = useLocationFromCookie();
     const navigate = useNavigate();

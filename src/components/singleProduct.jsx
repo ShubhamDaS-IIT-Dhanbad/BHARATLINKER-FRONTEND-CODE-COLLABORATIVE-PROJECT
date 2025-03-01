@@ -128,7 +128,7 @@ const ProductDetails = () => {
             price: productDetail.price || 0,
             discountedPrice: productDetail.discountedPrice || productDetail.price || 0,
             quantity: 1,
-            productImage: productDetail.images?.[0] || FALLBACK_IMAGE,
+            productImage: getImageUrl(productDetail.images?.[0]) || FALLBACK_IMAGE,
             shopName: productDetail.shop?.shopName || "Unknown Shop",
             phoneNumber: `91${userData.phoneNumber}`,
             shopEmail: productDetail.shop?.shopEmail || "",

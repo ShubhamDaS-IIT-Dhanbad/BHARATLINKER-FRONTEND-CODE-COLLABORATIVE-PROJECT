@@ -1,7 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { IoIosRemove } from "react-icons/io";
-import { IoIosRemoveCircle } from "react-icons/io";
 import './cartCard.css';
 
 function OrderProductCard({ order, onRemove, productId, isRemove = false }) {
