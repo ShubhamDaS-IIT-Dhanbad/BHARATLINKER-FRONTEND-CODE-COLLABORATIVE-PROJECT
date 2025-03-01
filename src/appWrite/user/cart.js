@@ -21,7 +21,7 @@ async function getCartItems(userId, page = 1, limit = 10) {
         Query.offset(offset),
         Query.orderDesc("$createdAt"),
       ]
-    );
+    );console.log(response)
     return response.documents;
   } catch (error) {
     console.error("Error fetching cart items:", error);
@@ -45,10 +45,10 @@ async function addToCart(cartItem) {
         discountedPrice: Number(cartItem.discountedPrice),
         quantity: Number(cartItem.quantity),
         productImage: cartItem.productImage,
-        shopEmail:cartItem.shopEmail,
-        customerName: cartItem.customerName,
-        shopName:cartItem.shopName,
-        customerPhoneNumber: Number(cartItem.phoneNumber),
+        shopEmail:cartItem?.shopEmail,
+        customerName: cartItem?.customerName,
+        shopName:cartItem?.shopName,
+        customerPhoneNumber: cartItem?.customerPhoneNumber,
       }
     );
     return response;

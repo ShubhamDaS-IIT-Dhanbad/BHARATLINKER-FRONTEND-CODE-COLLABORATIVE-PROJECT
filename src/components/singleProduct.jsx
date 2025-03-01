@@ -130,7 +130,7 @@ const ProductDetails = () => {
             quantity: 1,
             productImage: getImageUrl(productDetail.images?.[0]) || FALLBACK_IMAGE,
             shopName: productDetail.shop?.shopName || "Unknown Shop",
-            phoneNumber: `91${userData.phoneNumber}`,
+            customerPhoneNumber: `91${userData.phoneNumber}`,
             shopEmail: productDetail.shop?.shopEmail || "",
             customerName: userData.name || "user"
         }));
