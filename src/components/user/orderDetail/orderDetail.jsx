@@ -110,6 +110,12 @@ const UserOrderDetail = ({ userData, order, setOrder }) => {
                             <div className="uod-info-h">SHIPPING ADDRESS</div>
                             <span>{order.address}</span>
                         </div>
+                        {order.retailerMessage && (
+                            <div className="uod-info-c">
+                            <div className="uod-info-h">" MESSAGE FROM SHOP "</div>
+                            <span>" {order.retailerMessage} "</span>
+                        </div>
+                        )}
                         {order.building && (
                             <div className="uod-info-c">
                                 <div className="uod-info-h">BUILDING NO.</div>
@@ -149,12 +155,12 @@ const UserOrderDetail = ({ userData, order, setOrder }) => {
                     {order.deliveryBoyPhn && (
                         <div className="uod-product-card-address-div">
                             <p className="uod-product-card-address-p1">DELIVERY BOY</p>
-                            <button 
+                            <div
                                 className="uod-product-card-address-p2" 
                                 onClick={() => handlePhoneClick(order.deliveryBoyPhn)}
                             >
                                 {order.deliveryBoyPhn}
-                            </button>
+                            </div>
                         </div>
                     )}
 
