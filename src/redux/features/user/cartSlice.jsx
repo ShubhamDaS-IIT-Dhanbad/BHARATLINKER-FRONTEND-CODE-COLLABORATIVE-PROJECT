@@ -91,7 +91,7 @@ export const updateUserCart = createAsyncThunk(
     }
 );
 const debouncedUpdateUserCart = debounce(async (dispatch, cartId, updatedCart) => {
-    dispatch(updateUserCart({ cartId, updatedCart }));
+    dispatch(updateUserCart({cartId, updatedCart}));
 }, 50);
 export const updateCartStateAsync = (cartId, updatedCart) => async (dispatch, getState) => {
     debouncedUpdateUserCart(dispatch, cartId, updatedCart);

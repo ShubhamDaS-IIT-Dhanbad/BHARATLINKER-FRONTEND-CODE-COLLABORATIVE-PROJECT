@@ -21,7 +21,7 @@ async function getCartItems(userId, page = 1, limit = 10) {
         Query.offset(offset),
         Query.orderDesc("$createdAt"),
       ]
-    );console.log(response)
+    );
     return response.documents;
   } catch (error) {
     console.error("Error fetching cart items:", error);

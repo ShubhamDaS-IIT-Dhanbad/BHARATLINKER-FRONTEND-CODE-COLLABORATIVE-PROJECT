@@ -138,7 +138,7 @@ const ProductDetails = () => {
 
     const debouncedUpdateCart = useCallback(
         debounce((cartId, updatedCart) => {
-            dispatch(updateCartStateAsync({ cartId, ...updatedCart }));
+            dispatch(updateCartStateAsync(cartId, updatedCart ));
         }, 500),
         [dispatch]
     );
@@ -146,7 +146,7 @@ const ProductDetails = () => {
     const handleUpdateCart = (increment) => {
         if (!userData?.phoneNumber) return navigate("/login");
         if (!cartItem) return;
-
+        
         const cartId = cartItem.$id;
         const newQuantity = increment 
             ? Math.min(cartQuantity + 1, MAX_QUANTITY) 
