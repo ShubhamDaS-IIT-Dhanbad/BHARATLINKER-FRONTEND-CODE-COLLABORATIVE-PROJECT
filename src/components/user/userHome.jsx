@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
 import { CiLocationOn, CiMobile3 } from "react-icons/ci";
 import { PiShoppingBagOpenThin } from "react-icons/pi";
 import { IoIosLogOut } from "react-icons/io";
@@ -136,10 +135,8 @@ function UserHome({ userData }) {
             <header>
                 <Navbar onBackNavigation={() => navigate("/")} userData={userData} headerTitle="USER PROFILE" />
             </header>
-
             <main>
                 <section className="user-dashboard-info-section">
-
                     <HomeTestimonial ti1={ti1} />
                     <div className="user-dashboard-header-row">
                         {dashboardItems.map((item, index) => (

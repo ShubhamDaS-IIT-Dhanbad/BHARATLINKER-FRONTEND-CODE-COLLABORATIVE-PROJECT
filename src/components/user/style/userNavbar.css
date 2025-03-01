@@ -4,7 +4,7 @@
 .user-navbar-header-container {
     padding: 10px 0 10px 10px;
     display: flex; display: flex;padding-left: 20px;
-    width: 100vw;
+    width: 100vw ;
     position: fixed;
     top: 0;
     color: #000000;
