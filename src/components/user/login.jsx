@@ -5,7 +5,7 @@ import { sendOTP, verifyOTP } from '../../appWrite/user/userAuth.js';
 import Cookies from 'js-cookie';
 import { IoCloseCircleOutline } from "react-icons/io5";
 import { GoChevronLeft } from "react-icons/go";
-import i1 from './asset/lll.png';
+import i1 from './asset/lg1.png';
 import './style/userLogin.css';
 
 function SignUpForm() {
@@ -54,7 +54,6 @@ function SignUpForm() {
       setLoading(false);
     }
   };
-
 
   const handleVerifyOTP = async () => {
     if (otp.join('').length !== 6) return;
@@ -112,9 +111,10 @@ function SignUpForm() {
   return (
     <>
       {!otpSent ? (
-        <div className='auth-form-container'>
-          <div className='auth-form-container-back-container' onClick={() => navigate('/')}> <GoChevronLeft size={25} /> </div>
-          <div className='auth-form-container-u1'>
+        <div className='user-login-auth-form-container'>
+          <div className='user-login-auth-form-back-container' onClick={() => navigate('/')}> <GoChevronLeft size={25} /> </div>
+          
+          <div className='user-login-auth-form-u1'>
             <img src={i1} alt='Illustration' />
             <div className="user-login-container-text">
               <div>SIGN UP TO KEEP</div>
@@ -123,41 +123,42 @@ function SignUpForm() {
             </div>
           </div>
 
-          <div className='phone-input-container'>
-            <div className='country-code-pill'><span>+91</span></div>
+          <div className='user-login-phone-input-container'>
+            <div className='user-login-country-code-pill'><span>+91</span></div>
             <input
               type='number'
-              className='premium-input'
+              className='user-login-premium-input'
               placeholder='Enter mobile number'
               value={phone}
-              onChange={(e) => setPhone(e.target.value.replace(/[^0-9]/g, ''))}
+              onChange={(e) => setPhone(e.target.value.replace(/\D/g, '').slice(0, 10))}
+
               maxLength='10'
             />
           </div>
 
-          <button className='premium-button primary' onClick={handleSendOTP} disabled={loading || phone.length !== 10}>
+          <button className='user-login-premium-button user-login-primary' onClick={handleSendOTP} disabled={loading || phone.length !== 10}>
             {loading ? <TailSpin height={24} width={24} color='#ffffff' /> : 'SEND OTP'}
           </button>
           <p className='user-login-terms'>By continuing, you agree to our terms of service & Privacy Policy</p>
-          {errorMessage && <div className="premium-error-message">{errorMessage} <IoCloseCircleOutline size={20} /></div>}
+          {errorMessage && <div className="user-login-premium-error-message">{errorMessage} <IoCloseCircleOutline size={20} /></div>}
         </div>
       ) : (
-        <div className='otp-auth-form-container'>
-          <div className='otp-header'>
-            <div className='auth-form-container-back-container' onClick={() => setOtpSent(false)}> <GoChevronLeft size={30} /> </div>
-            <h3 className='otp-title'>OTP Verification</h3>
+        <div className='user-login-otp-auth-form-container'>
+          <div className='user-login-otp-header'>
+            <div className='user-login-auth-form-back-container' onClick={() => setOtpSent(false)}> <GoChevronLeft size={30} /> </div>
+            <h3 className='user-login-otp-title'>OTP Verification</h3>
           </div>
 
-          <p className='otp-instruction'>Enter the 6-digit code sent to +91 {phone}</p>
-          {errorMessage && <div className="premium-error-message">{errorMessage}</div>}
+          <p className='user-login-otp-instruction'>Enter the 6-digit code sent to +91 {phone}</p>
+          {errorMessage && <div className="user-login-premium-error-message">{errorMessage}</div>}
 
-          <div className='otp-input-group'>
+          <div className='user-login-otp-input-group'>
             {otp.map((_, index) => (
               <input
                 key={index}
                 id={`otp-input-${index}`}
                 type='number'
-                className='otp-digit-input'
+                className='user-login-otp-digit-input'
                 maxLength='1'
                 value={otp[index]}
                 onChange={(e) => handleOtpChange(e, index)}
@@ -167,18 +168,18 @@ function SignUpForm() {
             ))}
           </div>
 
-          <button className='premium-button primary' onClick={handleVerifyOTP} disabled={verifyingOtp || otp.join('').length !== 6}>
+          <button className='user-login-premium-button user-login-primary' onClick={handleVerifyOTP} disabled={verifyingOtp || otp.join('').length !== 6}>
             {verifyingOtp ? <TailSpin height={24} width={24} color='#ffffff' /> : 'Verify & Continue'}
           </button>
 
           {isResendDisabled && (
-            <div className='resend-otp'>
-              <button className='otp-premium-button secondary' onClick={handleSendOTP} disabled={isResendDisabled}>
+            <div className='user-login-resend-otp'>
+              <button className='user-login-otp-premium-button user-login-secondary' onClick={handleSendOTP} disabled={isResendDisabled}>
                 Resend OTP {isResendDisabled && `(${timer}s)`}
               </button>
             </div>
           )}
-          {errorMessage && <div className="premium-error-message">{errorMessage} <IoCloseCircleOutline size={20} /></div>}
+          {errorMessage && <div className="user-login-premium-error-message">{errorMessage} <IoCloseCircleOutline size={20} /></div>}
         </div>
       )}
     </>

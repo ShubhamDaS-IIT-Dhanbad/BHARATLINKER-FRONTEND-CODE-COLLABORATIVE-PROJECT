@@ -1,68 +1,104 @@
-
 /* userLogin.css */
-.auth-form-container {
+
+/* Sign Up Form Container */
+.user-login-auth-form-container {
   overflow-x: hidden;
-  padding: 20px;display: flex;flex-direction: column;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  max-width: calc(100vw - 40px);width: calc(100vw - 40px);
+  max-width: calc(100vw - 40px);
+  width: calc(100vw - 40px);
   min-height: 80vh;
-  background: #f9f9f9;
+  background-color: #f9f9f9;
 }
-.otp-auth-form-container{
+
+/* OTP Form Container */
+.user-login-otp-auth-form-container {
   overflow-x: hidden;
-  padding: 20px;display: flex;flex-direction: column;
-  align-items: center;justify-content: center;
-  max-width: calc(100vw - 40px);width: calc(100vw - 40px);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  max-width: calc(100vw - 40px);
+  width: calc(100vw - 40px);
   min-height: 40vh;
-  background: #f9f9f9;
+  background-color: #f9f9f9;
 }
-.auth-form-container-back-container{
-  position: fixed;top: 20px;left: 20px;
-  width: 40px;height: 40px;
-  border-radius: 50%;box-shadow: #333;
-  display: flex;justify-content: center;align-items: center;
+
+/* Back Button Container (used in both forms) */
+.user-login-auth-form-back-container {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-.user-login-container-text{
-  display: flex;flex-direction: column;
-  justify-content: center;align-items: center;
+
+/* Illustration and Text Container */
+.user-login-auth-form-u1 {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  flex-direction: column;
+  gap: 10px;
+  background-color: #f9f9f9;
+  width: 90vw;
+  margin-top: 90px;
+}
+
+.user-login-auth-form-u1 img {
+  width: 70vw;
+}
+
+.user-login-container-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   font-size: 20px;
   overflow: scroll;
-  margin-top: 10px;margin-bottom: 10px;
-  font-weight: 700;font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif
-}
-.auth-form-container-u1{
-  display: flex;justify-content:space-evenly;align-items: center;
-  flex-direction: column;gap: 10px;
-  width: 90vw;height: 35vh;margin-top: 30px;
-}
-.auth-form-container-u1 img{
-  width: 90vw;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  font-weight: 700;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
-/* background-color: rgb(28, 121, 43); */
-.phone-input-container {
-  display: flex;width: 80vw;
-  align-items: center;border-radius: 8px;
+/* Phone Input Section */
+.user-login-phone-input-container {
+  display: flex;
+  width: 80vw;
+  align-items: center;
+  border-radius: 8px;
   border: 1px solid #e0e0e0;
   margin-bottom: 10px;
+  margin-top: 40px;
 }
 
-.country-code-pill {
+.user-login-country-code-pill {
   padding: 7px 10px;
   border-radius: 8px;
   font-weight: 500;
 }
 
-.premium-input {
-  outline: none;border: none;
-  width: 100%;background-color: transparent;
+.user-login-premium-input {
+  outline: none;
+  border: none;
+  width: 100%;
+  background-color: transparent;
   padding: 12px;
   border-radius: 8px;
   font-size: 16px;
 }
 
-.premium-button {
+/* Buttons */
+.user-login-premium-button {
   width: 81vw;
   padding: 12px;
   border: none;
@@ -75,67 +111,65 @@
   gap: 8px;
 }
 
-.premium-button.primary {
+.user-login-premium-button.user-login-primary {
   background-color: rgb(28, 121, 43);
-  color: #f9f9f9;font-size: medium;
+  color: #f9f9f9;
+  font-size: medium;
   font-weight: 700;
 }
 
-.premium-button.secondary {
-  background: transparent;
-  color: rgb(28, 121, 43);
-  border: 1px solid rgb(28, 121, 43);
-}
-.digit-input:focus{
-  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
-  outline: none;
-}
-.phone-input-container:focus,
-.otp-digit-input:focus {box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
-  outline: none;
-}
-
-.premium-button:disabled {
+.user-login-premium-button:disabled {
   opacity: 0.7;
   cursor: not-allowed;
 }
 
-
-.auth-alternate-action {
-  display: flex;justify-content: center;align-items: center;
-  gap: 7px;
+/* Terms Text */
+.user-login-terms {
+  font-size: 11px;
+  margin-top: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 80vw;
   text-align: center;
-  margin-top: 15px;font-size: 14px;
-  color: #ff4444a0;
-  background: #ffeaea;
-  padding: 12px;
-  border-radius: 8px;
-  margin-bottom: 20px;
-  text-align: center;
+  color: #3333337b;
 }
 
-
-
-
-
-
-.password-inputs{
-  display: flex;width: 80vw;margin-bottom: 10px;
-  gap:5px;justify-content: center;align-items: center;
+/* OTP Header */
+.user-login-otp-header {
+  width: 100vw;
+  height: 90px;
+  position: fixed;
+  top: 0;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  justify-content: center;
+  margin-bottom: 25px;
 }
-.digit-input{
-  width: calc(15vw - 19.5px);
-  height: 50px;
-  text-align: center;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  font-size: 18px;
+
+.user-login-otp-title {
+  margin: 0;
 }
-.otp-input-group {
-  display: flex;width: 80vw;margin-bottom: 10px;
-  gap: 5px;justify-content: center;align-items: center;
+
+/* OTP Instruction */
+.user-login-otp-instruction {
+  color: #666;
+  font-size: 14px;
+  margin-bottom: 10px;
 }
-.otp-digit-input {
+
+/* OTP Input Group */
+.user-login-otp-input-group {
+  display: flex;
+  width: 80vw;
+  margin-bottom: 10px;
+  gap: 5px;
+  justify-content: center;
+  align-items: center;
+}
+
+.user-login-otp-digit-input {
   width: calc(15vw - 21px);
   height: 50px;
   text-align: center;
@@ -144,61 +178,74 @@
   font-size: 18px;
 }
 
-
-
-
-.otp-header {
-  width: 100vw;height: 90px;
-  position: fixed;top: 0;
-  display: flex;
-  align-items: center;
-  gap: 15px;justify-content: center;
-  margin-bottom: 25px;
+.user-login-otp-digit-input:focus {
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  outline: none;
 }
 
-.back-button {
-  background: none;
+/* Resend OTP */
+.user-login-resend-otp {
+  margin-top: 20px;
+  text-align: center;
   border: none;
-  color: #333;
 }
 
-.otp-title {
-  margin: 0;
+.user-login-otp-premium-button.user-login-secondary {
+  background: transparent;
+  color: rgb(28, 121, 43);
+  border: 1px solid rgb(28, 121, 43);
 }
 
-.otp-instruction {
-  color: #666;font-size: 14px;
-  margin-bottom: 10px;
-}
-.premium-error-message {
+/* Error Message */
+.user-login-premium-error-message {
   color: #ff4444;
   background: #ffeaea;
-  padding: 12px;display: flex;justify-content: center;
-  align-items: center;gap: 5px;
+  padding: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
   border-radius: 8px;
   margin-bottom: 20px;
-  position: fixed;bottom: 10px;
+  position: fixed;
+  bottom: 10px;
   text-align: center;
 }
 
 
 
-.resend-otp {
-  margin-top: 20px;
-  text-align: center;border: none;
-}
-.resend-otp button{
-  margin-top: 20px;
-  text-align: center;border: none;
-}
-
-
-.user-login-terms{
-  font-size: 11px;margin-top: 5px;
-  display: flex;justify-content: center;align-items: center;
-  width: 80vw;
-  color: #3333337b;
+.user-login-phone-input-container:hover {
+  box-shadow: rgba(91, 228, 169, 0.164) 0px 8px 24px;
 }
 
 
 
+
+.user-login-auth-form-u1 img {
+  animation: bounceShake 2s infinite ease-in-out;
+}
+
+@keyframes bounceShake {
+  0% {
+    transform: translateY(0) rotate(0deg);
+  }
+  20% {
+    transform: translateY(-10px) rotate(2deg);
+  }
+  40% {
+    transform: translateY(0) rotate(-2deg);
+  }
+  60% {
+    transform: translateY(-5px) rotate(1deg);
+  }
+  80% {
+    transform: translateY(0) rotate(-1deg);
+  }
+  100% {
+    transform: translateY(0) rotate(0deg);
+  }
+}
+
+.user-login-auth-form-u1 img:hover {
+  animation-play-state: paused;
+}
