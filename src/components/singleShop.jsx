@@ -125,11 +125,19 @@ const ProductDetails = memo(() => {
   }, [shopDetail]);
 
   const handlePhoneClick = useCallback(() => {
-    const phone = shopDetail?.customerCare;
+    const phone = shopDetail?.shopCustomerCare;
     if (phone?.match(/^[0-9+()\s-]+$/)) {
       window.location.href = `tel:${phone}`;
     } else {
       alert("Invalid phone number");
+    }
+  }, [shopDetail]);
+
+  const handleEmailClick = useCallback(() => {
+    if (shopDetail?.shopEmail) {
+      window.location.href = `mailto:${shopDetail.shopEmail}`;
+    } else {
+      alert("Email address not available");
     }
   }, [shopDetail]);
 
@@ -154,6 +162,7 @@ const ProductDetails = memo(() => {
       </div>
     );
   }
+
   return (
     <>
       <div id="product-details-search-container-top">
@@ -202,7 +211,7 @@ const ProductDetails = memo(() => {
           <div className="shop-detail-option" onClick={redirectMap}>
             <CiLocationOn size={35} />
           </div>
-          <div className="shop-detail-option">
+          <div className="shop-detail-option" onClick={handleEmailClick}>
             <CiMail size={35} />
           </div>
         </div>
