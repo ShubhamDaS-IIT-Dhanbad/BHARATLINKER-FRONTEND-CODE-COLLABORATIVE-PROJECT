@@ -68,7 +68,7 @@
 
 .uod-info-box {
   background-color: #100f0f;
-  background-color:rgb(66, 164, 244);
+  background-color:rgb(14, 119, 205);
   padding: 15px;
   color: white;
   border: 1px solid #ddd;
@@ -87,7 +87,7 @@
 }
 .uod-shop button{
   background-color: transparent;border: none;
-  background-color:rgb(66, 164, 244);padding: 10px;
+  background-color:rgb(14, 119, 205);padding: 10px;
   color: rgb(251, 243, 243);
 }
 .uod-shop span {

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useRef } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import PropTypes from 'prop-types';
@@ -12,11 +12,11 @@ import e1 from './e1.png';
 import "./order.css";
 
 const Order = ({ userData }) => {
-  const [order, setOrder] = useState(null);
+  const [selectedOrder, setSelectedOrder] = useState(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const abortControllerRef = useRef(null);
-  const { 
+
+  const {
     loading,
     orders,
     hasMore,
@@ -24,77 +24,41 @@ const Order = ({ userData }) => {
     error
   } = useSelector((state) => state.userorders);
 
-  const fetchInitialOrders = useCallback(async () => {
+  // Fetch initial orders when component mounts or when userData changes
+  const fetchInitialOrders = useCallback(() => {
     if (!userData?.phoneNumber) return;
-    abortControllerRef.current?.abort();
-    abortControllerRef.current = new AbortController();
-    
-    try {
-      await dispatch(fetchUserOrders({ 
-        phoneNumber: userData.phoneNumber,
-        page: 1 
-      })).unwrap();
-    } catch (err) {
-      if (err.name !== 'AbortError') {
-        console.error('Failed to fetch initial orders:', err);
-      }
-    }
-  }, [userData, dispatch]);
+    dispatch(fetchUserOrders({ phoneNumber: userData.phoneNumber, page: 1 }));
+  }, [userData?.phoneNumber, dispatch]);
 
-  const fetchNextPage = useCallback(async () => {
+  // Load more orders for infinite scrolling
+  const fetchNextPage = useCallback(() => {
     if (!userData?.phoneNumber || !hasMore || loading) return;
-    const nextPage = currentPage + 1;
-    
-    try {
-      await dispatch(loadMoreOrders({ 
-        phoneNumber: userData.phoneNumber, 
-        page: nextPage 
-      })).unwrap();
-    } catch (err) {
-      if (err.name !== 'AbortError') {
-        console.error('Failed to load more orders:', err);
-      }
+    dispatch(loadMoreOrders({ phoneNumber: userData.phoneNumber, page: currentPage + 1 }));
+  }, [userData?.phoneNumber, dispatch, hasMore, currentPage, loading]);
+
+  // Enhanced navigation handler
+  const handleImageClick = useCallback((productId) => {
+    if (!productId) {
+      console.error('Product ID is missing');
+      return;
     }
-  }, [userData, dispatch, hasMore, currentPage, loading]);
+    try {
+      navigate(`/product/${encodeURIComponent(productId)}`);
+    } catch (error) {
+      console.error('Navigation error:', error);
+    }
+  }, [navigate]);
 
   useEffect(() => {
-    const handlePopState = () => {
-      if (order) {
-        setOrder(null);
-      } else {
-        navigate('/user');
-      }
-    };
+    fetchInitialOrders();
+  }, [fetchInitialOrders]);
 
-    window.addEventListener('popstate', handlePopState);
-
-    if (userData?.phoneNumber && orders.length === 0) {
-      fetchInitialOrders();
-    }
-    
-    return () => {
-      window.removeEventListener('popstate', handlePopState);
-      abortControllerRef.current?.abort();
-    };
-  }, [userData, fetchInitialOrders, order, navigate]);
-
-  // Define onImageClick handler
-  const handleImageClick = (productId) => {
-    navigate(`/product/${productId}`);
-  };
-
+  // Render orders
   const renderOrders = () => {
     if (loading && orders.length === 0) {
       return (
         <div className="user-order-loading">
-          <Oval 
-            height={30} 
-            width={30} 
-            color="green" 
-            secondaryColor="white" 
-            ariaLabel="loading" 
-            visible={true}
-          />
+          <Oval height={30} width={30} color="green" secondaryColor="white" ariaLabel="loading" />
         </div>
       );
     }
@@ -103,16 +67,13 @@ const Order = ({ userData }) => {
       return (
         <div className="user-order-error">
           <p>Error: {error}</p>
-          <button 
-            onClick={fetchInitialOrders}
-            className="user-order-retry-btn"
-          >
+          <button onClick={fetchInitialOrders} className="user-order-retry-btn">
             Retry
           </button>
         </div>
       );
     }
-    
+
     if (orders.length === 0) {
       return (
         <div className="user-order-empty">
@@ -126,20 +87,20 @@ const Order = ({ userData }) => {
       <OrderProductCard
         key={orderItem.$id}
         order={orderItem}
-        setOrder={setOrder}
-        onImageClick={() => handleImageClick(orderItem.productId)} // Added prop
+        setOrder={setSelectedOrder}
+        onImageClick={() => handleImageClick(orderItem.productId)}
       />
     ));
   };
 
   return (
     <>
-      {order ? (
+      {selectedOrder ? (
         <UserOrderDetail
           userData={userData}
-          order={order}
-          onImageClick={() => handleImageClick(order.productId)}
-          setOrder={setOrder}
+          order={selectedOrder}
+          onImageClick={() => handleImageClick(selectedOrder.productId)}
+          setOrder={setSelectedOrder}
         />
       ) : (
         <>
@@ -154,27 +115,15 @@ const Order = ({ userData }) => {
             loader={
               loading && orders.length > 0 && (
                 <div className="user-order-loading-more">
-                  <Oval 
-                    height={20} 
-                    width={20} 
-                    color="green" 
-                    secondaryColor="white" 
-                    ariaLabel="loading-more" 
-                  />
+                  <Oval height={20} width={20} color="green" secondaryColor="white" ariaLabel="loading-more" />
                 </div>
               )
             }
             endMessage={
-              orders.length > 0 && !hasMore && (
-                <p className="user-order-end">
-                  ...
-                </p>
-              )
+              orders.length > 0 && !hasMore && <p className="user-order-end">...</p>
             }
           >
-            <div className="user-order-div-container">
-              {renderOrders()}
-            </div>
+            <div className="user-order-div-container">{renderOrders()}</div>
           </InfiniteScroll>
         </>
       )}
