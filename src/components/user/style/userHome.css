@@ -140,7 +140,7 @@
     align-items: flex-start;
     justify-content: center;
     background: rgba(0, 0, 0, 0.406);
-    z-index: 110;
+    z-index: 1001;
 }
 
 .user-dashboard-popup-card {
