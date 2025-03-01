@@ -1,33 +1,34 @@
-.user-order-detail-container {
+.uod-container {
   max-width: 600px;
   border-radius: 8px;
   padding: 20px;
 }
 
-.user-order-detail-header {
+.uod-header {
   text-align: center;
 }
-.order-product-card-img img{
-  width: 90vw;
+.uod-product-card{
+  width: calc(100vw - 43px);
+  display: flex;
 }
-.user-order-detail-header h1 {
+.uod-header h1 {
   font-size: 1.5em;
   margin: 10px 0;
   color: #333;
 }
 
-.user-order-detail-header p {
+.uod-header p {
   color: #777;
   font-size: 1em;
 }
 
-.user-order-detail-summary {
+.uod-summary {
   margin-top: 20px;
   border-top: 1px solid #ddd;
   padding-top: 10px;
 }
 
-.user-order-detail-cancel {
+.uod-cancel {
   background-color: #b41818;
   margin: 30px 0px 30px 0px;
   width: 40%;
@@ -40,14 +41,16 @@
   font-size: 13px;
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
 }
-
-.user-order-detail-info-c {
+.uod-info{
+  margin-top: 30px;
+}
+.uod-info-c {
   display: flex;
   justify-content: space-between;
   min-height: 30px;
 }
 
-.user-order-detail-info-h {
+.uod-info-h {
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   font-size: 14px;
   width: 50%;
@@ -55,7 +58,7 @@
   align-items: center;
 }
 
-.user-order-detail-info-c span {
+.uod-info-c span {
   display: flex;
   align-items: center;
   width: 70%;
@@ -63,8 +66,9 @@
   padding-left: 10px;
 }
 
-.user-order-detail-info-box {
+.uod-info-box {
   background-color: #100f0f;
+  background-color:rgb(66, 164, 244);
   padding: 15px;
   color: white;
   border: 1px solid #ddd;
@@ -75,30 +79,34 @@
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.091);
 }
 
-.user-order-detail-shop {
+.uod-shop {
   display: flex;
   align-items: center;
   justify-content: space-between;
   margin-top: 10vh;
 }
-
-.user-order-detail-shop span {
+.uod-shop button{
+  background-color: transparent;border: none;
+  background-color:rgb(66, 164, 244);padding: 10px;
+  color: rgb(251, 243, 243);
+}
+.uod-shop span {
   border-bottom: 1px solid rgb(0, 0, 0);
 }
 
-.order-product-card-address-div {
+.uod-product-card-address-div {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.order-product-card-address-p1 {
+.uod-product-card-address-p1 {
   width: 40%;
   font-size: 15px;
   font-weight: 600;
 }
 
-.order-product-card-address-p2 {
+.uod-product-card-address-p2 {
   width: 60%;
   display: flex;
   gap: 3px;

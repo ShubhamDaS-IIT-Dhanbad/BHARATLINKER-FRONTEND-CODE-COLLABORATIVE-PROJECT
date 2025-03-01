@@ -8,6 +8,7 @@ import "./orderDetail.css";
 import { TiInfoOutline } from "react-icons/ti";
 import Navbar from "../navbar.jsx";
 import { Oval } from "react-loader-spinner";
+import OrderProductCard from "../order/orderProductCard.jsx";
 
 const UserOrderDetail = ({ userData, order, setOrder }) => {
     const dispatch = useDispatch();
@@ -65,106 +66,65 @@ const UserOrderDetail = ({ userData, order, setOrder }) => {
     };
 
     if (!order) {
-        return <div className="redirect-message">No order selected</div>;
+        return <div className="uod-redirect-message">No order selected</div>;
     }
 
     return (
         <>
             <header>
                 <Navbar 
-                onBackNavigation={()=>{setOrder(null)}}
+                    onBackNavigation={() => setOrder(null)}
                     userData={userData} 
                     headerTitle="ORDER DETAIL"
                 />
             </header>
 
-            <div className="user-order-detail-container">
-                <header className="user-order-detail-header">
+            <div className="uod-container">
+                <header className="uod-header">
                     <h1>{getOrderTitle(order.state.toUpperCase())}</h1>
                     <p>Hello, {userData?.name || "USER"}</p>
                     <p>Your order is {order.state}</p>
                 </header>
 
-                <div className="user-order-detail-summary">
-                    <div className="order-product-card">
-                        <div 
-                            className="order-product-card-img" 
-                            onClick={() => navigate(`/product/${order.productId}`)}
-                        >
-                            <img src={order.image} alt={order.title} />
-                        </div>
-                        <div className="order-product-card-detail">
-                            <div className="order-product-card-detail-1">{order.title}</div>
-                            <div className="order-product-card-detail-2">
-                                <div style={{ display: "flex", gap: "7px" }}>
-                                    <div className="order-product-card-detail-2-1">
-                                        <p className="order-product-card-detail-2-1-tag">PRICE</p>
-                                        <p className="opcdp">₹{order.discountedPrice}</p>
-                                    </div>
-                                    <div className="order-product-card-detail-2-1">
-                                        <p className="order-product-card-detail-2-1-tag">QTY</p>
-                                        <p className="opcdp">{order.quantity}</p>
-                                    </div>
-                                    <div className="order-product-card-detail-2-1">
-                                        <p className="order-product-card-detail-2-1-tag">SUBTOTAL</p>
-                                        <p className="opcdp">₹{order.discountedPrice * order.quantity}</p>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                <div className="uod-summary">
+                    <div className="uod-product-card">
+                        <OrderProductCard
+                            order={order}
+                            onImageClick={() => navigate(`/product/${order.productId}`)}
+                        />
                     </div>
-
-                    {(order.state === "pending" || order.state === "confirmed") && (
-                        <button 
-                            className="user-order-detail-cancel" 
-                            onClick={handleCancel}
-                            disabled={isCancelling}
-                        >
-                            {isCancelling ? (
-                                <Oval 
-                                    height={20} 
-                                    width={20} 
-                                    color="white" 
-                                    secondaryColor="#b41818" 
-                                    ariaLabel="loading" 
-                                />
-                            ) : (
-                                "CANCEL ORDER"
-                            )}
-                        </button>
-                    )}
-                    <div className="user-order-detail-info">
-                        <div className="user-order-detail-info-c">
-                            <div className="user-order-detail-info-h">ORDERED DATE</div>
+                    <div className="uod-info">
+                        <div className="uod-info-c">
+                            <div className="uod-info-h">ORDERED DATE</div>
                             <span>{new Date(order.$createdAt).toLocaleDateString()}</span>
                         </div>
-                        <div className="user-order-detail-info-c">
-                            <div className="user-order-detail-info-h">ORDER ID</div>
+                        <div className="uod-info-c">
+                            <div className="uod-info-h">ORDER ID</div>
                             <span>{order.$id}</span>
                         </div>
-                        <div className="user-order-detail-info-c">
-                            <div className="user-order-detail-info-h">PAYMENT METHOD</div>
-                            <span className="payment-icon">CASH ON DELIVERY</span>
+                        <div className="uod-info-c">
+                            <div className="uod-info-h">PAYMENT METHOD</div>
+                            <span className="uod-payment-icon">CASH ON DELIVERY</span>
                         </div>
-                        <div className="user-order-detail-info-c">
-                            <div className="user-order-detail-info-h">SHIPPING ADDRESS</div>
+                        <div className="uod-info-c">
+                            <div className="uod-info-h">SHIPPING ADDRESS</div>
                             <span>{order.address}</span>
                         </div>
                         {order.building && (
-                            <div className="user-order-detail-info-c">
-                                <div className="user-order-detail-info-h">BUILDING NO.</div>
+                            <div className="uod-info-c">
+                                <div className="uod-info-h">BUILDING NO.</div>
                                 <span>{order.building}</span>
                             </div>
                         )}
                         {order.houseNo && (
-                            <div className="user-order-detail-info-c">
-                                <div className="user-order-detail-info-h">HOUSE NO.</div>
+                            <div className="uod-info-c">
+                                <div className="uod-info-h">HOUSE NO.</div>
                                 <span>{order.houseNo}</span>
                             </div>
                         )}
                         {order.landMark && (
-                            <div className="user-order-detail-info-c">
-                                <div className="user-order-detail-info-h">LANDMARK</div>
+                            <div className="uod-info-c">
+                                <div className="uod-info-h">LANDMARK</div>
                                 <span>{order.landMark}</span>
                             </div>
                         )}
@@ -172,25 +132,25 @@ const UserOrderDetail = ({ userData, order, setOrder }) => {
 
                     {order.expectedDeliveryDate && (
                         <>
-                            <div className="order-product-card-address-div">
-                                <p className="order-product-card-address-p1">EXP DELIVERY DATE</p>
-                                <p className="order-product-card-address-p2">
+                            <div className="uod-product-card-address-div">
+                                <p className="uod-product-card-address-p1">EXP DELIVERY DATE</p>
+                                <p className="uod-product-card-address-p2">
                                     {new Date(order.expectedDeliveryDate).toLocaleDateString()}
                                 </p>
                             </div>
-                            <div className="order-product-card-address-div">
-                                <p className="order-product-card-address-p1">EXP DELIVERY TIME</p>
-                                <p className="order-product-card-address-p2">
+                            <div className="uod-product-card-address-div">
+                                <p className="uod-product-card-address-p1">EXP DELIVERY TIME</p>
+                                <p className="uod-product-card-address-p2">
                                     {new Date(order.expectedDeliveryDate).toLocaleTimeString()}
                                 </p>
                             </div>
                         </>
                     )}
                     {order.deliveryBoyPhn && (
-                        <div className="order-product-card-address-div">
-                            <p className="order-product-card-address-p1">DELIVERY BOY</p>
+                        <div className="uod-product-card-address-div">
+                            <p className="uod-product-card-address-p1">DELIVERY BOY</p>
                             <button 
-                                className="order-product-card-address-p2" 
+                                className="uod-product-card-address-p2" 
                                 onClick={() => handlePhoneClick(order.deliveryBoyPhn)}
                             >
                                 {order.deliveryBoyPhn}
@@ -198,7 +158,7 @@ const UserOrderDetail = ({ userData, order, setOrder }) => {
                         </div>
                     )}
 
-                    <div className="user-order-detail-shop">
+                    <div className="uod-shop">
                         <button onClick={() => navigate(`/shop/${order.shopId}`)}>VISIT SHOP</button>
                         <TiInfoOutline 
                             size={20} 
@@ -207,7 +167,7 @@ const UserOrderDetail = ({ userData, order, setOrder }) => {
                         />
                     </div>
                     {showInfo && (
-                        <div className="user-order-detail-info-box">
+                        <div className="uod-info-box">
                             For any order-related issues, please contact the shop. Shop details are available on the Shop page.
                         </div>
                     )}
@@ -222,22 +182,23 @@ UserOrderDetail.propTypes = {
         name: PropTypes.string
     }),
     order: PropTypes.shape({
-        $id: PropTypes.string,
-        $createdAt: PropTypes.string,
-        productId: PropTypes.string,
-        shopId: PropTypes.string,
-        image: PropTypes.string,
-        title: PropTypes.string,
-        discountedPrice: PropTypes.number,
-        quantity: PropTypes.number,
-        state: PropTypes.string,
-        address: PropTypes.string,
+        $id: PropTypes.string.isRequired,
+        $createdAt: PropTypes.string.isRequired,
+        productId: PropTypes.string.isRequired,
+        shopId: PropTypes.string.isRequired,
+        image: PropTypes.string.isRequired,
+        title: PropTypes.string.isRequired,
+        discountedPrice: PropTypes.number.isRequired,
+        quantity: PropTypes.number.isRequired,
+        state: PropTypes.string.isRequired,
+        address: PropTypes.string.isRequired,
         building: PropTypes.string,
         houseNo: PropTypes.string,
         landMark: PropTypes.string,
         expectedDeliveryDate: PropTypes.string,
-        deliveryBoyPhn: PropTypes.number
-    }),
+        deliveryBoyPhn: PropTypes.oneOfType([PropTypes.string, PropTypes.number]) // Updated to allow string or number
+    }).isRequired,
+    setOrder: PropTypes.func.isRequired
 };
 
 export default UserOrderDetail;

@@ -6,11 +6,10 @@ import { updateOrderStateToCanceled } from "../../../appWrite/order/order.js";
 import { updateOrder, deleteOrder } from "../../../redux/features/user/orderSlice.jsx";
 import "./userOrderCard.css";
 
-function OrderProductCard({ order, setOrder }) {
+function OrderProductCard({ order, setOrder, onImageClick }) {
     const dispatch = useDispatch();
     const [canceling, setCanceling] = useState(false);
     const [imageLoaded, setImageLoaded] = useState(false);
-
 
     const handleCancel = async () => {
         if (window.confirm("Are you sure you want to cancel this order?")) {
@@ -23,6 +22,7 @@ function OrderProductCard({ order, setOrder }) {
                     updatedOrderData,
                     orderStateArrayName: "canceled"
                 }));
+                setOrder(null); // Reset order in parent component
             } catch (error) {
                 console.error("Failed to cancel order:", error);
                 alert("Failed to cancel order. Please try again.");
@@ -34,9 +34,9 @@ function OrderProductCard({ order, setOrder }) {
 
     return (
         <div className="user-order-card-parent">
-            <div className="user-order-card-state">ORDER STATUS : {order.state.toUpperCase()} </div>
+            <div className="user-order-card-state">ORDER STATUS : {order.state.toUpperCase()}</div>
             <div className="user-order-card">
-                <div className="user-order-card-img">
+                <div className="user-order-card-img" onClick={onImageClick}>
                     {!imageLoaded && (
                         <Oval
                             height={20}
@@ -50,7 +50,7 @@ function OrderProductCard({ order, setOrder }) {
                         src={order.image}
                         alt={order.title}
                         onLoad={() => setImageLoaded(true)}
-                        onError={() => setImageLoaded(true)} // Handle broken images
+                        onError={() => setImageLoaded(true)}
                         style={!imageLoaded ? { display: 'none' } : {}}
                     />
                 </div>
@@ -74,24 +74,22 @@ function OrderProductCard({ order, setOrder }) {
                     </div>
                     <div className="user-order-card-detail-3-state">
                         {order.state !== "canceled" && order.state !== "delivered" && (
-                           <button
-                           className={`user-order-card-detail-3-state-cancel ${canceling ? "disabled" : ""}`}
-                           onClick={handleCancel}
-                           disabled={canceling}
-                       >
-                           {canceling ? (
-                               <Oval
-                                   height={20}
-                                   width={30}
-                                   color="white"
-                                   secondaryColor="red"
-                                   ariaLabel="loading"
-                               />
-                           ) : "CANCEL"}
-                       </button>
-                       
+                            <button
+                                className={`user-order-card-detail-3-state-cancel ${canceling ? "disabled" : ""}`}
+                                onClick={handleCancel}
+                                disabled={canceling}
+                            >
+                                {canceling ? (
+                                    <Oval
+                                        height={20}
+                                        width={30}
+                                        color="white"
+                                        secondaryColor="red"
+                                        ariaLabel="loading"
+                                    />
+                                ) : "CANCEL"}
+                            </button>
                         )}
-
                         <button
                             className="user-order-card-detail-2-btn"
                             onClick={() => setOrder(order)}
@@ -114,7 +112,8 @@ OrderProductCard.propTypes = {
         quantity: PropTypes.number.isRequired,
         state: PropTypes.oneOf(["pending", "confirmed", "dispatched", "canceled", "delivered"]).isRequired
     }).isRequired,
-    setOrder: PropTypes.func.isRequired
+    setOrder: PropTypes.func.isRequired,
+    onImageClick: PropTypes.func.isRequired
 };
 
 export default OrderProductCard;
