@@ -3,9 +3,12 @@
     display: flex;
     flex-direction: column;
     color: rgb(0, 0, 0);
-    padding-bottom: 15px;
+    border: 0.5px solid rgba(0, 0, 0, 0.194);
 }
-
+.user-order-card-state {display: flex;justify-content: center;align-items: center;
+    height: 40px;border-bottom: 0.1px solid rgba(6, 6, 6, 0.299);
+    font-weight: 300;color: rgb(14, 13, 13);
+}
 .user-order-card {
     width: 95vw;
     display: flex;
@@ -14,32 +17,45 @@
 }
 
 .user-order-card-img {
-    height: 140px;
+    
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 40%;
+    height: 100%;width: 30%;
 }
 
 .user-order-card-img img {
-    height: 120px;
+    height: 70%;
     border: 0.5px solid rgba(0, 0, 0, 0.203);
-    width: 100%;
+    
     object-fit: cover;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
 .user-order-card-detail {
     width: 70%;
-    display: flex;
-    flex-direction: column;
+    display: flex;justify-content: center;
+    flex-direction: column;gap: 5px;
     padding: 0px 0px 0px 10px;
 }
 
 .user-order-card-detail-1 {
-    width: 100%;
+    max-width: 90%;
+    
     font-size: 12px;
-    font-weight: 800;
-    height: 30%;
+    font-weight: 500;
     display: flex;
     align-items: center;
     line-height: 12px;
@@ -47,7 +63,6 @@
 
 .user-order-card-detail-2 {
     width: 100%;
-    justify-content: space-between;
     align-items: center;
     height: 30%;
     display: flex;
@@ -56,12 +71,10 @@
 .user-order-card-detail-2-1 {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
 }
 
 .user-order-card-detail-2-1-tag {
-    font-weight: 600;
+    font-weight: 400;
     font-size: 11px;
 }
 
@@ -80,27 +93,22 @@
 }
 
 .user-order-card-detail-3-state-cancel {
-    display: flex;
-    align-items: center;
-    padding: 4px 5px 4px 5px;
+    display: flex;justify-content: center;
+    align-items: center;width: 65px;height: 35px;
     gap: 10px;
     font-size: 13px;
-    font-weight: 700;
-    color: #e56281;
-    border: 1.3px solid #e56281;
+    font-weight: 500;background-color:rgba(255, 0, 0, 0.854);
+    color: #ffffff;border: none;
 }
 
-.retailer-user-order-card-detail-2 {
-    display: flex;
+.user-order-card-detail-2-btn {
+    display: flex;justify-content: center;
+    align-items: center;width: 65px;height: 35px;
     font-size: 12px;
-    color: black;
-    font-weight: 700;
-    height: 30px;
-    width: 60px;
-    border-radius: 2px;
-    justify-content: center;
-    align-items: center;
-    border: 0.5px solid rgba(0, 0, 0, 0.203);
+    color: rgb(255, 255, 255);
+    font-weight: 500;
+    border: none;
+    align-items: center;background-color: #2195f3d8;
 }
 
 /* Icon styling */

@@ -1,4 +1,3 @@
-// orderSlice.jsx
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import { getOrderByUserId } from '../../../appWrite/order/order.js';
 
@@ -6,25 +5,23 @@ const ORDERS_PER_PAGE = 10;
 
 const initialState = {
   loading: false,
-  pendingOrders: { data: [], loading: false, error: null, hasMore: true, currentPage: 0 },  // Changed to 0
-  confirmedOrders: { data: [], loading: false, error: null, hasMore: true, currentPage: 0 }, // Changed to 0
-  dispatchedOrders: { data: [], loading: false, error: null, hasMore: true, currentPage: 0 }, // Changed to 0
-  deliveredOrders: { data: [], loading: false, error: null, hasMore: true, currentPage: 0 }, // Changed to 0
-  canceledOrders: { data: [], loading: false, error: null, hasMore: true, currentPage: 0 },  // Changed to 0
+  orders: [],
+  error: null,
+  hasMore: true,
+  currentPage: 0,
+  lastFetchTimestamp: null,
 };
 
-const fetchOrders = async (phoneNumber, status, page) => {
-  const response = await getOrderByUserId(phoneNumber, status, page);
-  return { documents: response.documents || [], total: response.total || 0 };  // Added fallbacks
-};
-
-export const fetchOrdersByStatus = createAsyncThunk(
-  'userorders/fetchOrdersByStatus',
-  async ({ phoneNumber, status, page }, { rejectWithValue }) => {
+export const fetchUserOrders = createAsyncThunk(
+  'userorders/fetchUserOrders',
+  async ({ phoneNumber, page }, { rejectWithValue, signal }) => {
     try {
-      const response = await fetchOrders(phoneNumber, status, page);
-      return { ...response, status, page };  // Include page in return
+      const response = await getOrderByUserId(phoneNumber, page, ORDERS_PER_PAGE);
+      return { ...response, page };
     } catch (error) {
+      if (signal.aborted) {
+        return rejectWithValue('Request aborted');
+      }
       return rejectWithValue(error.message || 'Failed to fetch orders');
     }
   }
@@ -32,11 +29,14 @@ export const fetchOrdersByStatus = createAsyncThunk(
 
 export const loadMoreOrders = createAsyncThunk(
   'userorders/loadMoreOrders',
-  async ({ phoneNumber, status, page }, { rejectWithValue }) => {
+  async ({ phoneNumber, page }, { rejectWithValue, signal }) => {
     try {
-      const response = await fetchOrders(phoneNumber, status, page);
-      return { ...response, status, page };
+      const response = await getOrderByUserId(phoneNumber, page, ORDERS_PER_PAGE);
+      return { ...response, page };
     } catch (error) {
+      if (signal.aborted) {
+        return rejectWithValue('Request aborted');
+      }
       return rejectWithValue(error.message || 'Failed to load more orders');
     }
   }
@@ -47,80 +47,75 @@ const ordersSlice = createSlice({
   initialState,
   reducers: {
     deleteOrder: (state, action) => {
-      const { orderId, orderStateArrayName } = action.payload;
-      const orderState = state[`${orderStateArrayName}Orders`];
-      if (orderState) {
-        orderState.data = orderState.data.filter(
-          (order) => order.$id !== orderId
-        );
-      }
+      const orderId = action.payload;
+      state.orders = state.orders.filter((order) => order.$id !== orderId);
+      state.total = state.orders.length;
     },
     updateOrder: (state, action) => {
-      const { orderId, updatedOrderData, orderStateArrayName } = action.payload;
-      const orderState = state[`${orderStateArrayName}Orders`];
-      if (!orderState) return;
-
-      const orderArray = orderState.data;
-      const orderIndex = orderArray.findIndex((order) => order.$id === orderId);
+      const { orderId, updatedOrderData } = action.payload;
+      const orderIndex = state.orders.findIndex((order) => order.$id === orderId);
       
       if (orderIndex !== -1) {
-        orderArray[orderIndex] = { ...orderArray[orderIndex], ...updatedOrderData };
+        state.orders[orderIndex] = { 
+          ...state.orders[orderIndex], 
+          ...updatedOrderData,
+          $updatedAt: new Date().toISOString()
+        };
       } else {
-        orderArray.push({ ...updatedOrderData, $id: orderId });  // Ensure $id is included
+        state.orders.push({ 
+          ...updatedOrderData, 
+          $id: orderId,
+          $updatedAt: new Date().toISOString()
+        });
       }
-      orderArray.sort((a, b) => new Date(b.updatedAt || 0) - new Date(a.updatedAt || 0));  // Added fallback
+      state.orders.sort((a, b) => new Date(b.$updatedAt || 0) - new Date(a.$updatedAt || 0));
+    },
+    resetOrders: (state) => {
+      return { ...initialState };
     },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchOrdersByStatus.pending, (state, action) => {
-        const { status } = action.meta.arg;
+      .addCase(fetchUserOrders.pending, (state) => {
         state.loading = true;
-        state[`${status}Orders`].loading = true;
-        state[`${status}Orders`].error = null;
+        state.error = null;
       })
-      .addCase(fetchOrdersByStatus.fulfilled, (state, action) => {
-        const { status, documents, total, page } = action.payload;
-        const orderState = state[`${status}Orders`];
+      .addCase(fetchUserOrders.fulfilled, (state, action) => {
+        const { documents, total, page } = action.payload;
         state.loading = false;
-        orderState.loading = false;
-        orderState.data = documents;
-        orderState.currentPage = page;
-        orderState.hasMore = documents.length === ORDERS_PER_PAGE && 
+        state.orders = documents;
+        state.currentPage = page;
+        state.hasMore = documents.length === ORDERS_PER_PAGE && 
           documents.length < total;
+        state.lastFetchTimestamp = Date.now();
       })
-      .addCase(fetchOrdersByStatus.rejected, (state, action) => {
-        const { status } = action.meta.arg;
+      .addCase(fetchUserOrders.rejected, (state, action) => {
         state.loading = false;
-        state[`${status}Orders`].loading = false;
-        state[`${status}Orders`].error = action.payload;
+        state.error = action.payload;
+        state.orders = [];
+        state.hasMore = false;
       })
-      .addCase(loadMoreOrders.pending, (state, action) => {
-        const { status } = action.meta.arg;
+      .addCase(loadMoreOrders.pending, (state) => {
         state.loading = true;
-        state[`${status}Orders`].loading = true;
-        state[`${status}Orders`].error = null;
+        state.error = null;
       })
       .addCase(loadMoreOrders.fulfilled, (state, action) => {
-        const { status, documents, total, page } = action.payload;
-        const orderState = state[`${status}Orders`];
+        const { documents, total, page } = action.payload;
         state.loading = false;
-        orderState.loading = false;
-        const existingOrderIds = new Set(orderState.data.map(order => order.$id));
+        const existingOrderIds = new Set(state.orders.map(order => order.$id));
         const newOrders = documents.filter(doc => !existingOrderIds.has(doc.$id));
-        orderState.data = [...orderState.data, ...newOrders];
-        orderState.currentPage = page;
-        orderState.hasMore = documents.length === ORDERS_PER_PAGE && 
-          orderState.data.length < total;
+        state.orders = [...state.orders, ...newOrders];
+        state.currentPage = page;
+        state.hasMore = documents.length === ORDERS_PER_PAGE && 
+          state.orders.length < total;
+        state.lastFetchTimestamp = Date.now();
       })
       .addCase(loadMoreOrders.rejected, (state, action) => {
-        const { status } = action.meta.arg;
         state.loading = false;
-        state[`${status}Orders`].loading = false;
-        state[`${status}Orders`].error = action.payload;
+        state.error = action.payload;
       });
   },
 });
 
-export const { deleteOrder, updateOrder } = ordersSlice.actions;
+export const { deleteOrder, updateOrder, resetOrders } = ordersSlice.actions;
 export default ordersSlice.reducer;

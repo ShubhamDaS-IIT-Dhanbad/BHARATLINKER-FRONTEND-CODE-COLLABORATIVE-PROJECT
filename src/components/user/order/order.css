@@ -1,92 +1,58 @@
-/* Container for the entire header */
-.retailer-update-header {
-    background-color: #ffffff;
-    color: #000;
-    position: fixed;
-    top: 0;
-    height: 60px;
-    display: flex;
-    flex-grow: 1;
-    align-items: center;
-    padding: 10px;
-    width: 100vw;
-}
-
-/* Left Icon */
-.retailer-update-header-left-icon {
-    margin-left: 4px;
-    color: #000;
-}
-
-/* Inner div containing title and shop name */
-.retailer-update-header-inner-div {
-    padding-left: 10px;
-    display: flex;
-    flex-direction: column;
-}
-
-.retailer-update-header-inner-div-p {
-    font-size: 25px;
-    font-weight: 600;
-    margin: 0;
-}
-
-.retailer-upload-product-header-shopname {
-    margin-top: -10px;
-}
-
-/* Buttons for order types */
-.retailer-order-type-buttons {
-    display: flex;
-    background-color: #f9f9f9;
-    justify-content: center;
-    align-items: center;
-    position:absolute;
-    top: 77px;
-    gap: 5px;
-    width: 100vw;
-    padding: 0 0 5px 0;
-}
-
-.retailer-order-type-button {
-    border: 1px solid rgb(27, 28, 28);
-    font-size: 11px;background-color: transparent;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    padding: 6px 6px 6px 6px;
-    font-weight: 400;
-    border-radius: 2px;
-}
-
-.retailer-order-type-button.active {
-    border: 1.3px solid rgb(12, 131, 31);;
-    background-color:  rgb(12, 131, 31);;
-    color: white;
-}
-
 /* Orders container */
-.retailer-order-div-container {
-    padding: 10px;
-    margin-top: 110px;
+.user-order-div-container {
+    padding: 10px;display: flex;flex-direction: column;
+    gap: 10px;
+    margin-top: 65px;
 }
 
-/* Loader for infinite scroll */
-.retailer-order-loading {
+/* Loader for initial load */
+.user-order-loading {
     display: flex;
     justify-content: center;
     align-items: center;
     padding-top: 20px;
 }
 
+/* Loader for infinite scroll */
+.user-order-loading-more {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px;
+}
+
 /* Empty state container */
-.retailer-order-empty {
+.user-order-empty {
     height: 50vh;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.retailer-order-empty-img {
+.user-order-empty-img {
     width: 50vw;
+}
+
+/* Error state */
+.user-order-error {
+    padding: 20px;
+    text-align: center;
+    color: #d32f2f;
+}
+
+.user-order-retry-btn {
+    margin-top: 10px;
+    padding: 8px 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+/* End message */
+.user-order-end {
+    text-align: center;
+    padding: 10px;
+    color: #666;
 }

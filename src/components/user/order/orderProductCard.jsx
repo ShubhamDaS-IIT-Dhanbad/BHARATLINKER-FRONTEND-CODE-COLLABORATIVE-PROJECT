@@ -1,9 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import PropTypes from 'prop-types';
-import { FaExclamationTriangle, FaLuggageCart, FaSadCry } from "react-icons/fa";
-import { RiChatSmileFill } from "react-icons/ri";
-import { GiPartyPopper } from "react-icons/gi";
 import { Oval } from "react-loader-spinner";
 import { updateOrderStateToCanceled } from "../../../appWrite/order/order.js";
 import { updateOrder, deleteOrder } from "../../../redux/features/user/orderSlice.jsx";
@@ -14,22 +11,6 @@ function OrderProductCard({ order, setOrder }) {
     const [canceling, setCanceling] = useState(false);
     const [imageLoaded, setImageLoaded] = useState(false);
 
-    const getStatusIcon = (status) => {
-        switch (status) {
-            case "pending":
-                return <FaExclamationTriangle className="status-icon pending" />;
-            case "confirmed":
-                return <RiChatSmileFill className="status-icon accepted" />;
-            case "dispatched":
-                return <FaLuggageCart className="status-icon dispatched" />;
-            case "canceled":
-                return <FaSadCry className="status-icon canceled" />;
-            case "delivered":
-                return <GiPartyPopper className="status-icon delivered" />;
-            default:
-                return null;
-        }
-    };
 
     const handleCancel = async () => {
         if (window.confirm("Are you sure you want to cancel this order?")) {
@@ -53,6 +34,7 @@ function OrderProductCard({ order, setOrder }) {
 
     return (
         <div className="user-order-card-parent">
+            <div className="user-order-card-state">ORDER STATUS : {order.state.toUpperCase()} </div>
             <div className="user-order-card">
                 <div className="user-order-card-img">
                     {!imageLoaded && (
@@ -91,7 +73,6 @@ function OrderProductCard({ order, setOrder }) {
                         </div>
                     </div>
                     <div className="user-order-card-detail-3-state">
-                        {getStatusIcon(order.state)}
                         {order.state !== "canceled" && order.state !== "delivered" && (
                             canceling ? (
                                 <Oval 
@@ -112,7 +93,7 @@ function OrderProductCard({ order, setOrder }) {
                             )
                         )}
                         <button 
-                            className="retailer-user-order-card-detail-2" 
+                            className="user-order-card-detail-2-btn" 
                             onClick={() => setOrder(order)}
                         >
                             DETAIL

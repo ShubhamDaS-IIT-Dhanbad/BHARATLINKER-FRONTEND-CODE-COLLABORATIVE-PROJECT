@@ -84,31 +84,27 @@ const placeOrderProvider = async (
 };
 
 
-
-const getOrderByUserId = async (phoneNumber, state, page, ordersPerPage = 10) => {
+const getOrderByUserId = async (phoneNumber, page = 1, ordersPerPage = 10) => {
   try {
     if (!phoneNumber) {
-      throw new Error('Shop ID is missing');
+      throw new Error('Phone number is missing');
     }
-
-    // Construct queries
+    
     const queries = [
-      Query.equal('phoneNumber', phoneNumber), // Filter by shop ID
-      Query.equal('state', state),   // Filter by state
+      Query.equal('phoneNumber', phoneNumber),
+      Query.orderDesc('$updatedAt'), 
+      Query.limit(ordersPerPage),
     ];
 
-    queries.push(Query.orderDesc('$updatedAt'));
-    // Pagination logic
     const offset = (page - 1) * ordersPerPage;
-    queries.push(Query.limit(ordersPerPage));
     queries.push(Query.offset(offset));
 
-    // Fetch documents
     const response = await databases.listDocuments(
       conf.appwriteShopsDatabaseId,
       conf.appwriteShopsOrdersCollectionId,
       queries
     );
+
     return {
       documents: response.documents,
       total: response.total,
@@ -120,7 +116,6 @@ const getOrderByUserId = async (phoneNumber, state, page, ordersPerPage = 10) =>
     throw error;
   }
 };
-
 
 const getOrderByShopId = async (shopId, state, page, ordersPerPage = 10) => {
   try {

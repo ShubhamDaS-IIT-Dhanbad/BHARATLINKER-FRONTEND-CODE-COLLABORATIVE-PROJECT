@@ -1,73 +1,75 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useState, useCallback, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import PropTypes from 'prop-types';
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Oval } from "react-loader-spinner";
 import Navbar from '../navbar.jsx';
-import { fetchOrdersByStatus, loadMoreOrders } from "../../../redux/features/user/orderSlice.jsx";
+import { fetchUserOrders, loadMoreOrders } from "../../../redux/features/user/orderSlice.jsx";
 import OrderProductCard from "./orderProductCard";
 import UserOrderDetail from '../orderDetail/orderDetail.jsx';
 import e1 from './e1.png';
 import "./order.css";
 
-const ORDER_TYPES = ["pending", "confirmed", "dispatched", "delivered", "canceled"];
-
 const Order = ({ userData }) => {
   const [order, setOrder] = useState(null);
-  const [selectedOrderType, setSelectedOrderType] = useState("pending");
   const dispatch = useDispatch();
+  const abortControllerRef = useRef(null);
   const { 
     loading,
-    pendingOrders,
-    confirmedOrders,
-    dispatchedOrders,
-    deliveredOrders,
-    canceledOrders 
+    orders,
+    hasMore,
+    currentPage,
+    error
   } = useSelector((state) => state.userorders);
 
-  const orderStates = {
-    pending: pendingOrders,
-    confirmed: confirmedOrders,
-    dispatched: dispatchedOrders,
-    delivered: deliveredOrders,
-    canceled: canceledOrders,
-  };
-
-  const selectedOrders = orderStates[selectedOrderType] || { 
-    data: [], 
-    hasMore: false, 
-    currentPage: 0 
-  };
-
-  const fetchInitialOrders = useCallback((status) => {
+  const fetchInitialOrders = useCallback(async () => {
     if (!userData?.phoneNumber) return;
-    dispatch(fetchOrdersByStatus({ 
-      phoneNumber: userData.phoneNumber, 
-      status, 
-      page: 1 
-    }));
+    abortControllerRef.current?.abort(); // Cancel previous request
+    abortControllerRef.current = new AbortController();
+    
+    try {
+      await dispatch(fetchUserOrders({ 
+        phoneNumber: userData.phoneNumber,
+        page: 1 
+      })).unwrap();
+    } catch (err) {
+      if (err.name !== 'AbortError') {
+        console.error('Failed to fetch initial orders:', err);
+      }
+    }
   }, [userData, dispatch]);
 
-  const fetchNextPage = useCallback(() => {
-    if (!userData?.phoneNumber || !selectedOrders.hasMore) return;
-    const nextPage = selectedOrders.currentPage + 1;
-    dispatch(loadMoreOrders({ 
-      phoneNumber: userData.phoneNumber, 
-      status: selectedOrderType, 
-      page: nextPage 
-    }));
-  }, [userData, dispatch, selectedOrders, selectedOrderType]);
+  const fetchNextPage = useCallback(async () => {
+    if (!userData?.phoneNumber || !hasMore || loading) return;
+    const nextPage = currentPage + 1;
+    
+    try {
+      await dispatch(loadMoreOrders({ 
+        phoneNumber: userData.phoneNumber, 
+        page: nextPage 
+      })).unwrap();
+    } catch (err) {
+      if (err.name !== 'AbortError') {
+        console.error('Failed to load more orders:', err);
+      }
+    }
+  }, [userData, dispatch, hasMore, currentPage, loading]);
 
   useEffect(() => {
-    if (userData?.phoneNumber && selectedOrders.data.length === 0) {
-      fetchInitialOrders(selectedOrderType);
+    if (userData?.phoneNumber && orders.length === 0) {
+      fetchInitialOrders();
     }
-  }, [selectedOrderType, userData, selectedOrders.data.length]);
+    
+    // Cleanup on unmount
+    return () => {
+      abortControllerRef.current?.abort();
+    };
+  }, [userData, fetchInitialOrders]);
 
   const renderOrders = () => {
-    if (loading) {
+    if (loading && orders.length === 0) {
       return (
-        <div className="retailer-order-loading">
+        <div className="user-order-loading">
           <Oval 
             height={30} 
             width={30} 
@@ -79,19 +81,34 @@ const Order = ({ userData }) => {
         </div>
       );
     }
-    
-    if (selectedOrders.data.length === 0) {
+
+    if (error) {
       return (
-        <div className="retailer-order-empty">
-          <img className="retailer-order-empty-img" src={e1} alt="No Orders" />
+        <div className="user-order-error">
+          <p>Error: {error}</p>
+          <button 
+            onClick={fetchInitialOrders}
+            className="user-order-retry-btn"
+          >
+            Retry
+          </button>
+        </div>
+      );
+    }
+    
+    if (orders.length === 0) {
+      return (
+        <div className="user-order-empty">
+          <img className="user-order-empty-img" src={e1} alt="No Orders" />
+          <p>No orders found</p>
         </div>
       );
     }
 
-    return selectedOrders.data.map((order) => (
+    return orders.map((orderItem) => (
       <OrderProductCard
-        key={order.$id}
-        order={order}
+        key={orderItem.$id}
+        order={orderItem}
         setOrder={setOrder}
       />
     ));
@@ -108,28 +125,35 @@ const Order = ({ userData }) => {
       ) : (
         <>
           <header>
-            <Navbar userData={userData} headerTitle="YOUR ORDER" />
+            <Navbar userData={userData} headerTitle="YOUR ORDERS" />
           </header>
 
-          <div className="retailer-order-type-buttons">
-            {ORDER_TYPES.map((type) => (
-              <button
-                key={type}
-                className={`retailer-order-type-button ${selectedOrderType === type ? "active" : ""}`}
-                onClick={() => setSelectedOrderType(type)}
-                aria-label={`View ${type} orders`}
-              >
-                {type.toUpperCase()}
-              </button>
-            ))}
-          </div>
-
           <InfiniteScroll
-            dataLength={selectedOrders.data.length}
+            dataLength={orders.length}
             next={fetchNextPage}
-            hasMore={selectedOrders.hasMore}
+            hasMore={hasMore}
+            loader={
+              loading && orders.length > 0 && (
+                <div className="user-order-loading-more">
+                  <Oval 
+                    height={20} 
+                    width={20} 
+                    color="green" 
+                    secondaryColor="white" 
+                    ariaLabel="loading-more" 
+                  />
+                </div>
+              )
+            }
+            endMessage={
+              orders.length > 0 && !hasMore && (
+                <p className="user-order-end">
+                  ...
+                </p>
+              )
+            }
           >
-            <div className="retailer-order-div-container">
+            <div className="user-order-div-container">
               {renderOrders()}
             </div>
           </InfiniteScroll>
