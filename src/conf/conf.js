@@ -1,7 +1,8 @@
 const conf = {
     // Appwrite Base URL
     appwriteUrl: import.meta.env.VITE_APPWRITE_URL,
-
+    hereApiKey: import.meta.env.VITE_HERE_API_KEY,
+    
     // API Keys
     geoapifyapikey: import.meta.env.VITE_REACT_APP_GEOAPIFY_API_KEY,
     opencageapikey: import.meta.env.VITE_REACT_APP_OPENCAGE_API_KEY,

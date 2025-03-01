@@ -12,7 +12,12 @@ import "leaflet/dist/leaflet.css";
 import "./map.css";
 import { useNavigate } from "react-router-dom";
 
-// Constants for better readability
+import conf from '../../conf/conf.js'
+// Constants for better readability and maintainability
+
+const HERE_API_KEY =  conf.hereApiKey;
+const HERE_GEOCODING_API_URL = "https://revgeocode.search.hereapi.com/v1/revgeocode";
+
 const DEFAULT_ZOOM = 15;
 const TILE_LAYER_URL = "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png";
 const NOMINATIM_API_URL = "https://nominatim.openstreetmap.org/reverse?format=json";
@@ -54,26 +59,34 @@ const LocationMap = ({
 
     // Fetch address from coordinates
     const getAddressFromLatLng = useCallback(async (lat, lon) => {
-        abortControllerRef.current.abort();
+        if (abortControllerRef.current) {
+          abortControllerRef.current.abort();
+        }
         abortControllerRef.current = new AbortController();
         setLoading(true);
-
+    
         try {
-            const response = await fetch(
-                `${NOMINATIM_API_URL}&lat=${lat}&lon=${lon}`,
-                { signal: abortControllerRef.current.signal }
-            );
-            if (!response.ok) throw new Error("Network error");
-            const data = await response.json();
-            setAddress(data.display_name);
+          const response = await fetch(
+            `${HERE_GEOCODING_API_URL}?at=${lat},${lon}&lang=en-US&apiKey=${HERE_API_KEY}`,
+            { signal: abortControllerRef.current.signal }
+          );
+          if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+          const data = await response.json();
+          if (data.items && data.items.length > 0) {
+            setAddress(data.items[0].address.label);
+          } else {
+            setAddress("No address found");
+          }
         } catch (error) {
-            if (error.name !== "AbortError") {
-                console.error("Error fetching address:", error);
-            }
+          if (error.name !== "AbortError") {
+            console.error("Geocoding error:", error);
+            setAddress("Error fetching address");
+          }
         } finally {
-            setLoading(false);
+          setLoading(false);
         }
-    }, []);
+      }, []);
+    
 
     // Debounced address fetch
     const debouncedGetAddress = useRef(debounce(getAddressFromLatLng, DEBOUNCE_DELAY)).current;

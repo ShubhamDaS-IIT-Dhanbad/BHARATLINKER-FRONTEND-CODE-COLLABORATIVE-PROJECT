@@ -6,7 +6,11 @@ import { batch } from 'react-redux';
 
 import { resetProducts } from '../redux/features/searchPage/searchProductSlice.jsx';
 import { resetShops } from '../redux/features/searchShop/searchShopSlice.jsx';
-// Constants for cookie configuration
+// Constants for better readability and maintainability
+
+const HERE_API_KEY =conf.hereApiKey;
+const HERE_GEOCODING_API_URL ="https://revgeocode.search.hereapi.com/v1/revgeocode";
+
 const LOCATION_COOKIE_NAME = 'BharatLinkerUserLocation';
 const COOKIE_EXPIRY_DAYS = 7;
 const DEFAULT_RADIUS_KM = 5;
@@ -137,6 +141,34 @@ const useLocationManager = () => {
     }
   }, []);
 
+  const fetchLocationSuggestionsHere = useCallback(async (query, latitude = 22.9868, longitude = 87.8550) => {
+    if (!query?.trim()) return [];
+  
+    try {
+      const apiKey =HERE_API_KEY;
+      const url = `https://autosuggest.search.hereapi.com/v1/autosuggest?at=${latitude},${longitude}&lang=en&q=${encodeURIComponent(query)}&limit=10&apiKey=${apiKey}`;
+console.log(url,HERE_API_KEY)
+      const response = await fetch(url);
+      if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+  
+      const data = await response.json();
+      console.log(data);
+  
+      return (data.items || []).map(({ title, address, position }) => ({
+        label:  address?.label || title,
+        lat: position.lat,
+        lon: position.lng,
+        address:  address?.label || title ||'',
+      }));
+    } catch (error) {
+      if (error.name !== 'AbortError') {
+        console.error('Geocoding API error:', error);
+      }
+      return [];
+    }
+  }, []);
+  
+
   const fetchCurrentLocation = useCallback(async () => {
     if (!('geolocation' in navigator)) {
       console.error('Geolocation is not supported');
@@ -188,6 +220,7 @@ const useLocationManager = () => {
     getLocationFromCookie,
     updateLocation,
     fetchLocationSuggestions,
+    fetchLocationSuggestionsHere,
     fetchCurrentLocation
   };
 };

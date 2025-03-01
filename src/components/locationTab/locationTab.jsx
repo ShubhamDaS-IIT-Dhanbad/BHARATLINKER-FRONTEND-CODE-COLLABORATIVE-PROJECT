@@ -9,7 +9,6 @@ import useLocationFromCookie from '../../hooks/useLocationFromCookie.jsx';
 import Map from '../map/map.jsx';
 import './locationTab.css';
 
-// Constants for better readability and maintainability
 const PREDEFINED_RADIUS_OPTIONS = [1, 3, 5, 9, 13];
 const DEBOUNCE_DELAY = 300;
 
@@ -22,7 +21,7 @@ const LocationTab = ({userData, documentId, header, setLocationTab, setShowAddre
     const [showMap, setShowMap] = useState(false);
     const [radius, setRadius] = useState('');
 
-    const { location, updateLocation, fetchLocationSuggestions } = useLocationFromCookie();
+    const { location, updateLocation, fetchLocationSuggestions, fetchLocationSuggestionsHere } = useLocationFromCookie();
     const debounceTimeout = useRef(null);
 
     useEffect(() => {
@@ -33,14 +32,14 @@ const LocationTab = ({userData, documentId, header, setLocationTab, setShowAddre
         if (!query.trim()) return;
         setLoading(true);
         try {
-            const newSuggestions = await fetchLocationSuggestions(query);
+            const newSuggestions = await fetchLocationSuggestionsHere(query);
             setSuggestions(newSuggestions);
         } catch (error) {
             console.error('Error fetching suggestions:', error);
         } finally {
             setLoading(false);
         }
-    }, [fetchLocationSuggestions]);
+    }, [fetchLocationSuggestionsHere]);
 
     const handleSearchInput = useCallback((e) => {
         const query = e.target.value;
