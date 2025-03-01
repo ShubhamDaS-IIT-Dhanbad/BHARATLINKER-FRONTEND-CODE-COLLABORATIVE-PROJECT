@@ -186,12 +186,6 @@ const MyCartPage = ({ userData }) => {
                     ) : (
                         <>
                             <div className="user-cart-container-img-div"><img src={c1} /></div>
-                            {/* {cartSummary.totalSavings > 0 && (
-                                <div className="user-cart-container-total-saving">
-                                    <img src={s1} />
-                                    Total Savings: ₹{cartSummary.totalSavings.toFixed(2)}
-                                </div>
-                            )} */}
                             <section className="user-cart-items-section">
                                 {Object.entries(
                                     cart.reduce((acc, item) => {
@@ -219,23 +213,23 @@ const MyCartPage = ({ userData }) => {
                             </section>
                             {!cartSummary.isEmpty && (
                                 <div className="order-summary-card">
-                                    <h3>Order Summary</h3>
+                                    <h3>ORDER SUMMARY</h3>
                                     <div className="price-details">
                                         <div className="price-row">
                                             <span>Total MRP</span>
-                                            <span>₹{(cartSummary.totalPrice + cartSummary.totalSaved).toFixed(2)}</span>
+                                            <span>Rs {(cartSummary.totalPrice + cartSummary.totalSaved).toFixed(2)}</span>
                                         </div>
                                         <div className="price-row">
                                             <span>Discount on MRP</span>
-                                            <span className="discount">-₹{cartSummary.totalSaved.toFixed(2)}</span>
+                                            <span className="discount">-Rs{cartSummary.totalSaved.toFixed(2)}</span>
                                         </div>
                                         <div className="price-row">
                                             <span>Shipping Fee</span>
                                             <span className="free-shipping">FREE</span>
                                         </div>
                                         <div className="total-price-row">
-                                            <span>Total Amount</span>
-                                            <span>₹{cartSummary.totalPrice.toFixed(2)}</span>
+                                            <span>TOTAL AMOUNT</span>
+                                            <span>Rs {cartSummary.totalPrice.toFixed(2)}</span>
                                         </div>
                                     </div>
                                 </div>

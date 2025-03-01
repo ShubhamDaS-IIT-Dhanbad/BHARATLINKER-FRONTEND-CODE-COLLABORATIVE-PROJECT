@@ -276,3 +276,63 @@
 .user-dashboard-popup-button-secondary:hover {
   background: #f0fdf4;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  /* Order Summary Card */
+  .order-summary-card {
+    padding: 20px;margin: 10px;
+    border-radius: 8px;border: 1px solid rgb(170, 255, 0);
+    background-color: rgba(170, 255, 0, 0.169);
+    padding-top: 0px;
+  }
+  
+  .order-summary-card h3 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 15px;
+  }
+  
+  .price-details {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .price-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+    color: #555;
+  }
+  
+  .discount {
+    color: #388e3c;
+  }
+  
+  .free-shipping {
+    color: #388e3c;
+  }
+  
+  .total-price-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 16px;
+    font-weight: 600;
+    padding-top: 10px;
+    border-top: 1px solid #e0e0e0;
+    margin-top: 10px;
+  }
+  
