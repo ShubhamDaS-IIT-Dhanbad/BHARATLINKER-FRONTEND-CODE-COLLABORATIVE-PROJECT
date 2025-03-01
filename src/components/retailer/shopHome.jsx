@@ -95,7 +95,7 @@ const Profile = ({ shopData }) => {
       { icon: <GrDocumentImage size={22} />, label: "Upload Here", path: "/secure/shop/upload" },
       { icon: <AiOutlineProduct size={26} />, label: "All Products", path: "/secure/retailer/products" },
       { icon: <RiLockPasswordLine size={26} />, label: "Password", path: "#", onClick: handlePasswordClick },
-      { icon: <MdOutlineWorkspacePremium size={26} />, label: "Subscription", path: "/secure/shop/subscription" },
+      { icon: <MdOutlineWorkspacePremium size={26} />, label: "Subscription", path: "" },
       { icon: <RiLogoutCircleLine size={22} />, label: "Log Out", path: "#", onClick: () => setLogoutPopup(true) },
       {
         icon: isOpen ? <FaDoorOpen size={26} /> : <FaDoorClosed size={26} />,
