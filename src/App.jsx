@@ -83,7 +83,6 @@ const RoutesWithConditionalHeader = React.memo(() => {
         console.error("Error parsing user data:", error);
       }
       if (parsedUserData?.userId && cart.length === 0) {
-        console.log(parsedUserData)
         dispatch(fetchUserCart(parsedUserData.userId));
       }
     }
