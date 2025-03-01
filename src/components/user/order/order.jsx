@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useCallback, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import PropTypes from 'prop-types';
 import InfiniteScroll from "react-infinite-scroll-component";
 import { Oval } from "react-loader-spinner";
@@ -13,6 +14,7 @@ import "./order.css";
 const Order = ({ userData }) => {
   const [order, setOrder] = useState(null);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const abortControllerRef = useRef(null);
   const { 
     loading,
@@ -24,7 +26,7 @@ const Order = ({ userData }) => {
 
   const fetchInitialOrders = useCallback(async () => {
     if (!userData?.phoneNumber) return;
-    abortControllerRef.current?.abort(); // Cancel previous request
+    abortControllerRef.current?.abort();
     abortControllerRef.current = new AbortController();
     
     try {
@@ -56,15 +58,30 @@ const Order = ({ userData }) => {
   }, [userData, dispatch, hasMore, currentPage, loading]);
 
   useEffect(() => {
+    const handlePopState = () => {
+      if (order) {
+        setOrder(null);
+      } else {
+        navigate('/user');
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+
     if (userData?.phoneNumber && orders.length === 0) {
       fetchInitialOrders();
     }
     
-    // Cleanup on unmount
     return () => {
+      window.removeEventListener('popstate', handlePopState);
       abortControllerRef.current?.abort();
     };
-  }, [userData, fetchInitialOrders]);
+  }, [userData, fetchInitialOrders, order, navigate]);
+
+  // Define onImageClick handler
+  const handleImageClick = (productId) => {
+    navigate(`/product/${productId}`);
+  };
 
   const renderOrders = () => {
     if (loading && orders.length === 0) {
@@ -110,6 +127,7 @@ const Order = ({ userData }) => {
         key={orderItem.$id}
         order={orderItem}
         setOrder={setOrder}
+        onImageClick={() => handleImageClick(orderItem.productId)} // Added prop
       />
     ));
   };
@@ -120,6 +138,7 @@ const Order = ({ userData }) => {
         <UserOrderDetail
           userData={userData}
           order={order}
+          onImageClick={() => handleImageClick(order.productId)}
           setOrder={setOrder}
         />
       ) : (

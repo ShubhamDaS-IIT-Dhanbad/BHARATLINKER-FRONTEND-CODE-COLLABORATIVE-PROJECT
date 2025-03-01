@@ -7,7 +7,6 @@ import { deleteOrder, updateOrder } from "../../../redux/features/user/orderSlic
 import "./orderDetail.css";
 import { TiInfoOutline } from "react-icons/ti";
 import Navbar from "../navbar.jsx";
-import { Oval } from "react-loader-spinner";
 import OrderProductCard from "../order/orderProductCard.jsx";
 
 const UserOrderDetail = ({ userData, order, setOrder }) => {
@@ -90,6 +89,7 @@ const UserOrderDetail = ({ userData, order, setOrder }) => {
                     <div className="uod-product-card">
                         <OrderProductCard
                             order={order}
+                            setOrder={setOrder} // Added the missing prop
                             onImageClick={() => navigate(`/product/${order.productId}`)}
                         />
                     </div>
@@ -196,7 +196,7 @@ UserOrderDetail.propTypes = {
         houseNo: PropTypes.string,
         landMark: PropTypes.string,
         expectedDeliveryDate: PropTypes.string,
-        deliveryBoyPhn: PropTypes.oneOfType([PropTypes.string, PropTypes.number]) // Updated to allow string or number
+        deliveryBoyPhn: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
     }).isRequired,
     setOrder: PropTypes.func.isRequired
 };
