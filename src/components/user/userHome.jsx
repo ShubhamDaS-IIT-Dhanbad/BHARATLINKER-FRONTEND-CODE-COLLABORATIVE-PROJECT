@@ -5,11 +5,9 @@ import { CiLocationOn, CiMobile3 } from "react-icons/ci";
 import { PiShoppingBagOpenThin } from "react-icons/pi";
 import { IoIosLogOut } from "react-icons/io";
 import { BsChatLeftText } from "react-icons/bs";
-import { FaPlus } from "react-icons/fa";
 import { WiNightCloudyWindy } from "react-icons/wi";
 import useUserAuth from "../../hooks/userAuthHook.jsx";
 import Navbar from "./navbar.jsx";
-import AddToCartTab from "../viewCartTab/viewCart.jsx";
 import "./style/userHome.css";
 import rd1 from "./asset/rd1.png";
 
@@ -180,8 +178,6 @@ function UserHome({ userData }) {
                     buttons={popupConfigs[popup.type].buttons}
                 />
             )}
-
-            <AddToCartTab totalQuantity={totalQuantity} totalPrice={totalPrice} />
         </>
     );
 }
