@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { Oval } from "react-loader-spinner";
 import { updateOrderStateToCanceled } from "../../../appWrite/order/order.js";
 import { updateOrder, deleteOrder } from "../../../redux/features/user/orderSlice.jsx";
-import "./userOrderCard.css"; 
+import "./userOrderCard.css";
 
 function OrderProductCard({ order, setOrder }) {
     const dispatch = useDispatch();
@@ -18,10 +18,10 @@ function OrderProductCard({ order, setOrder }) {
                 setCanceling(true);
                 const updatedOrderData = await updateOrderStateToCanceled(order.$id, "canceled");
                 dispatch(deleteOrder({ orderId: order.$id, orderStateArrayName: order.state }));
-                dispatch(updateOrder({ 
-                    orderId: order.$id, 
-                    updatedOrderData, 
-                    orderStateArrayName: "canceled" 
+                dispatch(updateOrder({
+                    orderId: order.$id,
+                    updatedOrderData,
+                    orderStateArrayName: "canceled"
                 }));
             } catch (error) {
                 console.error("Failed to cancel order:", error);
@@ -38,20 +38,20 @@ function OrderProductCard({ order, setOrder }) {
             <div className="user-order-card">
                 <div className="user-order-card-img">
                     {!imageLoaded && (
-                        <Oval 
-                            height={20} 
-                            width={20} 
-                            color="grey" 
-                            secondaryColor="white" 
-                            ariaLabel="loading" 
+                        <Oval
+                            height={20}
+                            width={20}
+                            color="grey"
+                            secondaryColor="white"
+                            ariaLabel="loading"
                         />
                     )}
-                    <img 
-                        src={order.image} 
-                        alt={order.title} 
+                    <img
+                        src={order.image}
+                        alt={order.title}
                         onLoad={() => setImageLoaded(true)}
                         onError={() => setImageLoaded(true)} // Handle broken images
-                        style={!imageLoaded ? { display: 'none' } : {}} 
+                        style={!imageLoaded ? { display: 'none' } : {}}
                     />
                 </div>
                 <div className="user-order-card-detail">
@@ -74,26 +74,26 @@ function OrderProductCard({ order, setOrder }) {
                     </div>
                     <div className="user-order-card-detail-3-state">
                         {order.state !== "canceled" && order.state !== "delivered" && (
-                            canceling ? (
-                                <Oval 
-                                    height={20} 
-                                    width={20} 
-                                    color="green" 
-                                    secondaryColor="white" 
-                                    ariaLabel="loading" 
-                                />
-                            ) : (
-                                <button 
-                                    className="user-order-card-detail-3-state-cancel" 
-                                    onClick={handleCancel}
-                                    disabled={canceling}
-                                >
-                                    CANCEL
-                                </button>
-                            )
+                           <button
+                           className={`user-order-card-detail-3-state-cancel ${canceling ? "disabled" : ""}`}
+                           onClick={handleCancel}
+                           disabled={canceling}
+                       >
+                           {canceling ? (
+                               <Oval
+                                   height={20}
+                                   width={30}
+                                   color="white"
+                                   secondaryColor="red"
+                                   ariaLabel="loading"
+                               />
+                           ) : "CANCEL"}
+                       </button>
+                       
                         )}
-                        <button 
-                            className="user-order-card-detail-2-btn" 
+
+                        <button
+                            className="user-order-card-detail-2-btn"
                             onClick={() => setOrder(order)}
                         >
                             DETAIL
