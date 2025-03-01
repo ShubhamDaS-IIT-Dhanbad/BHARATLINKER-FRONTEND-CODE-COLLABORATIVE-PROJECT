@@ -47,18 +47,20 @@
 }
 
 .search-page-product-card-top {
-    min-height: 195px;
+    height: 195px;
     max-height: 195px;
     display: flex;
-    justify-content: center;
+    justify-content: center;width: 100%;
     align-items: center;
     overflow: hidden;
 }
 
 .search-page-product-card-top-image {
-    width: 90%;
-    height: auto;
+
     border-radius: 5px;
+    height: 140px;
+    border-radius: 5px;
+    object-fit:contain; 
 }
 
 .search-page-product-card-bottom {
