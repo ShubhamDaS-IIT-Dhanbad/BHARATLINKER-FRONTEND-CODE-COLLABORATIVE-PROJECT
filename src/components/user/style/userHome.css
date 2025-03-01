@@ -37,8 +37,8 @@
     display: flex;
     flex-direction: column;align-items: center;
     gap: 10px;padding-left: 20px;padding-right: 20px;
-    margin-top: 97px;background-color:  #f9f9f9;
-    min-height: 50vh;
+    background-color:  #f9f9f9;
+    min-height: 50vh;margin-top: 77px;
 }
 .user-dashboard-info-section img{
     width: 60vw;

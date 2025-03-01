@@ -9,7 +9,10 @@ import { WiNightCloudyWindy } from "react-icons/wi";
 import useUserAuth from "../../hooks/userAuthHook.jsx";
 import Navbar from "./navbar.jsx";
 import "./style/userHome.css";
-import rd1 from "./asset/rd1.png";
+import HomeTestimonial from './userTestimonial.jsx';
+
+import ti1 from './asset/uh1.png';
+// const ti1 = 'https://res.cloudinary.com/demc9mecm/image/upload/v1737378115/ptnykpibqxqobs3gywoq.png';
 
 // Reusable Confirmation Popup Component
 const ConfirmationPopup = ({ isOpen, title, text, buttons }) => {
@@ -44,10 +47,8 @@ const ConfirmationPopup = ({ isOpen, title, text, buttons }) => {
 
 function UserHome({ userData }) {
     const navigate = useNavigate();
-    const { totalQuantity, totalPrice } = useSelector((state) => state.userCart);
     const { logout } = useUserAuth();
     const [isLoading, setIsLoading] = useState(false);
-    const [deferredPrompt, setDeferredPrompt] = useState(null);
     const [popup, setPopup] = useState({ isOpen: false, type: null });
 
     // Scroll to top on mount
@@ -55,15 +56,6 @@ function UserHome({ userData }) {
         window.scrollTo(0, 0);
     }, []);
 
-    // Capture PWA install prompt
-    useEffect(() => {
-        const handleBeforeInstallPrompt = (e) => {
-            e.preventDefault();
-            setDeferredPrompt(e);
-        };
-        window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
-        return () => window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
-    }, []);
 
     // Handle logout
     const handleLogout = async () => {
@@ -88,7 +80,7 @@ function UserHome({ userData }) {
             title: "Contact Support",
             text: "We’re here to assist you! For inquiries, email us at bharatlinker@gmail.com or call our support team at +91 8250846979. Our team is continuously working to enhance your experience with Bharat Linker.",
             buttons: [
-                { label: "OK", onClick: () => {setPopup({ isOpen: false, type: null }); }, primary: true },
+                { label: "OK", onClick: () => { setPopup({ isOpen: false, type: null }); }, primary: true },
                 { label: "Close", onClick: () => setPopup({ isOpen: false, type: null }), primary: false },
             ],
         },
@@ -96,15 +88,15 @@ function UserHome({ userData }) {
             title: "About Us",
             text: "At Bharat Linker, we are dedicated to empowering retailers by building a robust platform to thrive in the era of e-commerce and quick commerce. Our mission is to provide innovative tools and solutions that enable retailers to compete effectively with leading platforms, ensuring their success in a dynamic digital marketplace. Visit our About Us page to learn more about our vision and commitment.",
             buttons: [
-                { label: "OK", onClick: () => {setPopup({ isOpen: false, type: null }); }, primary: true },
+                { label: "OK", onClick: () => { setPopup({ isOpen: false, type: null }); }, primary: true },
                 { label: "Close", onClick: () => setPopup({ isOpen: false, type: null }), primary: false },
             ],
         },
         bharatLinker: {
             title: "Bharat Linker Lite",
-           text: "To install Bharat Linker Lite, tap the three-dot menu in the top-right corner of your browser, select 'Add to Home Screen,' and follow the prompts to complete the installation.",
+            text: "To install Bharat Linker Lite, tap the three-dot menu in the top-right corner of your browser, select 'Add to Home Screen,' and follow the prompts to complete the installation.",
             buttons: [
-                { label: "Ok",onClick: () => setPopup({ isOpen: false, type: null }), primary: true },
+                { label: "Ok", onClick: () => setPopup({ isOpen: false, type: null }), primary: true },
                 { label: "Cancel", onClick: () => setPopup({ isOpen: false, type: null }), primary: false },
             ],
         },
@@ -114,28 +106,28 @@ function UserHome({ userData }) {
     const dashboardItems = [
         { icon: CiLocationOn, text: "Address book", path: "/user/profile" },
         { icon: PiShoppingBagOpenThin, text: "Order", path: "/user/order" },
-        { 
-            icon: BsChatLeftText, 
-            text: "Support", 
-            size: 24, 
-            onClick: () => setPopup({ isOpen: true, type: "support" }) 
+        {
+            icon: BsChatLeftText,
+            text: "Support",
+            size: 24,
+            onClick: () => setPopup({ isOpen: true, type: "support" })
         },
-        { 
-            icon: WiNightCloudyWindy, 
-            text: "About Us", 
-            onClick: () => setPopup({ isOpen: true, type: "about" }) 
+        {
+            icon: WiNightCloudyWindy,
+            text: "About Us",
+            onClick: () => setPopup({ isOpen: true, type: "about" })
         },
-        { 
-            icon: CiMobile3, 
-            text: "Bharat Linker Lite", 
-            onClick: () => setPopup({ isOpen: true, type: "bharatLinker" }), 
-            ariaLabel: "Install Bharat Linker Lite" 
+        {
+            icon: CiMobile3,
+            text: "Bharat Linker Lite",
+            onClick: () => setPopup({ isOpen: true, type: "bharatLinker" }),
+            ariaLabel: "Install Bharat Linker Lite"
         },
-        { 
-            icon: IoIosLogOut, 
-            text: "Log - Out", 
-            onClick: () => setPopup({ isOpen: true, type: "logout" }), 
-            ariaLabel: "Logout" 
+        {
+            icon: IoIosLogOut,
+            text: "Log - Out",
+            onClick: () => setPopup({ isOpen: true, type: "logout" }),
+            ariaLabel: "Logout"
         },
     ];
 
@@ -147,10 +139,9 @@ function UserHome({ userData }) {
 
             <main>
                 <section className="user-dashboard-info-section">
-                    
+
+                    <HomeTestimonial ti1={ti1} />
                     <div className="user-dashboard-header-row">
-
-
                         {dashboardItems.map((item, index) => (
                             <article
                                 key={index}

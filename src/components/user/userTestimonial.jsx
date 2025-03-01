@@ -1,0 +1,85 @@
+import React, { useState } from "react";
+import "./style/userTestimonial.css";
+
+const Testimonial = ({ti1}) => {
+  const testimonials = [
+    {
+      title: "BHARAT | LINKER",
+      description:"We are testing our platform in the Dhanbad,Jharkhand regions. As a small team of recent graduates, our resources are limited, but we are passionate about improving and expanding our services based on your feedback.",
+      image: ti1,
+    },    
+    {
+      title: "Our Aim",
+      description:
+        "At BharatLinker, our goal is to create a seamless and efficient platform that connects users with the right services. We aim to provide solutions that foster growth and development for businesses and individuals alike.",
+      image: ti1,
+    },
+    {
+      title: "Help Us Grow",
+      description:
+        "We are constantly working towards improving our platform and services. Your feedback and support are invaluable in helping us expand and refine our offerings to better serve your needs.",
+      image: ti1,
+    },
+    {
+      title: "Join Us in Our Mission",
+      description:
+        "We invite you to be a part of BharatLinker’s journey. Whether you’re a user or a service provider, together, we can build a more connected and efficient digital ecosystem.",
+      image: ti1,
+    },
+    {
+      title: "Our Commitment",
+      description:
+        "BharatLinker is committed to delivering exceptional service and innovative solutions. We are here to support you every step of the way and provide a reliable platform for your digital needs.",
+      image: ti1,
+    },
+    {
+      title: "Your Feedback Matters",
+      description:
+        "We value the input of our users. Your feedback helps us shape the future of BharatLinker, allowing us to provide better features and improve the overall experience for everyone.",
+      image: ti1,
+    },
+    {
+      title: "Building the Future Together",
+      description:
+        "As we continue to grow, we remain focused on creating a platform that truly addresses the needs of our users. Join us in building the future of digital connections.",
+      image: ti1,
+    },
+    {
+      title: "Stay Connected",
+      description:
+        "At BharatLinker, we believe in the power of connection. Stay updated with our latest features and developments by following us and becoming part of our community.",
+      image: ti1,
+    },
+  ];
+
+  const [current, setCurrent] = useState(0);
+
+  const handleDotClick = (index) => {
+    setCurrent(index);
+  };
+
+  return (
+    <div className="user-testimonial-container">
+      <div className="user-testimonial">
+        <img
+          src={testimonials[current].image}
+          alt={testimonials[current].title}
+          className="user-testimonial-image"
+        />
+        <h3 className="user-testimonial-title">{testimonials[current].title}</h3>
+        <p className="user-testimonial-description">{testimonials[current].description}</p>
+      </div>
+      {/* <div className="user-testimonial-dots">
+        {testimonials.map((_, index) => (
+          <span
+            key={index}
+            className={`user-testimonial-dot ${index === current ? "active" : ""}`}
+            onClick={() => handleDotClick(index)}
+          ></span>
+        ))}
+      </div> */}
+    </div>
+  );
+};
+
+export default Testimonial;

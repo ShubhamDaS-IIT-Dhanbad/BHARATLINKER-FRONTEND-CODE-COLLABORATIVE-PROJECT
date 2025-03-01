@@ -1,0 +1,93 @@
+.user-testimonial-container {
+  text-align: center;
+  padding: 0px 40px 10px 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-family: Arial, sans-serif;
+}
+
+.user-testimonial-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.user-testimonial {
+  margin-top: 20px;
+}
+
+.user-testimonial-image {
+  width: 80vw;
+  border-radius: 50%;
+  margin-bottom: 10px;
+  animation: swingShake 2.5s infinite ease-in-out;
+  transform-origin: top center; /* Makes it swing from the top */
+}
+
+.user-testimonial-description {
+  font-size: 16px;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #666;
+  margin: 10px auto;
+  max-width: 500px;
+  line-height: 1.6;
+}
+
+.user-testimonial-dots {
+  margin-top: 20px;
+}
+
+.user-testimonial-dot {
+  height: 10px;
+  width: 10px;
+  margin: 0 5px;
+  background-color: #ccc;
+  border-radius: 50%;
+  display: inline-block;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.user-testimonial-dot.active {
+  background-color: #007bff;
+}
+
+@keyframes swingShake {
+  0% {
+    transform: rotate(0deg);
+  }
+  10% {
+    transform: rotate(4deg) translateX(2px);
+  }
+  20% {
+    transform: rotate(-4deg) translateX(-2px);
+  }
+  30% {
+    transform: rotate(3deg) translateX(1px);
+  }
+  40% {
+    transform: rotate(-3deg) translateX(-1px);
+  }
+  50% {
+    transform: rotate(2deg);
+  }
+  60% {
+    transform: rotate(-2deg);
+  }
+  70% {
+    transform: rotate(1deg);
+  }
+  80% {
+    transform: rotate(-1deg);
+  }
+  100% {
+    transform: rotate(0deg);
+  }
+}
+
+/* Optional: Add hover effect to pause animation */
+.user-testimonial-image:hover {
+  animation-play-state: paused;
+}
