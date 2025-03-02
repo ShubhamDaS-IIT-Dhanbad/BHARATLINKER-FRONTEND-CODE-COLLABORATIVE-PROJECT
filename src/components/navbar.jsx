@@ -125,7 +125,7 @@ const Navbar = ({ headerTitle, shopId }) => {
                             </div>
                         </div>
                     </div>
-                    <div className="home-page-header-retailer-section">
+                    {isHomePage && (<div className="home-page-header-retailer-section">
                         <MdAdminPanelSettings 
                             onClick={handleRetailerClick}
                             size={35}
@@ -133,6 +133,7 @@ const Navbar = ({ headerTitle, shopId }) => {
                             aria-label="Admin Panel"
                         />
                     </div>
+                    )}
                 </div>
                 <div className={isHomePage ? "home-page-search-section" : "product-page-search-section"}>
                     <div className={isHomePage ? "home-page-search-input-container" : "product-page-search-input-container"}>
