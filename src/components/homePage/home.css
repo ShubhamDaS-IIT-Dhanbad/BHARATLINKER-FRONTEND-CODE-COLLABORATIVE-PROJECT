@@ -25,7 +25,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 60px;gap: 7px;
+    height: 60px;gap: 12px;
     background: #f9f9f9;
     position: fixed;
     bottom: 0;
