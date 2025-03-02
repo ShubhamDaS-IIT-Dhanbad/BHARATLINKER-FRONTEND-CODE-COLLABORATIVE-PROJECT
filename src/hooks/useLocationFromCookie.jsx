@@ -147,7 +147,7 @@ const useLocationManager = () => {
     try {
       const apiKey =HERE_API_KEY;
       const url = `https://autosuggest.search.hereapi.com/v1/autosuggest?at=${latitude},${longitude}&lang=en&q=${encodeURIComponent(query)}&limit=10&apiKey=${apiKey}`;
-console.log(url,HERE_API_KEY)
+
       const response = await fetch(url);
       if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
   

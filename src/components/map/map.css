@@ -1,114 +1,113 @@
-
-.map-parent-container{
+.map-parent-container {
   height: 100vh;
-  width: 100vw;
-  z-index: 99999;
+  width: 100%;
+  position: relative;
+  font-family: 'Roboto', sans-serif; /* Matches Google Maps font */
+  background: #ffffff;z-index: 99999;
+}
+
+.map-back-bar {
+  display: flex;
+  align-items: center;
+  padding: 12px 15px;
+  background: #ffffff;
+  border-bottom: 1px solid #e0e0e0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  position: relative;
+  z-index: 2;
+}
+
+.map-back-bar-icon {
+  cursor: pointer;
+  color: #333;
+  margin-right: 12px;
+}
+
+.map-back-bar-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
 }
 
 .map-wrapper {
-    position: relative;
-    height: 100vh;
-    background-color: white;
-    width: 100vw;
+  position: relative;
+  height: calc(100% - 50px); /* Adjust for back bar height */
+  width: 100%;
 }
 
-.custom-popup {
-    max-width: 200px;
+.map-instruction-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(123, 44, 253, 0.9); /* Zepto purple with transparency */
+  color: #ffffff;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  z-index: 1;
+  text-align: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
-
-.popup-content {
-    display: flex;
-    align-items: center;
-}
-
-.popup-icon {
-    color: #1e7ac9;
-}
-
-.popup-text {
-    margin-left: 5px;
-}
-
-
-
-
-
-
-
-.map-back-bar{
-    display: flex;height: 57px;
-    align-items: center;width: 100vw;
-    justify-content: center;font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-    font-size: 17px;font-weight: 800;
-    position: absolute;
-    background-color: rgb(255, 255, 255);
-    top: 0;border-radius: 10px;
-    z-index: 99999;
-}
-.map-back-bar-icon{
-    position: fixed;left: 12px;
-}
-
-
-
-
 
 .map-address-container {
-    display: flex;align-items: center;
-    position: fixed;justify-content: center;
-    bottom: 0;
-    background-color: rgba(255, 255, 255, 0.21);
-    width: 100vw;
-    z-index: 99999;
-}
-  
-  .map-address-content {
-    display: flex;
-    flex-direction: column;
-    background-color: white;
-    border-radius: 8px;
-    padding: 12px;
-    border-radius: 10px;
-    width: calc(95vw - 24px);margin-bottom: 10px;
-  }
-  
-  .map-address-text {
-    font-size: 11px;
-    font-weight: bold;
-    color: #333;
-    margin-bottom: 10px;
-  }
-  
-  .map-coordinates {
-    font-size: 13px;
-    color: #777;
-  }
-  
-  .map-confirm-btn {
-    background-color: rgb(12, 131, 31);
-    color: white;
-    font-size: 1rem;
-    font-weight: bold;
-    padding: 10px;display: flex;
-    text-align: center;justify-content: center;
-    border-radius: 5px;
-    transition: background-color 0.3s;
-  }
-  .disabled {
-    pointer-events: none;
-    opacity: 0.75;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background: #ffffff;
+  padding: 20px;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
+  z-index: 2;
 }
 
-.map-address-icon {
-    color: #1e7ac9;
-    margin-right: 10px;
+.map-address-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
 }
 
-.map-coordinates {
-    font-size: 12px;
-    color: #666;
-    margin-top: 5px;
+.map-address-text {
+  color: #444;
+  font-size: 15px;
+  font-weight: 400;
+  text-align: center;
+  margin: 0;
+  line-height: 1.4;
+  max-width: 90%;
+  overflow-wrap: break-word;
 }
-.map-address-oval{padding-bottom: 10px;
-  display: flex;justify-content: center;align-items: center;
+
+.map-confirm-btn {
+  background-color: #FF4081; /* Zepto pink button */
+  color: white;
+  padding: 12px 25px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 15px;
+  font-weight: 600;
+  border: none;
+  transition: background-color 0.3s ease;
+  width: 100%;
+  max-width: 300px;
+  text-align: center;
+}
+
+.map-confirm-btn:hover {
+  background-color: #e93571; /* Darker pink on hover */
+}
+
+.map-confirm-btn.disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.map-address-oval {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 20px;
 }
