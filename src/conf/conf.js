@@ -2,6 +2,7 @@ const conf = {
     // Appwrite Base URL
     appwriteUrl: import.meta.env.VITE_APPWRITE_URL,
     hereApiKey: import.meta.env.VITE_HERE_API_KEY,
+    gmApiKey: import.meta.env.VITE_GOOGLE_MAPS_API_KEY,
     
     // API Keys
     geoapifyapikey: import.meta.env.VITE_REACT_APP_GEOAPIFY_API_KEY,

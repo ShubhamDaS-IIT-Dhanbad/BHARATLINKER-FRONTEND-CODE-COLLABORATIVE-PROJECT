@@ -5,7 +5,9 @@ import { HelmetProvider } from 'react-helmet-async';
 import App from './App.jsx';
 import store from './redux/store/store.jsx';
 import './index.css';
-const GOOGLE_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || "AIzaSyBIqmoXgxN8g5ji_81BukR6ZHVUXLQFMLA";
+import conf from './conf/conf.js'
+
+const GOOGLE_API_KEY = conf.gmApiKey;
 
 const loadGoogleMapsScript = () => {
   return new Promise((resolve, reject) => {
