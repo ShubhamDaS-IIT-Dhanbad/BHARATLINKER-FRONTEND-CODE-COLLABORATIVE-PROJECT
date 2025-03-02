@@ -1,3 +1,4 @@
+// LocationMap.jsx
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import Cookies from "js-cookie";
 import debounce from "lodash.debounce";
@@ -12,7 +13,6 @@ import "./map.css";
 const DEFAULT_ZOOM = 15;
 const MAP_CONTAINER_STYLE = { height: "100%", width: "100%" };
 
-// Convert TiLocation SVG to a Google Maps marker icon
 const markerIcon = {
   url: `data:image/svg+xml,${encodeURIComponent(`
     <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24">
@@ -38,9 +38,10 @@ const LocationMap = React.memo(({
   const [loading, setLoading] = useState(false);
   const [loadingConfirm, setLoadingConfirm] = useState(false);
   const [address, setAddress] = useState(addressMap || "");
-  const mapRef = useRef(null); // Ref for map instance
-  const markerRef = useRef(null); // Ref for marker instance
-  const containerRef = useRef(null); // Ref for map container DOM element
+
+  const mapRef = useRef(null);
+  const markerRef = useRef(null);
+  const containerRef = useRef(null);
   const geocoderRef = useRef(null);
 
   const getAddressFromLatLng = useCallback(async (lat, lng) => {
@@ -69,16 +70,16 @@ const LocationMap = React.memo(({
     }
   }, []);
 
-  const debouncedGetAddress = useRef(debounce(getAddressFromLatLng, 1000)).current;
+  const debouncedGetAddress = useRef(debounce((lat, lng) => {
+    getAddressFromLatLng(lat, lng);
+  }, 500)).current; // Reduced debounce time to 500ms for quicker response
 
-  // Initialize map and marker once on mount
   useEffect(() => {
     if (!window.google || !window.google.maps) {
       console.error("Google Maps API not loaded");
       return;
     }
 
-    // Initialize map if not already initialized
     if (!mapRef.current) {
       mapRef.current = new window.google.maps.Map(containerRef.current, {
         center: position,
@@ -89,33 +90,49 @@ const LocationMap = React.memo(({
         fullscreenControl: false,
       });
 
-      // Initialize legacy Marker (not AdvancedMarkerElement)
       markerRef.current = new window.google.maps.Marker({
         position: position,
         map: mapRef.current,
         title: "Your Location",
         draggable: true,
-        icon: markerIcon, // Use the custom SVG icon
+        icon: markerIcon,
       });
 
-      // Handle map click
+      // Enhanced map click handler
       mapRef.current.addListener("click", (event) => {
-        const lat = event.latLng.lat();
-        const lng = event.latLng.lng();
-        setPosition({ lat, lng });
-        debouncedGetAddress(lat, lng);
+        const newLat = event.latLng.lat();
+        const newLng = event.latLng.lng();
+        const newPosition = { lat: newLat, lng: newLng };
+        
+        // Update position state
+        setPosition(newPosition);
+        
+        // Move marker to new position
+        if (markerRef.current) {
+          markerRef.current.setPosition(newPosition);
+        }
+        
+        // Center map on new position
+        if (mapRef.current) {
+          mapRef.current.panTo(newPosition);
+        }
+        
+        // Get new address
+        debouncedGetAddress(newLat, newLng);
       });
 
-      // Handle marker drag end and fetch address immediately
+      // Add dragend listener for when marker is dragged
       markerRef.current.addListener("dragend", (event) => {
-        const lat = event.latLng.lat();
-        const lng = event.latLng.lng();
-        setPosition({ lat, lng });
-        getAddressFromLatLng(lat, lng); // Fetch address immediately on drag end
+        const newLat = event.latLng.lat();
+        const newLng = event.latLng.lng();
+        const newPosition = { lat: newLat, lng: newLng };
+        
+        setPosition(newPosition);
+        mapRef.current.panTo(newPosition);
+        debouncedGetAddress(newLat, newLng);
       });
     }
 
-    // Cleanup
     return () => {
       debouncedGetAddress.cancel();
       if (mapRef.current) {
@@ -125,19 +142,10 @@ const LocationMap = React.memo(({
         markerRef.current.setMap(null);
       }
     };
-  }, [debouncedGetAddress, getAddressFromLatLng]); // Added getAddressFromLatLng to dependencies
+  }, [debouncedGetAddress, getAddressFromLatLng]);
 
-  // Update position when props or state change
-  useEffect(() => {
-    if (mapRef.current && markerRef.current) {
-      const newPosition = { lat: position.lat, lng: position.lng };
-      markerRef.current.setPosition(newPosition);
-      mapRef.current.panTo(newPosition);
-    }
-    if (!addressMap && latMap && longMap) {
-      debouncedGetAddress(latMap, longMap);
-    }
-  }, [position, latMap, longMap, addressMap, debouncedGetAddress]);
+  // Removed the second useEffect as it's no longer needed
+  // The marker position is now handled directly in the click handler
 
   async function handleUserProfileUpdate(locationData) {
     if (window.location.pathname === "/user/profile") {
@@ -258,12 +266,12 @@ const LocationMap = React.memo(({
                 />
               </div>
             ) : (
-              <p className="map-address-text">{address || "No address available"}</p>
+              <p className="map-address-text">{address || "Select a location on the map"}</p>
             )}
             <button
-              className={`map-confirm-btn ${loading ? "disabled" : ""}`}
-              onClick={!loading ? handleConfirm : undefined}
-              disabled={loading}
+              className={`map-confirm-btn ${loading || !address ? "disabled" : ""}`}
+              onClick={!loading && address ? handleConfirm : undefined}
+              disabled={loading || !address}
             >
               {loadingConfirm ? (
                 <Oval height={20} width={20} color="white" ariaLabel="loading" />
