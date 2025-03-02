@@ -52,9 +52,11 @@
     display: flex;color: white;
     justify-content: center;
     align-items: center;
+    box-shadow: rgb(181, 244, 208) 0px 8px 24px;
 }
 #home-footer-div-home-icon{
     background-color: rgb(0, 0, 0);
+    box-shadow: rgba(8, 8, 8, 0.135) 0px 8px 24px;
     border-radius: 10px;height: 90%;width: 100%;
     display: flex;color: white;
     justify-content: center;
