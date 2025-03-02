@@ -55,10 +55,10 @@
     box-shadow: rgba(207, 241, 222, 0.484) 0px 8px 24px;
 }
 #home-footer-div-home-icon{
-    background-color: rgb(254, 75, 117);
+    background-color: rgb(40, 46, 43);
     box-shadow: rgba(8, 8, 8, 0.039) 0px 8px 24px;
     border-radius: 10px;height: 90%;width: 100%;
-    display: flex;color: white;
+    display: flex;color: rgb(90, 228, 169);
     justify-content: center;
     align-items: center;
 }
