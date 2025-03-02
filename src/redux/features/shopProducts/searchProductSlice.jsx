@@ -77,6 +77,7 @@ export const loadMoreProducts = createAsyncThunk(
 
 // Initial state
 const initialState = {
+    query:"",
     shops: {}, // Keyed by shopId
     loading: false,
     loadingMoreProducts: false,
@@ -99,6 +100,7 @@ const shopProductsSlice = createSlice({
                     state.shops[shopId] = {
                         ...shop,
                         products: [],
+                        query:"",
                         selectedCategories: shop.selectedCategories,
                         selectedBrands: shop.selectedBrands,
                         sortByAsc: shop.sortByAsc,

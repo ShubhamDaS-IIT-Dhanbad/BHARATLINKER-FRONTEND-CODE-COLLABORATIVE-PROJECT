@@ -31,7 +31,7 @@ export const useSearchShop = () => {
             selectedCategories,
         };
 
-        if (shops.length !== 0) dispatch(resetShops());
+        if (shops.length !== 0){dispatch(resetShops());}
         dispatch(fetchShops(params));
     };
 

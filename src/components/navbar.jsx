@@ -24,11 +24,13 @@ const Navbar = ({ headerTitle, shopId }) => {
     const [searchInput, setSearchInput] = useState('');
     const [locationTabVisible, setLocationTabVisible] = useState(false);
     const { executeSearch } = useExecuteSearch();
+
     const { query: searchQuery } = useSelector((state) => state.searchproducts);
     const { executeSearchShop } = useSearchShop();
     const { query: shopQuery } = useSelector((state) => state.searchshops);
     const { executeShopProductSearch } = useShopProductExecuteSearch(shopId);
     const { query: shopProductQuery } = useSelector((state) => state.shopproducts);
+
     const isHomePage = location.pathname === '/';
     const isSearchPage = location.pathname === '/search';
     const isShopPage = location.pathname === '/shop';
@@ -43,8 +45,8 @@ const Navbar = ({ headerTitle, shopId }) => {
         }
     }, [navigate]);
 
+    
     useEffect(() => {
-        setIsLocationHas(!!(userLocation?.address && userLocation?.lat && userLocation?.lon));
         if (isSearchPage) {
             setSearchInput(searchQuery);
         } else if (isShopPage) {
@@ -52,18 +54,12 @@ const Navbar = ({ headerTitle, shopId }) => {
         } else if (isShopProductPage) {
             setSearchInput(shopProductQuery);
         }
-    }, [isSearchPage, isShopPage, isShopProductPage, searchQuery, shopQuery, shopProductQuery, locationTabVisible]);
+    }, []);
+    useEffect(()=>{
+        setIsLocationHas(!!(userLocation?.address && userLocation?.lat && userLocation?.lon));
+    },[ locationTabVisible])
 
 
-
-    // useEffect(() => {
-    //     setIsLocationHas(!!(userLocation?.address && userLocation?.lat && userLocation?.lon));
-    //     if (isSearchPage) {
-    //         setSearchInput(searchQuery);
-    //     } else if (isShopPage) {
-    //         setSearchInput(shopQuery);
-    //     }
-    // }, [isSearchPage, isShopPage, searchQuery, shopQuery, locationTabVisible]);
     const handleHomePageUserIconClick = () => {
         const userSession = Cookies.get('BharatLinkerUserData');
         navigate(userSession ? '/user' : '/login');
