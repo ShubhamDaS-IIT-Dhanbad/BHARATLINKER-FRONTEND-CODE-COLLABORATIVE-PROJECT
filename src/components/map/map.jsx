@@ -9,7 +9,6 @@ import { useNavigate } from "react-router-dom";
 import { TiLocation } from "react-icons/ti";
 import "./map.css";
 
-const GOOGLE_API_KEY = import.meta.env.VITE_GOOGLE_MAPS_API_KEY || "AIzaSyBIqmoXgxN8g5ji_81BukR6ZHVUXLQFMLA";
 const DEFAULT_ZOOM = 15;
 const MAP_CONTAINER_STYLE = { height: "100%", width: "100%" };
 
@@ -107,12 +106,12 @@ const LocationMap = React.memo(({
         debouncedGetAddress(lat, lng);
       });
 
-      // Handle marker drag end
+      // Handle marker drag end and fetch address immediately
       markerRef.current.addListener("dragend", (event) => {
         const lat = event.latLng.lat();
         const lng = event.latLng.lng();
         setPosition({ lat, lng });
-        debouncedGetAddress(lat, lng);
+        getAddressFromLatLng(lat, lng); // Fetch address immediately on drag end
       });
     }
 
@@ -126,7 +125,7 @@ const LocationMap = React.memo(({
         markerRef.current.setMap(null);
       }
     };
-  }, [debouncedGetAddress]);
+  }, [debouncedGetAddress, getAddressFromLatLng]); // Added getAddressFromLatLng to dependencies
 
   // Update position when props or state change
   useEffect(() => {
