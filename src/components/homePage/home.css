@@ -37,7 +37,7 @@
 }
 
 .home-footer-div {
-    width: calc(85vw/6);
+    width: calc(90vw/5);
     height: 55px;
     color: rgba(0, 0, 0, 0.9);
     display: flex;
