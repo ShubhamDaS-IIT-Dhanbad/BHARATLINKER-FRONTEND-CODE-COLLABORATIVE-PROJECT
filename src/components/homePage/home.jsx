@@ -48,17 +48,7 @@ const Home = () => {
             }}>
                 <HomeTestimonial ti1={ti1} />
             </div>
-            <div id="home-footer" style={{
-                width: '100vw',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'space-evenly',
-                height: '60px',
-                backgroundColor: '#f9f9f9',
-                position: 'fixed',
-                bottom: '0',
-                zIndex: '100'
-            }}>
+            <div id="home-footer-1">
                 <FooterButton icon={<RiSunCloudyLine size={37} />} label="Home" onClick={() => navigate('/')} />
                 <FooterButton icon={<TbCategoryPlus size={37} />} label="Products" onClick={() => navigate('/search')} />
                 <FooterButton icon={<MdOutlineStore size={37} />} label="Shop" onClick={() => navigate('/shop')} />

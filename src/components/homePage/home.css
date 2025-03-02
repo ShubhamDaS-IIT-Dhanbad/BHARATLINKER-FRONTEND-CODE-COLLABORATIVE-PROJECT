@@ -11,8 +11,19 @@
 #productSearchPage-container-top ::-webkit-scrollbar{
     width: 0px;height: 0px;
 }
-
-
+#home-footer-1 {
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    height: 60px;
+    background: #f9f9f9;
+    position: fixed;
+    bottom: 0;padding-top: 7px;padding-bottom: 7px;
+    z-index: 100;
+    box-shadow: 0 4px 6px rgb(213, 248, 228);
+    box-shadow: rgb(206, 253, 226) 0px 8px 24px;
+}
 
 
 
