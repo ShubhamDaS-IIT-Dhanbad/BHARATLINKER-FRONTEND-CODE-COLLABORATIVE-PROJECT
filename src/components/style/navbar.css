@@ -96,7 +96,7 @@
 .home-page-search-input-container {
     display: flex;
     justify-content: center;
-    align-items: center;border: 0.1rem solid rgb(0, 0, 0);
+    align-items: center;border: 1.1px solid rgba(0, 0, 0, 0.283);
     border-radius: 11px;
     background-color: #f9f9f9;
     width: 96vw;height: 45px;

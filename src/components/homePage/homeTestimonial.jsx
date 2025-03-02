@@ -67,7 +67,7 @@ const Testimonial = ({ti1}) => {
           className="testimonial-image"
         />
         <h3 className="testimonial-title">{testimonials[current].title}</h3>
-        <p className="testimonial-description">{testimonials[current].description}</p>
+        <div className="home-testimonial-description">{testimonials[current].description}</div>
       </div>
       <div className="testimonial-dots">
         {testimonials.map((_, index) => (
