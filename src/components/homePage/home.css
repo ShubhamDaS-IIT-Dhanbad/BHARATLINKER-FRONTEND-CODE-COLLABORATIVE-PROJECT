@@ -21,8 +21,8 @@
     position: fixed;
     bottom: 0;padding-top: 7px;padding-bottom: 7px;
     z-index: 100;
-    box-shadow: 0 4px 6px rgb(213, 248, 228);
-    box-shadow: rgb(206, 253, 226) 0px 8px 24px;
+    box-shadow: 0 4px 6px rgb(242, 255, 247);
+    box-shadow: rgb(231, 252, 240) 0px 8px 24px;
 }
 
 
