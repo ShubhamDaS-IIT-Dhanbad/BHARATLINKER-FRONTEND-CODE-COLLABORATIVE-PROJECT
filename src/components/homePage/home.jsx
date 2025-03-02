@@ -44,11 +44,11 @@ const Home = () => {
                     <div
                         className='home-footer-div-icon'
                         id='home-footer-div-home-icon'>
-                        <RiHome3Fill size={28}/></div>
+                        <RiHome3Fill size={20}/></div>
                 </div>
-                <FooterButton icon={<AiFillProduct size={28} />} label="Products" onClick={() => navigate('/search')} />
-                <FooterButton icon={<AiFillShop size={28} />} label="Shop" onClick={() => navigate('/shop')} />
-                <FooterButton icon={<TbCircleLetterBFilled size={28} />} label="bharat linker" onClick={() => navigate('/')} />
+                <FooterButton icon={<AiFillProduct size={20} />} label="Products" onClick={() => navigate('/search')} />
+                <FooterButton icon={<AiFillShop size={20} />} label="Shop" onClick={() => navigate('/shop')} />
+                <FooterButton icon={<TbCircleLetterBFilled size={20} />} label="bharat linker" onClick={() => navigate('/')} />
                
             </div>
 

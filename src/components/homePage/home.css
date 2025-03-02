@@ -25,20 +25,20 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 60px;gap: 11px;
+    height: 40px;gap: 11px;
     background: #f9f9f9;
     position: fixed;
     bottom: 0;
-    padding-top: 7px;
-    padding-bottom: 7px;
+    padding-top: 10px;
+    padding-bottom: 10px;
     z-index: 100;
     box-shadow: 0 4px 6px rgb(242, 255, 247);
     box-shadow: rgb(231, 252, 240) 0px 8px 24px;
 }
 
 .home-footer-div {
-    width: calc(90vw/5);
-    height: 55px;
+    width: calc(80vw/5);
+    height: 45px;
     color: rgba(0, 0, 0, 0.9);
     display: flex;
     flex-direction: column;
@@ -47,7 +47,7 @@
 }
 
 .home-footer-div-icon {
-    background-color: rgb(49, 207, 117);
+    background-color: rgb(40, 46, 43);
     border-radius: 10px;height: 90%;width: 100%;
     display: flex;color: white;
     justify-content: center;
@@ -55,7 +55,7 @@
     box-shadow: rgba(207, 241, 222, 0.484) 0px 8px 24px;
 }
 #home-footer-div-home-icon{
-    background-color: rgb(0, 0, 0);
+    background-color: rgb(254, 75, 117);
     box-shadow: rgba(8, 8, 8, 0.039) 0px 8px 24px;
     border-radius: 10px;height: 90%;width: 100%;
     display: flex;color: white;
