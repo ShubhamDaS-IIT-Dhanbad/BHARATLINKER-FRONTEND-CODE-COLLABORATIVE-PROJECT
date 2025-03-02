@@ -1,3 +1,5 @@
+
+
 import React, { useState } from "react";
 import "./homeTestimonial.css";
 
@@ -59,21 +61,21 @@ const Testimonial = ({ti1}) => {
   };
 
   return (
-    <div className="testimonial-container">
-      <div className="testimonial">
+    <div className="home-testimonial-container">
+      <div className="home-testimonial">
         <img
           src={testimonials[current].image}
           alt={testimonials[current].title}
-          className="testimonial-image"
+          className="home-testimonial-image"
         />
-        <h3 className="testimonial-title">{testimonials[current].title}</h3>
-        <p className="testimonial-description">{testimonials[current].description}</p>
+        <h3 className="home-testimonial-title">{testimonials[current].title.toUpperCase()}</h3>
+        <p className="home-testimonial-description">{testimonials[current].description}</p>
       </div>
-      <div className="testimonial-dots">
+      <div className="home-testimonial-dots">
         {testimonials.map((_, index) => (
           <span
             key={index}
-            className={`dot ${index === current ? "active" : ""}`}
+            className={`home-testimonial-dot ${index === current ? "active" : ""}`}
             onClick={() => handleDotClick(index)}
           ></span>
         ))}

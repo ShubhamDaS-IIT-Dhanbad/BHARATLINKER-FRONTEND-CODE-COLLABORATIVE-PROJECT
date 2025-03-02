@@ -1,96 +1,81 @@
-.testimonial-container {
+.home-testimonial-container {
   text-align: center;
-  padding: 35px 40px 15vh 40px;
-  min-height: 50vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  font-family: Arial, sans-serif;
+  max-width: 100vw;
+  font-family: Arial, sans-serif;padding: 20px;
 }
 
-.testimonial-title {
-  font-size: 24px;
-  font-weight: bold;
+.home-testimonial-title {
+  font-size: 22px;
+  font-weight:600;
   margin-bottom: 20px;
 }
 
-.testimonial {
+.home-testimonial {
   margin-top: 20px;
 }
 
-.testimonial-image {
-  width: 80vw;
-  border-radius: 50%;
-  margin-bottom: 10px;
+.home-testimonial-description {
+  padding: 15px;
+  color: rgb(0, 0, 0);
+  margin: 0px 0px 10px 0px;
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  font-size: 13px;
+  background: rgb(213, 248, 228);
+  border: 1px solid rgb(91, 228, 168);
+  border-radius: 4px;
+  box-shadow: 0 4px 6px rgb(213, 248, 228);
+  padding: 20px;
+  margin: 20px 0;
 }
 
-.testimonial-description {
-  font-size: 16px;
-  font-family:Arial, Helvetica, sans-serif;
-  color: #666;
-  margin: 10px auto;
-  max-width: 500px;
-  line-height: 1.6;
+.home-testimonial-dots {
+  margin-top: 0px;
+  margin-bottom: 20px;
 }
 
-.testimonial-dots {
-  margin-top: 20px;
-}
-
-.dot {
+.home-testimonial-dot {
   height: 10px;
   width: 10px;
   margin: 0 5px;
-  background-color: #ccc;
+  background: rgb(213, 248, 228);
   border-radius: 50%;
   display: inline-block;
-  cursor: pointer;
-  transition: background-color 0.3s;
 }
 
-.dot.active {
-  background-color: #007bff;
-}
-.testimonial-image {
-  animation: swingShake 2.5s infinite ease-in-out;
-  transform-origin: top center; /* Makes it swing from the top */
+.home-testimonial-dot.active {
+  background: rgb(91, 228, 168);
 }
 
-@keyframes swingShake {
+.home-testimonial-image {
+  width:80vw;
+  animation: bounceShake 2s infinite ease-in-out;
+}
+
+@keyframes bounceShake {
   0% {
-    transform: rotate(0deg);
-  }
-  10% {
-    transform: rotate(4deg) translateX(2px);
+    transform: translateY(0) rotate(0deg);
   }
   20% {
-    transform: rotate(-4deg) translateX(-2px);
-  }
-  30% {
-    transform: rotate(3deg) translateX(1px);
+    transform: translateY(-10px) rotate(2deg);
   }
   40% {
-    transform: rotate(-3deg) translateX(-1px);
-  }
-  50% {
-    transform: rotate(2deg);
+    transform: translateY(0) rotate(-2deg);
   }
   60% {
-    transform: rotate(-2deg);
-  }
-  70% {
-    transform: rotate(1deg);
+    transform: translateY(-5px) rotate(1deg);
   }
   80% {
-    transform: rotate(-1deg);
+    transform: translateY(0) rotate(-1deg);
   }
   100% {
-    transform: rotate(0deg);
+    transform: translateY(0) rotate(0deg);
   }
 }
 
-/* Optional: Add hover effect to pause animation */
-.testimonial-image:hover {
+.home-testimonial-image:hover {
   animation-play-state: paused;
 }
