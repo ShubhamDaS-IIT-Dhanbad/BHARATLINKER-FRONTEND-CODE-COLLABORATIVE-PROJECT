@@ -126,7 +126,7 @@ const Navbar = ({ headerTitle, shopId }) => {
                         </div>
                     </div>
                     {isHomePage && (<div className="home-page-header-retailer-section">
-                        <MdAdminPanelSettings 
+                        < MdOutlineAdminPanelSettings
                             onClick={handleRetailerClick}
                             size={35}
                             className='nav-retailer-icon'
