@@ -274,7 +274,8 @@ const LocationMap = React.memo(({
               disabled={loading || !address}
             >
               {loadingConfirm ? (
-                <Oval height={20} width={20} color="white" ariaLabel="loading" />
+                  <Oval height={30} width={30} color="white" secondaryColor="#e93571" ariaLabel="loading" />
+           
               ) : (
                 "Confirm & Continue"
               )}

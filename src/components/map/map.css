@@ -8,12 +8,11 @@
 
 .map-back-bar {
   display: flex;
-  align-items: center;
-  padding: 12px 15px;
-  background: #ffffff;
+  align-items: center;width: 100vw;
+  padding: 12px 15px;height: 50px;
+  background: #ffffff;position: fixed;top: 0;
   border-bottom: 1px solid #e0e0e0;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  position: relative;
   z-index: 2;
 }
 
@@ -24,14 +23,14 @@
 }
 
 .map-back-bar-title {
-  font-size: 16px;
+  font-size: 20px;
   font-weight: 600;
   color: #333;
 }
 
 .map-wrapper {
   position: relative;
-  height: calc(100% - 50px); /* Adjust for back bar height */
+  height: calc(100%); /* Adjust for back bar height */
   width: 100%;
 }
 
@@ -51,12 +50,18 @@
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
 
+
+
+
+
+
+
 .map-address-container {
   position: absolute;
   bottom: 0;
-  width: 100%;
+  width:calc(100% - 20px);
   background: #ffffff;
-  padding: 20px;
+  padding: 20px 10px 20px 10px;
   border-top-left-radius: 15px;
   border-top-right-radius: 15px;
   box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
@@ -72,7 +77,7 @@
 
 .map-address-text {
   color: #444;
-  font-size: 15px;
+  font-size: 18px;
   font-weight: 400;
   text-align: center;
   margin: 0;
@@ -84,15 +89,13 @@
 .map-confirm-btn {
   background-color: #FF4081; /* Zepto pink button */
   color: white;
-  padding: 12px 25px;
+  padding: 15px 25px;
   border-radius: 8px;
-  cursor: pointer;
-  font-size: 15px;
-  font-weight: 600;
+  font-size: 20px;
+  font-weight: 400;
   border: none;
   transition: background-color 0.3s ease;
-  width: 100%;
-  max-width: 300px;
+  width: 100%;display: flex;justify-content: center;align-items: center;
   text-align: center;
 }
 
@@ -102,7 +105,7 @@
 
 .map-confirm-btn.disabled {
   background-color: #cccccc;
-  cursor: not-allowed;
+  cursor: not-allowed;background-color: #e93571;
 }
 
 .map-address-oval {
