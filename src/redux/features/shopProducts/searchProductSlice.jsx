@@ -22,6 +22,8 @@ export const fetchProducts = createAsyncThunk(
             });
             if (response.products && response.success) {
                 return {
+                    
+                    inputValue:inputValue,
                     shopId,
                     products: response.products,
                     hasMoreProducts: response.products.length >= productsPerPage,
@@ -60,6 +62,8 @@ export const loadMoreProducts = createAsyncThunk(
             });
             if (response.products && response.success) {
                 return {
+                    
+                    inputValue:inputValue,
                     shopId,
                     products: response.products,
                     hasMoreProducts: response.products.length >= productsPerPage,
@@ -195,7 +199,8 @@ const shopProductsSlice = createSlice({
                 state.error = null;
             })
             .addCase(fetchProducts.fulfilled, (state, action) => {
-                const { shopId, products, hasMoreProducts, totalPages } = action.payload;
+                const { shopId, products,inputValue, hasMoreProducts, totalPages } = action.payload;
+                state.query=inputValue;
                 if (!state.shops[shopId]) {
                     state.shops[shopId] = {
                         products: [],
