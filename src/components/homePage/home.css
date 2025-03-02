@@ -25,13 +25,13 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 60px;
+    height: 60px;gap: 7px;
     background: #f9f9f9;
     position: fixed;
     bottom: 0;
     padding-top: 7px;
     padding-bottom: 7px;
-    z-index: 100;gap: 0px;
+    z-index: 100;
     box-shadow: 0 4px 6px rgb(242, 255, 247);
     box-shadow: rgb(231, 252, 240) 0px 8px 24px;
 }
@@ -48,14 +48,14 @@
 
 .home-footer-div-icon {
     background-color: rgb(49, 207, 117);
-    border-radius: 10px;height: 90%;width: 95%;
+    border-radius: 10px;height: 90%;width: 100%;
     display: flex;color: white;
     justify-content: center;
     align-items: center;
 }
 #home-footer-div-home-icon{
     background-color: rgb(0, 0, 0);
-    border-radius: 10px;height: 90%;width: 95%;
+    border-radius: 10px;height: 90%;width: 100%;
     display: flex;color: white;
     justify-content: center;
     align-items: center;
