@@ -16,6 +16,18 @@
     transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
+
+.home-page-header-retailer-section {
+    display: flex;
+    height: 52px;
+    justify-content: center;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.nav-retailer-icon{
+    position: fixed;
+    margin-top: 3px;
+    right: 15px;
+}
 .home-page-header-hidden {
     padding: 10px 0;
     height: 87px;

@@ -1,13 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { HiOutlineUserCircle } from 'react-icons/hi';
 import { TiArrowSortedDown } from 'react-icons/ti';
 import { BiSearchAlt } from 'react-icons/bi';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Cookies from 'js-cookie';
+import { MdAdminPanelSettings } from "react-icons/md";
 import { FaArrowLeft } from 'react-icons/fa';
 import { useSelector } from 'react-redux';
 import LocationTab from './locationTab/locationTab.jsx';
 import useLocationFromCookie from '../hooks/useLocationFromCookie.jsx';
+import { MdOutlineAdminPanelSettings } from "react-icons/md";
 import { useExecuteSearch } from '../hooks/searchProductHook.jsx';
 import { useSearchShop } from '../hooks/searchShopHook.jsx';
 import { useShopProductExecuteSearch } from '../hooks/searchShopProductHook.jsx';
@@ -32,15 +34,36 @@ const Navbar = ({ headerTitle, shopId }) => {
     const isShopPage = location.pathname === '/shop';
     const isShopProductPage = location.pathname.startsWith('/shop/product');
 
+    const handleRetailerClick = useCallback(() => {
+        const retailerCookie = Cookies.get('BharatLinkerShopData'); // Fixed 'Cookie' to 'Cookies'
+        if (retailerCookie) {
+            navigate('/secure/shop');
+        } else {
+            navigate('/secure/login');
+        }
+    }, [navigate]);
+
     useEffect(() => {
         setIsLocationHas(!!(userLocation?.address && userLocation?.lat && userLocation?.lon));
         if (isSearchPage) {
             setSearchInput(searchQuery);
         } else if (isShopPage) {
             setSearchInput(shopQuery);
+        } else if (isShopProductPage) {
+            setSearchInput(shopProductQuery);
         }
-    }, [isSearchPage, isShopPage, searchQuery, shopQuery,locationTabVisible]);
+    }, [isSearchPage, isShopPage, isShopProductPage, searchQuery, shopQuery, shopProductQuery, locationTabVisible]);
 
+
+
+    // useEffect(() => {
+    //     setIsLocationHas(!!(userLocation?.address && userLocation?.lat && userLocation?.lon));
+    //     if (isSearchPage) {
+    //         setSearchInput(searchQuery);
+    //     } else if (isShopPage) {
+    //         setSearchInput(shopQuery);
+    //     }
+    // }, [isSearchPage, isShopPage, searchQuery, shopQuery, locationTabVisible]);
     const handleHomePageUserIconClick = () => {
         const userSession = Cookies.get('BharatLinkerUserData');
         navigate(userSession ? '/user' : '/login');
@@ -69,28 +92,62 @@ const Navbar = ({ headerTitle, shopId }) => {
                 <div className={isHomePage ? "home-page-header-container" : "product-page-header-container"}>
                     <div className={isHomePage ? "home-page-header-user-section" : "product-page-header-user-section"}>
                         {isHomePage ? (
-                            <HiOutlineUserCircle size={40} id="home-page-user-icon" onClick={handleHomePageUserIconClick} />
+                            <HiOutlineUserCircle
+                                size={40}
+                                id="home-page-user-icon"
+                                onClick={handleHomePageUserIconClick}
+                                aria-label="User Profile"
+                            />
                         ) : (
-                            <FaArrowLeft size={25} id='product-page-user-icon' onClick={() => navigate('/')} aria-label="Go to Home" tabIndex={0} />
+                            <FaArrowLeft
+                                size={25}
+                                id='product-page-user-icon'
+                                onClick={() => navigate('/')}
+                                aria-label="Go to Home"
+                                tabIndex={0}
+                            />
                         )}
                         <div className={isHomePage ? "home-page-user-location" : "product-page-user-location"}>
-                            <p className={isHomePage ? "home-page-location-label" : "product-page-location-label"}>{headerTitle}</p>
+                            <p className={isHomePage ? "home-page-location-label" : "product-page-location-label"}>
+                                {headerTitle}
+                            </p>
                             <div className={isHomePage ? "home-page-location-value" : "product-page-location-value"}>
-                                {isShopProductPage ? `EXPLORE PRODUCT` : `${userLocation?.address ? userLocation.address.slice(0, 30) : 'SET LOCATION, INDIA'}`}
-                                {!isShopProductPage && <TiArrowSortedDown size={15} onClick={toggleLocationTab} />}
+                                {isShopProductPage
+                                    ? 'EXPLORE PRODUCT'
+                                    : `${userLocation?.address ? userLocation.address.slice(0, 30) : 'SET LOCATION, INDIA'}`}
+                                {!isShopProductPage && (
+                                    <TiArrowSortedDown
+                                        size={15}
+                                        onClick={toggleLocationTab}
+                                        aria-label="Toggle Location Options"
+                                    />
+                                )}
                             </div>
                         </div>
+                    </div>
+                    <div className="home-page-header-retailer-section">
+                        <MdAdminPanelSettings 
+                            onClick={handleRetailerClick}
+                            size={35}
+                            className='nav-retailer-icon'
+                            aria-label="Admin Panel"
+                        />
                     </div>
                 </div>
                 <div className={isHomePage ? "home-page-search-section" : "product-page-search-section"}>
                     <div className={isHomePage ? "home-page-search-input-container" : "product-page-search-input-container"}>
-                        <BiSearchAlt className={isHomePage ? "home-page-search-icon" : "product-page-search-icon"} onClick={handleSearch} />
+                        <BiSearchAlt
+                            className={isHomePage ? "home-page-search-icon" : "product-page-search-icon"}
+                            onClick={handleSearch}
+                            aria-label="Search"
+                        />
                         <input
                             className={isHomePage ? "home-page-search-input" : "product-page-search-input"}
                             placeholder="Search"
                             value={searchInput}
                             onChange={(e) => setSearchInput(e.target.value)}
                             onKeyPress={handleSearch}
+                            aria-label="Search Input"
                         />
                     </div>
                 </div>
@@ -104,9 +161,25 @@ const Navbar = ({ headerTitle, shopId }) => {
                         <p className="popup-text">
                             We need your location to show you curated assortment from your nearest store
                         </p>
-                        <div className="popup-buttons" onClick={() => { setLocationTabVisible(true); setIsLocationHas(true); }}>
-                            <button className="popup-button primary">Use my location</button>
-                            <button className="popup-button secondary">Select manually</button>
+                        <div className="popup-buttons">
+                            <button
+                                className="popup-button primary"
+                                onClick={() => {
+                                    setLocationTabVisible(true);
+                                    setIsLocationHas(true);
+                                }}
+                            >
+                                Use my location
+                            </button>
+                            <button
+                                className="popup-button secondary"
+                                onClick={() => {
+                                    setLocationTabVisible(true);
+                                    setIsLocationHas(true);
+                                }}
+                            >
+                                Select manually
+                            </button>
                         </div>
                     </div>
                 </div>

@@ -3,16 +3,10 @@ import React, { memo, useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import HomePageNavbar from '../navbar.jsx';
 import HomeTestimonial from './homeTestimonial.jsx';
-import { AiOutlineProduct } from "react-icons/ai"; import { AiFillShop } from "react-icons/ai";
+ import { AiFillShop } from "react-icons/ai";
 import { AiFillProduct } from "react-icons/ai";
 import { RiHome3Fill } from "react-icons/ri";
 import { TbCircleLetterBFilled } from "react-icons/tb";
-import { PiShoppingBagOpenThin } from "react-icons/pi";
-import { FaCartShopping } from "react-icons/fa6";
-import { MdOutlineStore } from "react-icons/md";
-import { RiSunCloudyLine } from "react-icons/ri";
-import { TbCategoryPlus } from "react-icons/tb";
-import { MdOutlineAdminPanelSettings } from "react-icons/md";
 
 import Cookie from 'js-cookie';
 
@@ -21,17 +15,6 @@ const ti1 = 'https://res.cloudinary.com/demc9mecm/image/upload/v1737378115/ptnyk
 
 const Home = () => {
     const navigate = useNavigate();
-    const handleRetailerClick = useCallback(() => {
-        const retailerCookie = Cookie.get('BharatLinkerShopData');
-        if (retailerCookie) {
-            const shopData = JSON.parse(retailerCookie);
-            const path = shopData.registrationStatus === 'pending' ? '/retailer/pending' :
-                shopData.registrationStatus === 'rejected' ? '/retailer/rejected' : '/secure/shop';
-            navigate(path);
-        } else {
-            navigate('/secure/login');
-        }
-    }, [navigate]);
     useEffect(() => {
         window.scrollTo(0, 0);
     }, []);
@@ -66,8 +49,7 @@ const Home = () => {
                 <FooterButton icon={<AiFillProduct size={28} />} label="Products" onClick={() => navigate('/search')} />
                 <FooterButton icon={<AiFillShop size={28} />} label="Shop" onClick={() => navigate('/shop')} />
                 <FooterButton icon={<TbCircleLetterBFilled size={28} />} label="bharat linker" onClick={() => navigate('/')} />
-                {/* <FooterButton icon={<MdOutlineAdminPanelSettings size={28} />} label="Retailer" onClick={handleRetailerClick} />
-                */}
+               
             </div>
 
         </>
