@@ -33,12 +33,13 @@ const Navbar = ({ headerTitle, shopId }) => {
     const isShopProductPage = location.pathname.startsWith('/shop/product');
 
     useEffect(() => {
+        setIsLocationHas(!!(userLocation?.address && userLocation?.lat && userLocation?.lon));
         if (isSearchPage) {
             setSearchInput(searchQuery);
         } else if (isShopPage) {
             setSearchInput(shopQuery);
         }
-    }, [isSearchPage, isShopPage, searchQuery, shopQuery]);
+    }, [isSearchPage, isShopPage, searchQuery, shopQuery,locationTabVisible]);
 
     const handleHomePageUserIconClick = () => {
         const userSession = Cookies.get('BharatLinkerUserData');

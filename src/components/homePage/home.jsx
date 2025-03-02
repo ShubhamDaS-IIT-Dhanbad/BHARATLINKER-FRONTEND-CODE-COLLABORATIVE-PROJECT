@@ -3,7 +3,12 @@ import React, { memo, useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import HomePageNavbar from '../navbar.jsx';
 import HomeTestimonial from './homeTestimonial.jsx';
-
+import { AiOutlineProduct } from "react-icons/ai"; import { AiFillShop } from "react-icons/ai";
+import { AiFillProduct } from "react-icons/ai";
+import { RiHome3Fill } from "react-icons/ri";
+import { TbCircleLetterBFilled } from "react-icons/tb";
+import { PiShoppingBagOpenThin } from "react-icons/pi";
+import { FaCartShopping } from "react-icons/fa6";
 import { MdOutlineStore } from "react-icons/md";
 import { RiSunCloudyLine } from "react-icons/ri";
 import { TbCategoryPlus } from "react-icons/tb";
@@ -49,10 +54,20 @@ const Home = () => {
                 <HomeTestimonial ti1={ti1} />
             </div>
             <div id="home-footer-1">
-                <FooterButton icon={<RiSunCloudyLine size={28} />} label="Home" onClick={() => navigate('/')} />
-                <FooterButton icon={<TbCategoryPlus size={28} />} label="Products" onClick={() => navigate('/search')} />
-                <FooterButton icon={<MdOutlineStore size={28} />} label="Shop" onClick={() => navigate('/shop')} />
-                <FooterButton icon={<MdOutlineAdminPanelSettings size={28} />} label="Retailer" onClick={handleRetailerClick} />
+                <div
+                    onClick={() => navigate('/')}
+                    className='home-footer-div'
+                >
+                    <div
+                        className='home-footer-div-icon'
+                        id='home-footer-div-home-icon'>
+                        <RiHome3Fill size={28}/></div>
+                </div>
+                <FooterButton icon={<AiFillProduct size={28} />} label="Products" onClick={() => navigate('/search')} />
+                <FooterButton icon={<AiFillShop size={28} />} label="Shop" onClick={() => navigate('/shop')} />
+                <FooterButton icon={<TbCircleLetterBFilled size={28} />} label="bharat linker" onClick={() => navigate('/')} />
+                {/* <FooterButton icon={<MdOutlineAdminPanelSettings size={28} />} label="Retailer" onClick={handleRetailerClick} />
+                */}
             </div>
 
         </>
@@ -67,9 +82,6 @@ const FooterButton = memo(({ icon, label, onClick }) => (
         <div
             className='home-footer-div-icon'>
             {icon}</div>
-        <div
-            className='home-footer-div-label'>
-            {label}</div>
     </div>
 ));
 
