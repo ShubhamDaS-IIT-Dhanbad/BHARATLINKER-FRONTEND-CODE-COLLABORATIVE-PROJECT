@@ -144,9 +144,7 @@ const LocationMap = React.memo(({
     };
   }, [debouncedGetAddress, getAddressFromLatLng]);
 
-  // Removed the second useEffect as it's no longer needed
-  // The marker position is now handled directly in the click handler
-
+ 
   async function handleUserProfileUpdate(locationData) {
     if (window.location.pathname === "/user/profile") {
       const userData = JSON.parse(Cookies.get("BharatLinkerUserData") || "{}");
@@ -275,7 +273,6 @@ const LocationMap = React.memo(({
             >
               {loadingConfirm ? (
                   <Oval height={30} width={30} color="white" secondaryColor="#e93571" ariaLabel="loading" />
-           
               ) : (
                 "Confirm & Continue"
               )}
