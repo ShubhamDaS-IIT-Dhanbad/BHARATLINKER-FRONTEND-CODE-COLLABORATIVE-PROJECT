@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { TailSpin } from 'react-loader-spinner';
-import { sendOTP, verifyOTP, verifyPassword } from '../../appWrite/shop/shopAuth.js';
+import { sendOTP, verifyOTP, verifyPassword } from '../../../appWrite/shop/shopAuth.js';
 import Cookies from 'js-cookie';
 import { IoCloseCircleOutline } from "react-icons/io5";
 import { GoChevronLeft } from "react-icons/go";
-import i1 from './asset/r1.png';
-import './style/login.css';
+import i1 from '../asset/r1.png';
+import '../style/login.css';
 
 function SignUpForm() {
   const navigate = useNavigate();
@@ -15,7 +15,7 @@ function SignUpForm() {
   const [otp, setOtp] = useState(new Array(6).fill(""));
   const [password, setPassword] = useState('');
   const [otpSent, setOtpSent] = useState(false);
-  const [usePassword, setUsePassword] = useState(true); // Password default
+  const [usePassword, setUsePassword] = useState(true);
   const [loading, setLoading] = useState(false);
   const [verifyingOtp, setVerifyingOtp] = useState(false);
   const [timer, setTimer] = useState(30);

@@ -1,0 +1,88 @@
+
+  .shop-login-main-default-content {
+    display: flex;align-items: center;
+    text-align: center;flex-direction: column;
+    background-color: transparent;
+  }
+  .shop-login-main-rocket-image-c {
+    margin-top: 20px;
+    background-color: #ffffff;width: 90%;border: 1.3px solid rgb(22, 126, 250);
+    border-radius: 40px;box-shadow: rgba(44, 133, 242, 0.066) 0px 8px 24px;
+    height: 50vh;display: flex;justify-content: center;align-items: center;
+  }
+  .shop-login-main-rocket-image {
+    width: 90%;
+    height: auto;
+    animation: bounceShake 2s infinite ease-in-out;
+  }
+  
+  .shop-login-main-title {
+    font-size: 28px;
+    color: #333;max-width: 90%;
+  }
+
+  @keyframes bounceShake {
+    0% {
+      transform: translateY(0) rotate(0deg);
+    }
+    20% {
+      transform: translateY(-10px) rotate(2deg);
+    }
+    40% {
+      transform: translateY(0) rotate(-2deg);
+    }
+    60% {
+      transform: translateY(-5px) rotate(1deg);
+    }
+    80% {
+      transform: translateY(0) rotate(-1deg);
+    }
+    100% {
+      transform: translateY(0) rotate(0deg);
+    }
+  }
+  .shop-login-main-subtitle {
+    font-size: 14px;
+    color: #0000008e;
+    max-width: 85%;line-height: 19px;
+  }
+  
+  .shop-login-main-button-container {
+    display: flex;
+    gap: 10px;margin-top: 60px;
+  }
+  
+  .shop-login {
+    padding: 12px 24px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: rgb(22, 126, 250); /* Pink */
+    color: white;box-shadow: rgba(44, 133, 242, 0.137) 0px 8px 24px;
+    width: 120px;
+    font-weight:700;
+    transition: background-color 0.3s ease;
+  }
+  
+  .shop-login:hover {
+    opacity: 0.9;
+  }
+  
+  .register-btn {
+    padding: 12px 24px;
+    font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #ffffff;
+    color: rgb(22, 126, 250);
+    border: 2px solid rgb(22, 126, 250);
+    width: 120px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+  }
+  
+  .register-btn:hover {
+    opacity: 0.9;
+  }

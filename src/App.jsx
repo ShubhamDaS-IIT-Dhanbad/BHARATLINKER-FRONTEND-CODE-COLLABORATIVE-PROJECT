@@ -21,8 +21,7 @@ const SingleShopCard = lazy(() => import('./components/singleShop.jsx'));
 const ShopProducts = lazy(() => import('./components/shopProducts/shopProducts.jsx'));
 
 const RetailerRoutes = lazy(() => import('./components/retailer/retailerRoutes.jsx'));
-const RetailerLogin = lazy(() => import("./components/retailer/login.jsx"));
-const RetailerRegister = lazy(() => import("./components/retailer/register.jsx"));
+const RetailerLogin = lazy(() => import("./components/retailer/login/main.jsx"));
 
 const User = lazy(() => import('./components/user/userHome.jsx'));
 const UserProfile = lazy(() => import('./components/user/userProfile.jsx'));
@@ -41,8 +40,7 @@ const routes = {
     { path: "/shop/:shopId", component: SingleShopCard, title: "Shop Details - Bharat Linker", desc: "Discover detailed information about this shop on Bharat Linker." },
     { path: "/shop/product/:shopId", component: ShopProducts, title: "Shop Products - Bharat Linker", desc: "View products from this shop on Bharat Linker." },
     { path: "/secure/login", component: RetailerLogin, title: "Retailer Login - BharatLinker", desc: "Login to your BharatLinker Retailer account and manage your business effectively." },
-    { path: "/secure/register", component: RetailerRegister, title: "Register as a Retailer - BharatLinker", desc: "Register as a retailer on BharatLinker to expand your business opportunities." },
-    { path: "/*", component: RetailerRoutes, title: "Retailer Dashboard - Bharat Linker", desc: "Access the retailer dashboard to manage your shop, products, and orders on Bharat Linker." },
+   { path: "/*", component: RetailerRoutes, title: "Retailer Dashboard - Bharat Linker", desc: "Access the retailer dashboard to manage your shop, products, and orders on Bharat Linker." },
   ],
   private: [
     { path: "/user", component: User, title: "User Dashboard - Bharat Linker", desc: "Access your Bharat Linker user dashboard to manage your account, orders, and more." },

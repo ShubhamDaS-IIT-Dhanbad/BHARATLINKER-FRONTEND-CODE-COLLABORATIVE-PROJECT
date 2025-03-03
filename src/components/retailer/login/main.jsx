@@ -1,0 +1,43 @@
+import React, { useState } from 'react';
+import './main.css'; // Import the CSS file
+import Login from './login.jsx';
+import Register from './register.jsx';
+import sd from '../asset/sd.png';
+function Main() {
+  const [page, setPage] = useState("default");
+
+  return (
+    <>
+      {page === "default" && (
+        <div className="shop-login-main-default-content">
+
+          <div className="shop-login-main-rocket-image-c">
+            <img
+              src={sd}
+              alt="Rocket illustration"
+              className="shop-login-main-rocket-image"
+            />
+          </div>
+          <h1 className="shop-login-main-title">RISE ABOVE,THRIVE WITH BHARAT LINKER</h1>
+          <p className="shop-login-main-subtitle">
+           A-Rise, Empower your shop, connect with customers, and dominate the market. Join
+            Bharat Linker to unlock growth and success for your business today!
+          </p>
+          <div className="shop-login-main-button-container">
+            <button className="shop-login" onClick={() => setPage("login")}>
+              Sign In
+            </button>
+            <button className="register-btn" >
+              Register
+            </button>
+          </div>
+        </div>
+      )}
+
+      {page === "login" && <Login />}
+      {page === "register" && <Register />}
+    </>
+  );
+}
+
+export default Main;
