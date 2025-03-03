@@ -14,31 +14,43 @@ const databases = new Databases(client);
 // Function to fetch or create user data by phone number
 async function fetchUserByPhoneNumber(phoneNumber) {
     try {
+        // Input validation
         if (!phoneNumber) {
-            throw new Error("Phone number (phn) is required.");
+            throw new Error("Phone number is required.");
         }
-        if (isNaN(phoneNumber)) {
-            throw new Error("Invalid phone number.");
+        const cleanedPhone = phoneNumber.toString().replace(/[^+\d]/g, '');
+        if (!/^\+?\d+$/.test(cleanedPhone)) {
+            throw new Error("Invalid phone number format. Must contain only digits and optional + prefix.");
         }
 
-        const queries = [Query.equal('phoneNumber', phoneNumber)];
+        // Define queries with selected fields
+        const queries = [
+            Query.equal('phoneNumber', cleanedPhone),
+            Query.select(['$id','name', 'phoneNumber', 'lastLogin', 'address'])
+        ];
+
         const result = await databases.listDocuments(
             conf.appwriteUsersDatabaseId,
             conf.appwriteUsersUsersCollectionId,
             queries
         );
         if (result.documents.length === 0) {
-            const newUser = {
+            return {
                 total: 0,
-                phoneNumber: phoneNumber,
-                address: []
+                phoneNumber: cleanedPhone,
+                address: [],
+                name: null,
+                lastLogin: null
             };
-            return newUser;
         }
-        return result.documents[0];
+
+        return {total:result.total,userData:result.documents[0]};
     } catch (error) {
-        console.error('Error in fetchUserByPhoneNumber:', error);
-        return null;
+        console.error('Error in fetchUserByPhoneNumber:', {
+            message: error.message,
+            stack: error.stack
+        });
+        throw error; // Changed to throw instead of return null
     }
 }
 async function updateUserById(updatedData) {

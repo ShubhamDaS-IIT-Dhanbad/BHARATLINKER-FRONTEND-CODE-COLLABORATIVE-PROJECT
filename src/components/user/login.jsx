@@ -39,8 +39,8 @@ function SignUpForm() {
     setLoading(true);
     setErrorMessage('');
     try {
-      // const userId = await sendOTP(`+91${phone}`) ;
-      if (userId || 1) {
+      const userId = await sendOTP(`+91${phone}`) ;
+      if (userId) {
         setUserId(userId);
         setOtpSent(true);
         setIsResendDisabled(true);
@@ -80,8 +80,8 @@ function SignUpForm() {
 
       Cookies.set("BharatLinkerUserData", JSON.stringify({
         userId: userData.$id,
-        uId: session?.userId || "90",
-        id: session?.$id || "90",
+        uId: session?.userId || null,
+        id: session?.$id || null,
         phoneNumber: phone,
         address: parsedAddress,
         name: userData.name

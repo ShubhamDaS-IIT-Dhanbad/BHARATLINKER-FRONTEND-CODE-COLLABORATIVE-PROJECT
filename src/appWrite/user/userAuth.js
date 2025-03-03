@@ -17,27 +17,61 @@ export const sendOTP = async (phone) => {
   }
 };
 export const verifyOTP = async (userId, otpCode, phoneNumber) => {
+  if (!userId || typeof userId !== 'string') {
+    throw new Error('Invalid userId: must be a non-empty string');
+  }
+  if (!otpCode || typeof otpCode !== 'string') {
+    throw new Error('Invalid OTP code: must be a non-empty string');
+  }
+  if (!phoneNumber || !/^\+?[1-9]\d{1,14}$/.test(phoneNumber)) {
+    throw new Error('Invalid phone number format');
+  }
+
   try {
-    // const session = await account.createSession(userId, otpCode);
-    let userData = await fetchUserByPhoneNumber(phoneNumber);
-    if (userData.total == 0) {
-      await databases.createDocument(
+    const session = await account.createSession(userId, otpCode);
+    
+    const{total,userData} = await fetchUserByPhoneNumber(phoneNumber);
+    let userDocument;
+
+    if (total === 0) {
+      userDocument = await databases.createDocument(
         conf.appwriteUsersDatabaseId,
         conf.appwriteUsersUsersCollectionId,
         ID.unique(),
-        { phoneNumber }
+        { 
+          phoneNumber,
+          lastLogin: new Date().toISOString()
+        }
+      );
+    } else {
+      userDocument = userData;
+      await databases.updateDocument(
+        conf.appwriteUsersDatabaseId,
+        conf.appwriteUsersUsersCollectionId,
+        userDocument.$id,
+        { lastLogin: new Date().toISOString() }
       );
     }
-    return { session: "ko", userData };
+
+    return {
+      session:session,
+      userData: {
+        id: userDocument.$id,
+        address:userDocument.address,
+        phoneNumber: userDocument.phoneNumber,
+        createdAt: userDocument.createdAt,
+        lastLogin: userDocument.lastLogin
+      }
+    };
   } catch (error) {
-    console.error("Error verifying OTP:", error.message);
-    return null;
+    console.error('Error verifying OTP:', {
+      message: error.message,
+      code: error.code,
+      stack: error.stack
+    });
+    throw error;
   }
 };
-
-
-
-
 
 
 // Function to check if user exists
@@ -50,8 +84,6 @@ export const checkUserExists = async () => {
     return null;
   }
 };
-
-
 // Function to log out user
 export const logout = async () => {
   try {
