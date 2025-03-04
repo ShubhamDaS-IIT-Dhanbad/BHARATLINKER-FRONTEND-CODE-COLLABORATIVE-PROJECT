@@ -39,27 +39,27 @@ const Navbar = ({ headerTitle, shopId}) => {
     const isShopProductPage = location.pathname.startsWith('/shop/product');
 
     const searchArrayNames = isShopPage ? [
-        "electronics store",
-        "grocery store",
-        "clothing store",
-        "hardware store",
-        "book store",
-        "furniture store",
-        "specialty store",
-        "toy store",
-        "jewelry store",
-        "pet store"
+        `" electronics store " `,
+        `" grocery store "`,
+        `" clothing store "`,
+        `" hardware store "`,
+        `" book store "`,
+        `" furniture store "`,
+        `" specialty store "`,
+        `" toy store "`,
+        `" jewelry store "`,
+        `" pet store "`
     ] : [
-        "iPhone 14 Pro Max",
-        "Samsung Galaxy S23 Mobile",
-        "Apple AirPods Pro Ear Buds",
-        "Sony WF-1000XM5 Wireless Ear Buds",
-        "iPhone SE 2023",
-        "Google Pixel 8 Mobile",
-        "Jabra Elite 8 Active Ear Buds",
-        "Beats Studio Buds for iPhone",
-        "OnePlus Nord 3 Mobile",
-        "Bose QuietComfort Ultra Ear Buds"
+        `" iPhone 14 Pro Max "`,
+        `" Samsung Galaxy S23 Mobile "`,
+        `" Apple AirPods Pro Ear Buds "`,
+        `" Sony WF-1000XM5 Wireless Ear Buds "`,
+        `" iPhone SE 2023 "`,
+        `" Google Pixel 8 Mobile "`,
+        `" Jabra Elite 8 Active Ear Buds "`,
+        `" Beats Studio Buds for iPhone "`,
+        `" OnePlus Nord 3 Mobile "`,
+        `" Bose QuietComfort Ultra Ear Buds "`
     ];
 
     const handleRetailerClick = useCallback(() => {
