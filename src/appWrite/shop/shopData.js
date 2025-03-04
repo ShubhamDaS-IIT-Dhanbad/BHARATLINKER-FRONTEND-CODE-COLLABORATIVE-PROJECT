@@ -17,6 +17,34 @@ const databases = new Databases(client);
  * @param {string} shopPhoneNumber - The phone number to search for.
  * @returns {Promise<Object|null>} - The shop document or null if not found.
  */
+
+export async function registerShop(shopPhoneNumber, shopPassword, shopName) {
+  try {
+    // Validate inputs
+    if (!shopPhoneNumber) throw new Error("Phone number is required.");
+    if (isNaN(shopPhoneNumber)) throw new Error("Invalid phone number format.");
+    if (!shopPassword) throw new Error("Password is required.");
+    if (!shopName) throw new Error("Shop name is required.");
+
+    // Create shop document
+    const shopDocument = await databases.createDocument(
+      conf.appwriteShopsDatabaseId,
+      conf.appwriteShopsShopsCollectionId,
+      ID.unique(),
+      { 
+        phoneNumber: shopPhoneNumber, 
+        shopName: shopName,           
+        shopPassword: shopPassword,   
+        lastLogin: new Date().toISOString()
+      }
+    );
+    return shopDocument;
+
+  } catch (error) {
+    console.error("Error registering shop:", error.message);
+    throw error;
+  }
+}
 export async function fetchShopData(shopPhoneNumber) {
   try {
     if (!shopPhoneNumber) throw new Error("Phone number is required.");

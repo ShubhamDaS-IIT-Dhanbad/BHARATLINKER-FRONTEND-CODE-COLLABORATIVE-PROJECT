@@ -23,14 +23,14 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  box-shadow: rgba(46, 146, 247, 0.2) 0px 8px 24px;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
 .shop-login-jmain-rocket-image-c {
-  display: flex;margin-top:30px ;
+  display: flex;margin-top:30px ;min-height: 350px;
   justify-content: center;width: 90%;
 }
 

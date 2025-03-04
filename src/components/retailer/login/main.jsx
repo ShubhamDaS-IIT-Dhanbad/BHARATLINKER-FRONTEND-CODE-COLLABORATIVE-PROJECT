@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './main.css'; // Import the CSS file
+import './main.css';
 import Login from './login.jsx';
 import Register from './register.jsx';
 import sd from '../asset/sd.png';
@@ -27,15 +27,15 @@ function Main() {
             <button className="shop-login" onClick={() => setPage("login")}>
               Sign In
             </button>
-            <button className="register-btn" >
+            <button className="register-btn" onClick={() => setPage("register")}>
               Register
             </button>
           </div>
         </div>
       )}
 
-      {page === "login" && <Login />}
-      {page === "register" && <Register />}
+      {page === "login" && <Login setPage={setPage}/>}
+      {page === "register" && <Register setPage={setPage}/>}
     </>
   );
 }

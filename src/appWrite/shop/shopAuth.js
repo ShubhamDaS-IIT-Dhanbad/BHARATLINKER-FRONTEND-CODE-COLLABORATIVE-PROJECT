@@ -10,6 +10,7 @@ const account = new Account(client);
 const databases = new Databases(client);
 
 
+
 export const updatePassword = async (shopId, password) => {
   try {
     let passwordStr = String(password);
@@ -43,23 +44,24 @@ export const updatePassword = async (shopId, password) => {
   }
 };
 
+export const isShopExist = async (phone) => {
+  const queries = [Query.equal('shopPhoneNumber',phone)];
+  const { total, documents } = await databases.listDocuments(
+    conf.appwriteShopsDatabaseId,
+    conf.appwriteShopsShopsCollectionId,
+    queries
+  );
+  if (total === 0) {
+    return false;
+  }
+  return true;
+}
 export const sendOTP = async (phone) => {
   // Input validation
   if (!phone || typeof phone !== 'string' || phone.length < 10) {
     throw new Error("Invalid phone number provided");
   }
-
   try {
-    const formattedPhone = phone.startsWith('+') ? phone.slice(1) : phone;
-    const queries = [Query.equal('shopPhoneNumber', formattedPhone)];
-    const { total, documents } = await databases.listDocuments(
-      conf.appwriteShopsDatabaseId,
-      conf.appwriteShopsShopsCollectionId,
-      queries
-    );
-    if (total === 0) {
-      throw new Error("Shop with this phone number does not exist");
-    }
     const response = await account.createPhoneToken(ID.unique(), phone);
     if (!response || !response.userId) {
       throw new Error("Failed to create OTP token");

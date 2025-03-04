@@ -57,7 +57,6 @@
     font-size: 16px;
     border: none;
     border-radius: 5px;
-    cursor: pointer;
     background-color: rgb(22, 126, 250); /* Pink */
     color: white;box-shadow: rgba(44, 133, 242, 0.137) 0px 8px 24px;
     width: 120px;
@@ -74,7 +73,6 @@
     font-size: 16px;
     border: none;
     border-radius: 5px;
-    cursor: pointer;
     background-color: #ffffff;
     color: rgb(22, 126, 250);
     border: 2px solid rgb(22, 126, 250);
