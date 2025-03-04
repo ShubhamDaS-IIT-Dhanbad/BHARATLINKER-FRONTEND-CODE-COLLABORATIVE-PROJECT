@@ -48,16 +48,12 @@ const Home = () => {
                 <FooterButton icon={<TbCircleLetterBFilled size={20} />} label="bharat linker" onClick={() => navigate('/')} />
 
             </div>
-
-
-
            <HowItWorks/>
-
         </>
     );
 };
 
-const FooterButton = memo(({ icon, label, onClick }) => (
+const FooterButton = memo(({ icon, onClick }) => (
     <div
         onClick={onClick}
         className='home-footer-div'

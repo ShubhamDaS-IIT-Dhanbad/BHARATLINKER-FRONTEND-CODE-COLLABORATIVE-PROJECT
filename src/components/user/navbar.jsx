@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import React  from "react";
+import { useNavigate} from "react-router-dom";
 import { FaArrowLeft } from "react-icons/fa";
 import "./style/userNavbar.css";
-import p1 from './asset/pro1.png'
+
+const p1="https://res.cloudinary.com/demc9mecm/image/upload/v1741103723/pro1_yqfqbm.webp";
 const Navbar = ({ userData, headerTitle, onBackNavigation }) => {
   const navigate = useNavigate();
 

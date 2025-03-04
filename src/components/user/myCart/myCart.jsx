@@ -9,9 +9,10 @@ import { removeFromUserCart } from '../../../redux/features/user/cartSlice.jsx';
 import DeliveryAddress from './deliveryAddress.jsx';
 import {CheckOutPage} from './checkOutPage.jsx';
 import LocationTab from '../../locationTab/locationTab.jsx';
-import c1 from '../asset/c1.png';
 import './myCart.css';
 
+
+const c1="https://res.cloudinary.com/demc9mecm/image/upload/v1741103724/c1_1_o6ehkw.webp";
 const MyCartPage = ({ userData }) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();

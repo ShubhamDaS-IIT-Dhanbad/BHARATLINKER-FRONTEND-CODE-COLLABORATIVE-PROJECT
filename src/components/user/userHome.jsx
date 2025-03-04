@@ -10,10 +10,7 @@ import Navbar from "./navbar.jsx";
 import "./style/userHome.css";
 import HomeTestimonial from './userTestimonial.jsx';
 
-import ti1 from './asset/uh1.png';
-// const ti1 = 'https://res.cloudinary.com/demc9mecm/image/upload/v1737378115/ptnykpibqxqobs3gywoq.png';
-
-// Reusable Confirmation Popup Component
+const ti1='https://res.cloudinary.com/demc9mecm/image/upload/v1741103724/uh1_z4gvqu.webp';
 const ConfirmationPopup = ({ isOpen, title, text, buttons }) => {
     if (!isOpen) return null;
 

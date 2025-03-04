@@ -5,9 +5,11 @@ import { sendOTP, verifyOTP } from '../../appWrite/user/userAuth.js';
 import Cookies from 'js-cookie';
 import { IoCloseCircleOutline } from "react-icons/io5";
 import { GoChevronLeft } from "react-icons/go";
-import i1 from './asset/lg1.png';
-import i2 from './asset/otp1.png';
 import './style/userLogin.css';
+
+
+const i2 = "https://res.cloudinary.com/demc9mecm/image/upload/v1741103724/otp1_zkmo1n.webp";
+const i1="https://res.cloudinary.com/demc9mecm/image/upload/v1741103724/lg1_swotry.webp";
 
 function SignUpForm() {
   const navigate = useNavigate();
