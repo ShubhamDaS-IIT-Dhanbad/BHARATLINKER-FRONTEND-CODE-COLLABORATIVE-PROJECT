@@ -33,8 +33,7 @@
   padding-top: 10px;
   padding-bottom: 10px;
   z-index: 100;
-  box-shadow: 0 4px 6px rgb(242, 255, 247);
-  box-shadow: rgba(181, 182, 182, 0.696) 0px 8px 24px;
+  box-shadow: rgba(152, 152, 152, 0.427) 0px 8px 24px;
 }
 
 .home-footer-div {
