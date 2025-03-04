@@ -85,7 +85,7 @@ export const checkUserExists = async () => {
   }
 };
 // Function to log out user
-export const logout = async () => {
+export const userLogOut = async () => {
   try {
     await account.deleteSession("current");
     console.log("Logged out successfully");

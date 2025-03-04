@@ -1,5 +1,6 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
+import {userLogOut} from '../appWrite/user/userAuth.js'
 import { Navigate, useNavigate, useLocation } from 'react-router-dom';
 import {useDispatch} from 'react-redux';
 import Cookies from 'js-cookie';
@@ -92,6 +93,7 @@ const useUserAuth = () => {
 
     const logout = async () => {
         try {
+            userLogOut();
             console.log("Logging out...");
             document.cookie = "BharatLinkerUserData=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
             dispatch(resetCart());
