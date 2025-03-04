@@ -44,30 +44,45 @@ export const updatePassword = async (shopId, password) => {
 };
 
 export const sendOTP = async (phone) => {
+  // Input validation
+  if (!phone || typeof phone !== 'string' || phone.length < 10) {
+    throw new Error("Invalid phone number provided");
+  }
+
   try {
+    const formattedPhone = phone.startsWith('+') ? phone.slice(1) : phone;
+    const queries = [Query.equal('shopPhoneNumber', formattedPhone)];
+    const { total, documents } = await databases.listDocuments(
+      conf.appwriteShopsDatabaseId,
+      conf.appwriteShopsShopsCollectionId,
+      queries
+    );
+    if (total === 0) {
+      throw new Error("Shop with this phone number does not exist");
+    }
     const response = await account.createPhoneToken(ID.unique(), phone);
+    if (!response || !response.userId) {
+      throw new Error("Failed to create OTP token");
+    }
+
     return response.userId;
   } catch (error) {
-    console.error("Error sending OTP:", error.message);
-    return null;
+    throw new Error(`Failed to send OTP: ${error.message}`);
   }
 };
-
 export const verifyOTP = async (shopId, otpCode, shopPhoneNumber) => {
+  if (!shopId || !otpCode || !shopPhoneNumber) {
+    throw new Error("Missing required parameters: shopId, otpCode, or shopPhoneNumber");
+  }
   try {
-    let shopData = await fetchShopData(shopPhoneNumber);
-    if (!shopData || shopData.total === 0) {
-      shopData = await databases.createDocument(
-        conf.appwriteShopsDatabaseId,
-      conf.appwriteShopsShopsCollectionId,
-        ID.unique(),
-        { shopPhoneNumber }
-      );
+    const session = await account.createSession(shopId, otpCode);
+    const shopData = await fetchShopData(shopPhoneNumber);
+    if (!session || !shopData) {
+      throw new Error("Failed to create session or fetch shop data");
     }
-    return { session: "test1", shopData };
+    return { session, shopData };
   } catch (error) {
-    console.error("Error verifying OTP:", error.message);
-    return null;
+    throw new Error(`OTP verification failed: ${error.message}`);
   }
 };
 export const verifyPassword = async (shopPhoneNumber, password) => {

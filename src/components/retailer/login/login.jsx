@@ -6,7 +6,7 @@ import Cookies from 'js-cookie';
 import { IoCloseCircleOutline } from "react-icons/io5";
 import { GoChevronLeft } from "react-icons/go";
 import sd from '../asset/sd.png';
-import '../style/login.css';
+import './login.css';
 
 const SignUpForm = React.memo(() => {
     const navigate = useNavigate();
@@ -38,7 +38,7 @@ const SignUpForm = React.memo(() => {
         if (phoneRef.current.length !== 10) return setState(s => ({ ...s, errorMessage: 'Phone number must be 10 digits' }));
         setState(s => ({ ...s, loading: true, errorMessage: '' }));
         try {
-            const userId = await sendOTP();
+            const userId = await sendOTP(`+91${phoneRef.current}`);
             if (userId) setState(s => ({ ...s, userId, otpSent: true, isResendDisabled: true, timer: 30, otp: Array(6).fill("") }));
             else throw new Error();
         } catch {
@@ -122,7 +122,7 @@ const SignUpForm = React.memo(() => {
                 <>
                     <h1 className="shop-login-main-title">Welcome Back, Shopkeeper!</h1>
                     <p className="shop-login-main-subtitle" style={{ marginTop: "-10px" }}>Need help? Our support team is just a click away!</p><PhoneInput />
-                    <ActionButton onClick={handleSendOTP} disabled={state.loading || phoneRef.current.length !== 10} text="SEND OTP" />
+                    <ActionButton onClick={handleSendOTP} disabled={state.loading || !phoneRef.current.length == 10} text="SEND OTP" />
                     <div className='shop-login-sendotppassword' onClick={() => setState(s => ({ ...s, usePassword: true }))}>
                         use key?
                     </div>
