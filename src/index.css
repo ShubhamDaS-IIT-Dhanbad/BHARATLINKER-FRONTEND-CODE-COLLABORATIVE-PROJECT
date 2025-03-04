@@ -46,17 +46,3 @@ a {
 a:hover {
   text-decoration: underline;
 }
-#show-root-loader-img-div {
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #ffffff;
-}
-
-#show-root-loader-img {
-  width: 60vw;
-  max-width: 300px;
-  height: auto;
-}
