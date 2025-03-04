@@ -14,7 +14,7 @@ import { useSearchShop } from '../hooks/searchShopHook.jsx';
 import { useShopProductExecuteSearch } from '../hooks/searchShopProductHook.jsx';
 import './style/navbar.css';
 
-const Navbar = ({ headerTitle, shopId}) => {
+const Navbar = ({ headerTitle, shopId }) => {
     const { getLocationFromCookie } = useLocationFromCookie();
     const navigate = useNavigate();
     const location = useLocation();
@@ -35,6 +35,7 @@ const Navbar = ({ headerTitle, shopId}) => {
 
     const isHomePage = location.pathname === '/';
     const isSearchPage = location.pathname === '/search';
+    const isBlSearchPage = location.pathname === '/bharatlinker/search';
     const isShopPage = location.pathname === '/shop';
     const isShopProductPage = location.pathname.startsWith('/shop/product');
 
@@ -117,12 +118,15 @@ const Navbar = ({ headerTitle, shopId}) => {
             }
         }
     };
-
     return (
         <>
-            <div className={isHomePage ? "home-page-header-visible" : "product-page-header-visible"}>
+            <div className={isHomePage ? "home-page-header-visible" : "product-page-header-visible"}
+                style={isBlSearchPage ? { color: "white", backgroundColor: "rgb(55, 143, 250)" } : undefined}
+
+            >
                 <div className={isHomePage ? "home-page-header-container" : "product-page-header-container"}>
-                    <div className={isHomePage ? "home-page-header-user-section" : "product-page-header-user-section"}>
+                    <div className={isHomePage ? "home-page-header-user-section" : "product-page-header-user-section"}
+                    >
                         {isHomePage ? (
                             <HiOutlineUserCircle
                                 size={40}
@@ -168,7 +172,8 @@ const Navbar = ({ headerTitle, shopId}) => {
                     )}
                 </div>
                 <div className={isHomePage ? "home-page-search-section" : "product-page-search-section"}>
-                    <div className={isHomePage ? "home-page-search-input-container" : "product-page-search-input-container"}>
+                    <div className={isHomePage ? "home-page-search-input-container" : "product-page-search-input-container"}
+                        style={isBlSearchPage ? { border: "none" } : undefined}>
                         <BiSearchAlt
                             className={isHomePage ? "home-page-search-icon" : "product-page-search-icon"}
                             onClick={handleSearch}
@@ -182,8 +187,8 @@ const Navbar = ({ headerTitle, shopId}) => {
                             aria-label="Search Input"
                         />
                         <span>{!searchInput && searchArrayNames?.length > 0 && showPlaceholder
-                                    ? searchArrayNames[placeholderIndex]
-                                    : ""}</span>
+                            ? searchArrayNames[placeholderIndex]
+                            : ""}</span>
                     </div>
                 </div>
             </div>

@@ -14,6 +14,8 @@ import HomePage from './components/homePage/home.jsx';
 import SearchPage from './components/searchPage/searchPage.jsx';
 import SearchShop from './components/searchShop/searchShop.jsx';
 
+
+const BharatLinkerSearchPage = lazy(() => import('./components/bharatLinker/searchPage.jsx'));
 // Lazy Loaded 
 const LoginPage = lazy(() => import('./components/user/login.jsx'));
 const SingleProduct = lazy(() => import('./components/singleProduct.jsx'));
@@ -35,6 +37,7 @@ const routes = {
     { path: "/download", component: Download, title: "Bharat Linker", desc: "Welcome to Bharat Linker, your one-stop solution for business management.", robots: "index, follow" },
     { path: "/login", component: LoginPage, title: "Login - Bharat Linker", desc: "Login to access your Bharat Linker account and manage your business efficiently.", robots: "noindex, nofollow" },
     { path: "/search", component: SearchPage, title: "Search Products - Bharat Linker", desc: "Search and explore a wide range of products on Bharat Linker." },
+    { path: "/bharatlinker/search", component: BharatLinkerSearchPage, title: "Search Products - Bharat Linker", desc: "Search and explore a wide range of products on Bharat Linker." },
     { path: "/product/:productId", component: SingleProduct, title: "Product Details - Bharat Linker", desc: "View detailed information about the selected product on Bharat Linker." },
     { path: "/shop", component: SearchShop, title: "Search Shops - Bharat Linker", desc: "Search and explore various shops on Bharat Linker." },
     { path: "/shop/:shopId", component: SingleShopCard, title: "Shop Details - Bharat Linker", desc: "Discover detailed information about this shop on Bharat Linker." },

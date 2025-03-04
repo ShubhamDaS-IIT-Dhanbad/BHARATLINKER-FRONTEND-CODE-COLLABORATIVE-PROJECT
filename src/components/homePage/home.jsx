@@ -46,7 +46,7 @@ const Home = () => {
                 </div>
                 <FooterButton icon={<AiFillProduct size={20} />} label="Products" onClick={() => navigate('/search')} />
                 <FooterButton icon={<AiFillShop size={20} />} label="Shop" onClick={() => navigate('/shop')} />
-                <FooterButton icon={<TbCircleLetterBFilled size={20} />} label="bharat linker" onClick={() => navigate('/')} />
+                <FooterButton icon={<TbCircleLetterBFilled size={20} />} label="bharat linker" onClick={() => navigate('/bharatlinker/search')} />
 
             </div>
             <HowItWorks />
