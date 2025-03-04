@@ -1,14 +1,6 @@
 /* shopLogin.css */
-.shop-login-auth-form-container {
-  overflow-x: hidden;
-  padding: 20px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  max-width: calc(100vw - 40px);
-  width: calc(100vw - 40px);
-  min-height: 80vh;
-  background: #f9f9f9;
+.shop-login-main-default-content {
+  position: relative;
 }
 
 .shop-login-otp-auth-form-container {
@@ -37,32 +29,25 @@
   align-items: center;
 }
 
-.shop-login-user-login-container-text {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+.shop-login-jmain-rocket-image-c {
+  display: flex;margin-top:30px ;
+  justify-content: center;width: 90%;height: 50vh;
+}
+
+
+
+.shop-login-main-title {
   font-size: 20px;
-  overflow: scroll;
-  margin-top: 10px;
-  margin-bottom: 10px;
   font-weight: 700;
-  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+  margin: 10px 0;
+  text-align: center;
 }
 
-.shop-login-auth-form-container-u1 {
-  display: flex;
-  justify-content: space-evenly;
-  align-items: center;
-  flex-direction: column;
-  gap: 10px;
-  width: 90vw;
-  margin-top: 30px;
-  margin-bottom: 30px;
-}
-
-.shop-login-auth-form-container-u1 img {
-  width: 60vw;
+.shop-login-main-subtitle {
+  color: #666;
+  font-size: 14px;
+  margin-bottom: 10px;
+  text-align: center;
 }
 
 .shop-login-phone-input-container {
@@ -92,18 +77,13 @@
 
 .shop-login-sendotppassword {
   width: 81vw;
-  font-size: 13px;
-  padding: 20px 0px;
-  border: none;
-  border-radius: 8px;
-  font-weight: 500;
+  font-size: 18px;padding-top: 7px;
+  font-weight: 600;
   transition: opacity 0.2s;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  color: #33333393;
-  text-decoration: underline;
+  align-items: center;justify-content: flex-end;
+  color: rgba(22, 125, 250, 0.886);
+  
 }
 
 .shop-login-premium-button {
@@ -120,7 +100,7 @@
 }
 
 .shop-login-premium-button.shop-login-primary {
-  background-color: rgb(28, 121, 43);
+  background-color: rgb(22, 126, 250);
   color: #f9f9f9;
   font-size: medium;
   font-weight: 700;
@@ -128,58 +108,13 @@
 
 .shop-login-premium-button.shop-login-secondary {
   background: transparent;
-  color: rgb(28, 121, 43);
-  border: 1px solid rgb(28, 121, 43);
-}
-
-.shop-login-digit-input:focus {
-  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
-  outline: none;
-}
-
-.shop-login-phone-input-container:focus,
-.shop-login-otp-digit-input:focus {
-  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
-  outline: none;
+  color: rgb(22, 126, 250);
+  border: 1px solid rgb(22, 126, 250);
 }
 
 .shop-login-premium-button:disabled {
   opacity: 0.7;
   cursor: not-allowed;
-}
-
-.shop-login-auth-alternate-action {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 7px;
-  text-align: center;
-  margin-top: 15px;
-  font-size: 14px;
-  color: #ff4444a0;
-  background: #ffeaea;
-  padding: 12px;
-  border-radius: 8px;
-  margin-bottom: 20px;
-  text-align: center;
-}
-
-.shop-login-password-inputs {
-  display: flex;
-  width: 80vw;
-  margin-bottom: 10px;
-  gap: 5px;
-  justify-content: center;
-  align-items: center;
-}
-
-.shop-login-digit-input {
-  width: calc(15vw - 19.5px);
-  height: 50px;
-  text-align: center;
-  border: 1px solid #e0e0e0;
-  border-radius: 8px;
-  font-size: 18px;
 }
 
 .shop-login-otp-input-group {
@@ -212,12 +147,6 @@
   margin-bottom: 25px;
 }
 
-.shop-login-back-button {
-  background: none;
-  border: none;
-  color: #333;
-}
-
 .shop-login-otp-title {
   margin: 0;
 }
@@ -246,21 +175,4 @@
 .shop-login-resend-otp {
   margin-top: 20px;
   text-align: center;
-  border: none;
-}
-
-.shop-login-resend-otp button {
-  margin-top: 20px;
-  text-align: center;
-  border: none;
-}
-
-.shop-login-user-login-terms {
-  font-size: 11px;
-  margin-top: 5px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 80vw;
-  color: #3333337b;
 }

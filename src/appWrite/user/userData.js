@@ -14,7 +14,6 @@ const databases = new Databases(client);
 // Function to fetch or create user data by phone number
 async function fetchUserByPhoneNumber(phoneNumber) {
     try {
-        // Input validation
         if (!phoneNumber) {
             throw new Error("Phone number is required.");
         }
@@ -22,8 +21,6 @@ async function fetchUserByPhoneNumber(phoneNumber) {
         if (!/^\+?\d+$/.test(cleanedPhone)) {
             throw new Error("Invalid phone number format. Must contain only digits and optional + prefix.");
         }
-
-        // Define queries with selected fields
         const queries = [
             Query.equal('phoneNumber', cleanedPhone),
             Query.select(['$id','name', 'phoneNumber', 'lastLogin', 'address'])
