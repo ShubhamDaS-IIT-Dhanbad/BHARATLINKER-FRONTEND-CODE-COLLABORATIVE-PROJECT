@@ -9,7 +9,7 @@ const ProductList = ({ products, loading, hasMoreProducts, loadingMoreProducts }
     // Handle case where no products are found
     if (!loading && products.length === 0) {
         return <div className='search-not-found'>
-            <img src={e1} alt="No products available" className="no-products-image" />
+            <img src={e1} alt="No products available" id="no-products-image" />
             <p>Oops! We couldn't find any product.</p>
         </div>
     }

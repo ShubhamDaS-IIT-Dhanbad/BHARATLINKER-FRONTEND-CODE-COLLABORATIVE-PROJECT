@@ -121,7 +121,7 @@ const Navbar = ({ headerTitle, shopId }) => {
     return (
         <>
             <div className={isHomePage ? "home-page-header-visible" : "product-page-header-visible"}
-                style={isBlSearchPage ? { color: "white", backgroundColor: "rgb(55, 143, 250)" } : undefined}
+                style={isBlSearchPage ? { color: "white", backgroundColor: "rgb(51, 23, 63)" } : undefined}
 
             >
                 <div className={isHomePage ? "home-page-header-container" : "product-page-header-container"}>

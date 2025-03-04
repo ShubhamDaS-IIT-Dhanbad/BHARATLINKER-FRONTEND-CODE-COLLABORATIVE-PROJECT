@@ -42,7 +42,7 @@
   flex-direction: column;color: #0c0c0c50;
   align-items: center;text-align: center;
 }
-.no-products-image {
+#no-products-image {
   max-width: 200px; /* Adjust size as needed */
   animation: bounceShake 2s infinite ease-in-out;
 }
