@@ -207,6 +207,7 @@ const SignUpForm = React.memo(({ setPage }) => {
           <ActionButton 
             onClick={handleSendOTP} 
             disabled={
+              true||
               state.loading || 
               phoneNumber.length !== 10 || 
               shopPassword.length !== 6 || 
