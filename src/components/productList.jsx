@@ -4,9 +4,9 @@ import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import SearchPageProductCard from './productCard.jsx';
 import './style/productList.css';
-import e1 from '../assets/e1.png';
+
+const e1="https://res.cloudinary.com/demc9mecm/image/upload/v1741102459/e1_aj3axb.png";
 const NoProductsFound = () => {
-    const notfound = 'https://res.cloudinary.com/demc9mecm/image/upload/v1736953901/ir4hy5fcwevhr8ibeaqq.png';
     return (
         <div className='search-not-found'>
             <img src={e1} alt="No products available" className="no-products-image" />

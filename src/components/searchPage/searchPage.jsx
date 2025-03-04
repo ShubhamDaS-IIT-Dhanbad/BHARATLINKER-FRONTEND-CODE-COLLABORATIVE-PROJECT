@@ -9,7 +9,7 @@ import ProductList from '../productList.jsx';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useExecuteSearch } from '../../hooks/searchProductHook';
 
-import s1 from '../../assets/s1.png';
+const s1="https://res.cloudinary.com/demc9mecm/image/upload/v1741102460/s1_i7wbfi.png";
 import './searchPage.css';
 
 const SearchPage = () => {

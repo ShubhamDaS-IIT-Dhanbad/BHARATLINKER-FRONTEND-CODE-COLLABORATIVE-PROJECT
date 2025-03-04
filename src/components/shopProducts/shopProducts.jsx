@@ -1,9 +1,8 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect,useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams, useLocation } from 'react-router-dom';
 import ProductList from './productList.jsx';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import s1 from '../../assets/s1.png'
 import Navbar from '../navbar.jsx';
 
 import AddToCartTab from "../viewCartTab/viewCart.jsx";
@@ -11,6 +10,8 @@ import AddToCartTab from "../viewCartTab/viewCart.jsx";
 import { useShopProductExecuteSearch } from '../../hooks/searchShopProductHook.jsx';
 import './shopProducts.css';
 
+
+const s1="https://res.cloudinary.com/demc9mecm/image/upload/v1741102460/s1_i7wbfi.png";
 const ProductSearch = () => {
     const location = useLocation();
     const { shopId } = useParams();

@@ -3,13 +3,13 @@ import { useSelector } from 'react-redux';
 import SearchBar from '../navbar.jsx';
 import ShopList from './shopList.jsx';
 import InfiniteScroll from 'react-infinite-scroll-component';
-
-import s1 from '../../assets/s1.png'
 import 'react-loading-skeleton/dist/skeleton.css';
 import { Oval } from "react-loader-spinner";
 import { useSearchShop } from '../../hooks/searchShopHook.jsx';
 import './searchShop.css';
 
+
+const s1="https://res.cloudinary.com/demc9mecm/image/upload/v1741102460/s1_i7wbfi.png";
 const Shop = () => {
     const { shops, updated, loading, loadingMoreShops, hasMoreShops } = useSelector((state) => state.searchshops);
     const { executeSearchShop, onLoadMoreShop } = useSearchShop();
