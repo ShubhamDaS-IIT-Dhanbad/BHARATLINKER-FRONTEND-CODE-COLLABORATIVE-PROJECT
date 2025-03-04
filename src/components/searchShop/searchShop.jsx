@@ -27,18 +27,6 @@ const Shop = () => {
             <div id="shopSearchPage-container-top">
                 <SearchBar
                     headerTitle={"SEARCH SHOP"}
-                    searchArrayNames = {[
-                        "electronics store",
-                        "grocery store",
-                        "clothing store",
-                        "hardware store",
-                        "book store",
-                        "furniture store",
-                        "specialty store",
-                        "toy store",
-                        "jewelry store",
-                        "pet store"
-                      ]}
                 />
             </div>
             {(loading) ? (

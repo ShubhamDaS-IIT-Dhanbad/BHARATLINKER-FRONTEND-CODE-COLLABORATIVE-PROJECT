@@ -22,19 +22,7 @@ const Home = () => {
         <>
             <div id="productSearchPage-container-top">
                 <HomePageNavbar
-                    headerTitle={"Bharat | Linker"}
-                    searchArrayNames={[
-                        "iPhone 14 Pro Max",
-                        "Samsung Galaxy S23 Mobile",
-                        "Apple AirPods Pro Ear Buds",
-                        "Sony WF-1000XM5 Wireless Ear Buds",
-                        "iPhone SE 2023",
-                        "Google Pixel 8 Mobile",
-                        "Jabra Elite 8 Active Ear Buds",
-                        "Beats Studio Buds for iPhone",
-                        "OnePlus Nord 3 Mobile",
-                        "Bose QuietComfort Ultra Ear Buds"
-                    ]} />
+                    headerTitle={"Bharat | Linker"} />
             </div>
 
             <div id="home-div" style={{
