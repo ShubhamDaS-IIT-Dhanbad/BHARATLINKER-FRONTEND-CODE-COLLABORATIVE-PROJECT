@@ -85,7 +85,6 @@ const Navbar = ({ headerTitle, shopId}) => {
         setIsLocationHas(!!(userLocation?.address && userLocation?.lat && userLocation?.lon));
     }, [locationTabVisible]);
 
-    // Infinite loop for cycling placeholder
     useEffect(() => {
         setPlaceholderIndex(0);
         if (!searchArrayNames || searchArrayNames.length === 0) return;
@@ -95,7 +94,7 @@ const Navbar = ({ headerTitle, shopId}) => {
             }
         }, 2000);
         return () => clearInterval(interval);
-    }, []);
+    }, [searchArrayNames]);
 
     const handleHomePageUserIconClick = () => {
         const userSession = Cookies.get('BharatLinkerUserData');
