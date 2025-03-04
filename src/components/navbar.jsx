@@ -15,7 +15,7 @@ import { useSearchShop } from '../hooks/searchShopHook.jsx';
 import { useShopProductExecuteSearch } from '../hooks/searchShopProductHook.jsx';
 import './style/navbar.css';
 
-const Navbar = ({ headerTitle, shopId }) => {
+const Navbar = ({ headerTitle, shopId, searchArrayNames }) => {
     const { getLocationFromCookie } = useLocationFromCookie();
     const navigate = useNavigate();
     const location = useLocation();
@@ -24,12 +24,15 @@ const Navbar = ({ headerTitle, shopId }) => {
     const [searchInput, setSearchInput] = useState('');
     const [locationTabVisible, setLocationTabVisible] = useState(false);
     const { executeSearch } = useExecuteSearch();
-
     const { query: searchQuery } = useSelector((state) => state.searchproducts);
     const { executeSearchShop } = useSearchShop();
     const { query: shopQuery } = useSelector((state) => state.searchshops);
     const { executeShopProductSearch } = useShopProductExecuteSearch(shopId);
     const { query: shopProductQuery } = useSelector((state) => state.shopproducts);
+
+    // Placeholder cycling state
+    const [placeholderIndex, setPlaceholderIndex] = useState(0);
+    const [showPlaceholder, setShowPlaceholder] = useState(true);
 
     const isHomePage = location.pathname === '/';
     const isSearchPage = location.pathname === '/search';
@@ -37,7 +40,7 @@ const Navbar = ({ headerTitle, shopId }) => {
     const isShopProductPage = location.pathname.startsWith('/shop/product');
 
     const handleRetailerClick = useCallback(() => {
-        const retailerCookie = Cookies.get('BharatLinkerShopData'); // Fixed 'Cookie' to 'Cookies'
+        const retailerCookie = Cookies.get('BharatLinkerShopData');
         if (retailerCookie) {
             navigate('/secure/shop');
         } else {
@@ -45,7 +48,6 @@ const Navbar = ({ headerTitle, shopId }) => {
         }
     }, [navigate]);
 
-    
     useEffect(() => {
         if (isSearchPage) {
             setSearchInput(searchQuery);
@@ -55,10 +57,22 @@ const Navbar = ({ headerTitle, shopId }) => {
             setSearchInput(shopProductQuery);
         }
     }, []);
-    useEffect(()=>{
-        setIsLocationHas(!!(userLocation?.address && userLocation?.lat && userLocation?.lon));
-    },[ locationTabVisible])
 
+    useEffect(() => {
+        setIsLocationHas(!!(userLocation?.address && userLocation?.lat && userLocation?.lon));
+    }, [locationTabVisible]);
+
+    // Infinite loop for cycling placeholder
+    useEffect(() => {
+        if (!searchArrayNames || searchArrayNames.length === 0) return;
+        const interval = setInterval(() => {
+            if (true) {
+                setPlaceholderIndex((prev) => (prev + 1) % searchArrayNames.length); // Move to next name
+            }
+        }, 2000);
+
+        return () => clearInterval(interval);
+    }, [showPlaceholder, searchArrayNames]);
 
     const handleHomePageUserIconClick = () => {
         const userSession = Cookies.get('BharatLinkerUserData');
@@ -122,7 +136,7 @@ const Navbar = ({ headerTitle, shopId }) => {
                         </div>
                     </div>
                     {isHomePage && (<div className="home-page-header-retailer-section">
-                        < MdOutlineAdminPanelSettings
+                        <MdOutlineAdminPanelSettings
                             onClick={handleRetailerClick}
                             size={35}
                             className='nav-retailer-icon'
@@ -140,12 +154,14 @@ const Navbar = ({ headerTitle, shopId }) => {
                         />
                         <input
                             className={isHomePage ? "home-page-search-input" : "product-page-search-input"}
-                            placeholder="Search"
                             value={searchInput}
                             onChange={(e) => setSearchInput(e.target.value)}
                             onKeyPress={handleSearch}
                             aria-label="Search Input"
                         />
+                        <span>{!searchInput && searchArrayNames?.length > 0 && showPlaceholder
+                                    ? searchArrayNames[placeholderIndex]
+                                    : ""}</span>
                     </div>
                 </div>
             </div>

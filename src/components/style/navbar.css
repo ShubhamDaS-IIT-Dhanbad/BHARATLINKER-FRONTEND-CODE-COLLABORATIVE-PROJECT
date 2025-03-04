@@ -378,3 +378,126 @@
     background: #f0fdf4;
   }
   
+
+
+
+
+
+
+
+
+
+
+
+
+.home-page-search-input-container,
+.product-page-search-input-container{
+    position: relative;
+}
+
+/* Style the input to handle placeholder animation */
+.home-page-search-input-container span,
+.product-page-search-input-container span {
+  position: absolute;left: 50px;
+  pointer-events: none;
+  animation: slideInOut 2s infinite;
+  font-weight: 100;
+  color: #00000097 !important;
+  font-size: 0.9rem;
+}
+
+/* Keyframes for sliding in from bottom and out to top */
+@keyframes slideInOut {
+    0% {
+      opacity: 0;
+      transform: translateY(5px);
+    }
+    5% {
+      opacity: 0;
+      transform: translateY(4px);
+    }
+    10% {
+      opacity: 0.005;
+      transform: translateY(3px);
+    }
+    15% {
+      opacity: 0.3;
+      transform: translateY(2px);
+    }
+    20% {
+      opacity: 0.4;
+      transform: translateY(1px);
+    }
+    25% {
+      opacity: 0.5;
+      transform: translateY(0px);
+    }
+    30% {
+      opacity: 0.6;
+      transform: translateY(0px);
+    }
+    35% {
+      opacity: 0.7;
+      transform: translateY(0px);
+    }
+    40% {
+      opacity: 0.8;
+      transform: translateY(0px);
+    }
+    45% {
+      opacity: 0.9;
+      transform: translateY(0px);
+    }
+    50% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    55% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    60% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    65% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    70% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    75% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    80% {
+      opacity: 0.8;
+      transform: translateY(-1px);
+    }
+    85% {
+      opacity: 0.6;
+      transform: translateY(-2px);
+    }
+    90% {
+      opacity: 0.4;
+      transform: translateY(-3px);
+    }
+    95% {
+      opacity: 0.2;
+      transform: translateY(-4px);
+    }
+    100% {
+      opacity: 0;
+      transform: translateY(-5px);
+    }
+  }
+
+/* Stop animation and hide span when input is focused or has content */
+.home-page-search-input-container .home-page-search-input:focus + span,
+.product-page-search-input-container .product-page-search-input:focus + span {
+  animation: none; /* Stop the animation */
+  opacity: 0; /* Hide the span */
+  transition: opacity 1.7s ease; /* Smooth fade-out */
+}
