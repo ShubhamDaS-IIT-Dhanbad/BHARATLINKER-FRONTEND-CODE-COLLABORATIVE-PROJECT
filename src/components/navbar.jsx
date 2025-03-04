@@ -87,15 +87,15 @@ const Navbar = ({ headerTitle, shopId}) => {
 
     // Infinite loop for cycling placeholder
     useEffect(() => {
+        setPlaceholderIndex(0);
         if (!searchArrayNames || searchArrayNames.length === 0) return;
         const interval = setInterval(() => {
             if (true) {
-                setPlaceholderIndex((prev) => (prev + 1) % searchArrayNames.length); // Move to next name
+                setPlaceholderIndex((prev) => (prev + 1) % searchArrayNames.length);
             }
         }, 2000);
-
         return () => clearInterval(interval);
-    }, [showPlaceholder, searchArrayNames]);
+    }, []);
 
     const handleHomePageUserIconClick = () => {
         const userSession = Cookies.get('BharatLinkerUserData');
