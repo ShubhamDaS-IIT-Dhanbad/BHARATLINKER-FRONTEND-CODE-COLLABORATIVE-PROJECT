@@ -94,7 +94,7 @@ const Navbar = ({ headerTitle, shopId}) => {
             }
         }, 2000);
         return () => clearInterval(interval);
-    }, [searchArrayNames]);
+    }, []);
 
     const handleHomePageUserIconClick = () => {
         const userSession = Cookies.get('BharatLinkerUserData');
