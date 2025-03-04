@@ -104,7 +104,7 @@ export const verifyPassword = async (shopPhoneNumber, password) => {
       conf.appwriteShopsDatabaseId,
       conf.appwriteShopsShopsCollectionId,
       queries
-    );
+    );console.log(result,shopPhoneNumber, password)
     if (result.documents.length > 0) {
 
       console.log("successfully logged in");

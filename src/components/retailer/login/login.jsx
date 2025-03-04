@@ -10,7 +10,7 @@ import './login.css';
 
 const SignUpForm = React.memo(() => {
     const navigate = useNavigate();
-    const phoneRef = useRef('');
+    const [phoneNumber, setPhoneNumber] = useState('');
     const [state, setState] = useState({
         userId: null,
         otp: Array(6).fill(""),
@@ -35,46 +35,46 @@ const SignUpForm = React.memo(() => {
     }, [state.otpSent, state.timer]);
 
     const handleSendOTP = useCallback(async () => {
-        if (phoneRef.current.length !== 10) return setState(s => ({ ...s, errorMessage: 'Phone number must be 10 digits' }));
+        if (phoneNumber.length !== 10) return setState(s => ({ ...s, errorMessage: 'Phone number must be 10 digits' }));
         setState(s => ({ ...s, loading: true, errorMessage: '' }));
         try {
-            const userId = await sendOTP(`+91${phoneRef.current}`);
+            const userId = await sendOTP(`+91${phoneNumber}`);
             if (userId) setState(s => ({ ...s, userId, otpSent: true, isResendDisabled: true, timer: 30, otp: Array(6).fill("") }));
             else throw new Error();
-        } catch {
-            setState(s => ({ ...s, errorMessage: 'Failed to send OTP. Try again.' }));
+        } catch(error) {
+            setState(s => ({ ...s, errorMessage: 'Failed to send OTP.Try again.' }));
         } finally {
             setState(s => ({ ...s, loading: false }));
         }
-    }, []);
+    }, [phoneNumber]);
 
     const handleVerifyOTP = useCallback(async () => {
         if (state.otp.join('').length !== 6) return setState(s => ({ ...s, errorMessage: 'OTP must be 6 digits' }));
         setState(s => ({ ...s, verifyingOtp: true, errorMessage: '' }));
         try {
-            const { session, shopData } = await verifyOTP(state.userId, state.otp.join(''), `91${phoneRef.current}`);
+            const { session, shopData } = await verifyOTP(state.userId, state.otp.join(''), `91${phoneNumber}`);
             setCookiesAndNavigate(session, shopData);
         } catch {
             setState(s => ({ ...s, errorMessage: 'Invalid OTP. Please try again.', otp: Array(6).fill('') }));
         } finally {
             setState(s => ({ ...s, verifyingOtp: false }));
         }
-    }, [state.userId, state.otp]);
+    }, [state.userId, state.otp, phoneNumber]);
 
     const handlePasswordLogin = useCallback(async () => {
-        if (phoneRef.current.length !== 10 || state.password.length !== 6) {
-            return setState(s => ({ ...s, errorMessage: `Please enter valid ${phoneRef.current.length !== 10 ? 'phone number' : 'password'}` }));
+        if (phoneNumber.length !== 10 || state.password.length !== 6) {
+            return setState(s => ({ ...s, errorMessage: `Please enter valid ${phoneNumber.length !== 10 ? 'phone number' : 'password'}` }));
         }
         setState(s => ({ ...s, loading: true, errorMessage: '' }));
         try {
-            const { session, shopData } = await verifyPassword(`91${phoneRef.current}`, state.password);
+            const { session, shopData } = await verifyPassword(`91${phoneNumber}`, state.password);
             setCookiesAndNavigate(session, shopData);
         } catch {
             setState(s => ({ ...s, errorMessage: 'Invalid password. Please try again.' }));
         } finally {
             setState(s => ({ ...s, loading: false }));
         }
-    }, [state.password]);
+    }, [phoneNumber, state.password]);
 
     const setCookiesAndNavigate = useCallback((session, shopData) => {
         Cookies.set("BharatLinkerShopData", JSON.stringify({
@@ -112,19 +112,33 @@ const SignUpForm = React.memo(() => {
     }, []);
 
     const handlePhoneChange = useCallback((e) => {
-        phoneRef.current = e.target.value.replace(/[^0-9]/g, '').slice(0, 10);
-        if (state.errorMessage) setState(s => ({ ...s }));
-    }, [state.errorMessage]);
+        const inputValue = e.target.value.replace(/\D/g, '').slice(0, 10);
+        setPhoneNumber(inputValue);
+    }, []);
 
     const renderInputForm = () => {
         if (!state.usePassword && !state.otpSent) {
             return (
                 <>
                     <h1 className="shop-login-main-title">Welcome Back, Shopkeeper!</h1>
-                    <p className="shop-login-main-subtitle" style={{ marginTop: "-10px" }}>Need help? Our support team is just a click away!</p><PhoneInput />
-                    <ActionButton onClick={handleSendOTP} disabled={state.loading || !phoneRef.current.length == 10} text="SEND OTP" />
+                    <p className="shop-login-main-subtitle" style={{ marginTop: "-10px" }}>Need help? Our support team is just a click away!</p>
+                    <div className='shop-login-phone-input-container' style={{ marginTop: "40px" }}>
+                        <div className='shop-login-country-code-pill'><span>+91</span></div>
+                        <input
+                            type='text'
+                            className='shop-login-premium-input'
+                            placeholder='Enter mobile number'
+                            value={phoneNumber}
+                            onChange={handlePhoneChange}
+                            maxLength={10}
+                            inputMode="numeric"
+                            pattern="[0-9]*"
+                            autoComplete="off"
+                        />
+                    </div>
+                    <ActionButton onClick={handleSendOTP} disabled={state.loading || phoneNumber.length !== 10} text="SEND OTP" />
                     <div className='shop-login-sendotppassword' onClick={() => setState(s => ({ ...s, usePassword: true }))}>
-                        use key?
+                        Use password instead?
                     </div>
                 </>
             );
@@ -133,7 +147,21 @@ const SignUpForm = React.memo(() => {
             return (
                 <>
                     <h1 className="shop-login-main-title">Great to See You Again!</h1>
-                    <p className="shop-login-main-subtitle" style={{marginTop:"-10px"}}>Stay secure by keeping your password strong and updated.</p> <PhoneInput />
+                    <p className="shop-login-main-subtitle" style={{ marginTop: "-10px" }}>Stay secure by keeping your password strong and updated.</p>
+                    <div className='shop-login-phone-input-container' style={{ marginTop: "40px" }}>
+                        <div className='shop-login-country-code-pill'><span>+91</span></div>
+                        <input
+                            type='text'
+                            className='shop-login-premium-input'
+                            placeholder='Enter mobile number'
+                            value={phoneNumber}
+                            onChange={handlePhoneChange}
+                            maxLength={10}
+                            inputMode="numeric"
+                            pattern="[0-9]*"
+                            autoComplete="off"
+                        />
+                    </div>
                     <div className='shop-login-phone-input-container'>
                         <input
                             type='number'
@@ -141,16 +169,18 @@ const SignUpForm = React.memo(() => {
                             placeholder='Enter 6-digit password'
                             value={state.password}
                             onChange={e => setState(s => ({ ...s, password: e.target.value.replace(/[^0-9]/g, '').slice(0, 6) }))}
-                            maxLength='6'
+                            maxLength={6}
+                            inputMode="numeric"
+                            autoComplete="off"
                         />
                     </div>
-                    <ActionButton 
-                        onClick={handlePasswordLogin} 
-                        disabled={state.loading || state.password.length !== 6 || phoneRef.current.length !== 10} 
-                        text="LOGIN" 
+                    <ActionButton
+                        onClick={handlePasswordLogin}
+                        disabled={state.loading || state.password.length !== 6 || phoneNumber.length !== 10}
+                        text="LOGIN"
                     />
                     <div className='shop-login-sendotppassword' onClick={() => setState(s => ({ ...s, usePassword: false }))}>
-                        forgot password ?
+                        Forgot password? Use OTP
                     </div>
                 </>
             );
@@ -158,32 +188,32 @@ const SignUpForm = React.memo(() => {
         return (
             <div className='shop-login-otp-auth-form-container'>
                 <div className='shop-login-otp-header'>
-                    <div className='shop-login-auth-form-container-back-container' 
-                         onClick={() => setState(s => ({ ...s, otpSent: false, usePassword: true }))}>
+                    <div className='shop-login-auth-form-container-back-container'
+                        onClick={() => setState(s => ({ ...s, otpSent: false}))}>
                         <GoChevronLeft size={30} />
                     </div>
                     <h3 className='shop-login-otp-title'>OTP Verification</h3>
                 </div>
-                <p className='shop-login-otp-instruction'>Enter the 6-digit code sent to +91 {phoneRef.current}</p>
+                <p className='shop-login-otp-instruction'>Enter the 6-digit code sent to +91 {phoneNumber}</p>
                 <div className='shop-login-otp-input-group'>
-                    {state.otp.map((_, i) => (
+                    {state.otp.map((digit, i) => (
                         <input
                             key={i}
                             id={`otp-input-${i}`}
                             type='number'
                             className='shop-login-otp-digit-input'
-                            maxLength='1'
-                            value={state.otp[i]}
+                            maxLength={1}
+                            value={digit}
                             onChange={e => handleOtpChange(e, i)}
                             inputMode="numeric"
-                            autoFocus={i === 0}
+                            autoFocus={i === 0 && state.otpSent}
                         />
                     ))}
                 </div>
-                <ActionButton 
-                    onClick={handleVerifyOTP} 
-                    disabled={state.verifyingOtp || state.otp.join('').length !== 6} 
-                    text="Verify & Continue" 
+                <ActionButton
+                    onClick={handleVerifyOTP}
+                    disabled={state.verifyingOtp || state.otp.join('').length !== 6}
+                    text="Verify & Continue"
                 />
                 {state.isResendDisabled ? (
                     <div className='shop-login-resend-otp'>
@@ -200,29 +230,23 @@ const SignUpForm = React.memo(() => {
         );
     };
 
-    const PhoneInput = React.memo(() => (
-        <div className='shop-login-phone-input-container' style={{marginTop:"40px"}}>
-            <div className='shop-login-country-code-pill'><span>+91</span></div>
-            <input
-                type='number'
-                className='shop-login-premium-input'
-                placeholder='Enter mobile number'
-                defaultValue={phoneRef.current}
-                onChange={handlePhoneChange}
-                maxLength='10'
-            />
-        </div>
-    ));
-
     const ActionButton = React.memo(({ onClick, disabled, text }) => (
-        <button className='shop-login-premium-button shop-login-primary' onClick={onClick} disabled={disabled}>
-            {(state.loading || state.verifyingOtp) && text !== 'Resend OTP' ? <TailSpin height={24} width={24} color='#ffffff' /> : text}
+        <button 
+            className='shop-login-premium-button shop-login-primary' 
+            onClick={onClick} 
+            disabled={disabled}
+        >
+            {(state.loading || state.verifyingOtp) && text !== "Resend OTP" ? (
+                <TailSpin height={24} width={24} color='#ffffff' />
+            ) : (
+                text
+            )}
         </button>
     ));
 
     return (
         <div className="shop-login-main-default-content">
-            <div className='shop-login-auth-form-container-back-container' onClick={() =>{console.log("hi");navigate('/')}}>
+            <div className='shop-login-auth-form-container-back-container' onClick={() => navigate('/')}>
                 <GoChevronLeft size={25} />
             </div>
             <div className="shop-login-jmain-rocket-image-c">
@@ -232,7 +256,10 @@ const SignUpForm = React.memo(() => {
             {state.errorMessage && (
                 <div className="shop-login-premium-error-message">
                     {state.errorMessage}
-                    <IoCloseCircleOutline size={20} onClick={() => setState(s => ({ ...s, errorMessage: '' }))} />
+                    <IoCloseCircleOutline 
+                        size={20} 
+                        onClick={() => setState(s => ({ ...s, errorMessage: '' }))} 
+                    />
                 </div>
             )}
         </div>
