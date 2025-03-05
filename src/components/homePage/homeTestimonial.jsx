@@ -1,55 +1,39 @@
 import React, { useState } from "react";
 import "./homeTestimonial.css";
 
-const Testimonial = ({ti1}) => {
+const Testimonial = ({ ti1 }) => {
   const testimonials = [
     {
-      title: "BHARAT | LINKER",
-      description:"We are testing our platform in the Dhanbad,Jharkhand regions. As a small team of recent graduates, our resources are limited, but we are passionate about improving and expanding our services based on your feedback.",
-      image: ti1,
-    },    
-    {
-      title: "Our Aim",
+      title: "Empowering Local Retailers",
       description:
-        "At BharatLinker, our goal is to create a seamless and efficient platform that connects users with the right services. We aim to provide solutions that foster growth and development for businesses and individuals alike.",
-      image: ti1,
-    },
-    {
-      title: "Help Us Grow",
-      description:
-        "We are constantly working towards improving our platform and services. Your feedback and support are invaluable in helping us expand and refine our offerings to better serve your needs.",
+        "With giants like Zepto and Blinkit expanding into Tier 2 and Tier 3 cities, small retailers face tough competition. BharatLinker provides a powerful digital platform to help retailers stay ahead and thrive in the online era.",
       image: ti1, // Replace with actual image
     },
     {
-      title: "Join Us in Our Mission",
+      title: "Bridging the Digital Gap",
       description:
-        "We invite you to be a part of BharatLinker’s journey. Whether you’re a user or a service provider, together, we can build a more connected and efficient digital ecosystem.",
+        "The rise of big e-commerce players is disrupting traditional supply chains. BharatLinker is here to level the playing field by offering retailers a seamless online platform to grow their business and compete effectively.",
       image: ti1, // Replace with actual image
     },
     {
-      title: "Our Commitment",
+      title: "Tech for Retailers, Power to You",
       description:
-        "BharatLinker is committed to delivering exceptional service and innovative solutions. We are here to support you every step of the way and provide a reliable platform for your digital needs.",
+        "As large corporations enter local markets, BharatLinker stands with small retailers by providing innovative digital solutions to enhance visibility, streamline operations, and drive customer engagement.",
       image: ti1, // Replace with actual image
     },
     {
-      title: "Your Feedback Matters",
+      title: "Digital Transformation for Retail",
       description:
-        "We value the input of our users. Your feedback helps us shape the future of BharatLinker, allowing us to provide better features and improve the overall experience for everyone.",
+        "Big players are rapidly capturing customers, leaving small retailers struggling. BharatLinker empowers local businesses with the tech they need to compete, grow, and offer online services effortlessly.",
       image: ti1, // Replace with actual image
     },
     {
-      title: "Building the Future Together",
+      title: "Redefining Retail for the Future",
       description:
-        "As we continue to grow, we remain focused on creating a platform that truly addresses the needs of our users. Join us in building the future of digital connections.",
+        "The supply chain is evolving, and we ensure that local retailers are not left behind. BharatLinker provides a robust digital platform to help businesses adapt, connect with customers, and stay competitive in the changing market.",
       image: ti1, // Replace with actual image
-    },
-    {
-      title: "Stay Connected",
-      description:
-        "At BharatLinker, we believe in the power of connection. Stay updated with our latest features and developments by following us and becoming part of our community.",
-      image:ti1, // Replace with actual image
-    },
+    }
+
   ];
 
   const [current, setCurrent] = useState(0);
@@ -66,7 +50,7 @@ const Testimonial = ({ti1}) => {
           alt={testimonials[current].title}
           className="testimonial-image"
         />
-        <h3 className="testimonial-title">{testimonials[current].title}</h3>
+        <h3 className="testimonial-title">{testimonials[current].title.toUpperCase()}</h3>
         <div className="home-testimonial-description">{testimonials[current].description}</div>
       </div>
       <div className="testimonial-dots">
