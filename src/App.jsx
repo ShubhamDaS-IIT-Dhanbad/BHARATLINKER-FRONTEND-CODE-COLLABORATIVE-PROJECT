@@ -9,10 +9,11 @@ import { fetchUserCart } from "./redux/features/user/cartSlice.jsx";
 import './App.css';
 
 // Static Imports
-import Download from './components/downloadapp.jsx';
-import HomePage from './components/homePage/home.jsx';
-import SearchPage from './components/searchPage/searchPage.jsx';
-import SearchShop from './components/searchShop/searchShop.jsx';
+
+const Download = lazy(() => import('./components/downloadapp.jsx'));
+const HomePage = lazy(() => import('./components/homePage/home.jsx'));
+const SearchPage = lazy(() => import('./components/searchPage/searchPage.jsx'));
+const SearchShop = lazy(() => import('./components/searchShop/searchShop.jsx'));
 
 
 const BharatLinkerSearchPage = lazy(() => import('./components/bharatLinker/searchPage.jsx'));

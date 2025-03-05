@@ -53,6 +53,7 @@
     "react-router-dom": "^6.26.2",
     "react-toastify": "^10.0.5",
     "react-transition-group": "^4.4.5",
+    "react-window": "^1.8.11",
     "read-more-react": "^1.0.10"
   },
   "devDependencies": {
