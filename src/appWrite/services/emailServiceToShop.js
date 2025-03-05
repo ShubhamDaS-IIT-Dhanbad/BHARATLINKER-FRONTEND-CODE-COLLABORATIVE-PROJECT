@@ -1,4 +1,3 @@
-import conf from '../../conf/conf.js';
 import { Client, Functions } from 'appwrite';
 
 const client = new Client()
@@ -7,11 +6,11 @@ const client = new Client()
 
 const functions = new Functions(client);
 
-const handleSendEmail = async ({to, type,orderId,title,address,quantity,price,discountedPrice,phoneNumber,image}) => {
+const handleSendEmail = async ({to,type,orderId,orderDetails,address,phoneNumber}) => {
   const emailBody = JSON.stringify({
     to: to,
     type,
-    orderId,title,address,quantity,price,discountedPrice,phoneNumber,image
+    orderId,orderDetails,address,phoneNumber
   });
   try {
     const result = await functions.createExecution(

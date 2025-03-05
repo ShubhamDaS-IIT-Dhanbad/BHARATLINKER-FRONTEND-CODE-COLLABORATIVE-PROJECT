@@ -62,17 +62,12 @@ function CheckOutPage({ userData, items, deliveryAddress, setDeliveryAddress, se
                 const { shopEmail, items: shopItems, orderIds } = shopOrders[shopId];
                 const orderDetails = shopItems.map(item => ({
                     orderId: orderIds[shopItems.indexOf(item)],
-                    image: item.productImage,
-                    title: item.title,
-                    quantity: Number(item.quantity),
-                    price: Number(item.price),
-                    discountedPrice: Number(item.discountedPrice),
                 }));
 
                 await handleSendEmail({
                     to: shopEmail,
                     type: 'orderPlaced',
-                    orderIds: orderIds.join(', '),
+                    orderId: orderIds.join(', '),
                     orderDetails,
                     address: deliveryAddress.address,
                     phoneNumber: userData.phoneNumber,
