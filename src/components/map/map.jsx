@@ -249,6 +249,7 @@ const LocationMap = React.memo(({
       </div>
 
       <div className="map-wrapper">
+        
         <div ref={containerRef} style={MAP_CONTAINER_STYLE} />
 
         <div className="map-address-container">

@@ -2,14 +2,13 @@
   height: 100vh;
   width: 100%;
   position: relative;
-  font-family: 'Roboto', sans-serif; /* Matches Google Maps font */
   background: #ffffff;z-index: 99999;
 }
 
 .map-back-bar {
   display: flex;
   align-items: center;width: 100vw;
-  padding: 12px 15px;height: 50px;
+  padding: 10px 10px;height: 40px;
   background: #ffffff;position: fixed;top: 0;
   border-bottom: 1px solid #e0e0e0;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
@@ -23,7 +22,7 @@
 }
 
 .map-back-bar-title {
-  font-size: 20px;
+  font-size: 15px;
   font-weight: 600;
   color: #333;
 }
@@ -31,6 +30,10 @@
 .map-wrapper {
   position: relative;
   height: calc(100%); /* Adjust for back bar height */
+  width: 100%;
+}
+.map-wrapper div{
+  height: calc(100%); 
   width: 100%;
 }
 
@@ -56,16 +59,20 @@
 
 
 
+
+
+
+
 .map-address-container {
-  position: absolute;
+  position: fixed;
   bottom: 0;
-  width:calc(100% - 20px);
+  max-width:calc(100% - 20px);
   background: #ffffff;
   padding: 20px 10px 20px 10px;
   border-top-left-radius: 15px;
   border-top-right-radius: 15px;
   box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
-  z-index: 2;
+  z-index: 101;max-height: 90px;
 }
 
 .map-address-content {
@@ -77,7 +84,7 @@
 
 .map-address-text {
   color: #444;
-  font-size: 18px;
+  font-size: 13px;
   font-weight: 400;
   text-align: center;
   margin: 0;
@@ -89,9 +96,9 @@
 .map-confirm-btn {
   background-color: #FF4081; /* Zepto pink button */
   color: white;
-  padding: 15px 25px;
+  padding: 9px 25px;
   border-radius: 8px;
-  font-size: 20px;
+  font-size: 15px;
   font-weight: 400;
   border: none;
   transition: background-color 0.3s ease;
