@@ -3,7 +3,7 @@ import { Client, Functions } from 'appwrite';
 
 const client = new Client()
   .setEndpoint('https://cloud.appwrite.io/v1')
-  .setProject(conf.appwriteShopsProjectId);
+  .setProject("6703b6cf0021226113b9");
 
 const functions = new Functions(client);
 

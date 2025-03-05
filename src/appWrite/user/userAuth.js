@@ -56,7 +56,7 @@ export const verifyOTP = async (userId, otpCode, phoneNumber) => {
     return {
       session:session,
       userData: {
-        id: userDocument.$id,
+        $id: userDocument.$id,
         address:userDocument.address,
         phoneNumber: userDocument.phoneNumber,
         createdAt: userDocument.createdAt,

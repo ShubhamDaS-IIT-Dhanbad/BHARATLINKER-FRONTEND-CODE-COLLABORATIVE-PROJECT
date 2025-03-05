@@ -119,7 +119,7 @@ const ProductDetails = () => {
         if (!userData) return navigate("/login");
         if (!userData.phoneNumber) return navigate("/login");
         if (!productDetail?.shopId) return alert("SHOP DOES NOT EXIST");
-        
+        console.log(productDetail)
         dispatch(addToUserCart({
             userId: userData.userId,
             productId: productDetail.$id,
