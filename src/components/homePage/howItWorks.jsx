@@ -1,5 +1,5 @@
 import React from 'react';
-
+import './howItWorks.css'
 const hl1 = "https://res.cloudinary.com/demc9mecm/image/upload/v1741102459/hl1_xhdy7o.png";
 const hsp1 = "https://res.cloudinary.com/demc9mecm/image/upload/v1741102460/hs1_dmdchj.png";
 const hss1 = "https://res.cloudinary.com/demc9mecm/image/upload/v1741102460/hss1_eje5nx.png";
