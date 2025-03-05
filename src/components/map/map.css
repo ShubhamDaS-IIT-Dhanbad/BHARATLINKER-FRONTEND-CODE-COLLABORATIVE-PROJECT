@@ -91,7 +91,7 @@
 .map-confirm-btn {
   background-color: #FF4081; /* Zepto pink button */
   color: white;
-  padding: 9px 25px;
+  padding: 9px 15px 10px 15px;
   border-radius: 8px;
   font-size: 15px;
   font-weight: 400;
