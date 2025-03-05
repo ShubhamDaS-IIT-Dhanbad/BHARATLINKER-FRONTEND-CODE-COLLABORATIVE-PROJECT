@@ -4,7 +4,10 @@ import { TiInfoOutline } from "react-icons/ti";
 import { FaArrowLeft } from "react-icons/fa";
 import { BiSearchAlt } from "react-icons/bi";
 import { useShopProductExecuteSearch } from "../../hooks/retailerProductHook.jsx";
+
 import "./style/navbar.css";
+import "../style/navbar.css";
+
 
 const Navbar = ({ shopData, headerTitle, onBackNavigation, infoTitle, infoDescription }) => {
     const navigate = useNavigate();

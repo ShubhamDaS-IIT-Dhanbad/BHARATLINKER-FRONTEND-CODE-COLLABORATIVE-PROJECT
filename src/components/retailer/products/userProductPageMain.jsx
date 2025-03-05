@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useCallback, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { Oval } from 'react-loader-spinner';
