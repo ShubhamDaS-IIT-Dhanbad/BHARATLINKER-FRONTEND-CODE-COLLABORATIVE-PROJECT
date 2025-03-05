@@ -67,7 +67,6 @@ function CheckOutPage({ userData, items, deliveryAddress, setDeliveryAddress, se
                 await handleSendEmail({
                     to: shopEmail,
                     type: 'orderPlaced',
-                    orderId: orderIds.join(', '),
                     orderDetails,
                     address: deliveryAddress.address,
                     phoneNumber: userData.phoneNumber,

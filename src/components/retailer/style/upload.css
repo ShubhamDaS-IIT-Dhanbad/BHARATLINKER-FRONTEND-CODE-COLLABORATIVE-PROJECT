@@ -30,16 +30,16 @@
 }
 
 /* Form Container */
-.form-container {
+.shop-s1-form-container {
   border-radius: 12px;
   padding: 10px;
 }
 
-.step-card {
+.shop-s1-step-card {
   margin:10px 0px;
 }
 
-.step-card h2 {
+.shop-s1-step-card h2 {
   color: var(--text-color);
   margin-bottom: 2rem;
   font-size: 1.5rem;

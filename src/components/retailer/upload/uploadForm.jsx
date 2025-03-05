@@ -128,7 +128,7 @@ const Upload = ({ shopData }) => {
 
   const renderStepContent = useMemo(() => ({
     1: (
-      <div className="step-card">
+      <div className="shop-s1-step-card">
 
         <div className="shop-upload-1-desc">
           Upload product details, including images, specifications, pricing, and other relevant
@@ -184,7 +184,7 @@ const Upload = ({ shopData }) => {
       </div>
     ),
     2: (
-      <div className="step-card">
+      <div className="shop-s1-step-card">
         <div className="price-inputs">
           <fieldset className="floating-input">
             <legend>Original Price (₹)</legend>
@@ -219,7 +219,7 @@ const Upload = ({ shopData }) => {
       </div>
     ),
     3: (
-      <div className="step-card">
+      <div className="shop-s1-step-card">
 
         <div className="dropzone" onClick={() => !isUploading && document.getElementById('fileInput')?.click()}>
           <FiUploadCloud className="upload-icon" />
@@ -265,7 +265,7 @@ const Upload = ({ shopData }) => {
         <div className="shop-upload-pic-header">
           <img src={up1} className="shop-upload-pic" alt="Shop" />
         </div>
-        <div className="form-container">
+        <div className="shop-s1-form-container">
           {renderStepContent[currentStep]}
 
           <div className="form-navigation">

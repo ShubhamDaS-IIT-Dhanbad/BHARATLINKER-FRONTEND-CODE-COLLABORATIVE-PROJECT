@@ -6,23 +6,30 @@ const client = new Client()
 
 const functions = new Functions(client);
 
-const handleSendEmail = async ({to,type,orderId,orderDetails,address,phoneNumber}) => {
+const handleSendEmail = async ({ to, type, orderDetails, address, phoneNumber }) => {
+  // Ensure orderDetails is an array of order IDs or objects
   const emailBody = JSON.stringify({
-    to: to,
+    to,
     type,
-    orderId,orderDetails,address,phoneNumber
+    orderDetails, // Can be an array of order IDs or detailed objects
+    address,
+    phoneNumber
   });
+
   try {
+    console.log("Sending email with data:", emailBody); // Debug log
+
     const result = await functions.createExecution(
       '678f6501000fad7c34c5',
-      emailBody, 
-      false,
-      "/sendmail"
+      emailBody,
+      false
     );
+
+    console.log('Email function execution result:', result);
   } catch (error) {
     console.error('Error sending email:', error);
   } finally {
-    console.log("email")
+    console.log("Email function execution attempted");
   }
 };
 

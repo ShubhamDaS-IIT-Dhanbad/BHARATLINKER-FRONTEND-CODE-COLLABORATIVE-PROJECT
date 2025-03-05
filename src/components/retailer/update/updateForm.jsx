@@ -143,7 +143,6 @@ const UpdateForm = ({ shopData, product }) => {
             updatedFields,
             files
         );
-        // Dispatch the updated product data
         dispatch(updateProduct({ productId: product.$id, updatedData }));
 
         setUploadStatus('success');
@@ -159,22 +158,22 @@ const UpdateForm = ({ shopData, product }) => {
 
 
   const handleDelete = async () => {
-    // if (!window.confirm('Are you sure you want to delete this product?')) return;
-    // setIsDeleting(true);
-    // try {
-    //   await shopProduct.deleteShopProduct(product.$id, product.images);
-    //   dispatch(deleteProduct({ productId: product.$id }));
-    //   navigate(-1);
-    // } catch (error) {
-    //   console.error('Product deletion failed:', error);
-    // } finally {
-    //   setIsDeleting(false);
-    // }
+    if (!window.confirm('Are you sure you want to delete this product?')) return;
+    setIsDeleting(true);
+    try {
+      await shopProduct.deleteShopProduct(product.$id, product.images);
+      dispatch(deleteProduct({ productId: product.$id }));
+      navigate(-1);
+    } catch (error) {
+      console.error('Product deletion failed:', error);
+    } finally {
+      setIsDeleting(false);
+    }
   };
 
   const renderStepContent = () => {
     return (
-      <div className="step-card">
+      <div className="shop-s1-step-card">
         {currentStep === 1 && (
           <>
             <div className="shop-upload-1-desc">Upload product details for an accurate and engaging presentation.</div>
@@ -251,7 +250,7 @@ const UpdateForm = ({ shopData, product }) => {
     <div className="multi-step-form">
       {isUploading && <div className="overlay" />}
       <div className="shop-upload-pic-header"><img src={up1} className="shop-upload-pic" alt="Shop header" /></div>
-      <div className="form-container">
+      <div className="shop-s1-form-container">
         {renderStepContent()}
         <div className="form-navigation">
           {currentStep > 1 ? (
