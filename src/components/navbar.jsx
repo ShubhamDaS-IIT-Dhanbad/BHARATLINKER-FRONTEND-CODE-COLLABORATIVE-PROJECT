@@ -54,7 +54,7 @@ const Navbar = ({ headerTitle, shopId }) => {
         ` " Moong Dal other pulses " `,
         ` " iPhone 14 Pro Max " `,
         ` " Whole Wheat Flour (Atta) " `,
-        ` " Sugar " `,
+        ` " Sugar , Honey , Salt , Turmeric etc... " ` ,
         ` " Turmeric Powder " `,
         ` " Tea Leaves " `,
         ` " Cooking Salt " `,
