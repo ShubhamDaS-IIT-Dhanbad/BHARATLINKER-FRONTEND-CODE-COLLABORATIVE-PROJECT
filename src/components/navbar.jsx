@@ -51,22 +51,28 @@ const Navbar = ({ headerTitle, shopId }) => {
         `" jewelry store "`,
         `" pet store "`
     ] : [
-        ` " Moong Dal other pulses " `,
         ` " iPhone 14 Pro Max " `,
-        ` " Whole Wheat Flour (Atta) " `,
-        ` " Sugar , Honey , Salt , Turmeric etc... " ` ,
-        ` " Turmeric Powder " `,
-        ` " Tea Leaves " `,
-        ` " Cooking Salt " `,
+        ` " Moong Dal Other Pulses " `,
         ` " Samsung Galaxy S23 Mobile " `,
+        ` " Whole Wheat Flour (Atta) " `,
         ` " Air Conditioner " `,
-        ` " Kacchi Ghani Sarso Tel " `,
+        
+        ` " iPhone 14 Pro Max " `,
+        ` " Sugar , Honey , Salt , Turmeric etc... " `,
         ` " Apple AirPods Pro Ear Buds " `,
+        ` " Turmeric Powder " `,
+        ` " Dell/Lenovo  Laptop " `,
         ` " OnePlus Nord 3 Mobile " `,
-        ` " Basmati Rice " `,
-        ` " Besan (Gram Flour) " `
+        ` " Tea Leaves " `,
+        ` " i5 intel Gaming Laptop " `,
+        ` " Cooking Salt " `,
+        ` " Smart TV " `,
+        ` " OnePlus Nord 3 Mobile " `,
+        ` " Kacchi Ghani Sarso Tel " `,
+        ` " Wireless Earbuds " `
 
-    ];
+
+    ]
 
     const handleRetailerClick = useCallback(() => {
         const retailerCookie = Cookies.get('BharatLinkerShopData');
