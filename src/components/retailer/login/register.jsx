@@ -6,9 +6,10 @@ import { registerShop } from '../../../appWrite/shop/shopData.js';
 import Cookies from 'js-cookie';
 import { IoCloseCircleOutline } from "react-icons/io5";
 import { GoChevronLeft } from "react-icons/go";
-import sd from '../asset/sd.png';
 import './login.css';
 
+
+const sd="https://res.cloudinary.com/demc9mecm/image/upload/v1741231642/sd_ivpyyo.webp";
 const SignUpForm = React.memo(({ setPage }) => {
   const navigate = useNavigate();
   const [phoneNumber, setPhoneNumber] = useState('');

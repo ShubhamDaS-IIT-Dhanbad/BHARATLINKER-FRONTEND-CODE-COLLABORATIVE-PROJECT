@@ -3,9 +3,7 @@ import { FiUploadCloud } from 'react-icons/fi';
 import shopProduct from '../../../appWrite/shop/shopProduct.js';
 import { Oval } from 'react-loader-spinner';
 
-import up1 from '../asset/up3.png';
-
-
+const up1='https://res.cloudinary.com/demc9mecm/image/upload/v1741231626/up3_hxulzt.webp';
 const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
 const MAX_FILES = 3;
 const MAX_TITLE_LENGTH = 300;

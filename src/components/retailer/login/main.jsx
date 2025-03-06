@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import './main.css';
 import Login from './login.jsx';
 import Register from './register.jsx';
-import sd from '../asset/sd.png';
+
+
+const sd="https://res.cloudinary.com/demc9mecm/image/upload/v1741231642/sd_ivpyyo.webp";
 function Main() {
   const [page, setPage] = useState("default");
 

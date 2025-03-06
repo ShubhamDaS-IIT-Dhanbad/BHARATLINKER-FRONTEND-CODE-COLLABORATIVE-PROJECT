@@ -5,8 +5,8 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import shopProduct from '../../../appWrite/shop/shopProduct.js';
 import { updateProduct, deleteProduct } from '../../../redux/features/retailer/product.jsx';
-import up1 from '../asset/up3.png';
 
+const up1 = 'https://res.cloudinary.com/demc9mecm/image/upload/v1741231626/up3_hxulzt.webp';
 const MAX_LENGTHS = { TITLE: 500, DESCRIPTION: 2000, KEYWORDS: 50 };
 const MAX_IMAGES = 3;
 const MAX_FILE_SIZE = 5 * 1024 * 1024;

@@ -9,12 +9,14 @@ import {
   resetShopOrders 
 } from "../../../redux/features/retailer/orderSlice.jsx";
 import OrderProductCard from "./orderProductCard";
-import e1 from "./e1.png";
 import RetailerOrderDetail from '../orderDetail/orderDetail.jsx';
 import { LuRefreshCcw } from "react-icons/lu";
 import { FaChevronLeft } from "react-icons/fa";
 import "./order.css";
 
+
+
+import e1 from "./e1.png";
 function Order({ shopData }) {
   const [selectedOrderId, setSelectedOrderId] = useState(null);
   const [selectedOrderType, setSelectedOrderType] = useState("pending");

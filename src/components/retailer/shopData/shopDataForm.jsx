@@ -6,8 +6,9 @@ import Cookies from "js-cookie";
 import { Oval } from "react-loader-spinner";
 import { updateShopImagesAndData } from "../../../appWrite/shop/shopData.js";
 import "./shopData.css";
-import sd1 from '../asset/r1.png'
 
+
+const sd1='https://res.cloudinary.com/demc9mecm/image/upload/v1741231650/shopdata_dwtbs7.webp';
 const MAX_LENGTHS = {
   shopName: 50,
   shopDescription: 2000,

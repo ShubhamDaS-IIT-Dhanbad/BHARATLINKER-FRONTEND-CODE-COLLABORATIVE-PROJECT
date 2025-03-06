@@ -14,10 +14,11 @@ import { GrDocumentImage } from "react-icons/gr";
 import { MdOutlineWorkspacePremium } from "react-icons/md";
 import useRetailerAuthHook from "../../hooks/retailerAuthHook.jsx";
 import Password from "./password/password.jsx";
-import shopIllustration from "./asset/r1.png";
 import { fetchShopDataByAttribute } from '../../appWrite/shop/shopData.js';
 import "./style/shopHome.css";
 
+
+const shopIllustration = "https://res.cloudinary.com/demc9mecm/image/upload/v1741231627/r1_izwzvg.webp";
 const Profile = ({ shopData }) => {
   const navigate = useNavigate();
   const { updateShopCookie, updateShopCookieOnly, logout } = useRetailerAuthHook();

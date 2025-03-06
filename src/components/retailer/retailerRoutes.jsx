@@ -1,5 +1,5 @@
-import React, { Suspense} from "react";
-import { Routes, Route} from "react-router-dom";
+import React, { Suspense } from "react";
+import { Routes, Route } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
 import { Oval } from "react-loader-spinner";
 import useRetailerAuthHook from '../../hooks/retailerAuthHook.jsx'
@@ -23,9 +23,11 @@ const RetailerRoutes = React.memo(() => {
   return (
     <Suspense
       fallback={
-        <div className="fallback-loading">
-          <Oval height={30} width={30} color="green" secondaryColor="white" ariaLabel="loading" />
-        </div>
+        <div className="loading-shd-div-container">
+          <div className="loading-shd-div">
+            <Oval height={30} width={30} color="green" secondaryColor="white" />
+          </div>
+        </div >
       }
     >
       <Routes>
