@@ -110,7 +110,7 @@ const retailerProductsSlice = createSlice({
             }
         },
         deleteProduct: (state, action) => {
-            const productId = action.payload;
+            const {productId} = action.payload;
             state.products = state.products.filter((product) => product.$id !== productId);
         },
     },
