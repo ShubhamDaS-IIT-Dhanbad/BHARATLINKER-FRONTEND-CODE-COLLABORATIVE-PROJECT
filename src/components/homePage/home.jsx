@@ -83,20 +83,20 @@ const Home = () => {
                         <RiHome3Fill size={20} />
                     </div>
                 </div>
-                <FooterButton 
-                    icon={<AiFillProduct size={20} />} 
-                    label="Products" 
-                    onClick={() => navigate('/search')} 
+                <FooterButton
+                    icon={<AiFillProduct size={20} />}
+                    label="Products"
+                    onClick={() => navigate('/search')}
                 />
-                <FooterButton 
-                    icon={<AiFillShop size={20} />} 
-                    label="Shop" 
-                    onClick={() => navigate('/shop')} 
+                <FooterButton
+                    icon={<AiFillShop size={20} />}
+                    label="Shop"
+                    onClick={() => navigate('/shop')}
                 />
-                <FooterButton 
-                    icon={<TbCircleLetterBFilled size={20} />} 
-                    label="bharat linker" 
-                    onClick={() => navigate('/bharatlinker/search')} 
+                <FooterButton
+                    icon={<TbCircleLetterBFilled size={20} />}
+                    label="bharat linker"
+                    onClick={() => navigate('/bharatlinker/search')}
                 />
             </div>
 
@@ -104,9 +104,34 @@ const Home = () => {
                 {howItWorksInView && (
                     <React.Suspense fallback={<div></div>}>
                         <HowItWorks />
+                        <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+                            <div className="shop-info-message-rg">
+                                <p>We provide Software as a Service (SaaS), similar to Zepto and Blinkit, but with full control in the hands of individual retailers.</p>
+                            </div>
+                        </div>
+                        <div style={{ marginTop: "-30px",  display: "flex", justifyContent: "center", alignItems: "center" }}>
+                            <div className="shop-info-message-rg">
+
+                                <p>If someone, like Anish, wants to start a grocery delivery service in their village or small city, they can do so through our platform by creating a shop account. They can list products with all details, which will be visible to potential customers in their area. When an order is placed, Anish will receive a notification and handle everything from dispatch to delivery, empowering local businesses and driving the growth of e-commerce and quick commerce.</p>
+
+                            </div>
+                        </div>
+
+                        <div className='home-b-v'>
+
+                            <iframe className='home-b-v-iframe' src="https://www.youtube.com/embed/kOtgW_iUXCg"
+                                title="YouTube video player" frameborder="0" allowfullscreen>
+                            </iframe>
+
+                        </div>
+
                     </React.Suspense>
                 )}
             </div>
+
+
+
+
         </>
     );
 };
