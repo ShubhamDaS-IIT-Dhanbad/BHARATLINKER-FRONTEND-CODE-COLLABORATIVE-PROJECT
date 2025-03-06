@@ -147,24 +147,7 @@ const OrderDetails = ({ orderId, setSelectedOrderId }) => {
                             </div>
                         </div>
 
-                        {(order.state === "pending" || order.state === "confirmed") && (
-                            <button
-                                className={`retailer-order-detail-cancel-button ${isCancelling ? 'disabled' : ''}`}
-                                onClick={handleCancelOrder}
-                                disabled={isCancelling}
-                            >
-                                {isCancelling ? (
-                                    <Oval
-                                        height={20}
-                                        width={20}
-                                        color="#fff"
-                                        secondaryColor="#ccc"
-                                    />
-                                ) : (
-                                    "CANCEL ORDER"
-                                )}
-                            </button>
-                        )}
+                        
 
                         <div className="retailer-order-detail-order-info-section">
                             <div className="retailer-order-detail-info-group">

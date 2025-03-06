@@ -6,30 +6,31 @@
 
 //   return {
 //     plugins: [react()],
-//     base: isDevelopment ? '/' : 'https://shubhammkc.b-cdn.net/', 
+//     base: isDevelopment ? '/' : 'https://bharatlinker1-1.b-cdn.net/',
+
 //     server: {
-//       host: '0.0.0.0', 
+//       host: '0.0.0.0',
 //       port: 5173,
-//       strictPort: true, 
-//       cors: true, 
+//       strictPort: true,
+//       cors: true,      
 //     },
+
 //     build: {
-//       outDir: 'dist',
-//       sourcemap: true, 
-//       emptyOutDir: true, 
+//       outDir: 'dist',       
+//       sourcemap: false,      
+//       emptyOutDir: true,      
 //       rollupOptions: {
 //         output: {
 //           assetFileNames: 'assets/[name]-[hash][extname]', 
-//           chunkFileNames: 'assets/[name]-[hash].js',
-//           entryFileNames: 'assets/[name]-[hash].js', 
+//           chunkFileNames: 'assets/[name]-[hash].js',      
+//           entryFileNames: 'assets/[name]-[hash].js',  
 //         },
 //       },
 //     },
+
 //     root: '.',
 //   };
 // });
-
-
 
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react-swc';
