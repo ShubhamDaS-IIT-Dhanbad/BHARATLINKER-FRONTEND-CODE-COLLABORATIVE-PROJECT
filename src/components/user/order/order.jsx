@@ -22,7 +22,8 @@ const Order = ({ userData }) => {
     orders,
     hasMore,
     currentPage,
-    error
+    error,
+    lastFetchTimestamp
   } = useSelector((state) => state.userorders);
 
   const fetchInitialOrders = useCallback(() => {
@@ -48,7 +49,7 @@ const Order = ({ userData }) => {
   }, [navigate]);
 
   useEffect(() => {
-    fetchInitialOrders();
+    if(orders.length==0 && !loadinng) fetchInitialOrders();
   }, [fetchInitialOrders]);
 
   // Render orders
