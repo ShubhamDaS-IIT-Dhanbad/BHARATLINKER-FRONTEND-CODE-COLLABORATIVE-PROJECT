@@ -46,10 +46,22 @@ const ShopSpecialInput = React.memo(({ field, value = "", onChange, type = "text
     </fieldset>
   </div>
 ));
+const getImageUrl = (file, DEFAULT_IMAGE_URL = "https://example.com/default.jpg") => {
+  return file instanceof File 
+    ? URL.createObjectURL(file) 
+    : (() => {
+        const urlParts = file.split('/');
+        const publicIdWithExtension = urlParts.length > 0 ? urlParts[urlParts.length - 1] : '';
+        const publicId = publicIdWithExtension.includes('@X@XX@X@') 
+            ? publicIdWithExtension.split('@X@XX@X@')[1] 
+            : publicIdWithExtension;
 
+        return  publicId ? `https://bharatlinker.publit.io/file/${publicId}` : DEFAULT_IMAGE_URL;
+    })();
+};
 const ImagePreview = React.memo(({ file, onDelete }) => (
   <div className="shop-data-image-preview">
-    <img src={file instanceof File ? URL.createObjectURL(file) : file} alt="Preview" />
+    <img src={getImageUrl(file)} alt="Preview" />
     <button onClick={onDelete}>×</button>
   </div>
 ));

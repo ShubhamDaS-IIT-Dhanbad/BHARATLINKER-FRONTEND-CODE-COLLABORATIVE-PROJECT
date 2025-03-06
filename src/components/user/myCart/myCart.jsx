@@ -198,7 +198,7 @@ const MyCartPage = ({ userData }) => {
                                         return acc;
                                     }, {})
                                 ).map(([shopId, items]) => (
-                                    <div key={shopId} className="user-cart-items-section-filedset">
+                                    <div key={shopId} className="user-cart-items-section-filedset">{console.log(items)}
                                         {items.map((item) => (
                                             <OrderProductCard
                                                 key={item.$id}

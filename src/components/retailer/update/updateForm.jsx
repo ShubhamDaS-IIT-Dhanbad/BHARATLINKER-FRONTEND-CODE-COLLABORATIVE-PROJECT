@@ -98,7 +98,19 @@ const UpdateForm = ({ shopData, product }) => {
     });
     setFiles(prev => [...prev, ...newFiles].slice(0, MAX_IMAGES));
   };
-
+  const getImageUrl = (file, DEFAULT_IMAGE_URL = "https://example.com/default.jpg") => {
+    return file instanceof File 
+      ? URL.createObjectURL(file) 
+      : (() => {
+          const urlParts = file.split('/');
+          const publicIdWithExtension = urlParts.length > 0 ? urlParts[urlParts.length - 1] : '';
+          const publicId = publicIdWithExtension.includes('@X@XX@X@') 
+              ? publicIdWithExtension.split('@X@XX@X@')[1] 
+              : publicIdWithExtension;
+  
+          return  publicId ? `https://bharatlinker.publit.io/file/${publicId}` : DEFAULT_IMAGE_URL;
+      })();
+  };
   const removeFile = (index) => {
     setFiles(prev => {
       const file = prev[index];
@@ -235,7 +247,8 @@ const UpdateForm = ({ shopData, product }) => {
             <div className="preview-grid">
               {files.map((file, index) => (
                 <div key={index} className="image-preview">
-                  <img src={file instanceof File ? URL.createObjectURL(file) : file} alt={`Preview ${index}`} onError={(e) => { e.target.src = up1; }} />
+                  <img src={getImageUrl(file)}
+                    alt={`Preview ${index}`} onError={(e) => { e.target.src = up1; }} />
                   <button onClick={() => removeFile(index)} disabled={isUploading} aria-label="Remove image">×</button>
                 </div>
               ))}
