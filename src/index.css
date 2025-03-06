@@ -46,3 +46,14 @@ a {
 a:hover {
   text-decoration: underline;
 }
+
+
+
+.loading-shd-div-container{
+  height: 100vh;
+  display: flex;justify-content: center;align-items: center;
+}
+.loading-shd-div{
+  padding: 7px;border-radius: 50%;
+  box-shadow: rgba(28, 28, 28, 0.311) 0px 7px 29px 0px;
+}

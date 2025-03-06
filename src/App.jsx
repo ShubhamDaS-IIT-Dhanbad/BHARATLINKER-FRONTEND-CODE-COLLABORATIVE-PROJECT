@@ -44,7 +44,7 @@ const routes = {
     { path: "/shop/:shopId", component: SingleShopCard, title: "Shop Details - Bharat Linker", desc: "Discover detailed information about this shop on Bharat Linker." },
     { path: "/shop/product/:shopId", component: ShopProducts, title: "Shop Products - Bharat Linker", desc: "View products from this shop on Bharat Linker." },
     { path: "/secure/login", component: RetailerLogin, title: "Retailer Login - BharatLinker", desc: "Login to your BharatLinker Retailer account and manage your business effectively." },
-   { path: "/*", component: RetailerRoutes, title: "Retailer Dashboard - Bharat Linker", desc: "Access the retailer dashboard to manage your shop, products, and orders on Bharat Linker." },
+    { path: "/*", component: RetailerRoutes, title: "Retailer Dashboard - Bharat Linker", desc: "Access the retailer dashboard to manage your shop, products, and orders on Bharat Linker." },
   ],
   private: [
     { path: "/user", component: User, title: "User Dashboard - Bharat Linker", desc: "Access your Bharat Linker user dashboard to manage your account, orders, and more." },
@@ -59,9 +59,11 @@ function App() {
     <HelmetProvider>
       <Router>
         <Suspense fallback={
-          <div className="fallback-loading">
-            <Oval height={30} width={30} color="green" secondaryColor="white" ariaLabel="loading" />
-          </div>
+          <div className="loading-shd-div-container">
+            <div className="loading-shd-div">
+              <Oval height={30} width={30} color="green" secondaryColor="white" />
+            </div>
+          </div >
         }>
           <RoutesWithConditionalHeader />
         </Suspense>
