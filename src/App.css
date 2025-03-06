@@ -39,7 +39,7 @@
 }
 .search-not-found p {
   display: flex;font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-  flex-direction: column;color: #0c0c0c50;
+  flex-direction: column;color: #ffffff50;
   align-items: center;text-align: center;
 }
 #no-products-image {

@@ -9,7 +9,7 @@ import { GoChevronLeft } from "react-icons/go";
 import './login.css';
 
 
-const sd="https://res.cloudinary.com/demc9mecm/image/upload/v1741231642/sd_ivpyyo.webp";
+const sd = "https://res.cloudinary.com/demc9mecm/image/upload/v1741231642/sd_ivpyyo.webp";
 const SignUpForm = React.memo(({ setPage }) => {
   const navigate = useNavigate();
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -86,17 +86,17 @@ const SignUpForm = React.memo(({ setPage }) => {
     setState(s => ({ ...s, verifyingOtp: true, errorMessage: '' }));
     try {
       const { session } = await verifyOTP(state.userId, state.otp.join(''), `91${phoneNumber}`);
-      
+
       const shopData = await registerShop(phoneNumber, shopPassword, shopName);
-      
+
       if (shopData) {
         setCookiesAndNavigate(session, shopData);
       } else {
         throw new Error('Shop registration failed');
       }
     } catch (error) {
-      setState(s => ({ 
-        ...s, 
+      setState(s => ({
+        ...s,
         errorMessage: error.message || 'Invalid OTP or registration failed. Please try again.',
         otp: Array(6).fill('')
       }));
@@ -205,17 +205,17 @@ const SignUpForm = React.memo(({ setPage }) => {
               autoComplete="off"
             />
           </div>
-          <ActionButton 
-            onClick={handleSendOTP} 
+          <ActionButton
+            onClick={handleSendOTP}
             disabled={
-              true||
-              state.loading || 
-              phoneNumber.length !== 10 || 
-              shopPassword.length !== 6 || 
-              !shopName || 
+              true ||
+              state.loading ||
+              phoneNumber.length !== 10 ||
+              shopPassword.length !== 6 ||
+              !shopName ||
               shopPassword !== confirmPassword
-            } 
-            text="SEND OTP" 
+            }
+            text="SEND OTP"
           />
         </>
       );
@@ -224,7 +224,7 @@ const SignUpForm = React.memo(({ setPage }) => {
     return (
       <div className='shop-login-otp-auth-form-container'>
         <div className='shop-login-otp-header'>
-          <div 
+          <div
             className='shop-login-auth-form-container-back-container'
             onClick={() => setState(s => ({ ...s, otpSent: false }))}
           >
@@ -257,16 +257,16 @@ const SignUpForm = React.memo(({ setPage }) => {
         />
         {state.isResendDisabled ? (
           <div className='shop-login-resend-otp'>
-            <button 
-              className='shop-login-otp-premium-button shop-login-secondary' 
+            <button
+              className='shop-login-otp-premium-button shop-login-secondary'
               disabled
             >
               Resend OTP ({state.timer}s)
             </button>
           </div>
         ) : (
-          <button 
-            className='shop-login-otp-premium-button shop-login-secondary' 
+          <button
+            className='shop-login-otp-premium-button shop-login-secondary'
             onClick={handleSendOTP}
           >
             Resend OTP
@@ -275,13 +275,13 @@ const SignUpForm = React.memo(({ setPage }) => {
       </div>
     );
   }, [
-    state, 
-    phoneNumber, 
-    shopName, 
-    shopPassword, 
-    confirmPassword, 
-    handleSendOTP, 
-    handleVerifyOTP, 
+    state,
+    phoneNumber,
+    shopName,
+    shopPassword,
+    confirmPassword,
+    handleSendOTP,
+    handleVerifyOTP,
     handleOtpChange
   ]);
 
@@ -301,16 +301,24 @@ const SignUpForm = React.memo(({ setPage }) => {
 
   return (
     <div className="shop-login-main-default-content">
-      <div className='shop-login-auth-form-container-back-container' 
-          onClick={() => setPage('default')}  >
-        <GoChevronLeft 
-          size={25} 
+      <div className='shop-login-auth-form-container-back-container'
+        onClick={() => setPage('default')}  >
+        <GoChevronLeft
+          size={25}
         />
       </div>
       <div className="shop-login-jmain-rocket-image-c">
         <img src={sd} alt="Rocket" className="shop-login-main-rocket-image" />
       </div>
       {renderInputForm()}
+
+      <div className="shop-info-message-rg">
+        <p>
+        We have not enabled this feature yet, as our tech team is small, and we are currently unable to handle or manage large amounts of data. Additionally, implementing it would incur higher costs. At this time, we are manually managing only potential shops that demonstrate profitability.  
+
+If you're interested, you can contact us via email at **bharatlinker@gmail.com** or reach out to our support team on WhatsApp at **+91 8250846979**. Please refrain from spamming. If we are occupied, we will get back to you as soon as possible.
+        </p>
+      </div>
       {state.errorMessage && (
         <div className="shop-login-premium-error-message">
           {state.errorMessage}

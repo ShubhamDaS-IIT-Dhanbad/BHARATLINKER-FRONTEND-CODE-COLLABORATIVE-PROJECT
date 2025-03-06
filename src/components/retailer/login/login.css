@@ -176,3 +176,18 @@
   margin-top: 20px;
   text-align: center;
 }
+
+
+
+
+
+.shop-info-message-rg {
+  background: #f5faff;
+  border: 1px solid #2874f0;
+  border-radius: 4px;
+  padding: 20px;width: 80vw;
+  margin: 20px 0;
+}
+.shop-info-message-rg p{
+  display: flex;
+}
