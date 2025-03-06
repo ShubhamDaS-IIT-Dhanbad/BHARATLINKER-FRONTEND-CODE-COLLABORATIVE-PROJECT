@@ -51,7 +51,7 @@ const Navbar = ({ headerTitle, shopId }) => {
         `" jewelry store "`,
         `" pet store "`
     ] : [
-        ` " Moong Dal " `,
+        ` " Moong Dal other pulses " `,
         ` " iPhone 14 Pro Max " `,
         ` " Whole Wheat Flour (Atta) " `,
         ` " Sugar " `,
