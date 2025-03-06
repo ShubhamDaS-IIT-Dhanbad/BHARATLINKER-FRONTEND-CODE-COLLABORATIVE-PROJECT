@@ -120,7 +120,7 @@ const Home = () => {
                         <div className='home-b-v'>
 
                             <iframe className='home-b-v-iframe' src="https://www.youtube.com/embed/kOtgW_iUXCg"
-                                title="YouTube video player" frameborder="0" allowfullscreen>
+                                title="YouTube video player" frameborder="0" >
                             </iframe>
 
                         </div>
