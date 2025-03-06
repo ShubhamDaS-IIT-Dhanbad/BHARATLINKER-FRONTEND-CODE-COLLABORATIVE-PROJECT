@@ -49,7 +49,7 @@ const Order = ({ userData }) => {
   }, [navigate]);
 
   useEffect(() => {
-    if(orders.length==0 && !loadinng) fetchInitialOrders();
+    if(orders.length==0 && !loading) fetchInitialOrders();
   }, [fetchInitialOrders]);
 
   // Render orders
