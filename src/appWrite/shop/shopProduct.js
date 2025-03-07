@@ -46,7 +46,7 @@ class ShopProduct {
       const { total } = await this.databases.listDocuments(
         conf.appwriteShopsDatabaseId,
         conf.appwriteShopsProductsCollectionId,
-        [Query.equal('shopId', productData.shopId), Query.limit(1)] // Optimized for count
+        [Query.equal('shopId', productData.shopId), Query.limit(1)]
       );
       if (total >= maxShopProduct) {
         throw new Error('You have reached the maximum product limit for your plan');

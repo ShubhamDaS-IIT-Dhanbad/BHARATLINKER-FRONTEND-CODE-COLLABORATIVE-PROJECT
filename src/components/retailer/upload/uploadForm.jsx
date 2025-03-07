@@ -151,7 +151,7 @@ const Upload = ({ shopData }) => {
 
     setIsUploading(true);
     try {
-      const maxShopProduct = 50;
+      const maxShopProduct = 10;
       await shopProduct.uploadShopProduct({ ...formData, coordinates }, files, maxShopProduct);
       setUploadStatus('success');
       setFormData({
