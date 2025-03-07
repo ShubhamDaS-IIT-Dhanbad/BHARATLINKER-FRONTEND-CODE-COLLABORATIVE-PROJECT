@@ -1,0 +1,17 @@
+shop.bharatlinker.twa.app-play-services-basement-18.3.0-0 C:\Users\shubh\.gradle\caches\8.8\transforms\15999475ebeb2c24a8350b8f771af836\transformed\play-services-basement-18.3.0\res
+shop.bharatlinker.twa.app-lifecycle-viewmodel-2.3.1-1 C:\Users\shubh\.gradle\caches\8.8\transforms\3a59547557c33f149091598428863d28\transformed\lifecycle-viewmodel-2.3.1\res
+shop.bharatlinker.twa.app-lifecycle-runtime-2.3.1-2 C:\Users\shubh\.gradle\caches\8.8\transforms\6848bc1b932ed47a6e9e13618b46efe2\transformed\lifecycle-runtime-2.3.1\res
+shop.bharatlinker.twa.app-play-services-base-18.3.0-3 C:\Users\shubh\.gradle\caches\8.8\transforms\ab08fb0ff0e883b8348c6fcbacc27c6f\transformed\play-services-base-18.3.0\res
+shop.bharatlinker.twa.app-browser-1.4.0-4 C:\Users\shubh\.gradle\caches\8.8\transforms\b511174c15fdde7dea3e957094b4390b\transformed\browser-1.4.0\res
+shop.bharatlinker.twa.app-androidbrowserhelper-2.5.0-5 C:\Users\shubh\.gradle\caches\8.8\transforms\d3335fbdff4200978ad121d7b141def7\transformed\androidbrowserhelper-2.5.0\res
+shop.bharatlinker.twa.app-billing-6.2.1-6 C:\Users\shubh\.gradle\caches\8.8\transforms\d417ce2645c1f65b8c845005c78dc697\transformed\billing-6.2.1\res
+shop.bharatlinker.twa.app-billing-1.0.0-alpha11-7 C:\Users\shubh\.gradle\caches\8.8\transforms\d52669c31af7f4a0c62ea4e14e77d275\transformed\billing-1.0.0-alpha11\res
+shop.bharatlinker.twa.app-savedstate-1.1.0-8 C:\Users\shubh\.gradle\caches\8.8\transforms\f6c27d4e5e305cd0c83eeb91765e2133\transformed\savedstate-1.1.0\res
+shop.bharatlinker.twa.app-core-1.2.0-9 C:\Users\shubh\.gradle\caches\8.8\transforms\feb8e2b099a13ef41f9cf940d6fd2758\transformed\core-1.2.0\res
+shop.bharatlinker.twa.app-pngs-10 C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\build\generated\res\pngs\release
+shop.bharatlinker.twa.app-resValues-11 C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\build\generated\res\resValues\release
+shop.bharatlinker.twa.app-packageReleaseResources-12 C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\build\intermediates\incremental\release\packageReleaseResources\merged.dir
+shop.bharatlinker.twa.app-packageReleaseResources-13 C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\build\intermediates\incremental\release\packageReleaseResources\stripped.dir
+shop.bharatlinker.twa.app-release-14 C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\build\intermediates\merged_res\release\mergeReleaseResources
+shop.bharatlinker.twa.app-main-15 C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\res
+shop.bharatlinker.twa.app-release-16 C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\release\res

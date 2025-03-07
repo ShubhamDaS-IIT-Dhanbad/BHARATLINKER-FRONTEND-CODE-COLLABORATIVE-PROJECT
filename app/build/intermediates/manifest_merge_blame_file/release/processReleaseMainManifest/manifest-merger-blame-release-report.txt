@@ -1,0 +1,434 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<!--
+3    Copyright 2019 Google Inc. All Rights Reserved.
+4
+5     Licensed under the Apache License, Version 2.0 (the "License");
+6     you may not use this file except in compliance with the License.
+7     You may obtain a copy of the License at
+8
+9         http://www.apache.org/licenses/LICENSE-2.0
+10
+11     Unless required by applicable law or agreed to in writing, software
+12     distributed under the License is distributed on an "AS IS" BASIS,
+13     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+14     See the License for the specific language governing permissions and
+15     limitations under the License.
+16-->
+17<!--
+18 The "package" attribute is rewritten by the Gradle build with the value of applicationId.
+19     It is still required here, as it is used to derive paths, for instance when referring
+20     to an Activity by ".MyActivity" instead of the full name. If more Activities are added to the
+21     application, the package attribute will need to reflect the correct path in order to use
+22     the abbreviated format.
+23-->
+24<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+25    package="shop.bharatlinker.twa"
+26    android:versionCode="1"
+27    android:versionName="1" >
+28
+29    <uses-sdk
+30        android:minSdkVersion="21"
+31        android:targetSdkVersion="35" />
+32
+33    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+33-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:26:9-80
+33-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:26:26-78
+34    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+34-->[com.google.androidbrowserhelper:locationdelegation:1.1.1] C:\Users\shubh\.gradle\caches\8.8\transforms\ad3286f937b2a8d61d644356a246454e\transformed\locationdelegation-1.1.1\AndroidManifest.xml:11:5-79
+34-->[com.google.androidbrowserhelper:locationdelegation:1.1.1] C:\Users\shubh\.gradle\caches\8.8\transforms\ad3286f937b2a8d61d644356a246454e\transformed\locationdelegation-1.1.1\AndroidManifest.xml:11:22-76
+35    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+35-->[com.google.androidbrowserhelper:locationdelegation:1.1.1] C:\Users\shubh\.gradle\caches\8.8\transforms\ad3286f937b2a8d61d644356a246454e\transformed\locationdelegation-1.1.1\AndroidManifest.xml:12:5-81
+35-->[com.google.androidbrowserhelper:locationdelegation:1.1.1] C:\Users\shubh\.gradle\caches\8.8\transforms\ad3286f937b2a8d61d644356a246454e\transformed\locationdelegation-1.1.1\AndroidManifest.xml:12:22-78
+36
+37    <queries>
+37-->[com.google.androidbrowserhelper:androidbrowserhelper:2.5.0] C:\Users\shubh\.gradle\caches\8.8\transforms\d3335fbdff4200978ad121d7b141def7\transformed\androidbrowserhelper-2.5.0\AndroidManifest.xml:26:5-34:15
+38        <intent>
+38-->[com.google.androidbrowserhelper:androidbrowserhelper:2.5.0] C:\Users\shubh\.gradle\caches\8.8\transforms\d3335fbdff4200978ad121d7b141def7\transformed\androidbrowserhelper-2.5.0\AndroidManifest.xml:27:9-33:18
+39            <action android:name="android.intent.action.VIEW" />
+39-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:140:17-68
+39-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:140:25-66
+40
+41            <category android:name="android.intent.category.BROWSABLE" />
+41-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:142:17-77
+41-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:142:27-75
+42
+43            <data android:scheme="https" />
+43-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:143:17-146:19
+43-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:143:23-45
+44        </intent>
+45        <intent>
+45-->[com.android.billingclient:billing:6.2.1] C:\Users\shubh\.gradle\caches\8.8\transforms\d417ce2645c1f65b8c845005c78dc697\transformed\billing-6.2.1\AndroidManifest.xml:13:9-15:18
+46            <action android:name="com.android.vending.billing.InAppBillingService.BIND" />
+46-->[com.android.billingclient:billing:6.2.1] C:\Users\shubh\.gradle\caches\8.8\transforms\d417ce2645c1f65b8c845005c78dc697\transformed\billing-6.2.1\AndroidManifest.xml:14:13-91
+46-->[com.android.billingclient:billing:6.2.1] C:\Users\shubh\.gradle\caches\8.8\transforms\d417ce2645c1f65b8c845005c78dc697\transformed\billing-6.2.1\AndroidManifest.xml:14:21-88
+47        </intent>
+48    </queries>
+49
+50    <uses-permission android:name="com.android.vending.BILLING" /> <!-- Although the *SdkVersion is captured in gradle build files, this is required for non gradle builds -->
+50-->[com.android.billingclient:billing:6.2.1] C:\Users\shubh\.gradle\caches\8.8\transforms\d417ce2645c1f65b8c845005c78dc697\transformed\billing-6.2.1\AndroidManifest.xml:10:5-67
+50-->[com.android.billingclient:billing:6.2.1] C:\Users\shubh\.gradle\caches\8.8\transforms\d417ce2645c1f65b8c845005c78dc697\transformed\billing-6.2.1\AndroidManifest.xml:10:22-64
+51    <!-- <uses-sdk android:minSdkVersion="14"/> -->
+52    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+52-->[com.google.android.datatransport:transport-backend-cct:3.1.8] C:\Users\shubh\.gradle\caches\8.8\transforms\686fe56e74446f381389de1544c0f1d4\transformed\transport-backend-cct-3.1.8\AndroidManifest.xml:24:5-79
+52-->[com.google.android.datatransport:transport-backend-cct:3.1.8] C:\Users\shubh\.gradle\caches\8.8\transforms\686fe56e74446f381389de1544c0f1d4\transformed\transport-backend-cct-3.1.8\AndroidManifest.xml:24:22-76
+53    <uses-permission android:name="android.permission.INTERNET" />
+53-->[com.google.android.datatransport:transport-backend-cct:3.1.8] C:\Users\shubh\.gradle\caches\8.8\transforms\686fe56e74446f381389de1544c0f1d4\transformed\transport-backend-cct-3.1.8\AndroidManifest.xml:25:5-67
+53-->[com.google.android.datatransport:transport-backend-cct:3.1.8] C:\Users\shubh\.gradle\caches\8.8\transforms\686fe56e74446f381389de1544c0f1d4\transformed\transport-backend-cct-3.1.8\AndroidManifest.xml:25:22-64
+54
+55    <application
+55-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:35:5-217:19
+56        android:name="shop.bharatlinker.twa.Application"
+56-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:36:9-35
+57        android:allowBackup="true"
+57-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:37:9-35
+58        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+58-->[androidx.core:core:1.2.0] C:\Users\shubh\.gradle\caches\8.8\transforms\feb8e2b099a13ef41f9cf940d6fd2758\transformed\core-1.2.0\AndroidManifest.xml:24:18-86
+59        android:extractNativeLibs="true"
+60        android:icon="@mipmap/ic_launcher"
+60-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:38:9-43
+61        android:label="@string/appName"
+61-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:39:9-40
+62        android:manageSpaceActivity="com.google.androidbrowserhelper.trusted.ManageDataLauncherActivity"
+62-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:41:9-105
+63        android:supportsRtl="true"
+63-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:43:9-35
+64        android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+64-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:44:9-68
+65        <meta-data
+65-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:46:9-48:58
+66            android:name="asset_statements"
+66-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:47:13-44
+67            android:resource="@string/assetStatements" />
+67-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:48:13-55
+68        <meta-data
+68-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:51:13-53:58
+69            android:name="web_manifest_url"
+69-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:52:17-48
+70            android:value="@string/webManifestUrl" />
+70-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:53:17-55
+71        <meta-data
+71-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:56:9-58:52
+72            android:name="twa_generator"
+72-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:57:13-41
+73            android:value="@string/generatorApp" />
+73-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:58:13-49
+74
+75        <activity android:name="com.google.androidbrowserhelper.trusted.ManageDataLauncherActivity" >
+75-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:65:13-69:24
+75-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:65:23-104
+76            <meta-data
+76-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:66:13-68:53
+77                android:name="android.support.customtabs.trusted.MANAGE_SPACE_URL"
+77-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:67:17-83
+78                android:value="@string/launchUrl" />
+78-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:68:17-50
+79        </activity>
+80        <activity
+80-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:72:9-150:20
+81            android:name="shop.bharatlinker.twa.LauncherActivity"
+81-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:72:19-50
+82            android:alwaysRetainTaskState="true"
+82-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:73:13-49
+83            android:exported="true"
+83-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:75:13-36
+84            android:label="@string/launcherName" >
+84-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:74:13-49
+85            <meta-data
+85-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:76:13-77:53
+86                android:name="android.support.customtabs.trusted.DEFAULT_URL"
+86-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:76:24-85
+87                android:value="@string/launchUrl" />
+87-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:77:17-50
+88            <meta-data
+88-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:79:13-81:58
+89                android:name="android.support.customtabs.trusted.STATUS_BAR_COLOR"
+89-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:80:17-83
+90                android:resource="@color/colorPrimary" />
+90-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:81:17-55
+91            <meta-data
+91-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:83:13-85:62
+92                android:name="android.support.customtabs.trusted.STATUS_BAR_COLOR_DARK"
+92-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:84:17-88
+93                android:resource="@color/colorPrimaryDark" />
+93-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:85:17-59
+94            <meta-data
+94-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:87:13-89:61
+95                android:name="android.support.customtabs.trusted.NAVIGATION_BAR_COLOR"
+95-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:88:17-87
+96                android:resource="@color/navigationColor" />
+96-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:89:17-58
+97            <meta-data
+97-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:91:13-93:65
+98                android:name="android.support.customtabs.trusted.NAVIGATION_BAR_COLOR_DARK"
+98-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:92:17-92
+99                android:resource="@color/navigationColorDark" />
+99-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:93:17-62
+100            <meta-data
+100-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:95:13-97:68
+101                android:name="androix.browser.trusted.NAVIGATION_BAR_DIVIDER_COLOR"
+101-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:96:17-84
+102                android:resource="@color/navigationDividerColor" />
+102-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:97:17-65
+103            <meta-data
+103-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:99:13-101:72
+104                android:name="androix.browser.trusted.NAVIGATION_BAR_DIVIDER_COLOR_DARK"
+104-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:100:17-89
+105                android:resource="@color/navigationDividerColorDark" />
+105-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:101:17-69
+106            <meta-data
+106-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:103:13-104:54
+107                android:name="android.support.customtabs.trusted.SPLASH_IMAGE_DRAWABLE"
+107-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:103:24-95
+108                android:resource="@drawable/splash" />
+108-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:104:17-52
+109            <meta-data
+109-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:106:13-107:60
+110                android:name="android.support.customtabs.trusted.SPLASH_SCREEN_BACKGROUND_COLOR"
+110-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:106:24-104
+111                android:resource="@color/backgroundColor" />
+111-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:107:17-58
+112            <meta-data
+112-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:109:13-110:71
+113                android:name="android.support.customtabs.trusted.SPLASH_SCREEN_FADE_OUT_DURATION"
+113-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:109:24-105
+114                android:value="@integer/splashScreenFadeOutDuration" />
+114-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:110:17-69
+115            <meta-data
+115-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:112:13-113:60
+116                android:name="android.support.customtabs.trusted.FILE_PROVIDER_AUTHORITY"
+116-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:112:24-97
+117                android:value="@string/providerAuthority" />
+117-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:113:17-58
+118            <meta-data
+118-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:115:13-97
+119                android:name="android.app.shortcuts"
+119-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:115:24-60
+120                android:resource="@xml/shortcuts" />
+120-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:115:61-94
+121            <meta-data
+121-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:117:13-118:56
+122                android:name="android.support.customtabs.trusted.FALLBACK_STRATEGY"
+122-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:117:24-91
+123                android:value="@string/fallbackType" />
+123-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:118:17-53
+124            <meta-data
+124-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:123:13-124:45
+125                android:name="android.support.customtabs.trusted.DISPLAY_MODE"
+125-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:123:24-86
+126                android:value="immersive" />
+126-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:124:17-42
+127            <meta-data
+127-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:127:13-128:54
+128                android:name="android.support.customtabs.trusted.SCREEN_ORIENTATION"
+128-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:127:24-92
+129                android:value="@string/orientation" />
+129-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:128:17-52
+130
+131            <intent-filter>
+131-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:134:13-137:29
+132                <action android:name="android.intent.action.MAIN" />
+132-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:135:17-69
+132-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:135:25-66
+133
+134                <category android:name="android.intent.category.LAUNCHER" />
+134-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:136:17-77
+134-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:136:27-74
+135            </intent-filter>
+136            <intent-filter android:autoVerify="true" >
+136-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:139:13-147:29
+136-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:139:28-53
+137                <action android:name="android.intent.action.VIEW" />
+137-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:140:17-68
+137-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:140:25-66
+138
+139                <category android:name="android.intent.category.DEFAULT" />
+139-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:141:17-76
+139-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:141:27-73
+140                <category android:name="android.intent.category.BROWSABLE" />
+140-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:142:17-77
+140-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:142:27-75
+141
+142                <data
+142-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:143:17-146:19
+143                    android:host="@string/hostName"
+143-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:144:21-52
+144                    android:scheme="https" />
+144-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:143:23-45
+145            </intent-filter>
+146        </activity>
+147        <activity android:name="com.google.androidbrowserhelper.trusted.FocusActivity" />
+147-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:152:9-90
+147-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:152:19-87
+148        <activity
+148-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:154:9-155:62
+149            android:name="com.google.androidbrowserhelper.trusted.WebViewFallbackActivity"
+149-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:154:19-97
+150            android:configChanges="orientation|screenSize" />
+150-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:155:13-59
+151
+152        <provider
+152-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:157:9-165:20
+153            android:name="androidx.core.content.FileProvider"
+153-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:158:13-62
+154            android:authorities="@string/providerAuthority"
+154-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:159:13-60
+155            android:exported="false"
+155-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:161:13-37
+156            android:grantUriPermissions="true" >
+156-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:160:13-47
+157            <meta-data
+157-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:162:13-164:53
+158                android:name="android.support.FILE_PROVIDER_PATHS"
+158-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:163:17-67
+159                android:resource="@xml/filepaths" />
+159-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:164:17-50
+160        </provider>
+161
+162        <service
+162-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:167:9-182:19
+163            android:name="shop.bharatlinker.twa.DelegationService"
+163-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:168:13-46
+164            android:enabled="@bool/enableNotification"
+164-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:169:13-55
+165            android:exported="@bool/enableNotification" >
+165-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:170:13-56
+166            <meta-data
+166-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:173:17-175:73
+167                android:name="android.support.customtabs.trusted.SMALL_ICON"
+167-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:174:21-81
+168                android:resource="@drawable/ic_notification_icon" />
+168-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:175:21-70
+169
+170            <intent-filter>
+170-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:178:13-181:29
+171                <action android:name="android.support.customtabs.trusted.TRUSTED_WEB_ACTIVITY_SERVICE" />
+171-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:179:17-105
+171-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:179:25-103
+172
+173                <category android:name="android.intent.category.DEFAULT" />
+173-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:141:17-76
+173-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:141:27-73
+174            </intent-filter>
+175        </service>
+176
+177        <activity android:name="com.google.androidbrowserhelper.trusted.NotificationPermissionRequestActivity" />
+177-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:185:13-118
+177-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:185:23-115
+178        <activity android:name="com.google.androidbrowserhelper.locationdelegation.PermissionRequestActivity" />
+178-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:189:13-190:89
+178-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:189:23-123
+179        <activity
+179-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:193:9-206:20
+180            android:name="com.google.androidbrowserhelper.playbilling.provider.PaymentActivity"
+180-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:194:13-96
+181            android:configChanges="keyboardHidden|keyboard|orientation|screenLayout|screenSize"
+181-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:196:13-96
+182            android:exported="true"
+182-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:197:13-36
+183            android:theme="@android:style/Theme.Translucent.NoTitleBar" >
+183-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:195:13-72
+184            <intent-filter>
+184-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:199:13-201:29
+185                <action android:name="org.chromium.intent.action.PAY" />
+185-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:200:17-73
+185-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:200:25-70
+186            </intent-filter>
+187
+188            <meta-data
+188-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:203:13-205:67
+189                android:name="org.chromium.default_payment_method_name"
+189-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:204:17-72
+190                android:value="https://play.google.com/billing" />
+190-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:205:17-64
+191        </activity>
+192
+193        <!-- This service checks who calls it at runtime. -->
+194        <service
+194-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:209:9-215:19
+195            android:name="com.google.androidbrowserhelper.playbilling.provider.PaymentService"
+195-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:210:13-95
+196            android:exported="true" >
+196-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:211:13-36
+197            <intent-filter>
+197-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:212:13-214:29
+198                <action android:name="org.chromium.intent.action.IS_READY_TO_PAY" />
+198-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:213:17-85
+198-->C:\Users\shubh\OneDrive\Desktop\FbharatLinker\bharatlinker\app\src\main\AndroidManifest.xml:213:25-82
+199            </intent-filter>
+200        </service>
+201
+202        <meta-data
+202-->[com.android.billingclient:billing:6.2.1] C:\Users\shubh\.gradle\caches\8.8\transforms\d417ce2645c1f65b8c845005c78dc697\transformed\billing-6.2.1\AndroidManifest.xml:19:9-21:37
+203            android:name="com.google.android.play.billingclient.version"
+203-->[com.android.billingclient:billing:6.2.1] C:\Users\shubh\.gradle\caches\8.8\transforms\d417ce2645c1f65b8c845005c78dc697\transformed\billing-6.2.1\AndroidManifest.xml:20:13-73
+204            android:value="6.2.1" />
+204-->[com.android.billingclient:billing:6.2.1] C:\Users\shubh\.gradle\caches\8.8\transforms\d417ce2645c1f65b8c845005c78dc697\transformed\billing-6.2.1\AndroidManifest.xml:21:13-34
+205
+206        <activity
+206-->[com.android.billingclient:billing:6.2.1] C:\Users\shubh\.gradle\caches\8.8\transforms\d417ce2645c1f65b8c845005c78dc697\transformed\billing-6.2.1\AndroidManifest.xml:23:9-27:75
+207            android:name="com.android.billingclient.api.ProxyBillingActivity"
+207-->[com.android.billingclient:billing:6.2.1] C:\Users\shubh\.gradle\caches\8.8\transforms\d417ce2645c1f65b8c845005c78dc697\transformed\billing-6.2.1\AndroidManifest.xml:24:13-78
+208            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+208-->[com.android.billingclient:billing:6.2.1] C:\Users\shubh\.gradle\caches\8.8\transforms\d417ce2645c1f65b8c845005c78dc697\transformed\billing-6.2.1\AndroidManifest.xml:25:13-96
+209            android:exported="false"
+209-->[com.android.billingclient:billing:6.2.1] C:\Users\shubh\.gradle\caches\8.8\transforms\d417ce2645c1f65b8c845005c78dc697\transformed\billing-6.2.1\AndroidManifest.xml:26:13-37
+210            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+210-->[com.android.billingclient:billing:6.2.1] C:\Users\shubh\.gradle\caches\8.8\transforms\d417ce2645c1f65b8c845005c78dc697\transformed\billing-6.2.1\AndroidManifest.xml:27:13-72
+211        <activity
+211-->[com.android.billingclient:billing:6.2.1] C:\Users\shubh\.gradle\caches\8.8\transforms\d417ce2645c1f65b8c845005c78dc697\transformed\billing-6.2.1\AndroidManifest.xml:28:9-32:75
+212            android:name="com.android.billingclient.api.ProxyBillingActivityV2"
+212-->[com.android.billingclient:billing:6.2.1] C:\Users\shubh\.gradle\caches\8.8\transforms\d417ce2645c1f65b8c845005c78dc697\transformed\billing-6.2.1\AndroidManifest.xml:29:13-80
+213            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+213-->[com.android.billingclient:billing:6.2.1] C:\Users\shubh\.gradle\caches\8.8\transforms\d417ce2645c1f65b8c845005c78dc697\transformed\billing-6.2.1\AndroidManifest.xml:30:13-96
+214            android:exported="false"
+214-->[com.android.billingclient:billing:6.2.1] C:\Users\shubh\.gradle\caches\8.8\transforms\d417ce2645c1f65b8c845005c78dc697\transformed\billing-6.2.1\AndroidManifest.xml:31:13-37
+215            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+215-->[com.android.billingclient:billing:6.2.1] C:\Users\shubh\.gradle\caches\8.8\transforms\d417ce2645c1f65b8c845005c78dc697\transformed\billing-6.2.1\AndroidManifest.xml:32:13-72
+216        <activity
+216-->[com.google.android.gms:play-services-base:18.3.0] C:\Users\shubh\.gradle\caches\8.8\transforms\ab08fb0ff0e883b8348c6fcbacc27c6f\transformed\play-services-base-18.3.0\AndroidManifest.xml:20:9-22:45
+217            android:name="com.google.android.gms.common.api.GoogleApiActivity"
+217-->[com.google.android.gms:play-services-base:18.3.0] C:\Users\shubh\.gradle\caches\8.8\transforms\ab08fb0ff0e883b8348c6fcbacc27c6f\transformed\play-services-base-18.3.0\AndroidManifest.xml:20:19-85
+218            android:exported="false"
+218-->[com.google.android.gms:play-services-base:18.3.0] C:\Users\shubh\.gradle\caches\8.8\transforms\ab08fb0ff0e883b8348c6fcbacc27c6f\transformed\play-services-base-18.3.0\AndroidManifest.xml:22:19-43
+219            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+219-->[com.google.android.gms:play-services-base:18.3.0] C:\Users\shubh\.gradle\caches\8.8\transforms\ab08fb0ff0e883b8348c6fcbacc27c6f\transformed\play-services-base-18.3.0\AndroidManifest.xml:21:19-78
+220
+221        <meta-data
+221-->[com.google.android.gms:play-services-basement:18.3.0] C:\Users\shubh\.gradle\caches\8.8\transforms\15999475ebeb2c24a8350b8f771af836\transformed\play-services-basement-18.3.0\AndroidManifest.xml:21:9-23:69
+222            android:name="com.google.android.gms.version"
+222-->[com.google.android.gms:play-services-basement:18.3.0] C:\Users\shubh\.gradle\caches\8.8\transforms\15999475ebeb2c24a8350b8f771af836\transformed\play-services-basement-18.3.0\AndroidManifest.xml:22:13-58
+223            android:value="@integer/google_play_services_version" />
+223-->[com.google.android.gms:play-services-basement:18.3.0] C:\Users\shubh\.gradle\caches\8.8\transforms\15999475ebeb2c24a8350b8f771af836\transformed\play-services-basement-18.3.0\AndroidManifest.xml:23:13-66
+224
+225        <service
+225-->[com.google.android.datatransport:transport-backend-cct:3.1.8] C:\Users\shubh\.gradle\caches\8.8\transforms\686fe56e74446f381389de1544c0f1d4\transformed\transport-backend-cct-3.1.8\AndroidManifest.xml:28:9-34:19
+226            android:name="com.google.android.datatransport.runtime.backends.TransportBackendDiscovery"
+226-->[com.google.android.datatransport:transport-backend-cct:3.1.8] C:\Users\shubh\.gradle\caches\8.8\transforms\686fe56e74446f381389de1544c0f1d4\transformed\transport-backend-cct-3.1.8\AndroidManifest.xml:29:13-103
+227            android:exported="false" >
+227-->[com.google.android.datatransport:transport-backend-cct:3.1.8] C:\Users\shubh\.gradle\caches\8.8\transforms\686fe56e74446f381389de1544c0f1d4\transformed\transport-backend-cct-3.1.8\AndroidManifest.xml:30:13-37
+228            <meta-data
+228-->[com.google.android.datatransport:transport-backend-cct:3.1.8] C:\Users\shubh\.gradle\caches\8.8\transforms\686fe56e74446f381389de1544c0f1d4\transformed\transport-backend-cct-3.1.8\AndroidManifest.xml:31:13-33:39
+229                android:name="backend:com.google.android.datatransport.cct.CctBackendFactory"
+229-->[com.google.android.datatransport:transport-backend-cct:3.1.8] C:\Users\shubh\.gradle\caches\8.8\transforms\686fe56e74446f381389de1544c0f1d4\transformed\transport-backend-cct-3.1.8\AndroidManifest.xml:32:17-94
+230                android:value="cct" />
+230-->[com.google.android.datatransport:transport-backend-cct:3.1.8] C:\Users\shubh\.gradle\caches\8.8\transforms\686fe56e74446f381389de1544c0f1d4\transformed\transport-backend-cct-3.1.8\AndroidManifest.xml:33:17-36
+231        </service>
+232        <service
+232-->[com.google.android.datatransport:transport-runtime:3.1.8] C:\Users\shubh\.gradle\caches\8.8\transforms\e9aeb3a12b317415ea9135db88269d91\transformed\transport-runtime-3.1.8\AndroidManifest.xml:26:9-30:19
+233            android:name="com.google.android.datatransport.runtime.scheduling.jobscheduling.JobInfoSchedulerService"
+233-->[com.google.android.datatransport:transport-runtime:3.1.8] C:\Users\shubh\.gradle\caches\8.8\transforms\e9aeb3a12b317415ea9135db88269d91\transformed\transport-runtime-3.1.8\AndroidManifest.xml:27:13-117
+234            android:exported="false"
+234-->[com.google.android.datatransport:transport-runtime:3.1.8] C:\Users\shubh\.gradle\caches\8.8\transforms\e9aeb3a12b317415ea9135db88269d91\transformed\transport-runtime-3.1.8\AndroidManifest.xml:28:13-37
+235            android:permission="android.permission.BIND_JOB_SERVICE" >
+235-->[com.google.android.datatransport:transport-runtime:3.1.8] C:\Users\shubh\.gradle\caches\8.8\transforms\e9aeb3a12b317415ea9135db88269d91\transformed\transport-runtime-3.1.8\AndroidManifest.xml:29:13-69
+236        </service>
+237
+238        <receiver
+238-->[com.google.android.datatransport:transport-runtime:3.1.8] C:\Users\shubh\.gradle\caches\8.8\transforms\e9aeb3a12b317415ea9135db88269d91\transformed\transport-runtime-3.1.8\AndroidManifest.xml:32:9-34:40
+239            android:name="com.google.android.datatransport.runtime.scheduling.jobscheduling.AlarmManagerSchedulerBroadcastReceiver"
+239-->[com.google.android.datatransport:transport-runtime:3.1.8] C:\Users\shubh\.gradle\caches\8.8\transforms\e9aeb3a12b317415ea9135db88269d91\transformed\transport-runtime-3.1.8\AndroidManifest.xml:33:13-132
+240            android:exported="false" />
+240-->[com.google.android.datatransport:transport-runtime:3.1.8] C:\Users\shubh\.gradle\caches\8.8\transforms\e9aeb3a12b317415ea9135db88269d91\transformed\transport-runtime-3.1.8\AndroidManifest.xml:34:13-37
+241    </application>
+242
+243</manifest>
