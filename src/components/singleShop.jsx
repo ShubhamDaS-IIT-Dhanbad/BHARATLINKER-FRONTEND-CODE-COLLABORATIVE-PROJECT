@@ -159,79 +159,81 @@ const ProductDetails = memo(() => {
     return (
       <div className="loading-shd-div-container">
         <div className="loading-shd-div">
-        <Oval height={30} width={30} color="green" secondaryColor="white" />
-      </div>
+          <Oval height={30} width={30} color="green" secondaryColor="white" />
+        </div>
       </div >
     );
   }
 
-return (
-  <>
-    <div id="product-details-search-container-top">
-      <SingleProductSearchBar heading={"SHOP INFO"} />
-    </div>
-
-    <div id="shop-details-container">
-      <div id="product-details-img">
-        <LazyLoadImage
-          src={selectedImage}
-          alt={`Shop Thumbnail`}
-          effect="fadeIn"
-          id="product-details-img-selected"
-        />
+  return (
+    <>
+      <div id="product-details-search-container-top">
+        <SingleProductSearchBar heading={"SHOP INFO"} />
       </div>
 
-      <div id="product-details-thumbnails">
-        {shopDetail?.shopImages?.map((image, index) => (
-          <div
-            key={index}
-            onClick={() => handleImageClick(index)}
-            className={selectedImage === image ? "shop-detail-image-select" : "product-detail-image-unselect"}
+      <div id="shop-details-container">
+        <div id="product-details-img">
+          <LazyLoadImage
+            src={selectedImage}
+            alt={`Shop Thumbnail`}
+            effect="fadeIn"
+            id="product-details-img-selected"
           />
-        ))}
-      </div>
+        </div>
 
-      <div id="product-details-info">
-        <div id="product-details-title">{shopDetail?.shopName.toUpperCase()}</div>
-        <div className="product-detaile-share" onClick={handleShare}>
-          <RiShareForwardLine size={20} />
-        </div>
-      </div>
-
-      <div id="shop-detail-view-all-product" onClick={handleViewProducts}>
-        View all products of {shopDetail?.shopName ? shopDetail?.shopName : "-"}
-        <FaCaretRight size={20} />
-      </div>
-
-      <div className="shop-detail-options">
-        <div className={`shop-detail-option ${shopDetail?.isShopOpen ? 'open' : 'closed'}`}>
-          {shopDetail?.isShopOpen ? <FaDoorOpen size={35} /> : <FaDoorClosed size={35} />}
-        </div>
-        <div className="shop-detail-option" onClick={handlePhoneClick}>
-          <CiPhone size={35} />
-        </div>
-        <div className="shop-detail-option" onClick={redirectMap}>
-          <CiLocationOn size={35} />
-        </div>
-        <div className="shop-detail-option" onClick={handleEmailClick}>
-          <CiMail size={35} />
-        </div>
-      </div>
-
-      <div className="product-detail-description-container">
-        <div>Shop Details</div>
-        <div className="productDetails-lists-description-container">
-          {descriptionSections?.map((section, index) => (
-            <div key={index} className="description-section">
-              <div className="description-heading">{section.heading}</div>
-              <div className="description-content">{section.content}</div>
-            </div>
+        <div id="product-details-thumbnails">
+          {shopDetail?.shopImages?.map((image, index) => (
+            <div
+              key={index}
+              onClick={() => handleImageClick(index)}
+              className={selectedImage === getImageUrl(image, index)
+                ? "shop-detail-image-select"
+                : "shop-detail-image-unselect"}
+            />
           ))}
         </div>
+
+        <div id="product-details-info">
+          <div id="product-details-title">{shopDetail?.shopName.toUpperCase()}</div>
+          <div className="product-detaile-share" onClick={handleShare}>
+            <RiShareForwardLine size={20} />
+          </div>
+        </div>
+
+        <div id="shop-detail-view-all-product" onClick={handleViewProducts}>
+          View all products of {shopDetail?.shopName ? shopDetail?.shopName : "-"}
+          <FaCaretRight size={20} />
+        </div>
+
+        <div className="shop-detail-options">
+          <div className={`shop-detail-option ${shopDetail?.isShopOpen ? 'open' : 'closed'}`}>
+            {shopDetail?.isShopOpen ? <FaDoorOpen size={35} /> : <FaDoorClosed size={35} />}
+          </div>
+          <div className="shop-detail-option" onClick={handlePhoneClick}>
+            <CiPhone size={35} />
+          </div>
+          <div className="shop-detail-option" onClick={redirectMap}>
+            <CiLocationOn size={35} />
+          </div>
+          <div className="shop-detail-option" onClick={handleEmailClick}>
+            <CiMail size={35} />
+          </div>
+        </div>
+
+        <div className="product-detail-description-container">
+          <div>Shop Details</div>
+          <div className="productDetails-lists-description-container">
+            {descriptionSections?.map((section, index) => (
+              <div key={index} className="description-section">
+                <div className="description-heading">{section.heading}</div>
+                <div className="description-content">{section.content}</div>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
-    </div>
-  </>
-);
+    </>
+  );
 });
 
 export default ProductDetails;
