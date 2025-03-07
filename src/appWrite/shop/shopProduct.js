@@ -128,7 +128,6 @@ class ShopProduct {
       if (!Array.isArray(newFiles)) {
         throw new Error('newFiles must be an array');
       }
-
       if (toDeleteImagesUrls.length > 0) {
         await cleanupUploadedImages(toDeleteImagesUrls);
         allImageUrls = allImageUrls.filter(url => url && !toDeleteImagesUrls.includes(url));

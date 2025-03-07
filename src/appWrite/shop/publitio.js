@@ -37,12 +37,11 @@ const deleteImageFromPublitio = async (id) => {
 
     // Use the extracted publicId in the API call
     const response = await publitio.call(`/files/delete/${publicId}`, 'DELETE');
-    
     if (!response.success) {
       throw new Error(`Failed to delete image: ${response.error || 'Unknown error'}`);
     }
     
-    console.log('✅ Image deleted successfully:', response);
+    console.log('✅ Image deleted successfully:');
     return response;
   } catch (error) {
     console.error('❌ Error deleting image from Publitio:', error);

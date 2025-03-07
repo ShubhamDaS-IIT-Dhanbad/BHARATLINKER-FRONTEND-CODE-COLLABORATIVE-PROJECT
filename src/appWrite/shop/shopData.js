@@ -136,7 +136,7 @@ export async function updateShopData(shopId, updatedData) {
  */
 export async function updateShopImagesAndData({ shopId, toDeleteImagesUrls, updatedData, newFiles }) {
   let uploadedImages = [];
-  let allImageUrls = updatedData.shopImages || []; // Use shopImages consistently
+    let allImageUrls = Array.isArray(updatedData.shopImages) ? [...updatedData.shopImages] : [];
 
   try {
     // Validate inputs
@@ -146,7 +146,6 @@ export async function updateShopImagesAndData({ shopId, toDeleteImagesUrls, upda
 
     // Delete old images if any
     if (toDeleteImagesUrls.length > 0) {
-      // Fixed: Removed unnecessary mapping as URLs are already strings
       await cleanupUploadedImages(toDeleteImagesUrls);
       allImageUrls = allImageUrls.filter(url => !toDeleteImagesUrls.includes(url));
     }
@@ -159,16 +158,15 @@ export async function updateShopImagesAndData({ shopId, toDeleteImagesUrls, upda
     
     if (filesToUpload.length > 0) {
       uploadedImages = await uploadImagesToPublitio(filesToUpload);
-      // Fixed: Added proper object destructuring and removed incorrect syntax
       formattedImageUrls = uploadedImages.map(image => image.secure_url);
       allImageUrls = [...allImageUrls, ...validUrls, ...formattedImageUrls].filter(Boolean);
     } else if (validUrls.length > 0) {
       allImageUrls = [...allImageUrls, ...validUrls].filter(Boolean);
-    }
+    }console.log( allImageUrls,'urls')
 
     // Prepare updated data, applying toLowerCase only to string fields
     const updatedShopData = {
-      ...(allImageUrls.length > 0 && { shopImages: allImageUrls }), // Store formatted URLs
+      ...(allImageUrls.length > 0 && { shopImages: allImageUrls }),
     };
 
     for (const [key, value] of Object.entries(updatedData)) {
@@ -176,7 +174,6 @@ export async function updateShopImagesAndData({ shopId, toDeleteImagesUrls, upda
         updatedShopData[key] = typeof value === 'string' ? value.toLowerCase() : value;
       }
     }
-
     // Update in Appwrite
     const shopData = await databases.updateDocument(
       conf.appwriteShopsDatabaseId,

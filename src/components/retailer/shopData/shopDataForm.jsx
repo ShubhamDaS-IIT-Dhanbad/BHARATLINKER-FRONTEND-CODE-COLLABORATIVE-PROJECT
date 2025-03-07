@@ -7,6 +7,7 @@ import { Oval } from "react-loader-spinner";
 import { updateShopImagesAndData } from "../../../appWrite/shop/shopData.js";
 import "./shopData.css";
 
+import Compressor from 'compressorjs';
 
 const sd1='https://res.cloudinary.com/demc9mecm/image/upload/v1741231650/shopdata_dwtbs7.webp';
 const MAX_LENGTHS = {
@@ -16,6 +17,9 @@ const MAX_LENGTHS = {
   shopCustomerCare: 15,
   shopEmail: 50,
 };
+
+const MAX_IMAGES = 3;
+const MAX_FILE_SIZE = 5 * 1024 * 1024;
 
 const ShopInput = React.memo(({ field, value = "", onChange }) => {
   const isTextArea = field === "shopDescription";
@@ -116,10 +120,80 @@ const ShopDataForm = React.memo(({ shopData = {} }) => {
     }
   }, []);
 
+  // const handleFileChange = useCallback((e) => {
+  //   const newFiles = Array.from(e.target.files || []).slice(0, 3 - files.length);
+  //   setFiles((prev) => [...prev, ...newFiles]);
+  // }, [files.length]);
+
+
+const compressAndConvertToWebP = (file) => {
+    return new Promise((resolve, reject) => {
+      new Compressor(file, {
+        quality: 0.6, // Reduce quality to 60%
+        maxWidth: 800, // Optional: resize to max width of 800px
+        maxHeight: 800, // Optional: resize to max height of 800px
+        success(compressedFile) {
+          const img = new Image();
+          img.onload = () => {
+            const canvas = document.createElement("canvas");
+            canvas.width = img.width;
+            canvas.height = img.height;
+            const ctx = canvas.getContext("2d");
+            ctx.drawImage(img, 0, 0);
+
+            // Convert to WebP
+            canvas.toBlob(
+              (blob) => {
+                const webpFile = new File([blob], `${file.name.split('.')[0]}.webp`, {
+                  type: "image/webp",
+                  lastModified: Date.now(),
+                });
+                resolve(webpFile);
+              },
+              "image/webp",
+              0.8 // WebP quality (0-1)
+            );
+          };
+          img.onerror = (err) => reject(err);
+          img.src = URL.createObjectURL(compressedFile);
+        },
+        error(err) {
+          reject(err);
+        },
+      });
+    });
+  };
+
   const handleFileChange = useCallback((e) => {
-    const newFiles = Array.from(e.target.files || []).slice(0, 3 - files.length);
-    setFiles((prev) => [...prev, ...newFiles]);
-  }, [files.length]);
+    const newFiles = Array.from(e.target.files || []).filter((file) => {
+      if (file.size > MAX_FILE_SIZE) {
+        alert(`${file.name} exceeds 5MB limit`);
+        return false;
+      }
+      return true;
+    });
+
+    if (newFiles.length === 0) return; // Exit if no valid files after filtering
+
+    // Compress and convert each valid file to WebP
+    newFiles.forEach((file) => {
+      compressAndConvertToWebP(file)
+        .then((webpFile) => {
+          setFiles((prev) => {
+            const updatedFiles = [...prev, webpFile].slice(0, MAX_IMAGES);
+            return updatedFiles;
+          });
+        })
+        .catch((err) => {
+          console.error(`Error processing ${file.name}:`, err);
+          alert(`Failed to process ${file.name}.`);
+        });
+    });
+  }, []);
+
+
+
+
 
   const handleDeleteImage = useCallback((index) => {
     const fileToDelete = filesRef.current[index];
