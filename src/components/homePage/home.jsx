@@ -11,7 +11,7 @@ const HomePageNavbar = React.lazy(() => import('../navbar.jsx'));
 const HomeTestimonial = React.lazy(() => import('./homeTestimonial.jsx'));
 const HowItWorks = React.lazy(() => import('./howItWorks.jsx'));
 
-const ti1 = 'https://res.cloudinary.com/demc9mecm/image/upload/v1737378115/ptnykpibqxqobs3gywoq.png';
+const ti1 = 'https://res.cloudinary.com/demc9mecm/image/upload/v1741342908/ptnykpibqxqobs3gywoq-removebg-preview_skroel.webp';
 
 // Custom hook to detect when an element is in view
 const useInView = () => {
