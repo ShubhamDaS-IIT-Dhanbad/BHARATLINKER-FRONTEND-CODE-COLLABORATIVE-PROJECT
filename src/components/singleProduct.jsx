@@ -277,11 +277,11 @@ const ProductDetails = () => {
                         </div>
 
                         <div className="product-detail-description-container">
-                            <div>Product Details</div>
+                            {/* <div>Product Details</div> */}
                             <div className="productDetails-lists-description-container">
                                 {descriptionSections.length > 0 ? descriptionSections.map((section, index) => (
                                     <div key={index} className="description-section">
-                                        <div className="description-heading">{section.heading}</div>
+                                        <div className="description-heading">{section.heading.toUpperCase()}</div>
                                         {section.content.map((contentItem, contentIndex) => (
                                             <div className="description-content-p-div" key={contentIndex}>
                                                 <div className="dcpdc"></div>
