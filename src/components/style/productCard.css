@@ -58,7 +58,7 @@
 .search-page-product-card-top-image {
 
     border-radius: 5px;
-    height: 140px;
+    max-height: 140px;width: 95%;
     border-radius: 5px;
     object-fit:contain; 
 }

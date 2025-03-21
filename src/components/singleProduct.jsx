@@ -36,22 +36,29 @@ const ProductDetails = () => {
 
     const parseDescription = (description) => {
         if (!description) return [];
+
         return description
             .split("#")
-            .slice(1)
+            .slice(1) // Remove the first empty split part
             .map((section) => {
-                const [heading, ...contents] = section.split("*");
-                return { heading: heading.trim(), content: contents.join("*").trim() };
+                const lines = section.trim().split("\n").map(line => line.trim()).filter(Boolean);
+                const heading = lines[0]; // First line after '#' is the heading
+                const contentItems = lines.slice(1).map(line => line.startsWith("*") ? line.substring(1).trim() : line);
+
+                return {
+                    heading,
+                    content: contentItems // Keep content as an array of individual strings
+                };
             })
-            .filter(section => section.heading && section.content);
+            .filter(section => section.heading && section.content.length);
     };
 
     const getImageUrl = (imageString) => {
         if (!imageString) return FALLBACK_IMAGE;
         const urlParts = imageString.split('/');
         const publicIdWithExtension = urlParts[urlParts.length - 1] || '';
-        const publicId = publicIdWithExtension.includes('@X@XX@X@') 
-            ? publicIdWithExtension.split('@X@XX@X@')[1] 
+        const publicId = publicIdWithExtension.includes('@X@XX@X@')
+            ? publicIdWithExtension.split('@X@XX@X@')[1]
             : publicIdWithExtension;
         return publicId ? `https://bharatlinker.publit.io/file/${publicId}` : imageString;
     };
@@ -138,7 +145,7 @@ const ProductDetails = () => {
 
     const debouncedUpdateCart = useCallback(
         debounce((cartId, updatedCart) => {
-            dispatch(updateCartStateAsync(cartId, updatedCart ));
+            dispatch(updateCartStateAsync(cartId, updatedCart));
         }, 500),
         [dispatch]
     );
@@ -146,19 +153,19 @@ const ProductDetails = () => {
     const handleUpdateCart = (increment) => {
         if (!userData?.phoneNumber) return navigate("/login");
         if (!cartItem) return;
-        
+
         const cartId = cartItem.$id;
-        const newQuantity = increment 
-            ? Math.min(cartQuantity + 1, MAX_QUANTITY) 
+        const newQuantity = increment
+            ? Math.min(cartQuantity + 1, MAX_QUANTITY)
             : Math.max(cartQuantity - 1, 0);
 
         if (newQuantity === 0) {
             dispatch(removeFromUserCart({ productId: productDetail.$id, cartId }));
         } else {
-            debouncedUpdateCart(cartId, { 
-                productId: productDetail.$id, 
-                quantity: newQuantity, 
-                customerName: userData.name || "user" 
+            debouncedUpdateCart(cartId, {
+                productId: productDetail.$id,
+                quantity: newQuantity,
+                customerName: userData.name || "user"
             });
         }
     };
@@ -192,8 +199,8 @@ const ProductDetails = () => {
                                     key={index}
                                     alt={`Thumbnail ${index + 1}`}
                                     onClick={() => handleImageClick(index)}
-                                    className={selectedImage === getImageUrl(image) 
-                                        ? "product-detail-image-select" 
+                                    className={selectedImage === getImageUrl(image)
+                                        ? "product-detail-image-select"
                                         : "product-detail-image-unselect"}
                                 />
                             ))}
@@ -208,17 +215,18 @@ const ProductDetails = () => {
 
                         <div id="product-details-see-all-brand-product">
                             View all products by {productDetail?.brand || "-"}
-                            <FaCaretRight 
-                                onClick={() => productDetail?.brand && navigate(`/search?query=${productDetail.brand}`)} 
-                                size={20} 
+                            <FaCaretRight
+                                onClick={() => productDetail?.brand && navigate(`/search?query=${productDetail.brand}`)}
+                                size={20}
                             />
                         </div>
 
                         <div id="product-details-shop">
                             Shop:{" "}
                             <span onClick={handleShopClick}>
-                                {productDetail?.shop?.shopName ? 
-                                    productDetail.shop.shopName.toUpperCase() : 
+                                {productDetail?.shop?.shopName ?
+                                    `${productDetail.shop.shopName.toUpperCase().slice(0, 14)}...`
+                                    :
                                     "Loading..."}
                             </span>
                         </div>
@@ -228,12 +236,12 @@ const ProductDetails = () => {
                                 <div id="productDetails-discounted-price">
                                     ₹{productDetail?.discountedPrice || productDetail?.price || 0}
                                     <div className="product-detail-discount-container">
-                                        {productDetail?.price && productDetail?.discountedPrice && 
-                                         productDetail.price > productDetail.discountedPrice ? (
+                                        {productDetail?.price && productDetail?.discountedPrice &&
+                                            productDetail.price > productDetail.discountedPrice ? (
                                             <span>
                                                 {Math.round(
-                                                    ((productDetail.price - productDetail.discountedPrice) / 
-                                                    productDetail.price) * 100
+                                                    ((productDetail.price - productDetail.discountedPrice) /
+                                                        productDetail.price) * 100
                                                 )}% off
                                             </span>
                                         ) : (
@@ -241,12 +249,12 @@ const ProductDetails = () => {
                                         )}
                                     </div>
                                 </div>
-                                {productDetail?.price && (!productDetail.discountedPrice || 
+                                {productDetail?.price && (!productDetail.discountedPrice ||
                                     productDetail.price > productDetail.discountedPrice) && (
-                                    <p id="productDetails-price1">
-                                        MRP <span id="productDetails-price2">₹{productDetail.price}</span>
-                                    </p>
-                                )}
+                                        <p id="productDetails-price1">
+                                            MRP <span id="productDetails-price2">₹{productDetail.price}</span>
+                                        </p>
+                                    )}
                             </div>
 
                             {productDetail?.isInStock && productDetail?.shop?.isShopOpen ? (
@@ -274,7 +282,12 @@ const ProductDetails = () => {
                                 {descriptionSections.length > 0 ? descriptionSections.map((section, index) => (
                                     <div key={index} className="description-section">
                                         <div className="description-heading">{section.heading}</div>
-                                        <div className="description-content">{section.content}</div>
+                                        {section.content.map((contentItem, contentIndex) => (
+                                            <div className="description-content-p-div" key={contentIndex}>
+                                                <div className="dcpdc"></div>
+                                                <div className="description-content">{contentItem}</div>
+                                            </div>
+                                        ))}
                                     </div>
                                 )) : (
                                     <div className="description-section">

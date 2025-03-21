@@ -59,10 +59,10 @@
 }
 
 #product-details-title {
-    font-weight: 700;
+    font-weight: 600;
     flex-wrap: wrap;
     margin-top: 10px;
-    font-size: 18px;
+    font-size: 16px;
     line-height: 1.2;color: #100f0fdb;
     max-width: 80vw;
     letter-spacing: 0.28px;
@@ -225,7 +225,7 @@ margin-left: 5px;
 .product-details-price-instock {
     min-width: 110px;max-width: 110px;
     height: 40px;
-    border: 1px solid rgb(67, 208, 123);
+    border: 1px solid rgb(37, 147, 37);
     background-color: rgb(37, 147, 37);
     display: flex;
     justify-content: center;
@@ -302,11 +302,18 @@ margin-left: 5px;
     margin-bottom: 10px;color: black;
     max-width: 50vw;
   }
-  
+  .description-content-p-div{
+    display: flex;gap: 10px;
+    padding: 0;margin: 0;align-items: center;
+    margin-top: 5px;
+  }
+  .dcpdc{
+    width: 4px;height: 4px;border-radius: 50%;background-color: black;
+  }
   .description-content {
     max-width: 80vw;
     font-size: 14px;font-weight: 400;
-    line-height: 1.2;font-family: Arial, Helvetica, sans-serif;
+    line-height: 1.1;font-family: Arial, Helvetica, sans-serif;
   }
   
 
