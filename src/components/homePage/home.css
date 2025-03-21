@@ -33,7 +33,7 @@
   padding-top: 10px;
   padding-bottom: 10px;
   z-index: 100;
-  box-shadow: rgba(152, 152, 152, 0.427) 0px 8px 24px;
+  box-shadow: rgba(152, 152, 152, 0.231) 0px 8px 24px;
 }
 
 .home-footer-div {
@@ -48,7 +48,7 @@
 
 .home-footer-div-icon {
   background-color: rgb(40, 46, 43);
-  border-radius: 10px;
+  border-radius: 8px;
   height: 90%;
   width: 100%;
   display: flex;
@@ -59,11 +59,11 @@
 
 #home-footer-div-home-icon {
   background-color: rgb(40, 46, 43);
-  border-radius: 10px;
+  border-radius: 8px;
   height: 90%;
   width: 100%;
   display: flex;
-  color: rgb(90, 228, 169);
+  color: rgb(79, 244, 173);
   justify-content: center;
   align-items: center;
 }

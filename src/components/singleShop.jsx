@@ -13,13 +13,21 @@ import "./style/singleShop.css";
 
 const parseDescription = (description) => {
   if (!description) return [];
-  return description.split("#").slice(1).map(section => {
-    const [heading, ...contents] = section.split("*");
-    return {
-      heading: heading.trim(),
-      content: contents.join("*").trim()
-    };
-  });
+
+  return description
+    .split("#")
+    .slice(1) // Remove the first empty split part
+    .map((section) => {
+      const lines = section.trim().split("\n").map(line => line.trim()).filter(Boolean);
+      const heading = lines[0]; // First line after '#' is the heading
+      const contentItems = lines.slice(1).map(line => line.startsWith("*") ? line.substring(1).trim() : line);
+
+      return {
+        heading,
+        content: contentItems // Keep content as an array of individual strings
+      };
+    })
+    .filter(section => section.heading && section.content.length);
 };
 
 const ProductDetails = memo(() => {
@@ -221,14 +229,23 @@ const ProductDetails = memo(() => {
         </div>
 
         <div className="product-detail-description-container">
-          <div>Shop Details</div>
+          {/* <div>Shop Details</div> */}
           <div className="productDetails-lists-description-container">
-            {descriptionSections?.map((section, index) => (
+            {descriptionSections.length > 0 ? descriptionSections?.map((section, index)  => (
               <div key={index} className="description-section">
-                <div className="description-heading">{section.heading}</div>
-                <div className="description-content">{section.content}</div>
+                <div className="description-heading">{section.heading.toUpperCase()}</div>
+                {section.content.map((contentItem, contentIndex) => (
+                  <div className="description-content-p-div" key={contentIndex}>
+                    <div className="dcpdc"></div>
+                    <div className="description-content">{contentItem}</div>
+                  </div>
+                ))}
               </div>
-            ))}
+            )) : (
+              <div className="description-section">
+                <div className="description-content">No description available</div>
+              </div>
+            )}
           </div>
         </div>
       </div>

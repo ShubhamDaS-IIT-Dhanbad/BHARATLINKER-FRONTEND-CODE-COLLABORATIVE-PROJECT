@@ -13,7 +13,14 @@
     display: flex;
     justify-content: center;
 }
-
+.description-content-p-div{
+    display: flex;gap: 6px;
+    padding: 0;margin: 0;align-items: center;
+    margin-top: 5px;
+  }
+  .dcpdc{
+    width: 4px;height: 4px;border-radius: 50%;background-color: black;
+  }
 
 #product-details-img-selected {
     height: 240px;
