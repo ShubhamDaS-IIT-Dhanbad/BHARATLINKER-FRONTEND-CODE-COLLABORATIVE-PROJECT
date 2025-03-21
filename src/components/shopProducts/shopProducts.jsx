@@ -31,7 +31,7 @@ const ProductSearch = () => {
 
     const {
         products = [],
-        hasMoreProducts = false,
+        hasMoreProducts,
     } = shopData;
 
     const globalLoading = useSelector((state) => state.shopproducts.loading);
@@ -46,7 +46,6 @@ const ProductSearch = () => {
     useEffect(() => {
         handleInitialSearch();
     }, [handleInitialSearch]);
-
     return (
         <>
             <div id="shopSearchPage-container-top">

@@ -3,7 +3,7 @@ import searchProductService from '../../../appWrite/main/searchProduct.js';
 
 // Async thunk to fetch products for a specific shop
 export const fetchProducts = createAsyncThunk(
-    'shopProducts/fetchProducts',
+    'shopproducts/fetchProducts',
     async ({ shopId, inputValue, selectedCategories, selectedBrands, page, productsPerPage, sortByAsc, sortByDesc }, { rejectWithValue }) => {
          // Set selectedCategories to an empty array if it's not provided
         selectedCategories = selectedCategories || [];
@@ -26,6 +26,7 @@ export const fetchProducts = createAsyncThunk(
                     inputValue:inputValue,
                     shopId,
                     products: response.products,
+                    currentPage:1,
                     hasMoreProducts: response.products.length >= productsPerPage,
                     totalPages: response.totalPages || 1
                 };
@@ -42,7 +43,7 @@ export const fetchProducts = createAsyncThunk(
 
 // Async thunk to load more products for a specific shop
 export const loadMoreProducts = createAsyncThunk(
-    'shopProducts/loadMoreProducts',
+    'shopproducts/loadMoreProducts',
     async ({ shopId, inputValue, selectedCategories, selectedBrands, page, productsPerPage, sortByAsc, sortByDesc }, { rejectWithValue }) => {
         try {
 
@@ -66,6 +67,7 @@ export const loadMoreProducts = createAsyncThunk(
                     inputValue:inputValue,
                     shopId,
                     products: response.products,
+                    currentPage:page+1,
                     hasMoreProducts: response.products.length >= productsPerPage,
                     totalPages: response.totalPages || 1
                 };
@@ -82,9 +84,10 @@ export const loadMoreProducts = createAsyncThunk(
 // Initial state
 const initialState = {
     query:"",
-    shops: {}, // Keyed by shopId
+    shops: {},
     loading: false,
     loadingMoreProducts: false,
+    productsPerPage:5,
     error: null
 };
 

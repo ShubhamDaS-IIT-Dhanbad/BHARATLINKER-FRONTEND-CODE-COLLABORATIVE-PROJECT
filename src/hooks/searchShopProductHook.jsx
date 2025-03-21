@@ -4,17 +4,15 @@ import useLocationFromCookie from './useLocationFromCookie.jsx';
 
 export const useShopProductExecuteSearch = (shopId) => {
     const dispatch = useDispatch();
-    const { getLocationFromCookie } = useLocationFromCookie();
-
-    // Get location
-    const pinCodes = getLocationFromCookie()?.pinCodes || [742136];
-
+    const shopData = useSelector((state) => state.shopproducts.shops[shopId]) || {};
     const {
-        products,
-        loading,
+        products = [],
         currentPage,
-        loadingMoreProducts,
         hasMoreProducts,
+    } = shopData;
+    const {
+        loading,
+        loadingMoreProducts,
         productsPerPage,
         sortByAsc,
         sortByDesc,
@@ -29,7 +27,6 @@ export const useShopProductExecuteSearch = (shopId) => {
             inputValue,
             page: 1,
             productsPerPage,
-            pinCodes,
             selectedCategories,
             selectedBrands,
             sortByAsc,
@@ -42,7 +39,6 @@ export const useShopProductExecuteSearch = (shopId) => {
 
     const onLoadMoreShopProduct = (inputValue = "") => {
         if (!hasMoreProducts || loadingMoreProducts) return;
-
         const params = {
             inputValue,
             page: currentPage + 1,
@@ -53,7 +49,6 @@ export const useShopProductExecuteSearch = (shopId) => {
             sortByDesc,
             shopId,
         };
-
         dispatch(loadMoreProducts(params));
     };
 
