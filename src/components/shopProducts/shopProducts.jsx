@@ -8,7 +8,9 @@ import Navbar from '../navbar.jsx';
 import AddToCartTab from "../viewCartTab/viewCart.jsx";
 
 import { useShopProductExecuteSearch } from '../../hooks/searchShopProductHook.jsx';
+
 import './shopProducts.css';
+import '../style/productList.css';
 
 
 const s1="https://res.cloudinary.com/demc9mecm/image/upload/v1741102460/s1_i7wbfi.png";
@@ -49,7 +51,7 @@ const ProductSearch = () => {
     return (
         <>
             <div id="shopSearchPage-container-top">
-                <Navbar headerTitle={shopName.slice(0, 20).toUpperCase()} shopId={shopId} />
+                <Navbar headerTitle={`${shopName.slice(0, 13).toUpperCase()}..`} shopId={shopId} />
             </div>
 
             {loading ? (
